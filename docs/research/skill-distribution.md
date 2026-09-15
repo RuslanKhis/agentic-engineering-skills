@@ -121,3 +121,8 @@ Each install used a new temporary project, temporary CLI state, and no global in
 - `git diff --check` passed. Existing ADK runtime suites were not rerun because their implementation files were unchanged.
 
 Remote installation can only pick up committed changes available on the selected GitHub ref. The local tests do not claim these edits are published.
+
+Subsequent [Codex CLI generation checks](../testing/codex-cli-smoke.md) went
+beyond installation and routing walkthroughs: three fresh coding sessions
+generated and tested memory, refund-tool and ADK workflow implementations.
+That report includes the prompts, generated code and independent acceptance results.

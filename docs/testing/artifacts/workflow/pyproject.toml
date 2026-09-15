@@ -1,0 +1,7 @@
+[project]
+name = "document-review-workflow"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = ["google-adk==2.8.0", "google-genai==2.19.0"]
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

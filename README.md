@@ -186,13 +186,42 @@ one user's session cannot read another user's history.
 
 *The contents · One entry point and eleven independently usable specialists.*
 
-**[adk-engineer](skills/adk-engineer/SKILL.md)** is the starting point when you
-know the outcome but have not chosen a specialist. It loads the relevant
-instructions as needed. Installing the full set does not mean reading every
-skill for every request.
+Choose a skill by the problem you need to solve. Each entry below explains
+when it helps, what to ask for, and the command that selects it. The numbers
+follow Chapters 0–10 of the book; no chapter reading is required.
 
-The specialists below follow Chapters 0–10 of the book. Each linked name is
-also its command name, with `/` in Claude Code or `$` in Codex.
+**Copy any example into your coding agent's chat.** Examples use Claude Code's
+`/` prefix. In Codex, replace only the leading `/` with `$`; keep the skill name
+and request the same. Adapt the scenario to your project.
+
+### Start here · Choose the right specialist
+
+**[adk-engineer](skills/adk-engineer/SKILL.md)**
+
+Use this when you can describe the outcome but are unsure which skill fits.
+It inspects your project, selects the relevant installed specialist, and follows
+that skill through the requested explanation, design, code change or review.
+It can combine specialists when a change crosses several concerns, and loads
+their instructions as needed.
+
+**Invoke:** Claude Code `/adk-engineer` · Codex `$adk-engineer`
+
+```text
+/adk-engineer Add memory so our support agent remembers a user's preferred
+language between conversations. Use our existing database and let users
+change or forget the preference.
+```
+
+```text
+/adk-engineer Our agent sometimes issues a refund twice after a timeout.
+Trace the tool call, fix the cause and add a regression test.
+```
+
+```text
+/adk-engineer We have a working Python ADK agent and an existing React app.
+Plan how to connect them with streamed replies and private user sessions.
+Identify the code and tests we will need.
+```
 
 ### I. Foundations & safeguards
 
@@ -200,18 +229,92 @@ also its command name, with `/` in Claude Code or `$` in Codex.
 
 **00** &nbsp; **[adk-workflow-design](skills/adk-workflow-design/SKILL.md)**
 
-Choose how work moves through an agent: in sequence, in parallel, through a
-bounded loop, or under ordinary Python control. Check handoffs and results.
+*Arrange the work and make sure it finishes.*
+
+Use this to decide which steps run in order, which can run together, and when
+a refinement loop should stop. It helps implement or repair the handoffs
+between agents, shared state and final results. Ask for a workflow design,
+a focused code change, or tests that show each step produces the required output.
+
+**Invoke:** Claude Code `/adk-workflow-design` · Codex `$adk-workflow-design`
+
+```text
+/adk-workflow-design Build a workflow that researches a topic, drafts an
+answer, then checks it. Pass each step's result to the next and test what
+happens when the research step fails.
+```
+
+```text
+/adk-workflow-design Our agent fetches a customer's orders and support
+tickets one after the other. Run these independent lookups in parallel,
+then combine both results without losing either one.
+```
+
+```text
+/adk-workflow-design Our writer and reviewer keep revising forever.
+Limit them to three revision rounds and return an explicit result when
+the reviewer still rejects the draft.
+```
 
 **01** &nbsp; **[safe-api-tool-calls](skills/safe-api-tool-calls/SKILL.md)**
 
-Handle temporary failures, deadlines and uncertain replies. Make repeated
-requests safe when a tool changes something outside the application.
+*Handle unreliable APIs without repeating an action by accident.*
+
+Use this when a tool calls an external service that can fail, hang or return
+an unclear result. It helps add selective retries, time limits and protection
+against duplicate writes where the provider supports it. The result should
+include tests for failures and an honest response when an action's outcome
+cannot yet be confirmed.
+
+**Invoke:** Claude Code `/safe-api-tool-calls` · Codex `$safe-api-tool-calls`
+
+```text
+/safe-api-tool-calls Our order lookup fails on occasional 429 and 503
+responses. Add retries for recoverable failures, respect Retry-After,
+and keep the complete lookup within a five-second budget.
+```
+
+```text
+/safe-api-tool-calls This refund tool retries after a timeout and can
+refund twice. Inspect the provider's duplicate-request guarantees and
+fix the tool to preserve one logical refund across supported retries.
+```
+
+```text
+/safe-api-tool-calls The booking API may accept a reservation before our
+connection drops. Add an uncertain-result path and a status check so
+the agent does not blindly submit another booking.
+```
 
 **02** &nbsp; **[adk-operational-guardrails](skills/adk-operational-guardrails/SKILL.md)**
 
-Bound agent work, track usage, stop repeated tool calls and give consequential
-actions a human approval path.
+*Put limits and approval checks around agent actions.*
+
+Use this when an agent repeats tools, consumes too much model usage, runs too
+long, or needs a person to approve an action. It helps put enforcement in the
+application code that actually runs the work, with tests showing that blocked
+actions never execute. It also helps design usage accounting across turns
+and application controls for reducing spend.
+
+**Invoke:** Claude Code `/adk-operational-guardrails` · Codex `$adk-operational-guardrails`
+
+```text
+/adk-operational-guardrails Our agent keeps calling the same failing tool.
+Stop repeated calls with identical arguments, cap model calls at ten per
+request, and test that blocked calls never reach the tool.
+```
+
+```text
+/adk-operational-guardrails Add a token allowance that accumulates across
+a user's conversation. Refuse further model work when it is exhausted
+and return a clear message without another model call.
+```
+
+```text
+/adk-operational-guardrails Require human approval before the agent
+cancels an order. Bind approval to that specific cancellation and test
+rejection, repeated approval and attempted execution before approval.
+```
 
 ### II. From runtime to interface
 
@@ -219,18 +322,93 @@ actions a human approval path.
 
 **03** &nbsp; **[deploy-adk-on-google-cloud](skills/deploy-adk-on-google-cloud/SKILL.md)**
 
-Choose and prepare hosting on Cloud Run, Agent Runtime or GKE, including
-identity, packaging, validation and resource lifecycle.
+*Choose a host and prepare the files needed to run there.*
+
+Use this to compare Cloud Run, managed Agent Runtime and Google Kubernetes
+Engine (GKE), or adapt an existing project for your chosen host. It helps
+prepare packaging, runtime identity, configuration, health checks and
+verification steps. You can request a recommendation or locally checked
+deployment files before doing any cloud deployment.
+
+**Invoke:** Claude Code `/deploy-adk-on-google-cloud` · Codex `$deploy-adk-on-google-cloud`
+
+```text
+/deploy-adk-on-google-cloud We have an ADK agent behind a custom FastAPI
+service and no Kubernetes platform. Compare Cloud Run and Agent Runtime
+for our project and recommend a host with a concrete deployment plan.
+```
+
+```text
+/deploy-adk-on-google-cloud Prepare this existing API for Cloud Run.
+Add the container configuration, a health check and a deployment runbook.
+Validate locally and leave cloud deployment for later.
+```
+
+```text
+/deploy-adk-on-google-cloud Review our agent's GKE manifests. Check the
+runtime identity, startup and readiness probes, configuration and session
+storage. Report specific changes with verification steps.
+```
 
 **04** &nbsp; **[optimise-adk-on-google-cloud](skills/optimise-adk-on-google-cloud/SKILL.md)**
 
-Find where time and model usage go. Improve measured bottlenecks in agent work,
-streaming, sessions, startup, concurrency and scaling.
+*Find where time and model usage go before changing the system.*
+
+Use this for slow replies, growing token usage, startup delays or problems
+under concurrent load. It traces the request through tools, model calls,
+session storage and hosting, then targets a measured bottleneck. Expect a
+focused improvement with a comparison plan, or instrumentation and hypotheses
+when the project has no measurements yet.
+
+**Invoke:** Claude Code `/optimise-adk-on-google-cloud` · Codex `$optimise-adk-on-google-cloud`
+
+```text
+/optimise-adk-on-google-cloud Our replies take about twelve seconds.
+Add timing around model calls, tools and session storage so we can locate
+the delay, and show how to compare requests consistently.
+```
+
+```text
+/optimise-adk-on-google-cloud Token usage grows on every turn because we
+keep passing full tool results and conversation history. Inspect what
+the model needs, reduce avoidable context and test answer completeness.
+```
+
+```text
+/optimise-adk-on-google-cloud This Cloud Run service is slow on the first
+request and under concurrent load. Review our startup path, configuration
+and supplied traces, then propose changes with a measurement plan.
+```
 
 **05** &nbsp; **[adk-frontend-integration](skills/adk-frontend-integration/SKILL.md)**
 
-Connect an ADK agent to a browser through a custom JSON API or AG-UI with
-CopilotKit. Handle session ownership, streamed text and tool progress.
+*Connect the agent to the person using it.*
+
+Use this to connect an existing browser interface to an ADK agent through a
+JSON API or a streaming interface using AG-UI and CopilotKit. It helps define
+requests and responses, connect conversations to authenticated users, and
+display text, tool progress and failures correctly. Ask for a working
+integration, an interface design, or a repair to the conversation flow.
+
+**Invoke:** Claude Code `/adk-frontend-integration` · Codex `$adk-frontend-integration`
+
+```text
+/adk-frontend-integration Connect our existing React chat to this ADK
+agent through a JSON API. Reuse our login system and ensure users can
+only create and continue their own conversations.
+```
+
+```text
+/adk-frontend-integration Add streaming replies and tool-progress cards
+to our existing CopilotKit interface using AG-UI. Check our pinned
+versions and test one complete request through the browser.
+```
+
+```text
+/adk-frontend-integration Our chat shows duplicate text when a final
+answer arrives, and errors after partial text look like success.
+Fix both cases and add tests for the actual event sequence.
+```
 
 ### III. Memory, evidence & care
 
@@ -238,18 +416,93 @@ CopilotKit. Handle session ownership, streamed text and tool progress.
 
 **06** &nbsp; **[adk-memory-architecture](skills/adk-memory-architecture/SKILL.md)**
 
-Separate conversation state, facts across sessions, document retrieval and
-structured history. Apply identity, consent, retention and erasure boundaries.
+*Remember the right information for the right person.*
+
+Use this when an agent needs to continue a conversation, remember facts across
+sessions, answer from approved documents, or look up structured history. It
+helps choose the right store and connect it to the agent, with explicit rules
+for who can read the data, how long it stays and how it is forgotten. Exact
+settings, such as a preferred language, may belong in an ordinary profile record.
+
+**Invoke:** Claude Code `/adk-memory-architecture` · Codex `$adk-memory-architecture`
+
+```text
+/adk-memory-architecture Let users resume a conversation after the
+server restarts. Use our existing database, enforce conversation
+ownership and test that one user cannot load another user's history.
+```
+
+```text
+/adk-memory-architecture Help our agent answer questions from approved
+company manuals. Design document retrieval with source references,
+document-version controls and access checks for each user.
+```
+
+```text
+/adk-memory-architecture Add opt-in memory for low-risk facts users
+share across sessions. Include correction, expiry and a forget action,
+with offline tests for consent denial and cross-user access.
+```
 
 **07** &nbsp; **[adk-agent-evaluation](skills/adk-agent-evaluation/SKILL.md)**
 
-Test agent behaviour with deterministic checks, live evaluation sets,
-conversation simulation and strict inspection of the results.
+*Test what the agent does as well as what it says.*
+
+Use this to catch regressions in tool selection, arguments, action order,
+stored effects and final answers. It helps write repeatable tests with a
+scripted model, prepare evaluation cases for a real model, or audit a report
+whose passing scores may hide missing checks. The output is a test strategy,
+executable tests, evaluation assets or evidence-backed findings.
+
+**Invoke:** Claude Code `/adk-agent-evaluation` · Codex `$adk-agent-evaluation`
+
+```text
+/adk-agent-evaluation Add deterministic tests through our ADK runner
+that force an invalid refund request. Assert that the refund tool
+rejects it and no money-changing operation reaches the backend.
+```
+
+```text
+/adk-agent-evaluation Create evaluation cases for a support agent that
+must look up an order before cancelling it. Cover missing details,
+refusal and successful cancellation. Validate the files offline.
+```
+
+```text
+/adk-agent-evaluation Our evaluation report says every case passed,
+but some tool failures were ignored. Audit the result files for missing
+cases, failed actions and answers that falsely claim success.
+```
 
 **08** &nbsp; **[protect-adk-sensitive-data](skills/protect-adk-sensitive-data/SKILL.md)**
 
-Control personal information in prompts, tools, stored history and public
-responses, including Sensitive Data Protection and Model Armor integrations.
+*Control what sensitive information reaches each part of the system.*
+
+Use this when personal information or credentials could enter prompts, tools,
+conversation history, logs or public replies. It helps implement or review
+screening and data-handling rules, including Google Sensitive Data Protection
+and Model Armor integrations. Ask for a traced data flow, a focused code
+change and tests showing what happens when screening rejects data or fails.
+
+**Invoke:** Claude Code `/protect-adk-sensitive-data` · Codex `$protect-adk-sensitive-data`
+
+```text
+/protect-adk-sensitive-data Add a Sensitive Data Protection boundary
+that replaces email addresses and rejects credentials before text is
+saved or sent to the model. Test failures with a fake screening client.
+```
+
+```text
+/protect-adk-sensitive-data Review this agent for customer data leaking
+through tool results, session history, logs or traces. Map each path
+and recommend specific fixes with regression cases.
+```
+
+```text
+/protect-adk-sensitive-data Our API streams answers before screening
+finishes. Buffer the answer, apply the configured Model Armor checks,
+and test that blocked or uninspectable content is never released.
+```
 
 ### IV. Trust in practice
 
@@ -257,13 +510,64 @@ responses, including Sensitive Data Protection and Model Armor integrations.
 
 **09** &nbsp; **[adk-tool-auth-and-secrets](skills/adk-tool-auth-and-secrets/SKILL.md)**
 
-Verify who is calling a tool and what they may access. Work with keyless cloud
-credentials, Secret Manager and delegated OAuth lifecycles.
+*Give each tool the right identity and keep credentials out of the conversation.*
+
+Use this when tools need private Google Cloud access, an application secret,
+or permission to act through a user's connected account. It helps separate
+the authenticated user from the service's credentials, enforce access in
+trusted code, and handle OAuth connection, refresh and disconnect flows.
+Expect an implementation or review with tests for user isolation and
+credential exposure.
+
+**Invoke:** Claude Code `/adk-tool-auth-and-secrets` · Codex `$adk-tool-auth-and-secrets`
+
+```text
+/adk-tool-auth-and-secrets Our tool loads a service-account key file.
+Adapt it for keyless Google Cloud credentials and document the narrow
+runtime permissions it needs. Keep IAM changes as a reviewable plan.
+```
+
+```text
+/adk-tool-auth-and-secrets Move our third-party API key out of agent
+state and load it from Secret Manager in trusted code. Test that tool
+results, errors and session events do not expose the key.
+```
+
+```text
+/adk-tool-auth-and-secrets Add a per-user OAuth connection for our
+calendar tool, including refresh and disconnect. Test locally that
+one user's session cannot select or use another user's credentials.
+```
 
 **10** &nbsp; **[adk-sql-agent-engineering](skills/adk-sql-agent-engineering/SKILL.md)**
 
-Build natural-language analytics agents with reviewed query templates,
-selective schema retrieval and application-controlled query execution.
+*Turn business questions into controlled, read-only analytics.*
+
+Use this to build or improve an agent that answers questions from a database.
+It helps route familiar questions to reviewed SQL templates, give the model
+only relevant authorised schema information, and check proposed queries in
+application code before execution. Expect a small working query path, tests
+for correct answers and rejected queries, or an architecture review.
+
+**Invoke:** Claude Code `/adk-sql-agent-engineering` · Codex `$adk-sql-agent-engineering`
+
+```text
+/adk-sql-agent-engineering Add a path for "What were monthly sales last
+quarter?" using our approved revenue definition and a parameterised SQL
+template. Test the totals and reject unsupported filters.
+```
+
+```text
+/adk-sql-agent-engineering Our agent sends all 500 table schemas to the
+model for every question. Retrieve only relevant authorised schemas
+and test that unrelated or forbidden tables never enter its context.
+```
+
+```text
+/adk-sql-agent-engineering Review our generated-query execution path.
+Enforce read-only queries, allowed tables and resource limits in code,
+and add tests proving rejected queries never reach the database.
+```
 
 <p align="center">
   <img src="docs/editorial/section-break.svg" alt="" width="240">
@@ -346,6 +650,14 @@ the selected skill's scope and approval requirements.
 
 For the packaging investigation, installation checks and design rationale, see
 [the distribution notes](docs/research/skill-distribution.md).
+
+We also ran three fresh Codex CLI sessions against small local projects. They
+used the installed skills to generate persistent user preferences, a refund
+tool with safe retries, and a concurrent ADK workflow. The generated code passed
+162 tests, including 37 independent acceptance checks. These checks cover those
+three examples; they do not establish that every skill or cloud integration has
+been exercised. See the [CLI test results and generated code](docs/testing/codex-cli-smoke.md)
+for the prompts, versions, source files and instructions for rerunning the checks.
 
 ### Updating and troubleshooting
 
