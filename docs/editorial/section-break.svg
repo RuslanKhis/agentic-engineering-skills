@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="52" viewBox="0 0 320 52" role="img" aria-labelledby="title desc">
+<title id="title">Section ornament</title>
+<desc id="desc">A small engraved flourish.</desc>
+<g transform="translate(160 26) scale(1.6)"><path d="M-75 0H-23 M23 0H75" stroke="#857B6C" stroke-width="0.8" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="M-21 0Q-44 -18 -52 -4 Q-58 8 -39 3 M21 0Q44 -18 52 -4 Q58 8 39 3" stroke="#857B6C" stroke-width="0.8" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="M-10 0Q0 -19 10 0Q0 19 -10 0Z" stroke="#8B2635" stroke-width="1" fill="none" stroke-linejoin="round" stroke-linecap="round"/><path d="M-3 0l3 -3l3 3l-3 3Z" stroke="#8B2635" stroke-width="0.8" fill="#8B2635" stroke-linejoin="round" stroke-linecap="round"/></g>
+</svg>
