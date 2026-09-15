@@ -1,0 +1,6 @@
+interface:
+  display_name: "Deploy ADK on Google Cloud"
+  short_description: "Plan, adapt and verify ADK cloud deployments"
+  default_prompt: "Use $deploy-adk-on-google-cloud to inspect this project and prepare the appropriate deployment workflow with scoped validation and cleanup."
+policy:
+  allow_implicit_invocation: true

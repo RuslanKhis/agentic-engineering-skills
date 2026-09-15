@@ -1,0 +1,6 @@
+interface:
+  display_name: "ADK Tool Authentication and Secrets"
+  short_description: "Secure ADK tool identity and credential boundaries"
+  default_prompt: "Use $adk-tool-auth-and-secrets to inspect this project's authenticated tools and implement or review the required identity and credential boundaries."
+policy:
+  allow_implicit_invocation: true

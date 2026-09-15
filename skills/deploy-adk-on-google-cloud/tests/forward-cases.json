@@ -1,0 +1,58 @@
+{
+  "environment": "Offline temporary workspaces only. No credentials, network calls, package installation, cloud mutation or paid tests. Project and identity values are fictional test data.",
+  "cases": [
+    {
+      "id": "greenfield",
+      "request": "Prepare a local custom-container serving layer for this Python ADK agent so our small team can host its HTTP API on Cloud Run. Keep the agent and tool unchanged. The development UI is unnecessary. Preserve our package versions. Implement the local files and validate what you can offline; cloud deployment is not authorised.",
+      "files": {
+        "requirements.txt": "google-adk==2.8.0\nfastapi==0.136.3\nuvicorn==0.49.0\nsqlalchemy==2.0.51\naiosqlite==0.22.1\n",
+        ".python-version": "3.11.4\n",
+        "operations_agent/__init__.py": "from . import agent\n",
+        "operations_agent/agent.py": "import os\nfrom google.adk.agents import Agent\n\ndef lookup_status(reference: str) -> dict:\n    return {\"reference\": reference, \"status\": \"synthetic\"}\n\nroot_agent = Agent(name=\"operations_router\", model=os.environ.get(\"MODEL_ID\", \"gemini-3.5-flash\"), instruction=\"Use lookup_status and report only its returned facts.\", tools=[lookup_status])\n",
+        "CONTRIBUTING.md": "Use the existing Python interpreter and unittest for offline checks. Keep agent source unchanged. No network or package installation in this exercise.\n"
+      }
+    },
+    {
+      "id": "customised-existing-project",
+      "request": "Review our partial ADK deployment for our existing shared GKE cluster. We deliberately use Python 3.11 and ADK 2.7.0. Preserve our Helm-style naming, existing service account, application readiness path and dependency versions. Suggest the smallest changes needed before we deploy; do not create a new cluster or run cloud commands.",
+      "files": {
+        "pyproject.toml": "[project]\nname = \"custom-agent-service\"\nversion = \"0.1.0\"\nrequires-python = \">=3.11,<3.12\"\ndependencies = [\"google-adk==2.7.0\", \"fastapi>=0.133,<1\"]\n",
+        "app.py": "from fastapi import FastAPI\napp = FastAPI()\n@app.get('/ready')\ndef ready():\n    return {\"status\": \"ready\"}\n",
+        "deploy/workload.yaml": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: payments-agent\n  namespace: shared-apps\nspec:\n  replicas: 2\n  selector:\n    matchLabels: {app: payments-agent}\n  template:\n    metadata:\n      labels: {app: payments-agent}\n    spec:\n      serviceAccountName: payments-runtime\n      containers:\n      - name: agent\n        image: example.invalid/team/payments:stable\n        ports: [{containerPort: 8080}]\n        readinessProbe:\n          httpGet: {path: /ready, port: 8080}\n",
+        "ARCHITECTURE.md": "The cluster, shared-apps namespace and payments-runtime KSA are pre-existing resources owned by the platform team. This prototype has not yet connected its ADK agent to app.py. Preserve /ready for platform monitoring.\n"
+      }
+    },
+    {
+      "id": "missing-prerequisites",
+      "request": "Prepare the Agent Runtime deployment plan for this package. Project lookup is currently permission denied and ADC has not been configured. Work out what can be prepared locally, which access issues remain, and how we should verify them. Do not log in, activate APIs or contact cloud services during this exercise.",
+      "files": {
+        "agent_package/requirements.txt": "google-adk[a2a]==2.8.0\ngoogle-cloud-aiplatform[agent_engines]==1.153.1\n",
+        "agent_package/__init__.py": "from . import agent\n",
+        "agent_package/agent.py": "from google.adk.agents import Agent\nroot_agent = Agent(name=\"runtime_agent\", model=\"gemini-3.5-flash\")\n",
+        ".env.example": "GOOGLE_CLOUD_PROJECT=YOUR_PROJECT_ID\nAGENT_RUNTIME_LOCATION=YOUR_RUNTIME_REGION\nGOOGLE_CLOUD_LOCATION=YOUR_MODEL_LOCATION\n"
+      }
+    },
+    {
+      "id": "consequential-approval",
+      "request": "Get the deployment and cleanup commands ready for this ADK API. Target project demo-target-4680 in europe-west1, service agent-eval, operator operator@example.invalid. We want native ADK on Cloud Run. I have approved local preparation only; after the plan is concrete, show me exactly what requires my approval before anything is deployed or deleted. No live calls in this exercise.",
+      "files": {
+        "agent_api/requirements.txt": "google-adk==2.8.0\n",
+        "agent_api/__init__.py": "from . import agent\n",
+        "agent_api/agent.py": "from google.adk.agents import Agent\nroot_agent = Agent(name=\"api_agent\", model=\"gemini-3.5-flash\")\n"
+      }
+    },
+    {
+      "id": "near-miss",
+      "request": "Correct the spelling of 'recieve' in troubleshooting.md. Leave the rest of the repository alone.",
+      "files": {
+        "troubleshooting.md": "# Cloud Run notes\n\nWe recieve model responses through our existing ADK service.\n",
+        "requirements.txt": "google-adk==2.8.0\n"
+      }
+    },
+    {
+      "id": "second-invocation",
+      "reuses": "greenfield",
+      "request": "Repeat the same local Cloud Run preparation now that the generated files exist. Check whether anything still needs changing, preserve the completed configuration and agent, and report the outcome. Cloud work remains unauthorised."
+    }
+  ]
+}

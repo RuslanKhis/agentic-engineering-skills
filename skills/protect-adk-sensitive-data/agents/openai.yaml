@@ -1,0 +1,6 @@
+interface:
+  display_name: "Protect ADK sensitive data"
+  short_description: "Guard PII and credentials across ADK data boundaries"
+  default_prompt: "Use $protect-adk-sensitive-data to inspect this project's data boundaries, adapt its existing controls, and validate the authorised changes."
+policy:
+  allow_implicit_invocation: true

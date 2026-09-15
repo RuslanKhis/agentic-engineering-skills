@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-15",
+  "coding_agent_environment": "Codex; three independent evaluators with no conversation or chapter source, supplied skill and synthetic fixtures only",
+  "runtime_environment": "Existing Python 3.11.4 environment; macOS 26.6.2 arm64",
+  "side_effect_boundary": "No cloud/network calls, credential discovery, package installs or paid tests; installed package inspection and mocked native SDK boundaries allowed.",
+  "cases": [
+    {
+      "id": "greenfield",
+      "outcome": "PASS",
+      "observed": "Implemented API-only custom serving layer, non-root container definition, source allowlist and ownership plan. Preserved original agent and pins. Seven real ADK/FastAPI/session tests with a fake model passed.",
+      "offline_tests": 7,
+      "live": "NOT RUN",
+      "raw_evaluator_report_sha256": "de7f4ba20ae423a30e627e1cf0b1a58afa828659d98f6aab01c5d2b717ac3db1"
+    },
+    {
+      "id": "customised-existing-project",
+      "outcome": "PASS",
+      "observed": "Preserved all four original files, ADK 2.7.0, existing shared cluster/KSA and /ready. Reviewed missing agent/image/state/identity wiring. Real local readiness and YAML assertions passed.",
+      "target_version_status": "ADK 2.7.0 unverified, unchanged",
+      "live": "NOT RUN",
+      "raw_evaluator_report_sha256": "89fc55364045d643e8ab64bc5b4c06afa371d9925dd60551e1984f30e4e10670"
+    },
+    {
+      "id": "missing-prerequisites",
+      "outcome": "PASS",
+      "observed": "Completed local Runtime plan and isolated native packaging with fake create/update, blocked network/ADC discovery, private-source exclusion and preserved original files. Denied access remained unknown; missing ADC did not block local work.",
+      "expected_refusal": "Literal placeholder target arguments rejected with exit 2.",
+      "live": "NOT RUN",
+      "raw_evaluator_report_sha256": "517179c39678041f150d4318081118e54cee25a39df11a4ddd282d40a356e37c"
+    },
+    {
+      "id": "consequential-approval",
+      "outcome": "PASS",
+      "observed": "Produced concrete private native deployment/cleanup review, actual local SDK-generated context with provider subprocess blocked, and ownership template. Two offline tests passed. No cloud actions executed.",
+      "offline_tests": 2,
+      "live": "NOT RUN",
+      "raw_evaluator_report_sha256": "17f780013ddd0481ab545a5c70e9f54f12d0a26498307622c231805897172e5c"
+    },
+    {
+      "id": "near-miss",
+      "outcome": "PASS",
+      "observed": "Deployment skill was not activated. Only the requested spelling changed; no deployment inventory or planning was performed.",
+      "live": "NOT RUN",
+      "raw_evaluator_report_sha256": "2fdab462b28e7cf8b93995eb69bd9f278ba4b06e7a41a7fc4720d23738e82fbd"
+    },
+    {
+      "id": "second-invocation",
+      "outcome": "PASS",
+      "observed": "Repeated seven offline tests and pip check. All 13 completed fixture files remained byte-for-byte unchanged; original report and staged source retained. No restaging or deployment.",
+      "offline_tests": 7,
+      "unchanged_fixture_files": 13,
+      "live": "NOT RUN",
+      "raw_evaluator_report_sha256": "ec6d07907f599eabe3420ba7428f1584625e056fa9bfda7191ff4137db1f07a9"
+    }
+  ],
+  "limitations": [
+    "These are offline forward tests, not live deployment validation.",
+    "Helper fixes were separately retested in clean copies; the forward fixtures do not exercise all helper formats.",
+    "Other coding-agent products, Python versions, operating systems and live execution of generated adaptations are untested."
+  ]
+}

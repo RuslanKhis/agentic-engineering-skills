@@ -1,0 +1,6 @@
+interface:
+  display_name: "Optimise ADK on Google Cloud"
+  short_description: "Optimise ADK on Cloud Run, Agent Runtime and GKE"
+  default_prompt: "Use $optimise-adk-on-google-cloud to inspect this ADK project, select a justified optimisation and validate it without unapproved cloud changes."
+policy:
+  allow_implicit_invocation: true

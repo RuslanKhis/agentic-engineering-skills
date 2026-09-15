@@ -1,0 +1,6 @@
+interface:
+  display_name: "ADK Workflow Design"
+  short_description: "Select and validate ADK workflow control flow"
+  default_prompt: "Use $adk-workflow-design to inspect this project, choose or adapt its orchestration pattern, and validate its result and failure contracts."
+policy:
+  allow_implicit_invocation: true

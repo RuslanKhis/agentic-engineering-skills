@@ -1,0 +1,4 @@
+interface:
+  display_name: "ADK Operational Guardrails"
+  short_description: "Bound agent loops, budgets and risky tool actions"
+  default_prompt: "Use $adk-operational-guardrails to inspect this agent and implement or audit the operational controls it needs."

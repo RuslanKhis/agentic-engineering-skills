@@ -1,0 +1,6 @@
+interface:
+  display_name: "ADK Agent Evaluation"
+  short_description: "Build and audit evidence for ADK agent behaviour"
+  default_prompt: "Use $adk-agent-evaluation to inspect this agent project and implement or audit the smallest useful test strategy, separating offline checks from approved live evaluation."
+policy:
+  allow_implicit_invocation: true

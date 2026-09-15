@@ -1,0 +1,79 @@
+---
+name: adk-sql-agent-engineering
+description: Build, adapt or audit Google ADK SQL agents using reviewed query templates, selective schema retrieval and application-controlled read-only execution. Use for natural-language analytics agents, schema-context bloat, SQL routing or generated-query reliability. Do not activate for ordinary SQL tuning, database administration, RAG-only work or deployment without an SQL-agent design task.
+license: MIT
+metadata:
+  author: Ruslan Khissamiyev
+  source-book: Agentic Engineering
+  source-chapter: "10"
+  last-tested: "2026-09-15"
+---
+
+# ADK SQL agent engineering
+
+Deliver an SQL-agent change, an evidence-based review, or an implementable architecture plan. Preserve the target application's conventions and business definitions. The skill is self-contained; the book and companion repository are optional provenance, not runtime dependencies.
+
+## 1. Inspect the project
+
+Read the target's contributor instructions, dependency declarations and lockfiles, configuration loader, entry point, routing/context/SQL modules and relevant tests. Inspect before importing application modules: imports can load secrets, construct clients or start work.
+
+Use [scripts/inspect_project.py](scripts/inspect_project.py) for a bounded, read-only inventory. Invoke it with the target's existing Python interpreter and `--project` set to its root; `--help` documents the options. Its static findings are leads for inspection, not proof that a control is enforced. Inspect skipped or unsupported manifests manually without exposing values.
+
+Record these facts before choosing a change:
+
+- Python, ADK, GenAI SDK, Pydantic, database client and parser versions, separating declared constraints, resolved locks and the selected interpreter's installed packages.
+- Model backend, actual configuration precedence, resource/quota project distinction, database location and authentication method. Report presence and identifiers only where needed; keep secret values out of output.
+- Current query path: who selects metadata, who authors SQL, who can execute it, and where caller access is enforced.
+- Repeated intents, metric definitions, row grain, joins, date semantics, approved data surface and existing assertions.
+
+Read [references/compatibility.md](references/compatibility.md) before version-sensitive ADK changes. Preserve existing pins and package management. An unknown or different version requires a compatibility check, not an automatic upgrade or downgrade. If a required API is absent, report the exact incompatibility and continue only with independent work.
+
+**Inspection is complete** when the change can name its existing integration points and tests, or identify the specific missing decision. Ask only for business meaning, target selection or authorisation that cannot be inferred safely.
+
+## 2. Select the mode and query path
+
+| Mode | Use when | Deliverable |
+| --- | --- | --- |
+| Implement or adapt | The user wants working behaviour | Small coherent changes integrated into existing modules and tests |
+| Review or diagnose | The user wants findings or a failure explained | Reproduced evidence, severity, correction and validation plan; edit only within the requested scope |
+| Plan or select | Code, business rules or a provider contract are missing | Concrete architecture, interfaces, prerequisites and acceptance cases; avoid speculative scaffolding |
+
+Within one application, combine these paths as needed:
+
+- **Reviewed template:** the full metric, grain, filter, ranking and period contract matches an approved query. Validate typed values and run the template without custom SQL authoring.
+- **Generated query:** supported business question with enough approved context. Select a bounded semantic domain, retrieve relevant metadata in application code, then use a tool-free SQL author.
+- **Clarify or refuse:** missing meaning, ambiguous categorical values, unavailable metadata or unsupported relationships. Stop before SQL authoring or execution where possible.
+- **Managed/specialist integration:** a separately evaluated option when that service owns the required semantics. Establish its execution and permission boundary before connecting it; see [references/implementation.md](references/implementation.md#managed-tools-and-follow-ups).
+
+Before broad edits, give a short plan naming the path, files, preserved contracts and tests. Read [references/implementation.md](references/implementation.md) for implementation or architectural selection. In a review, read only its relevant boundary.
+
+## 3. Implement and enforce the boundaries
+
+For every executable route, read [references/execution-safety.md](references/execution-safety.md). A prompt, schema or successful dry run cannot substitute for application and database enforcement.
+
+Keep four boundaries explicit:
+
+1. **Meaning:** reviewed metrics, grain, joins and reporting windows determine what a correct answer means.
+2. **Context:** trusted code validates the selected domain, resolves values and retrieves only authorised relevant schemas. A metadata failure stops authoring.
+3. **Execution:** a model proposes a candidate; trusted code checks SQL, parameters, actual references and resource limits before using a least-privilege database identity.
+4. **Evidence:** deterministic checks establish expected answers and absence of forbidden operations. Output and telemetry distinguish query completion, completeness and source freshness.
+
+Reuse project modules rather than replacing the project with a sample application. For greenfield work, implement one useful vertical slice and its refusal path before generalising. Additional caller policy, cumulative deadlines, result completeness, repair or follow-up behaviour needs its own implementation and tests; companion evidence does not certify those extensions.
+
+## 4. Obtain approval at the consequential boundary
+
+Repository and cloud inspection are read-only by default. Local code generation does not authorise deployment. Before enabling APIs, creating billable resources, changing IAM, creating secrets, migrating data, deploying, deleting resources or running paid/destructive tests, present the **exact project, region/location, resource names, commands, limits and cleanup scope**, and obtain explicit approval. Apply an existing approval only to its recorded scope; ask again only when that scope changes.
+
+Finish the local code, plan and offline checks so approval is for a concrete operation. Missing credentials should still allow offline work. Use an isolated test target and a bounded campaign for approved live tests. Keep cleanup separate, confirm it explicitly, and delete only resources created by this operation with matching ownership records. Do not adopt pre-existing resources by relabelling them. Detailed lifecycle rules are in [references/execution-safety.md](references/execution-safety.md#cloud-lifecycle).
+
+## 5. Validate and report
+
+Read [references/validation.md](references/validation.md) for the changed paths. Use the project's existing environment, formatter, static checks and test runner. Start with deterministic tests; mark provider doubles and SQLite substitutes as offline evidence. Exercise the public workflow, not only isolated helper functions.
+
+At minimum, an implementation needs a correct supported answer, invalid/unsupported input with zero execution, selected-schema-only retrieval, a rejected write, and a second invocation without unwanted duplicate effects. Test required schema fields through actual framework-to-SDK serialisation when changing structured output. Do not execute a paid call to compensate for a failed local assertion.
+
+[scripts/check_results.py](scripts/check_results.py) compares sanitised fixture aggregates using explicit aliases and exact finite decimals. Its `--dry-run` checks shapes only. It does not establish routing, authorisation, live connectivity, ranking order or SQL safety; assert those at the application boundary.
+
+Complete the report with files changed, commands and exit results, exact environment, assertions passed/failed, manual prerequisites and unverified behaviour. Separate **LIVE VERIFIED**, **OFFLINE VERIFIED**, **NOT RUN** and **PRODUCTION PRINCIPLE**. Do not generalise a small sample to an SLA or universal SQL correctness. The skill's own validation and provenance are recorded in [references/compatibility.md](references/compatibility.md) and [references/verification-record.md](references/verification-record.md).
+
+This is an independent community project and is not affiliated with or endorsed by Google.

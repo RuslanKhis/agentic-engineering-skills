@@ -1,0 +1,6 @@
+interface:
+  display_name: "ADK SQL Agent Engineering"
+  short_description: "Build and audit grounded, read-only SQL agents"
+  default_prompt: "Use $adk-sql-agent-engineering to inspect this project and implement or review its SQL routing, context retrieval and execution boundaries with meaningful validation."
+policy:
+  allow_implicit_invocation: true

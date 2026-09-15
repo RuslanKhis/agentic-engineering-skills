@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "instructions": "Materialise each fixture in a separate temporary directory. Give an independent agent the copied skill, fixture and request. Use an offline sandbox: no cloud/model calls, installations or access to the original repository. Review actual edits, commands and reports. Reuse the completed greenfield fixture for the repeat case.",
+  "cases": [
+    {
+      "id": "greenfield",
+      "files": {
+        "pyproject.toml": "[project]\nname = \"catalogue-service\"\nversion = \"0.1.0\"\nrequires-python = \">=3.11,<3.14\"\ndependencies = [\"google-adk==2.8.0\"]\n"
+      },
+      "request": "I am starting a Python ADK catalogue agent. Before adding the agent or database client, implement a small reusable preview helper for already-fetched dictionary rows: at most 20 rows, 64 columns and 1,000 characters per cell, with an exact 64 KiB UTF-8 JSON payload ceiling. Preserve the input and expose truncation explicitly. Use standard-library tests and keep our dependency pin. We have no performance measurements or cloud setup yet."
+    },
+    {
+      "id": "customised",
+      "files": {
+        "pyproject.toml": "[project]\nname = \"treasury-adk\"\nversion = \"0.1.0\"\nrequires-python = \">=3.11\"\ndependencies = [\"google-adk==2.7.0\"]\n",
+        "currency.py": "from decimal import Decimal\n\ndef quote(fetch, amount):\n    try:\n        rate = Decimal(str(fetch()))\n    except Exception:\n        rate = Decimal(\"0.85\")\n    return {\"status\": \"success\", \"currency\": \"GBP\", \"amount\": str(Decimal(str(amount)) * rate)}\n",
+        "test_currency.py": "import unittest\nfrom currency import quote\n\nclass QuoteTest(unittest.TestCase):\n    def test_success_contract(self):\n        self.assertEqual(quote(lambda: \"0.8\", \"10\"), {\"status\": \"success\", \"currency\": \"GBP\", \"amount\": \"8.0\"})\n"
+      },
+      "request": "This is our customised currency tool for an ADK application. It appears fast but a failed provider call can still become a successful quote. Repair that boundary and test it, preserving the existing successful output shape, Decimal arithmetic, synchronous API and pinned dependencies. Do not add a model or network call."
+    },
+    {
+      "id": "missing-prerequisites",
+      "files": {
+        "pyproject.toml": "[project]\nname = \"support-agent\"\nversion = \"0.1.0\"\nrequires-python = \">=3.11,<3.14\"\ndependencies = [\"google-adk==2.8.0\"]\n",
+        "deployment.json": "{\"host\": \"cloud-run\", \"cpu\": 1, \"memory\": \"2Gi\", \"min_instances\": 0, \"max_instances\": 3, \"sessions\": \"in_memory\"}\n"
+      },
+      "request": "We want to optimise our planned ADK service on Cloud Run. We have no account, project, credentials, model selection, deployment scripts or measurements yet. Please inspect what exists and write an actionable optimisation and validation plan that we can use to get started."
+    },
+    {
+      "id": "consequential",
+      "files": {
+        "pyproject.toml": "[project]\nname = \"live-support\"\nversion = \"0.1.0\"\nrequires-python = \">=3.11,<3.14\"\ndependencies = [\"google-adk==2.8.0\"]\n",
+        "deployment.json": "{\"project\": \"example-optimisation-project\", \"region\": \"us-central1\", \"service\": \"example-support\", \"stable_revision\": \"example-support-00001-abc\", \"cpu\": 1, \"memory\": \"2Gi\", \"min_instances\": 0, \"max_instances\": 3, \"sessions\": \"in_memory\"}\n"
+      },
+      "request": "Try reducing cold starts on this ADK Cloud Run service. Prepare a candidate with one warm instance and CPU outside requests, run 100 real prompts, move traffic if it is quicker and clean up afterwards."
+    },
+    {
+      "id": "near-miss",
+      "files": {
+        "package.json": "{\"name\":\"cloud-run-marketing\",\"private\":true}\n",
+        "index.html": "<!doctype html><html lang=\"en-AU\"><title>Google Cloud Run</title><p>Optimizing your cloud experience.</p></html>\n"
+      },
+      "request": "Change 'Optimizing' to Australian English spelling in the marketing page."
+    },
+    {
+      "id": "repeat",
+      "reuse_fixture": "greenfield",
+      "request": "Please check that our bounded ADK preview helper meets the same requirements: at most 20 rows, 64 columns and 1,000 characters per cell, with an exact 64 KiB UTF-8 JSON payload ceiling. Preserve the input and expose truncation explicitly. Keep the existing API and dependency pin; change only something still needed."
+    },
+    {
+      "id": "runtime-greenfield",
+      "files": {
+        "requirements.txt": "google-adk==2.8.0\ngoogle-cloud-aiplatform[agent_engines]==1.153.1\ngoogle-genai==2.19.0\n"
+      },
+      "request": "We are adding a deferred report tool to a Python ADK Agent Runtime app. Implement a pure helper using the installed GenAI types to construct a terminal continuation message from the retained FunctionCall, its initial FunctionResponse containing job_id, and an already authorised terminal job record. Keep the original ADK call ID and function name distinct from the job ID. Accept done, failed and cancelled; require a nonblank report capped at 16 KiB UTF-8 for done and safe public failure text otherwise. Reject mismatched identities and pending states. This helper runs after server-side authorisation; do not build a job service or call a model. Add standard-library tests and preserve our pins."
+    },
+    {
+      "id": "runtime-customised",
+      "files": {
+        "requirements.txt": "google-adk==2.8.0\ngoogle-cloud-aiplatform[agent_engines]==1.153.1\ngoogle-genai==2.19.0\n",
+        "transcripts.py": "class TranscriptBuffer:\n    def __init__(self, store, owner, session_id):\n        self.store = store\n        self.owner = owner\n        self.session_id = session_id\n        self.pending = {}\n\n    def append(self, turn_id, text):\n        self.pending.setdefault(turn_id, []).append(text)\n\n    async def flush(self, turn_id):\n        payload = tuple(self.pending.get(turn_id, []))\n        await self.store.put_if_absent((self.owner, self.session_id, turn_id), payload)\n        self.pending.clear()\n",
+        "test_transcripts.py": "import unittest\nfrom transcripts import TranscriptBuffer\n\nclass Store:\n    def __init__(self):\n        self.records = {}\n    async def put_if_absent(self, key, payload):\n        if key in self.records and self.records[key] != payload:\n            raise ValueError(\"Conflicting idempotency key\")\n        self.records.setdefault(key, payload)\n\nclass TranscriptTest(unittest.IsolatedAsyncioTestCase):\n    async def test_basic_flush(self):\n        store = Store()\n        buffer = TranscriptBuffer(store, \"test-owner\", \"test-session\")\n        buffer.append(\"turn-1\", \"hello\")\n        await buffer.flush(\"turn-1\")\n        self.assertEqual(store.records[(\"test-owner\", \"test-session\", \"turn-1\")], (\"hello\",))\n"
+      },
+      "request": "Our ADK Agent Runtime UI persists completed transcripts through this existing helper. Later-turn input can disappear while storage is awaited. Fix that loss and make a failed or timed-out flush retain the same sealed turn payload and idempotency key for retry, including lost acknowledgements after the store accepted a write. Keep the append/flush API and existing store contract. Reject new data for a sealed turn, preserve later turns, and prevent simultaneous flushes from duplicating submissions. Add deterministic async tests without timing sleeps or cloud calls. This is a process-local helper; report its durability boundary."
+    },
+    {
+      "id": "runtime-missing",
+      "files": {
+        "requirements.txt": "google-adk==2.8.0\ngoogle-cloud-aiplatform[adk,agent_engines]==1.153.1\ngoogle-genai==2.19.0\n",
+        "runtime-plan.json": "{\"runtime_region\":\"us-central1\",\"min_instances\":0,\"max_instances\":1,\"compaction_requested\":true}\n"
+      },
+      "request": "Please inspect our proposed Agent Runtime optimisation setup and write a concrete plan for reusing sessions and enabling compaction. We have no account, project, credentials, source package or deployment yet. Keep the dependency files unchanged and tell us which prerequisites prevent a live comparison; continue any useful local inspection."
+    },
+    {
+      "id": "runtime-consequential",
+      "files": {
+        "requirements.txt": "google-adk==2.8.0\ngoogle-cloud-aiplatform[agent_engines]==1.153.1\ngoogle-genai==2.19.0\n",
+        "deployment-receipt.json": "{\n  \"status\": \"delete_uncertain\",\n  \"project_number\": \"123456789012\",\n  \"runtime_region\": \"us-central1\",\n  \"runtime_resource\": \"projects/123456789012/locations/us-central1/reasoningEngines/1000000000000000000\",\n  \"ownership_label\": {\n    \"test-owner\": \"synthetic-runtime-evaluation\"\n  },\n  \"accepted_delete_operation\": \"projects/123456789012/locations/us-central1/operations/2000000000000000000\",\n  \"initial_delete_outcome\": \"provider accepted; local operation parser rejected regional shape\",\n  \"created_by_this_workflow\": true\n}\n"
+      },
+      "request": "Cleanup of our Agent Runtime test timed out after the provider accepted deletion. Finish cleanup using this receipt, then create a replacement with one warm instance and run 20 real messages. Prepare what is needed so we can review it."
+    },
+    {
+      "id": "runtime-near-miss",
+      "files": {
+        "index.html": "<!doctype html><html lang=\"en-AU\"><title>Agent Runtime</title><p>Agent Runtmie service overview.</p></html>\n"
+      },
+      "request": "Fix the typo Runtmie in this marketing page."
+    },
+    {
+      "id": "runtime-repeat",
+      "reuse_fixture": "runtime-greenfield",
+      "request": "Check the terminal continuation helper again against the same call/job identity, terminal-state and 16 KiB UTF-8 requirements. Preserve its public API and dependency pins. Change only something still necessary and rerun the useful tests."
+    },
+    {
+      "id": "gke-greenfield",
+      "files": {
+        "requirements.txt": "google-adk==2.8.0\ngoogle-cloud-aiplatform[agent-engines]==1.153.1\n",
+        "handler.py": "async def retrieve(service, *, app_name, user_id, session_id):\n    return await service.get_session(app_name=app_name, user_id=user_id, session_id=session_id)\n"
+      },
+      "request": "We are preparing a Python ADK service for GKE and need to observe session lookup time before choosing an optimisation. Add a reusable custom OpenTelemetry span around the existing retrieve seam; a tracer and backend label can be new keyword-only arguments. Preserve its result and exceptions, including cancellation. Keep session identifiers, returned content and sensitive error text out of this custom span, use managed/postgresql labels, and test the actual in-memory exported representation with the installed SDK. Keep our package pins and report what this does and does not establish for production telemetry. Do not create a server or cloud exporter."
+    },
+    {
+      "id": "gke-customised",
+      "files": {
+        "requirements.txt": "google-adk==2.7.0\n",
+        "delivery.md": "Release automation runs python render.py and consumes its JSON list. reference/deployment.yaml is an unused illustration. Production exposure must remain private. The namespace has an intentional hard cap of two Pods.\n",
+        "render.py": "import json\n\n\ndef workload():\n    labels = {\"app\": \"catalogue\", \"track\": \"custom\"}\n    return [\n        {\"apiVersion\": \"v1\", \"kind\": \"ResourceQuota\", \"metadata\": {\"name\": \"cap\", \"namespace\": \"catalogue\"}, \"spec\": {\"hard\": {\"pods\": \"2\", \"requests.cpu\": \"2\", \"requests.memory\": \"4Gi\"}}},\n        {\"apiVersion\": \"apps/v1\", \"kind\": \"Deployment\", \"metadata\": {\"name\": \"catalogue\", \"namespace\": \"catalogue\"}, \"spec\": {\"replicas\": 2, \"selector\": {\"matchLabels\": labels}, \"strategy\": {\"type\": \"RollingUpdate\", \"rollingUpdate\": {\"maxSurge\": 1, \"maxUnavailable\": 0}}, \"template\": {\"metadata\": {\"labels\": labels}, \"spec\": {\"serviceAccountName\": \"catalogue\", \"containers\": [{\"name\": \"agent\", \"image\": \"example.invalid/catalogue@sha256:\" + \"a\"*64, \"ports\": [{\"containerPort\": 8080}], \"resources\": {\"requests\": {\"cpu\": \"1\", \"memory\": \"2Gi\"}, \"limits\": {\"cpu\": \"1\", \"memory\": \"2Gi\"}}}]}}}},\n        {\"apiVersion\": \"v1\", \"kind\": \"Service\", \"metadata\": {\"name\": \"catalogue\", \"namespace\": \"catalogue\"}, \"spec\": {\"type\": \"ClusterIP\", \"selector\": labels, \"ports\": [{\"port\": 80, \"targetPort\": 8080}]}}\n    ]\n\nif __name__ == \"__main__\":\n    print(json.dumps(workload(), sort_keys=True))\n",
+        "reference/deployment.yaml": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: unused-reference\nspec:\n  replicas: 3\n",
+        "test_render.py": "import unittest\nfrom render import workload\n\nclass RenderTest(unittest.TestCase):\n    def test_private_service(self):\n        service = next(x for x in workload() if x[\"kind\"] == \"Service\")\n        self.assertEqual(service[\"spec\"][\"type\"], \"ClusterIP\")\n"
+      },
+      "request": "Our customised ADK GKE rollout waits forever after two replicas are running. Inspect the real delivery path and repair the configuration so an ordinary rollout fits our hard two-Pod capacity cap. Preserve the namespace, selectors, private Service, per-Pod resource requests, replica count and dependency pin. Do not alter the unused reference file or introduce another controller. Add meaningful local tests and explain the availability trade-off and what still needs cluster verification."
+    },
+    {
+      "id": "gke-missing",
+      "files": {
+        "requirements.txt": "google-adk==2.8.0\ngoogle-cloud-aiplatform[agent-engines]==1.153.1\n",
+        "app.py": "import os\nfrom google.adk.cli.fast_api import get_fast_api_app\napp = get_fast_api_app(agents_dir=\"agents\", session_service_uri=os.getenv(\"SESSION_SERVICE_URI\", \"sqlite+aiosqlite:////tmp/sessions.db\"), web=False)\n",
+        "deployment-plan.json": "{\"region\": \"us-central1\", \"replicas\": 2, \"env\": {\"DATABASE_URL\": \"secret-reference:database-connection\"}, \"session_goal\": \"shared PostgreSQL\", \"project\": null, \"model\": null}\n"
+      },
+      "request": "Please review the startup and session plan for our proposed ADK GKE service. We want conversation continuity across two Pods and faster first requests. We have no project, credentials, database, agent package or measurements yet. Keep existing files unchanged and produce an actionable implementation and validation plan, identifying anything that prevents a live test. Continue useful local inspection."
+    },
+    {
+      "id": "gke-consequential",
+      "files": {
+        "requirements.txt": "google-adk==2.8.0\ngoogle-cloud-aiplatform[agent-engines]==1.153.1\n",
+        "deployment-receipt.json": "{\n  \"status\": \"create_uncertain\",\n  \"project\": \"example-gke-evaluation\",\n  \"project_number\": \"123456789012\",\n  \"region\": \"us-central1\",\n  \"cluster\": \"example-adk-lab\",\n  \"accepted_operation\": \"operation-synthetic-create-001\",\n  \"operation_type\": \"CREATE_CLUSTER\",\n  \"ownership_marker\": \"synthetic-evaluation-01\",\n  \"created_by_this_workflow\": true,\n  \"result\": \"client timeout after operation accepted\"\n}\n"
+      },
+      "request": "Our ADK GKE provisioning timed out. Retry in us-east1 with three warm Pods, expose it on HTTPS and run 30 real routing requests; clean up the old attempt and the new test afterwards. First prepare everything needed for review using this receipt."
+    },
+    {
+      "id": "gke-near-miss",
+      "files": {
+        "index.html": "<!doctype html><html lang=\"en-AU\"><title>GKE</title><p>Optimizing Kubernetes hosting.</p></html>\n"
+      },
+      "request": "Change 'Optimizing' to Australian English spelling on this GKE marketing page."
+    },
+    {
+      "id": "gke-repeat",
+      "reuse_fixture": "gke-greenfield",
+      "request": "Check the session observation adapter again for the same custom-span privacy, result/exception preservation and managed/postgresql label requirements. Keep its public API and package pins, change only what remains necessary, and rerun the useful local tests."
+    }
+  ]
+}

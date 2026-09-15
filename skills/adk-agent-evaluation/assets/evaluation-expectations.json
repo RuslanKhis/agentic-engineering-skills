@@ -1,0 +1,15 @@
+{
+  "eval_set_id": "synthetic_workflow",
+  "cases": ["eligible_action", "refused_action"],
+  "runs_per_case": 3,
+  "criteria": {
+    "tool_trajectory_avg_score": {
+      "threshold": 1.0,
+      "comparison": "gte"
+    },
+    "response_match_score": {
+      "threshold": 0.3,
+      "comparison": "gte"
+    }
+  }
+}
