@@ -5,6 +5,7 @@
 <p align="center">
   <a href="#getting-started">Getting started</a> ·
   <a href="#the-skills">The skills</a> ·
+  <a href="#using-these-with-googles-agents-cli">Working with Agents CLI</a> ·
   <a href="#using-these-with-matt-pococks-skills">Working with Matt's skills</a> ·
   <a href="#about-the-book">About the book</a>
 </p>
@@ -568,6 +569,66 @@ and test that unrelated or forbidden tables never enter its context.
 Enforce read-only queries, allowed tables and resource limits in code,
 and add tests proving rejected queries never reach the database.
 ```
+
+<p align="center">
+  <img src="docs/editorial/section-break.svg" alt="" width="240">
+</p>
+
+## Using These with Google's Agents CLI
+
+*Bring the project tools and the application design to the same task.*
+
+[Google's Agents CLI](https://github.com/google/agents-cli) supplies commands,
+project templates and seven skills for scaffolding, writing ADK code, evaluating,
+deploying, publishing and observing agents. Its recipes also cover capabilities
+such as memory, tool approval and credentials. This toolkit adds detailed
+guidance for adapting those capabilities to your application's data, tools,
+identity boundaries and tests.
+
+Use Google's workflow when you want an Agents CLI project. Bring in an Agentic
+Engineering specialist for the particular feature or engineering decision:
+
+| Work you are doing | Agents CLI contributes | This toolkit contributes |
+| --- | --- | --- |
+| Add memory to a generated agent | Project conventions, ADK APIs and reference recipes | Choosing what to store, user isolation, consent and forgetting |
+| Evaluate a tool that changes data | Dataset and metric formats, trace generation and grading commands | Deterministic checks of actual effects, coverage and result auditing |
+| Prepare and operate a deployment | Generated infrastructure, deployment commands and telemetry integrations | Hosting and identity decisions, recovery, performance analysis and sensitive-data controls |
+| Publish to Gemini Enterprise | Registration commands and platform-specific guidance | Relevant application authentication and data-boundary review |
+
+To install Google's skills alongside these in a Claude Code project:
+
+```bash
+npx skills@latest add google/agents-cli --skill '*' -a claude-code
+```
+
+For Codex, use `-a codex`. This installs Google's skill files; using its platform
+commands also requires the Agents CLI executable. See the
+[combined setup guide](docs/integrations/agents-cli.md#install-them-together)
+for the CLI installation and scope choices. Reload your coding-agent session
+after installation.
+
+For an existing Agents CLI project, try:
+
+```text
+/adk-engineer Add a remembered response-language preference to this
+Agents CLI project. Use the installed google-agents-cli-adk-code skill
+for its APIs and recipes, and adk-memory-architecture for storage,
+consent, user isolation and forgetting. Preserve the generated project
+structure and dependency pins. Implement and run offline tests;
+prepare a separate plan for live evaluation.
+```
+
+In Codex, start with `$adk-engineer`. Use one entry command and name the other
+installed skills in the request. Installing both collections makes their
+guidance available; it does not establish an automatic integration or a rule
+for resolving competing workflows. For a focused change, state the requested
+scope: Google's full workflow expects scaffolding and live evaluation, while
+an existing application may only need a local code change.
+
+Read the [three worked usage examples](docs/integrations/agents-cli.md#three-practical-workflows)
+for feature development, evaluation and deployment planning. That guide also
+explains how Matt's `tdd` or `code-review` can supply the development method
+alongside both collections.
 
 <p align="center">
   <img src="docs/editorial/section-break.svg" alt="" width="240">
