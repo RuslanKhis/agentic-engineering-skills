@@ -4,6 +4,8 @@ Use this reference when an ADK optimisation changes a GKE image, workload,
 identity, capacity or cloud resources, or requires recovery and cleanup. Apply
 [lifecycle.md](lifecycle.md) for the exact approval and budget contract. Adapt the
 target's deployment system; this skill supplies no automatic cloud deployer.
+For the tested wire failures, exact permission boundaries and partial-cleanup
+diagnosis, read [gke-deployment-troubleshooting.md](gke-deployment-troubleshooting.md).
 
 ## Establish the actual deployment boundary
 

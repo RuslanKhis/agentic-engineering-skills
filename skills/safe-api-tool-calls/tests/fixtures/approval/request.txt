@@ -1,0 +1,1 @@
+Our approval screen can stay open while a refund changes. Use the safe-api-tool-calls skill to repair the execution boundary in this fixture. Preserve the existing interface and add offline tests for the relevant behaviour. Report limitations rather than adding new infrastructure.

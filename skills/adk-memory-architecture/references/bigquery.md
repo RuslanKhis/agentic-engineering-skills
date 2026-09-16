@@ -25,6 +25,25 @@ Complete the decision with the supported questions, ownership mapping and explic
 
 Complete this phase when each identity boundary is enforced in code or effective data access controls and can be tested separately.
 
+A typical authorised-view topology is:
+
+```text
+source dataset access entry:
+  view: {projectId: serving_project, datasetId: serving_dataset, tableId: serving_view}
+serving workload:
+  read permitted serving data + create query jobs in the selected query project
+analytics workload (if enabled):
+  write only the separate analytics destination
+```
+
+DDL and these access entries are different mutations. Preserve unrelated
+existing ACL entries and use the supported concurrency precondition instead of
+uploading a stale replacement ACL. Check region compatibility and the full view
+identity. After create, replacement and repeat, test serving-view read succeeds,
+protected-source read/mutation and view redefinition are denied where outside
+the role, unrelated ACLs remain, and analytics grants do not widen source access.
+These provider checks need approved live scope; a mocked DDL test proves less.
+
 ## 3. Implement a bounded result contract
 
 1. Map the source lifecycle deliberately; validate status/category values and timestamp types rather than treating every non-closed state as open. Preserve target domain terminology.
@@ -49,6 +68,44 @@ Where the production requirement includes bounded admission and reconciliation o
 
 A successful cancellation request is not terminal-state evidence. A lost submission response does not prove that no job exists. Setup-script journalling does not establish those guarantees in a separate runtime executor; inspect both paths before making the claim.
 
+### Job completion is not the end of result I/O
+
+Treat submit → job wait → page fetch → validation/projection → public release
+as separate stages under the same remaining deadline. `job.result(timeout=...)`
+can return a lazy iterator whose later fetches still perform network I/O.
+Bound real page reads and final bytes, handle caller cancellation and preserve
+the query identity. A failure after one page must not become a successful
+partial or empty answer unless that is the explicit public contract.
+
+Use a lazy double that yields one page then blocks or fails. Assert bounded
+safe failure, no partial release and no replacement query. The source contract
+test returns an eager list, so it does not establish those guarantees; its
+runtime iterates results outside the inner job-result timeout handler.
+
+### Optional pagination contract
+
+For a target that needs more than one bounded page, use a stable final order,
+such as `ORDER BY updated_at DESC, record_id ASC`. Apply it to the final query
+result, not only an inner CTE. Fetch N+1 rows and return N to derive `has_more`,
+or expose a conservative `may_have_more` when only N were requested. An example
+keyset condition for that order is:
+
+```sql
+updated_at < @last_updated_at
+OR (updated_at = @last_updated_at AND record_id > @last_record_id)
+```
+
+Combine it with the same trusted ownership/filter predicates. Bind a
+tamper-evident continuation token to owner, query/filter/policy version, last
+sort tuple and expiry; reauthorise every page. Define whether pages share a
+fixed result/snapshot or are best-effort current reads. Keyset pagination alone
+does not prevent movement when a row's sort key changes. Test equal timestamps,
+N/N+1 boundaries, changed rows, forged tokens and cross-owner reuse.
+
+This is an extension: the source limits an inner query, has no final stable
+ordering contract or pagination marker, and must not be described as returning
+all matching records.
+
 ## 5. Verify ingestion and the view contract
 
 - If the serving table represents current rows, specify its business key, deduplication rule and source-version ordering. Prevent an older late-arriving event from replacing a newer state.
@@ -56,6 +113,24 @@ A successful cancellation request is not terminal-state evidence. A lost submiss
 - Keep append-only analytical history separate from a current-row serving table where the domain needs both. Set purpose, partitioning, retention and access controls independently.
 - Treat synthetic fixture merges as fixture setup, not proof of a production replication engine. Test importer guarantees with duplicate, out-of-order and missing updates.
 - Treat agent analytics as a separate privacy route. Inventory the complete exporter schema and actual sinks, minimise fields and test synthetic sensitive-data canaries; disabling a content formatter alone does not prove whole-row minimisation.
+
+### Analytics needs a startup, schema and loss contract
+
+Keep analytics explicitly opt-in. Against the installed plugin, verify an
+event allowlist, excluded content/content-parts/attributes, multimodal and
+session-metadata switches, and whether it auto-creates or upgrades schema/views.
+The source disables broad content capture and schema/view mutation; that is a
+configuration contract, not proof about every emitted row. Keep schema setup
+under operator authority and prevent request metadata from widening capture.
+
+Register protection before exporters at the actual startup boundary. Capture
+complete emitted rows/objects under success, failure and exception paths;
+inspect IDs, attributes and offloaded content as well as text. Exercise a full
+queue and shutdown timeout, and report lost/undelivered events. Missing metrics
+are not a verified zero-drop count, and missing telemetry is not evidence that
+no tool ran. See [integration-recipes.md](integration-recipes.md) for event
+projection and client ownership; the source's configuration-only tests do not
+establish a full telemetry privacy guarantee.
 
 ## 6. Validate and report
 

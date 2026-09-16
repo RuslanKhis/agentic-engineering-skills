@@ -14,6 +14,9 @@ Adapt the workflow to the target project's existing framework and boundaries; a 
 Finish with a compact boundary map naming the owner of each control and any path that bypasses it.
 Passing an App to Runner preserves registered plugins; it does not initialise missing application controls.
 Register tool-result protection before observers that can export those results, and close owned clients on failed startup as well as shutdown.
+For concrete assembly, injected context fields, plugin return semantics,
+public-event projection and rotation-safe replay, read
+[integration-recipes.md](integration-recipes.md).
 
 ## Resolve identity and session ownership
 
@@ -79,3 +82,28 @@ Use existing tests for review; for authorised implementation work, add focused c
 
 Report the implemented control, supporting test boundary and remaining production requirement separately.
 Record missing context management or lease renewal as gaps; do not infer them from a passing aggregate suite.
+
+## Production extensions when the requirement calls for them
+
+**Long conversations:** define a context budget and overflow rule independently
+of transcript retention. Reserve required instructions, current request, exact
+workflow state and function-call/result relationships; select protected summaries
+or retrieved history for the remaining budget. Keep authoritative locators and
+cited releases, but recheck permissions and pending approvals. Test a pending
+action across compaction, process restart and a second replica. The companion
+does not implement a compactor or prove these continuation cases.
+
+**Remote runtime:** choose an actual remote SDK/API boundary instead of running
+both a local Runner and a remote agent accidentally. Keep a durable mapping of
+owner, application thread, remote resource and remote session. Verify every
+history/list/attach/cancel route's owner filter; general resource IAM does not
+prove end-user filtering. Authenticate the service hop and keep the browser
+behind the application's gateway. This is a design extension, not the source
+lab's hosted in-process Runner.
+
+**Streaming reconnect:** persist only approved public events with run ID,
+monotonic sequence/cursor and bounded retention. Reconnect attaches to that run
+without executing its tools again. Test wrong owner, duplicate reconnect, expired
+cursor, disconnected consumer and worker loss. Preserve completed-response and
+erased-response semantics independently of the stream. The source's buffered
+JSON/replay implementation does not provide this public event log.

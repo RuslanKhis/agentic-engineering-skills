@@ -17,7 +17,7 @@ The example guides allow Python 3.11–3.13; that range is not a claim that ever
 
 ## Inspect the target, then apply the appropriate contract
 
-Select the target's existing interpreter from its documented environment. Read `pyproject.toml`, requirements/constraints/includes, lockfiles and Docker base together; check the installed environment separately. For example, run this using the selected interpreter, without importing the agent:
+Select the target's existing interpreter from its documented environment. Read `.python-version`, `pyproject.toml`, requirements/constraints/includes, lockfiles and Docker base together; check the installed environment separately. A project version declaration and the interpreter running the inspector can differ. For example, run this using the selected interpreter, without importing the agent:
 
 ```python
 import importlib.metadata
@@ -40,6 +40,8 @@ If a pinned target differs from the baseline, label it **unverified against this
 Run `scripts/inspect_project.py` with an explicit project root. It uses only the Python 3.11+ standard library and never imports target code, executes cloud tools, reads `.env` values or edits the target. `--help` describes its limits and exit statuses. `--dry-run` explicitly selects the same non-mutating inspection behaviour as the default.
 
 `--mode` selects `auto`, `cloud-run`, `agent-runtime` or `gke`. Architecture signals help discovery; they do not choose the user's platform or replace inspection of customised deployment code. `--require-baseline` is a strict evidence gate: missing, ranged, conflicting or different required pins cause a nonzero result. It does not install packages or prove that a different version cannot work.
+
+Read the three Python fields separately: `python.interpreter` is the process running the helper, `python.declared_requirements` contains parsed `pyproject.toml` constraints, and `python.version_pins` contains `.python-version` declarations. Pin records point to manifest IDs with root/nested provenance. One or more nonblank numeric `major.minor[.patch]` lines are reported in their declared order. A file containing a named environment, path, unsupported syntax or no version is marked `unparsed` with its values omitted; inspect it privately if relevant. These files use the same bounded, nonsymlink manifest reader. The helper neither selects an interpreter nor evaluates Python compatibility, and Python declarations do not change the package baseline gate.
 
 With a selected mode and all of `--project`, `--region`, `--account`, the helper prints read-only `gcloud` argument arrays for project, billing, enabled-API and applicable build-identity checks. It never runs them. Inspect the arrays before executing only the intended reads. Project-level reads have no region scope; regional reads include the selected region. API listings still require comparison with the mode's actual dependencies, and neither a plan nor a successful lookup establishes model access.
 

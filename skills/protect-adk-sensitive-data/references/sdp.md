@@ -3,7 +3,8 @@
 Use this mode when raw text may reach a model, history, tool or other sink. SDP
 means Google Cloud Sensitive Data Protection; the Python package/API still uses
 `google-cloud-dlp` / `dlp_v2`. The framework-neutral asset is a controller, not a
-detector or Google client. Provider adapters and domain policy remain explicit.
+detector or Google client. An optional regional SDK adapter is also supplied
+below; provider policy and separately approved live acceptance remain explicit.
 
 ## Choose coverage
 
@@ -57,10 +58,54 @@ side-effect idempotency or SDK concurrency control is supplied by this asset.
 
 ## Adapt the Google provider boundary
 
+For an implementation starting without an SDP adapter, copy
+[google_sdp_adapter.py](../assets/google_sdp_adapter.py) and
+[sdp_boundary.py](../assets/sdp_boundary.py) into the **same existing Python
+package**, retaining their MIT notice and licence. The adapter uses a relative
+import; it is a library, not a standalone CLI. It adds real typed SDK requests,
+template scope validation, byte/character limits, a shared deadline including
+queueing, transport reuse and close. Read/adapt it before using it in a target
+whose conventions differ; preserve an equivalent existing adapter.
+
+The host supplies trusted `SdpTemplates(project, location, deny_inspect,
+pii_inspect, deidentify)` with **full resource names**. Create one
+`GoogleSdpProtector(templates, ...)` per worker/event loop, explicitly await
+`start()` during the host lifecycle, and await `close()` after requests drain.
+`async with GoogleSdpProtector(...) as protector` is also supported. Use
+`await protector.protect_text(text, deadline=host_monotonic_deadline)` before
+downstream sinks; only the return value is accepted. The optional host deadline
+can shorten, never extend, the adapter's protection budget.
+
+Its regional endpoint is `dlp.{location}.rep.googleapis.com`. The resource
+location, endpoint and three templates must agree. The adapter intentionally
+rejects `global` because this template implements the regional path; a global
+endpoint requires a deliberate alternative design. Supported regional/multi-
+regional locations still need verification; a well-formed string is not service
+availability. This endpoint format and co-location rule are documented by
+[Google's processing-location guide](https://docs.cloud.google.com/sensitive-data-protection/docs/specifying-location).
+
+Construction and import create no client. `start()` lazily imports the SDK and
+uses its normal ADC chain unless an owned test client is injected. Missing
+configuration fails before SDK/ADC construction; missing credentials have no
+local/pass-through fallback. SDK dependency declaration remains the target's
+decision. The adapter sends no inline config that could merge unexpectedly with
+named templates. Validate all-finding replacement and `throw_error` in preflight.
+If adding per-type transformations, prove every required detected type has an
+action. Inspecting PII first merely to call de-identification again duplicates
+detection; the separate initial inspection here makes a different **deny**
+decision and is intentional.
+
+**Fresh offline only:** SDK 3.38.0 request/response fixtures exercise the added
+adapter. Its strict requirement for populated response messages/overview is
+additional hardening; a separately approved benign and PII live canary must
+confirm actual provider response shapes before production activation. It does
+not prove detector accuracy, template policy, IAM, billing, deployment or SDK
+log/exporter privacy. Output release and Model Armor remain separate controls.
+
 Inspect the target's installed SDK before writing calls. In the recorded
 `google-cloud-dlp==3.38.0` path:
 
-1. Own one `dlp_v2.DlpServiceAsyncClient` with the selected endpoint and close its
+1. Own one `dlp_v2.DlpServiceAsyncClient` with the selected regional endpoint and close its
    transport during application shutdown. Bound active calls with a semaphore;
    queue time counts towards the request deadline.
 2. Validate the configured security project/location and full template names.
@@ -101,4 +146,7 @@ not only the user-visible answer.
 **Evidence:** the historical adapter/tests support deny-before-transform,
 template routing, error handling and concurrency. They do not cover the
 empty/truncated case. A later offline probe exposed that gap; the new asset
-enforces the stronger rule. See [compatibility.md](compatibility.md), E1–E3.
+enforces the stronger rule. See [compatibility.md](compatibility.md), E1–E3 and
+E14 for the separately tested regional SDK adapter.
+For transformation/recovery choices and representative detector evaluation,
+read the relevant sections of [production-policy.md](production-policy.md).

@@ -23,6 +23,34 @@ can produce final responses in one invocation. Check content/parts/text before
 reading them, handle failure rather than manufacturing an empty success, and
 preserve the workflow's designated author/node/state result.
 
+Choose and test the result adapter explicitly:
+
+| Application contract | Selection after consuming the run |
+| --- | --- |
+| One named conversational agent | Retain text-bearing final responses from the designated author; define what no matching response means. |
+| Sequential or loop artefact | Read the designated committed key after a successful current turn; a critic acknowledgement is not the artefact. |
+| Parallel branches | Read every required branch result after the join; one final text cannot represent all branches. |
+| Typed `Workflow` result | Use the expected node/workflow's structured `event.output`, with its author and `node_info.output_for` provenance. JSON uses `nodeInfo.outputFor`. Preserve valid empty output such as `[]`. |
+
+For graph output, a result may be a Python/Pydantic value with no text parts.
+Do not discard it with `if event.output` or use `str(value)` as a JSON serializer.
+Validate the expected type/schema and presence for that node. In the checked
+plain-function Workflow path, a bare `None` may produce no output event; if null
+is a meaningful result, return an explicit typed envelope such as
+`{"value": None}`. `event.output is None` cannot distinguish absent output from
+a successful null result. Consume the remaining
+events, check error/paused status and then deliver the result. Early text must
+not hide a later tool or workflow failure. The structured-output and callback
+recipes in [test_runtime_contracts.py](../tests/test_runtime_contracts.py) exercise
+the real Runner with the model boundary substituted.
+
+Persistent result keys need a freshness contract. A new failed turn can leave a
+previous turn's successful value in the same session. Gate delivery on the current
+turn's success and expected producer; if the application permits reuse, record
+and compare the producing invocation/version. Do not blindly clear shared state
+or treat a populated `final_copy` as proof of new work. Test success followed by
+failure on the same populated session, not only failure on an empty session.
+
 ## Commit and durability are separate
 
 Writing through tracked `context.state` updates the invocation's view immediately.
@@ -30,6 +58,31 @@ The corresponding `event.actions.state_delta` must reach a successfully processe
 complete event to establish the service-side transition. Earlier local reads are
 not proof that a persistent service committed the value. `temp:` keys are scratch
 space, not durable resume data.
+
+Tracked writes occur at the top-level state assignment/update boundary in the
+checked SDK. `context.state["cart"]["items"].append(item)` can change a local
+object without producing a state delta. Use copy–modify–reassign when changing
+mutable nested values:
+
+```python
+from copy import deepcopy
+
+cart = deepcopy(context.state.get("cart", {"items": []}))
+cart["items"].append(item)
+context.state["cart"] = cart
+```
+
+This is a callback/tool fragment; `context` and validated `item` come from the
+application. Verify the complete event's delta and reload through the session
+service. An in-memory alias appearing changed is weaker evidence than a committed
+delta; persistence claims additionally require the configured durable service.
+
+Choose state scope deliberately: unprefixed keys are session-scoped, `user:` is
+shared across one user's sessions within an app, `app:` across the app's users
+and sessions, and `temp:` is invocation scratch state omitted from persistence.
+Keep caller-specific results and permissions out of `app:` and mutable module
+globals. These scopes do not authenticate the supplied user ID or isolate tool
+credentials; test populated control sessions when claiming data separation.
 
 `InMemorySessionService` loses data when its process stops. ADK Web's default local
 SQLite session store survives a restart. Use the configured persistent service

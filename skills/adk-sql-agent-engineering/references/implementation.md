@@ -2,6 +2,8 @@
 
 Read this for a new path, architecture choice or a review of the relevant stage. The default pattern has a small router, reviewed templates, deterministic context collection, a tool-free author and a shared execution boundary. It is an architectural option, not a requirement to migrate every project to an identical graph.
 
+Use [semantic-contracts.md](semantic-contracts.md) for concrete metric/context fixtures, [adk-runtime.md](adk-runtime.md) for framework wiring and the executable offline contract asset, and [acceptance-and-extensions.md](acceptance-and-extensions.md) for public acceptance and optional production capabilities.
+
 ## Reviewed templates
 
 Define a template contract before routing: metric and units, one-row meaning, selected columns, parameter types and allowed business values, date bounds/timezone, sorting/ties, empty-result behaviour and caller access. Bind user-controlled values through the database client's parameter mechanism. Physical identifiers come from trusted configuration and an approved catalogue; parameters bind values, not table or column names.

@@ -1,6 +1,6 @@
 # Provenance and evidence limits
 
-Evidence reviewed: **15 September 2026**. The source companion is the MIT-licensed [Agentic Engineering repository](https://github.com/RuslanKhis/agentic-engineering-adk-gcp). Paths below are relative to its `chapter-05-frontend-integration/` directory. They identify provenance; installing or using this skill does not require that repository, the manuscript, or this conversation. Preserve applicable MIT notices when redistributing adapted source code.
+Evidence reviewed: **16 September 2026**. The source companion is the MIT-licensed [Agentic Engineering repository](https://github.com/RuslanKhis/agentic-engineering-adk-gcp). Paths below are relative to its `chapter-05-frontend-integration/` directory. They identify provenance; installing or using this skill does not require that repository, the manuscript, or this conversation. Preserve applicable MIT notices when redistributing adapted source code.
 
 This reference records historical companion evidence, not validation results for the new skill or the user's project. “Offline” means the stated application or SDK boundary ran with its external model, provider transport, or command boundary replaced. It does not mean Google Cloud was exercised.
 
@@ -21,11 +21,30 @@ This reference records historical companion evidence, not validation results for
 
 ## Gaps that must remain explicit
 
-`copilot_frontend/src/app/tool-renderers.tsx` casts parsed results rather than validating them. Its parameter schema does not validate results; a completed JSON `null` can break rendering. Stronger runtime validation is production guidance, not a tested companion guarantee.
+`copilot_frontend/src/app/tool-renderers.tsx` casts parsed results rather than validating them. Its parameter schema does not validate results; a completed JSON `null` can break rendering. The skill's [CopilotKit recipe](copilotkit-recipe.md) supplies a stronger parsing pattern; that does not retroactively repair or certify the companion renderer. Its separate validation is recorded in [validation.md](validation.md).
 
 The managed bridge selects an earlier nonempty user message, allowlists one state key without validating its value, and uses generated IDs/name-order fallback for limited tool correlation. It does not implement strict continuation admission, durable replay, arbitrary parallel-tool correlation, distributed fencing, resumable approvals, or durable unknown-outcome protection. `copilot_frontend/src/app/telemetry-monitor.tsx` retains 50 selected entries, without a byte budget or whole-SDK memory bound. The routing tool only classifies; it performs no external ticket write.
 
 Provisioning principles come from `scripts/runtime_bootstrap.py`, `scripts/runtime_lab.py`, `scripts/runtime_smoke.py` and their corresponding tests: read-only preflight, exact approved changes, saved operation intent, ownership-bound reconciliation, and separate cleanup. These scripts contain companion/campaign dependencies and are not portable assets unchanged. Injected recovery and missing-prerequisite branches were offline.
+
+## Depth review: where the practical lessons now live
+
+The September 16 review compared the current skill with implementation, test records, `MANUSCRIPT_COMPARISON_2026-09-15.md` and the updated manuscript. The following additions make earlier lessons actionable; they do not expand the historical live-test claim.
+
+| Lesson and destination | Source of the rule | Evidence boundary |
+| --- | --- | --- |
+| Complete Next.js route, provider, CSS, renderer and observer wiring: [CopilotKit recipe](copilotkit-recipe.md) | `copilot_frontend/src/app/`, `audit/evidence/browser-checks.md` | Recorded package versions and historical local-browser production build; new recipe checked separately. No cloud-hosted frontend evidence. |
+| Validate tool results independently of hook parameters, and distinguish invalid completion from pending work: [CopilotKit recipe](copilotkit-recipe.md) | Renderer defect; `agui_backend/runtime_bridge.py` public result model; `tests/test_runtime_chapter3_contract.py` | Backend projection tested; stronger frontend parser is a skill improvement, not a companion feature. |
+| SDK event encoding and HTTP versus in-band errors: [AG-UI](ag-ui.md) | `agui_backend/runtime_bridge.py`, `tests/test_backend_http.py` | Offline HTTP assertions and historical browser streaming; a collected ASGI response alone does not prove incremental delivery. |
+| Reject unsupported browser tools/state/continuation before invocation: [AG-UI](ag-ui.md) | Updated manuscript §12.4; comparison findings | Stronger production admission guidance; companion earlier-user-message fallback does not implement it. |
+| ADK application naming, session paths, `/run` payload and private-service credentials: [JSON API](json-api.md) | `manual_api/adk_api_gateway.py`, `tests/test_adk_api_events.py`, README private Cloud Run instructions | Offline URL/payload/error tests and installed google-auth source; no live workstation impersonation or Cloud Run/GKE gateway check. |
+| Exact managed service identity, external deployment configuration, child environment and independent readback: [deployment runbook](deployment-runbook.md) | `scripts/RUNTIME_BOOTSTRAP.md`, `scripts/RUNTIME_LAB.md`, `runtime_lab.py`, `tests/test_runtime_lab.py` | Identity correction and bounded existing-resource updates live; injection/refusal branches offline; fresh API activation unverified. |
+| SDK plus transport attempt bounds and operation-state recovery: [deployment runbook](deployment-runbook.md) | `runtime_smoke.py`, `tests/test_runtime_smoke.py`, `tests/test_runtime_lab.py` | Successful smoke and ordinary provision/delete repeats live; uncertain-operation and retry faults injected offline. |
+| Boundary-driven diagnosis, real model substitution and cancellation phases: [troubleshooting](troubleshooting.md) | `tests/offline_server.py`, `tests/test_runtime_model_streaming.py`, frontend HTTP tests, manuscript §13.8, prior skill forward-test cancellation failure | Some phases tested; complete managed stalled-producer/socket-disconnect coverage remains a requirement, not an accomplished test. |
+| First event versus visible answer/tool/final timing: [troubleshooting](troubleshooting.md) | `tests/BROWSER_TIMING.md`, September 13 audit | Historical target misses and inconclusive stall cause remain visible; no latency promise. |
+| Persistent-storage readiness, collision-safe provider identities and thread mapping: [production](production.md) | Updated manuscript §§12.1, 13.1–13.2 | Managed history recall after gateway restart live; local schema migration/readiness and production identity mapping remain advice requiring new tests. |
+
+This review deliberately keeps project-wide RAG, VM, database and storage teardown outside a frontend integration skill. The transferable lesson is ownership-scoped cleanup with explicit inventory limits, not a universal deletion script.
 
 ## Recorded compatibility
 

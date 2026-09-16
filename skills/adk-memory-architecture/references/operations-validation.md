@@ -2,9 +2,13 @@
 
 Use this reference when planning paid acceptance, resuming a failed campaign, or cleaning up created resources. A request to review architecture or write documentation does not authorise a live campaign.
 
+Use [managed-deployment.md](managed-deployment.md) for configuration, identity
+and deployment ordering; use [failure-recovery.md](failure-recovery.md) for
+specific retry, quota, credential, probe and cleanup failure decisions.
+
 ## 1. Establish a read-only baseline
 
-- Locate the application, deployment guides, configuration schema, dependency constraints, source hashes and latest dated evidence. Resolve paths in the current repository; Chapter 6 paths below are provenance, not a required layout.
+- Locate the application, deployment guides, configuration schema, dependency constraints, source hashes and latest dated evidence. Resolve paths in the current repository; source paths in the provenance reference are not a required layout.
 - Record the intended account, project, quota project, resource locations and workload identities. Pin these per command or client; inspect access without changing global CLI defaults.
 - Check required APIs, billing availability and effective quotas through read-only interfaces. Preserve missing permissions, disabled APIs and unreachable regions as unresolved checks.
 - Inspect nested application configuration without printing secrets. A changed root environment file does not prove that child configuration or API keys changed.

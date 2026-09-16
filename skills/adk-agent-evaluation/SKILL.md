@@ -6,7 +6,7 @@ metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   source-chapter: "7"
-  last-tested: "2026-09-15"
+  last-tested: "2026-09-16"
   compatibility: See references/compatibility.md for exact tested versions and limits
 ---
 
@@ -32,6 +32,12 @@ Combine modes only when the requested outcome needs them. Read the linked refere
 | Explain a misleading pass, check a CSV, design reliability/holdout gates | [Result auditing](references/result-auditing.md) | Expected coverage checked, failed/incomplete rows retained, conclusions limited to identifiable observations |
 
 Planning a production suite can stop at a reviewable design with cases, budgets and acceptance criteria. Recommendations about holdouts, remote-write reconciliation or production telemetry are not claims those features exist or passed testing.
+
+Load additional implementation detail only for the relevant branch:
+
+- **Setup, project/provider changes or access failures:** [environment and troubleshooting](references/environment-and-troubleshooting.md) gives configuration tracing, API-state reconciliation and scoped cleanup checks.
+- **Runtime wiring, fault injection, observers, deadlines or browser timing:** [execution evidence](references/execution-evidence.md) gives concrete recipes and the checks that make their results trustworthy.
+- **Dataset curation, judge calibration, work budgets, ambiguous writes or release gates:** [evaluation design](references/evaluation-design.md) gives production implementation procedures and acceptance criteria, explicitly separate from historical companion coverage.
 
 ## Apply the pattern
 

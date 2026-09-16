@@ -57,6 +57,22 @@ The inventory limits are 4 directory levels, 4,096 entries, 64 manifests,
 | GKE workload | Authoritative rendered manifests, quota/surge/scaling coherence, selectors/ports, shipped image, admitted resources and separate startup/readiness/model acceptance |
 | GKE serving | Actual shared backend and replacement continuity, caller-bound sessions, tested drain and final export privacy; partial delivery is independent of completion |
 
+For Part 1 implementation depth, use
+[part1-verification.md](part1-verification.md): actual ADK transport doubles,
+component/integration acceptance, exact preview/export checks, aggregate budgets
+and cleanup-only recovery. Use
+[cloud-run-troubleshooting.md](cloud-run-troubleshooting.md) for installed
+packaging/CLI, environment parser, TLS/authentication and UI boundary tests.
+
+For Part 2 startup, compaction, streaming, buffering and continuation changes,
+use [runtime-verification.md](runtime-verification.md). It includes actual-framework
+checks and controlled failure interleavings; the optional finite stream consumer
+validates decoded answer completion separately from tool-result semantics.
+
+For GKE release, server/session, streaming or telemetry changes, read
+[gke-verification.md](gke-verification.md). It separates renderer and SDK contracts
+from admission, real storage, authenticated delivery and provider cleanup.
+
 For a proposed performance improvement, retain the baseline workload, model and
 configuration, measure successful comparable requests, record errors and sample
 counts, and separate cold starts, cache state and client/network effects. A
@@ -121,6 +137,15 @@ make the smoke contract pass. Missing cache usage means unknown; zero means no h
 observed. A positive count supports reuse in the supplied data only. The reported
 maximum is neither a token total nor a billing estimate.
 
+The supported Part contract contains text, thought/signature metadata and the
+declared named function calls/responses. Non-null code-execution, server-side tool,
+media and unknown payload fields return unsupported input, including when they
+occur after an apparent answer. The same restriction applies to nested tool media,
+partial arguments, continuation and scheduling fields. It does not inspect
+ordinary business keys within the declared JSON args/response as protocol fields.
+Null SDK defaults are allowed. Additional protocols need an explicit
+target-specific verifier; accompanying text is not a substitute.
+
 Inputs are bounded to 8 MiB/2,000 events and a 64 KiB expectation file. Duplicate
 JSON keys, nonfinite numbers and nonregular or symlink input files are rejected.
 Only counts and fixed reason codes are printed. Exit 0 means accepted saved data,
@@ -141,6 +166,44 @@ through real ADK with deterministic model doubles and contrasts App versus
 agent-only construction. Both explicitly skip if that SDK baseline is absent;
 a skip is not an SDK compatibility pass. No test calls a provider model or
 creates a cloud resource.
+
+`test_runtime_token_compaction.py` additionally exercises the real ADK 2.8.0
+token path: synthetic observed usage, an oversized first input reaching the model,
+and a retained function-call/response pair outside the compacted prefix. It skips
+on another SDK baseline. This establishes neither real token usage nor summary
+quality, hosted configuration or a hard input admission limit.
+
+`test_finite_answer_stream.py` checks the optional standard-library async consumer
+through late errors, strict aliases/types, thought/tool exclusion, UTF-8/count/time
+bounds, provisional delta/snapshot updates, cancellation and independent closure
+failure. Its interoperability cases use real ADK 2.8 event JSON serialisation and
+skip explicitly if that baseline is absent; the other consumer tests need no ADK. The consumer
+does not validate application-specific tool results or perform transport decoding.
+
+`test_gke_http_contract.py` keeps ADK 2.8's actual FastAPI, Runner, session routes
+and event serialisation while replacing the model. It tests session body shapes,
+application versus author identity, streaming selection, late errors after HTTP
+200 and framework closure order. `test_gke_session_contract.py` tests real SQLite
+history selection/disposal, the managed adapter with its API client doubled, and
+native span export to memory. The latter intentionally demonstrates that capture
+flags leave a raw conversation identifier. These tests skip missing required
+SDKs; neither file establishes GKE delivery, PostgreSQL behaviour or telemetry
+privacy after a production export policy. The saved-run checker's real SDK
+regression also rejects code-result narration as unsupported input.
+
+`test_formatting_contract.py` exercises the optional Pydantic 2 preview asset:
+strict plain JSON cells (including rejection of Decimal-to-float coercion), exact
+UTF-8 limits, cross-field shape, safe public errors, input preservation and
+revalidation after mutation. It skips when Pydantic 2 is absent. This is an input
+contract test, not a formatter integration or query/authorisation test.
+
+`test_part1_adk_budget.py` uses real ADK 2.8.0 Runner, `AgentTool` and session
+orchestration with deterministic model doubles. It demonstrates that the root's
+framework call limit is not an aggregate child-call limit, and that shared
+logical-generation admission can reject a continuation before model dispatch.
+It also checks that a content-free error can be marked final. Socket/DNS paths
+are blocked and another ADK version skips explicitly. The test-only counter does
+not provide durable coordination, provider-attempt accounting or a live budget.
 
 `test_gke_observation.py` uses the bundled optional session-observation component
 and real OpenTelemetry in-memory export. It checks preserved service results and

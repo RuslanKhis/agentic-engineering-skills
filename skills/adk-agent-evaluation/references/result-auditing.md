@@ -36,6 +36,8 @@ Counts alone cannot distinguish duplicated rows from independent repetitions, pr
 
 ## Production extensions
 
-Compare candidates on the same cases, initial state, fixtures, criteria and trial counts; report important risk/language/intent slices rather than only averages. Use development cases for diagnosis and a maintained holdout for release decisions. Calibrate a judge on fixed, human-labelled good/bad/borderline traces before making it a gate. Report missing or unavailable scores as incomplete evaluation.
+Compare candidates on the same cases, initial state, fixtures, criteria and trial counts; report important risk/language/intent slices rather than only averages. For concrete dataset review, holdout replenishment, fixed-trace judge calibration and release gates, read [evaluation-design.md](evaluation-design.md). Report missing or unavailable scores as incomplete evaluation.
 
 Upper bounds for latency/cost/usage differ from lower bounds for quality. Record clock boundary, versions, workload, concurrency, cache and cold/warm state; a few samples do not establish a production p95. An observer failure after submission is not permission to retry a mutation. Finish with the verified verdict, evidence completeness limits and an actionable next step; implementing a broader production gate requires its own tests.
+
+When measurement itself is in doubt, read [execution-evidence.md](execution-evidence.md) for observer self-tests, concurrent-effect attribution, streaming usage accounting and browser calibration. Preserve unavailable timings and unknown usage instead of replacing them with zero or a fresh submission.

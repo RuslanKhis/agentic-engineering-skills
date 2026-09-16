@@ -6,6 +6,12 @@ budget rules in [lifecycle.md](lifecycle.md); this reference supplies the
 runtime-specific checks. Adapt the target project's supported interfaces rather
 than introducing a second deployment system.
 
+For a configuration that fails to reach the deployed agent, packaging/import
+surprises, an inconclusive preflight or operation recovery, read
+[runtime-deployment-troubleshooting.md](runtime-deployment-troubleshooting.md).
+It traces staged source through the actual SDK serializer and effective provider
+configuration, and gives concrete tests and recovery decisions.
+
 ## Establish the target and source boundary
 
 Distinguish remote agent execution from a local ADK runner using managed session

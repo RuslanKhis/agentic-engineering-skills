@@ -10,11 +10,13 @@ Use the target's existing environment, fixtures, test runner and build commands.
 | JSON | Complete result schema, thought filtering, late reported error, empty result, controlled upstream error, response validation and timeout covering response body |
 | Concurrency/deadlines | Lock waiting consumes the request budget; cancellation propagates; a timed-out submit is not automatically repeated |
 | AG-UI translation | Partial text plus merged aggregate appears once; partial function arguments announce one confirmed call; exact result correlation; unknown/private tool data filtered |
-| AG-UI lifecycle | Text and tools start/end in order; separate result IDs; safe run failure after visible text; no ordinary successful terminal after failure |
+| AG-UI lifecycle | Text and tools start/end in order; separate result IDs; safe run failure after visible text; no ordinary successful terminal after failure; reject unsupported fresh-turn/continuation inputs before model invocation |
 | BFF/browser | Agent identifier and tool name agree; runtime result schema validation; safe errors; controls recover; subscriptions clean up; state remains bounded |
-| Managed execution | Retained SDK owner; typed absent metadata vs permission/transport error; exact owner/resource checks; no model retry on failed query; explicit SSE run config |
+| Managed execution | Retained SDK owner; typed absent metadata vs permission/transport error; exact owner/resource checks; no model retry on failed query, including hidden transport retries; explicit SSE run config |
 
 Add production acceptance tests from [production.md](production.md) only for promised features. A single-process lock test is not distributed fencing evidence; a protocol-order test is not authorisation evidence.
+
+Use [troubleshooting.md](troubleshooting.md) for the concrete real-runner/model-substitute procedure, response-body deadline checks, cancellation phase matrix and four-boundary browser investigation. When changing streaming, test arrival of a first frame before upstream completion through a real local socket; consuming `response.text` after completion cannot establish that property. When changing a renderer, use the malformed/null/oversize result cases in [copilotkit-recipe.md](copilotkit-recipe.md). A valid AG-UI trace can still contain an invalid application result, so run both checks.
 
 ## Read-only helper checks
 
@@ -93,3 +95,30 @@ The greenfield evaluator's first run caught a cancellation bug in its generated 
 Forward tests used CPython 3.11.4, FastAPI 0.141.1, ADK 2.8.0, GenAI 2.19.0, Pydantic 2.13.5, HTTPX 0.28.1, pytest 9.1.1, pytest-asyncio 1.4.0 and Node 18.20.4. The older fixture's declared ADK 1.16.0 was assessed, not installed or executed. Browser-helper tests ran under Node; a live browser UI was not created or tested in these fixtures.
 
 This is an explicit-path Codex behavioural smoke test, not a test of automatic installation/discovery in every client. No Claude Code, Gemini CLI, Cursor, Linux or Windows smoke test was performed. No fresh cloud deployment, inference, API activation, production identity, distributed ownership, replay or human-approval service was tested during skill creation.
+
+### September 16 depth-review validation
+
+The expanded references were checked against current source, the updated manuscript, comparison findings and historical audit records. These fresh checks are offline; they do not repeat the cloud campaign. The entry point remains 75 lines and routes to the detailed recipes only for the relevant work.
+
+| Check | Actual result |
+| --- | --- |
+| Available `quick_validate.py`, relative links/heading anchors, metadata, whitespace, empty-directory, scaffold and private-path scans | PASS. |
+| Existing helper suite in the chapter environment, then a detached skill copy using `python -I -S -B -m unittest discover -s tests -p 'test_*.py'` | 53 passed in each environment. No site packages, book or companion imports were needed by the detached helpers. |
+| Both helpers' `--help`, normal, `--dry-run` and repeated dry runs on synthetic fixtures | PASS; file hashes unchanged. Installed-version gate again matched all five managed-AGUI pins. |
+| Existing `test_adk_api_events.py` and `test_backend_http.py` | 25 passed, five existing warnings; actual HTTP/application machinery with external model/provider boundaries replaced. |
+| Existing CLI-to-SDK external-configuration regression plus smoke throttling/disconnect retry regressions | Three passed, three existing warnings. No cloud command or provider call. |
+| Seven TypeScript/TSX blocks extracted from the CopilotKit recipe and checked together using `tsc --project` | PASS with the installed pinned dependencies, including all route exports, renderer scope, imports and observer callbacks. |
+| Extracted result parser compiled with `tsc`, then `node --test` | 24 passed: both statuses and object/string forms; pending/invalid lifecycle; null, malformed, scalar/array, extra/private and wrong-type fields; size bounds. |
+| Extracted BFF route through TypeScript transpilation and injected runtime factories | Four passed, covering all four methods in each missing-setting case and configured reuse. Missing settings permit import, return safe 503 and construct/invoke no upstream client. This is not an actual runtime or browser test. |
+| Two extracted Python recipe blocks exercised with pytest, actual AG-UI models/encoder and FastAPI/HTTPX | 20 passed: 13 invalid admission shapes reject before invocation and allow a later valid request; six stream success/failure cases preserve safe terminal outcome; cancelling a task awaiting a silent generator closes it. This task-cancellation test is not a real socket-disconnect test. |
+| Companion source fingerprints against final September 13 delivered manifest | All 77 matched. No manuscript or companion source was changed. |
+
+The stream recipe now withholds proposed `RUN_FINISHED` until generator exhaustion and closure, so a closure exception cannot follow a published success. The BFF recipe resolves required private-service settings on invocation, allowing an offline import/build while failing closed at request time. Both refinements have the direct tests above.
+
+Fresh root checks used macOS arm64, CPython 3.11.4 and bundled Node 24.19.0; TypeScript 5.7.3, Zod 3.25.76, CopilotKit 1.69.0 and the integration versions in [compatibility.md](compatibility.md). The invoking Python environment now reports google-auth 2.57.1; its impersonated-ID-token branch was inspected without refreshing credentials. No packages were changed. Recipe test fixtures were temporary, with dependencies supplied by the existing environment; the installed skill retains its standard-library-only helpers.
+
+A fresh independent evaluator received a detached skill, minimal Next.js fixture, installed dependency runtime and a backend contract, without the manuscript or companion source. It implemented the provider/chat, routing card, bounded monitor and BFF while preserving the layout, package manifest, lockfile and external authentication contract. **17 application tests, TypeScript, production build, 53 copied-helper tests and a synthetic nine-event trace passed.** The build retained an installed runtime dynamic-import warning. It used Node 22.23.2, npm 10.7.0 and CPython 3.11.14. Reapplying the request required no implementation changes; 18 tracked fixture-file hashes stayed unchanged.
+
+The evaluator adapted the recipe's strict result schema to the fixture's explicitly extensible contract with an allowlisted server projection; that choice is now explained beside the parser. Its private-backend configuration findings informed the lazy required-settings example, separately checked above. Its direct installed-runtime Fetch test exposed string chunks incompatible with Node `Response.text()`, resolved in the fixture with a streaming byte transform; the recipe documents that narrow observation without claiming a live Next.js server defect. Browser-supplied credential/assertion forwarding is explicitly restricted in the final recipe. The evaluator used an earlier copy before these final refinements; the final route was typechecked and its configuration/factory tests rerun independently.
+
+The fixture's card checks used React server rendering; the runtime test substituted outbound HTTP with synthetic SSE. No live browser, actual backend/model call, cloud operation, package installation or publication occurred. Production middleware coverage, user ownership, progressive socket delivery and remote cancellation remain unverified by this evaluation.

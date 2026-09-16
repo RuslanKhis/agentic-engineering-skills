@@ -1,20 +1,30 @@
 # AG-UI and CopilotKit
 
-Use this mode when the browser needs progressive text or application-owned tool displays. Preserve an existing AG-UI implementation if it already serves that purpose. Confirm the exact SDK/import surface in [compatibility.md](compatibility.md).
+Use this mode when the browser needs progressive text or incremental tool lifecycle displays. Preserve an existing AG-UI implementation if it already serves that purpose. Confirm the exact SDK/import surface in [compatibility.md](compatibility.md).
+
+When implementing the CopilotKit route, client mounting, result renderer or streaming HTTP boundary, read the [pinned CopilotKit recipe](copilotkit-recipe.md). It supplies composable v2 API snippets for the recorded 1.69.0 packages, a bounded result parser, fresh-turn admission and wire-level checks. Adapt these pieces to the target rather than replacing its application.
 
 ## Build the vertical path
 
 1. Define an application agent identifier and use the same value in the browser hook/provider, CopilotKit Runtime registry and adapter. It need not equal the model's name. Define the allowed backend tool names, input schemas, result schemas and state projection first.
 2. For local ADK, adapt the existing agent with the pinned `ag-ui-adk` API and attach it to the existing ASGI app. In the recorded stack these are `ADKAgent` and `add_adk_fastapi_endpoint`. Authenticate the endpoint before starting a run and verify how the adapter resolves its user/session identity. The book's fixed demo `user_id` is not a multi-user design; implement request-scoped verified identity for a real app.
 3. Keep provider credentials in the server. A Next.js backend-for-frontend forwards to Python; it must authenticate each browser caller and forward a separately verified user assertion when needed. A module-level shared backend token identifies the gateway only. Never mutate a singleton client's headers with one request's user identity.
-4. In the recorded CopilotKit stack, the route imports `HttpAgent` from `@ag-ui/client` and `CopilotRuntime` / `createCopilotRuntimeHandler` from `@copilotkit/runtime/v2`. Register the selected agent with its backend URL, pass the runtime and `/api/copilotkit` base path to the handler, and export the HTTP methods required by the installed version. Verify these imports against target pins instead of mixing examples from another major version.
-5. Mount the client's matching agent and a server-tool renderer. Render components written by the application; never execute model-generated React source. Validate results with the app's runtime schema library before displaying them. Preserve a safe loading/failure state for missing or malformed results.
+4. Wire the BFF's agent registry, optional catch-all route and HTTP methods to the matching client provider, chat and stylesheet using the recipe. Verify the pinned imports instead of mixing examples from different API generations. The `/v2` import path is distinct from the package's 1.69.0 version number.
+5. Mount the server-tool renderer inside the provider. Its argument schema does not validate the returned result. Distinguish pending execution, malformed completed output and a valid business result using runtime validation. Render components written by the application; never execute model-generated React source.
 
 The original renderer used TypeScript assertions; robust runtime validation is additional production work. In the support-triage evidence, local `status: "routed"` and managed `status: "success"` were two intentional variants of one bounded queue/reason schema. Inspect actual tool output in the target; do not accept arbitrary statuses or hard-code those book-specific names in a different domain.
+
+## Admit the supported request before invocation
+
+For a new-turn-only bridge, require a fresh final user message before session creation, provider work or response streaming. Reject unsupported browser tools, writable state, resume/parent-run fields and tool-result continuation with zero agent invocations; selecting the last user message anywhere in history can accidentally repeat an earlier turn. The recipe shows one deliberately narrow profile. If the product supports any of those features, define their authorised contract instead of copying its rejections. Prior browser history is display data when the server owns conversation history.
+
+The companion's `last_user_text` searches backwards and does not enforce this stronger admission policy. Its successful chat tests do not establish rejection of continuation or browser-provided tool/state features.
 
 ## Translate the stream deliberately
 
 Use supported SDK event models and encoders. Keep provider input, translator output, BFF forwarding and browser state separately inspectable. Explicit `StreamingMode.SSE` in the managed ADK run configuration was needed for actual model partial text; an async iterator or SSE response alone did not enable it.
+
+Perform auth/input rejection before starting the response; after streaming starts, consume the run's terminal event rather than treating HTTP 200 as success. Use the installed `EventEncoder` for aliases, framing and negotiated content type. The recipe includes the streaming response boundary and explains why completed-response HTTP tests cannot prove progressive delivery or prompt disconnect cleanup.
 
 For the explicit lifecycle profile used here:
 

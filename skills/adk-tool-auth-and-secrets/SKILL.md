@@ -6,7 +6,7 @@ metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   source-chapter: "09"
-  validation-date: "2026-09-15"
+  validation-date: "2026-09-16"
 ---
 
 # Secure ADK tool authentication and credentials
@@ -28,6 +28,7 @@ The skill is self-contained. The book and companion repository are optional prov
 | End-user delegation, reconnect, refresh, rotation or disconnect | [OAuth lifecycle](references/oauth-lifecycle.md) |
 | Native ADK authentication, Resume or managed Auth Manager | [Continuation contracts](references/adk-continuations.md) |
 | Gateway/tool identity, public output or credential exposure | [Identity and output boundaries](references/identity-and-output.md) |
+| Provisioning/repeating a lab, diagnosing access or model admission, preparing hosted release, or verifying cleanup | [Operations runbook](references/operations-runbook.md) |
 
 Read [compatibility and evidence](references/compatibility-and-evidence.md) before adapting an SDK example or making a compatibility claim. Audit/recommendation mode may finish with a concrete design and gaps; it does not require generating an application.
 

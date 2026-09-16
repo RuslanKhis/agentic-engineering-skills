@@ -7,7 +7,8 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "02"
   compatibility: Python helpers tested on 3.11.4; see references/compatibility.md for exact ADK evidence and adaptation gates.
-  last-tested: "2026-09-15"
+  last-tested: "2026-09-16"
+  last-reviewed: "2026-09-16"
 ---
 
 # ADK operational guardrails
@@ -23,6 +24,8 @@ Make the application decide whether another model call, tool action or expensive
 
 Inspection is complete when each relevant entry point has an identified enforcement boundary, version baseline and state lifetime. Ask only for unresolved product limits, deployment targets or authority decisions that materially change the work; continue offline work while those answers are pending.
 
+If no project interpreter exists, use an available Python only for read-only inspection and label its package metadata as the inspector environment. A successful scan with no relevant source/configuration files establishes no application coverage; do not install dependencies just to inspect a plan or inventory fixture.
+
 ## Choose the relevant mode
 
 Modes compose within this one skill. Read only the references needed for the request.
@@ -33,6 +36,8 @@ Modes compose within this one skill. Read only the references needed for the req
 | Usage must accumulate across turns or instances | [Token budgets](references/token-budgets.md) | Honest local accounting or shared admission/settlement, chosen for the actual concurrency and durability requirement |
 | Risky tool actions need a human or can be retried after uncertainty | [Human review](references/human-review.md) | Trusted identity, explicit operation states, deduplication and an approval/execution boundary |
 | Spend should degrade or suspend AI features | [Cost controls](references/cost-controls.md) | Read-only assessment or an application control plan; cloud changes require separate approval |
+| Guarded work is moving to an API/worker or several instances | [Serving and lifecycle](references/serving-and-lifecycle.md) | Wire real entry points, shared admission, recovery and owned cleanup into the selected host |
+| Provider/browser behaviour needs evidence after offline checks | [Live campaigns](references/live-campaigns.md) | Reproducible preflight, an approved shared attempt/time envelope and honest outcome evidence |
 | User requests a review or architecture recommendation | Relevant modes above; [evidence](references/evidence.md) for provenance | Prioritised findings and concrete acceptance criteria; implementation only if requested |
 
 For a greenfield project, confirm Python/ADK selection before installing dependencies; prepare a dependency-free design and tests meanwhile. For an existing project, adapt its interfaces and persistence rather than installing the demonstration architecture. Preserve custom statuses, policy thresholds, public APIs and test tools unless the requested fix requires a change.
@@ -43,7 +48,7 @@ For a greenfield project, confirm Python/ADK selection before installing depende
 2. Implement only the selected controls. The [invocation guard asset](assets/invocation_guard.py) is an optional, tested local starter for asynchronous tools. Read runtime guidance before adapting it: it supplies neither ADK orchestration nor distributed budgets, authentication, durable approval or provider idempotency. Compare with existing code before copying and preserve its licence notice.
 3. Bind user/tenant and operation authority outside the model's arguments. Enforce permission and repeat policy before dispatch. A prompt or a `pending_approval` string is not an execution gate.
 4. Record spent usage even when output delivery is stopped. Return a bounded, static explanation when a guard fires; spending another model call to explain exhausted allowance defeats the control.
-5. Run the target project's tests using its existing environment and conventions. Select the relevant cases from [validation](references/validation.md), including a real runner with a fake model for ADK boundary changes. Test the served path as well as the helper. Repeat the invocation to check cumulative state and avoid duplicate files or registrations.
+5. Run the target project's tests using its existing environment and conventions. Select the relevant cases from [validation](references/validation.md), including a real runner with a fake model for ADK boundary changes. Test the served path as well as the helper, and assert actual outgoing configuration and effects. Repeat the invocation to check cumulative state and avoid duplicate files or registrations.
 6. Stop only when the relevant invariants have evidence or are explicitly unverified. Distinguish new offline tests, historical live evidence, mocks and proposed production work using [evidence](references/evidence.md). Do not infer live provider or human-review success from a fixture response.
 
 ## Permissions and safe execution

@@ -6,6 +6,12 @@ planning live changes, recovering interrupted operations or deleting resources.
 Complete only the modes authorised by the task; local inspection does not require
 a deployment.
 
+For source/build failures, ineffective configuration, TLS/authentication errors,
+developer-UI failures or delayed lifecycle visibility, read
+[cloud-run-troubleshooting.md](cloud-run-troubleshooting.md). It records concrete
+repairs and the boundary tests they need. For offline-to-live acceptance and
+aggregate provider limits, read [part1-verification.md](part1-verification.md).
+
 ## Establish the deployed contract
 
 Locate the real entrypoint, exported ADK `App` or agent, dependency declarations,
@@ -165,6 +171,11 @@ and declare acceptance thresholds. Deploy the digest with no traffic and a
 temporary tag; capture the candidate revision. Test authenticated health,
 complete relevant tool responses and sessions directly against that candidate.
 Promote explicit revisions through agreed stages, collecting comparable samples.
+Traffic splitting is not paired replay: cohorts, affinity and session histories
+can differ. Compare equivalent staging workloads before attributing an effect
+to one flag. A UI's session-creation request may warm the instance before its
+model-bearing request; use platform startup/instance evidence to classify
+coldness. Time idle alone does not establish a cold invocation.
 Assemble rollback from the recorded stable revision:
 
 ```bash

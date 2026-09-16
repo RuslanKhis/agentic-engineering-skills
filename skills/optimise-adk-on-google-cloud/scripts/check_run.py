@@ -19,6 +19,14 @@ import sys
 MAX_BYTES = 8 * 1024 * 1024
 MAX_EVENTS = 2000
 NAME = re.compile(r"[A-Za-z_][A-Za-z0-9_.-]{0,127}\Z")
+PART_FIELDS = frozenset({
+    "text", "thought", "thought_signature", "thoughtSignature",
+    "function_call", "functionCall", "function_response", "functionResponse",
+    "error", "errors", "errorCode", "errorMessage", "error_code", "error_message",
+})
+TOOL_ERROR_FIELDS = frozenset({
+    "error", "errors", "errorCode", "errorMessage", "error_code", "error_message",
+})
 
 
 class InvalidInput(Exception):
@@ -240,6 +248,17 @@ def check_events(events, expected):
             if not isinstance(part, dict):
                 raise InvalidInput()
             reported_error(part)
+            # This contract declares named function tools and a text answer.
+            # Code/server-side tools and multimodal or future payloads need their
+            # own acceptance rules; accompanying narration cannot satisfy ours.
+            if any(key not in PART_FIELDS and value is not None
+                   for key, value in part.items()):
+                raise InvalidInput()
+            if part.get("thought") is not None and type(part["thought"]) is not bool:
+                raise InvalidInput()
+            signature = alias(part, "thought_signature", "thoughtSignature")
+            if signature is not None and not isinstance(signature, str):
+                raise InvalidInput()
             call = alias(part, "function_call", "functionCall")
             reply = alias(part, "function_response", "functionResponse")
             if call is not None and reply is not None:
@@ -249,10 +268,14 @@ def check_events(events, expected):
                 if not isinstance(tool, dict):
                     raise InvalidInput()
                 reported_error(tool)
+                payload_key = "args" if call is not None else "response"
+                supported = {"id", "name", payload_key} | TOOL_ERROR_FIELDS
+                if any(key not in supported and value is not None
+                       for key, value in tool.items()):
+                    raise InvalidInput()
                 for key in ("name", "id"):
                     if tool.get(key) is not None and not isinstance(tool[key], str):
                         raise InvalidInput()
-                payload_key = "args" if call is not None else "response"
                 if tool.get(payload_key) is not None and not isinstance(tool[payload_key], dict):
                     raise InvalidInput()
                 tool_parts.append((call, reply))

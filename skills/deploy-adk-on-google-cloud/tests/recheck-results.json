@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-16",
+  "scope": "Three additional independent offline forward evaluations of the deeper Chapter 3 deployment skill. The six September 15 evaluations remain separately recorded.",
+  "coding_agent_environment": "Codex; fresh evaluators with supplied copied skill and assigned synthetic fixture/request only",
+  "runtime_environment": "Existing Python 3.11.4; macOS 26.6.2 arm64; ADK 2.8.0",
+  "side_effect_boundary": "No cloud/network/model endpoint calls, credential discovery, package installs or paid tests. Installed-library inspection and local fake model/provider boundaries only.",
+  "cases": [
+    {
+      "id": "production-control",
+      "outcome": "PASS",
+      "observed": "Implemented finite server-owned model-call limit, rejected caller overrides, and handled actual ADK limit exhaustion. HTTP ASGI -> real ADK Runner/tool/session with only model replaced. Identified ignored MODEL_ID/session settings, unverified identity header and two-replica durability blockers. Original agent and pins preserved.",
+      "offline_tests": 22,
+      "modified_original_fixture_files": [
+        "app.py",
+        "deployment.json"
+      ],
+      "live": "NOT RUN",
+      "raw_evaluator_report_sha256": "beed6acc96e74ada457a3cf87f23deabbd4be7f6647001b4db039c60a1c8c8b9"
+    },
+    {
+      "id": "runtime-verifier-recovery",
+      "outcome": "PASS",
+      "observed": "Repaired native NDJSON/single-line SSE parsing and separate routing/recall oracles. Original recordings and session metadata establish two accepted turns and one tool call; no resubmission. Added call/invocation/order/error regressions. Preserved recordings and pins.",
+      "offline_tests": 26,
+      "modified_original_fixture_files": [
+        "verify.py"
+      ],
+      "live": "NOT RUN",
+      "raw_evaluator_report_sha256": "8ffbec9960b20d007ff2b83de3c943b8d5a78ea1b00fd1d279fa96efccd479a3"
+    },
+    {
+      "id": "gke-late-object-review",
+      "outcome": "PASS",
+      "observed": "One object was only a candidate pending fresh proof; another remained blocked because an exact late-object receipt cannot create a new controller trust root. Entire batch remained blocked, no partial receipts, original baseline unchanged. Local saved-metadata refusal checks only.",
+      "offline_tests": 12,
+      "modified_original_fixture_files": [],
+      "live": "NOT RUN",
+      "raw_evaluator_report_sha256": "4117ddd5d28a140dc22409fb7056cd6c1be56b8569b063109984d6e758dc0dd0"
+    }
+  ],
+  "limitations": [
+    "Initial evaluator attempts stopped at an account usage limit before running; evaluations resumed after the user requested continuation. These final results describe completed runs.",
+    "Additional IAP/TLS reference clarifications, Australian spelling and provenance/validation records were finalised after freezing the evaluation copy. The observed runner-exhaustion lesson was added after the production case.",
+    "Runtime verification uses saved synthetic event/history schemas and lexical grounding checks, not authenticated live provider evidence or general semantic entailment.",
+    "GKE review does not execute a production reconciler, atomic receipt commit or live inventory.",
+    "No new live deployment, production authorisation, multi-replica store, scaling, release/rollback or cross-agent-product compatibility validation."
+  ],
+  "evaluated_instruction_sha256": {
+    "SKILL.md": "8930976b69a949a62a5b37d6e058e98e0e2ce54b232e6e80f6ba365335945676",
+    "references/agent-runtime.md": "c7186ce653e11c021c6348b791d6e11f0dd2fc2f3fc5f6820d195c390dee6fe3",
+    "references/cloud-run.md": "a5d18edc4929c9d84cc0a822e83ac2e02f3427fe56119a61846ac446afcf31ef",
+    "references/compatibility.md": "2f3ea09c4da5843a9decd19ab96642bc715f3af234a915ffe0048c730f667627",
+    "references/evidence.md": "5a75a3e7665ce5cb6b847c0a3ed91ef4923023415c9dd003f87f17a3de9f3b7e",
+    "references/gke.md": "9ff1a04ce7dba65f425f9949e24994b6917a3f22413cc7016e6a43a736ca5ddf",
+    "references/lifecycle.md": "badbfa7d402225a2ae26df6c112b94583e00dc45111afe40846463e427e7c078",
+    "references/production.md": "9734b13a80dab50e1e8d743e885910705edacd984c0dee09c2d2e7230a5a4397",
+    "references/skill-validation.md": "5d8fa844fd34ca50d69b181c249dfbf441f859a61fcdca708b45770af349e23e",
+    "references/troubleshooting.md": "ccb6dcfe13923241d2f90346370c3e99ae16b8500aa23814d2c4e05e72a6c2c9",
+    "references/validation.md": "6ba2a884c86833d44f9e79ce202c9050c9e069991acdf56808696b6a07aadbc7"
+  }
+}

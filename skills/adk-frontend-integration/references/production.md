@@ -2,9 +2,26 @@
 
 Read only the sections relevant to the requested product. These are explicit production principles, not claims that the teaching application implements them. Turn each required guarantee into a target-specific implementation and an observable acceptance test. An audit may conclude that a capability is out of scope without building it.
 
+## Persistence and readiness
+
+When conversation continuity is required, choose a session service supported by the pinned SDK and the target deployment. In-memory history belongs to one process; persistence and protection against concurrent writers are separate decisions. Keep conversation history, long-term memory and retrieval knowledge separate, with explicit ownership, retention and deletion policies for each store.
+
+Implement and verify the storage boundary in this order:
+
+1. Inspect the existing schema/version and migration mechanism. Prepare the required schema before admitting traffic; coordinate migration ownership instead of letting every serving worker race to migrate. Follow the task's approval boundary before changing an external database.
+2. Construct session and network resources in worker lifespan, after any fork. Close partially initialised resources on startup failure and close owned clients on shutdown using the installed SDK's lifecycle.
+3. Make readiness reflect the dependencies required to accept a conversation. A fixed health response proves process liveness only. Use bounded, non-mutating dependency checks; routine health probes should not invoke the model or a business tool.
+4. Create and continue a synthetic conversation, stop the original serving process, then resume the same owned conversation from a fresh process without browser history replay. Confirm that another user cannot retrieve it and that unavailable or incompatible storage prevents readiness or admission under the declared policy.
+
+Acceptance: the restart test retrieves stored history, rejected ownership checks invoke no model/tool, and the storage-failure path settles within its budget. The historical companion demonstrated remote-session recall after a local gateway restart; it did not establish local database migration, readiness or production retention guarantees. Add shared writer admission from the section below when more than one process can write.
+
 ## Identity and conversation access
 
 Reuse the application's identity provider and verified session. Validate signatures, issuer, audience, expiry and subject before mapping claims to an application user. With several issuers, include the issuer in the identity mapping. Keep trusted user/tenant context separate from browser state and model-selected arguments.
+
+Check the pinned provider's identity length, encoding and character constraints before forwarding the mapped ID. Use a stable internal ID with a persisted unique mapping from the verified issuer/subject and required tenant scope. Preserve distinctions between identities: truncating or normalising subjects merely to fit a provider field can merge callers. A deterministic digest requires an unambiguous input encoding and an explicit collision policy; it is not a substitute for verifying the claims.
+
+Keep application thread IDs separate from provider resource IDs where their creation rules differ. A string safe to interpolate into a path is not necessarily a valid caller-selected provider session ID. Either validate the provider's actual creation constraints or persist an owned mapping between the application thread, exact remote resource and provider-generated session ID. Introducing that mapping also requires the matching browser/BFF create/resume contract. Test long identities, equal subjects from different issuers, and application-valid IDs rejected by provider creation rules. The companion's exercised browser UUIDs do not certify every string accepted by its application regex.
 
 Apply ownership to create/resume, history, state, reconnect, rename, archive, delete and stop operations. Use the same safe not-found response where distinguishing absent and other-user conversations would leak information. A BFF needs access control for its own storage as well as Python's session access control.
 

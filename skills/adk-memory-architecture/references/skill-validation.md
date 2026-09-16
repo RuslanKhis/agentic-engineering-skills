@@ -1,7 +1,9 @@
 # Skill package validation
 
-Validation date: 15 September 2026. This record concerns the reusable skill;
-historical application acceptance is qualified in [provenance.md](provenance.md).
+Initial validation: 15 September 2026. The implementation-depth recheck on
+16 September 2026 is recorded at the end. This record concerns the reusable
+skill; historical application acceptance is qualified in
+[provenance.md](provenance.md).
 
 The creation environment was Codex desktop on macOS 26.6.2, ARM64, using the
 repository's existing CPython 3.11.4 virtual environment, pytest 8.4.2 and
@@ -136,3 +138,94 @@ Their passing tests verify the named local boundaries only. A consuming
 application still needs its own authentication, SDK/Runner, real-provider and
 hosted acceptance tests. The fixture implementations are evaluation artefacts,
 not bundled production templates.
+
+## Implementation-depth recheck — 16 September 2026
+
+The recheck added three references and expanded the existing mode guidance.
+It changed only this skill's documentation, with no companion implementation,
+manuscript, dependency, deployment or cloud-resource changes. All **180** source
+hashes still match the recorded application snapshot. The interpreter and
+packages used remain the exact environment listed above; no packages were
+installed. Public provider documentation was consulted for current log
+pagination, Cloud Run token headers and RAG deployment modes.
+
+### Package and source checks
+
+- The structural validator passed. The package now contains **16 files**;
+  all **38 relative Markdown links** resolved within it. All **4 Python
+  fences** parsed; YAML metadata, Python syntax, whitespace and private/scaffold
+  content scans passed. All **129 provenance path mentions** resolve in the
+  optional source checkout, installed SDK or skill as appropriate.
+- Helper tests passed **16 tests in 0.24 seconds**. A clean copy outside the
+  repository passed the same **16 tests in 0.25 seconds**; help, dry-run and
+  normal inspection of a synthetic project exited 0. No companion modules or
+  manuscript were copied, and inspection executed no target project code.
+- Nine selected companion modules passed **131 tests, 3 warnings, in 10.25
+  seconds**. These covered token expiry, log pagination, durable RAG recovery,
+  public projection, plugin protection, HTTP consent/replay/erasure, SDK memory
+  requests and project-ID/number validation. They used local services and
+  doubles, not live GCP or real Redis. Warnings concerned Pydantic/ADK
+  deprecation and an experimental ADK feature.
+
+The selected source command was:
+
+```bash
+PYTHON_DOTENV_DISABLED=1 PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest \
+  chapter-06-memory-and-rag/tests/test_rest_token_expiry.py \
+  chapter-06-memory-and-rag/tests/test_cloud_probe_log_window.py \
+  chapter-06-memory-and-rag/tests/test_rag_setup_recovery.py \
+  chapter-06-memory-and-rag/tests/test_public_projection.py \
+  chapter-06-memory-and-rag/tests/test_content_boundary.py \
+  chapter-06-memory-and-rag/tests/test_offline_api_acceptance.py \
+  chapter-06-memory-and-rag/tests/test_managed_memory_sdk.py \
+  chapter-06-memory-and-rag/tests/test_memory_recall_project_identity.py \
+  chapter-06-memory-and-rag/tests/test_privacy_project_identity.py \
+  -q -p no:cacheprovider
+```
+
+The entire historical 888-test suite was not repeated. Passing the selected
+tests does not close the newly discovered coverage gaps described below.
+
+### Independent SDK recipe check
+
+An independent evaluator extracted the three integration Python fences and
+executed **21 offline checks** against ADK 2.8.0, with socket connections blocked.
+Actual `Event`, `Content`, `RunConfig`, context and PluginManager objects were
+used. Provider constructors were replaced by recording doubles whose keyword
+arguments bind against real signatures. The collector used a scripted runner;
+this was not a managed-client construction or full serving test.
+
+The first run passed 19 checks and failed two: ADK's `is_final_response()` can
+accept `partial=True` with either `skip_summarization` or `long_running_tool_ids`.
+The skill recipe now explicitly rejects partial events. The second run passed
+**all 21 checks**, with no errors or skips. Checks include public/hidden/tool
+content, absent content, post-final generator exhaustion, trusted metadata,
+context properties, plugin mutation followed by an observer canary and
+non-`None` override short-circuiting. The companion projection itself remains
+unchanged; this stronger recipe is labelled as an improvement.
+
+Separately, an AST-isolated execution reproduced the ledger's late-handle loss
+and stale Redis status overwrite described in provenance. These are confirmed
+offline source limitations, not fixes or live incident-frequency measurements.
+The temporary SDK probe and ledger reproducer were evaluation artifacts, not
+new package runtime dependencies.
+
+### Independent recovery exercise
+
+A fresh evaluator received only a copied skill and a synthetic interrupted
+campaign: a completed RAG case, a transient error, uncertain import, paginated
+probe evidence, post-tool screening failure, multiple replicas and expiring
+credentials. It produced a bounded plan that preserved completed work and
+uncertainty, avoided full-smoke replacement, followed log pagination, separated
+concurrency from quota, reconciled memory effects and qualified cleanup.
+
+The evaluator found no material instruction conflict. Its usability feedback
+led to a concrete quota worksheet and a manual allowance/reconciliation rule
+for handle-less interrupted reads. No cloud commands were executed; the plan
+is behavioural evidence in one coding-agent environment, not a live remedy or
+a repeat of the earlier greenfield/existing-project implementation exercises.
+
+The new references preserve unimplemented production guidance and the missing
+hosted memory/restart/privacy gates. This depth review provides more actionable
+implementation and recovery instructions; it does not certify full hosted
+acceptance or prove exhaustive coverage of every production failure.

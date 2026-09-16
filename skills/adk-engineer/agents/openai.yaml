@@ -1,6 +1,0 @@
-interface:
-  display_name: "ADK Engineer"
-  short_description: "Choose and apply the right ADK engineering skill"
-  default_prompt: "Use $adk-engineer to inspect this Google ADK project and help me make the requested change with relevant specialist guidance."
-policy:
-  allow_implicit_invocation: true

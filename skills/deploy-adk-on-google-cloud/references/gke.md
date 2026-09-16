@@ -4,6 +4,8 @@ Read this when deploying, reviewing or adapting an ADK workload on GKE. Apply th
 
 **Evidence boundary.** The source-tested path created an exclusively owned GKE Autopilot lab, built a custom image and served the bundled ADK UI through an authenticated localhost tunnel. Real routing, explicit recall, direct connection recovery and rebuilt telemetry behaviour passed. Shared-cluster adaptation, generated `adk deploy gke` scaffolding, production ingress/auth and durable external state were not exercised by that acceptance.
 
+Use sections 1–5 for implementation and acceptance; section 6 adds the deeper recovery rules needed only for owned-cluster teardown. For a concrete failure, read [troubleshooting.md](troubleshooting.md); for external state, user authentication or a production release pipeline, read [production.md](production.md).
+
 ## 1. Select the ownership boundary
 
 - **Existing cluster requested or already part of the product:** inspect its exact project/location, cluster identity, access policy, workload identity configuration and intended namespace. Produce a namespace/workload-level change. Treat the cluster, shared registry, controllers and existing grants as externally owned. The lab's cluster-deletion model must not be transferred to this branch.
@@ -36,6 +38,18 @@ principal://iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workload
 
 Prepare the actual principal and narrowly scoped roles. Source-tested project-wide build grants were broad lab bootstrap permissions; least-privilege named build identities are production adaptations. Record only newly added grants and preserve existing/conditional grants.
 
+The concrete lab mapping explains which responsibility each grant served. Use it to diagnose the permission boundary, then derive the target application's narrower scopes; it is not a blanket grant prescription.
+
+| Tested identity | Tested roles and scope | Operational boundary |
+| --- | --- | --- |
+| Actual regional default Cloud Build account | Project `roles/storage.objectAdmin`, `roles/logging.logWriter`, `roles/artifactregistry.writer` | Source archive access, build logs and publishing the image |
+| Explicit default Compute account used by GKE nodes | Project `roles/container.defaultNodeServiceAccount`; `roles/artifactregistry.reader` on the owned repository | Node operation and pulling the image |
+| Direct namespace/KSA principal | Project `roles/aiplatform.user` | Runtime model invocation |
+
+Build and node roles used the same Google service account in the recorded campaign; they remain distinct responsibilities. Changing the KSA's model permission does not repair source-upload access or node image pulls. Preserve the existing cluster's node identity and workload-identity mechanism when adapting a product deployment.
+
+Check `gke-gcloud-auth-plugin` is installed before depending on `get-credentials` or kubectl authentication. Plugin installation is a local prerequisite, not an API-enablement operation. A successful gcloud sign-in alone does not establish that kubectl can authenticate.
+
 Use a private kubeconfig for this operation. With all variables resolved, this command selects the known cluster without changing the user's normal kubectl context:
 
 ```bash
@@ -55,6 +69,106 @@ Inspect the application entrypoint, discovered app name, listener, session backe
 
 Render concrete manifests locally: namespace, KSA, Deployment, Service, image reference, environment, resource requests/limits and probes. Inspect the target's actual port and startup behaviour. The tested workload used one replica, CPU/memory/ephemeral-storage bounds, `/health` readiness/liveness and ClusterIP. These are example settings, not production sizing or readiness guarantees.
 
+### Connect the server, workload and Service
+
+For a project using ADK's packaged FastAPI server, the essential wiring at the tested version was:
+
+```python
+import os
+from pathlib import Path
+
+from google.adk.cli.fast_api import get_fast_api_app
+
+app = get_fast_api_app(
+    agents_dir=str(Path(__file__).resolve().parent),
+    session_service_uri=os.environ.get(
+        "SESSION_SERVICE_URI", "sqlite+aiosqlite:////tmp/adk_sessions.db"
+    ),
+    allow_origins=["https://example.invalid"],
+    web=True,
+)
+```
+
+This is an adaptation sketch, not a replacement for an existing server. The parent directory must contain the actual agent package with its exported root agent; discover the resulting app identifier through `/list-apps`. Preserve the application's CORS settings and authenticated access path. The intentionally nonmatching example origin does not provide authentication, and same-origin UI access does not need a permissive cross-origin policy. The image must include the selected session driver's dependencies and run its server on `0.0.0.0:8080`; `EXPOSE` alone does not start a listener. The recorded image used exec-form `uvicorn app:app --host 0.0.0.0 --port 8080` and a non-root user with a writable home.
+
+The following YAML makes the tested relationships explicit. It uses generic names and a deliberate image placeholder, so it is a **rendering example**, not a directly deployable artefact. Resolve names, namespace ownership, model/backend configuration, image digest and the application's actual server contract first. For a shared cluster, use the namespace selected by the platform owner. Create a new namespace only in the approved ownership plan.
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: agent-runtime
+  namespace: agent-lab
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-api
+  namespace: agent-lab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: agent-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: agent-api
+    spec:
+      serviceAccountName: agent-runtime
+      containers:
+        - name: agent
+          image: REGISTRY_HOST/PROJECT/REPOSITORY/IMAGE@sha256:REPLACE_WITH_DIGEST
+          ports:
+            - name: http
+              containerPort: 8080
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+              ephemeral-storage: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+              ephemeral-storage: 1Gi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-api
+  namespace: agent-lab
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: agent-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+```
+
+Before applying the rendered result, check these relationships locally:
+
+- The KSA name and namespace exactly match both `serviceAccountName` and the IAM workload principal. A direct KSA principal does not by itself require an IAM-service-account annotation; use the target cluster's selected identity mechanism consistently.
+- Deployment selector, Pod labels and Service selector identify the same workload. The Service's port 80 resolves to the named container port 8080; the tunnel therefore forwards to Service port 80.
+- The image contains the intended package and server, and the manifest uses the resolved digest. Add the application's explicit **non-secret** project/location/backend environment and ownership metadata to the rendered workload; the example omits values that must be derived from the target.
+- Parse all YAML documents; inspect the final render for unresolved tokens, wrong namespace, unintended public exposure and lost existing settings. Server-side dry-run adds cluster contact and admission checks; local parsing does not prove the cluster will accept the result.
+- Inspect effective Pod resources after admission. In the historical run, requests remained 500m/512Mi and Autopilot reduced the declared ephemeral-storage limit from 1Gi to 512Mi. Record the actual adjustment instead of declaring the authored manifest to be the live resource contract.
+
+Use cheap process/server probes. A healthy `/health` response does not establish model credentials, tool reachability or session durability. Add startup-probe behaviour only when the measured startup contract warrants it, and validate it as a new adaptation.
+
 Keep the unauthenticated development server behind Kubernetes-authorised access. ClusterIP restricts reachability but does not authenticate sessions or isolate tenants. In a shared cluster, consider which other workloads can reach it. Public ingress, TLS, workload network controls, user authorisation, durable state, autoscaling and startup probes are proposed production work unless already present and verified.
 
 Done when source inventory, image build configuration and fully rendered workload diff are reviewable.
@@ -70,7 +184,9 @@ gcloud builds submit "$SANITISED_SOURCE_DIR" \
   --tag="$UNIQUE_IMAGE_TAG" --async --format=json
 ```
 
-Resolve and authorise source staging, account and repository permissions before submitting. Where the target uses a named build identity, set the CLI's verified account option rather than inheriting an unexpected default. Record submission intent before the call and the returned build ID immediately afterwards. Wait for terminal state and verify the actual account/source; then resolve the image:
+Resolve and authorise source staging, account and repository permissions before submitting. `--account` in this command selects the **gcloud caller**, not the account that executes the build. A named build identity uses the separate build service-account option: verify `gcloud builds submit --help` for the installed CLI, including `--service-account`, and resolve its resource format and source/log permissions before use. The chapter deployed with the discovered regional default; the named-account adaptation was not its tested path. In either case, verify the returned Build's `serviceAccount` against the planned execution identity.
+
+Record submission intent before the call and the returned build ID immediately afterwards. Wait for terminal state and verify the actual account/source; then resolve the image:
 
 ```bash
 gcloud artifacts docker images describe "$UNIQUE_IMAGE_TAG" \
@@ -107,6 +223,32 @@ For an existing/shared cluster, remove only the operation's owned workloads and 
 
 Preserve a provider baseline for exclusively owned lab teardown. Late controller-created ConfigMaps, Secrets, Pods and leases can cause safe refusal. Verify exact reviewed UID, immutable creation time, authenticated create audit, original creator/binding identity and fresh current metadata before reconciling an exception. A system namespace, manager name or refreshed blanket baseline is insufficient. The tested inventory covered namespaced resources, not every possible cluster extension or concurrent administrator action.
 
+### Reconcile exact late objects without widening ownership
+
+Use the project's existing recovery implementation where it has these properties. Otherwise prepare the reconciliation algorithm and refusal tests before accepting a late object. This is conditional recovery for an exclusively owned cluster, not a reason to adopt controllers in a shared cluster.
+
+1. Capture the complete blocker set as **metadata**: kind, namespace/name, UID, immutable creation timestamp and owner UIDs. Keep Secret/ConfigMap contents out of persisted snapshots and reports. Preserve the original namespace and controller baseline.
+2. Obtain one successful authenticated create event for the exact resource, method and bounded creation-time interval. Refuse duplicate matches, unknown actors, missing dependencies and truncated audit responses. A principal string or managed-field manager name alone does not establish that the original trusted controller performed the create.
+3. Validate the applicable provenance anchor from the table below. Preserve any missing audit-response UID as an explicit evidence limitation; accept a substitute proof only in a reviewed branch that defines it. Some branches require the response UID and have no fallback.
+4. Re-read **every target and every proof dependency** immediately before recording results. A changed target, namespace, creator, Node or binding invalidates the batch. Save all receipts atomically after every check passes; leave no partially accepted batch.
+5. Each receipt covers only its exact reviewed object UID and creation identity. A replacement or a new descendant of that late object needs its own evidence. Keep it outside the original controller trust roots. Re-run cleanup inventory against the unchanged original baseline plus the exact receipts.
+
+| Observed object/actor branch | Evidence that anchored the source implementation |
+| --- | --- |
+| Provider ConfigMap/Secret created by a Kubernetes service account | Exact authenticated creator, its original service-account UID, target's original namespace UID and creation-time ordering. For cross-namespace controllers, verify both original namespace UIDs. |
+| Lease created by a system User principal | Exact creator and an original RoleBinding UID with the expected User subject; a matching name alone is insufficient. |
+| Node Lease | Earlier readiness record of Node name/UID/provider ID; matching current Node and Lease owner UID; exact `system:node:<name>` creator and expected project/location. The Node is not added as a new cleanup trust root. |
+| VPA controller Lease | Exact `system:<lease-name>` creator plus successful provider bootstrap PATCH response matching binding UID, role reference and subjects, corroborated by an original baseline control identity. That bootstrap proves provenance; it is not evidence that a reader binding grants Lease-write permission. |
+| Autoscaler balloon Pod | Exact autoscaler creator and exact create-audit response UID; the narrowed delayed-event case also requires response creation time. |
+
+These are explanations of the tested proof branches, not a universal allowlist of future controller names. Unknown resource/principal combinations remain unresolved. Kubernetes/GKE versions and installed controllers can change the required evidence.
+
+Two live repairs explain why the proof must be concrete. The original VPA branch recognised the admission-controller actor but refused the distinct recommender/updater actors; each was added only with the same original-identity and bootstrap checks. A balloon Pod's successful audit arrived 1.012507 seconds after its second-rounded creation timestamp. The repair widened **only that branch** from one to two seconds and required exact response UID and creation time for the additional second. Other windows stayed unchanged. Regression tests retained refusal for wrong actors, replaced bindings, absent subjects, wrong/missing response UID/time and out-of-window events.
+
+The successful late-object reconciliation and cleanup were live observations. Atomic-batch replacement, wrong-actor and descendant-refusal cases were tested with provider doubles. In the follow-up, 15 of 17 successful receipts lacked target UIDs in the audit response; those receipts disclosed narrower evidence using exact resource/create time, authenticated creator, original control identities and a freshly rechecked reviewed UID. Do not summarise this as a returned provider UID for every object.
+
 List all blockers together and retain metadata without secret contents. One inventory can fan out over many Kubernetes resource kinds; refusal, audit lookup and repetition still consume time/actions. Reserve capacity for reconciliation and independent checks before spending the optional testing allowance. Preserve failed budget constraints rather than revising the historical pass criterion.
 
-Remove only exact owned source object generations, using a generation precondition. Keep shared staging buckets, enabled APIs, provider identities, build/log history and applicable retention. Retain node grants while the cluster needs them; remove only recorded additions. Verify resource absence and eligible grant removal through repeat cleanup and independent reads. Report retained resources and visibility limits without claiming physical erasure or guaranteed zero charges.
+Remove only exact owned source object generations, using a generation precondition. Keep shared staging buckets, enabled APIs, provider identities, build/log history and applicable retention. Retain node grants while the cluster needs them; remove only recorded additions. Preserve the repository required by a retained cluster too. The source lifecycle refuses repository deletion until the owned cluster is removed; adapting shared-registry image deletion needs its own ownership and reference analysis.
+
+Verify resource absence and eligible grant removal through repeat cleanup and independent reads. Verify the saved cluster DELETE operation reached its terminal successful state as well as observing cluster absence. Autopilot backing VMs/disks were not fully visible through the recorded direct Compute interface, so the audit did not claim individual direct deletion evidence for them. Report that visibility limit and the retained resource inventory; cluster absence alone is not proof of physical erasure or guaranteed zero future charges.

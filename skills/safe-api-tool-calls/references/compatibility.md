@@ -7,6 +7,8 @@ and limits are described here independently of those files.
 
 For this package's actual interpreter, helper checks and independent agent
 evaluations, read the [skill validation record](../tests/forward-evaluation.md).
+For the later implementation-depth recheck and retained fixture validation,
+read the [recheck record](../tests/depth-recheck.md).
 
 ## Historical environment
 

@@ -12,6 +12,13 @@ fingerprints matched the September 13 follow-up source manifest when rechecked
 on September 15. Source paths below are provenance labels under
 `chapter-00-setting-the-stage`, not dependencies or links to installed skill files.
 
+The depth review on **16 September 2026** reopened the revised manuscript,
+application/tests, audit controls, historical reports and broader cleanup
+recheck at repository revision `51b41e83cdf6adc8904d7039b283c292989203fc`.
+It added implementation procedures to the skill rather than changing the
+manuscript or companion. New mechanisms inspected in the installed ADK 2.8.0
+source are distinguished from newly executed offline recipes below.
+
 | Skill rule | Grounding | Evidence level and limits |
 | --- | --- | --- |
 | Select ordinary code when rules suffice; avoid unnecessary agents | Revised chapter's modularity/workflow argument; `workflows/dynamic/agent.py` | Production principle plus an entirely offline dynamic example. |
@@ -53,3 +60,22 @@ source's MIT-licensed real-Runner/boundary-double approach and preserve the lice
 notice in `LICENSE`. Creation-time results and independent forward tests are in
 [validation-results.md](validation-results.md); they do not inherit historical
 model-quality or cloud-lifecycle passes.
+
+## Depth-review additions and their authority
+
+| Added guidance | Source and evidence boundary |
+| --- | --- |
+| Reject a previous final state key after a later failed turn | New real-Runner, same-session two-turn reproduction and bundled regression. Four substituted model calls; no provider call. The earlier fresh-session failure test alone missed this case. |
+| Copy–modify–reassign nested state; select session/user/app/temp scope | Installed `google.adk.sessions.state`, `_session_util` and `in_memory_session_service`; new callback fixture asserts the assigned delta and fetched state. Durable database/restart semantics remain a separate target-project check. |
+| Exact agent versus plugin callback keywords and chain order | Installed `llm_agent`, `base_agent`, `base_llm_flow` and `flows.llm_flows.functions`. New Runner tests reproduce the empty-dictionary chain hazard and repeated nonempty denial with an allowed control. This is SDK 2.8.0 mechanics, not verified customer authentication. |
+| Typed result provenance, empty output and progress separation | Existing graph/dynamic code and HTTP tests; new ordinary-code Workflow fixture returns typed data, progress and `[]`, then writes completion state. The stream is fully consumed; no model call occurs. |
+| Supervised dynamic child calls and data-ID versus execution-ID distinction | Installed `agents.context.run_node` documentation/implementation plus existing duplicate-input tests. New interrupted-child recovery was not executed. |
+| Strict send limits, durable reservations, full-body deadlines and owned-client shutdown | `audit_controls.py` and its HTTP-transport/lifespan/resume tests; historical approved model campaign. The new reference is a portable design recipe, not a bundled provisioner or a freshly retested cloud launcher. |
+| Local process ownership, causal streaming, timing intervals and scoped SQLite cleanup | `tests/test_http.py`, gated ASGI streaming regression, September 13 browser observations and README. The runbook adapts previously tested procedures; no new browser or model sample is implied. |
+| Ordered project/backend/ADC diagnosis and honest broad cleanup | README, September 13 preflight failures and September 15 project cleanup recheck. Official authentication, service-list, error and retention documentation checked on September 16. No current account or cloud state was read or mutated for this skill review. |
+| Deployment/data-store handoff and deterministic versus probabilistic validation | Revised manuscript's explicitly labelled production extensions. Planning guidance only; Cloud Run, build triggers, authentication, RAG and memory remain separate implementation scopes. |
+
+The broader cleanup report retained provider storage and unresolved inventory
+questions. Only its evidence rules were generalised: reconcile direct service
+state, distinguish inaccessible from empty, and disclose retention. Personal IDs,
+project-wide deletion commands and campaign-specific quotas were not copied.

@@ -34,6 +34,10 @@ Plain Markdown remains usable without running the helper.
 
 ## Verify the target before applying SDK details
 
+The extracts in [integration-recipes.md](integration-recipes.md) describe this
+specific ADK baseline and selected seams. They are not a complete application
+template or evidence that another release preserves the same lifecycle.
+
 1. Identify the environment that runs the chosen service. Compare declared
    Python/ADK requirements and resolved locks with its interpreter/package
    metadata. Resolve stale environments, markers and multi-package workspaces.

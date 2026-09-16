@@ -6,6 +6,11 @@ whose result arrives later. These are production designs to adapt and validate;
 the historical routing campaign did not establish them as hosted capabilities.
 Inspect the target's current APIs and preserve their successful behaviour.
 
+For the optional finite-answer consumer, controlled persistence interleavings,
+processing-timeout failures and deferred-job acceptance tests, read
+[runtime-verification.md](runtime-verification.md). Load only the recipe relevant
+to the changed boundary; no general queue or job framework is required.
+
 ## Separate preview delivery from accepted completion
 
 Identify the serving surface. The ADK HTTP server's `/run_sse` request with
@@ -86,6 +91,12 @@ termination signal after accepted input, and allow a bounded drain. If the
 consumer fails or drain expires, cancel and await owned tasks and report discarded
 work. An unbounded `queue.join()` can hang after its only consumer has failed.
 Cancellation does not prove a provider undid previously accepted work.
+
+Scope a queue-idle timeout handler around the queue wait alone. If it also wraps
+processing, a processor's `TimeoutError` can be mistaken for an empty queue and
+silently swallowed, as reproduced in the companion example on Python 3.11.
+Report processor failure through the supervisor. `task_done()` means queue
+accounting completed, not that processing succeeded.
 
 ## Freeze completed turns before persistence
 

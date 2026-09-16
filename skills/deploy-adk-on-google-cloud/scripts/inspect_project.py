@@ -70,6 +70,7 @@ class Inspector:
         self.manifests = []
         self.declarations = {name: [] for name in BASELINE}
         self.python_requirements = []
+        self.python_version_pins = []
         self.managers = set()
         self.signals = set()
         self.config = {"dotenv": False, "dotenv_example": False,
@@ -144,6 +145,17 @@ class Inspector:
                                          "status": "declared" if expression else "unparsed",
                                          **({"specifier": expression} if expression else {})})
 
+    def python_version_file(self, content, source):
+        """Report only numeric declarations; named environments and paths stay private."""
+        versions = [line.strip() for line in content.splitlines() if line.strip()]
+        parsed = bool(versions) and all(
+            len(value) <= 32 and re.fullmatch(r"[0-9]+\.[0-9]+(?:\.[0-9]+)?", value)
+            for value in versions
+        )
+        self.python_version_pins.append({"source": source,
+                                         "status": "declared" if parsed else "unparsed",
+                                         **({"versions": versions} if parsed else {})})
+
     def manifest(self, path, kind):
         if path in self.visited:
             return
@@ -154,6 +166,9 @@ class Inspector:
         self.manifests.append({"id": source, "kind": kind,
                                "location": "root" if path.parent == self.root else "nested"})
         content = self.read(path)
+        if kind == "python-version":
+            self.python_version_file(content, source)
+            return
         if kind == "pyproject":
             try:
                 document = tomllib.loads(content)
@@ -265,6 +280,8 @@ class Inspector:
                     path = Path(entry.path)
                     if name == "pyproject.toml":
                         self.manifest(path, "pyproject")
+                    elif name == ".python-version":
+                        self.manifest(path, "python-version")
                     elif re.fullmatch(r"requirements[\w.-]*\.(?:txt|in)", name):
                         self.manifest(path, "requirements")
                     for filename, manager in {"uv.lock": "uv", "poetry.lock": "poetry",
@@ -338,7 +355,8 @@ def main(argv=None):
     parser = SafeParser(description=__doc__, epilog=(
         "Always offline and read-only: no cloud commands, installs, imports of project code, or writes. "
         "JSON reports declarations, not installed versions or proven compatibility. Lockfiles and .env contents "
-        "are never read. Filename hints do not establish an architecture. Exit 0: inspection completed "
+        "are never read. Numeric .python-version pins are separate from this tool's interpreter and Python constraints. "
+        "Filename hints do not establish an architecture. Exit 0: inspection completed "
         "(possibly unverified); 2: invalid input, unreadable/invalid manifest, or exceeded hard limit; "
         "3: --require-baseline evidence gate not met. Use a stable project tree during inspection."))
     parser.add_argument("--root", required=True, help="Project directory; inspect bounded nonsymlink manifests beneath it.")
@@ -372,6 +390,7 @@ def main(argv=None):
             "network_calls": 0, "writes": 0,
             "python": {"interpreter": ".".join(map(str, sys.version_info[:3])),
                        "declared_requirements": inspector.python_requirements,
+                       "version_pins": inspector.python_version_pins,
                        "requirement_satisfaction": "not_evaluated"},
             "package_manager_indicators": sorted(inspector.managers),
             "manifests": inspector.manifests,
@@ -393,6 +412,7 @@ def main(argv=None):
                 "Matching the recorded baseline does not prove dependency resolution, Python compatibility, IAM, billing, API, model, or regional access.",
                 "Different, missing, ranged, conditional, or unsupported declarations require validation; they are not declared incompatible.",
                 "Only PEP 621 and basic Poetry dependency declarations plus local requirements/constraints files are parsed; other installer options and dependency formats require manual review.",
+                "Python version pins report only numeric major.minor[.patch] declarations from .python-version; named environments, paths and other forms are unparsed with values omitted. No interpreter is selected or compatibility evaluated.",
                 "Hidden/build/environment directories are skipped; inspection is bounded, excludes symlinks, and assumes files are not concurrently replaced.",
                 "Architecture hints and API candidates are incomplete evidence, not deployment configuration or an authorization to deploy.",
             ],

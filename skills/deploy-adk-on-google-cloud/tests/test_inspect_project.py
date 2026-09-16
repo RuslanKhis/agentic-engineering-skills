@@ -60,6 +60,8 @@ class InspectProjectTests(unittest.TestCase):
 
     def test_dry_run_is_identical_and_does_not_write_or_execute(self):
         self.write("requirements.txt", "google-adk==2.8.0\n")
+        self.write(".python-version", "3.12.11\n")
+        self.write("service/.python-version", "3.13\n")
         self.write("agent.py", "raise RuntimeError('MUST_NOT_EXECUTE')\n")
         self.write(".env", "SECRET=DO_NOT_EMIT\n")
         before = self.snapshot()
@@ -71,6 +73,64 @@ class InspectProjectTests(unittest.TestCase):
         self.assertNotIn("DO_NOT_EMIT", first.stdout + first.stderr)
         self.assertTrue(json.loads(first.stdout)["configuration_file_presence"]["dotenv"])
         self.assertFalse((self.root / "__pycache__").exists())
+
+    def test_python_pins_are_separate_from_interpreter_constraints_and_baseline_gate(self):
+        self.write(".python-version", " 9.8.7\n\n3.12\n")
+        self.write("service/.python-version", "3.13.2\n")
+        self.write("pyproject.toml", '[project]\nrequires-python = ">=3.11,<3.14"\ndependencies = ["google-adk==2.8.0"]\n')
+        report = self.output("--mode", "cloud-run", "--require-baseline")
+        python = report["python"]
+        self.assertEqual(python["interpreter"], ".".join(map(str, sys.version_info[:3])))
+        self.assertEqual(python["declared_requirements"][0]["specifier"], ">=3.11,<3.14")
+        self.assertEqual(python["requirement_satisfaction"], "not_evaluated")
+        self.assertTrue(report["baseline_gate_passed"])
+        manifests = {item["id"]: item for item in report["manifests"]}
+        self.assertEqual(len(python["version_pins"]), 2)
+        self.assertEqual(python["version_pins"][0]["versions"], ["9.8.7", "3.12"])
+        self.assertEqual(python["version_pins"][1]["versions"], ["3.13.2"])
+        for pin, location in zip(python["version_pins"], ("root", "nested")):
+            self.assertEqual(pin["status"], "declared")
+            self.assertEqual(manifests[pin["source"]]["kind"], "python-version")
+            self.assertEqual(manifests[pin["source"]]["location"], location)
+        self.assertEqual(report["package_manager_indicators"], ["pyproject"])
+
+    def test_unsupported_python_pins_are_redacted_and_do_not_claim_incompatibility(self):
+        self.write("requirements.txt", "google-adk==2.8.0\n")
+        for value in ("SECRET_NAMED_ENV", "/private/SECRET_PYTHON_PATH/bin/python", "3.12\nSECRET_SECOND_PIN",
+                      "https://SECRET_PRIVATE_HOST/python", "$(SECRET_COMMAND)", "system", "3", "3.12.1.2", ""):
+            with self.subTest(value=value):
+                self.write(".python-version", value + "\n")
+                result = self.run_helper("--mode", "cloud-run", "--require-baseline")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertNotIn("SECRET_", result.stdout + result.stderr)
+                report = json.loads(result.stdout)
+                self.assertEqual(report["python"]["version_pins"], [{"source": "manifest-001", "status": "unparsed"}])
+                self.assertEqual(report["python"]["requirement_satisfaction"], "not_evaluated")
+                self.assertTrue(report["baseline_gate_passed"])
+
+    def test_python_version_symlinks_are_skipped_with_no_contents_read(self):
+        outside = Path(self.temp.name) / "outside"
+        outside.mkdir()
+        (outside / ".python-version").write_text("SECRET_EXTERNAL_INTERPRETER")
+        (self.root / ".python-version").symlink_to(outside / ".python-version")
+        (self.root / "external").symlink_to(outside, target_is_directory=True)
+        self.write("service/.python-version", "3.12.11\n")
+        report = self.output()
+        self.assertEqual(report["coverage"]["symlinks_skipped"], 2)
+        self.assertEqual(report["manifests"], [{"id": "manifest-001", "kind": "python-version", "location": "nested"}])
+        self.assertEqual(report["python"]["version_pins"], [{"source": "manifest-001", "status": "declared", "versions": ["3.12.11"]}])
+        self.assertNotIn("SECRET_EXTERNAL_INTERPRETER", json.dumps(report))
+
+    def test_python_version_files_use_bounded_utf8_manifest_reader(self):
+        path = self.write(".python-version", "3.12.11\n")
+        for content, message in ((b"SECRET_INVALID_UTF8\xff", "not valid UTF-8"),
+                                 (b"SECRET_TOO_LARGE" + b"0" * 131073, "Manifest byte limit")):
+            with self.subTest(message=message):
+                path.write_bytes(content)
+                result = self.run_helper()
+                self.assertEqual(result.returncode, 2)
+                self.assertNotIn("SECRET_", result.stdout + result.stderr)
+                self.assertIn(message, result.stderr)
 
     def test_pyproject_and_includes_distinguish_pins_ranges_and_python(self):
         self.write("pyproject.toml", '[project]\nrequires-python = ">=3.11,<3.14"\ndependencies = ["google-adk==2.8.0"]\n')

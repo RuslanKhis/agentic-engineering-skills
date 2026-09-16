@@ -16,6 +16,12 @@ variable does not override a model selected directly in source.
 | Part 2 retained runtime environment | Python 3.11.4; ADK 2.8.0; AI Platform SDK 1.153.1; Google GenAI 2.19.0; Pydantic 2.13.5; pytest 9.1.1 | Both new offline compaction/App contract tests passed; no provider or managed-session call |
 | Historical Part 3 GKE evidence | Local CPython 3.11.4; ADK 2.8.0; AI Platform SDK 1.153.1; GenAI 2.23.0; Pydantic 2.13.5; pytest 9.1.1; Cloud SDK 572.0.0 | Retained 89-test source and final private two-Pod live lifecycle; container base tag was Python 3.12.11 slim Bookworm, not a reproduced container package freeze |
 | Part 3 observation component | Authoring OpenTelemetry API/SDK 1.41.1; retained GKE environment API/SDK 1.42.1 | Eight offline in-memory-export tests passed in each environment; no external exporter or Cloud Trace calls |
+| Part 1 depth review, 16 September 2026 | Authoring CPython 3.11.4; ADK 2.8.0; AI Platform SDK 1.153.1; GenAI 2.19.0; Pydantic 2.13.4 | 82 package tests passed, including 13 strict-preview tests and two real-ADK nested-generation admission tests; no provider calls |
+| Part 1 depth review, retained runtime | CPython 3.11.4; ADK 2.8.0; AI Platform SDK 1.153.1; GenAI 2.19.0; Pydantic 2.13.5; pytest 9.1.1 | All 15 new preview/nested-budget tests passed; this is not a second full-suite or provider test |
+| Part 2 depth review, 16 September 2026 | Authoring CPython 3.11.4; ADK 2.8.0; AI Platform SDK 1.153.1; GenAI 2.19.0; Pydantic 2.13.4 | 121 package tests passed, including 36 finite-stream and three token-compaction tests; no provider calls |
+| Part 2 depth review, retained runtime | CPython 3.11.4; ADK 2.8.0; AI Platform SDK 1.153.1; GenAI 2.19.0; Pydantic 2.13.5; pytest 9.1.1 | All 39 new stream/token-compaction tests passed; not a second complete suite or hosted test |
+| Part 3 depth review, 16 September 2026 | CPython 3.11.4; ADK 2.8.0; AI Platform SDK 1.153.1; GenAI 2.19.0; FastAPI 0.136.3; SQLAlchemy 2.0.51; OpenTelemetry 1.41.1 | 135 package tests passed, including 11 new GKE HTTP/session contracts and three additional saved-run regressions; no provider calls |
+| Part 3 depth review, retained GKE environment | CPython 3.11.4; ADK 2.8.0; AI Platform SDK 1.153.1; GenAI 2.23.0; FastAPI 0.141.1; SQLAlchemy 2.0.52; OpenTelemetry 1.42.1 | 41 HTTP/session/checker tests passed; includes all 14 new tests and 27 pre-existing checker tests, not a second full suite or hosted check |
 
 The historical application declares Python `>=3.11,<3.14`; this is not an exact
 interpreter reproduction or this portable skill's dependency lock. Preserve a
@@ -47,6 +53,29 @@ also fails the GKE gate. Kubernetes filename hints are presence candidates only;
 the inspector does not parse manifests or identify the authoritative generator.
 The optional session-observation asset needs OpenTelemetry API; its tests also
 need the SDK. Preserve the target's compatible packages and test export locally.
+
+The optional formatting asset uses Pydantic 2 and Python 3.11 syntax. Its limits
+are an adaptable manuscript-derived contract, not ADK defaults. Use its safe
+parser/encoder boundary for untrusted previews; direct validation diagnostics can
+contain input. Strict Pydantic scalar declarations alone did not prevent a
+Decimal-to-float conversion in the recorded environment, so the asset explicitly
+checks plain JSON cell types before validation.
+
+The optional finite-stream asset needs only Python 3.11 standard-library APIs.
+Its ADK event interoperability test requires exactly the recorded ADK 2.8.0
+baseline and skips on another version. Its single-invocation STOP policy, exact
+identity requirements and byte budgets must match the target's decoded adapter;
+it is neither a general wire decoder nor a tool-result semantic validator.
+The token-compaction tests also require ADK 2.8.0 and use synthetic usage with
+deterministic models. No hosted compaction or real summarisation quality is implied.
+
+The new GKE HTTP tests require the recorded ADK 2.8.0 factory/loader contract and
+its FastAPI/TestClient dependencies; missing ADK or a different version skips
+that baseline. SQLite session tests require `aiosqlite`, and the native span test
+requires the OpenTelemetry SDK. Both recorded environments used Starlette 1.6.0,
+HTTPX 0.28.1 and aiosqlite 0.22.1. TestClient emitted an HTTPX deprecation warning;
+no dependency was changed to silence it. These in-process tests establish SDK
+semantics, not PostgreSQL compatibility, streaming delivery or native skill discovery.
 
 ## Describe coverage precisely
 

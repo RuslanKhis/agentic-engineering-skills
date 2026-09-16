@@ -1,6 +1,0 @@
-interface:
-  display_name: "Safe API Tool Calls"
-  short_description: "Build reliable API tools with safe retries and writes"
-  default_prompt: "Use $safe-api-tool-calls to inspect this project's API tools and improve their retry, deadline or write-safety behaviour."
-policy:
-  allow_implicit_invocation: true

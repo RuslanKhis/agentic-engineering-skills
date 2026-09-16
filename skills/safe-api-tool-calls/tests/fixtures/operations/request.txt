@@ -1,0 +1,1 @@
+Use the safe-api-tool-calls skill to review these incident facts and give a concrete ordered recovery and verification plan. Explain what each observation proves and what remains unknown, including the setup state and cleanup claim. Prepare reviewable next steps; use only the supplied facts and do not contact any real services or alter external configuration.

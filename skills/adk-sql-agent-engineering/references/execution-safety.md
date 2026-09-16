@@ -2,6 +2,8 @@
 
 These are production principles for implementation and review. The companion verified a narrower subset, listed in [compatibility.md](compatibility.md). Apply controls according to the real data surface and requested scope; report absent controls as gaps instead of claiming the sample supplies them.
 
+For concrete setup, recovery and deletion algorithms, read [lifecycle-runbook.md](lifecycle-runbook.md). For observed failure signatures and regression recipes, read [troubleshooting.md](troubleshooting.md).
+
 ## Trusted request and query checks
 
 Preserve the original request and authenticated caller scope in host-owned state. The model's copied question, selected domain, declared table list and operational reason are untrusted proposals. Before execution, bind the candidate to the authorised domain and schemas actually retrieved for this invocation. Compare parsed physical references with that trusted scope. A candidate must not widen its own permissions by naming another otherwise approved domain.

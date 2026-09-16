@@ -2,6 +2,8 @@
 
 Use the target project's runner and existing virtual environment. The bundled helpers need Python 3.11 or later and only the standard library; `pytest` can run their `unittest` tests. All ordinary tests must remain offline. Mark every provider substitute explicitly.
 
+The optional [ADK contract asset](../assets/test_adk_contract.py) exercises real framework/SDK serialisation with synthetic HTTP responses; read [adk-runtime.md](adk-runtime.md) before running or adapting it. It has separate dependencies and does not import the target application. Use [acceptance-and-extensions.md](acceptance-and-extensions.md) for target-level Runner/HTTP/browser checks and [semantic-contracts.md](semantic-contracts.md) for adversarial data fixtures. Passing the asset does not establish that the target is wired correctly.
+
 ## Minimum useful cases
 
 | Boundary | Positive case | Negative case and observable outcome |

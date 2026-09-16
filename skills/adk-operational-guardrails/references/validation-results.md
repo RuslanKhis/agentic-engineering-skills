@@ -1,4 +1,6 @@
-# Validation record — 15 September 2026
+# Validation records
+
+## Baseline — 15 September 2026
 
 The skill was developed and tested locally on macOS 26.6.2 arm64 with CPython 3.11.4. Current project virtual environment: `google-adk==2.8.0`, `google-genai==2.19.0`, `google-cloud-pubsub==2.39.0`, `google-api-python-client==2.197.0`, `PyYAML==6.0.3`. No dependency versions were changed. Historical live evidence used `google-genai==2.23.0` and is recorded separately in [compatibility](compatibility.md).
 
@@ -51,3 +53,43 @@ The final greenfield cold CLI checks succeeded, but full process times were 3.36
 Smoke-tested a Codex desktop agent workflow with the skill explicitly supplied by path. Automatic selection/installation and other coding-agent products were not smoke-tested; plain Markdown portability is a format property, not proof of behavioural compatibility everywhere. Optional OpenAI metadata leaves implicit invocation enabled by default.
 
 No paid model call, cloud mutation, deployment, IAM change, secret creation, commit or publication was performed. Shared reservations, durable review/outbox, actual human delivery, payment execution, provider reconciliation, billing notification deployment and managed cleanup are production guidance, not services delivered by this skill. Cloud mutations, billable/destructive testing and owned-resource cleanup require the explicit, scoped confirmation described in SKILL.md. Local test success is not a hard spending cap or an audit of a live project.
+
+## Depth review — 16 September 2026
+
+Expanded the conditional references after re-reading the manuscript, source, original failures, corrected campaigns and cleanup evidence. No executable, dependency, chapter source or manuscript was changed. New references cover service integration/lifecycle and bounded live campaigns; the existing references now give more concrete state, transaction, crash-recovery, traffic, accounting and testing decisions.
+
+### Fresh local validation
+
+Used the same CPython 3.11.4/macOS 26.6.2 arm64 environment and exact package versions recorded above, without installation or pin changes. Copied the complete skill to a new temporary directory without companion sources or credentials. Removed credential variables from the child environment, disabled dotenv/telemetry and pointed ADC at an absent file.
+
+| Check | Actual result |
+| --- | --- |
+| Official `quick_validate.py` | PASS: “Skill is valid!” |
+| `python -m unittest discover -s tests -p 'test_*.py' -v` | 29 passed in 0.958s, no failures or skips |
+| `python -m unittest discover -s tests -p adk_boundary.py -v` | 4 passed in 1.165s, no failures or skips; real ADK, fake model |
+| Inspector help and clean-copy `--project . --dry-run --require-adk 2.8.0` | Both exit 0; the latter intentionally checks the skill as a helper smoke test, not a target application |
+| `python -m pip check` | Exit 0; no broken requirements |
+| Final structure, links, AST, whitespace and sensitive/scaffold-pattern scan | 19 packaged files, 5 Python files parse, 34 relative Markdown links resolve; no errors |
+| Companion source manifest | All 27 SHA-256 hashes still match |
+
+### Fresh forward exercises
+
+Two fresh evaluators received only isolated skill copies, synthetic fixtures and requests, with provider/cloud execution prohibited. They did not receive the original chapter or conversation as an answer source.
+
+| Exercise | Observed result and boundary |
+| --- | --- |
+| Three replicas, two workers each; existing service adapter | Evaluator produced 16 offline defect-reproduction tests, including two real-ADK/fake-model cases with socket connections blocked. Maintainer inspected and reran them: 16 passed in 2.450s. Passing here confirms deliberately flawed fixture behaviour, not service readiness. |
+| Cleanup gaps and a new campaign across two servers plus CLI | Evaluator produced an actionable audit and proposed 12-submission/24-attempt/30-minute envelope. It preserved retained storage, denied/disabled inventories, pagination, unresolved activation and nonfinal billing as incomplete evidence; required one shared ledger and a current estimate before approval. Only static inspection and fixture-integrity checks ran; no application or live tests were claimed. |
+
+The service reproductions confirmed lost final-event/tail usage, per-turn counter reset, tenant-key collision, duplicate/missing usage problems, unbounded waiting, absent outer timeout, empty-stream success and unsupported payment prose. A real ADK final response carrying 17 tokens left the fixture's counter at zero; repeated terminal tool failure executed twice. Six separate worker processes each admitted four requests and started with empty counters, establishing the scope problem and potential aggregate capacity of 24—not a measured simultaneous fleet peak. Early iterator exit also emitted context-detachment errors. These findings reinforce the same-task iterator cleanup and complete-consumption guidance.
+
+The service evaluator supplied tests and intermediate findings but did not complete its final narrative report. The maintainer completed the test review and rerun; no independent remediation pass or deployed-service result is claimed. Temporary fixtures are evaluation evidence, not additional skill dependencies or production implementations.
+
+### Corrections from these exercises
+
+- Corrected the validation command to inspect `"$PROJECT_ROOT"`, distinguishing target application tests from bundled skill tests. Running `--project .` from the skill folder is now explicitly a helper smoke test.
+- Added an interpreter fallback for source-free fixtures and a warning that a successful scan with zero relevant files establishes no application coverage. The inspector's existing JSON schema remains unchanged.
+- Added concrete coverage allocation, admission/closeout timing and current-price worksheet guidance. Kept illustrative numbers separate from authority; no turnkey campaign ledger or current monetary estimate is claimed supplied.
+- Clarified operation-key granularity for legitimate repeated partial refunds and Cloud Run's attached runtime identity rather than shipped credential files.
+
+Final documentation-only corrections were structurally checked after the test run; executable files did not change. No paid model calls, deployment, resource creation/deletion, credential changes, commit or push occurred in this review. Production recommendations remain acceptance requirements until implemented and exercised in the target system.

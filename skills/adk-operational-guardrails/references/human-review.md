@@ -14,17 +14,59 @@ Validate amounts before any approval/publication: positive, finite, correct curr
 
 A mock publisher demonstrates routing only. Fresh UUIDs on every request, in-memory lists, Pub/Sub delivery and instructions saying “do not repeat” do not create durable review or exactly-once effects. If production explicitly selects a transport/store, fail clearly when configuration is missing instead of silently falling back to a mock.
 
-For a production operation:
+## Durable record and transaction recipe
 
-1. Derive or accept a trusted stable business-operation ID, with canonical payload, tenant, requester and stored provider idempotency key. Persist it before dispatch. Changed payload under the same ID is a conflict. The same payload with a new random ID is not replay protection.
-2. Authorise the requester and resolve eligibility/ownership in trusted code. Atomically create the operation and notification outbox record. Enforce a uniqueness constraint and handle insertion races; `SELECT FOR UPDATE` does not lock a nonexistent row.
-3. Return the existing operation on repeats, including when it remains pending. Make notification delivery retryable and deduplicated; Pub/Sub is a transport, not the review record or proof a person received it.
-4. Authenticate and authorise the reviewer for that operation. Apply a conditional state/version transition once, with expiry and separation-of-duties policy where required. A supplied approval Boolean/dataclass is not authority.
-5. Execute only from the authorised state, with a persisted provider key and ownership/concurrency controls. Approval itself moves no money. Duplicate worker delivery and reviewer clicks must not duplicate effects.
-6. If the provider outcome is unknown, persist that state and reconcile before retrying. If no safe provider idempotency or lookup contract exists, route to manual reconciliation. Do not mint a fresh key to clear an error.
+The following schema and state transitions are **production design**, not a service bundled with this skill or implemented by the companion. Adapt them to the chosen database and provider contract, then verify their concurrency and recovery semantics.
 
-Retain access-controlled audit facts needed for review without exposing customer payloads to routine model logs. Define cancellation, expiry, rejection, final failure and notification recovery, not just the happy path.
+| Durable record | Minimum information and purpose |
+| --- | --- |
+| Business operation | Stable operation ID scoped to its tenant, canonical payload and payload digest, requester, provider idempotency key, operation state and version; retains the exact authorised action across retries |
+| Review | Opaque review reference, operation link, tenant, requester, decision/version, creation/expiry times and authorised decision actor; one decision for the stored proposal |
+| Outbox | Stable event ID, schema/event type, opaque review reference and publication state; records notification work in the same transaction as the state change |
+| Audit | Actor, action, operation reference, time and allowlisted decision/reason fields; access-controlled history with a retention policy |
 
-ADK's [Tool Confirmation](https://adk.dev/tools-custom/confirmation/) may supply an interaction mechanism. Check the pinned version, session backend and resumption contract before adoption. An interaction confirmation does not by itself establish a durable authorised business operation.
+Bind the principal at the application/tool adapter; the model supplies business inputs, not tenant, requester, approver or provider key. Verify order ownership and eligibility against trusted records. Keep caller context isolated across concurrent invocations; a mutable process-global principal can bind one user's request to another user.
 
-Acceptance tests: unauthorised or forged identity causes zero writes; invalid amounts cause zero publication; pending repeats return the same operation; concurrent review decisions cause one transition; restart and redelivery cause one external effect; publish failure never reports successful submission unless a durable queued record actually exists; provider timeout leads to reconciliation; final user-visible text reflects approved versus completed state. Treat storage/provider tests as unverified until those integrations are exercised.
+For creation, authorise first, canonicalise the payload, then atomically create or retrieve the operation, review, outbox and audit records. Enforce a unique tenant/operation key and review linkage; handle competing inserts by reading the committed existing record. `SELECT FOR UPDATE` does not lock a nonexistent row. Reusing the operation ID with a changed payload is a conflict. Reusing it unchanged returns the existing state; issuing a fresh random ID for every retry bypasses that protection.
+
+Choose the business key at the intended operation granularity. An order may legitimately have several distinct partial-refund operations; deduplicating forever by order ID alone would block them. Trusted application code must distinguish a retry of one authorised operation from a new eligible operation.
+
+The notification payload contains only schema version, event type and an opaque review reference. Keep order IDs, amounts, free-text reasons, customer identities and provider keys in the protected record. Consumers authenticate and load the record before acting. An opaque identifier is not authorisation: status lookup also checks the caller's tenant and permission before disclosing a review, its existence or its outcome.
+
+## Authorised transitions and recovery
+
+Implement conditional state/version transitions and audit them in the same transaction. The names below are illustrative; preserve compatible existing API names.
+
+| Transition | Condition and resulting authority |
+| --- | --- |
+| Pending → approved/rejected | Authenticate the reviewer, check tenant and action permission, enforce separation of duties where required, and check expiry; repeated decisions return the stored result |
+| Pending → expired/cancelled | A trusted expiry process or authorised cancellation wins only while the operation is still pending; subsequent approval cannot revive it |
+| Approved → executing | A worker atomically claims the authorised operation and uses its stored payload/key; duplicate approval messages observe the existing claim/state |
+| Executing → completed | Trusted provider evidence confirms the effect; store the provider reference before reporting completion |
+| Executing → failed | A confirmed final provider rejection; distinguish execution failure from a human rejecting the proposal |
+| Executing → outcome_unknown | Timeout or crash leaves acceptance uncertain; reconcile by the persisted key/reference before any further write |
+
+Approval is a permission transition. It performs no external effect itself. A claim/lease expiring after a crash also does not prove that the provider did nothing. Where the provider offers neither safe idempotency nor a lookup contract, send uncertain outcomes to manual reconciliation rather than issuing a new key.
+
+Use crash injection at the transaction and external-call boundaries:
+
+| Failure point | Required recovery and observable assertion |
+| --- | --- |
+| Before creation commits | No review/outbox record is visible and no notification/provider call occurred |
+| After commit, before publication | The review remains queryable; a worker retries the committed outbox entry |
+| After publish acceptance, before marking published | Publication may repeat with the same event/reference; the consumer performs one authorised transition |
+| Concurrent or repeated reviewer decisions | One permitted transition wins; the other observes it, without another execution event |
+| After provider acceptance, before storing success | The operation remains uncertain; recovery reconciles with the same key instead of assuming failure |
+| After storing completion, before final notification | Status lookup returns completion; notification retries do not execute the operation again |
+
+Publish committed outbox entries, wait for bounded acknowledgement, then mark them published. A failed or timed-out publish leaves retryable notification work. A durable queued record permits “queued for review”; it does not establish delivery to a person. The companion's direct publisher has no outbox: its offline test verifies that an acknowledgement error propagates rather than returning `pending_approval`.
+
+Define final-result notification and authenticated status lookup alongside creation. They let a user learn the outcome after the original agent invocation ends, without replaying the action. For deployment, persistence and worker lifecycle checks, use [serving and lifecycle](serving-and-lifecycle.md).
+
+## Choose confirmation or a separate review service
+
+ADK's [Tool Confirmation](https://adk.dev/tools-custom/confirmation/) can supply an interaction mechanism for a client that promptly resumes its invocation. Before adopting it, inspect the installed version and verify support for the actual session backend. Preserve the function-call identity in the confirmation response and, when the resume contract requires it, the original invocation ID. Test the real client reconnect/resume path; merely sending an approval Boolean does not establish reviewer authority or durable execution.
+
+Use a separate durable review operation when another person decides, decisions may take hours or days, or completion must survive process/client restarts. Historical ADK session-backend restrictions are version-sensitive; recheck official documentation rather than inheriting a compatibility claim from the chapter.
+
+Acceptance tests: unauthorised/forged identity causes zero writes; another tenant cannot read an opaque review reference; invalid amounts cause zero publication; missing required inputs cause clarification and zero tool calls; pending retries return the same operation; changed-payload reuse conflicts; expiry/cancellation race safely with approval; the crash table's recovery assertions hold; final user-visible text reflects approval versus completion. Pair the clarification case with a complete request that creates one appropriate operation. Treat actual storage, reviewer transport and provider guarantees as unverified until those integrations are exercised.

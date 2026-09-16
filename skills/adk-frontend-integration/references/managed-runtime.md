@@ -2,13 +2,15 @@
 
 Use this reference only when the selected JSON or AG-UI gateway calls managed Agent Runtime. The legacy SDK identifiers `vertexai`, `agent_engines`, `AdkApp` and `reasoningEngines` remain exact code/resource names in the recorded implementation. Do not rename them to match product marketing.
 
+For **connecting an existing Runtime**, **preparing an owned deployment**, or **recovering/cleaning up**, read [deployment-runbook.md](deployment-runbook.md). It provides the scoped preflight, default managed-identity check, pinned deployment/configuration contract and gateway/browser handoff without depending on companion scripts. Continue below for the adapter's session and stream behaviour.
+
 ## Inspect before connecting
 
 Read explicit configuration for project, Runtime region, model/backend region, model and exact remote resource name. Runtime location and model location are independent. Confirm that the resource name agrees with the selected project and Runtime region. Review environment precedence without printing values: changing a root `.env` does not update a chapter/app-local key, and an exported shell value can override the edited file.
 
 CLI login, Application Default Credentials and ADC quota project are different settings. Read-only project/API access checks must succeed before claiming connectivity. A selected project in an IDE is not proof that CLI or SDK access works. Missing prerequisites can leave local implementation and tests complete while remote validation remains explicitly unverified. API activation, IAM or secret changes require the approval process in `SKILL.md`.
 
-The helper's installed-version gate does not inspect credentials, billing or enabled APIs. Perform those checks through the target project's existing read-only tooling when needed, recording denied access as unknown, not absent resources.
+The helper's installed-version gate does not inspect credentials, billing or enabled APIs. Use the runbook's [read-only preflight](deployment-runbook.md#2-read-only-preflight-bootstrap-only-when-required), adapted to the existing project's tools and selected caller/deployer role. Denied access is unknown, not absent resources. Default managed Runtime identity readiness uses the exact project IAM binding, not a customer-project service-account metadata lookup; functional model access remains a separate check.
 
 ## Retain the SDK owner
 
@@ -32,12 +34,14 @@ Use the pinned SDK's stream parser for SDK JSON-lines/SSE responses. A hand-writ
 
 Use the selected transport reference for terminal outcomes. Retain a client deadline, a gateway deadline covering preparation and query consumption, and appropriate dependency deadlines. Cancellation of an await is not evidence that remote execution stopped. Do not retry an uncertain mutating invocation to obtain a better latency sample.
 
+Verify the SDK transport's retry policy too. The recorded smoke required both one SDK attempt and an HTTPX transport with retries disabled; application code without a retry loop alone did not establish that bound. The runbook's [verification procedure](deployment-runbook.md#5-verify-without-accidental-repeated-model-work) includes the tested configuration and the required submission-count regressions.
+
 ## Authorised live verification and cleanup
 
-Preparation can produce commands and a resource manifest without deploying. Obtain explicit approval for the exact disposable target, region, unique labels, call/attempt limits, deadline and expected spend before paid calls or provisioning. A request-count limit and min-zero instances are not spending caps.
+Preparation can produce commands and a resource manifest without deploying. Resolve the exact disposable target, region, unique labels, call/attempt limits, deadline and expected spend before paid calls or provisioning. Use the task's existing approval when it covers those exact effects; request approval for missing or expanded scope. A request-count limit and min-zero instances are not spending caps.
 
 Reuse the target's setup scripts only after inspecting their plan and ownership behaviour. Record operation intent before submission, exact resource and operation IDs after acceptance, and provider readback of completion. A CLI exit code or plausible final text alone is insufficient: a tested CLI could print failure and exit zero. Bound polls and reconcile unknown outcomes before resubmitting.
 
-Keep cleanup separate. Present the exact owned targets and deletion commands for confirmation, then verify operation completion and exact-resource absence. Some deletion operations are regional rather than nested under the resource; accept one only with an exact saved operation/resource binding. Preserve unrelated resources and shared prerequisites. A failed inventory is not a clean bill of health, and logical deletion is not proof of physical backup erasure.
+Keep cleanup separate, with confirmation of the exact owned targets and effects unless already authorised in this task. Use the runbook's [recovery table](deployment-runbook.md#6-recover-and-clean-up-the-owned-target) to distinguish unknown acceptance, terminal failure, completed deletion and failed independent inspection. Verify operation completion and exact-resource absence. Preserve unrelated resources and shared prerequisites. A failed inventory is not a clean bill of health, and logical deletion is not proof of physical backup erasure.
 
 Historical evidence covers a prepared API baseline, managed execution and owned cleanup. Fresh-project activation, live interrupted-operation recovery, deployed Cloud Run/GKE variants and production identity were not verified by that campaign. Nothing in this skill authorises repeating it.

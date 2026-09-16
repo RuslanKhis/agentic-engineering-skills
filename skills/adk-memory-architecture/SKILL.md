@@ -13,7 +13,7 @@ metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   source-chapter: "6"
-  last-tested: "2026-09-15"
+  last-tested: "2026-09-16"
 ---
 
 # ADK memory architecture
@@ -61,6 +61,14 @@ Use the owning transactional service for current entitlements or business
 mutations. Exact user-controlled settings belong in a deterministic profile.
 Neither semantic memory nor retrieved prose authorises an action. Do not add
 all four stores merely because they are available.
+
+When implementing the HTTP/ADK boundary, read
+[integration-recipes.md](references/integration-recipes.md) for concrete
+assembly, trusted-context, event and replay contracts. When connecting or
+hosting managed backends, read
+[managed-deployment.md](references/managed-deployment.md). For failed setup,
+retrieval, protection, probes or cleanup, use
+[failure-recovery.md](references/failure-recovery.md) before proposing a retry.
 
 ## Implement or adapt
 

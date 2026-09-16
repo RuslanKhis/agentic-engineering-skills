@@ -3,6 +3,9 @@
 Read when a project has tools, stored conversations, custom entry points or
 streaming. Follow the existing architecture; use this as a boundary checklist,
 not a reason to replace an application with an example.
+For callback signatures, runtime assembly, final-event selection, client
+ownership or telemetry configuration, read
+[implementation-recipes.md](implementation-recipes.md).
 
 ## Request and session boundary
 
@@ -113,12 +116,10 @@ provider exception details. Inspect middleware, SDK diagnostics, traces and
 error exporters independently. Suppressing displayed exception chaining alone
 does not remove retained exception context or exporter capture.
 
-In the recorded ADK version, review `ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS`,
-`OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT`,
-`ADK_EXPERIMENTAL_TELEMETRY`, `ADK_CAPTURE_MCP_HTTP_BODIES` and
-`ADK_TELEMETRY_IGNORE_RUN_CONFIG`; verify their installed semantics and tests
-before configuring them. The chapter used disabled content capture (including
-`NO_CONTENT` for the OTEL setting), not proof that every external sink is safe.
+Use the version-specific settings and canary procedure in
+[observability configuration](implementation-recipes.md#configure-and-verify-observability).
+Verify effective capture and exporter behaviour, including per-run overrides;
+configuration alone does not establish that every external sink is safe.
 
 Create clients at application lifecycle boundaries, not per callback or during
 module import. The recorded runtime used an explicit `Gemini(model=...)` object
@@ -131,3 +132,5 @@ need equivalent boundaries when present. The supplied text workflow does not
 implement those paths, production identity, distributed locking, retention
 enforcement or incident response. Record these as production extensions and
 scope them explicitly instead of claiming full coverage.
+For tenant policy selection, retention, detector evaluation or incident recovery,
+use [production-policy.md](production-policy.md).

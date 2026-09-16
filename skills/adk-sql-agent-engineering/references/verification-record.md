@@ -1,12 +1,12 @@
 # Skill verification record
 
-Validation date: 15 September 2026. This record concerns the portable skill package, not a new cloud deployment or a new live companion campaign.
+Initial validation: 15 September 2026. The first sections preserve that package's results; the dated depth-review section below records the 16 September revision. Neither is a new cloud deployment or live companion campaign.
 
 ## Environment
 
 Package and forward tests used the existing isolated Python **3.11.4** environment, on **macOS / Darwin 25.6.0, arm64**, with **pytest 9.1.1** and **PyYAML 6.0.3**. Synthetic workflow fixtures used **SQLite 3.42.0** and **SQLGlot 29.0.1**. The selected interpreter also had the exact ADK/provider versions recorded in [compatibility.md](compatibility.md); no dependency installation or version changes occurred.
 
-Agent behaviour was exercised in **Codex Desktop** using two independent agents with fresh context. Each received only the packaged skill, a clean synthetic project, a realistic request and the permitted local interpreter. Neither had access to the book, companion code or the other agent's fixture. The core `SKILL.md` SHA-256 was `96c4d6d34541cd09af04a1ff1c5ddeeef842e314de301a246d1238d279d37b6a`, matching the delivered entrypoint.
+Agent behaviour was exercised in **Codex Desktop** using two independent agents with fresh context. Each received only the packaged skill, a clean synthetic project, a realistic request and the permitted local interpreter. Neither had access to the book, companion code or the other agent's fixture. The core `SKILL.md` SHA-256 was `96c4d6d34541cd09af04a1ff1c5ddeeef842e314de301a246d1238d279d37b6a`, matching the 15 September entrypoint before the depth-review revision.
 
 Windows, Linux and other coding-agent environments were **NOT RUN**. Plain Markdown and optional UI metadata make the package reusable; they do not prove behavioural portability. A late inspector change added a clear failure on platforms without directory-descriptor scanning, with a new unit test and a final clean-copy run. It does not change the tested macOS workflow. No new live API, deployment, IAM or paid Gemini/BigQuery work occurred.
 
@@ -50,3 +50,119 @@ Both independent implementations initially exposed SQLite's optimised `COUNT(*)`
 The original manuscript and companion source were unchanged. All 44 source files still match the recorded follow-up fingerprints. Existing repository skills and concurrent work were preserved. No commit, push, publication, deployment, new cloud resource or secret was produced.
 
 The skill entrypoint, scripts, tests, conditional references, MIT licence and optional discovery metadata are the complete deliverable. The historical live behaviour remains separately dated in [compatibility.md](compatibility.md). Before using a new production target, verify its model/SDK contract, authenticated scope, provider SQL policy, cumulative budgets, output completeness and separately approved live lifecycle. The skill's local results do not supply those target-specific guarantees.
+
+## 16 September 2026 — implementation depth review
+
+Re-opened the current manuscript, source, unit/integration tests, independent audit,
+both live campaign records and later cleanup evidence. Three parallel source audits
+covered lifecycle, semantics/evaluation and ADK/runtime integration. Their findings
+were incorporated and checked locally against the source. The expanded entrypoint's
+SHA-256 is `9009167cdbfd6a4afaf3cc057a640a29d96cd9caa72e156558582e186613ef19`.
+
+The change adds five conditional references and one runnable test asset:
+
+- Metric contracts, adversarial fixture mutations, field-specific value resolution,
+  exact context, nested-schema limits and relationship-policy checks.
+- Actual ADK graph/event wiring, wire/runtime models, trusted invocation interfaces,
+  shared credential construction, configuration lifetime and concurrency limits.
+- Read-only prerequisite inspection, API/IAM matrices, durable operation state,
+  stable loads, token readiness, interrupted deletion and independent closure.
+- Public Runner/HTTP/browser acceptance, outcome mutation controls, telemetry,
+  follow-up semantics and managed-tool responsibility boundaries.
+- Failure signatures, concrete parser/value regressions and reviewed-template
+  promotion from generated traces.
+- A synthetic ADK contract asset that retains the actual SDK serializer and blocks
+  ADC discovery and socket/DNS operations during its test fixture.
+
+The [coverage map](compatibility.md#depth-review-coverage) connects the chapter's
+sections and campaign findings to these procedures. Production extensions remain
+labelled, including caller isolation, complete SQL policy, cumulative deadlines,
+semantic follow-ups and cloud frontend hosting. The failed historical latency gate
+and original checker failures remain recorded.
+
+### Current test environment
+
+Used the existing repository Python **3.11.4** environment on **macOS 26.6.2 /
+Darwin 25.6.0, arm64**, with `google-adk` **2.8.0**, `google-genai` **2.19.0**,
+`pydantic` **2.13.4**, `google-auth` **2.57.0**, `httpx` **0.28.1**, `pytest`
+**8.4.2**, `PyYAML` **6.0.3** and SQLite **3.42.0**. BigQuery **3.42.0** and
+API Core **2.31.0** were installed but were not exercised by the synthetic asset.
+No dependencies were installed or changed.
+
+This is a different SDK stack from the historical GenAI 2.23.0 live campaign.
+The old isolated environment no longer supplied its full dependencies, so it was
+not silently reused or repaired. The new asset was **NOT RUN on GenAI 2.23.0**.
+The test result is limited to the synthetic integration on the versions above;
+it is not a new whole-companion compatibility result.
+
+### Commands and observed results
+
+Commands use `python` for that selected interpreter and run from the skill root
+unless stated otherwise. The official validator is supplied by the installed
+skill-creator guidance; it is not a dependency of the delivered skill.
+
+| Command or check | Actual result |
+| --- | --- |
+| Official `quick_validate.py` against this skill | Exit 0, `Skill is valid!` |
+| `PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest -q -p no:cacheprovider tests` | Exit 0; **45 passed**, 6.88 seconds |
+| Same pytest invocation targeting `assets/test_adk_contract.py` | Exit 0; **10 passed**, one upstream ADK `BaseAgentConfig` deprecation warning, 2.94 seconds |
+| Standalone copy; `PYTHONDONTWRITEBYTECODE=1 PYTHONPATH='' python -S -m unittest discover -s tests -q` | Exit 0; **45 tests passed**, 5.904 seconds; site packages disabled |
+| Standalone copy; same offline pytest asset invocation with empty `PYTHONPATH` | Exit 0; **10 passed**, same upstream warning, 1.91 seconds; no companion/book files in copy |
+| Both helper `--help` and `--dry-run` invocations | Exit 0; plans reported no correctness/connectivity verdict |
+| Inspector on a synthetic project with declared ADK 2.8.0 and a private canary `.env` | Exit 0; strict ADK gate PASS; no secret value in output |
+| Checker on the two bundled validation JSON examples | Exit 0; exact PASS; no model or database involved |
+| Semantic recipe replay in SQLite | PASS: baseline plus six independent mutations, both Sydney-to-UTC endpoints, follow-up selection versus presentation example |
+| Python AST, YAML/discovery metadata, internal relative links/anchors, private-identifier/unfinished-text scans and scoped whitespace check | PASS |
+| Source preservation | All **44** companion files still match the follow-up fingerprints; all **42** files in the additional source/manuscript snapshot remained unchanged |
+
+The ADK asset's ten cases establish four branch trajectories, required/nullable
+provider fields, exact synthetic metadata delivery, two null-bearing refusal
+statuses, incomplete READY rejection, a removed-callback negative control and
+active ADC/network guards. The “execution” node is a spy with fixed synthetic
+rows; no SQL is executed. HTTP responses are doubles, and the model transport is
+non-streaming while the actual asynchronous Runner event stream is consumed.
+It does not test live Gemini, BigQuery, credentials, SQL policy, HTTP/SSE serving,
+browser interaction or the target application's integration.
+
+Fresh independent agent forward-use evaluation of the expanded revision was
+**NOT RUN**: follow-up worker turns stopped at the account usage limit. The earlier
+six forward-use cases remain dated evidence for the previous entrypoint, not a
+new behavioural PASS for this revision. Local review and the new executable
+framework checks completed after those workers stopped. No reset was purchased
+or consumed, and no cloud operation was used to compensate for that limitation.
+
+### Delivered package
+
+```text
+adk-sql-agent-engineering/
+├── SKILL.md
+├── LICENSE
+├── agents/
+│   └── openai.yaml
+├── assets/
+│   └── test_adk_contract.py
+├── references/
+│   ├── acceptance-and-extensions.md
+│   ├── adk-runtime.md
+│   ├── compatibility.md
+│   ├── execution-safety.md
+│   ├── implementation.md
+│   ├── lifecycle-runbook.md
+│   ├── semantic-contracts.md
+│   ├── troubleshooting.md
+│   ├── validation.md
+│   └── verification-record.md
+├── scripts/
+│   ├── check_results.py
+│   └── inspect_project.py
+└── tests/
+    ├── test_check_results.py
+    └── test_inspect_project.py
+```
+
+Changed the entrypoint, optional UI prompt and five existing references; added the
+five detailed references and test asset. The original two helpers, their tests and
+the licence are unchanged. The skill remains self-contained and automatically
+discoverable. Other repository work was preserved. No manuscript/source changes,
+commit, push, installation, deployment, API activation, IAM change, paid call or
+cloud resource creation/deletion occurred in this revision.

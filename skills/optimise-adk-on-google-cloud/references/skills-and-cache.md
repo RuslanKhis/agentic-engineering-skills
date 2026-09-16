@@ -4,6 +4,8 @@ Use this reference when specialised instructions inflate ordinary requests,
 irrelevant history reaches a narrow child, or repeated stable input suggests
 context caching. First identify the actual root, tools, children, `App` and
 Runner or serving loader. Imported definitions alone do not establish wiring.
+If those relationships are unclear, first use the configuration and registration
+checks in [application-integration.md](application-integration.md).
 
 ## Load instructions progressively
 
@@ -44,6 +46,10 @@ Configure `ContextCacheConfig` on the `App` and preserve that `App` in the Runne
 or serving integration. In ADK 2.8.0, `min_tokens` gates activation using earlier
 response token metadata; the provider's minimum also applies.
 `cache_intervals` counts invocations, while `ttl_seconds` controls retention.
+In this baseline the interval bounds reuse; it does not postpone initial creation
+until the fifth call. An eligible tool continuation can create a cache within a
+user turn. Test the installed cache-manager boundary before estimating creation
+frequency, and distinguish invocations from model requests.
 One user turn can contain several model requests. Treat
 `min_tokens=2048`, `ttl_seconds=600`, `cache_intervals=5` as historical experiment
 inputs. If adding a creation deadline, `create_http_options` accepts
@@ -70,3 +76,9 @@ uncertain outcomes. A cache may exist even when the following generation fails.
 Reconcile pending creation before another attempt. Delete owned caches separately
 from sessions and compute, verify absence, and retain unresolved receipts. Report
 provider retention separately from active-resource absence.
+
+Do not rely on an SDK invalidation path that suppresses deletion errors as proof
+of cleanup. Independently read the recorded provider cache identity. A generation
+failure can omit that identity from returned events, which is why creation-boundary
+recording is necessary. Use [part1-verification.md](part1-verification.md) when
+bounding the effective input including cached content and nested model calls.

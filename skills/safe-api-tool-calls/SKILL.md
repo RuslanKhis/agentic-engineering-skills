@@ -1,12 +1,12 @@
 ---
 name: safe-api-tool-calls
 license: MIT
-description: Implement, adapt or review safe external API tools in Python and ADK projects, including selective retries, cooperative deadlines, idempotent writes and confirmation. Use for unreliable API calls, ambiguous write outcomes or unsafe tool replay. Do not activate for model-only tuning, general cloud deployment, UI-only changes or database query optimisation without an external-call safety problem.
+description: Implement, adapt or review safe external API tools in Python and ADK projects, including selective retries, cooperative deadlines, idempotent writes and confirmation. Use for unreliable API calls, ambiguous write outcomes, unsafe tool replay or setup failures blocking ADK API verification. Do not activate for model-only tuning, general cloud deployment, UI-only changes or database query optimisation without an external-call safety problem.
 metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   source-chapter: "01"
-  last-tested: "2026-09-15"
+  last-tested: "2026-09-16"
 ---
 
 # Safe API tool calls
@@ -34,6 +34,7 @@ The helper reads source and declarations without importing project code, loading
 | --- | --- |
 | Read or replay-safe request | Read [reads and deadlines](references/reads-and-deadlines.md); implement selective retries and separate transport, attempt and complete-operation budgets. |
 | State-changing request or approval flow | Read [writes and confirmation](references/writes-and-confirmation.md) before enabling retries. If replay safety is unknown, retain a single attempt and an honest uncertain result; prepare reconciliation or a provider-contract question. |
+| ADK integration setup, project migration or local runtime cleanup | Read [ADK operations](references/adk-operations.md) for configuration precedence, actual runtime identity, recoverable API activation and owned local state. This supplies no managed application deployment recipe. |
 | Review or recommendation | Use the applicable reference above. Compare guarantees against actual control flow and tests; report concrete findings without changing code unless requested. |
 
 A request may need both read and write paths. Keep them in the same skill; do not replace the application with a demonstration project or introduce a database solely because the chapter discusses one.
@@ -59,6 +60,8 @@ Keep cleanup separate. Inventory what this task created, show the exact deletion
 ## Validate and finish
 
 Read [validation and reporting](references/validation.md) for the selected behaviour. Run the project's existing checks without network calls by default. Cover the public tool/client boundary, real cancellation or retry sleeps where relevant, transient recovery, terminal failure and the write/confirmation invariants. Do not substitute a print-only random demo for assertions.
+
+For ADK HTTP/confirmation tests, live-call limit enforcement or latency diagnosis, also read [ADK verification](references/adk-verification.md). It explains the concrete test boundaries and failure diagnosis behind the historical results.
 
 On a second invocation, inspect existing changes and recorded state, rerun the relevant checks, and avoid duplicating wrappers, configuration, keys or resources. If the pinned version cannot support the chosen implementation, identify the incompatible API and stop that path; adapt within the existing version or request a version decision rather than silently changing dependencies.
 

@@ -22,6 +22,33 @@ Complete this decision with the chosen retrieval path, the checks it permits, an
 
 Complete inspection with a concrete authority and provenance chain, plus any missing enforcement points.
 
+Use this minimal relationship to design the target's own schemas; these are
+conceptual field names, not an SDK request to paste unchanged:
+
+```text
+entitlement: tenant, scope, allowed_classifications
+active: tenant, scope, release, corpus, index_uri, index_generation
+index: tenant, scope, release, documents[]
+document: source_uri, document_id, version, release, tenant, classification,
+          approval_status, inspection_status, reviewed_sha256, effective_from, title
+```
+
+Require agreement between entitlement, active release and index; unique,
+nonempty source keys; and a supported version/approval policy. Optional section
+or page metadata must remain optional. Pin metadata reads with the actual
+object-generation precondition. A digest-shaped field is not a source-byte
+verification: identify the stage that checked the digest and the immutable
+source version it approved. SDK snake-case response fields and REST camel-case
+payloads belong in separate adapters; normalise them into one evidence type.
+
+Diagnose serving access in stages: registry object read → pinned index read →
+corpus metadata read → scoped query → source mapping → content protection.
+The lab once passed operator evaluation while runtime lacked
+`aiplatform.ragCorpora.get`; adding query permission alone was insufficient.
+Check the selected SDK's actual calls and narrow permissions rather than
+copying a role wholesale. Keep internal denied-stage codes separate from a safe
+public no-answer result. Verify that serving cannot import or promote releases.
+
 ## 3. Implement the serving contract
 
 1. Accept a bounded question and only the business arguments the model needs. Use the target's supported context injection to obtain trusted identity; do not manufacture ADK context from request text.
@@ -45,6 +72,21 @@ Define a stable public unavailable/no-supported-answer contract that does not re
 - Record accepted import and other long-running operation handles before retrying uncertain work. Resume or reconcile the known operation instead of creating an untracked replacement.
 - Define retirement separately for inactive collections, source/staging objects, index versions, caches and evaluation copies. Read [operations-validation.md](operations-validation.md) when planning authorised cleanup; deleting a collection is not proof that retained copies or regional backend capacity are gone.
 
+For repeatable evaluation, fingerprint the candidate/manifest and corpus,
+evaluation-set digest, retrieval adapter/version, relevant chunk/index settings,
+top-k/threshold/filter/reranker settings and metric/threshold policy. Bind the
+artifact to that fingerprint and its validity window. A candidate-only digest
+does not detect a changed evaluator or retrieval policy. Keep answer-generation
+metrics separate from retrieval metrics. For interrupted setup, use the durable
+case-attempt recipe in [failure-recovery.md](failure-recovery.md).
+
+**Production addition — ambiguous promotion:** persist the desired pointer
+digest and expected previous generation before a conditional write. On a lost
+acknowledgement, read back the pointer: the exact intended release settles the
+operation; a competing state is a conflict; failed readback remains unresolved.
+Do not fetch a new generation and blindly retry, overwriting a newer publisher.
+The source standalone promotion script does not provide this durable recovery.
+
 ## 5. Validate the selected guarantees
 
 - Test an authorised request, another tenant/role, a missing mapping, an inactive release, unknown source metadata, and an empty result. Assert that none of the negative cases broadens retrieval.
@@ -53,6 +95,21 @@ Define a stable public unavailable/no-supported-answer contract that does not re
 - Test failed/stale candidate evaluation, concurrent promotion and a request spanning promotion. Assert the documented release and cache behaviour.
 - Measure retrieval independently from generation: expected document/section recall, irrelevant and unanswerable questions, scope negatives, citation support and bounded work. A positive document-hit fixture does not establish answer quality.
 - Use deterministic doubles for boundary failures, then authorised live checks with the actual serving identity for provider behaviour. Label unexecuted or blocked gates explicitly; a historic pass does not validate a changed target.
+
+Two particularly discriminating fixtures prevent misleading passes:
+
+- **Multiple documents:** case A expects document A; case B expects B. Returning
+  only A must fail B. Reject an expected document absent from the candidate
+  before dispatch; define expected-empty cases explicitly. The managed lab
+  evaluator checks its first candidate document for every case, which only
+  serves its single-document fixture. Its two positives do not generalise to a
+  multi-document evaluator. The standalone evaluation artifact also omits some
+  inputs from the stronger fingerprint above.
+- **Real generation semantics:** make the storage double reject a stale
+  generation, then test stale read, stale write, competing promotion and commit
+  with a lost response. A fake that accepts but ignores `if_generation_match`
+  cannot prove concurrency protection. Also test duplicate or unknown source
+  mappings and a changed pinned index; a happy-path manifest parse is weaker.
 
 ## Completion and evidence limits
 

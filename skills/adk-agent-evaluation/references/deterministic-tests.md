@@ -24,6 +24,16 @@ If the application renders a terminal receipt from trusted tool output, test cur
 
 An environment-simulation callback plus scripted model verifies interception and orchestration only. It does not establish live model recovery, remote authentication or service-contract compatibility.
 
+For actual harness construction, HTTP/CLI checks, separate interception/backend-failure tests, callback ordering and blocking-grader sentinels, use [execution-evidence.md](execution-evidence.md). For commit-then-lost-acknowledgement faults and shared dispatch budgets, use [evaluation-design.md](evaluation-design.md); those are production extensions, not additional guarantees of the local backend.
+
+## Keep the default test command offline
+
+Offline tests can still require installed ADK/evaluation dependencies. Preserve the project's existing installation process; absence of SDK packages is a prerequisite failure, not evidence that tests passed or a reason to replace orchestration with a stand-in.
+
+For pytest projects, the companion's useful pattern is registered paid-test markers plus a separate explicit environment opt-in inside each live test. Its ordinary selection excludes both `live_eval` and `managed_eval`; adapt names and commands to the target. Clear ambient opt-ins in the offline child environment and establish external-access denial before imports/collection when claiming hermetic execution. Do not globally enable paid flags just to make discovery green. Collection itself can load dotenv, construct clients or run plugin hooks.
+
+Verify nonzero expected offline collection, actual execution counts and the reason for every paid skip/deselection. One live pytest wrapper may request many cases/repetitions; pytest's test count is not the number of completed conversations. Treat an explicitly requested live job that skips everything as incomplete.
+
 ## Completion
 
 Run the focused suite and required existing checks. Confirm expected tests were collected and executed, not merely skipped. Report actual counts, changed files, remaining failures and the substituted boundaries. For a reproduced bug, retain failing-before/passing-after evidence. Label results **deterministic/offline**; identify live integration and production identity checks that remain unverified.

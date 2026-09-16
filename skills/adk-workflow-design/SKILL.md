@@ -6,7 +6,7 @@ metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   source-chapter: "00"
-  last-tested: "2026-09-15"
+  last-tested: "2026-09-16"
 ---
 
 # ADK workflow design
@@ -52,6 +52,7 @@ and validation path are known, or their specific blockers are recorded.
 | Fixed order, independent concurrent work, bounded refinement, typed graph, or runtime-sized work | Selection/implementation/review: read [orchestration.md](references/orchestration.md). Preserve an existing supported pattern unless changing it solves the requested problem. |
 | Missing final result, lost state, streaming, restart or paused-run semantics | Runtime contract: read [runtime.md](references/runtime.md). |
 | Logging hooks, deterministic short-circuits, tool visibility or call-time policy | Callback boundary: read [callbacks.md](references/callbacks.md). |
+| Local startup, actual HTTP/UI checks, buffering, timing or retained sessions | Reader/runtime operation: read [local-runbook.md](references/local-runbook.md). |
 
 Modes can combine within one task. Read only relevant references. Cloud hosting,
 retrieval, long-term memory and tenant authentication may be architectural
@@ -105,10 +106,15 @@ path where applicable. Prove concurrent branches overlap, state survives only as
 claimed, and failure cannot be reported as success. Repeat setup/adaptation to
 check that it preserves existing work rather than duplicating it.
 
+For strict paid-request limits, SDK retries or campaign restart, read
+[model-call-controls.md](references/model-call-controls.md) before choosing the
+enforcement point. A callback counter alone does not establish a transport cap.
+
 Report changed files, exact commands and versions, actual outcomes, warnings,
 manual prerequisites and outstanding work. Separate PASS/FAIL/BLOCKED/NOT RUN/N/A
 for offline execution, live behaviour, browser functionality, latency and cleanup
-as applicable. Historical companion results are provenance, not a pass for the
+as applicable; use INCONCLUSIVE when observations cannot resolve a threshold.
+Historical companion results are provenance, not a pass for the
 target project. Read [provenance.md](references/provenance.md) only to trace a rule
 or assess the scope of that prior evidence.
 

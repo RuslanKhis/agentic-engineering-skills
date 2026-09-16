@@ -5,6 +5,10 @@ Produce a targeted change or review with a measurable acceptance boundary.
 For sessions, access, telemetry or streaming use [gke-serving.md](gke-serving.md).
 For any cloud mutation, capacity retry or cleanup also read
 [gke-lifecycle.md](gke-lifecycle.md).
+For source packaging, provider response or recovery failures, use
+[deployment troubleshooting](gke-deployment-troubleshooting.md). When changing
+server/session startup, use [application integration](gke-application-integration.md).
+For actual-boundary tests, use [GKE verification](gke-verification.md).
 
 ## Find the running configuration
 

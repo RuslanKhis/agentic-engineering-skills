@@ -2,7 +2,7 @@
 
 ## Recorded integration baseline
 
-These versions identify the companion implementation and prior evidence reopened on 15 September 2026. They are not instructions to replace a target's dependency choices.
+These versions identify the companion implementation and prior evidence reopened on 16 September 2026. They are not instructions to replace a target's dependency choices.
 
 | Layer | Declared or recorded versions |
 | --- | --- |
@@ -16,6 +16,8 @@ These versions identify the companion implementation and prior evidence reopened
 | Historical frontend execution | Node 24.19.0, npm 10.7.0, macOS |
 
 The companion pins the five Python integration packages exactly; other Python requirements use bounded ranges. Its resolved versions are evidence snapshots, not a complete reproducible Python lock. Frontend lockfiles pin the resolved npm graphs. Preserve the target's own lockfile and existing override rationale. Matching a few direct versions does not prove the full environment matches.
+
+The September 16 depth-review checks found all five integration pins unchanged, with google-auth **2.57.1** in the invoking environment rather than historical 2.58.0. The private-service helper branch was inspected at that installed version. The new frontend recipe checks used bundled Node **24.19.0** and the recorded TypeScript/CopilotKit/Zod dependencies; the shell's default Node 18.20.4 is below this Next app's declared minimum. No packages were upgraded or downgraded by the skill review.
 
 **Known incompatibility:** the recorded `google-cloud-aiplatform[adk]==1.153.1` extra requires ADK below 2.0.0. The integration deliberately uses `[agent-engines]` alongside the explicit ADK 2.8.0 pin. Do not add the `[adk]` extra to that stack or silently downgrade ADK to satisfy it. Report the conflict and prepare the smallest explicit dependency decision.
 

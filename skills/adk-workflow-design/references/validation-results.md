@@ -1,6 +1,7 @@
 # Skill validation results
 
-Date: **15 September 2026**. These results concern this skill, separately from
+Initial validation: **15 September 2026**. The depth-review checks of
+**16 September 2026** are recorded below. These results concern this skill, separately from
 historical companion evidence in [provenance.md](provenance.md). No live Google
 API/model request, API activation, deployment, IAM change or cloud resource
 creation occurred. The manuscript and companion source remained unchanged; all
@@ -104,3 +105,110 @@ manual tracing and actual runtime assertions.
   dependencies and contain no real credentials.
 - Deployment, API/IAM/secret changes, data migration, paid tests and owned-resource
   deletion still require the exact-scope approvals specified by the skill.
+
+## Depth review — 16 September 2026
+
+Starting repository revision: `51b41e83cdf6adc8904d7039b283c292989203fc`.
+The current skill was compared again with the revised manuscript, workflow and
+HTTP tests, audited transport controls, live reports and broader cleanup recheck.
+Independent runtime and operations reviews identified actionable gaps. The entry
+point grew from 916 to 967 words; detailed procedures live in conditional
+references rather than becoming mandatory reading for every task.
+
+Added two runbooks for local lifecycle/streaming and strict model-call controls,
+plus precise recipes for typed handoffs, scoped/tracked state, callback chains,
+current-turn result selection, project/auth diagnosis and production handoff.
+Existing scripts and companion source were preserved. All 13 historical
+application/test/pin fingerprints still match; the manuscript and chapter
+evidence also match this turn's starting fingerprints.
+
+### New runnable recipes
+
+Five new real-ADK offline tests expand the runtime suite from 3 to 8:
+
+1. Before-model substitution prevents a model call, emits the assigned state
+   delta and persists the designated output key.
+2. Two before-tool callbacks deny repeated forbidden actions while a permitted
+   control executes once and produces the expected safe result.
+3. The pinned ADK 2.8.0 empty-dictionary override followed by `None` reproduces
+   actual tool execution. This test records an SDK trap; the adjacent nonempty
+   denial test is the safe recipe. No SDK source was patched.
+4. Two turns through the same Runner/session reproduce a stale previous
+   `final_copy` alongside the second turn's new draft after reviewer failure.
+   The exception remains visible. Consumer guidance now requires current-turn
+   success/provenance rather than mere key presence.
+5. A real typed, ordinary-code Workflow emits progress and valid empty `[]`
+   output, then updates completion state. Full consumption retains both output
+   and completion; selection uses node provenance rather than assumed chat text.
+
+All model calls in these fixtures are substituted at the Gemini boundary and
+socket/DNS access is blocked. These are not live model, authorisation, persistent
+database or deployment results. Copy–modify–reassign and scope rules additionally
+come from inspected ADK state implementation. Independent review corrected the
+before-tool-specific chain wording and explained why a meaningful null result
+needs an explicit envelope in the checked plain-function Workflow path.
+
+### Executed checks and environment
+
+| Check | Result |
+| --- | --- |
+| In-repository `python -m unittest discover -s skills/adk-workflow-design/tests -v` | PASS: 22 tests, 1.539 s, zero skips/failures. |
+| Clean standalone copy: `env -i PATH=/usr/bin:/bin PYTHONDONTWRITEBYTECODE=1 python -m unittest discover -s tests -v` | PASS: 22 tests, 1.665 s, zero skips/failures. `python` here denotes the explicit existing SDK interpreter, not PATH discovery. |
+| Official `quick_validate.py` | PASS: `Skill is valid!` |
+| `black --check` on the helper and both test files | PASS: three files unchanged. |
+| `python -m tabnanny` and scoped `git diff --check` | PASS. |
+| Metadata, internal links, sensitive-path/scaffold scan, source fingerprints | PASS; automatic discovery remains enabled. |
+
+Both checks used existing Python **3.11.4** on macOS **26.6.2**, **arm64**.
+The runtime environment was ADK **2.8.0**, GenAI **2.23.0**, HTTPX **0.28.1**;
+the metadata/structural environment retained GenAI **2.22.0** and PyYAML **6.0.3**.
+Black remained **22.6.0**. No dependency installation or upgrade occurred.
+Compatibility-agent deprecations, experimental function-schema and missing
+synthetic token-usage warnings remain visible. They are not skipped assertions.
+
+The official authentication, service-list, error and storage-retention pages
+linked in the external reference were read. No cloud account was inspected and
+no live commands, model calls, provisioning, IAM or billing changes occurred.
+Historical browser/transport/lifecycle findings were re-read, not replayed and
+relabelled as a new live campaign. Other agent products and system-wide automatic
+discovery remain NOT RUN.
+
+### Independent forward use of the expanded guidance
+
+A new evaluator received only the standalone skill copy, synthetic observations,
+three pinned requirements and a realistic request to review an existing local UI
+before a future ten-send, zero-retry managed-model smoke. It produced a concrete
+repair/verification plan and two local evidence records. The parent inspected
+the actual plan and evidence, rather than relying only on the evaluator's verdict.
+
+Observed behaviours:
+
+- Identified root/nested project and ADC quota disagreement, unresolved runtime
+  identity, and a denied API listing as unknown state. It did not choose a project,
+  invent access or activate an API.
+- Diagnosed callback-only counters, restart resets, default transport retries,
+  late registry configuration and a header-only deadline; specified transport
+  enforcement and offline tests against the real wiring.
+- Treated a `(4.9, 5.2]` first-content interval against five seconds as
+  INCONCLUSIVE, and retained the recorded correct final answer without inventing
+  another timing result or a p95 claim.
+- Preserved the existing-store and old-reservation claims; distinguished a
+  stopped process from erased sessions and known cloud cleanup.
+- Detected absent application source despite a successful helper scan. It
+  labelled application tests BLOCKED and future live work NOT RUN, with exact
+  missing inputs and a concrete approval-envelope checklist.
+- Ran the helper for initial inspection and two retained repeat checks (all
+  exit 0); repeats were identical and original fixture hashes unchanged.
+  Read-only installed SDK checks confirmed public client injection and the
+  version-specific retry concern without constructing a client.
+
+This additional planning/review case passed its scope and evidence boundaries.
+It did not implement a new guard or execute its proposed tests. The six original
+forward cases above remain September 15 evidence, not six newly rerun cases.
+Temporary standalone copies, synthetic fixture data and the review plan are
+retained locally for inspection; the installed skill has no dependency on them.
+
+Change scope: two reference files added, nine existing Markdown files updated,
+and one runtime-test file expanded. The inspector and its tests, UI metadata,
+licence, original manuscript and companion application were unchanged. No commit,
+push, publication or cloud-resource operation was performed.

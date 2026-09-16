@@ -7,6 +7,12 @@ For deployment packaging, receipts and cleanup, read
 [state and streams](runtime-state-and-streams.md) only when changing streaming,
 memory ingestion, buffered persistence or deferred jobs.
 
+For ineffective profile settings, local-versus-remote execution, lazy clients or
+adding metrics/compaction to a small verified profile, read
+[runtime-application-integration.md](runtime-application-integration.md). For
+actual-boundary tests and controlled failure interleavings, read
+[runtime-verification.md](runtime-verification.md).
+
 ## Locate execution and the actual configuration
 
 Trace one real request before editing. A remote
@@ -81,6 +87,9 @@ path uses observed prompt usage when available and estimates effective context
 when it is absent. It takes priority when triggered; otherwise sliding-window
 processing can apply. These settings are triggers, not hard limits on the next
 message or tool result. Retention size counts **events**, not user turns.
+The raw tail can grow to preserve a function-call/response pair; do not manually
+cut history to the nominal event count. Test the next outgoing request when a
+proposed split falls inside the tool protocol.
 
 Configure compaction on the executing App with a supported summariser. Keep
 domain facts, decisions, amounts and unresolved questions needed by later tasks;

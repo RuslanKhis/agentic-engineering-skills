@@ -49,6 +49,92 @@ class RunChecks(unittest.TestCase):
         self.assertEqual(result["cache_evidence"], "unknown")
         self.assertIsNone(result["maximum_cached_tokens_observed"])
 
+    def test_unsupported_tool_or_media_cannot_become_answer_or_hidden_late_activity(self):
+        for key in ("executable_code", "executableCode", "code_execution_result",
+                    "codeExecutionResult", "tool_call", "toolCall", "tool_response",
+                    "toolResponse", "inline_data", "inlineData", "file_data", "fileData",
+                    "videoMetadata", "audioTranscription", "futurePayload"):
+            for late in (False, True):
+                with self.subTest(key=key, late=late):
+                    events, expected = example()
+                    target = deepcopy(events[-1]) if late else events[-1]
+                    target["content"]["parts"].append({key: {"private": "SYNTHETIC_SECRET_VALUE"}})
+                    if late:
+                        target["content"]["parts"] = target["content"]["parts"][-1:]
+                        events.append(target)
+                    with self.assertRaises(checker.InvalidInput):
+                        checker.check_events(events, expected)
+        for event_index, field, protocol in (
+            (0, "functionCall", {"partialArgs": []}),
+            (0, "functionCall", {"partial_args": []}),
+            (0, "functionCall", {"willContinue": True}),
+            (0, "functionCall", {"will_continue": False}),
+            (1, "functionResponse", {"parts": [{"inlineData": {"data": "c3ludGhldGlj"}}]}),
+            (1, "functionResponse", {"scheduling": "INTERRUPT"}),
+            (1, "functionResponse", {"willContinue": True}),
+            (1, "functionResponse", {"will_continue": False}),
+            (1, "functionResponse", {"futurePayload": {"private": "SYNTHETIC_SECRET_VALUE"}}),
+        ):
+            with self.subTest(nested_protocol=protocol):
+                events, expected = example()
+                events[event_index]["content"]["parts"][0][field].update(protocol)
+                with self.assertRaises(checker.InvalidInput):
+                    checker.check_events(events, expected)
+
+    def test_null_sdk_defaults_and_valid_thought_signatures_preserve_text_contract(self):
+        part = self.events[-1]["content"]["parts"][0]
+        part.update(codeExecutionResult=None, inlineData=None,
+                    thought=False, thoughtSignature="c3ludGhldGlj")
+        self.events[0]["content"]["parts"][0]["functionCall"].update(
+            partialArgs=None, willContinue=None)
+        self.events[1]["content"]["parts"][0]["functionResponse"].update(
+            parts=None, scheduling=None, willContinue=None)
+        self.assertEqual(checker.check_events(self.events, self.expected)["verdict"], "PASS")
+        for updates in ({"thought": "false"}, {"thought": 0}, {"thoughtSignature": 123}):
+            events, expected = example()
+            events[-1]["content"]["parts"][0].update(updates)
+            with self.assertRaises(checker.InvalidInput):
+                checker.check_events(events, expected)
+
+    def test_actual_adk_code_result_is_unsupported_for_named_function_smoke(self):
+        import importlib.metadata
+        try:
+            if importlib.metadata.version("google-adk") != "2.8.0":
+                self.skipTest("Recorded serialization requires ADK 2.8.0")
+        except importlib.metadata.PackageNotFoundError:
+            self.skipTest("ADK absent; preserve target dependencies")
+        from google.adk.events import Event
+        from google.genai import types
+        candidate = Event(author="catalogue_agent", invocation_id="synthetic-invocation",
+                          finish_reason="STOP", content=types.Content(role="model", parts=[
+                              types.Part(text="user_id, revenue"),
+                              types.Part(code_execution_result=types.CodeExecutionResult(
+                                  outcome="OUTCOME_OK", output="synthetic")),
+                          ]))
+        self.assertFalse(candidate.is_final_response())
+        for aliases in (False, True):
+            events, expected = example()
+            events[-1] = candidate.model_dump(mode="json", by_alias=aliases, exclude_none=True)
+            with self.assertRaises(checker.InvalidInput):
+                checker.check_events(events, expected)
+
+        # These are real nested SDK protocols, not arbitrary business keys
+        # inside the declared JSON response. Both aliases must fail explicitly.
+        for updates in (
+            {"parts": [types.FunctionResponsePart(inline_data=types.FunctionResponseBlob(
+                mime_type="image/png", data=b"synthetic"))]},
+            {"will_continue": True},
+            {"scheduling": types.FunctionResponseScheduling.INTERRUPT},
+        ):
+            response = types.FunctionResponse(id="lookup-1", name="get_schema",
+                response={"status": "success", "result": "user_id, revenue"}, **updates)
+            for aliases in (False, True):
+                events, expected = example()
+                events[1]["content"]["parts"][0]["functionResponse"] = response.model_dump(
+                    mode="json", by_alias=aliases, exclude_none=True)
+                with self.assertRaises(checker.InvalidInput):
+                    checker.check_events(events, expected)
+
     def test_late_provider_error_invalidates_final(self):
         self.events.append({"errorMessage": "SYNTHETIC_SECRET_VALUE"})
         self.rejected("reported_error")
@@ -216,6 +302,16 @@ class CommandChecks(unittest.TestCase):
             self.assertEqual(failure.returncode, 3)
             self.assertNotIn("SYNTHETIC_SECRET_VALUE", failure.stdout + failure.stderr)
             self.assertNotIn(directory, failure.stdout + failure.stderr)
+            events[-1]["content"]["parts"].append({
+                "codeExecutionResult": {"output": "SYNTHETIC_SECRET_VALUE"},
+            })
+            ep.write_text(json.dumps(events))
+            unchanged = ep.read_bytes()
+            unsupported = self.run_cli("--events", str(ep), "--expect", str(cp), "--dry-run")
+            self.assertEqual(unsupported.returncode, 2)
+            self.assertNotIn("SYNTHETIC_SECRET_VALUE", unsupported.stdout + unsupported.stderr)
+            self.assertNotIn(directory, unsupported.stdout + unsupported.stderr)
+            self.assertEqual(ep.read_bytes(), unchanged)
 
     def test_duplicate_keys_nonfinite_oversize_and_symlinks_rejected(self):
         with tempfile.TemporaryDirectory() as directory:

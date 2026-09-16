@@ -1,6 +1,6 @@
 # Validation evidence
 
-Checks completed on 15 September 2026. These are results for the packaged skill, separate from the historical ADK integration evidence in [compatibility.md](compatibility.md) and [provenance.md](provenance.md).
+Initial checks completed on 15 September 2026; the 16 September depth review is recorded separately below. These are results for the packaged skill, separate from the historical ADK integration evidence in [compatibility.md](compatibility.md) and [provenance.md](provenance.md).
 
 ## Environments
 
@@ -54,3 +54,29 @@ The forward trials establish useful local adaptation, scope selection and approv
 The standalone copy executed without the book, original evidence or companion packages. Automatic-discovery metadata is enabled, but the forward tests supplied the skill explicitly: marketplace installation, automatic product discovery and other coding-agent products were not smoke-tested. The core Markdown/helper does not require OpenAI metadata. Windows and Linux execution remain untested.
 
 No provider calls, API activation, deployments, IAM changes, secrets, billable resources or cloud cleanup were performed to package this skill. Such operations still require the exact scoped approvals in `SKILL.md`. Only this new skill directory was added to the repository by this task; the original chapter manuscript and companion code were left unchanged. No commit, push, publication or global skill installation was performed.
+
+## Depth review — 16 September 2026
+
+Reopened the original and corrected manuscripts, current code and retained audit/remediation/cleanup evidence. Two independent source reviewers compared manuscript coverage and implementation/operational coverage. The resulting changes add three conditional references: `environment-and-troubleshooting.md`, `execution-evidence.md` and `evaluation-design.md`. Existing mode references now route to them and include concrete asset construction, offline test selection and score-export procedures. The entrypoint remains one skill; no new runtime dependency or executable helper was added.
+
+### Repeated package checks
+
+- Official `quick_validate.py`: exit 0, `Skill is valid!`.
+- Clean-copy `python -B -I -m unittest discover -s "$COPY/tests" -v`: all 15 tests passed on CPython 3.11.4 in 3.069 seconds. An initial run through the host's default CPython 3.9.13 also passed all 15 in 4.934 seconds; this incidental result does not broaden the documented Python 3.11+ target.
+- Same macOS 26.6.2 arm64 host. The explicit 3.11.4 validation environment retains PyYAML 6.0.3; the default-interpreter structural run used PyYAML 6.0. No package was installed for this review.
+- Current package: 16 files, 28 valid internal Markdown links, one `SKILL.md`, implicit invocation enabled, no empty directories or bytecode artifacts. YAML/JSON parsing, Python AST/indentation, final newlines, whitespace, balanced fences and scoped credential/personal-path scans passed. Five shell code blocks passed `bash -n`; their cloud commands were **not executed**.
+- `git diff --check -- skills/adk-agent-evaluation`: passed. All 38 original companion-source fingerprints still match the retained final manifest. No manuscript or companion application/test code changed.
+
+### New scenario exercises
+
+Two fresh agents received only the copied skill, separate synthetic fixtures and realistic requests, without source-review conclusions or an expected patch. Their turns were interrupted by an account usage limit. The parent reviewed the artifacts they had already written and completed local validation. A further design evaluation could not run independently and was completed as a parent walkthrough. These results are not three completed independent-agent passes.
+
+| Scenario | Actual evidence |
+| --- | --- |
+| Resume evaluations after a project/key switch and activation timeout | The independent agent wrote a readiness plan and result report. Parent review confirmed it identified root-versus-local dotenv precedence, inherited key/server state, separate CLI/ADC/quota identities, unknown API state after permission denial, operation reconciliation before another activation, fresh target state and separate model/scorer readiness. It proposed commands without executing them or inventing scores. |
+| Repair misleading observations under concurrent runs | The independent agent preserved the fixture's `summarise(data)` interface, corrected the summary and added six standard-library regressions. Parent execution on CPython 3.11.4 passed all six with zero skips. Replaying the original supplied function in memory against those tests produced five failures and one pass, as asserted by the comparison harness; no corrected source was overwritten. Confirmed effects were attributed to their originating run, cumulative/duplicate token records were counted once, and missing first-text timing remained null. |
+| Design release evidence for a pending appointment and a lost acknowledgement | Parent walkthrough produced an ordered plan covering actual outcome assertions, commit-then-lost-response reconciliation, atomic shared model/tool reservations, fixed-trace judge calibration, contaminated holdout reclassification and staged release evidence. This was a design review only: no implementation, runtime test, live calibration or independent evaluator verdict is claimed. |
+
+The observer fixture explicitly guarantees complete, ordered synthetic capture. Its passing parser tests do not establish that arbitrary live telemetry is complete or that local token counts equal billed cost. The readiness scenario supplied observations rather than real credentials. Temporary fixture applications/reports remain outside the skill package; the skill itself has no dependency on them.
+
+No new ADK Runner execution, injected grading, conformance recording, cloud API request or deployed-service test occurred in this depth review. Detailed recipes retain their historical evidence labels; production budgets, judge calibration, holdouts, remote reconciliation and monitoring still require implementation and validation in the target project.

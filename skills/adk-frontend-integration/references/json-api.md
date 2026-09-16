@@ -25,14 +25,66 @@ The companion's local final-response collector is **not** a complete implementat
 
 Keep the browser pointed at the application gateway. Authenticate gateway-to-service calls using the platform's workload identity mechanism; keep that credential separate from the application user. Scope upstream session operations with the server-derived user and validated session ID. Translate returned ADK events into the small public response.
 
-The tested gateway consumes `/run` as a collected response. An upstream `/run_sse` route is a separate option and does not make the existing JSON browser stream tokens. Verify the selected server's pinned request schema and session behaviour locally before making remote calls. A proxy lookup receiving 403 is not evidence that it should create a session.
+For the recorded ADK 2.8.0 adapter, use this mapping after checking the target service's contract:
+
+| Operation | Recorded upstream contract |
+| --- | --- |
+| Read a session | `GET /apps/{app}/users/{verified_user}/sessions/{session}` |
+| Create after confirmed absence, when the chosen contract permits it | `POST` to that same session path; use the server's documented initial-state body |
+| Execute the new message | `POST /run` with the body below |
+| Stream upstream events | `/run_sse` is a separate route; consuming it in a collector still gives the browser one final JSON response |
+
+Encode each path segment independently with `urllib.parse.quote(value, safe="")`, after validating its syntax and scope. The served application package/folder (`support_agent` in the recorded example) supplies `appName`; the Python agent name and CopilotKit registration (`support_triage` there) are different identifiers. Discover the actual served application instead of deriving it from the UI label.
+
+```python
+payload = {
+    "appName": upstream_app_name,
+    "userId": verified_user_id,
+    "sessionId": validated_session_id,
+    "newMessage": {"role": "user", "parts": [{"text": validated_message}]},
+}
+```
+
+Keep an `httpx.AsyncClient` in the worker lifespan, use `follow_redirects=False` when forwarding credentials, and include token acquisition, session operations and body consumption in the overall deadline. The companion collector accepts an event list, an `events` envelope, or one event. Scan the whole collection for `error_code`/`errorCode` and `error_message`/`errorMessage` before selecting the last nonpartial public model/assistant text. Keep thought filtering and the explicit tool-error policy from the server procedure above. These accepted envelopes are this adapter's behaviour, not a promise that every ADK server returns every shape.
+
+Only a confirmed metadata 404 permits the selected creation path. The teaching gateway accepts a creation-race 409 without readback; a production gateway must read the exact session back and establish caller ownership before continuing. A 403, timeout or invalid payload is not absence. Test the mapping with an HTTP mock transport that checks the actual URL, body and caller scope, including two users with the same session ID. This adapter has offline HTTP evidence; a new Cloud Run/GKE service still needs its own authorised live check.
+
+### Private Cloud Run identity
+
+Use a Google-signed **ID token**, with the receiving service's accepted audience, for gateway-to-Cloud-Run authentication. An OAuth access token for Google APIs and the browser's sign-in credential serve different purposes. Keep the audience as the service URL or configured custom audience, separate from the `/run` request path. Grant the gateway identity `roles/run.invoker` on the specific receiving service. [Cloud Run service authentication](https://docs.cloud.google.com/run/docs/authenticating/service-to-service) documents this contract.
+
+For an attached Google Cloud identity, the recorded Python helper can acquire the ID token through metadata. On a workstation, the helper reads `GOOGLE_APPLICATION_CREDENTIALS` and supports an `impersonated_service_account` configuration; an ordinary user ADC login alone does not satisfy this helper. This branch was rechecked in installed google-auth **2.57.1** during the skill depth review; the historical campaign recorded 2.58.0. Inspect the installed helper before transferring the recipe to another version. Once the exact identity and credential change are authorised:
+
+```bash
+gcloud auth application-default login \
+  --impersonate-service-account="$GATEWAY_SERVICE_ACCOUNT"
+export GOOGLE_APPLICATION_CREDENTIALS="${CLOUDSDK_CONFIG:-$HOME/.config/gcloud}/application_default_credentials.json"
+```
+
+This replaces local ADC configuration; retain the user's intended authentication setup. Confirm the actual generated path if a custom gcloud configuration is used. The operator needs Token Creator on the impersonated service account; any new IAM grant is a separate, scoped change. The configuration has no service-account private key, but remains sensitive credential material. See [local ADC impersonation](https://docs.cloud.google.com/docs/authentication/set-up-adc-local-dev-environment#sa-impersonation).
+
+Set the gateway's server-only `UPSTREAM_AUTH_MODE=google-id-token` and explicit `UPSTREAM_AUDIENCE`. The corresponding helper pattern is:
+
+```python
+import asyncio
+from google.auth.transport.requests import Request as GoogleAuthRequest
+from google.oauth2 import id_token
+
+async def service_headers(audience: str) -> dict[str, str]:
+    token = await asyncio.to_thread(
+        id_token.fetch_id_token, GoogleAuthRequest(), audience
+    )
+    return {"Authorization": f"Bearer {token}"}
+```
+
+Call this within the overall deadline; cancelling the await does not stop a synchronous worker, so bound transport time and worker capacity in production. Treat token acquisition failure as a controlled upstream error and invoke no agent. Never return or log the token. Keep application-user verification in addition to this service credential. The companion verifies sanitised failure offline; **workstation impersonation and private Cloud Run invocation were not live-tested**.
 
 ## Browser implementation order
 
 1. Keep the API helper independent of token storage or sign-in. Pass the credential from the app's verified auth flow. Never store a production secret in a `VITE_` or `NEXT_PUBLIC_` variable.
 2. Validate the response at runtime: required ID and text fields must have the intended types and bounds. TypeScript type assertions do not validate incoming JSON. Handle string, structured and validation-list error bodies without displaying raw untrusted provider detail.
 3. Maintain transcript, current conversation ID, draft, in-flight state and controlled error state. Use stable message IDs. A new-conversation button clears the local selection; it does not silently delete backend history.
-4. Use an `AbortController` with a bounded response/body deadline. The tested demo used 130 seconds around a 120-second backend budget, which is evidence of bounded waits, not a latency objective. Disable overlapping sends and restore controls on settled outcomes.
+4. Use an `AbortController` with a bounded response/body deadline. Start its timer before `fetch`, retain it while awaiting `response.json()`, and clear it in `finally`; a server can send headers and then stall the body. The tested demo used 130 seconds around a 120-second backend budget, which is evidence of bounded waits, not a latency objective. Disable overlapping sends and restore controls on settled outcomes.
 5. Do not automatically resend an agent invocation after a timeout. For mutating tools, retain its operation key and present an in-progress/unknown outcome until server reconciliation resolves it. Reconnect/status retrieval is different from executing the user's message again.
 
 Finish with the tests in [validation.md](validation.md), covering both the request helper and an HTTP route with the model boundary replaced. Pure rendering assertions cannot prove that the correct backend tool ran.

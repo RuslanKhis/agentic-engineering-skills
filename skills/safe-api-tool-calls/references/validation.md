@@ -10,6 +10,7 @@ Use the target's existing test runner and interpreter. Keep test doubles at prov
 - A genuinely delayed cooperative call is cancelled at the attempt or operation deadline. A real backoff sleep is also interrupted by the complete-operation deadline; removing sleeps in every test would miss that bug.
 - A provider-native timeout raised before the deadline is not mislabelled as budget expiry. Caller cancellation propagates and is not retried.
 - The public result distinguishes successful data from a terminal error. Count retrieval successes separately from fast error responses.
+- Malformed or incomplete provider success data never becomes validated business success. Expected failure translation preserves the public schema; unexpected defects remain visible in safe diagnostics without leaking payloads or keys.
 
 ## Writes and confirmation
 
@@ -18,10 +19,13 @@ Use the target's existing test runner and interpreter. Keep test doubles at prov
 - If implementing durable recovery, reconstruct the service/worker and repeat the same operation; assert identity reuse. Reject changed payloads and test concurrent claim behaviour. An instance dictionary cannot pass as durable storage.
 - Preserve unknown state across multiple attempts, including a later terminal rejection. Exercise key-retention expiry and reconciliation rules when the integration implements them.
 - Invalid amounts and unauthorised actors never reach the provider. Exact money and approval policy must follow the target's business rules.
+- Change the business revision or approved details during a confirmation pause: execution must revalidate and send zero provider requests. Exercise balance races when implementing that guarantee.
 - Invoke the real confirmation wrapper: missing consent and rejected consent cause zero provider calls; approved consent permits the authorised action. Directly calling the underlying function is insufficient.
 - Exercise the client/session pause-and-resume path independently of the direct wrapper. A scripted model checks wiring; it cannot prove that a live model describes rejection accurately.
 
 Implement only tests relevant to changed guarantees. Preserve the source of any reused test and adapt its public interface to the target. Do not claim restart, concurrency, real-provider or approval guarantees that were not exercised.
+
+For concrete ADK ASGI/session/SSE mechanics and pre-live limit checks, use [ADK verification](adk-verification.md). For activation recovery, test the decision table in [ADK operations](adk-operations.md) with a fake metadata/enable client before exercising an approved live target.
 
 ## Live verification
 

@@ -4,6 +4,9 @@ Read when a GKE optimisation changes session access, serving, drain, traces or
 delivery. Combine only the applicable sections with [gke.md](gke.md). The
 historical private lab verified managed-session continuity through Pod replacement;
 the public edge, PostgreSQL and exported tracing below are production extensions.
+For application construction, settings and lifecycle ownership, read
+[gke-application-integration.md](gke-application-integration.md); for actual HTTP,
+history, shutdown and exported-span checks, read [gke-verification.md](gke-verification.md).
 
 ## Wire storage into the actual request path
 
@@ -26,9 +29,12 @@ For an explicitly chosen PostgreSQL alternative:
 
 1. Resolve a compatible asynchronous driver and connection/authentication path;
    a declared ADK package does not supply every database driver.
-2. Construct one `DatabaseSessionService` per worker after fork. Prepare expected
-   tables during bounded startup and reuse that service in the actual Runner.
-   Preserve `Runner(app=...)` when App settings are required.
+2. Use the existing server factory's supported URI/database options when they
+   meet the requirement. For a deliberately custom lifecycle, construct one
+   `DatabaseSessionService` per worker after fork, prepare it during bounded
+   startup and reuse it in the actual `Runner(app=...)`. Inspect the framework's
+   closure order before attaching a lifespan that disposes shared resources;
+   see [application integration](gke-application-integration.md#order-ownership-and-closure-explicitly).
 3. Budget pool checkout, connection, queries and transactions independently.
    Calculate connections as `(active + surge + terminating Pods) × workers ×
    (pool_size + max_overflow)`, plus migration/admin/other consumers. This is a
@@ -50,6 +56,10 @@ History optimisation uses the same rules as
 and do not delete or summarise old records. Verify whether the backend limits
 remote reads or slices after retrieval. Test retained facts, approvals and
 unresolved work before reducing context.
+The recorded database event limit can return a function response without its
+earlier call. That service-level slice is different from compaction's tool-pair
+retention. Check the next Runner/model request separately; a shorter raw event
+list does not establish a valid or useful model context.
 
 ## Preserve access while changing the HTTP path
 

@@ -1,6 +1,6 @@
 # Keyless credentials, Secret Manager and approved live work
 
-Read only when workload identity, application credentials, Secret Manager or an approved GCP verification is involved. Discovery and plan preparation are read-only. Use the entrypoint's exact-plan approval boundary before external changes or paid calls.
+Read only when workload identity, application credentials, Secret Manager or an approved GCP verification is involved. Discovery and plan preparation are read-only. Use the entrypoint's exact-plan approval boundary before external changes or paid calls. For the ordered preflight, provisioning, failure diagnosis, hosted-release and cleanup procedure, read the [operations runbook](operations-runbook.md).
 
 ## Choose the authority
 
@@ -25,7 +25,15 @@ Use the smallest justified IAM role at the lowest suitable resource boundary. A 
 
 Select exact numeric secret versions from trusted configuration/index data. With several users in one container, `latest` can select another user's token. This demonstrates the mapping risk; it is not a recommendation to use that layout universally. Large/high-risk credential populations can justify a dedicated broker or managed vault.
 
-A version write and metadata activation are different operations. Use conditional publication and reconcile losing writes; keep provider invalidation semantics in mind before rollback. Bounded caches must include the credential identity/version/revision, expire conservatively and honour invalidation. API access is network I/O: thread offloading does not create an end-to-end deadline or cancel underlying SDK work. Bound transport attempts and total work using the pinned clients.
+A version write and metadata activation are different operations. Use conditional publication and reconcile losing writes; keep provider invalidation semantics in mind before rollback. Bounded caches must include the credential identity/version/revision, expire conservatively and honour invalidation. Use one monotonic tool deadline across metadata lookup, secret access, refresh, provider requests and retries. Set transport limits within the remaining allowance and bound concurrent underlying work: thread offloading does not cancel a synchronous SDK request when its async waiter times out. The lab's 15-second HTTPX timeout is not a shared 15-second operation budget.
+
+For application-wide credentials, test replacement material and roll out an exact version using a cutover compatible with the provider's overlap/invalidation semantics. Define retirement/rollback before activation; a gradual mixed-version rollout is suitable only while both versions remain accepted. Reuse clients under their supported concurrency model and account for simultaneous instance startup when sizing retrieval/cache policy. A Secret Manager rotation schedule emits a notification; a worker must obtain replacement provider material, store it, activate it and retire the old credential. Reconcile interruption and duplicate delivery rather than minting a new version on every retry. This production workflow extends the lab; see Google's [rotation guidance](https://docs.cloud.google.com/secret-manager/docs/rotation-recommendations).
+
+## Audit payload access deliberately
+
+When policy requires secret-read records, inspect the applicable Secret Manager `DATA_READ` Data Access audit configuration. Admin Activity logs and application audit events do not establish that payload reads are recorded. [Secret Manager audit methods](https://docs.cloud.google.com/secret-manager/docs/audit-logging) classify `AccessSecretVersion` separately; [Data Access configuration](https://docs.cloud.google.com/logging/docs/audit/configure-data-access) is normally opt-in and can affect logging costs. Any policy change belongs in the approved plan.
+
+Verify log visibility, permissions, routing/exemptions and ingestion delay before interpreting an empty query. Correlate allowlisted application decisions with workload access where required; Cloud IAM identifies the workload, not automatically the end user. Restrict linkage and retention. The companion bootstrap does not enable this audit policy, and its historical campaign did not certify this correlation. These provider references were checked on 16 September 2026.
 
 ## Plan, validate, clean up
 

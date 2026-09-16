@@ -133,6 +133,11 @@ production templates. The packaged CLI tests are self-contained and repeatable;
 repeating the agent evaluation requires recreating the described fixtures and
 issuing the requests to an agent.
 
+The subsequent [retained evaluation cases](forward-cases.md) provide exact
+inputs, requests and independent assertions for the implementation-depth
+recheck. They extend the package without claiming to reconstruct this earlier
+temporary evaluation exactly.
+
 ## Source verification and limits
 
 The unchanged chapter suite was rerun with

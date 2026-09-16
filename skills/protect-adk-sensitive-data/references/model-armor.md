@@ -37,6 +37,13 @@ not establish protection before user-event persistence, complete-history
 screening or safe tool payloads. Historical source and regression provenance:
 [compatibility.md](compatibility.md), E4–E6.
 
+The native plugin accepts `client=...`, but its calls supply no explicit timeout
+or retry arguments and have no semaphore. It closes its internal lazy client,
+not a supplied client. Its failure path also logs provider exceptions. When
+bounding native calls or suppressing sensitive diagnostics, use the facade and
+ownership guidance in [implementation-recipes.md](implementation-recipes.md).
+Direct-client limits and log filtering do not automatically cover this path.
+
 ## Direct client and verdicts
 
 Own one regional `modelarmor_v1.ModelArmorAsyncClient`, reuse it, close its
@@ -68,6 +75,11 @@ paths, including aggregate no-match results (**production hardening beyond the
 historical aggregate no-match shortcut**). Add recorded SDK-shaped fixtures for
 each accepted and rejected result shape.
 
+The inspected native plugin also accepts successful invocation when the
+aggregate state is anything except `MATCH_FOUND`; that is weaker than validating
+the required filter set above. A custom client/plugin boundary must enforce the
+stronger contract if required; attaching the stock plugin is not evidence of it.
+
 For output use block-only policy unless the product deliberately implements and
 tests an output rewriting contract. Withhold the full answer on a block; do not
 release a prefix. Historical output SDP policy inspected PII only and did not
@@ -89,3 +101,5 @@ A template GET is not an effective-policy audit. Confirm applicable organisation
 floor settings, supported filters/modality/locations and payload logging before
 production use. See [cloud-lifecycle.md](cloud-lifecycle.md) for the controlled
 setup and readiness workflow.
+For tenant-specific templates, shadow rollout or detector evaluation, read
+[production-policy.md](production-policy.md).

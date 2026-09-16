@@ -8,6 +8,14 @@ Trace the public tool through adapters, SDKs and transport. Inspect the installe
 
 Read the provider's contract for the particular operation, including error semantics, rate limits and retry guidance. Confirm that a purported read has no business side effect; its name or HTTP method is insufficient. Inspect SDK and transport retry defaults as well as application retries. Finish with an identified retry owner and a bound on combined requests and waits; nested loops can multiply both.
 
+### Replace the mock at a defined adapter boundary
+
+Obtain the base URL and authentication from trusted application configuration; model-supplied identifiers are request data, not authority to choose a destination or credential. Keep the existing mock's scalar timeout separate from a real transport's timeout type. A mock that accepts `timeout_seconds` does not establish that an HTTPX client accepts that keyword.
+
+For each response, classify HTTP failure before interpreting success, parse the body and validate the provider's required fields, types and business meaning. Translate the validated result into the existing public tool schema. A 2xx status or parseable JSON alone is insufficient evidence of a usable result. A malformed success body is not automatically transient. For a write, a response-validation failure after dispatch may leave the outcome unknown; only evidence under the provider's contract establishes that it was applied or not applied.
+
+Complete this boundary with tests for a valid response, a non-selected HTTP failure and malformed/incomplete success data. Reuse the project's response-validation library rather than adding another framework. The companion's real-client illustration omits authentication and schema validation; it is not a production adapter to copy unchanged.
+
 ## 2. Select retries explicitly
 
 Choose a predicate scoped to that operation and provider. Distinguish selected transient connection, timeout and HTTP failures from authentication, validation, permission and programming errors. Retrying every exception or every server error is not a substitute for a contract. If evidence is incomplete, retain a conservative policy and state the unresolved assumption.
@@ -27,6 +35,8 @@ Deadlines cancel cooperative asynchronous work; they cannot interrupt blocking c
 ## 4. Return and verify meaningful outcomes
 
 Preserve the established result schema and callers. Translate expected provider failures at the existing boundary, distinguish total-budget exhaustion from other failures, and retain useful diagnostic information through the application's error handling. Measure successful retrieval separately from the time to any answer or error.
+
+Let application startup own logging configuration. Emit safe structured fields such as attempt number, exception class, HTTP status, elapsed time and an authorised operation reference. Keep credentials, replay keys, raw prompts and complete provider bodies out of ordinary logs and model-facing errors. Preserve unexpected defects for application monitoring; a broad `except Exception` that silently returns routine unavailability hides broken code. After write dispatch, report the defect while retaining uncertainty about its side effect. Verify both the returned contract and captured diagnostics using synthetic sensitive markers.
 
 Use deterministic local substitutes and the project's test runner to verify the changed behaviours:
 

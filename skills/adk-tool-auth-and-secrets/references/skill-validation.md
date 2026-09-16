@@ -1,8 +1,23 @@
-# Skill validation record — 15 September 2026
+# Skill validation record
 
 This records package checks, separate from the historical companion evidence.
 
-## Environment
+## Depth recheck — 16 September 2026
+
+Three independent read-only reviews compared the existing skill with current companion implementation/tests, the revised manuscript and historical campaign reports. They found operational and production details worth retaining without changing the chapter-level job. Added the conditional [operations runbook](operations-runbook.md), expanded identity/OAuth/custody/validation guidance and updated source mapping. A subsequent independent documentation review caught an overly broad gradual-rotation instruction; it was corrected to respect the provider's overlap/invalidation semantics.
+
+Validation used the existing Python 3.11.4 environment on macOS. Official Skill Creator `quick_validate.py` passed; YAML/name/automatic-discovery, all relative links/anchors, Python syntax, private-identifier and unfinished-marker checks passed across **15 files**. `git diff --check -- skills/adk-tool-auth-and-secrets` passed. All **37** source fingerprints from the historical final campaign still matched. The main entrypoint remains **925 words**; the new detail is loaded conditionally.
+
+Two additional raw-fixture planning cases used a clean copy of the updated skill:
+
+| Case | Actual outcome |
+| --- | --- |
+| Failed lab: shortened resource names, delayed IAM, generation billing refusal, unknown transport attempts and disabled secret version | Independent evaluator produced an ordered recovery/cleanup/release plan. It stopped retries at the billing blocker, preserved the shared secret, distinguished logical submissions from unknown wire attempts, and did not claim disabled versions or failed billing queries proved cost closure. Local JSON/document checks passed. |
+| Calendar production design: forwarded UID, two replicas, broad existing grants, status-only error handling, rotation schedule and weak restart test | Independent evaluator produced a detailed release plan but hit a usage limit before final validation/reporting. The parent reviewer completed local document checks and manual review of the actual plan. It addressed trusted service-hop assertions, grant migration, access-token versus refresh-grant errors, populated process restart, replica coordination, rotation ownership, Calendar completeness and exporter gates. **Not counted as a completed independent evaluation.** |
+
+These cases validate guidance through generated plans, not implementation/runtime behaviour. No application tests or cloud/provider/credential operations ran in either case. The script, adapter and bundled tests were unchanged, so their 15 September results below were retained rather than presented as newly executed tests. This pass added no deployment recipe claimed to be live-tested: hosted release, real OAuth, audit-policy configuration and distributed behaviour remain explicit production work. Current official ADC, IAM, Secret Manager, Gemini and Calendar documentation was consulted where linked; that is documentation evidence, not a provider test.
+
+## Initial environment — 15 September 2026
 
 Codex desktop on macOS, Darwin 25.6.0 arm64; existing repository virtual environment with Python **3.11.4**, pytest **8.4.2**, PyYAML **6.0.3**, google-adk **2.8.0** and google-genai **2.19.0**. Installed versions were read from distribution metadata. No packages were installed or pins changed. The historical chapter campaign used different resolved versions; see [compatibility-and-evidence.md](compatibility-and-evidence.md).
 

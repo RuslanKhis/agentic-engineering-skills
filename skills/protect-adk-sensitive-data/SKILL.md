@@ -6,7 +6,7 @@ metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   source-chapter: "8"
-  last-tested: "2026-09-15"
+  last-tested: "2026-09-16"
 ---
 
 # Protect ADK sensitive data
@@ -45,10 +45,12 @@ project, not affiliated with or endorsed by Google.
 
 | Need | Mode and conditional reading |
 | --- | --- |
-| Deny credentials or replace permitted PII before any write/call | **SDP** — read [sdp.md](references/sdp.md); optionally adapt [sdp_boundary.py](assets/sdp_boundary.py) |
+| Deny credentials or replace permitted PII before any write/call | **SDP** — read [sdp.md](references/sdp.md); choose its framework-neutral controller or regional SDK adapter |
 | Prompt injection, content screening, native ADK plugin or final response screening | **Model Armor** — read [model-armor.md](references/model-armor.md) |
-| Tool arguments/results, session leakage, unsafe streaming, or overall audit | **Boundary integration** — read [boundaries.md](references/boundaries.md), then the provider reference needed |
+| Tool arguments/results, session leakage, unsafe streaming, or overall audit | **Boundary integration** — read [boundaries.md](references/boundaries.md); for callback wiring, lifecycle or telemetry use [implementation-recipes.md](references/implementation-recipes.md) |
 | Missing cloud prerequisites, setup, runtime identity or owned-resource cleanup | **Cloud readiness** — read [cloud-lifecycle.md](references/cloud-lifecycle.md); prepare a plan before any mutation |
+| Startup, identity, TLS, quota, SDK, request-accounting or cleanup failure | **Diagnosis** — use the matching symptom in [troubleshooting.md](references/troubleshooting.md) |
+| Tenant-specific policy, detector tuning, retention/media, failure modes or rollout | **Production policy** — use the relevant section of [production-policy.md](references/production-policy.md); distinguish planned policy from configured coverage |
 
 Modes compose within this one skill. A narrow SDP fix does not require replacing
 the gateway, and an audit request authorises inspection and recommendations.
@@ -73,8 +75,10 @@ the gateway, and an audit request authorises inspection and recommendations.
 6. Bound input bytes and characters, output size, concurrency, RPC time and total
    request time. Reuse owned async clients and close them on shutdown. Retain
    only approved metadata in logs; inspect SDK and exporter capture separately.
+   Native-plugin defaults do not automatically inherit direct-client limits or
+   application log filtering; verify them using the implementation recipes.
 7. Add focused regression tests at the changed boundary. Adapt files in place;
-   copy the optional asset only if it reduces duplication. Preserve its MIT
+   copy optional assets only if they reduce duplication. Preserve their MIT
    notice. On repeat invocation inspect first and avoid duplicate plugins,
    callbacks, environment settings, templates or dependency entries.
 
@@ -104,7 +108,8 @@ log or side effect. For callback changes use the actual pinned ADK runner with
 an injected model and provider doubles, not just direct callback calls.
 
 Run `python -m unittest discover -s /path/to/skill/tests -v` to check the bundled
-helper/controller when adapting them. These tests make no provider calls. A local
+resources when adapting them. The optional SDK adapter tests require the target's
+existing DLP SDK; report skips explicitly. These tests make no provider calls. A local
 protection fake alone does **not** make an ADK application offline: replace the
 model/runner too and prevent network egress in the test harness.
 

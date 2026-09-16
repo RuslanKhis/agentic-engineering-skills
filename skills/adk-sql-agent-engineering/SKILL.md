@@ -1,17 +1,17 @@
 ---
 name: adk-sql-agent-engineering
-description: Build, adapt or audit Google ADK SQL agents using reviewed query templates, selective schema retrieval and application-controlled read-only execution. Use for natural-language analytics agents, schema-context bloat, SQL routing or generated-query reliability. Do not activate for ordinary SQL tuning, database administration, RAG-only work or deployment without an SQL-agent design task.
+description: Build, adapt, test or troubleshoot Google ADK SQL agents using reviewed templates, selective schemas and controlled read-only execution. Use for natural-language analytics, SQL routing, generated-query reliability, or the agent's BigQuery/Gemini identity, setup and cleanup. Do not activate for ordinary SQL tuning, general database administration, RAG-only work or unrelated cloud hosting.
 license: MIT
 metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   source-chapter: "10"
-  last-tested: "2026-09-15"
+  last-tested: "2026-09-16"
 ---
 
 # ADK SQL agent engineering
 
-Deliver an SQL-agent change, an evidence-based review, or an implementable architecture plan. Preserve the target application's conventions and business definitions. The skill is self-contained; the book and companion repository are optional provenance, not runtime dependencies.
+Deliver an SQL-agent change, an evidence-based review, an implementable architecture plan or a verified runtime recovery. Preserve the target application's conventions and business definitions. The skill is self-contained; the book and companion repository are optional provenance, not runtime dependencies.
 
 ## 1. Inspect the project
 
@@ -37,6 +37,7 @@ Read [references/compatibility.md](references/compatibility.md) before version-s
 | Implement or adapt | The user wants working behaviour | Small coherent changes integrated into existing modules and tests |
 | Review or diagnose | The user wants findings or a failure explained | Reproduced evidence, severity, correction and validation plan; edit only within the requested scope |
 | Plan or select | Code, business rules or a provider contract are missing | Concrete architecture, interfaces, prerequisites and acceptance cases; avoid speculative scaffolding |
+| Prepare or recover runtime | The SQL agent needs identity, fixture setup, project migration or owned cleanup | Read-only diagnosis, reproducible local procedure and bounded execution within explicit approval |
 
 Within one application, combine these paths as needed:
 
@@ -46,6 +47,16 @@ Within one application, combine these paths as needed:
 - **Managed/specialist integration:** a separately evaluated option when that service owns the required semantics. Establish its execution and permission boundary before connecting it; see [references/implementation.md](references/implementation.md#managed-tools-and-follow-ups).
 
 Before broad edits, give a short plan naming the path, files, preserved contracts and tests. Read [references/implementation.md](references/implementation.md) for implementation or architectural selection. In a review, read only its relevant boundary.
+
+Load deeper guidance only for the work at hand:
+
+| Work | Read next |
+| --- | --- |
+| Define metrics, joins, values or selected context | [Semantic contracts](references/semantic-contracts.md) |
+| Wire ADK models, callbacks, events or credentials | [ADK runtime](references/adk-runtime.md); its bundled offline contract asset preserves the real framework and SDK |
+| Provision, resume or clean up BigQuery/Vertex resources | [Lifecycle runbook](references/lifecycle-runbook.md); the tested serving surface was local ADK Web, not a deployed cloud frontend |
+| Investigate a wrong answer, refusal, SDK failure or misleading PASS | [Troubleshooting](references/troubleshooting.md) |
+| Test the public app, add telemetry, follow-ups or a managed branch | [Acceptance and extensions](references/acceptance-and-extensions.md) |
 
 ## 3. Implement and enforce the boundaries
 
@@ -64,7 +75,7 @@ Reuse project modules rather than replacing the project with a sample applicatio
 
 Repository and cloud inspection are read-only by default. Local code generation does not authorise deployment. Before enabling APIs, creating billable resources, changing IAM, creating secrets, migrating data, deploying, deleting resources or running paid/destructive tests, present the **exact project, region/location, resource names, commands, limits and cleanup scope**, and obtain explicit approval. Apply an existing approval only to its recorded scope; ask again only when that scope changes.
 
-Finish the local code, plan and offline checks so approval is for a concrete operation. Missing credentials should still allow offline work. Use an isolated test target and a bounded campaign for approved live tests. Keep cleanup separate, confirm it explicitly, and delete only resources created by this operation with matching ownership records. Do not adopt pre-existing resources by relabelling them. Detailed lifecycle rules are in [references/execution-safety.md](references/execution-safety.md#cloud-lifecycle).
+Finish the local code, plan and offline checks so approval is for a concrete operation. Missing credentials should still allow offline work. Use an isolated test target and a bounded campaign for approved live tests. Keep cleanup separate, confirm it explicitly, and delete only resources created by this operation with matching ownership records. Do not adopt pre-existing resources by relabelling them. Detailed procedures are in the [lifecycle runbook](references/lifecycle-runbook.md); apply the boundaries in [execution safety](references/execution-safety.md#cloud-lifecycle).
 
 ## 5. Validate and report
 

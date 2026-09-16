@@ -13,14 +13,18 @@ upgrade is outside a narrow sensitive-data fix unless the user requests it.
 | Companion declarations reopened 15 September 2026 | `google-adk[gcp]==2.8.0`, `google-cloud-dlp==3.38.0`, `google-cloud-modelarmor==0.7.1`; `pydantic>=2.12,<3`, `pytest>=9.0.3,<10`; google-genai is resolved transitively |
 | Historical managed-service run, 14 September 2026 | ADK 2.8.0, DLP 3.38.0, Model Armor 0.7.1; resolved google-genai 2.23.0, Pydantic 2.13.5; Vertex ADC, `gemini-3.5-flash` at `global`; SDP/Armor `us-central1` |
 | Skill creation environment, 15 September 2026 | macOS 26.6.2 arm64; Python 3.11.4; installed ADK 2.8.0, DLP 3.38.0, Model Armor 0.7.1, google-genai 2.19.0, Pydantic 2.13.4, FastAPI 0.136.3, pytest 8.4.2, PyYAML 6.0.3 |
-| Bundled Python resources | Standard library only; require Python 3.11+ (`tomllib`, `asyncio.timeout_at`); actually exercised on Python 3.11.4 only |
+| Depth recheck, 16 September 2026 | Same installed versions and host as creation; no dependencies changed. SDK source and real protobuf types inspected offline; no new provider calls |
+| Inspector and framework-neutral controller | Standard library only; require Python 3.11+ (`tomllib`, `asyncio.timeout_at`); actually exercised on Python 3.11.4 only |
+| Optional regional SDK adapter, added 16 September | Python 3.11+ plus target-supplied `google-cloud-dlp`; SDK-shaped fixtures exercised on 3.38.0. Both asset files belong in the same package; no ADC/client at import or construction |
 
 The existing creation environment's pytest version is below the companion's
 declared range. It was not repaired or represented as a clean chapter install;
-new helper/controller tests use standard-library `unittest`. No dependency was
+bundled tests use standard-library `unittest`; optional adapter tests also use
+the installed DLP SDK. No dependency was
 upgraded, downgraded or installed. Native SDK observations come from pinned
-source and the historical companion tests, not a fresh provider integration of
-this asset. See [skill-validation.md](skill-validation.md) for current outcomes.
+source and offline tests, not a fresh provider integration of the new adapter.
+Its strict response-presence checks require a benign/PII live canary before
+activation. See [skill-validation.md](skill-validation.md) for dated outcomes.
 
 Core instructions use open Markdown and the helper/asset use Python. The
 optional `agents/openai.yaml` permits automatic invocation in Codex; removing it
@@ -37,6 +41,9 @@ at revision `c909d7e5d285ae582abb3899bbe162fa55f075dd`, reopened for this task.
 The September 14 run began at `59e789a53254c5fffcdd9a38bd13abeb31e454a7`;
 its audit retains the exact source fingerprints. The following links are
 optional further reading; this installed skill contains the required workflow.
+The depth recheck reopened the local companion and public audit artifacts at
+repository HEAD `51b41e83cdf6adc8904d7039b283c292989203fc` on 16 September;
+this is an inspection baseline, not a rerun of the September 14 campaign.
 
 | ID | Behaviour and source | Evidence / boundary of the claim |
 | --- | --- | --- |
@@ -50,6 +57,10 @@ optional further reading; this installed skill contains the required workflow.
 | E8 | `infrastructure/lifecycle.py`, `runtime_identity.py`, cleanup scripts; `tests/test_lifecycle_cli.py` and runtime identity tests; dated audits | Historical repeated setup/delete and scoped IAM checks; offline ownership/partial-failure tests. API activation was not freshly exercised in the final live retest |
 | E9 | `tools.py`, `order_store.py`, `tests/test_tools.py` | Historical ownership/contact checks and synthetic side-effect minimisation. Real email, production tokenisation, durable idempotency and real identity provider absent |
 | E10 | Updated manuscript's production extensions | Durable/distributed state, effective residency, full telemetry audit, added secret classes, RAG/media paths and operational policy are guidance, not supplied implementations |
+| E11 | Public September 13/14 audits, `runtime_identity.py`, `lifecycle.py`, `cleanup_gcp.py`, `scripts/live_campaign.py`; September 15 cleanup recheck | `troubleshooting.md` and expanded cloud lifecycle preserve historical TLS/identity/429/delete/accounting lessons. Cross-chapter retained storage and inaccessible inventory do not prove a new Chapter 8 resource or complete current cleanup |
+| E12 | Installed ADK 2.8.0 native Armor/plugin-manager/telemetry source; GenAI 2.19.0 client source | `implementation-recipes.md` distinguishes native call bounds, supplied-client ownership, exception logging and telemetry precedence from historical gateway behaviour. Facade, outer deadline and exporter tests are required adaptations, not historical hosted guarantees |
+| E13 | Updated manuscript policy/failure-mode/evaluation/deployment sections | `production-policy.md` turns advice into policy records, tenant runtime selection, detector evaluation and retained-data recovery; these extensions remain production guidance. Incident/rollback procedure is a derived recommendation |
+| E14 | Bundled `google_sdp_adapter.py` and `test_google_sdp_adapter.py`; official SDP processing-location/API documentation | Fresh offline endpoint, typed-request, response-validation, deadline and lifecycle evidence. A prior generated fixture excluded the verified regional endpoint despite passing mocks; the new asset fixes that packaging gap, without claiming new live validation |
 
 Optional source links: [pinned companion chapter](https://github.com/RuslanKhis/agentic-engineering-adk-gcp/tree/c909d7e5d285ae582abb3899bbe162fa55f075dd/chapter-08-sensitive-data),
 [dated live audit](https://github.com/RuslanKhis/agentic-engineering-adk-gcp/blob/c909d7e5d285ae582abb3899bbe162fa55f075dd/chapter-08-sensitive-data/audit/INDEPENDENT_AUDIT_2026-09-14.md),

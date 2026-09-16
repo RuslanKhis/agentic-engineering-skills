@@ -13,6 +13,14 @@ Read this when deploying, reviewing or adapting an ADK agent for Cloud Run. Appl
 
 Done when the selected mode, app name, callable endpoints, runtime entrypoint and session backend are recorded.
 
+### Implement the serving contract, not only the deploy command
+
+For a new custom application, the tested ADK 2.8.0 integration is `google.adk.cli.fast_api.get_fast_api_app`. Its `agents_dir` points to the **parent** of the importable agent package; the package's `__init__.py` imports its `agent` module, which exports `root_agent`. An existing application may have another supported loader: preserve it and verify `/list-apps` rather than restructuring it to match the lab.
+
+The factory's important seams are `session_service_uri`, `allow_origins` and `web`. Pass concrete values chosen for the target. In the tested wrapper, the session default was `sqlite+aiosqlite:////tmp/adk_sessions.db`, origins were parsed into a list, and `web` was parsed as a Boolean. `bool("False")` would enable the UI, so parse textual flags explicitly. The wrapper's requirements included the asynchronous SQLAlchemy/SQLite dependencies as well as ADK, FastAPI and Uvicorn; changing a session adapter also changes dependency and identity requirements. Check the installed factory signature before adding an artefact adapter or another option.
+
+The factory already exposed `/health` at the baseline. Adding a second route is an application decision, not a prerequisite copied from a different manuscript version. Locally exercise app discovery, direct session-state input, a real tool result and the selected session service through the actual server, with only the model boundary substituted. [Validation](validation.md) defines the HTTP acceptance contract.
+
 ## 2. Resolve identities, locations and packaging
 
 Read the active account, project, enabled APIs, billing/quota prerequisites and existing resources. In the tested path the required API set included Run, Cloud Build, Artifact Registry, Vertex AI, IAM, Storage, Resource Manager and Logging. API activation is a mutation; record only the missing APIs intended for the approved plan.
@@ -31,7 +39,23 @@ Map the deployer, build service account, runtime service account and caller inde
 
 Prepare a sanitised upload directory and inspect its file list. Exclude local `.env`, credentials, keys, state, sessions, logs and unrelated source from the upload *and* Docker context. Inspect native ADK's package ignore mechanism separately. Use workload IAM in managed deployment; remove inherited developer API keys from build/deploy subprocess environments.
 
+At the recorded baseline there were three packaging boundaries: the custom upload's `.gcloudignore`, the Docker context's `.dockerignore`, and native ADK's agent-local `.gcloudignore`. A root ignore file did not stand in for all three. Exercise the installed native CLI with the cloud-command boundary replaced and a synthetic nested `.env` to inspect what it actually stages. Treat imported local modules, package data and dependency files as required source; an exclusion that removes a necessary module is also a packaging failure.
+
+Fingerprint the **actual selected source manifest**, including entrypoints, imported application files, dependency/lock files, ignore rules and build configuration. Stage once from that reviewed manifest and verify its hashes before upload. The lab's narrow source list was enough for its fixed example; expanding an application while retaining that list can hide changes. If source changes during approval or a long build, report which snapshot the image contains and decide explicitly whether another release is needed. A source edit alone cannot update an existing image.
+
 For custom containers, check the listener uses `0.0.0.0` and the configured port; inspect the actual command instead of assuming `PORT` controls a hardcoded Uvicorn argument. Run as a non-root user. If the SDK writes configuration under its home directory, create that writable home: a missing home caused real telemetry opt-out HTTP 500s. Do not mistake a host-file repair for a rebuilt deployed image.
+
+Resolve configuration at each consumer, then verify it on the deployed revision:
+
+| Consumer | What must actually reach it |
+| --- | --- |
+| Deployment CLI and its `gcloud` children | Explicit operator, resource project and CLI billing/quota project; setting a Python client quota variable alone does not configure every child CLI. |
+| Agent model client | Supported backend selector, project and inference location. The historical agent explicitly selected global inference; a hosting-region argument does not supply that configuration. |
+| Custom app factory | Parsed origin list, UI Boolean, and chosen session URI. These are application inputs only if the wrapper reads them. |
+| Native generated server | Its supported ADK flags and generated configuration. The custom wrapper's `SERVE_WEB_INTERFACE` or `ALLOWED_ORIGINS` variables do not automatically configure native ADK. |
+| Cloud Build config | Explicit, reviewed substitutions for service, repository, locations, runtime identity and application settings. Inspect defaults before submission. |
+
+Avoid serialising comma-containing values by blindly joining `--substitutions` or `--set-env-vars` entries. The lab refused commas in substitutions; a multi-origin application needs a supported escaped delimiter or structured configuration file plus a test of the resulting deployed list. Keep credential-bearing URIs out of plain substitutions and command arguments. CORS controls browser access and is not user authentication; production frontend/IAP and session-ownership designs are covered in [production.md](production.md).
 
 Done when source exclusions, actual build identity, runtime grants and every deployment variable have concrete reviewed values.
 
@@ -43,6 +67,8 @@ Native ADK's tested private development deployment used:
 
 ```bash
 CLOUDSDK_CORE_ACCOUNT="$OPERATOR_ACCOUNT" \
+CLOUDSDK_CORE_PROJECT="$PROJECT_ID" \
+CLOUDSDK_BILLING_QUOTA_PROJECT="$PROJECT_ID" \
 GOOGLE_CLOUD_QUOTA_PROJECT="$PROJECT_ID" \
 adk deploy cloud_run \
   --project="$PROJECT_ID" --region="$DEPLOYMENT_REGION" \
@@ -50,8 +76,11 @@ adk deploy cloud_run \
   --with_ui "$AGENT_DIR" -- \
   --service-account="$RUNTIME_SERVICE_ACCOUNT" \
   --build-service-account="projects/$PROJECT_ID/serviceAccounts/$BUILD_SERVICE_ACCOUNT" \
-  --no-allow-unauthenticated
+  --no-allow-unauthenticated \
+  --set-env-vars="GOOGLE_GENAI_USE_ENTERPRISE=True,GOOGLE_CLOUD_PROJECT=$PROJECT_ID,GOOGLE_CLOUD_LOCATION=$MODEL_LOCATION"
 ```
+
+This runtime-environment fragment reflects the tested enterprise backend; set `MODEL_LOCATION` to the target's validated inference location (`global` in the lab), and adapt the backend selector to the installed SDK contract. Host-shell exports alone are not proof that these values reached the revision. An approved update must also preserve required existing environment settings: inspect the difference between replacing and updating environment variables before selecting flags. Resolve instance/resource limits for the intended workload rather than inheriting the fragment's unspecified defaults; infrastructure limits do not enforce a model/tool-action budget.
 
 Inspect the native source staging bucket, service-specific upload prefix and generated image repository before submission. Some SDK resources have fixed names; their existence does not authorise adoption or deletion. Journal accepted source generations, build identity, resolved image and service UID. Existing shared infrastructure requires an explicit reuse plan.
 
@@ -83,9 +112,20 @@ For browser testing, exercise the documented transport end to end. The tested or
 
 The source-tested workaround was a narrowly scoped local bridge: bind exact loopback, accept only its exact Host and absent/exact local Origin, discard caller-supplied forwarding headers, translate to the resolved owned HTTPS service and preserve upstream IAM verification. It refreshed existing standard user ADC, checked the caller's verified email, held the short-lived token in a private temporary flags file and removed it on startup failure, expiry or shutdown. This is a specific tested workaround; adapt and test its trust boundary instead of treating origin rewriting as general advice or making the service public.
 
+If this workaround is needed, keep its implementation contract explicit:
+
+- Resolve the Ready service URL from the selected project/region/name and verify the recorded UID/ownership before obtaining a token. The historical launcher required existing standard authorized-user ADC and refused custom clients, service-account keys and another email; it did not silently log in or install proxy components.
+- The launcher inspected claims from an ID token received directly from Google's TLS-verified OAuth response. It did not establish a generic JWT verifier by decoding a token. Cloud Run still verified the token cryptographically and checked IAM. Arbitrary caller tokens need proper verification at their actual trust boundary.
+- Reject foreign, `null`, duplicate or rebinding Host/Origin headers before the authenticated hop. Strip incoming `Forwarded` and `X-Forwarded-*`; then set the trusted upstream scheme/host because ADK's origin calculation can prefer `Forwarded`. Preserve payload bytes, remove incompatible hop-by-hop framing, and flush streamed chunks instead of buffering the entire model response.
+- Reproduce these boundaries with an actual loopback fixture: rejected requests never reach upstream, spoofed forwarding claims are replaced, chunked SSE payloads survive exactly, and startup failure/expiry/shutdown remove the private token file and only the owned child process group. Test the browser separately; a local proxy fixture does not establish live IAM.
+
+This bridge is not bundled by the skill and remains an optional operator-development adaptation. For a production sign-in flow, use the topology and acceptance requirements in [production.md](production.md).
+
 Check `/health`, then the real model/tool workflow, all intended routing outcomes and explicit same-session recall. Inspect structured results and grounded text: a classifier that selects a queue must not claim it filed a ticket or promised follow-up. Disconnect the actual local transport only within the agreed test scope, observe error feedback and usable input, restore it and retry only after establishing the first request was not accepted.
 
 The observed SDK retained a failed local message bubble. Two bubbles alone did not prove two server actions. A lost response or accepted timeout needs server-side reconciliation, not automatic retry. Native optional telemetry/debug endpoints returned 404 despite a working core chat; custom telemetry persisted through a reload in the same instance only.
+
+Keep evidence identifiers separate: an app name locates the agent, a session groups turns, an invocation groups one run's events, and a function-call ID relates a tool call to its response. A synthetic marker helps test recall but is not an operation or deduplication identifier. Optional debug traces can aid diagnosis; their absence is not proof that the required model/tool events are missing. The lab's HTTP smoke checked the queue and answer text without strict call-ID, invocation and final-event correlation. When external effects or strong completion claims require that correlation, implement it against real event fixtures and test stale, partial and mismatched events as additional production work.
 
 Done when the caller's real workflow and its measured limitations are recorded against the deployed revision.
 

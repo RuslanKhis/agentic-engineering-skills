@@ -14,6 +14,12 @@ declarations, installed packages and historical results are distinct facts.
 The skill-creation checks and their exact environments are recorded in
 [validation-results.md](validation-results.md).
 
+The September 16 depth review retained these pins. Its new runtime recipes target
+ADK 2.8.0 specifically, including a callback-chain quirk and retained-state hazard;
+reassess those assertions when deliberately migrating SDK versions. Guidance on
+transport guards is conditional on the GenAI 2.23.0/HTTPX 0.28.1 path, and is not
+an assertion that every SDK transport retries identically.
+
 No claim is made for “latest ADK”, every Python version, all agent products or
 API-key live behaviour. Keep the target package manager and pins. For another
 release, inspect its local signatures/source or version-matched official provider

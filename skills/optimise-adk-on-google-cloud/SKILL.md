@@ -7,15 +7,15 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "4"
   source-part: "1,2,3"
-  last-tested: "2026-09-15"
+  last-tested: "2026-09-16"
 ---
 
 # Optimise ADK on Google Cloud
 
 Reduce avoidable work while preserving correct, authorised and complete results.
 This one skill covers all three parts of Chapter 4: application optimisation,
-Cloud Run, Agent Runtime and GKE. The
-book and companion repository are optional provenance, never runtime dependencies.
+Cloud Run, Agent Runtime and GKE. The book and companion repository are optional
+provenance, never runtime dependencies.
 
 ## Inspect and define acceptance
 

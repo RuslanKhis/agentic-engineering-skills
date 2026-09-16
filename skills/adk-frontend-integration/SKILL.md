@@ -6,7 +6,7 @@ metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   source-chapter: "5"
-  last-tested: "2026-09-15"
+  last-tested: "2026-09-16"
 ---
 
 # ADK frontend integration
@@ -30,12 +30,14 @@ Choose transport and execution location independently.
 | Need | Mode and required reference |
 | --- | --- |
 | A complete answer for web, mobile or service clients | Custom JSON API: [json-api.md](references/json-api.md) |
-| Streaming text, tool cards or an existing CopilotKit interface | AG-UI: [ag-ui.md](references/ag-ui.md) |
+| Streaming text, incremental tool lifecycle displays or an existing CopilotKit interface | AG-UI: [ag-ui.md](references/ag-ui.md); use [copilotkit-recipe.md](references/copilotkit-recipe.md) for concrete Next.js wiring |
 | Either interface calls a remote managed ADK agent | Add [managed-runtime.md](references/managed-runtime.md) to the chosen transport |
+| Connect, provision, recover or clean up a managed test deployment | Add [deployment-runbook.md](references/deployment-runbook.md) |
 | Production identity, several replicas, mutating tools, replay or approval continuation | Add the relevant section of [production.md](references/production.md) |
+| Missing/duplicate output, failed connections, cancellation or latency investigation | Use [troubleshooting.md](references/troubleshooting.md) to select a probe and regression |
 | A recommendation or review rather than an implementation | Apply the same decision criteria; report a concrete design or findings without creating an app |
 
-An existing ADK API service can sit behind the JSON gateway. A plain JSON response is collected, even if the upstream emits events. AG-UI does not automatically add durable replay, tenant isolation or human approval.
+An existing ADK API service can sit behind the JSON gateway. A plain JSON response is collected, even if the upstream emits events; it can still render a validated completed tool result as a card. Choose AG-UI for incremental event semantics. AG-UI does not automatically add durable replay, tenant isolation or human approval.
 
 ## 3. Implement the smallest complete change
 
@@ -62,7 +64,7 @@ Make authorised setup idempotent using recorded intent and verified readback. Ke
 
 ## 5. Validate and report
 
-Read [validation.md](references/validation.md) for the chosen boundary tests. Run existing formatting/static checks and offline tests in the target environment, then test the actual browser path when available. Exercise one chapter-specific failure: streamed partials followed by a repeated aggregate, malformed/correlated tool results, or an error after visible text. Confirm that rejected auth/ownership calls produce zero agent invocations.
+Read [validation.md](references/validation.md) for the chosen boundary tests. Run existing formatting/static checks and offline tests in the target environment, then test the actual browser path when available. Cover every applicable failure class at the changed boundary, including repeated aggregates, malformed/miscorrelated tool results and errors after visible text. Confirm that rejected auth/ownership and unsupported continuation calls produce zero agent invocations. Use the concrete offline and cancellation procedures in [troubleshooting.md](references/troubleshooting.md) when those boundaries change.
 
 For the explicit AG-UI event profile, use [scripts/check_agui_trace.py](scripts/check_agui_trace.py) on a bounded synthetic or sanitised NDJSON trace. A passing trace validates event ordering only. It cannot prove model correctness, identity, SSE framing, browser rendering or a cloud integration.
 

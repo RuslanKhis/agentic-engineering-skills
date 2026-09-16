@@ -31,3 +31,20 @@ Review publication remained a local mock. Live counter enforcement was not indep
 Atomic multi-scope reservation/settlement; authenticated identity; stable business-operation IDs; durable review/outbox; authorised reviewer transitions; provider idempotency/reconciliation; versioned billing controls and explicit reset; simulation-first emergency operations are production designs from the updated chapter. Implement and test them against the target architecture before claiming them.
 
 The bundled invocation guard is newly adapted from the pre-execution principle. Its own offline tests establish only its stated local asynchronous contract. It is not copied ADK event instrumentation and does not turn the production designs into implemented services. New skill tests and independent fixture exercises are recorded separately in [validation results](validation-results.md).
+
+## Depth review — 16 September 2026
+
+The second audit re-opened the current manuscript, source/tests, initial failure report, corrected live campaigns and cleanup recheck. It retained the existing implementation boundaries and added the following actionable detail rather than copying the whole chapter:
+
+| Added guidance | Origin and evidence class |
+| --- | --- |
+| Consume beyond final-answer-like events; never dispatch incomplete function calls | Updated manuscript “Events and session lifetime”; `guardrails.py::extract_tool_calls` ignores partial calls. Complete-tail consumption is a production acceptance requirement, not an existing dedicated late-accounting integration test. |
+| Assert actual routed model and output limit, including an existing runner | `test_live_campaign_limits.py` checks serialised output limits, preserving 512 under the 2048 cap. `run_with_existing_runner()` rechecks policy admission but does not itself rebuild the supplied runner. Offline transport evidence and source-level limitation. |
+| Shared rate/concurrency/queue admission; failure when control state cannot be trusted | Manuscript “Quotas and application limits” and storage-failure guidance. Production design; no distributed limiter is claimed implemented. |
+| Durable records, review transitions, outbox crash recovery, opaque messages and authorised status lookup | Manuscript's durable human-review sections. Production design; publisher-failure and amount-validation tests remain the narrower offline evidence. |
+| Automatic degradation state versus operator stop; atomic updates and explicit reset | Manuscript's proposed control-state schema and version/period rules. Production design; current companion flags latch without a deployed recovery service. |
+| Stepwise preflight, shared campaign ledger, missing-input clarification and actual browser/network checks | `scripts/preflight.py`, `scripts/live_model_limits.py`, their offline regressions, both September 13 campaign records and `verification/flash-followup/REPORT.md`. Mix of successful offline and scoped live evidence; fresh disabled-to-enabled activation remains unverified. |
+| Serving integration, dependency/identity gates, empty-stream and disconnect outcomes | Derived production acceptance design combining the chapter's separate Web/runtime paths, cooperative deadline limits and local prototype review lessons. The abandoned Chapter 2 cloud implementation was removed before deployment. No managed deployment success is claimed. |
+| Active resources versus retained cost and incomplete inventories | `verification/project-cleanup-recheck-2026-09-15.md`: broader project read-only audit, including retained storage, denied/disabled APIs and region/pagination limits. This is not a Chapter 2 cloud lifecycle test or current zero-cost guarantee. |
+
+No personal project IDs, accounts, resource names or past paid-campaign authority are carried into the reusable procedures. Provider-specific hosting/retention guidance links official documentation and must be rechecked for the selected target.

@@ -5,6 +5,12 @@ I/O. Keep the existing business task and change the boundary supported by the
 evidence. The source examples used ADK 2.8.0; verify the target's interfaces before
 adapting a recipe.
 
+For environment changes that do not take effect, mock/live ambiguity or wiring a
+bounded query-to-child handoff, read
+[application-integration.md](application-integration.md). For actual ADK test
+construction, provider budgets and failed-run recovery, read
+[part1-verification.md](part1-verification.md).
+
 ## Remove an unnecessary remote adapter
 
 Find whether a tool call provisions or wakes another service, builds a client
@@ -33,6 +39,24 @@ Keep runtime read/query permissions separate from fixture creation and export
 permissions. BigQuery job creation and dataset access are different grants.
 Choose permissions for the actual operation and permitted dataset; avoid copying
 a deployment identity's broader access into the agent.
+
+Treat submission, job execution, waiting and result retrieval as separate stages.
+A caller wait timeout stops waiting; it does not establish job cancellation.
+A job timeout requests a server-side stop, which still needs reconciliation.
+Record the planned job ID and location before submission, use supported transport
+and job timeout controls, and inspect both request and job retry policy. Confirm
+terminal state before deleting fixtures or resubmitting ambiguous work.
+
+`to_dataframe()` can use the optional BigQuery Storage Read path when its
+dependencies are installed. Query creation can succeed while retrieval fails for
+missing API access or permissions under the runtime identity. Inspect the actual
+retrieval mechanism, driver extras and data location before broadening IAM or
+changing code. Neither the shipped synchronous adapter nor a small preview
+provides these production limits automatically.
+Resolve parameter semantics against the installed package and the
+[BigQuery client](https://docs.cloud.google.com/python/docs/reference/bigquery/latest/google.cloud.bigquery.client.Client)
+and [QueryJob](https://docs.cloud.google.com/python/docs/reference/bigquery/latest/google.cloud.bigquery.job.QueryJob)
+references; a newer documentation signature does not verify an older target.
 
 ## Disclose schema detail when needed
 

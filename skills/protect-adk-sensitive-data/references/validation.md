@@ -39,10 +39,21 @@ python -m unittest discover -s /path/to/skill/tests -v
 ```
 
 The inspector is read-only in both modes. An exit-zero inventory is not a
-compatibility pass; review any unresolved metadata. The asset is a library, not
-a command-line script, so `--help`/`--dry-run` do not apply to it. Its tests use
-only the standard library and fake provider functions. The module requires
-Python 3.11+ for its timeout API; only Python 3.11.4 was exercised here.
+compatibility pass; review any unresolved metadata. Both assets are libraries,
+so `--help`/`--dry-run` do not apply. Inspector/controller tests use the standard
+library and fake provider functions. The optional regional adapter's tests use
+the target's existing `google-cloud-dlp` package for real message types while
+replacing client construction/transport; the SDK-dependent group is skipped
+when it is absent. Report those skips as unverified SDK integration, not a pass.
+Do not install/change dependencies merely to eliminate a skip. Python 3.11+ is
+required; only Python 3.11.4 was exercised here.
+
+When adapting the SDK asset, retain both files in one package and verify the
+regional endpoint, full template names, absence of inline overrides, actual SDK
+response shapes, queue/RPC/host deadlines, cancellation, client reuse and close.
+Mocked provider results prove orchestration only. Its stricter response-presence
+checks still need a separately approved benign/PII provider canary before live
+activation; see [sdp.md](sdp.md).
 
 For a skill edit, run the available Agent Skills structural validator, parse the
 frontmatter/UI YAML, check local links and unfinished markers, and run syntax /
@@ -63,6 +74,10 @@ repeat invocation on the already changed project. Check preservation of package
 pins and domain contracts, safe refusal of unapproved cloud changes, no
 credential invention, no activation for unrelated work, and no duplicate edits.
 Only claim coding-agent environments in which this behavioural test was run.
+For the deeper implementation references, add focused trials of real regional
+SDK adoption, native-plugin bounds and error logging, and operational diagnosis
+with tenant-specific policy. Use actual installed SDK types/plugin execution
+where those contracts matter, while replacing all provider transports.
 
 ## Evidence labels and completion
 
@@ -79,4 +94,4 @@ Report skipped/inapplicable checks and why. An implementation is ready for its
 stated scope only when the changed invariants have evidence and pending cloud
 or production work is explicit. See [compatibility.md](compatibility.md) for
 provenance and [skill-validation.md](skill-validation.md) for this package's
-recorded creation checks.
+dated creation and subsequent recheck results.

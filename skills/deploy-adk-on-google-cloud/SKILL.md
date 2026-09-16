@@ -6,7 +6,7 @@ metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   source-chapter: "3"
-  last-tested: "2026-09-15"
+  last-tested: "2026-09-16"
 ---
 
 # Deploy ADK on Google Cloud
@@ -41,6 +41,8 @@ These choices are not a maturity ladder. Keep the user's selected platform unles
 3. Prepare an allowlisted source package, explicit model/backend configuration, workload identity, authenticated access and selected state services. Review generated native-ADK files as well as authored files. Bind the application to the container's configured port and provide cheap health checks that do not call a model.
 4. Prepare a data-only ownership journal or extend the existing lifecycle system: exact target, source fingerprint, original resource identities and IAM baseline, submitted operation IDs and created identities. On repeats, reconcile state before submitting more work. Use the lifecycle reference for uncertain outcomes and concurrency.
 5. Complete the implementation and offline checks before asking for approval of a concrete cloud action. Production changes such as external state, user authorisation, IAP, distributed locking and release promotion need their own implementation and tests; historical lab success does not validate them.
+
+When the request includes production users, durability, scaling or release operations, read the relevant sections of [production.md](references/production.md) for implementation decisions and acceptance tests. For a concrete failure, use [troubleshooting.md](references/troubleshooting.md) to separate provider, application and test-harness problems before retrying. These references add depth when needed; a small deployment edit does not require implementing every production extension.
 
 ## Permission boundary
 

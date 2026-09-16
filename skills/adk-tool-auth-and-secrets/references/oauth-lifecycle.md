@@ -6,6 +6,8 @@ Read this reference when the requested work involves user consent, account linki
 
 Trace the verified application principal through the credential index, token store and cache. Record the provider, trusted provider-account identifier, OAuth client, granted scopes, active credential reference, connection status and revision. Derive the principal from validated issuer/project, tenant where applicable, and subject. An application UID does not automatically identify the provider account selected during consent.
 
+Apply access and retention controls to connection metadata too: account mappings and secret references remain sensitive without containing plaintext tokens. Preserve separate environment/client bindings so staging cannot select production credentials.
+
 Complete this step when every credential lookup has an explicit owner and every lifecycle update can distinguish the connection revision it acts upon. On review tasks, report missing fields and protections rather than claiming they exist.
 
 ## 2. Bind and consume consent transactions
@@ -22,6 +24,8 @@ When using Google, consult its [web-server OAuth guidance](https://developers.go
 
 Establish the provider account using its documented trusted identification mechanism. Fully validate any OIDC token used for this purpose. Check the actual granted scopes against the operation; request added permissions deliberately when the feature changes.
 
+Treat scope reduction as a migration. A narrower scope in source/configuration does not narrow previously issued tokens. Align consent, stored granted scopes, tool permission checks and tests; plan provider-supported revocation/reconnection for existing broader grants when required. Test existing connections as well as newly consenting users. Do not silently relabel an old token as narrowly scoped.
+
 If a later response omits a refresh token, preserve the existing token only when the trusted account and client bindings still match an active connection. Account/client changes require valid new durable authority. Publish new secret material through a conditional index update against the expected revision and status. Keep payloads in the protected store and only references/metadata in the index.
 
 Complete this step when account switching and omitted-token responses cannot relabel another connection's credential or overwrite a newer connection.
@@ -33,6 +37,8 @@ Coordinate concurrent refreshes per connection. After obtaining replacement mate
 An expected-version/connected-status compare-and-swap is useful partial protection. It does not automatically cover reconnect, same-user refresh serialisation or replica coordination. Advance the revision for account, client, grant and status changes. Apply a rejected grant to the revision that failed, rather than disconnecting a newer connection.
 
 Distinguish recognised invalid grants from outages, malformed responses and quota failures. Preserve durable authorisation during transient failure and return a safe unavailable outcome. Classify provider error reasons before retrying; keep eligible attempts and underlying transports within the operation's total budget.
+
+Resource-server rejection of a short-lived access token is distinct from token-endpoint rejection of the durable refresh grant. Define provider-specific cache invalidation and a bounded refresh/retry policy; recheck the connection revision before replaying an authorised read. Replay writes only under their idempotency/confirmation contract. Do not erase durable consent from a resource HTTP status alone. For example, Google's [Calendar error guidance](https://developers.google.com/workspace/calendar/api/guides/errors), checked 16 September 2026, distinguishes invalid access tokens from 403 rate-limit reasons. The source lab instead maps Calendar 401 to reconnect and all 403 to a permission outcome; those paths are a production limitation, not the tested token-endpoint `invalid_grant` repair.
 
 Cache short-lived access tokens with conservative expiry and keys covering principal, provider, account/client, scope and revision. Keep refresh tokens in the protected credential store. For replicas, use shared authoritative state and test invalidation or an explicit maximum revocation delay.
 
