@@ -1,0 +1,51 @@
+Ripgrep is not available. Falling back to GrepTool.
+Discovered Agent Skills:
+
+adk-agent-evaluation [Enabled]
+  Description: Build, adapt or audit a Python ADK agent's testing strategy: deterministic tool and Runner tests, live evaluation sets, simulated conversations, conformance replay and strict result checks. Use for agent behaviour, regression coverage or evaluation reliability. Do not activate for ordinary non-agent unit tests, standalone model benchmarks, deployment, or cloud cleanup alone.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/adk-agent-evaluation/SKILL.md
+
+adk-engineer [Enabled]
+  Description: Help build, change or review a Python Google ADK agent by selecting the relevant Agentic Engineering specialist skills. Use as the starting point for an ADK engineering request when the user has not chosen a specialist, or when a change spans several ADK concerns. For a focused task already covered by an active specialist, continue with that skill directly.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/adk-engineer/SKILL.md
+
+adk-frontend-integration [Enabled]
+  Description: Implement, adapt, review or select a web interface for a Google ADK agent using a custom JSON API or AG-UI with CopilotKit, including gateways to managed Agent Runtime. Use for agent-to-browser contracts, session ownership, streaming text and tool displays. Do not activate for ordinary React styling, agent prompting alone, general cloud provisioning or non-ADK chat applications.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/adk-frontend-integration/SKILL.md
+
+adk-memory-architecture [Enabled]
+  Description: Design, implement, adapt or audit memory and retrieval in Python Google ADK agents. Select and combine conversation sessions/state, governed RAG, Agent Platform Memory Bank and scoped BigQuery history; enforce identity, consent, retention, replay and erasure boundaries. Use for agent memory, knowledge retrieval or cross-session continuity work. Do not activate for general database administration, arbitrary SQL generation, deployment alone, prompt-only editing or non-agent caching.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/adk-memory-architecture/SKILL.md
+
+adk-operational-guardrails [Enabled]
+  Description: Implement, adapt or audit invocation limits, token budgets, repeated-tool protection, human approval and application cost controls in Python Google ADK agents. Use for runaway agent loops, cross-turn budget enforcement, risky actions awaiting review, or staged cost shutdown. Do not activate for a single HTTP retry policy, deployment alone, prompt-only editing, or general cloud billing administration.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/adk-operational-guardrails/SKILL.md
+
+adk-sql-agent-engineering [Enabled]
+  Description: Build, adapt, test or troubleshoot Google ADK SQL agents using reviewed templates, selective schemas and controlled read-only execution. Use for natural-language analytics, SQL routing, generated-query reliability, or the agent's BigQuery/Gemini identity, setup and cleanup. Do not activate for ordinary SQL tuning, general database administration, RAG-only work or unrelated cloud hosting.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/adk-sql-agent-engineering/SKILL.md
+
+adk-tool-auth-and-secrets [Enabled]
+  Description: Implement or review authenticated Google ADK tools with verified user/session ownership, keyless GCP access, Secret Manager and delegated OAuth lifecycle controls. Use for tool credential selection, cross-user access bugs, consent/refresh/disconnect flows or credential exposure in agent events. Exclude generic sign-in UI, general IAM administration, model-key billing troubleshooting and content moderation without a tool-authentication boundary.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/adk-tool-auth-and-secrets/SKILL.md
+
+adk-workflow-design [Enabled]
+  Description: Select, implement or review Google ADK workflow control flow, event consumption, session-state handoffs and callback boundaries. Use when choosing between ordinary code, sequential, parallel, bounded-loop, graph or dynamic orchestration, or repairing those runtime contracts in an existing agent. Do not activate for unrelated UI edits, general LLM explanations, standalone cloud deployment, or implementing RAG, memory or SQL services.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/adk-workflow-design/SKILL.md
+
+deploy-adk-on-google-cloud [Enabled]
+  Description: Select, implement, adapt or audit deployment of Python Google ADK agents on Cloud Run, Agent Runtime or GKE, including identity, packaging, browser validation, recovery and owned-resource cleanup. Use for ADK hosting decisions and deployment lifecycle work. Do not activate for general Kubernetes administration, non-ADK applications, prompt-only changes, or RAG and memory design without a deployment task.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/deploy-adk-on-google-cloud/SKILL.md
+
+optimise-adk-on-google-cloud [Enabled]
+  Description: Diagnose, implement or review Python Google ADK optimisations on Cloud Run, Agent Runtime and GKE involving model/tool work, history, streaming completion, session handling, startup, concurrency or workload scaling. Use for measured changes or actionable optimisation plans. Do not activate for hosting selection or first deployment alone, general Kubernetes administration, standalone RAG or memory architecture, non-ADK performance work, or unrelated prompt and UI edits.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/optimise-adk-on-google-cloud/SKILL.md
+
+protect-adk-sensitive-data [Enabled]
+  Description: Inspect, implement or review sensitive-data boundaries in Python Google ADK agents using Sensitive Data Protection (SDP), Model Armor, strict tool contracts and guarded response release. Use for PII or credential exposure in prompts, tool calls, session history, logs or streamed answers, and for planning these controls and their cloud prerequisites. Do not activate for generic ADK setup, ordinary authentication work without a data-boundary concern, Cloud Armor WAF configuration, unrelated infrastructure cleanup, or non-agent document redaction.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/protect-adk-sensitive-data/SKILL.md
+
+safe-api-tool-calls [Enabled]
+  Description: Implement, adapt or review safe external API tools in Python and ADK projects, including selective retries, cooperative deadlines, idempotent writes and confirmation. Use for unreliable API calls, ambiguous write outcomes, unsafe tool replay or setup failures blocking ADK API verification. Do not activate for model-only tuning, general cloud deployment, UI-only changes or database query optimisation without an external-call safety problem.
+  Location:    <INSTALLER_TEST>/projects/gemini-cli/.agents/skills/safe-api-tool-calls/SKILL.md
+

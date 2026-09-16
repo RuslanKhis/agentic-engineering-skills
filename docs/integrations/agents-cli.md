@@ -18,7 +18,7 @@ instructions, not a tested integration or an endorsement by Google.
 
 ## Install them together
 
-### Project skills for Claude Code or Codex
+### Project skills for your coding client
 
 From the application directory, install both collections for the same coding
 agent. If one is already installed there, only add the missing collection:
@@ -34,6 +34,12 @@ and twelve Agentic Engineering skills available. Restart the coding-agent
 session if they do not appear. Google's README explicitly offers the
 Skills CLI installation route and names both Claude Code and Codex.
 [Google's installation instructions](https://github.com/google/agents-cli#readme)
+
+For Gemini CLI, use `-a gemini-cli` on both commands; for Antigravity, use
+`-a antigravity` or `-a antigravity-cli`. These project targets share
+`.agents/skills/`. Follow the [Google coding-agent setup guide](google-coding-agents.md)
+for discovery and invocation. In Gemini CLI, start a combined request with
+“Use the adk-engineer skill…” and name Google's relevant skill in the same request.
 
 The skills installer needs the prerequisites in our
 [getting-started guide](../../README.md#getting-started). Skill files alone do
@@ -115,6 +121,9 @@ These are chat prompts, not terminal commands. The examples use Claude Code's
 `/` prefix; in Codex replace the leading `/` with `$`. Name additional installed
 skills in ordinary text rather than assuming several slash commands compose
 automatically. Each example states its scope; expand it when you want live work.
+In Gemini CLI and Antigravity IDE integrations, replace the first `/skill-name`
+with “Use the skill-name skill to” and keep the remaining request. Antigravity
+2.0 and its CLI also support the slash form.
 
 ### 1. Add memory to a generated support agent
 

@@ -1,0 +1,13 @@
+gemini skills install <source> [--scope] [--path]
+
+Installs an agent skill from a git repository URL or a local path.
+
+Positionals:
+  source  The git repository URL or local path of the skill to install.  [string] [required]
+
+Options:
+  -d, --debug    Run in debug mode (open debug console with F12)  [boolean] [default: false]
+      --scope    The scope to install the skill into. Defaults to "user" (global).  [choices: "user", "workspace"] [default: "user"]
+      --path     Sub-path within the repository to install from (only used for git repository sources).  [string]
+      --consent  Acknowledge the security risks of installing a skill and skip the confirmation prompt.  [boolean] [default: false]
+  -h, --help     Show help  [boolean]

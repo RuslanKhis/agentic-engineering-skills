@@ -1,0 +1,191 @@
+1389: 	antigravity: {
+1390: 		name: "antigravity",
+1391: 		displayName: "Antigravity",
+1392: 		skillsDir: ".agents/skills",
+1393: 		globalSkillsDir: join(home, ".gemini/antigravity/skills"),
+1394: 		detectInstalled: async () => {
+1395: 			return existsSync(join(home, ".gemini/antigravity"));
+1396: 		}
+1397: 	},
+1398: 	"antigravity-cli": {
+1399: 		name: "antigravity-cli",
+1400: 		displayName: "Antigravity CLI",
+1401: 		skillsDir: ".agents/skills",
+1402: 		globalSkillsDir: join(home, ".gemini/antigravity-cli/skills"),
+1403: 		detectInstalled: async () => {
+1404: 			return existsSync(join(home, ".gemini/antigravity-cli"));
+1405: 		}
+1406: 	},
+1407: 	astrbot: {
+
+1626: 	"gemini-cli": {
+1627: 		name: "gemini-cli",
+1628: 		displayName: "Gemini CLI",
+1629: 		skillsDir: ".agents/skills",
+1630: 		globalSkillsDir: join(home, ".gemini/skills"),
+1631: 		detectInstalled: async () => {
+1632: 			return existsSync(join(home, ".gemini"));
+1633: 		}
+1634: 	},
+1635: 	"github-copilot": {
+
+2087: 	return Object.entries(agents).filter(([_, config]) => config.skillsDir === ".agents/skills" && config.showInUniversalList !== false).map(([type]) => type);
+2088: }
+2089: function getVisibleUniversalAgents() {
+2090: 	return Object.entries(agents).filter(([_, config]) => config.skillsDir === ".agents/skills" && config.showInUniversalList !== false && config.showInUniversalPrompt !== false).map(([type]) => type);
+2091: }
+2092: function getNonUniversalAgents() {
+2093: 	return Object.entries(agents).filter(([_, config]) => config.skillsDir !== ".agents/skills").map(([type]) => type);
+2094: }
+2095: function isUniversalAgent(type) {
+2096: 	return agents[type].skillsDir === ".agents/skills";
+2097: }
+
+2115: 		return false;
+2116: 	}
+2117: }
+2118: function getCanonicalSkillsDir(global, cwd) {
+2119: 	return join(global ? homedir() : cwd || process.cwd(), AGENTS_DIR$1, SKILLS_SUBDIR);
+2120: }
+2121: function getEveSubagentSkillsDir(subagent, cwd) {
+2122: 	return join(cwd || process.cwd(), EVE_SUBAGENTS_DIR, sanitizeName(subagent), "skills");
+2123: }
+2124: function getAgentBaseDir(agentType, global, cwd, eveSubagent) {
+2125: 	if (isUniversalAgent(agentType)) return getCanonicalSkillsDir(global, cwd);
+2126: 	if (agentType === "eve" && eveSubagent) return getEveSubagentSkillsDir(eveSubagent, cwd);
+2127: 	const agent = agents[agentType];
+2128: 	const baseDir = global ? homedir() : cwd || process.cwd();
+2129: 	if (global) {
+2130: 		if (agent.globalSkillsDir === void 0) return join(baseDir, agent.skillsDir);
+2131: 		return agent.globalSkillsDir;
+2132: 	}
+2133: 	return join(baseDir, agent.skillsDir);
+2134: }
+2135: function resolveSymlinkTarget(linkPath, linkTarget) {
+
+2184: async function installSkillForAgent(skill, agentType, options = {}) {
+2185: 	const agent = agents[agentType];
+2186: 	const isGlobal = options.global ?? false;
+2187: 	const cwd = options.cwd || process.cwd();
+2188: 	const eveSubagent = options.eveSubagent;
+2189: 	if (isGlobal && agent.globalSkillsDir === void 0) return {
+2190: 		success: false,
+2191: 		path: "",
+2192: 		mode: options.mode ?? "symlink",
+2193: 		error: `${agent.displayName} does not support global skill installation`
+2194: 	};
+2195: 	const skillName = sanitizeName(skill.name || basename(skill.path));
+2196: 	const installMode = options.mode ?? "symlink";
+2197: 	const canonicalBase = agentType === "eve" && installMode === "symlink" ? getAgentBaseDir(agentType, isGlobal, cwd, eveSubagent) : getCanonicalSkillsDir(isGlobal, cwd);
+2198: 	const canonicalDir = join(canonicalBase, skillName);
+2199: 	const agentBase = getAgentBaseDir(agentType, isGlobal, cwd, eveSubagent);
+2200: 	const agentDir = join(agentBase, skillName);
+2201: 	if (!isPathSafe$2(canonicalBase, canonicalDir)) return {
+2202: 		success: false,
+2203: 		path: agentDir,
+2204: 		mode: installMode,
+2205: 		error: "Invalid skill name: potential path traversal detected"
+2206: 	};
+2207: 	if (!isPathSafe$2(agentBase, agentDir)) return {
+2208: 		success: false,
+2209: 		path: agentDir,
+2210: 		mode: installMode,
+2211: 		error: "Invalid skill name: potential path traversal detected"
+2212: 	};
+2213: 	try {
+2214: 		if (pathsOverlap(skill.path, agentDir)) return {
+2215: 			success: true,
+2216: 			path: agentDir,
+2217: 			mode: installMode,
+2218: 			skipped: true
+2219: 		};
+2220: 		if (installMode === "copy") {
+2221: 			await cleanAndCreateDirectory(agentDir);
+2222: 			await copyDirectory(skill.path, agentDir, agentType);
+2223: 			return {
+2224: 				success: true,
+2225: 				path: agentDir,
+2226: 				mode: "copy"
+2227: 			};
+2228: 		}
+2229: 		if (pathsOverlap(skill.path, canonicalDir)) return {
+2230: 			success: true,
+2231: 			path: canonicalDir,
+2232: 			canonicalPath: canonicalDir,
+2233: 			mode: "symlink",
+2234: 			skipped: true
+2235: 		};
+2236: 		await cleanAndCreateDirectory(canonicalDir);
+2237: 		await copyDirectory(skill.path, canonicalDir, agentType);
+2238: 		if (isGlobal && isUniversalAgent(agentType)) return {
+2239: 			success: true,
+2240: 			path: canonicalDir,
+2241: 			canonicalPath: canonicalDir,
+2242: 			mode: "symlink"
+2243: 		};
+2244: 		if (!isGlobal && !isUniversalAgent(agentType)) {
+2245: 			if (!existsSync(join(cwd, agents[agentType].skillsDir.split("/")[0])) && agentType !== "claude-code") return {
+2246: 				success: true,
+2247: 				path: canonicalDir,
+2248: 				canonicalPath: canonicalDir,
+2249: 				mode: "symlink",
+2250: 				skipped: true
+2251: 			};
+2252: 		}
+2253: 		if (!await createSymlink(canonicalDir, agentDir)) {
+2254: 			await cleanAndCreateDirectory(agentDir);
+2255: 			await copyDirectory(skill.path, agentDir, agentType);
+
+4803: 		let targetAgents;
+4804: 		const validAgents = Object.keys(agents);
+4805: 		if (options.agent?.includes("*")) {
+4806: 			targetAgents = validAgents;
+4807: 			log.info(`Installing to all ${targetAgents.length} agents`);
+4808: 		} else if (options.agent && options.agent.length > 0) {
+4809: 			const invalidAgents = options.agent.filter((a) => !validAgents.includes(a));
+4810: 			if (invalidAgents.length > 0) {
+4811: 				log.error(`Invalid agents: ${invalidAgents.join(", ")}`);
+4812: 				log.info(`Valid agents: ${validAgents.join(", ")}`);
+4813: 				await cleanup(tempDir);
+4814: 				process.exit(1);
+4815: 			}
+4816: 			targetAgents = options.agent;
+4817: 		} else {
+4818: 			spinner$3.start("Loading agents…");
+4819: 			const installedAgents = await detectInstalledAgents();
+4820: 			const totalAgents = Object.keys(agents).length;
+
+4925: 			installGlobally = scope;
+4926: 		}
+4927: 		let installMode = options.copy ? "copy" : "symlink";
+4928: 		const allEve = installTargets.every((t) => t.agent === "eve");
+4929: 		const uniqueDirs = new Set(installTargets.map((t) => t.subagent ? `eve:subagent:${t.subagent}` : agents[t.agent].skillsDir));
+4930: 		if (!options.copy && !options.yes && uniqueDirs.size > 1 && !allEve) {
+4931: 			const modeChoice = await select({
+4932: 				message: "Installation method",
+4933: 				options: [{
+4934: 					value: "symlink",
+4935: 					label: "Symlink (Recommended)",
+4936: 					hint: "Single source of truth, easy updates"
+4937: 				}, {
+4938: 					value: "copy",
+4939: 					label: "Copy to all agents",
+4940: 					hint: "Independent copies for each agent"
+4941: 				}]
+4942: 			});
+4943: 			if (isCancel(modeChoice)) {
+4944: 				cancel("Installation cancelled");
+4945: 				await cleanup(tempDir);
+4946: 				process.exit(0);
+4947: 			}
+4948: 			installMode = modeChoice;
+4949: 		} else if (uniqueDirs.size <= 1 || allEve) installMode = "copy";
+4950: 		const cwd = process.cwd();
+4951: 		const summaryLines = [];
+4952: 		const overwriteChecks = await Promise.all(selectedSkills.flatMap((skill) => installTargets.map(async (target) => ({
+4953: 			skillName: skill.name,
+4954: 			target,
+4955: 			installed: await isSkillInstalled(skill.name, target.agent, {
+4956: 				global: installGlobally,
+4957: 				eveSubagent: target.subagent
+4958: 			})

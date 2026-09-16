@@ -1,0 +1,87 @@
+{
+  "gemini_cli": "0.60.0",
+  "node": "24.15.0",
+  "cases": [
+    {
+      "case": "skills-cli-discovery",
+      "command": [
+        "~/.nvm/versions/node/v24.15.0/bin/node",
+        "--require",
+        "<GEMINI_TEST>/no-network.cjs",
+        "<GEMINI_TEST>/cli/node_modules/@google/gemini-cli/bundle/gemini.js",
+        "skills",
+        "list"
+      ],
+      "cwd": "<INSTALLER_TEST>/projects/gemini-cli",
+      "exit_code": 0,
+      "missing_skills": [
+        "adk-agent-evaluation",
+        "adk-engineer",
+        "adk-frontend-integration",
+        "adk-memory-architecture",
+        "adk-operational-guardrails",
+        "adk-sql-agent-engineering",
+        "adk-tool-auth-and-secrets",
+        "adk-workflow-design",
+        "deploy-adk-on-google-cloud",
+        "optimise-adk-on-google-cloud",
+        "protect-adk-sensitive-data",
+        "safe-api-tool-calls"
+      ]
+    },
+    {
+      "case": "native-install",
+      "command": [
+        "~/.nvm/versions/node/v24.15.0/bin/node",
+        "--require",
+        "<GEMINI_TEST>/no-network.cjs",
+        "<GEMINI_TEST>/cli/node_modules/@google/gemini-cli/bundle/gemini.js",
+        "skills",
+        "install",
+        "<REPO>/skills",
+        "--scope",
+        "workspace",
+        "--consent"
+      ],
+      "cwd": "<GEMINI_TEST>/native-project",
+      "exit_code": 0
+    },
+    {
+      "case": "native-discovery",
+      "command": [
+        "~/.nvm/versions/node/v24.15.0/bin/node",
+        "--require",
+        "<GEMINI_TEST>/no-network.cjs",
+        "<GEMINI_TEST>/cli/node_modules/@google/gemini-cli/bundle/gemini.js",
+        "skills",
+        "list"
+      ],
+      "cwd": "<GEMINI_TEST>/native-project",
+      "exit_code": 0,
+      "missing_skills": [
+        "adk-agent-evaluation",
+        "adk-engineer",
+        "adk-frontend-integration",
+        "adk-memory-architecture",
+        "adk-operational-guardrails",
+        "adk-sql-agent-engineering",
+        "adk-tool-auth-and-secrets",
+        "adk-workflow-design",
+        "deploy-adk-on-google-cloud",
+        "optimise-adk-on-google-cloud",
+        "protect-adk-sensitive-data",
+        "safe-api-tool-calls"
+      ]
+    },
+    {
+      "case": "native-byte-verification",
+      "files": 229,
+      "mismatches": []
+    }
+  ],
+  "network_attempts": [
+    "fetch",
+    "fetch"
+  ],
+  "scope": "Temporary CLI profile and project installation/discovery only. No login, activation, generation or cloud calls."
+}

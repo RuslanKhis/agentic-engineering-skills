@@ -1,0 +1,78 @@
+{
+  "gemini_cli": "0.60.0",
+  "node": "24.15.0",
+  "cases": [
+    {
+      "case": "skills-cli-discovery",
+      "command": [
+        "~/.nvm/versions/node/v24.15.0/bin/node",
+        "--require",
+        "<GEMINI_TEST>/no-network.cjs",
+        "<GEMINI_TEST>/cli/node_modules/@google/gemini-cli/bundle/gemini.js",
+        "skills",
+        "list"
+      ],
+      "cwd": "<INSTALLER_TEST>/projects/gemini-cli",
+      "exit_code": 0,
+      "missing_skills": []
+    },
+    {
+      "case": "native-install",
+      "command": [
+        "~/.nvm/versions/node/v24.15.0/bin/node",
+        "--require",
+        "<GEMINI_TEST>/no-network.cjs",
+        "<GEMINI_TEST>/cli/node_modules/@google/gemini-cli/bundle/gemini.js",
+        "skills",
+        "install",
+        "<REPO>/skills",
+        "--scope",
+        "workspace",
+        "--consent"
+      ],
+      "cwd": "<GEMINI_TEST>/native-project",
+      "exit_code": 0
+    },
+    {
+      "case": "native-discovery",
+      "command": [
+        "~/.nvm/versions/node/v24.15.0/bin/node",
+        "--require",
+        "<GEMINI_TEST>/no-network.cjs",
+        "<GEMINI_TEST>/cli/node_modules/@google/gemini-cli/bundle/gemini.js",
+        "skills",
+        "list"
+      ],
+      "cwd": "<GEMINI_TEST>/native-project",
+      "exit_code": 0,
+      "missing_skills": []
+    },
+    {
+      "case": "native-byte-verification",
+      "files": 229,
+      "mismatches": []
+    },
+    {
+      "case": "global-alias-discovery",
+      "exit_code": 0,
+      "cwd": "<GEMINI_TEST>/empty-project",
+      "command": [
+        "~/.nvm/versions/node/v24.15.0/bin/node",
+        "--require",
+        "<GEMINI_TEST>/no-network.cjs",
+        "<GEMINI_TEST>/cli/node_modules/@google/gemini-cli/bundle/gemini.js",
+        "skills",
+        "list"
+      ],
+      "missing_skills": [],
+      "expected_source": "GEMINI_CLI_HOME/.agents/skills",
+      "all_locations_match": true
+    }
+  ],
+  "network_attempts": [
+    "fetch:https://play.googleapis.com",
+    "fetch:https://play.googleapis.com",
+    "fetch:https://play.googleapis.com"
+  ],
+  "scope": "Temporary CLI profile trusts only two owned disposable test projects. Installation/discovery only; no login, activation, generation or cloud calls."
+}

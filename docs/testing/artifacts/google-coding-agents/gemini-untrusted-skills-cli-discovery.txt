@@ -1,0 +1,4 @@
+Skipping project agents due to untrusted folder. To enable, ensure that the project root is trusted.
+Ripgrep is not available. Falling back to GrepTool.
+Project hooks disabled because the folder is not trusted.
+No skills discovered.
