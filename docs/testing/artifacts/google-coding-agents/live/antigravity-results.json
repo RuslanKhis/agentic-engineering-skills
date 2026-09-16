@@ -1,0 +1,57 @@
+{
+  "client": "Antigravity IDE",
+  "client_version": "2.5.5",
+  "selected_model": "Gemini 3.8 Flash Medium",
+  "python_version": "3.11.4",
+  "results": [
+    {
+      "check": "generated-tests",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v"
+      ],
+      "exit_code": 0,
+      "output": "\n\n----------------------------------------------------------------------\nRan 21 tests in 0.001s\n\nOK\n"
+    },
+    {
+      "check": "acceptance-tests",
+      "command": [
+        "/Library/Frameworks/Python.framework/Versions/3.11/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "<DESIGN>/acceptance",
+        "-v"
+      ],
+      "exit_code": 0,
+      "output": "k\n\n----------------------------------------------------------------------\nRan 9 tests in 0.001s\n\nOK\n"
+    }
+  ],
+  "preserved": {
+    "provider.py": true,
+    "CONTRACT.md": true
+  },
+  "initial_sha256": {
+    "service.py": "3a1e7c78d106bd409754f1d60401545a1da825a8f2bbd2e0886c6452cefd08e3",
+    "provider.py": "bc49b85efdec12762f6b879165928b1736695ac67e161851421d669a11830bbd",
+    "test_service.py": "7969ae3100b3a399d66e9392af20818e4981dbf931a09bc8612b19fb7971ac1a",
+    "CONTRACT.md": "c51335ae9f2461f4f0c4e169c4a44cd0f0580671c8db97204fb2d98593841c26",
+    "README.md": "12e84e5c5d373fd84a253a687ac70a9ce204b9231872c8ec4e74726495b76c2f"
+  },
+  "final_sha256": {
+    "service.py": "3a1e7c78d106bd409754f1d60401545a1da825a8f2bbd2e0886c6452cefd08e3",
+    "provider.py": "bc49b85efdec12762f6b879165928b1736695ac67e161851421d669a11830bbd",
+    "test_service.py": "7969ae3100b3a399d66e9392af20818e4981dbf931a09bc8612b19fb7971ac1a",
+    "CONTRACT.md": "c51335ae9f2461f4f0c4e169c4a44cd0f0580671c8db97204fb2d98593841c26",
+    "README.md": "ede4b5f9329316ad1727fddbcc10f543b5f6a36d48e2377768d72a96efd9ff6e"
+  },
+  "post_review_changed_files": [
+    "README.md"
+  ],
+  "post_review_tests_rerun": false,
+  "post_review_note": "Antigravity corrected only README confirmation wording. Service and tests retain the exact tested hashes."
+}

@@ -1,0 +1,14 @@
+Use the safe-api-tool-calls skill to repair this existing local refund adapter.
+Read the skill and relevant references, inspect CONTRACT.md, provider.py,
+service.py and the current tests, and implement the contract with the smallest
+coherent change. The important problems are a response lost after a refund,
+stable operation identity across retries and repeated calls, changed amounts,
+invalid money inputs, confirmation, and uncertain outcomes.
+
+Use only Python's standard library and local synthetic provider calls. Preserve
+the public interface, provider.py and CONTRACT.md. Add meaningful tests, run
+`python3 -m unittest discover -v`, and write a short README with the actual
+results and the in-memory guarantee's limits. Do not deploy, access cloud
+resources, install packages or read credentials. All design decisions needed
+for this bounded exercise are in CONTRACT.md. In your final response, name the
+skill file and relevant references you used and summarize actual test results.

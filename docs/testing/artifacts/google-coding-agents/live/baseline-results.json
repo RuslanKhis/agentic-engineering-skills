@@ -1,0 +1,30 @@
+{
+  "baseline": {
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "-m",
+      "unittest",
+      "discover",
+      "-v"
+    ],
+    "exit_code": 0
+  },
+  "baseline-heldout": {
+    "command": [
+      "/opt/homebrew/bin/python3.12",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "<DESIGN>/acceptance",
+      "-v"
+    ],
+    "exit_code": 1
+  },
+  "source_sha256": {
+    "CONTRACT.md": "c51335ae9f2461f4f0c4e169c4a44cd0f0580671c8db97204fb2d98593841c26",
+    "provider.py": "bc49b85efdec12762f6b879165928b1736695ac67e161851421d669a11830bbd",
+    "service.py": "bd44ff19d4d3ee6a275e75bae9b2a5d6641f6283951abd14434f266d3fc04f88",
+    "test_service.py": "54d6d23f44af7e84ab614917e4362c566fafaccb1ecd288c3059f7c08228e861"
+  }
+}

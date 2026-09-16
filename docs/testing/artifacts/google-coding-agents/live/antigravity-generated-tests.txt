@@ -1,0 +1,26 @@
+test_previously_dispatched_called_with_confirmed_false_returns_stored_result (test_service.ConfirmationTests.test_previously_dispatched_called_with_confirmed_false_returns_stored_result) ... ok
+test_unconfirmed_does_not_block_later_confirmed_dispatch (test_service.ConfirmationTests.test_unconfirmed_does_not_block_later_confirmed_dispatch) ... ok
+test_unconfirmed_returns_cancelled_with_zero_provider_calls (test_service.ConfirmationTests.test_unconfirmed_returns_cancelled_with_zero_provider_calls) ... ok
+test_success_keeps_public_contract (test_service.ExistingTests.test_success_keeps_public_contract) ... ok
+test_changed_amount_on_dispatched_id_raises_value_error (test_service.IdempotencyAndLedgerTests.test_changed_amount_on_dispatched_id_raises_value_error) ... ok
+test_repeating_completed_operation_returns_stored_without_dispatch (test_service.IdempotencyAndLedgerTests.test_repeating_completed_operation_returns_stored_without_dispatch) ... ok
+test_repeating_rejected_operation_returns_stored_without_dispatch (test_service.IdempotencyAndLedgerTests.test_repeating_rejected_operation_returns_stored_without_dispatch) ... ok
+test_repeating_unknown_operation_returns_stored_without_dispatch (test_service.IdempotencyAndLedgerTests.test_repeating_unknown_operation_returns_stored_without_dispatch) ... ok
+test_repeating_with_equivalent_amount_spellings (test_service.IdempotencyAndLedgerTests.test_repeating_with_equivalent_amount_spellings) ... ok
+test_returned_result_is_isolated_from_mutation (test_service.IdempotencyAndLedgerTests.test_returned_result_is_isolated_from_mutation) ... ok
+test_invalid_amount_formats_raise_value_error (test_service.InputValidationTests.test_invalid_amount_formats_raise_value_error) ... ok
+test_invalid_operation_id_types_and_formats (test_service.InputValidationTests.test_invalid_operation_id_types_and_formats) ... ok
+test_valid_amount_boundaries (test_service.InputValidationTests.test_valid_amount_boundaries) ... ok
+test_valid_operation_id_boundaries (test_service.InputValidationTests.test_valid_operation_id_boundaries) ... ok
+test_replay_key_stays_internal_and_keys_match_contract (test_service.ReplayKeyPrivacyTests.test_replay_key_stays_internal_and_keys_match_contract) ... ok
+test_commit_then_timeout_followed_by_rejection_is_unknown (test_service.RetryAndRecoveryTests.test_commit_then_timeout_followed_by_rejection_is_unknown) ... ok
+test_first_attempt_rejection_is_terminal_rejected_without_retry (test_service.RetryAndRecoveryTests.test_first_attempt_rejection_is_terminal_rejected_without_retry) ... ok
+test_lost_response_after_commit_recovered_with_single_effect (test_service.RetryAndRecoveryTests.test_lost_response_after_commit_recovered_with_single_effect) ... ok
+test_timeout_before_commit_retried_and_succeeds (test_service.RetryAndRecoveryTests.test_timeout_before_commit_retried_and_succeeds) ... ok
+test_timeout_then_rejection_is_unknown (test_service.RetryAndRecoveryTests.test_timeout_then_rejection_is_unknown) ... ok
+test_two_timeouts_is_unknown (test_service.RetryAndRecoveryTests.test_two_timeouts_is_unknown) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 0.001s
+
+OK

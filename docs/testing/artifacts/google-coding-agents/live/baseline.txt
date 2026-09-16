@@ -1,0 +1,6 @@
+test_success_keeps_public_contract (test_service.ExistingTests.test_success_keeps_public_contract) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.000s
+
+OK

@@ -168,6 +168,10 @@ Do not flatten the files into one folder. See the
 
 The [Google compatibility check](../testing/google-coding-agents.md) records the
 installer versions, source-file comparisons and native Gemini discovery results.
-Google-client authentication, skill activation and generated-code quality need
-separate runs. The earlier [Claude Code and Codex trials](../testing/updated-skills-laptop.md)
-remain evidence for those clients only.
+A subsequent [Antigravity IDE trial](../testing/google-client-generation.md) used
+Gemini 3.8 Flash to load `safe-api-tool-calls`, repair a local adapter and pass
+21 project tests plus nine independent checks. This is one specialist exercise;
+the separate Antigravity app and CLI still need their own generation trials.
+Gemini CLI generation was attempted but awaits sign-in. The earlier
+[Claude Code and Codex trials](../testing/updated-skills-laptop.md) remain evidence
+for those clients only.

@@ -1,0 +1,14 @@
+test_changed_payload_does_not_dispatch (test_acceptance.RefundAcceptance.test_changed_payload_does_not_dispatch) ... ok
+test_contract_valid_money_is_exact_and_canonical (test_acceptance.RefundAcceptance.test_contract_valid_money_is_exact_and_canonical) ... ok
+test_first_rejection_is_terminal_and_repeated_call_is_cached (test_acceptance.RefundAcceptance.test_first_rejection_is_terminal_and_repeated_call_is_cached) ... ok
+test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) ... ok
+test_later_rejection_preserves_earlier_uncertainty (test_acceptance.RefundAcceptance.test_later_rejection_preserves_earlier_uncertainty) ... ok
+test_lost_reply_reuses_key_and_produces_one_effect (test_acceptance.RefundAcceptance.test_lost_reply_reuses_key_and_produces_one_effect) ... ok
+test_no_confirmation_means_no_attempt (test_acceptance.RefundAcceptance.test_no_confirmation_means_no_attempt) ... ok
+test_repeated_applied_operation_returns_original_receipt (test_acceptance.RefundAcceptance.test_repeated_applied_operation_returns_original_receipt) ... ok
+test_unknown_repeat_uses_record_without_more_dispatch (test_acceptance.RefundAcceptance.test_unknown_repeat_uses_record_without_more_dispatch) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.001s
+
+OK

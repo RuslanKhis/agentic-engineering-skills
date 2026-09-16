@@ -1,0 +1,293 @@
+test_changed_payload_does_not_dispatch (test_acceptance.RefundAcceptance.test_changed_payload_does_not_dispatch) ... FAIL
+test_contract_valid_money_is_exact_and_canonical (test_acceptance.RefundAcceptance.test_contract_valid_money_is_exact_and_canonical) ... ok
+test_first_rejection_is_terminal_and_repeated_call_is_cached (test_acceptance.RefundAcceptance.test_first_rejection_is_terminal_and_repeated_call_is_cached) ... FAIL
+test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) ... 
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount='None') ... ERROR
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount='True') ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount='1') ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount='1.0') ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'0'") ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'-1'") ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'+1'") ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'Infinity'") ... ERROR
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'1e2'") ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="' 1.00'") ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'1.001'") ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'10000.01'") ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'999999999999999999999999999999999'") ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'١.00'") ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (operation_id='') ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (operation_id=None) ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (operation_id='bad id') ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (operation_id='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa') ... FAIL
+  test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (operation_id='é') ... FAIL
+test_later_rejection_preserves_earlier_uncertainty (test_acceptance.RefundAcceptance.test_later_rejection_preserves_earlier_uncertainty) ... FAIL
+test_lost_reply_reuses_key_and_produces_one_effect (test_acceptance.RefundAcceptance.test_lost_reply_reuses_key_and_produces_one_effect) ... FAIL
+test_no_confirmation_means_no_attempt (test_acceptance.RefundAcceptance.test_no_confirmation_means_no_attempt) ... FAIL
+test_repeated_applied_operation_returns_original_receipt (test_acceptance.RefundAcceptance.test_repeated_applied_operation_returns_original_receipt) ... FAIL
+test_unknown_repeat_uses_record_without_more_dispatch (test_acceptance.RefundAcceptance.test_unknown_repeat_uses_record_without_more_dispatch) ... FAIL
+
+======================================================================
+ERROR: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount='None')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 63, in test_invalid_amounts_and_ids_never_reach_provider
+    RefundService(provider).refund("order-6", amount)
+  File "<DESIGN>/project/service.py", line 13, in refund
+    amount_minor = round(float(amount) * 100)
+                         ^^^^^^^^^^^^^
+TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+======================================================================
+ERROR: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'Infinity'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 63, in test_invalid_amounts_and_ids_never_reach_provider
+    RefundService(provider).refund("order-6", amount)
+  File "<DESIGN>/project/service.py", line 13, in refund
+    amount_minor = round(float(amount) * 100)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+OverflowError: cannot convert float infinity to integer
+
+======================================================================
+FAIL: test_changed_payload_does_not_dispatch (test_acceptance.RefundAcceptance.test_changed_payload_does_not_dispatch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 32, in test_changed_payload_does_not_dispatch
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_first_rejection_is_terminal_and_repeated_call_is_cached (test_acceptance.RefundAcceptance.test_first_rejection_is_terminal_and_repeated_call_is_cached)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 94, in test_first_rejection_is_terminal_and_repeated_call_is_cached
+    self.assertEqual(original["status"], "rejected")
+AssertionError: 'applied' != 'rejected'
+- applied
++ rejected
+
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount='True')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount='1')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount='1.0')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'0'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'-1'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'+1'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'1e2'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="' 1.00'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'1.001'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'10000.01'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'999999999999999999999999999999999'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (amount="'١.00'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 62, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (operation_id='')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 68, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (operation_id=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 68, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (operation_id='bad id')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 68, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (operation_id='aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 68, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_invalid_amounts_and_ids_never_reach_provider (test_acceptance.RefundAcceptance.test_invalid_amounts_and_ids_never_reach_provider) (operation_id='é')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 68, in test_invalid_amounts_and_ids_never_reach_provider
+    with self.assertRaises(ValueError):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_later_rejection_preserves_earlier_uncertainty (test_acceptance.RefundAcceptance.test_later_rejection_preserves_earlier_uncertainty)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 39, in test_later_rejection_preserves_earlier_uncertainty
+    self.assertEqual(result["status"], "unknown")
+AssertionError: 'rejected' != 'unknown'
+- rejected
++ unknown
+
+
+======================================================================
+FAIL: test_lost_reply_reuses_key_and_produces_one_effect (test_acceptance.RefundAcceptance.test_lost_reply_reuses_key_and_produces_one_effect)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 15, in test_lost_reply_reuses_key_and_produces_one_effect
+    self.assertEqual(provider.calls[0], provider.calls[1])
+AssertionError: Tuples differ: ('order-1', 1234, '899199bd-6072-4198-a5fa-7fe55394e57d') != ('order-1', 1234, 'bd472c87-b3b3-4325-bb07-c11512086bdc')
+
+First differing element 2:
+'899199bd-6072-4198-a5fa-7fe55394e57d'
+'bd472c87-b3b3-4325-bb07-c11512086bdc'
+
+- ('order-1', 1234, '899199bd-6072-4198-a5fa-7fe55394e57d')
++ ('order-1', 1234, 'bd472c87-b3b3-4325-bb07-c11512086bdc')
+
+======================================================================
+FAIL: test_no_confirmation_means_no_attempt (test_acceptance.RefundAcceptance.test_no_confirmation_means_no_attempt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 85, in test_no_confirmation_means_no_attempt
+    self.assertEqual(result["status"], "cancelled")
+AssertionError: 'applied' != 'cancelled'
+- applied
++ cancelled
+
+
+======================================================================
+FAIL: test_repeated_applied_operation_returns_original_receipt (test_acceptance.RefundAcceptance.test_repeated_applied_operation_returns_original_receipt)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 24, in test_repeated_applied_operation_returns_original_receipt
+    self.assertEqual(original, repeated)
+AssertionError: {'sta[26 chars]n_id': 'order-2', 'amount_minor': 100, 'refund_id': 'refund-1'} != {'sta[26 chars]n_id': 'order-2', 'amount_minor': 100, 'refund_id': 'refund-2'}
+  {'amount_minor': 100,
+   'operation_id': 'order-2',
+-  'refund_id': 'refund-1',
+?                       ^
+
++  'refund_id': 'refund-2',
+?                       ^
+
+   'status': 'applied'}
+
+======================================================================
+FAIL: test_unknown_repeat_uses_record_without_more_dispatch (test_acceptance.RefundAcceptance.test_unknown_repeat_uses_record_without_more_dispatch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<DESIGN>/acceptance/test_acceptance.py", line 50, in test_unknown_repeat_uses_record_without_more_dispatch
+    self.assertEqual(original["status"], "unknown")
+AssertionError: 'rejected' != 'unknown'
+- rejected
++ unknown
+
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.003s
+
+FAILED (failures=24, errors=2)

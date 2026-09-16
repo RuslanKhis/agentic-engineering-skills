@@ -795,6 +795,12 @@ for Gemini CLI, Antigravity and Antigravity CLI; the [Google setup and verificat
 records the native discovery checks and separates them from the Claude/Codex
 code-generation results above.
 
+An [Antigravity IDE trial](docs/testing/google-client-generation.md) also used
+Gemini 3.8 Flash to repair a local refund adapter with `safe-api-tool-calls`.
+Its 21 project tests and nine independent checks passed. Gemini CLI generation
+was attempted but awaits sign-in; the standalone Antigravity app and CLI remain
+untested for generation.
+
 ### Updating and troubleshooting
 
 The [Skills CLI](https://github.com/vercel-labs/skills/blob/main/src/cli.ts)
