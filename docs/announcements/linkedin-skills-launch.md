@@ -1,4 +1,4 @@
-I’ve turned the practical engineering guidance from my upcoming book into 12 open-source skills for Claude Code, Codex, Google Gemini CLI and Antigravity.
+I’ve turned the practical engineering guidance from my upcoming book into 12 open-source skills for Claude Code, Codex and Google Antigravity.
 
 They help your coding agent build and improve applications using Google ADK and Google Cloud.
 
@@ -18,7 +18,9 @@ The collection includes implementation recipes, reusable helpers, failure scenar
 
 We tested installation and code generation through real Claude Code and Codex sessions. The current revision passed 476 repository and SDK checks; two generated examples passed another 71 tests after independent review and repairs.
 
-We also tested Antigravity IDE with Gemini: it used the API-safety skill to repair a local adapter and passed 21 project tests plus nine independent checks. All twelve skills are discoverable in Gemini CLI; code generation through that CLI still needs a separate run.
+We also tested Antigravity IDE with Gemini: it used the API-safety skill to repair a local adapter and passed 21 project tests plus nine independent checks. Gemini CLI discovers all twelve skills, but Google rejected our consumer-account generation attempt. Its supported enterprise and paid API-key routes remain untested for generation.
+
+For Google consumer accounts, use Antigravity. Google has retired Gemini CLI access through Code Assist for individuals, AI Pro and AI Ultra: https://developers.google.com/gemini-code-assist/docs/deprecations/code-assist-individuals
 
 You can use the skills without reading the book first. They’re free, MIT-licensed, and designed to work in your own projects.
 

@@ -4,10 +4,9 @@
 
 <p align="center">
   <a href="#getting-started">Getting started</a> ·
-  <a href="docs/integrations/google-coding-agents.md">Google coding agents</a> ·
   <a href="#the-skills">The skills</a> ·
-  <a href="#using-these-with-googles-agents-cli">Working with Agents CLI</a> ·
-  <a href="#using-these-with-matt-pococks-skills">Working with Matt's skills</a> ·
+  <a href="#using-skills-together">Using skills together</a> ·
+  <a href="#compatibility--checks">What has been tested</a> ·
   <a href="#about-the-book">About the book</a>
 </p>
 
@@ -33,17 +32,9 @@ skills help it apply the book's engineering practices to your own application:
 handle failed tool calls, add memory, connect a browser interface, test agent
 behaviour, or prepare a deployment.
 
-Start with one command and describe the change you need:
-
-```text
-/adk-engineer I need to add memory to my Google ADK agent.
-```
-
-That is the Claude Code form. In Codex, use `$adk-engineer` with the same request.
-In Gemini CLI or Antigravity, you can say “Use the adk-engineer skill to add
-memory to my Google ADK agent.” See the [Google setup guide](docs/integrations/google-coding-agents.md).
-The entry skill selects the relevant specialist and follows its workflow through
-the requested work. You can also call a specialist directly.
+Start with **adk-engineer** and describe the change you need. It selects the
+relevant specialist and follows its workflow through the requested work.
+If you already know the topic, you can call a specialist directly.
 
 You do not need the book or its example repository to use the skills. Install
 them in the project you want to work on. They guide your **coding agent**;
@@ -71,12 +62,22 @@ From your application's project directory, run:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*'
 ```
 
-This selects **all twelve skills**: `adk-engineer` and the eleven chapter
-specialists. Choose your coding agent when prompted. The default installation
-belongs to the current project. Keep the quotes around `'*'` so your shell
-passes it to the installer unchanged.
+Choose your coding agent when prompted. This installs **all twelve skills**
+for the current project: `adk-engineer` and the eleven specialists it uses.
+Keep the quotes around `'*'` so your shell passes it unchanged.
 
-To select a particular coding agent explicitly, use one of these commands:
+**Choosing a Google client?** Use Antigravity for Google consumer accounts.
+Since 18 June 2026, Gemini CLI no longer serves Code Assist for individuals,
+Google AI Pro or Google AI Ultra through Google sign-in. Gemini CLI remains
+available through Code Assist Standard/Enterprise and supported paid API-key
+routes. See the [Google setup guide](docs/integrations/google-coding-agents.md),
+[Google's account guidance](https://developers.google.com/gemini-code-assist/docs/deprecations/code-assist-individuals)
+and [supported Gemini CLI access](https://developers.googleblog.com/en/an-important-update-transitioning-gemini-cli-to-antigravity-cli/).
+
+<details>
+<summary>Choose a client explicitly, install globally, or select one specialist</summary>
+
+To select a particular coding agent, use one of these project commands:
 
 ```bash
 # Claude Code
@@ -85,23 +86,26 @@ npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*' -a claud
 # Codex
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*' -a codex
 
-# Google Gemini CLI
-npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*' -a gemini-cli
-
 # Google Antigravity app or IDE
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*' -a antigravity
 
 # Google Antigravity CLI (agy)
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*' -a antigravity-cli
+
+# Gemini CLI with supported Standard/Enterprise or paid API-key access
+npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*' -a gemini-cli
 ```
 
-The existing `skills/<name>/SKILL.md` layout is supported by the
-[Skills CLI](https://github.com/vercel-labs/skills#readme). Each specialist brings
-its own references and helpers. The entry skill relies on those installed
-specialists, so installing only `adk-engineer` does not give you the whole toolkit.
+For Claude Code, Codex or Gemini CLI, add `-g` to install for your user account
+across projects. For example:
 
-<details>
-<summary>Install one specialist, install for all projects, or inspect the list</summary>
+```bash
+npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*' -a codex -g
+```
+
+Antigravity's app, IDE and CLI document different global directories. Use the
+project commands above or follow the [global directory guidance](docs/integrations/google-coding-agents.md#installation-scope)
+for your client; the tested Skills CLI's `-g` destination differs from those paths.
 
 If you already know the topic, install that specialist on its own:
 
@@ -109,16 +113,8 @@ If you already know the topic, install that specialist on its own:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill adk-memory-architecture
 ```
 
-For Claude Code, Codex or Gemini CLI, add `-g` to install for your user account
-across projects. For example:
-
-```bash
-npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*' -a gemini-cli -g
-```
-
-Antigravity's app, IDE and CLI document different global directories. Use the
-project commands above or follow the [global directory guidance](docs/integrations/google-coding-agents.md#installation-scope)
-for your client; the tested Skills CLI's `-g` destination differs from those paths.
+Each specialist includes its own references and helpers. Installing only
+`adk-engineer` does not give you the specialists it needs to carry out the work.
 
 To see the available skills without installing them:
 
@@ -131,28 +127,33 @@ agents can be selected in the installer; their invocation interface may differ.
 
 </details>
 
-### 2. Ask your coding agent
+### 2. Open your coding agent
 
-Open your project in the coding agent after installation. If it was already
-running and the new skills do not appear, restart the session.
+Open your project after installation. If the coding agent was already running
+and the new skills do not appear, restart its session. Type skill requests
+**in the coding agent's chat**:
 
-| Coding agent | Entry command | Direct memory command |
+| Coding agent | Start with | Choose a specialist directly |
 | --- | --- | --- |
 | Claude Code | `/adk-engineer` | `/adk-memory-architecture` |
 | Codex | `$adk-engineer` | `$adk-memory-architecture` |
-| Gemini CLI | `Use the adk-engineer skill to…` | `Use the adk-memory-architecture skill to…` |
 | Antigravity app / IDE / CLI | `Use the adk-engineer skill to…` | `Use the adk-memory-architecture skill to…` |
+| Gemini CLI, with supported access | `Use the adk-engineer skill to…` | `Use the adk-memory-architecture skill to…` |
 
-Type these **in your coding agent's chat**. Claude Code supports `/name` for
-installed skills; Codex supports explicit skill mentions using `$name`. See the respective
+<details>
+<summary>How skill activation differs between clients</summary>
+
+Claude Code supports `/name` for installed skills; Codex supports explicit
+skill mentions using `$name`. See the respective
 [Claude Code](https://code.claude.com/docs/en/skills) and
-[Codex](https://developers.openai.com/codex/skills/) documentation for details.
+[Codex](https://developers.openai.com/codex/skills/) documentation.
 
 Gemini CLI activates skills in response to the request; use `/skills list` to
 check discovery and `/skills reload` after changes. Installing these skills
 does not create `/adk-engineer` as a Gemini CLI command. Antigravity 2.0 and its
-CLI also support named skill commands such as `/adk-engineer`; mentioning the skill by name works across
-its app, IDE and CLI interfaces. Follow any activation prompt the client shows.
+CLI also support named skill commands such as `/adk-engineer`; mentioning the
+skill by name works across its app, IDE and CLI interfaces. Follow any
+activation prompt the client shows.
 [Gemini skill usage](https://geminicli.com/docs/cli/using-agent-skills/),
 [Antigravity invocation](https://www.antigravity.google/docs/migration/workflows-to-skills/).
 
@@ -161,7 +162,9 @@ project's existing code and configuration when they run. Their descriptions also
 allow a supporting coding agent to select them from a natural-language request;
 an explicit command makes your intended skill clear.
 
-### 3. Try a concrete request
+</details>
+
+### 3. Ask for a useful change
 
 For example, in Claude Code:
 
@@ -171,47 +174,17 @@ preferred language between sessions. Keep our existing database and
 include a way for the user to forget the preference.
 ```
 
-In Codex:
+In Codex, replace `/adk-engineer` with `$adk-engineer`. In Antigravity or
+Gemini CLI, start with “Use the adk-engineer skill to” and keep the request.
 
-```text
-$adk-engineer Add memory so this support agent can remember a user's
-preferred language between sessions. Keep our existing database and
-include a way for the user to forget the preference.
-```
+The entry skill selects `adk-memory-architecture`, inspects how your application
+identifies users and stores state, and chooses an appropriate design. For
+implementation work, expect a project change, relevant checks and a clear account
+of what remains unverified. For a design question, ask for a design.
 
-In Gemini CLI or Antigravity:
-
-```text
-Use the adk-engineer skill to add memory so this support agent can remember
-a user's preferred language between sessions. Keep our existing database
-and include a way for the user to forget the preference.
-```
-
-The entry skill starts with `adk-memory-architecture`. It asks the coding agent
-to inspect how your application identifies users and stores state, then choose
-an appropriate design. An exact preference may belong in a profile record;
-conversation history, facts across sessions and document retrieval have
-different requirements. “Add memory” is enough to start that investigation.
-
-For implementation work, the intended result is a change to your project with
-relevant checks and a clear account of what remains unverified. For a design
-question, ask for a design. You stay in control of the scope.
-
-Here are a few other starting points; use `$` in place of `/` in Codex:
-
-```text
-/adk-engineer Our agent sometimes repeats a refund after a timeout.
-Inspect the tool and fix the retry behaviour.
-
-/adk-engineer Help me choose where to host this agent on Google Cloud.
-Start with a deployment plan.
-
-/adk-engineer Connect this ADK agent to our existing React interface
-and show tool progress while a response streams.
-
-/adk-engineer Add repeatable tests for tool selection and verify that
-one user's session cannot read another user's history.
-```
+Find **three practical examples for every skill** in the contents below.
+For installation problems or later changes, see
+[updating and troubleshooting](#updating-and-troubleshooting).
 
 <p align="center">
   <img src="docs/editorial/section-break.svg" alt="" width="240">
@@ -225,15 +198,30 @@ Choose a skill by the problem you need to solve. Each entry below explains
 when it helps, what to ask for, and the command that selects it. The numbers
 follow Chapters 0–10 of the book; no chapter reading is required.
 
+| What you need | Skill |
+| --- | --- |
+| Help choosing an approach or combining concerns | [adk-engineer](#adk-engineer) |
+| Sequential steps, parallel work or bounded loops | [adk-workflow-design](#adk-workflow-design) |
+| Reliable API calls and protection against duplicate actions | [safe-api-tool-calls](#safe-api-tool-calls) |
+| Usage limits, repeated-tool protection or human approval | [adk-operational-guardrails](#adk-operational-guardrails) |
+| A hosting choice or deployment preparation | [deploy-adk-on-google-cloud](#deploy-adk-on-google-cloud) |
+| Faster replies and lower model usage | [optimise-adk-on-google-cloud](#optimise-adk-on-google-cloud) |
+| A browser interface, streaming or tool progress | [adk-frontend-integration](#adk-frontend-integration) |
+| Conversation history, memory or document retrieval | [adk-memory-architecture](#adk-memory-architecture) |
+| Repeatable tests and trustworthy evaluation results | [adk-agent-evaluation](#adk-agent-evaluation) |
+| Sensitive-data controls across prompts, tools and replies | [protect-adk-sensitive-data](#protect-adk-sensitive-data) |
+| Tool identity, credentials or per-user OAuth | [adk-tool-auth-and-secrets](#adk-tool-auth-and-secrets) |
+| Controlled natural-language analytics and SQL execution | [adk-sql-agent-engineering](#adk-sql-agent-engineering) |
+
 **Copy any example into your coding agent's chat.** Examples use Claude Code's
 `/` prefix. In Codex, replace only the leading `/` with `$`; keep the skill name
 and request the same. In Gemini CLI or an Antigravity IDE integration, replace
 `/skill-name` with “Use the skill-name skill to” and keep the request.
 Antigravity 2.0 and its CLI also support the slash form. Adapt the scenario to your project.
 
-### Start here · Choose the right specialist
+### [adk-engineer](skills/adk-engineer/SKILL.md)
 
-**[adk-engineer](skills/adk-engineer/SKILL.md)**
+*Start here · Choose the right specialist.*
 
 Use this when you can describe the outcome but are unsure which skill fits.
 It inspects your project, selects the relevant installed specialist, and follows
@@ -244,6 +232,9 @@ their instructions as needed.
 **Invoke:** Claude Code `/adk-engineer` · Codex `$adk-engineer`
 
 Gemini CLI / Antigravity: “Use the adk-engineer skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /adk-engineer Add memory so our support agent remembers a user's preferred
@@ -262,13 +253,15 @@ Plan how to connect them with streamed replies and private user sessions.
 Identify the code and tests we will need.
 ```
 
+</details>
+
 ### I. Foundations & safeguards
 
 *Give the system a structure, then give it boundaries.*
 
-**00** &nbsp; **[adk-workflow-design](skills/adk-workflow-design/SKILL.md)**
+#### [adk-workflow-design](skills/adk-workflow-design/SKILL.md)
 
-*Arrange the work and make sure it finishes.*
+*00 · Arrange the work and make sure it finishes.*
 
 Use this to decide which steps run in order, which can run together, and when
 a refinement loop should stop. It helps implement or repair the handoffs
@@ -278,6 +271,9 @@ a focused code change, or tests that show each step produces the required output
 **Invoke:** Claude Code `/adk-workflow-design` · Codex `$adk-workflow-design`
 
 Gemini CLI / Antigravity: “Use the adk-workflow-design skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /adk-workflow-design Build a workflow that researches a topic, drafts an
@@ -297,9 +293,11 @@ Limit them to three revision rounds and return an explicit result when
 the reviewer still rejects the draft.
 ```
 
-**01** &nbsp; **[safe-api-tool-calls](skills/safe-api-tool-calls/SKILL.md)**
+</details>
 
-*Handle unreliable APIs without repeating an action by accident.*
+#### [safe-api-tool-calls](skills/safe-api-tool-calls/SKILL.md)
+
+*01 · Handle unreliable APIs without repeating an action by accident.*
 
 Use this when a tool calls an external service that can fail, hang or return
 an unclear result. It helps add selective retries, time limits and protection
@@ -310,6 +308,9 @@ cannot yet be confirmed.
 **Invoke:** Claude Code `/safe-api-tool-calls` · Codex `$safe-api-tool-calls`
 
 Gemini CLI / Antigravity: “Use the safe-api-tool-calls skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /safe-api-tool-calls Our order lookup fails on occasional 429 and 503
@@ -329,9 +330,11 @@ connection drops. Add an uncertain-result path and a status check so
 the agent does not blindly submit another booking.
 ```
 
-**02** &nbsp; **[adk-operational-guardrails](skills/adk-operational-guardrails/SKILL.md)**
+</details>
 
-*Put limits and approval checks around agent actions.*
+#### [adk-operational-guardrails](skills/adk-operational-guardrails/SKILL.md)
+
+*02 · Put limits and approval checks around agent actions.*
 
 Use this when an agent repeats tools, consumes too much model usage, runs too
 long, or needs a person to approve an action. It helps put enforcement in the
@@ -342,6 +345,9 @@ and application controls for reducing spend.
 **Invoke:** Claude Code `/adk-operational-guardrails` · Codex `$adk-operational-guardrails`
 
 Gemini CLI / Antigravity: “Use the adk-operational-guardrails skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /adk-operational-guardrails Our agent keeps calling the same failing tool.
@@ -361,13 +367,15 @@ cancels an order. Bind approval to that specific cancellation and test
 rejection, repeated approval and attempted execution before approval.
 ```
 
+</details>
+
 ### II. From runtime to interface
 
 *Find a home for the agent, refine its performance, and open the conversation.*
 
-**03** &nbsp; **[deploy-adk-on-google-cloud](skills/deploy-adk-on-google-cloud/SKILL.md)**
+#### [deploy-adk-on-google-cloud](skills/deploy-adk-on-google-cloud/SKILL.md)
 
-*Choose a host and prepare the files needed to run there.*
+*03 · Choose a host and prepare the files needed to run there.*
 
 Use this to compare Cloud Run, managed Agent Runtime and Google Kubernetes
 Engine (GKE), or adapt an existing project for your chosen host. It helps
@@ -378,6 +386,9 @@ deployment files before doing any cloud deployment.
 **Invoke:** Claude Code `/deploy-adk-on-google-cloud` · Codex `$deploy-adk-on-google-cloud`
 
 Gemini CLI / Antigravity: “Use the deploy-adk-on-google-cloud skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /deploy-adk-on-google-cloud We have an ADK agent behind a custom FastAPI
@@ -397,9 +408,11 @@ runtime identity, startup and readiness probes, configuration and session
 storage. Report specific changes with verification steps.
 ```
 
-**04** &nbsp; **[optimise-adk-on-google-cloud](skills/optimise-adk-on-google-cloud/SKILL.md)**
+</details>
 
-*Find where time and model usage go before changing the system.*
+#### [optimise-adk-on-google-cloud](skills/optimise-adk-on-google-cloud/SKILL.md)
+
+*04 · Find where time and model usage go before changing the system.*
 
 Use this for slow replies, growing token usage, startup delays or problems
 under concurrent load. It traces the request through tools, model calls,
@@ -410,6 +423,9 @@ when the project has no measurements yet.
 **Invoke:** Claude Code `/optimise-adk-on-google-cloud` · Codex `$optimise-adk-on-google-cloud`
 
 Gemini CLI / Antigravity: “Use the optimise-adk-on-google-cloud skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /optimise-adk-on-google-cloud Our replies take about twelve seconds.
@@ -429,9 +445,11 @@ request and under concurrent load. Review our startup path, configuration
 and supplied traces, then propose changes with a measurement plan.
 ```
 
-**05** &nbsp; **[adk-frontend-integration](skills/adk-frontend-integration/SKILL.md)**
+</details>
 
-*Connect the agent to the person using it.*
+#### [adk-frontend-integration](skills/adk-frontend-integration/SKILL.md)
+
+*05 · Connect the agent to the person using it.*
 
 Use this to connect an existing browser interface to an ADK agent through a
 JSON API or a streaming interface using AG-UI and CopilotKit. It helps define
@@ -442,6 +460,9 @@ integration, an interface design, or a repair to the conversation flow.
 **Invoke:** Claude Code `/adk-frontend-integration` · Codex `$adk-frontend-integration`
 
 Gemini CLI / Antigravity: “Use the adk-frontend-integration skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /adk-frontend-integration Connect our existing React chat to this ADK
@@ -461,13 +482,15 @@ answer arrives, and errors after partial text look like success.
 Fix both cases and add tests for the actual event sequence.
 ```
 
+</details>
+
 ### III. Memory, evidence & care
 
 *Decide what the system knows, how to test it, and what it must protect.*
 
-**06** &nbsp; **[adk-memory-architecture](skills/adk-memory-architecture/SKILL.md)**
+#### [adk-memory-architecture](skills/adk-memory-architecture/SKILL.md)
 
-*Remember the right information for the right person.*
+*06 · Remember the right information for the right person.*
 
 Use this when an agent needs to continue a conversation, remember facts across
 sessions, answer from approved documents, or look up structured history. It
@@ -478,6 +501,9 @@ settings, such as a preferred language, may belong in an ordinary profile record
 **Invoke:** Claude Code `/adk-memory-architecture` · Codex `$adk-memory-architecture`
 
 Gemini CLI / Antigravity: “Use the adk-memory-architecture skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /adk-memory-architecture Let users resume a conversation after the
@@ -497,9 +523,11 @@ share across sessions. Include correction, expiry and a forget action,
 with offline tests for consent denial and cross-user access.
 ```
 
-**07** &nbsp; **[adk-agent-evaluation](skills/adk-agent-evaluation/SKILL.md)**
+</details>
 
-*Test what the agent does as well as what it says.*
+#### [adk-agent-evaluation](skills/adk-agent-evaluation/SKILL.md)
+
+*07 · Test what the agent does as well as what it says.*
 
 Use this to catch regressions in tool selection, arguments, action order,
 stored effects and final answers. It helps write repeatable tests with a
@@ -510,6 +538,9 @@ executable tests, evaluation assets or evidence-backed findings.
 **Invoke:** Claude Code `/adk-agent-evaluation` · Codex `$adk-agent-evaluation`
 
 Gemini CLI / Antigravity: “Use the adk-agent-evaluation skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /adk-agent-evaluation Add deterministic tests through our ADK runner
@@ -529,9 +560,11 @@ but some tool failures were ignored. Audit the result files for missing
 cases, failed actions and answers that falsely claim success.
 ```
 
-**08** &nbsp; **[protect-adk-sensitive-data](skills/protect-adk-sensitive-data/SKILL.md)**
+</details>
 
-*Control what sensitive information reaches each part of the system.*
+#### [protect-adk-sensitive-data](skills/protect-adk-sensitive-data/SKILL.md)
+
+*08 · Control what sensitive information reaches each part of the system.*
 
 Use this when personal information or credentials could enter prompts, tools,
 conversation history, logs or public replies. It helps implement or review
@@ -542,6 +575,9 @@ change and tests showing what happens when screening rejects data or fails.
 **Invoke:** Claude Code `/protect-adk-sensitive-data` · Codex `$protect-adk-sensitive-data`
 
 Gemini CLI / Antigravity: “Use the protect-adk-sensitive-data skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /protect-adk-sensitive-data Add a Sensitive Data Protection boundary
@@ -561,13 +597,15 @@ finishes. Buffer the answer, apply the configured Model Armor checks,
 and test that blocked or uninspectable content is never released.
 ```
 
+</details>
+
 ### IV. Trust in practice
 
 *Secure the boundaries and work through a case study.*
 
-**09** &nbsp; **[adk-tool-auth-and-secrets](skills/adk-tool-auth-and-secrets/SKILL.md)**
+#### [adk-tool-auth-and-secrets](skills/adk-tool-auth-and-secrets/SKILL.md)
 
-*Give each tool the right identity and keep credentials out of the conversation.*
+*09 · Give each tool the right identity and keep credentials out of the conversation.*
 
 Use this when tools need private Google Cloud access, an application secret,
 or permission to act through a user's connected account. It helps separate
@@ -579,6 +617,9 @@ credential exposure.
 **Invoke:** Claude Code `/adk-tool-auth-and-secrets` · Codex `$adk-tool-auth-and-secrets`
 
 Gemini CLI / Antigravity: “Use the adk-tool-auth-and-secrets skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /adk-tool-auth-and-secrets Our tool loads a service-account key file.
@@ -598,9 +639,11 @@ calendar tool, including refresh and disconnect. Test locally that
 one user's session cannot select or use another user's credentials.
 ```
 
-**10** &nbsp; **[adk-sql-agent-engineering](skills/adk-sql-agent-engineering/SKILL.md)**
+</details>
 
-*Turn business questions into controlled, read-only analytics.*
+#### [adk-sql-agent-engineering](skills/adk-sql-agent-engineering/SKILL.md)
+
+*10 · Turn business questions into controlled, read-only analytics.*
 
 Use this to build or improve an agent that answers questions from a database.
 It helps route familiar questions to reviewed SQL templates, give the model
@@ -611,6 +654,9 @@ for correct answers and rejected queries, or an architecture review.
 **Invoke:** Claude Code `/adk-sql-agent-engineering` · Codex `$adk-sql-agent-engineering`
 
 Gemini CLI / Antigravity: “Use the adk-sql-agent-engineering skill to…”
+
+<details>
+<summary>Three practical examples</summary>
 
 ```text
 /adk-sql-agent-engineering Add a path for "What were monthly sales last
@@ -630,11 +676,20 @@ Enforce read-only queries, allowed tables and resource limits in code,
 and add tests proving rejected queries never reach the database.
 ```
 
+</details>
+
 <p align="center">
   <img src="docs/editorial/section-break.svg" alt="" width="240">
 </p>
 
-## Using These with Google's Agents CLI
+## Using Skills Together
+
+*Bring complementary instructions to the same task.*
+
+Both collections below are optional. Install them in the same project or user
+scope, then name the skills you want your coding agent to combine.
+
+### Using These with Google's Agents CLI
 
 *Bring the project tools and the application design to the same task.*
 
@@ -643,7 +698,8 @@ project templates and seven skills for scaffolding, writing ADK code, evaluating
 deploying, publishing and observing agents. Its recipes also cover capabilities
 such as memory, tool approval and credentials. This toolkit adds detailed
 guidance for adapting those capabilities to your application's data, tools,
-identity boundaries and tests.
+identity boundaries and tests. Agents CLI runs alongside the coding client
+you use to work on the application.
 
 Use Google's workflow when you want an Agents CLI project. Bring in an Agentic
 Engineering specialist for the particular feature or engineering decision:
@@ -692,11 +748,7 @@ for feature development, evaluation and deployment planning. That guide also
 explains how Matt's `tdd` or `code-review` can supply the development method
 alongside both collections.
 
-<p align="center">
-  <img src="docs/editorial/section-break.svg" alt="" width="240">
-</p>
-
-## Using These with Matt Pocock's Skills
+### Using These with Matt Pocock's Skills
 
 *Bring a development method and the ADK guidance to the same task.*
 
@@ -736,12 +788,7 @@ to this agent. Test user isolation and forgetting through our existing
 storage interface.
 ```
 
-In Codex:
-
-```text
-$adk-engineer Use $tdd to add cross-session memory to this agent.
-Test user isolation and forgetting through our existing storage interface.
-```
+In Codex, use `$adk-engineer` and mention `$tdd` in the same request.
 
 The development method supplies the test-first loop; the memory specialist
 supplies the ADK and data-lifecycle guidance. This is composition through the
@@ -752,56 +799,9 @@ The result still depends on the coding agent following both sets of guidance.
   <img src="docs/editorial/section-break.svg" alt="" width="240">
 </p>
 
-## Compatibility & Checks
+## Updating and Troubleshooting
 
-The packages use the [Agent Skills format](https://agentskills.io/specification).
-Each specialist contains a `SKILL.md`, supporting resources and its own licence.
-The `agents/openai.yaml` files provide optional Codex display and invocation
-metadata.
-
-The specialists inspect your project's installed versions before applying an
-SDK recipe. Their `references/` directories record compatibility, validation
-evidence and practical limits; some helpers use only Python's standard library,
-while optional checks require the listed ADK or cloud dependencies. There is
-no single application environment to install at this repository's root.
-
-Support for the file format and installer does not establish that every coding
-agent, model or ADK version has been tested. Offline checks, live model calls
-and deployed cloud behaviour are different kinds of evidence. The skills ask
-the coding agent to report which checks actually ran. Cloud operations follow
-the selected skill's scope and approval requirements.
-
-For the packaging investigation, installation checks and design rationale, see
-[the distribution notes](docs/research/skill-distribution.md).
-
-An earlier revision was tested in three fresh Codex CLI sessions against small local projects. They
-used the installed skills to generate persistent user preferences, a refund
-tool with safe retries, and a concurrent ADK workflow. The generated code passed
-162 tests, including 37 independent acceptance checks. These checks cover those
-three examples; they do not establish that every skill or cloud integration has
-been exercised. See the [CLI test results and generated code](docs/testing/codex-cli-smoke.md)
-for the prompts, versions, source files and instructions for rerunning the checks.
-
-The deeper revision was rechecked on 16 September 2026: all twelve packages
-installed for Claude Code and Codex, and 476 repository and SDK checks passed
-without skips. Fresh coding sessions produced a refund adapter and a finite
-streaming adapter; after reviewing and repairing the generated code, their
-71 tests passed, including 17 separate acceptance checks. See the
-[laptop verification report](docs/testing/updated-skills-laptop.md) for the fixes,
-prompts, generated code and limits of these local checks.
-
-Google-client support uses these same packages. Project installation was checked
-for Gemini CLI, Antigravity and Antigravity CLI; the [Google setup and verification guide](docs/integrations/google-coding-agents.md)
-records the native discovery checks and separates them from the Claude/Codex
-code-generation results above.
-
-An [Antigravity IDE trial](docs/testing/google-client-generation.md) also used
-Gemini 3.8 Flash to repair a local refund adapter with `safe-api-tool-calls`.
-Its 21 project tests and nine independent checks passed. Gemini CLI generation
-was attempted but awaits sign-in; the standalone Antigravity app and CLI remain
-untested for generation.
-
-### Updating and troubleshooting
+*Keep the installed skills current and find them when you need them.*
 
 The [Skills CLI](https://github.com/vercel-labs/skills/blob/main/src/cli.ts)
 can update installed skills. Choose the scope you used for installation:
@@ -835,6 +835,66 @@ npx skills@latest add "/path/to/agentic-engineering-skills" --skill '*'
 
 Replace the example path with the real directory. This lets you try a changed
 skill before it is available through the GitHub install command.
+
+</details>
+
+<p align="center">
+  <img src="docs/editorial/section-break.svg" alt="" width="240">
+</p>
+
+## Compatibility & Checks
+
+*What was installed, what generated code, and what the checks establish.*
+
+The packages use the [Agent Skills format](https://agentskills.io/specification).
+The specialists inspect your project's installed SDK versions before applying a
+recipe; their references record compatibility, validation evidence and practical
+limits. There is no single application environment to install at this
+repository's root.
+
+### Current revision · 16 September 2026
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| Repository packages and helper / SDK tests | All 12 packages validated; 476 tests passed with zero skips. | [Laptop verification](docs/testing/updated-skills-laptop.md) |
+| Claude Code and Codex | All 12 skills installed. Two fresh sessions generated refund and finite-streaming adapters; after review and repairs, 71 tests passed, including 17 independent acceptance checks. | [Generated examples and repairs](docs/testing/updated-skills-laptop.md) |
+| Google client installation and discovery | Project installation checked for Gemini CLI, Antigravity and Antigravity CLI; Gemini CLI also discovered all 12 through its native skill interface. | [Google installation checks](docs/testing/google-coding-agents.md) |
+| Antigravity IDE with Gemini 3.8 Flash | Used `safe-api-tool-calls` to repair a local refund adapter; 21 project tests and nine independent checks passed. | [Generation trial](docs/testing/google-client-generation.md) |
+| Gemini CLI generation | Google sign-in succeeded, but the service rejected the consumer-account access route before skill activation or code generation. | [Attempt and account restriction](docs/testing/google-client-generation.md) |
+| Standalone Antigravity app and CLI generation | Not yet tested. | [Test coverage and limits](docs/testing/google-client-generation.md) |
+
+These are local checks and bounded coding trials. They do not establish that
+every skill, model, SDK version or cloud integration has been exercised. No cloud
+deployment was performed in these trials. The skills ask the coding agent to
+report which checks actually ran and what remains unverified; cloud operations
+follow the selected skill's scope and approval requirements.
+
+<details>
+<summary>Earlier revision: three Codex CLI trials</summary>
+
+An earlier revision was tested in three fresh Codex CLI sessions against small
+local projects: persistent user preferences, a refund tool with safe retries,
+and a concurrent ADK workflow. The generated code passed 162 tests, including
+37 independent acceptance checks. These are separate historical results;
+they are not included in the current revision's counts above.
+
+See the [CLI test results and generated code](docs/testing/codex-cli-smoke.md)
+for the prompts, versions, source files and instructions for rerunning the checks.
+
+</details>
+
+<details>
+<summary>Package layout and optional dependencies</summary>
+
+Each specialist contains a `SKILL.md`, supporting resources and its own licence.
+The `agents/openai.yaml` files provide optional Codex display and invocation
+metadata. Some helpers use only Python's standard library; optional checks
+require the ADK or cloud dependencies listed in the skill's references.
+
+The `skills/<name>/SKILL.md` layout is supported by the
+[Skills CLI](https://github.com/vercel-labs/skills#readme). See the
+[distribution notes](docs/research/skill-distribution.md) for the packaging
+investigation, installation checks and design rationale.
 
 </details>
 

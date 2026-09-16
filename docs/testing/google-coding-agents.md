@@ -6,8 +6,10 @@ fork or rewrite the engineering skills.
 
 **Follow-up:** a [real Antigravity IDE generation trial](google-client-generation.md)
 used `safe-api-tool-calls` and passed 21 project tests plus nine independent
-checks. Gemini CLI generation was attempted but requires sign-in. The results
-below describe the earlier installation and discovery checks.
+checks. Gemini CLI generation was attempted after sign-in, but Google rejected
+the consumer-account access route with `IneligibleTierError`. The results below
+describe the earlier installation and discovery checks; package discovery does
+not establish eligibility to use a hosted model.
 
 ## Results
 

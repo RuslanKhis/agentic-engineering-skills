@@ -6,6 +6,31 @@
 
 Keep the existing `skills/<name>/SKILL.md` packages and their supporting directories. Google clients support this format. For a project used by several clients, install each complete package under `.agents/skills/<name>/`; avoid an extra enclosing repository directory. Document invocation separately for each client. No Google-specific rewrite of the engineering instructions is needed for discovery. This is a packaging recommendation based on the documented loaders, not evidence of equivalent generated-code quality. [Gemini skills](https://geminicli.com/docs/cli/skills/), [Google's Antigravity CLI codelab](https://codelabs.developers.google.com/antigravity/how-to-create-agent-skills-for-antigravity-cli).
 
+## Account-access correction · 16 September 2026
+
+Recommend Antigravity to consumer-account users. Google's deprecation notice,
+updated 2 September 2026, states that Gemini CLI stopped serving Code Assist for
+individuals, Google AI Pro and Google AI Ultra through Google sign-in on
+18 June 2026. Code Assist Standard and Enterprise subscriptions are unaffected.
+[Official deprecation notice](https://developers.google.com/gemini-code-assist/docs/deprecations/code-assist-individuals).
+
+Google's transition announcement also preserves access through paid Gemini and
+Gemini Enterprise Agent Platform API keys. This is an account-access change,
+not a universal discontinuation of Gemini CLI or its skill format. Google's
+Antigravity CLI migration guide covers existing context files, plugins and skill
+paths. [Transition announcement](https://developers.googleblog.com/en/an-important-update-transitioning-gemini-cli-to-antigravity-cli/),
+[migration guide](https://antigravity.google/docs/cli/gcli-migration/).
+
+The generic Gemini authentication guide still recommends personal Google
+sign-in. That advice conflicts with the newer, specific deprecation notice;
+the setup guide now follows the notice. A subsequent live attempt with Gemini
+CLI 0.60.0, the latest stable npm release at the check, found cached OAuth
+credentials but received `IneligibleTierError` before activation or generation.
+See the [recorded trial](../testing/google-client-generation.md). Updating the
+client is not expected to restore this withdrawn consumer route; this is an
+inference from the service policy, not a successful test of another version.
+[Generic authentication guide](https://geminicli.com/docs/get-started/authentication/).
+
 ## Discovery paths
 
 Paths below contain individual `<name>/SKILL.md` packages, including their assets and references.

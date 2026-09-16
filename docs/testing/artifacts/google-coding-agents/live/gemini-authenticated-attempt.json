@@ -1,0 +1,32 @@
+{
+  "date": "2026-09-16",
+  "client": "Gemini CLI",
+  "client_version": "0.60.0",
+  "latest_npm_version_verified": "0.60.0",
+  "npm_source": "https://registry.npmjs.org/@google%2fgemini-cli/latest",
+  "authentication": "Normal Google OAuth sign-in completed; cached credential file exists. Credential values were not read.",
+  "outcome": "blocked_consumer_account_route",
+  "error_type": "IneligibleTierError",
+  "error_message": "This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products: https://antigravity.google",
+  "returncode": 1,
+  "elapsed_seconds": 6.067,
+  "timed_out": false,
+  "stream_json_bytes": 0,
+  "skill_activation_observed": false,
+  "code_generation_observed": false,
+  "original_project_files_unchanged": {
+    "service.py": true,
+    "provider.py": true,
+    "test_service.py": true,
+    "CONTRACT.md": true
+  },
+  "test_project_settings_written": {
+    "model": {
+      "maxSessionTurns": 40
+    }
+  },
+  "temporary_policy": "auto_edit for workspace edits, named safe-api-tool-calls activation and exact unit-test command; no global policy change",
+  "official_deprecation_notice": "https://developers.google.com/gemini-code-assist/docs/deprecations/code-assist-individuals",
+  "official_transition_announcement": "https://developers.googleblog.com/en/an-important-update-transitioning-gemini-cli-to-antigravity-cli/",
+  "scope": "Service eligibility prevented the generation test; this is not a skill failure or a successful model test."
+}

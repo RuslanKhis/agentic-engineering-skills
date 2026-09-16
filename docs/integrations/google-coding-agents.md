@@ -8,6 +8,14 @@ existing `SKILL.md` packages and supporting resources.
 [Gemini skills](https://geminicli.com/docs/cli/skills/),
 [Antigravity skills](https://www.antigravity.google/docs/skills/).
 
+**For Google consumer accounts, use Antigravity.** Since 18 June 2026, Gemini
+CLI no longer serves Code Assist for individuals, Google AI Pro or Google AI
+Ultra through Google sign-in. Code Assist Standard/Enterprise access remains
+available, as do the paid Gemini and Gemini Enterprise Agent Platform API-key
+routes described by Google. These access requirements are separate from skill
+installation. [Consumer-account deprecation](https://developers.google.com/gemini-code-assist/docs/deprecations/code-assist-individuals),
+[supported access routes](https://developers.googleblog.com/en/an-important-update-transitioning-gemini-cli-to-antigravity-cli/).
+
 These clients are where you ask for a code change. **Google's Agents CLI** is a
 separate tool for scaffolding, evaluating and operating agent projects. You can
 combine its skills with this collection inside a coding client; see the
@@ -17,8 +25,11 @@ combine its skills with this collection inside a coding client; see the
 
 ### Install and discover
 
-Install Gemini CLI and follow Google's sign-in instructions if you do not
-already use it. The skills installer also needs the Node/Git prerequisites in
+Use this route if you already have supported Gemini CLI access. Install the
+client and configure your Standard/Enterprise or paid API-key authentication.
+Google's general authentication guide still describes consumer sign-in; follow
+the account restrictions above when choosing a method. The skills installer
+also needs the Node/Git prerequisites in
 our [getting-started guide](../../README.md#getting-started).
 [Official Gemini installation](https://geminicli.com/docs/get-started/installation/),
 [authentication](https://geminicli.com/docs/get-started/authentication/).
@@ -172,6 +183,9 @@ A subsequent [Antigravity IDE trial](../testing/google-client-generation.md) use
 Gemini 3.8 Flash to load `safe-api-tool-calls`, repair a local adapter and pass
 21 project tests plus nine independent checks. This is one specialist exercise;
 the separate Antigravity app and CLI still need their own generation trials.
-Gemini CLI generation was attempted but awaits sign-in. The earlier
+Gemini CLI 0.60.0 generation was attempted after Google sign-in, but the service
+rejected this consumer-account route with `IneligibleTierError` before skill
+activation or code generation. Version 0.60.0 was the latest stable npm release
+at the check. Supported enterprise and API-key routes were not exercised. The earlier
 [Claude Code and Codex trials](../testing/updated-skills-laptop.md) remain evidence
 for those clients only.

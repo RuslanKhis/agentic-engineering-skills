@@ -1,0 +1,32 @@
+Warning: Basic terminal detected (TERM=dumb). Visual rendering will be limited. For the best experience, use a terminal emulator with truecolor support.
+Warning: 256-color support not detected. Using a terminal with at least 256-color support is recommended for a better visual experience.
+Error authenticating: IneligibleTierError: This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products: https://antigravity.google
+    at throwIneligibleOrProjectIdError (file://<GEMINI_RUNTIME>/cli/node_modules/@google/gemini-cli/bundle/chunk-M6NSK26M.js:310656:11)
+    at _doSetupUser (file://<GEMINI_RUNTIME>/cli/node_modules/@google/gemini-cli/bundle/chunk-M6NSK26M.js:310645:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  ineligibleTiers: [
+    {
+      reasonCode: 'UNSUPPORTED_CLIENT',
+      reasonMessage: 'This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products: https://antigravity.google',
+      tierId: 'free-tier',
+      tierName: 'Gemini Code Assist for individuals'
+    }
+  ]
+}
+Ripgrep is not available. Falling back to GrepTool.
+Skill conflict detected: "safe-api-tool-calls" from "<LIVE_TEST>/gemini/.agents/skills/safe-api-tool-calls/SKILL.md" is overriding the same skill from "~/.agents/skills/safe-api-tool-calls/SKILL.md".
+Skill conflict detected: "protect-adk-sensitive-data" from "<LIVE_TEST>/gemini/.agents/skills/protect-adk-sensitive-data/SKILL.md" is overriding the same skill from "~/.agents/skills/protect-adk-sensitive-data/SKILL.md".
+Skill conflict detected: "optimise-adk-on-google-cloud" from "<LIVE_TEST>/gemini/.agents/skills/optimise-adk-on-google-cloud/SKILL.md" is overriding the same skill from "~/.agents/skills/optimise-adk-on-google-cloud/SKILL.md".
+Skill conflict detected: "deploy-adk-on-google-cloud" from "<LIVE_TEST>/gemini/.agents/skills/deploy-adk-on-google-cloud/SKILL.md" is overriding the same skill from "~/.agents/skills/deploy-adk-on-google-cloud/SKILL.md".
+Skill conflict detected: "adk-workflow-design" from "<LIVE_TEST>/gemini/.agents/skills/adk-workflow-design/SKILL.md" is overriding the same skill from "~/.agents/skills/adk-workflow-design/SKILL.md".
+Skill conflict detected: "adk-tool-auth-and-secrets" from "<LIVE_TEST>/gemini/.agents/skills/adk-tool-auth-and-secrets/SKILL.md" is overriding the same skill from "~/.agents/skills/adk-tool-auth-and-secrets/SKILL.md".
+Skill conflict detected: "adk-sql-agent-engineering" from "<LIVE_TEST>/gemini/.agents/skills/adk-sql-agent-engineering/SKILL.md" is overriding the same skill from "~/.agents/skills/adk-sql-agent-engineering/SKILL.md".
+Skill conflict detected: "adk-operational-guardrails" from "<LIVE_TEST>/gemini/.agents/skills/adk-operational-guardrails/SKILL.md" is overriding the same skill from "~/.agents/skills/adk-operational-guardrails/SKILL.md".
+Skill conflict detected: "adk-memory-architecture" from "<LIVE_TEST>/gemini/.agents/skills/adk-memory-architecture/SKILL.md" is overriding the same skill from "~/.agents/skills/adk-memory-architecture/SKILL.md".
+Skill conflict detected: "adk-frontend-integration" from "<LIVE_TEST>/gemini/.agents/skills/adk-frontend-integration/SKILL.md" is overriding the same skill from "~/.agents/skills/adk-frontend-integration/SKILL.md".
+Skill conflict detected: "adk-engineer" from "<LIVE_TEST>/gemini/.agents/skills/adk-engineer/SKILL.md" is overriding the same skill from "~/.agents/skills/adk-engineer/SKILL.md".
+Skill conflict detected: "adk-agent-evaluation" from "<LIVE_TEST>/gemini/.agents/skills/adk-agent-evaluation/SKILL.md" is overriding the same skill from "~/.agents/skills/adk-agent-evaluation/SKILL.md".
+An unexpected critical error occurred:IneligibleTierError: This client is no longer supported for Gemini Code Assist for individuals. To continue using Gemini, please migrate to the Antigravity suite of products: https://antigravity.google
+    at throwIneligibleOrProjectIdError (file://<GEMINI_RUNTIME>/cli/node_modules/@google/gemini-cli/bundle/chunk-M6NSK26M.js:310656:11)
+    at _doSetupUser (file://<GEMINI_RUNTIME>/cli/node_modules/@google/gemini-cli/bundle/chunk-M6NSK26M.js:310645:5)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)

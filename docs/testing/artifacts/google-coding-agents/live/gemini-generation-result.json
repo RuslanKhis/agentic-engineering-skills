@@ -1,0 +1,21 @@
+{
+  "client": "Gemini CLI",
+  "cli_version": "0.60.0",
+  "node_version": "24.15.0",
+  "started_utc": "2026-09-16T11:57:13.172866+00:00",
+  "finished_utc": "2026-09-16T11:57:19.240118+00:00",
+  "elapsed_seconds": 6.067,
+  "timeout_seconds": 240,
+  "timed_out": false,
+  "returncode": 1,
+  "launch_error": null,
+  "max_session_turns": 40,
+  "model_selection": "existing client default; no model override",
+  "approval_mode": "auto_edit",
+  "normal_user_profile": true,
+  "prompt_sha256": "9875bb839b50f39650cde23cc4f5eab4e3bd892063489abe8648bfa481a161f3",
+  "policy_sha256": "950c953ec0e610b1ccce1ef6a773aa3def9b51f471430a4794b9bfe3c3c8cb0d",
+  "stdout_path": "<LIVE_TEST>/evidence/gemini-generation.jsonl",
+  "stderr_path": "<LIVE_TEST>/evidence/gemini-generation.stderr.txt",
+  "note": "Process completion is not a skill/code correctness result; inspect tools, generated files, and independent tests."
+}

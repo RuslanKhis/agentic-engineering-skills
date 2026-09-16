@@ -1,0 +1,20 @@
+# Temporary approvals for this single synthetic smoke test.
+# Passed with --policy; no global policy files are changed.
+# Gemini CLI 0.60.0 stableStringify wraps each top-level JSON field in NULs.
+# These boundaries match the entire field value, including its closing quote.
+
+[[rule]]
+toolName = "activate_skill"
+argsPattern = '\x00"name":"safe-api-tool-calls"\x00'
+decision = "allow"
+priority = 100
+modes = ["autoEdit"]
+interactive = false
+
+[[rule]]
+toolName = "run_shell_command"
+argsPattern = '\x00"command":"python3 -m unittest discover -v"\x00'
+decision = "allow"
+priority = 100
+modes = ["autoEdit"]
+interactive = false

@@ -9,9 +9,10 @@
 and nine independent acceptance tests passed. No implementation repair was
 needed after review; a follow-up corrected one sentence in its generated README.
 
-Gemini CLI 0.60.0 was also attempted, but its preflight exited **41** because no
-authentication method was configured. Its normal Google sign-in flow was opened;
-model generation remains pending authentication. Antigravity's separate app and
+Gemini CLI 0.60.0 was also attempted. An initial preflight exited **41** before
+sign-in. After Google sign-in completed, the generation attempt exited **1** with
+`IneligibleTierError`: Google no longer serves this consumer-account route.
+No skill activation or code generation occurred. Antigravity's separate app and
 `agy` CLI were not exercised. The IDE result does not establish results for them.
 
 | Evidence | Result |
@@ -23,7 +24,30 @@ model generation remains pending authentication. Antigravity's separate app and
 | Independent acceptance | 9 passed, kept outside the client project during generation |
 | Required file preservation | `provider.py` and `CONTRACT.md` unchanged; original test class preserved |
 | Review follow-up | README wording corrected; tested code and test hashes unchanged |
-| Gemini CLI generation | Blocked at authentication preflight; no code generated |
+| Gemini CLI generation after sign-in | Blocked by consumer-account eligibility; no activation or generated code |
+
+## Gemini CLI account restriction
+
+Google sign-in completed and a cached credential file was present; credential
+values were not read. The authenticated run ended after 6.067 seconds with
+`IneligibleTierError`, an empty event stream and unchanged application files.
+Version **0.60.0** was also the latest version in Google's npm package at the
+time of the check, so there was no newer published release to try.
+
+Google's [deprecation notice](https://developers.google.com/gemini-code-assist/docs/deprecations/code-assist-individuals)
+confirms that, starting **18 June 2026**, Gemini CLI stopped serving the
+individual, Google AI Pro and Google AI Ultra tiers through Google sign-in.
+Google directs these users to Antigravity. Standard/Enterprise access and paid
+API-key routes remain available according to the
+[transition announcement](https://developers.googleblog.com/en/an-important-update-transitioning-gemini-cli-to-antigravity-cli/).
+Those alternative Gemini CLI routes were not tested here.
+
+The attempted run had a 240-second wall-time bound and a project limit of 40
+model turns. A temporary policy allowed the named skill activation and the exact
+local unittest command alongside workspace editing. It did not change global
+policies. The service rejection occurred before those model tools ran. This
+result identifies an access restriction; it does not evaluate the skill's
+behavior in Gemini CLI.
 
 ## Exercise and method
 
@@ -100,6 +124,9 @@ PYTHONPATH=docs/testing/artifacts/google-coding-agents/live/antigravity-final py
 - [Failing seed results](artifacts/google-coding-agents/live/baseline-results.json)
   and [editorial follow-up prompt](artifacts/google-coding-agents/live/editorial-followup.txt).
 - [Gemini authentication preflight error](artifacts/google-coding-agents/live/gemini-preflight.stderr.txt).
+- [Authenticated Gemini attempt](artifacts/google-coding-agents/live/gemini-authenticated-attempt.json),
+  [process result](artifacts/google-coding-agents/live/gemini-generation-result.json)
+  and [service error](artifacts/google-coding-agents/live/gemini-generation.stderr.txt).
 
 See the earlier [installation and discovery checks](google-coding-agents.md) for
 all twelve packages, and the [Google client setup guide](../integrations/google-coding-agents.md)
