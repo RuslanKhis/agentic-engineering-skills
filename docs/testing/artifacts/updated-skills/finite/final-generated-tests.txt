@@ -1,0 +1,35 @@
+test_aggregate_only_with_camel_case_metadata (test_stream_adapter.AdapterTests.test_aggregate_only_with_camel_case_metadata) ... ok
+test_callback_failure_is_sanitized_and_closes (test_stream_adapter.AdapterTests.test_callback_failure_is_sanitized_and_closes) ... ok
+test_cancellation_during_close_waits_for_owned_cleanup (test_stream_adapter.AdapterTests.test_cancellation_during_close_waits_for_owned_cleanup) ... ok
+test_close_failure_prevents_acceptance (test_stream_adapter.AdapterTests.test_close_failure_prevents_acceptance) ... ok
+test_close_own_cancellation_is_controlled_failure (test_stream_adapter.AdapterTests.test_close_own_cancellation_is_controlled_failure) ... ok
+test_closes_obtained_iterator_without_reacquiring_it (test_stream_adapter.AdapterTests.test_closes_obtained_iterator_without_reacquiring_it) ... ok
+test_completion_is_required (test_stream_adapter.AdapterTests.test_completion_is_required) ... ok
+test_conflicting_aliases_and_malformed_markers_reject (test_stream_adapter.AdapterTests.test_conflicting_aliases_and_malformed_markers_reject) ... ok
+test_deltas_are_awaited_snapshots_and_final_replaces_them (test_stream_adapter.AdapterTests.test_deltas_are_awaited_snapshots_and_final_replaces_them) ... ok
+test_every_invocation_is_checked_even_on_ignored_events (test_stream_adapter.AdapterTests.test_every_invocation_is_checked_even_on_ignored_events) ... ok
+test_filters_authors_roles_thoughts_and_entire_tool_events (test_stream_adapter.AdapterTests.test_filters_authors_roles_thoughts_and_entire_tool_events) ... ok
+test_finish_failure_and_interruption_even_after_final (test_stream_adapter.AdapterTests.test_finish_failure_and_interruption_even_after_final) ... ok
+test_identical_aliases_and_null_sdk_defaults_are_supported (test_stream_adapter.AdapterTests.test_identical_aliases_and_null_sdk_defaults_are_supported) ... ok
+test_ignored_late_authors_and_thoughts_do_not_replace_answer (test_stream_adapter.AdapterTests.test_ignored_late_authors_and_thoughts_do_not_replace_answer) ... ok
+test_iterator_acquisition_failure_is_sanitized (test_stream_adapter.AdapterTests.test_iterator_acquisition_failure_is_sanitized) ... ok
+test_iterator_without_aclose_is_supported (test_stream_adapter.AdapterTests.test_iterator_without_aclose_is_supported) ... ok
+test_late_reported_errors_are_sticky_and_stream_is_drained (test_stream_adapter.AdapterTests.test_late_reported_errors_are_sticky_and_stream_is_drained) ... ok
+test_late_transport_failure_is_sanitized (test_stream_adapter.AdapterTests.test_late_transport_failure_is_sanitized) ... ok
+test_malformed_content_has_controlled_rejection (test_stream_adapter.AdapterTests.test_malformed_content_has_controlled_rejection) ... ok
+test_missing_identity_is_not_discovered_from_other_events (test_stream_adapter.AdapterTests.test_missing_identity_is_not_discovered_from_other_events) ... ok
+test_original_cancellation_survives_close_failure (test_stream_adapter.AdapterTests.test_original_cancellation_survives_close_failure) ... ok
+test_partial_after_complete_answer_rejects_without_callback (test_stream_adapter.AdapterTests.test_partial_after_complete_answer_rejects_without_callback) ... ok
+test_partial_only_never_becomes_success (test_stream_adapter.AdapterTests.test_partial_only_never_becomes_success) ... ok
+test_preview_arrives_before_final_and_final_waits_for_exhaustion (test_stream_adapter.AdapterTests.test_preview_arrives_before_final_and_final_waits_for_exhaustion) ... ok
+test_rejection_and_callback_failure_survive_close_failure (test_stream_adapter.AdapterTests.test_rejection_and_callback_failure_survive_close_failure) ... ok
+test_second_complete_answer_rejects (test_stream_adapter.AdapterTests.test_second_complete_answer_rejects) ... ok
+test_swallowed_input_cancellation_cannot_produce_success (test_stream_adapter.AdapterTests.test_swallowed_input_cancellation_cannot_produce_success) ... ok
+test_task_cancellation_at_input_and_preview_closes_iterator (test_stream_adapter.AdapterTests.test_task_cancellation_at_input_and_preview_closes_iterator) ... ok
+test_tool_payload_families_never_supply_answer_text (test_stream_adapter.AdapterTests.test_tool_payload_families_never_supply_answer_text) ... ok
+test_whitespace_and_empty_deltas_are_preserved (test_stream_adapter.AdapterTests.test_whitespace_and_empty_deltas_are_preserved) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 0.068s
+
+OK

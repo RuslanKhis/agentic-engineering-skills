@@ -1,0 +1,18 @@
+{
+  "phase": "additional regressions after independent review; not initial heldout tests",
+  "command": [
+    "~/Documents/adk-claude-starter/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "<RUN>/api/acceptance/test_adapter.py",
+    "-k",
+    "literal_exception_source or contract_valid_leading_zero"
+  ],
+  "selected_project": "<RUN>/api/review-original",
+  "service_sha256": "76ba741cd2b70239c9204640f1857313622d16db2b5478824c573f42790aa256",
+  "exit_code": 1,
+  "result": "2 failed,5 deselected"
+}

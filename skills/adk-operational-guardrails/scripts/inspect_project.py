@@ -208,7 +208,8 @@ def inspect(project, required=None):
                             entry = report["guardrail_identifiers"].setdefault(identifier, {"occurrences": 0, "files": []})
                             entry["occurrences"] += count
                             entry["files"].append(relative)
-            except (OSError, UnicodeError, ValueError, TypeError, AttributeError, configparser.Error):
+            except (OSError, UnicodeError, ValueError, TypeError, AttributeError,
+                    RecursionError, configparser.Error):
                 warn("file_unreadable_or_configuration_malformed")
         if report["files_considered"] > MAX_FILES or report["bytes_read"] > MAX_TOTAL_BYTES:
             break

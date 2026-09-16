@@ -1,0 +1,20 @@
+[
+  {
+    "location": "~/.agents/skills",
+    "packages": 12,
+    "files": 229,
+    "mismatches": []
+  },
+  {
+    "location": "~/.claude/skills",
+    "packages": 12,
+    "files": 229,
+    "mismatches": []
+  },
+  {
+    "location": "~/Documents/adk-claude-starter/.claude/skills",
+    "packages": 12,
+    "files": 229,
+    "mismatches": []
+  }
+]

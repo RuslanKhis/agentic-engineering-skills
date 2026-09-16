@@ -1,0 +1,15 @@
+test_callback_failure_rejects_without_disclosing_content (test_acceptance.Acceptance.test_callback_failure_rejects_without_disclosing_content) ... ok
+test_caller_cancellation_propagates_and_closes_owned_iterator (test_acceptance.Acceptance.test_caller_cancellation_propagates_and_closes_owned_iterator) ... ok
+test_close_failure_prevents_returning_a_success (test_acceptance.Acceptance.test_close_failure_prevents_returning_a_success) ... ok
+test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion (test_acceptance.Acceptance.test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion) ... ok
+test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) ... ok
+test_late_reported_error_invalidates_the_candidate (test_acceptance.Acceptance.test_late_reported_error_invalidates_the_candidate) ... ok
+test_late_transport_failure_invalidates_the_candidate (test_acceptance.Acceptance.test_late_transport_failure_invalidates_the_candidate) ... ok
+test_only_designated_public_model_text_is_displayed (test_acceptance.Acceptance.test_only_designated_public_model_text_is_displayed) ... ok
+test_unrelated_configuration_is_preserved (test_acceptance.Acceptance.test_unrelated_configuration_is_preserved) ... ok
+test_wrong_invocation_is_rejected_before_its_preview (test_acceptance.Acceptance.test_wrong_invocation_is_rejected_before_its_preview) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.018s
+
+OK

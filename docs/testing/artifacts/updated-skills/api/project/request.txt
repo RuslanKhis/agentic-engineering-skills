@@ -1,0 +1,1 @@
+Harden this existing provider adapter using the safe-api-tool-calls skill. Keep our client ownership, interface, result schema and dependency pins. Make provider response handling and refund failures reliable, with useful safe diagnostics. Add meaningful offline tests and explain what remains unverified.

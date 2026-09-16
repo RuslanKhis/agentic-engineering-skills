@@ -108,6 +108,15 @@ class InspectorTests(unittest.TestCase):
         self.assertIn("file_size_limit_reached", warnings)
         self.assertNotIn("not echoed", result.stdout + result.stderr)
 
+    def test_deep_toml_returns_incomplete_inventory_without_traceback(self):
+        self.write("pyproject.toml", "x = " + "[" * 2000 + "1" + "]" * 2000 + "\n")
+        result = self.run_cli("--project", str(self.root))
+        self.assertEqual(result.returncode, 1)
+        report = json.loads(result.stdout)
+        self.assertFalse(report["complete_within_scope"])
+        self.assertIn("file_unreadable_or_configuration_malformed", report["warnings"])
+        self.assertNotIn("Traceback", result.stdout + result.stderr)
+
     def test_metadata_probe_and_exact_adk_check(self):
         with mock.patch.object(inspector.metadata, "version", side_effect=["2.8.0", "1.5.0"]) as probe:
             report = inspector.inspect(self.root, "2.8.0")

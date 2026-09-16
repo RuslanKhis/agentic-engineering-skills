@@ -1,0 +1,38 @@
+[
+  {
+    "label": "final-generated-tests",
+    "exit_code": 0,
+    "python": "3.11.4",
+    "httpx": "0.28.1",
+    "command": [
+      "<RUN>/api-runtime/bin/python",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "<RUN>/api/project",
+      "-p",
+      "test_*.py",
+      "-v"
+    ]
+  },
+  {
+    "label": "final-acceptance",
+    "exit_code": 0,
+    "python": "3.11.4",
+    "httpx": "0.28.1",
+    "command": [
+      "<RUN>/api-runtime/bin/python",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "<RUN>/api/acceptance",
+      "-p",
+      "test_adapter.py",
+      "-v"
+    ]
+  }
+]

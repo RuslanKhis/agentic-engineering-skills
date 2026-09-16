@@ -1,0 +1,25 @@
+test_ambiguous_refund_has_one_effect_and_unknown_result (test_adapter.AdapterAcceptance.test_ambiguous_refund_has_one_effect_and_unknown_result) ... provider refund unknown
+provider refund unknown
+provider refund unknown
+provider refund unknown
+ok
+test_contract_valid_leading_zero_amount_is_preserved (test_adapter.AdapterAcceptance.test_contract_valid_leading_zero_amount_is_preserved) ... ok
+test_diagnostics_do_not_disclose_provider_body (test_adapter.AdapterAcceptance.test_diagnostics_do_not_disclose_provider_body) ... ok
+test_invalid_money_never_dispatches (test_adapter.AdapterAcceptance.test_invalid_money_never_dispatches) ... provider refund not_attempted
+provider refund not_attempted
+provider refund not_attempted
+provider refund not_attempted
+provider refund not_attempted
+ok
+test_invalid_read_success_never_becomes_business_success (test_adapter.AdapterAcceptance.test_invalid_read_success_never_becomes_business_success) ... provider lookup unavailable
+provider lookup unavailable
+provider lookup unavailable
+provider lookup unavailable
+ok
+test_literal_exception_source_is_absent_from_structured_logs (test_adapter.AdapterAcceptance.test_literal_exception_source_is_absent_from_structured_logs) ... ok
+test_valid_read_and_refund_preserve_contract_and_client_ownership (test_adapter.AdapterAcceptance.test_valid_read_and_refund_preserve_contract_and_client_ownership) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.015s
+
+OK

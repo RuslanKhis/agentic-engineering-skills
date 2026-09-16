@@ -1,0 +1,46 @@
+Command: ['<RUN>/runtime/bin/python', '-B', '-I', '-m', 'unittest', 'discover', '-s', '<REPO>/skills/adk-workflow-design/tests', '-p', 'test_runtime_contracts.py', '-v']
+test_before_model_substitution_persists_output_and_state_delta (test_runtime_contracts.RuntimeContracts.test_before_model_substitution_persists_output_and_state_delta)
+Return LlmResponse; reassign copied state; drain before reading storage. ... ok
+test_before_tool_denies_repeated_calls_and_allows_control (test_runtime_contracts.RuntimeContracts.test_before_tool_denies_repeated_calls_and_allows_control)
+Nonempty denial stops a hook chain; None permits real tool dispatch. ... <RUN>/runtime/lib/python3.12/site-packages/google/adk/models/llm_request.py:298: UserWarning: [EXPERIMENTAL] feature FeatureName.JSON_SCHEMA_FOR_FUNC_DECL is enabled.
+  declaration = tool._get_declaration()
+Skipping missing token usage metadata for agent record_writer and model gemini-offline-fixture
+Skipping missing token usage metadata for agent record_writer and model gemini-offline-fixture
+Skipping missing token usage metadata for agent record_writer and model gemini-offline-fixture
+Skipping missing token usage metadata for agent record_writer and model gemini-offline-fixture
+ok
+test_empty_tool_override_is_overwritten_by_later_none_in_adk_2_8 (test_runtime_contracts.RuntimeContracts.test_empty_tool_override_is_overwritten_by_later_none_in_adk_2_8)
+Pinned SDK trap, not a safe recipe: a later None replaces an empty {}. ... Skipping missing token usage metadata for agent empty_override_writer and model gemini-offline-fixture
+Skipping missing token usage metadata for agent empty_override_writer and model gemini-offline-fixture
+ok
+test_failed_second_turn_keeps_prior_output_key_in_same_session (test_runtime_contracts.RuntimeContracts.test_failed_second_turn_keeps_prior_output_key_in_same_session)
+A stored final key is not proof of success for the current invocation. ... <REPO>/skills/adk-workflow-design/tests/test_runtime_contracts.py:183: DeprecationWarning: SequentialAgent is deprecated in favor of Workflow and will be removed in a future version. Workflow cannot yet be used as an LlmAgent sub-agent.
+  root = SequentialAgent(
+Skipping missing token usage metadata for agent writer and model gemini-offline-fixture
+Skipping missing token usage metadata for agent reviewer and model gemini-offline-fixture
+Skipping missing token usage metadata for agent writer and model gemini-offline-fixture
+ok
+test_loop_executes_real_exit_tool_and_skips_reviser (test_runtime_contracts.RuntimeContracts.test_loop_executes_real_exit_tool_and_skips_reviser) ... <REPO>/skills/adk-workflow-design/tests/test_runtime_contracts.py:233: DeprecationWarning: LoopAgent is deprecated in favor of Workflow and will be removed in a future version. Workflow cannot yet be used as an LlmAgent sub-agent.
+  LoopAgent(
+<REPO>/skills/adk-workflow-design/tests/test_runtime_contracts.py:229: DeprecationWarning: SequentialAgent is deprecated in favor of Workflow and will be removed in a future version. Workflow cannot yet be used as an LlmAgent sub-agent.
+  root = SequentialAgent(
+Skipping missing token usage metadata for agent writer and model gemini-offline-fixture
+Skipping missing token usage metadata for agent critic and model gemini-offline-fixture
+Skipping missing token usage metadata for agent critic and model gemini-offline-fixture
+ok
+test_parallel_overlaps_and_preserves_both_populated_outputs (test_runtime_contracts.RuntimeContracts.test_parallel_overlaps_and_preserves_both_populated_outputs) ... <REPO>/skills/adk-workflow-design/tests/test_runtime_contracts.py:139: DeprecationWarning: ParallelAgent is deprecated in favor of Workflow and will be removed in a future version. Workflow cannot yet be used as an LlmAgent sub-agent.
+  root = ParallelAgent(
+Skipping missing token usage metadata for agent b and model gemini-offline-fixture
+Skipping missing token usage metadata for agent a and model gemini-offline-fixture
+ok
+test_sequence_propagates_failure_without_repeating_completed_work (test_runtime_contracts.RuntimeContracts.test_sequence_propagates_failure_without_repeating_completed_work) ... <REPO>/skills/adk-workflow-design/tests/test_runtime_contracts.py:158: DeprecationWarning: SequentialAgent is deprecated in favor of Workflow and will be removed in a future version. Workflow cannot yet be used as an LlmAgent sub-agent.
+  root = SequentialAgent(
+Skipping missing token usage metadata for agent writer and model gemini-offline-fixture
+ok
+test_typed_workflow_consumes_empty_output_and_drains_past_progress (test_runtime_contracts.RuntimeContracts.test_typed_workflow_consumes_empty_output_and_drains_past_progress)
+Select the designated node's output using is not None; retain []. ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.226s
+
+OK

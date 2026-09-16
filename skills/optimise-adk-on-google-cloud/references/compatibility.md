@@ -71,8 +71,14 @@ deterministic models. No hosted compaction or real summarisation quality is impl
 
 The new GKE HTTP tests require the recorded ADK 2.8.0 factory/loader contract and
 its FastAPI/TestClient dependencies; missing ADK or a different version skips
-that baseline. SQLite session tests require `aiosqlite`, and the native span test
-requires the OpenTelemetry SDK. Both recorded environments used Starlette 1.6.0,
+that baseline. SQLite session tests require `sqlalchemy`, `aiosqlite` and
+`greenlet`. ADK's optional `db` extra provides SQLAlchemy, but did not install
+greenlet in the macOS arm64 laptop recheck. Use SQLAlchemy's `asyncio` extra at
+the target's compatible version when preparing that test environment; preserve
+existing pins. The managed-session tests
+also require `google-cloud-aiplatform`, and the native span test requires the
+OpenTelemetry SDK. Missing optional test dependencies produce explicit skips.
+Both recorded environments used Starlette 1.6.0,
 HTTPX 0.28.1 and aiosqlite 0.22.1. TestClient emitted an HTTPX deprecation warning;
 no dependency was changed to silence it. These in-process tests establish SDK
 semantics, not PostgreSQL compatibility, streaming delivery or native skill discovery.

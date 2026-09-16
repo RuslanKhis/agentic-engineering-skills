@@ -25,10 +25,12 @@ def _positive(value: int) -> None:
 
 def project_final_text(event: object, *, max_chars: int = 20_000,
                        max_parts: int = 512) -> str | None:
-    """Return final text, or None for non-final/content-free events.
+    """Return final model text, or None for non-public/content-free events.
 
     Only text from parts with thought=False/None is copied. Credentials already
     present in that allowed text are NOT detected or removed by this function.
+    ADK completion overrides can mark partial and tool-bearing events final;
+    check their visibility independently of ``is_final_response()``.
     """
     _positive(max_chars)
     _positive(max_parts)
@@ -38,11 +40,19 @@ def project_final_text(event: object, *, max_chars: int = 20_000,
             raise PublicProjectionError("Invalid event completion flag.")
         if not final or event.content is None:
             return None
+        partial = event.partial
+        if partial is not None and type(partial) is not bool:
+            raise PublicProjectionError("Invalid event partial flag.")
+        if partial or event.author == "user" or event.content.role != "model":
+            return None
         parts = event.content.parts
         if parts is None:
             return ""
         if not isinstance(parts, (list, tuple)) or len(parts) > max_parts:
             raise PublicProjectionError("Invalid or excessive event parts.")
+        if any(part.function_call is not None or part.function_response is not None
+               for part in parts):
+            return None
         output: list[str] = []
         count = 0
         for part in parts:

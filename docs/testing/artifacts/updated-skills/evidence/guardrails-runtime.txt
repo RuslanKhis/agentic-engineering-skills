@@ -1,0 +1,380 @@
+Command: ['<RUN>/runtime/bin/python', '-B', '-I', '<RUN>/guardrails_runtime_check.py']
+test_model_bound_is_separate_from_tool_allowance (adk_boundary.BoundaryTests.test_model_bound_is_separate_from_tool_allowance) ... Executing <Task pending name='Task-2' coro=<BoundaryTests.test_model_bound_is_separate_from_tool_allowance() running at <REPO>/skills/adk-operational-guardrails/tests/adk_boundary.py:109> wait_for=<Future pending cb=[Task.task_wakeup()] created at /opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py:181] created at /opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py:100> took 0.841 seconds
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/models/llm_request.py:298: UserWarning: [EXPERIMENTAL] feature FeatureName.JSON_SCHEMA_FOR_FUNC_DECL is enabled.
+  declaration = tool._get_declaration()
+Skipping missing token usage metadata for agent support and model offline-model
+Skipping missing token usage metadata for agent support and model offline-model
+Node execution failed with exception
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1359, in _run_one_step_async
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1836, in _call_llm_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1765, in _call_llm_with_tracing
+    invocation_context.increment_llm_call_count()
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/invocation_context.py", line 413, in increment_llm_call_count
+    self._invocation_cost_manager.increment_and_enforce_llm_calls_limit(
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/invocation_context.py", line 99, in increment_and_enforce_llm_calls_limit
+    raise LlmCallsLimitExceededError(
+google.adk.agents.invocation_context.LlmCallsLimitExceededError: Max number of llm calls limit of `2` exceeded
+Root node support failed.
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 748, in _drive_root_node
+    await root_ctx._run_node_internal(
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/context.py", line 608, in _run_node_internal
+    raise DynamicNodeFailError(
+google.adk.workflow._errors.DynamicNodeFailError: Dynamic node support failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 1061, in _cleanup_root_task
+    await task
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 757, in _drive_root_node
+    raise e.error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1359, in _run_one_step_async
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1836, in _call_llm_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1765, in _call_llm_with_tracing
+    invocation_context.increment_llm_call_count()
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/invocation_context.py", line 413, in increment_llm_call_count
+    self._invocation_cost_manager.increment_and_enforce_llm_calls_limit(
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/invocation_context.py", line 99, in increment_and_enforce_llm_calls_limit
+    raise LlmCallsLimitExceededError(
+google.adk.agents.invocation_context.LlmCallsLimitExceededError: Max number of llm calls limit of `2` exceeded
+ok
+test_outer_deadline_stops_model_before_first_event (adk_boundary.BoundaryTests.test_outer_deadline_stops_model_before_first_event) ... Root node support was cancelled.
+ok
+test_parallel_batch_admits_only_remaining_capacity (adk_boundary.BoundaryTests.test_parallel_batch_admits_only_remaining_capacity) ... Skipping missing token usage metadata for agent support and model offline-model
+Node execution failed with exception
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1377, in _run_one_step_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1505, in _postprocess_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1651, in _postprocess_handle_function_calls_async
+    if function_response_event := await functions.handle_function_calls_async(
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 456, in handle_function_calls_async
+    return await handle_function_call_list_async(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 502, in handle_function_call_list_async
+    maybe_function_response_events = await asyncio.gather(*tasks)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 712, in _execute_single_function_call_async
+    tel_ctx.function_response_event = await _run_with_trace()
+                                      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 650, in _run_with_trace
+    raise tool_error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 637, in _run_with_trace
+    function_response = await __call_tool_async(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 1511, in __call_tool_async
+    result: object = await tool.run_async(args=args, tool_context=tool_context)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/tools/function_tool.py", line 353, in run_async
+    return await self._invoke_callable(self.func, args_to_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/tools/function_tool.py", line 374, in _invoke_callable
+    return await target(**args_to_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/tests/adk_boundary.py", line 122, in lookup
+    return await guard.run("lookup", {"order_id": order_id}, execute)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/assets/invocation_guard.py", line 155, in run
+    token = self.admit(action, arguments, effect=effect)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/assets/invocation_guard.py", line 118, in admit
+    raise GuardStopped("tool_call_limit")
+guard_asset.GuardStopped: tool_call_limit
+Root node support failed.
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 748, in _drive_root_node
+    await root_ctx._run_node_internal(
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/context.py", line 608, in _run_node_internal
+    raise DynamicNodeFailError(
+google.adk.workflow._errors.DynamicNodeFailError: Dynamic node support failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 1061, in _cleanup_root_task
+    await task
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 757, in _drive_root_node
+    raise e.error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1377, in _run_one_step_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1505, in _postprocess_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1651, in _postprocess_handle_function_calls_async
+    if function_response_event := await functions.handle_function_calls_async(
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 456, in handle_function_calls_async
+    return await handle_function_call_list_async(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 502, in handle_function_call_list_async
+    maybe_function_response_events = await asyncio.gather(*tasks)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 712, in _execute_single_function_call_async
+    tel_ctx.function_response_event = await _run_with_trace()
+                                      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 650, in _run_with_trace
+    raise tool_error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 637, in _run_with_trace
+    function_response = await __call_tool_async(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 1511, in __call_tool_async
+    result: object = await tool.run_async(args=args, tool_context=tool_context)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/tools/function_tool.py", line 353, in run_async
+    return await self._invoke_callable(self.func, args_to_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/tools/function_tool.py", line 374, in _invoke_callable
+    return await target(**args_to_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/tests/adk_boundary.py", line 122, in lookup
+    return await guard.run("lookup", {"order_id": order_id}, execute)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/assets/invocation_guard.py", line 155, in run
+    token = self.admit(action, arguments, effect=effect)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/assets/invocation_guard.py", line 118, in admit
+    raise GuardStopped("tool_call_limit")
+guard_asset.GuardStopped: tool_call_limit
+ok
+test_terminal_repeat_stops_before_actual_second_execution (adk_boundary.BoundaryTests.test_terminal_repeat_stops_before_actual_second_execution) ... Skipping missing token usage metadata for agent support and model offline-model
+Skipping missing token usage metadata for agent support and model offline-model
+Node execution failed with exception
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1377, in _run_one_step_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1505, in _postprocess_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1651, in _postprocess_handle_function_calls_async
+    if function_response_event := await functions.handle_function_calls_async(
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 456, in handle_function_calls_async
+    return await handle_function_call_list_async(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 502, in handle_function_call_list_async
+    maybe_function_response_events = await asyncio.gather(*tasks)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 712, in _execute_single_function_call_async
+    tel_ctx.function_response_event = await _run_with_trace()
+                                      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 650, in _run_with_trace
+    raise tool_error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 637, in _run_with_trace
+    function_response = await __call_tool_async(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 1511, in __call_tool_async
+    result: object = await tool.run_async(args=args, tool_context=tool_context)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/tools/function_tool.py", line 353, in run_async
+    return await self._invoke_callable(self.func, args_to_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/tools/function_tool.py", line 374, in _invoke_callable
+    return await target(**args_to_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/tests/adk_boundary.py", line 85, in lookup
+    return await guard.run(
+           ^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/assets/invocation_guard.py", line 155, in run
+    token = self.admit(action, arguments, effect=effect)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/assets/invocation_guard.py", line 114, in admit
+    raise GuardStopped(self._blocked[signature])
+guard_asset.GuardStopped: repeated_terminal_failure
+Root node support failed.
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 748, in _drive_root_node
+    await root_ctx._run_node_internal(
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/context.py", line 608, in _run_node_internal
+    raise DynamicNodeFailError(
+google.adk.workflow._errors.DynamicNodeFailError: Dynamic node support failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 1061, in _cleanup_root_task
+    await task
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 757, in _drive_root_node
+    raise e.error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1377, in _run_one_step_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1505, in _postprocess_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1651, in _postprocess_handle_function_calls_async
+    if function_response_event := await functions.handle_function_calls_async(
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 456, in handle_function_calls_async
+    return await handle_function_call_list_async(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 502, in handle_function_call_list_async
+    maybe_function_response_events = await asyncio.gather(*tasks)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 712, in _execute_single_function_call_async
+    tel_ctx.function_response_event = await _run_with_trace()
+                                      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 650, in _run_with_trace
+    raise tool_error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 637, in _run_with_trace
+    function_response = await __call_tool_async(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/functions.py", line 1511, in __call_tool_async
+    result: object = await tool.run_async(args=args, tool_context=tool_context)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/tools/function_tool.py", line 353, in run_async
+    return await self._invoke_callable(self.func, args_to_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/tools/function_tool.py", line 374, in _invoke_callable
+    return await target(**args_to_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/tests/adk_boundary.py", line 85, in lookup
+    return await guard.run(
+           ^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/assets/invocation_guard.py", line 155, in run
+    token = self.admit(action, arguments, effect=effect)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<REPO>/skills/adk-operational-guardrails/assets/invocation_guard.py", line 114, in admit
+    raise GuardStopped(self._blocked[signature])
+guard_asset.GuardStopped: repeated_terminal_failure
+ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.997s
+
+OK

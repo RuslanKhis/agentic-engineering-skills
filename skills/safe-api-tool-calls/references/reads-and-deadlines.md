@@ -38,6 +38,12 @@ Preserve the established result schema and callers. Translate expected provider 
 
 Let application startup own logging configuration. Emit safe structured fields such as attempt number, exception class, HTTP status, elapsed time and an authorised operation reference. Keep credentials, replay keys, raw prompts and complete provider bodies out of ordinary logs and model-facing errors. Preserve unexpected defects for application monitoring; a broad `except Exception` that silently returns routine unavailability hides broken code. After write dispatch, report the defect while retaining uncertainty about its side effect. Verify both the returned contract and captured diagnostics using synthetic sensitive markers.
 
+Formatted traceback frames can include source lines containing sensitive literals,
+even when the exception message is omitted. If stack locations are needed, select
+only approved filename, function and line-number fields without source text or
+locals. Test a literal exception canary and inspect structured log extras as well
+as the formatted message.
+
 Use deterministic local substitutes and the project's test runner to verify the changed behaviours:
 
 - A selected transient failure can recover; a non-selected error stops after one attempt.

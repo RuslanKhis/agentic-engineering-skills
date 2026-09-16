@@ -1,0 +1,45 @@
+{
+  "claude": {
+    "cli": "2.1.266",
+    "effort": "medium",
+    "fresh_session": true,
+    "review_followup": true,
+    "skill_commands": [
+      "S=~/.claude/skills/safe-api-tool-calls; ls -R $S; cat $S/references/writes-and-confirmation.md $S/references/validation.md $S/references/compatibility.md",
+      "S=~/.claude/skills/safe-api-tool-calls; sed -n '/adapter boundary/,$p' $S/references/reads-and-deadlines.md | head -60; P=<RUN>/runtime/bin/python; $P --version; $P -m pip list 2>/dev/null | head -30; cd <RUN>/api/project && $P $S/scripts/inspect_project.py --project . --dry-run | head -40"
+    ],
+    "model": "claude-opus-5[1m]",
+    "discovered_our_skills": [
+      "adk-agent-evaluation",
+      "adk-engineer",
+      "adk-frontend-integration",
+      "adk-memory-architecture",
+      "adk-operational-guardrails",
+      "adk-sql-agent-engineering",
+      "adk-tool-auth-and-secrets",
+      "adk-workflow-design",
+      "deploy-adk-on-google-cloud",
+      "optimise-adk-on-google-cloud",
+      "protect-adk-sensitive-data",
+      "safe-api-tool-calls"
+    ]
+  },
+  "codex": {
+    "cli": "0.153.4",
+    "configured_model": "gpt-6-astra",
+    "configured_effort": "ultra",
+    "override": false,
+    "fresh_session": true,
+    "skill_commands": [
+      "/bin/zsh -lc 'cat ~/.agents/skills/adk-engineer/SKILL.md ~/.agents/skills/adk-frontend-integration/SKILL.md ~/.agents/skills/adk-workflow-design/SKILL.md'",
+      "/bin/zsh -lc 'cat ~/.agents/skills/adk-frontend-integration/references/compatibility.md ~/.agents/skills/adk-frontend-integration/references/json-api.md ~/.agents/skills/adk-frontend-integration/references/troubleshooting.md ~/.agents/skills/adk-frontend-integration/references/validation.md'",
+      "/bin/zsh -lc 'cat ~/.agents/skills/adk-workflow-design/references/compatibility.md ~/.agents/skills/adk-workflow-design/references/runtime.md ~/.agents/skills/adk-workflow-design/references/validation.md'",
+      "/bin/zsh -lc \"rg -n 'finite|asset|collector|aclose|cancel|partial|STOP|MAX_TOKENS' ~/.agents/skills/adk-frontend-integration/references/troubleshooting.md ~/.agents/skills/adk-frontend-integration/references/validation.md && rg --files ~/.agents/skills/adk-frontend-integration/assets && python3 ~/.agents/skills/adk-frontend-integration/scripts/inspect_project.py --project . --mode json --dry-run\"",
+      "/bin/zsh -lc \"rg --files -L ~/.agents/skills/adk-frontend-integration ~/.agents/skills/adk-workflow-design ~/.agents/skills/optimise-adk-on-google-cloud && cat ~/.agents/skills/adk-frontend-integration/references/troubleshooting.md && sed -n '1,26p' ~/.agents/skills/adk-frontend-integration/references/validation.md\"",
+      "/bin/zsh -lc 'python3 ~/.agents/skills/adk-frontend-integration/scripts/inspect_project.py --project . --mode json --dry-run'",
+      "/bin/zsh -lc \"cat ~/.agents/skills/optimise-adk-on-google-cloud/assets/finite_answer_stream.py ~/.agents/skills/optimise-adk-on-google-cloud/SKILL.md && rg -n -C 4 'finite_answer|finite answer|raw.byte|decoded' ~/.agents/skills/optimise-adk-on-google-cloud/references/*.md\"",
+      "/bin/zsh -lc \"cat ~/.agents/skills/optimise-adk-on-google-cloud/LICENSE && sed -n '1,160p' ~/.agents/skills/optimise-adk-on-google-cloud/references/runtime-verification.md && cat ~/.agents/skills/optimise-adk-on-google-cloud/SKILL.md\"",
+      "/bin/zsh -lc \"rg -n 'cancel|close|late|partial|tool' ~/.agents/skills/optimise-adk-on-google-cloud/tests/test_finite_answer_stream.py\""
+    ]
+  }
+}

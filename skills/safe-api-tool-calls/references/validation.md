@@ -19,6 +19,7 @@ Use the target's existing test runner and interpreter. Keep test doubles at prov
 - If implementing durable recovery, reconstruct the service/worker and repeat the same operation; assert identity reuse. Reject changed payloads and test concurrent claim behaviour. An instance dictionary cannot pass as durable storage.
 - Preserve unknown state across multiple attempts, including a later terminal rejection. Exercise key-retention expiry and reconciliation rules when the integration implements them.
 - Invalid amounts and unauthorised actors never reach the provider. Exact money and approval policy must follow the target's business rules.
+- Preserve contract-valid amount spellings; do not add canonical-only acceptance when the provider contract permits other decimal strings. Test the exact dispatched and returned values.
 - Change the business revision or approved details during a confirmation pause: execution must revalidate and send zero provider requests. Exercise balance races when implementing that guarantee.
 - Invoke the real confirmation wrapper: missing consent and rejected consent cause zero provider calls; approved consent permits the authorised action. Directly calling the underlying function is insufficient.
 - Exercise the client/session pause-and-resume path independently of the direct wrapper. A scripted model checks wiring; it cannot prove that a live model describes rejection accurately.

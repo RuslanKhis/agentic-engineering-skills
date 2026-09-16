@@ -1,0 +1,35 @@
+test_caller_cancellation_propagates (test_service.LookupTests.test_caller_cancellation_propagates) ... ok
+test_gateway_does_not_close_caller_client (test_service.LookupTests.test_gateway_does_not_close_caller_client) ... provider lookup unavailable
+ok
+test_http_errors_are_single_attempt_and_do_not_leak_body (test_service.LookupTests.test_http_errors_are_single_attempt_and_do_not_leak_body) ... ok
+test_invalid_reference_makes_no_request (test_service.LookupTests.test_invalid_reference_makes_no_request) ... ok
+test_invalid_success_bodies_are_unavailable (test_service.LookupTests.test_invalid_success_bodies_are_unavailable) ... provider lookup unavailable
+provider lookup unavailable
+provider lookup unavailable
+provider lookup unavailable
+provider lookup unavailable
+ok
+test_malformed_json_is_unavailable (test_service.LookupTests.test_malformed_json_is_unavailable) ... ok
+test_transport_errors_are_classified_without_messages (test_service.LookupTests.test_transport_errors_are_classified_without_messages) ... ok
+test_unexpected_defect_is_logged_as_error_without_message (test_service.LookupTests.test_unexpected_defect_is_logged_as_error_without_message) ... ok
+test_valid_states_are_read (test_service.LookupTests.test_valid_states_are_read) ... ok
+test_boundary_amounts_are_accepted (test_service.RefundTests.test_boundary_amounts_are_accepted) ... ok
+test_cancellation_after_dispatch_propagates_and_logs_unknown (test_service.RefundTests.test_cancellation_after_dispatch_propagates_and_logs_unknown) ... ok
+test_confirmed_refund_is_applied_once (test_service.RefundTests.test_confirmed_refund_is_applied_once) ... ok
+test_connect_failure_is_still_unknown (test_service.RefundTests.test_connect_failure_is_still_unknown) ... ok
+test_empty_or_malformed_2xx_body_is_unknown (test_service.RefundTests.test_empty_or_malformed_2xx_body_is_unknown) ... ok
+test_http_error_statuses_are_unknown_single_attempt (test_service.RefundTests.test_http_error_statuses_are_unknown_single_attempt) ... ok
+test_invalid_amounts_make_no_request (test_service.RefundTests.test_invalid_amounts_make_no_request) ... ok
+test_invalid_reference_makes_no_request (test_service.RefundTests.test_invalid_reference_makes_no_request) ... ok
+test_logs_exclude_reference_and_amount (test_service.RefundTests.test_logs_exclude_reference_and_amount) ... ok
+test_lost_response_after_commit_is_unknown_and_not_replayed (test_service.RefundTests.test_lost_response_after_commit_is_unknown_and_not_replayed) ... ok
+test_normalised_amount_echo_is_unknown (test_service.RefundTests.test_normalised_amount_echo_is_unknown) ... ok
+test_unconfirmed_2xx_bodies_are_unknown (test_service.RefundTests.test_unconfirmed_2xx_bodies_are_unknown) ... ok
+test_unexpected_defect_after_dispatch_is_unknown_and_logged (test_service.RefundTests.test_unexpected_defect_after_dispatch_is_unknown_and_logged) ... ok
+test_lookup_defect_logs_locations_only (test_service.SourceLiteralLeakTests.test_lookup_defect_logs_locations_only) ... ok
+test_refund_defect_logs_locations_only (test_service.SourceLiteralLeakTests.test_refund_defect_logs_locations_only) ... ok
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.047s
+
+OK

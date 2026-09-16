@@ -1,0 +1,4 @@
+/safe-api-tool-calls Harden this existing provider adapter using the safe-api-tool-calls skill. Keep our client ownership, interface, result schema and dependency pins. Make provider response handling and refund failures reliable, with useful safe diagnostics. Add meaningful offline tests and explain what remains unverified.
+
+
+Use the globally installed skill. Work only in this project. Read CONTRACT.md. Dependencies are already installed in <RUN>/runtime/bin/python; use that interpreter for offline tests and preserve the declared Python 3.11.4 and httpx pins. This machine interpreter is 3.12.9, so report that validation limit. No dependency upgrades, cloud operations, live provider calls, or git operations. Complete the local implementation and tests without awaiting review.

@@ -48,3 +48,15 @@ If latency matters, measure from submission to meaningful content and final comp
 Report exact commands, versions, passed/failed/skipped counts and remaining manual steps. Mark each claim as current offline, historical live, current live, mocked or unverified production design. Record source identity where possible. Any authorised cleanup must independently confirm removal of owned resources and preserve existing resources; absence of created resources makes lifecycle testing not applicable, not passed.
 
 Skill maintainers: run the official structural validator, test every helper's help/dry-run, check internal links/frontmatter/unfinished scaffold text, copy the whole skill to a clean temporary workspace and exercise the scenarios in [forward cases](../tests/forward-cases.md). Recheck existing implementation and second invocation before claiming portability. Exact validation records live in [validation results](validation-results.md).
+
+## Laptop recheck — 16 September 2026
+
+A deeply nested TOML file reproduced an uncaught parser `RecursionError`. The
+inspector now returns its structured incomplete-inventory result, exit 1, without
+a traceback. A new regression exercises that input through the real CLI. From
+outside the repository, `python -B -I -m unittest discover -s "$SKILL_DIR/tests"
+-p 'test_*.py' -v` passed all **30** helper/guard tests with zero skips on CPython
+**3.12.9**, macOS **26.6.2 arm64**. The four optional real-ADK tests also passed
+with socket/DNS access blocked before imports, using ADK **2.8.0**, GenAI
+**2.19.0** and HTTPX **0.28.1**. No dependencies changed or provider calls ran.
+These are current offline results, separate from the historical records above.

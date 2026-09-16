@@ -1,0 +1,181 @@
+{
+  "repository_gate": {
+    "label": "repository-check",
+    "exit_code": 0,
+    "seconds": 39.88,
+    "command": [
+      "<RUN>/runtime/bin/python",
+      "-B",
+      "-I",
+      "<REPO>/scripts/check_repo.py"
+    ],
+    "log": "<RUN>/logs/repository-check.txt"
+  },
+  "repository_suites": [
+    {
+      "name": "Repository check tests",
+      "runner": "unittest",
+      "passed": 35,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.271
+    },
+    {
+      "name": "adk-agent-evaluation",
+      "runner": "unittest",
+      "passed": 15,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 3.505
+    },
+    {
+      "name": "adk-frontend-integration",
+      "runner": "unittest",
+      "passed": 53,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 2.751
+    },
+    {
+      "name": "adk-memory-architecture",
+      "runner": "pytest",
+      "passed": 16,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.42
+    },
+    {
+      "name": "adk-operational-guardrails",
+      "runner": "unittest",
+      "passed": 30,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 1.33
+    },
+    {
+      "name": "adk-sql-agent-engineering",
+      "runner": "unittest",
+      "passed": 45,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 6.077
+    },
+    {
+      "name": "adk-tool-auth-and-secrets",
+      "runner": "unittest",
+      "passed": 28,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.938
+    },
+    {
+      "name": "adk-workflow-design",
+      "runner": "unittest",
+      "passed": 14,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 1.415
+    },
+    {
+      "name": "deploy-adk-on-google-cloud",
+      "runner": "unittest",
+      "passed": 27,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 3.323
+    },
+    {
+      "name": "optimise-adk-on-google-cloud",
+      "runner": "unittest",
+      "passed": 135,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 13.928
+    },
+    {
+      "name": "protect-adk-sensitive-data",
+      "runner": "unittest",
+      "passed": 44,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.083
+    },
+    {
+      "name": "safe-api-tool-calls",
+      "runner": "unittest",
+      "passed": 12,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 1.772
+    }
+  ],
+  "repository_passed": 454,
+  "supplemental_suites": [
+    {
+      "name": "workflow-runtime",
+      "passed": 8,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "<RUN>/logs/workflow-runtime.txt"
+    },
+    {
+      "name": "guardrails-runtime",
+      "passed": 4,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "<RUN>/logs/guardrails-runtime.txt"
+    },
+    {
+      "name": "sql-runtime",
+      "passed": 10,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0,
+      "log": "<RUN>/logs/sql-runtime.txt"
+    }
+  ],
+  "supplemental_passed": 22,
+  "total_unique_passed": 476,
+  "total_skips": 0,
+  "total_failures": 0,
+  "total_errors": 0,
+  "scope": "Current offline repository/package/helper and supplemental real-SDK fixture execution. No live model/cloud behavior or automatic skill selection tested by these commands.",
+  "versions": {
+    "python": "3.12.9 (main, Feb  4 2025, 14:38:38) [Clang 16.0.0 (clang-1600.0.26.6)]",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "packages": {
+      "google-adk": "2.8.0",
+      "google-genai": "2.19.0",
+      "google-cloud-aiplatform": "1.153.1",
+      "google-cloud-dlp": "3.38.0",
+      "httpx": "0.28.1",
+      "pydantic": "2.13.5",
+      "google-auth": "2.58.0",
+      "pytest": "9.1.1",
+      "PyYAML": "6.0.3",
+      "aiosqlite": "0.22.1",
+      "sqlalchemy": "2.0.54",
+      "greenlet": "3.5.6"
+    }
+  },
+  "initial_attempt": {
+    "log": "<RUN>/logs/repository-check-initial.txt",
+    "exit_code": 1,
+    "explanation": "Gate stopped at optimise135:7 failures+4 errors. Missing greenlet caused3 database errors; harness OTEL_SDK_DISABLED=true prevented deliberately in-memory traces, causing remaining8 failures/errors. Installed compatible sqlalchemy[asyncio] in test runtime and removed blanket OTEL disabling from main gate. Original log retained; no source runtime logic changed."
+  },
+  "counting": "Counts use only final successful main gate and non-overlapping supplemental suites. Initial failed/repeated executions and earlier subagent83 tests are not added."
+}

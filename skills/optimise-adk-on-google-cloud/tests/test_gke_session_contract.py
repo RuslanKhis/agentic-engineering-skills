@@ -42,8 +42,15 @@ class GkeSessionContract(unittest.TestCase):
         except importlib.metadata.PackageNotFoundError:
             self.skipTest(f"{name} is absent; preserve target dependencies")
 
-    def database_run(self, exercise):
+    def require_database_dependencies(self):
+        # Core ADK includes aiosqlite but keeps SQLAlchemy in its optional db
+        # extra. Its async engine also needs greenlet, which may require the
+        # SQLAlchemy asyncio extra on this platform.
+        self.require_distribution("sqlalchemy")
         self.require_distribution("aiosqlite")
+        self.require_distribution("greenlet")
+
+    def database_run(self, exercise):
         from google.adk.sessions import DatabaseSessionService
 
         async def run():
@@ -91,6 +98,7 @@ class GkeSessionContract(unittest.TestCase):
         }
 
     def test_database_limits_events_in_sql_without_deleting_history_or_state(self):
+        self.require_database_dependencies()
         from google.adk.sessions.base_session_service import GetSessionConfig
         from sqlalchemy import event as sqlalchemy_event
 
@@ -126,6 +134,7 @@ class GkeSessionContract(unittest.TestCase):
         self.database_run(exercise)
 
     def test_database_zero_event_window_skips_event_query_but_keeps_metadata(self):
+        self.require_database_dependencies()
         from google.adk.sessions.base_session_service import GetSessionConfig
         from sqlalchemy import event as sqlalchemy_event
 
@@ -152,7 +161,7 @@ class GkeSessionContract(unittest.TestCase):
         self.database_run(exercise)
 
     def test_runner_close_flushes_and_service_close_disposes_owned_engine(self):
-        self.require_distribution("aiosqlite")
+        self.require_database_dependencies()
         from google.adk import Agent, Runner
         from google.adk.apps import App
         from google.adk.sessions import DatabaseSessionService

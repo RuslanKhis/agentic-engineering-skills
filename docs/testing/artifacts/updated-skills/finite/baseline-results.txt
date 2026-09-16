@@ -1,0 +1,254 @@
+test_callback_failure_rejects_without_disclosing_content (test_acceptance.Acceptance.test_callback_failure_rejects_without_disclosing_content) ... ERROR
+test_caller_cancellation_propagates_and_closes_owned_iterator (test_acceptance.Acceptance.test_caller_cancellation_propagates_and_closes_owned_iterator) ... FAIL
+test_close_failure_prevents_returning_a_success (test_acceptance.Acceptance.test_close_failure_prevents_returning_a_success) ... FAIL
+test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion (test_acceptance.Acceptance.test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion) ... 
+  test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion (test_acceptance.Acceptance.test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion) (camel=False) ... FAIL
+  test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion (test_acceptance.Acceptance.test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion) (camel=True) ... FAIL
+test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) ... 
+  test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=0) ... FAIL
+  test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=1) ... FAIL
+  test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=2) ... FAIL
+  test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=3) ... FAIL
+  test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=4) ... FAIL
+  test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=5) ... FAIL
+  test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=6) ... FAIL
+  test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=7) ... FAIL
+test_late_reported_error_invalidates_the_candidate (test_acceptance.Acceptance.test_late_reported_error_invalidates_the_candidate) ... 
+  test_late_reported_error_invalidates_the_candidate (test_acceptance.Acceptance.test_late_reported_error_invalidates_the_candidate) (camel=False) ... FAIL
+  test_late_reported_error_invalidates_the_candidate (test_acceptance.Acceptance.test_late_reported_error_invalidates_the_candidate) (camel=True) ... FAIL
+test_late_transport_failure_invalidates_the_candidate (test_acceptance.Acceptance.test_late_transport_failure_invalidates_the_candidate) ... FAIL
+test_only_designated_public_model_text_is_displayed (test_acceptance.Acceptance.test_only_designated_public_model_text_is_displayed) ... FAIL
+test_unrelated_configuration_is_preserved (test_acceptance.Acceptance.test_unrelated_configuration_is_preserved) ... ok
+test_wrong_invocation_is_rejected_before_its_preview (test_acceptance.Acceptance.test_wrong_invocation_is_rejected_before_its_preview) ... FAIL
+
+======================================================================
+ERROR: test_callback_failure_rejects_without_disclosing_content (test_acceptance.Acceptance.test_callback_failure_rejects_without_disclosing_content)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 161, in test_callback_failure_rejects_without_disclosing_content
+    await self.reject(Stream([
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 74, in reject
+    await self.invoke(source, callback=callback)
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 67, in invoke
+    return await collect_answer(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "<FINITE_EVAL>/project/stream_adapter.py", line 30, in collect_answer
+    await on_preview(preview)
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 159, in failed_callback
+    raise RuntimeError(PRIVATE)
+RuntimeError: SYNTHETIC_PRIVATE_PROVIDER_DETAIL_41
+
+======================================================================
+FAIL: test_caller_cancellation_propagates_and_closes_owned_iterator (test_acceptance.Acceptance.test_caller_cancellation_propagates_and_closes_owned_iterator)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 187, in test_caller_cancellation_propagates_and_closes_owned_iterator
+    self.assertEqual(source.closed, 1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_close_failure_prevents_returning_a_success (test_acceptance.Acceptance.test_close_failure_prevents_returning_a_success)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 166, in test_close_failure_prevents_returning_a_success
+    await self.reject(Stream(
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 73, in reject
+    with self.assertRaises(AnswerRejected) as raised:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AnswerRejected not raised
+
+======================================================================
+FAIL: test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion (test_acceptance.Acceptance.test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion) (camel=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 91, in test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion
+    self.assertTrue(source.exhausted)
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion (test_acceptance.Acceptance.test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion) (camel=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 91, in test_complete_answer_replaces_delta_preview_and_waits_for_exhaustion
+    self.assertTrue(source.exhausted)
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 144, in test_incomplete_or_unaccepted_outcomes_are_rejected
+    await self.reject(Stream(items))
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 76, in reject
+    self.assertEqual(source.closed, 1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 144, in test_incomplete_or_unaccepted_outcomes_are_rejected
+    await self.reject(Stream(items))
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 76, in reject
+    self.assertEqual(source.closed, 1)
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=2)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 144, in test_incomplete_or_unaccepted_outcomes_are_rejected
+    await self.reject(Stream(items))
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 73, in reject
+    with self.assertRaises(AnswerRejected) as raised:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AnswerRejected not raised
+
+======================================================================
+FAIL: test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=3)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 144, in test_incomplete_or_unaccepted_outcomes_are_rejected
+    await self.reject(Stream(items))
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 73, in reject
+    with self.assertRaises(AnswerRejected) as raised:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AnswerRejected not raised
+
+======================================================================
+FAIL: test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=4)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 144, in test_incomplete_or_unaccepted_outcomes_are_rejected
+    await self.reject(Stream(items))
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 73, in reject
+    with self.assertRaises(AnswerRejected) as raised:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AnswerRejected not raised
+
+======================================================================
+FAIL: test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=5)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 144, in test_incomplete_or_unaccepted_outcomes_are_rejected
+    await self.reject(Stream(items))
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 73, in reject
+    with self.assertRaises(AnswerRejected) as raised:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AnswerRejected not raised
+
+======================================================================
+FAIL: test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=6)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 144, in test_incomplete_or_unaccepted_outcomes_are_rejected
+    await self.reject(Stream(items))
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 73, in reject
+    with self.assertRaises(AnswerRejected) as raised:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AnswerRejected not raised
+
+======================================================================
+FAIL: test_incomplete_or_unaccepted_outcomes_are_rejected (test_acceptance.Acceptance.test_incomplete_or_unaccepted_outcomes_are_rejected) (case=7)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 144, in test_incomplete_or_unaccepted_outcomes_are_rejected
+    await self.reject(Stream(items))
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 73, in reject
+    with self.assertRaises(AnswerRejected) as raised:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AnswerRejected not raised
+
+======================================================================
+FAIL: test_late_reported_error_invalidates_the_candidate (test_acceptance.Acceptance.test_late_reported_error_invalidates_the_candidate) (camel=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 122, in test_late_reported_error_invalidates_the_candidate
+    await self.reject(source)
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 73, in reject
+    with self.assertRaises(AnswerRejected) as raised:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AnswerRejected not raised
+
+======================================================================
+FAIL: test_late_reported_error_invalidates_the_candidate (test_acceptance.Acceptance.test_late_reported_error_invalidates_the_candidate) (camel=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 122, in test_late_reported_error_invalidates_the_candidate
+    await self.reject(source)
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 73, in reject
+    with self.assertRaises(AnswerRejected) as raised:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AnswerRejected not raised
+
+======================================================================
+FAIL: test_late_transport_failure_invalidates_the_candidate (test_acceptance.Acceptance.test_late_transport_failure_invalidates_the_candidate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 126, in test_late_transport_failure_invalidates_the_candidate
+    await self.reject(Stream(
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 73, in reject
+    with self.assertRaises(AnswerRejected) as raised:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AnswerRejected not raised
+
+======================================================================
+FAIL: test_only_designated_public_model_text_is_displayed (test_acceptance.Acceptance.test_only_designated_public_model_text_is_displayed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 107, in test_only_designated_public_model_text_is_displayed
+    self.assertEqual(await self.invoke(source, previews), "In stock.")
+AssertionError: 'Do not display tool narration.' != 'In stock.'
+- Do not display tool narration.
++ In stock.
+
+
+======================================================================
+FAIL: test_wrong_invocation_is_rejected_before_its_preview (test_acceptance.Acceptance.test_wrong_invocation_is_rejected_before_its_preview)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "<FINITE_EVAL>/acceptance/test_acceptance.py", line 152, in test_wrong_invocation_is_rejected_before_its_preview
+    with self.assertRaises(AnswerRejected):
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: AnswerRejected not raised
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.013s
+
+FAILED (failures=17, errors=1)

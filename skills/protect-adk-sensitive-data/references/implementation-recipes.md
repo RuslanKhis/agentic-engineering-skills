@@ -159,7 +159,8 @@ screening_unavailable is true                         -> UNAVAILABLE
 model_armor_blocked or tool_policy_blocked is true     -> BLOCKED
 trusted ADK AuthorizationDenied error code             -> UNAUTHORIZED
 any other error_code or error_message                 -> ERROR
-not final, absent content, or content.role != "model" -> IGNORE
+partial, not final, absent content, or non-model role -> IGNORE
+author is "user", or any function call/response part  -> IGNORE
 otherwise join text parts excluding thought parts     -> FINAL(text) or IGNORE
 ```
 
@@ -169,6 +170,9 @@ Map error kinds to static application exceptions/public codes; the historical
 gateway uses one generic 404 for missing and unauthorised sessions. ADK 2.8.0
 turns tool authorisation exceptions into error events, so catching only the
 original Python exception misses this path (E1, E5).
+Its `is_final_response()` also accepts partial/tool-bearing events under
+`skip_summarization` or `long_running_tool_ids`; completion does not establish
+visibility. Check the explicit exclusions above before selecting answer text.
 The native Armor plugin marks both a detected match and its fail-closed provider
 failure as `model_armor_blocked=True`. A distinct unavailable outcome requires a
 tested adapter/plugin adaptation; the projector cannot infer it from safe text.

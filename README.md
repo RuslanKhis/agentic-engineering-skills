@@ -712,13 +712,21 @@ the selected skill's scope and approval requirements.
 For the packaging investigation, installation checks and design rationale, see
 [the distribution notes](docs/research/skill-distribution.md).
 
-We also ran three fresh Codex CLI sessions against small local projects. They
+An earlier revision was tested in three fresh Codex CLI sessions against small local projects. They
 used the installed skills to generate persistent user preferences, a refund
 tool with safe retries, and a concurrent ADK workflow. The generated code passed
 162 tests, including 37 independent acceptance checks. These checks cover those
 three examples; they do not establish that every skill or cloud integration has
 been exercised. See the [CLI test results and generated code](docs/testing/codex-cli-smoke.md)
 for the prompts, versions, source files and instructions for rerunning the checks.
+
+The deeper revision was rechecked on 16 September 2026: all twelve packages
+installed for Claude Code and Codex, and 476 repository and SDK checks passed
+without skips. Fresh coding sessions produced a refund adapter and a finite
+streaming adapter; after reviewing and repairing the generated code, their
+71 tests passed, including 17 separate acceptance checks. See the
+[laptop verification report](docs/testing/updated-skills-laptop.md) for the fixes,
+prompts, generated code and limits of these local checks.
 
 ### Updating and troubleshooting
 

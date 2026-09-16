@@ -1,0 +1,500 @@
+Command: ['<RUN>/runtime/bin/python', '-B', '-I', '<REPO>/scripts/check_repo.py']
+
+=== Skill packages ===
+adk-agent-evaluation: SKILL.md 63 lines / 1133 words; 11 Markdown files; 2 Python files
+adk-engineer: SKILL.md 90 lines / 683 words; 2 Markdown files; 0 Python files
+adk-frontend-integration: SKILL.md 75 lines / 1137 words; 11 Markdown files; 4 Python files
+adk-memory-architecture: SKILL.md 133 lines / 1024 words; 12 Markdown files; 2 Python files
+adk-operational-guardrails: SKILL.md 66 lines / 1195 words; 12 Markdown files; 5 Python files
+adk-sql-agent-engineering: SKILL.md 90 lines / 1256 words; 11 Markdown files; 5 Python files
+adk-tool-auth-and-secrets: SKILL.md 57 lines / 925 words; 9 Markdown files; 4 Python files
+adk-workflow-design: SKILL.md 121 lines / 967 words; 11 Markdown files; 3 Python files
+deploy-adk-on-google-cloud: SKILL.md 65 lines / 1135 words; 11 Markdown files; 2 Python files
+optimise-adk-on-google-cloud: SKILL.md 128 lines / 1129 words; 24 Markdown files; 16 Python files
+protect-adk-sensitive-data: SKILL.md 121 lines / 1121 words; 11 Markdown files; 6 Python files
+safe-api-tool-calls: SKILL.md 70 lines / 1109 words; 14 Markdown files; 7 Python files
+Checked 12 skill packages: 0 errors, 0 warnings.
+Evaluation case structure valid; model activation has not been evaluated.
+
+=== Repository check tests ===
+...................................
+----------------------------------------------------------------------
+Ran 35 tests in 0.271s
+
+OK
+
+=== adk-agent-evaluation ===
+...............
+----------------------------------------------------------------------
+Ran 15 tests in 3.505s
+
+OK
+
+=== adk-frontend-integration ===
+.....................................................
+----------------------------------------------------------------------
+Ran 53 tests in 2.751s
+
+OK
+
+=== adk-memory-architecture ===
+................                                                         [100%]
+16 passed in 0.42s
+
+=== adk-operational-guardrails ===
+..............................
+----------------------------------------------------------------------
+Ran 30 tests in 1.330s
+
+OK
+
+=== adk-sql-agent-engineering ===
+.............................................
+----------------------------------------------------------------------
+Ran 45 tests in 6.077s
+
+OK
+
+=== adk-tool-auth-and-secrets ===
+.................Executing <Task finished name='Task-18' coro=<CollectionTests.test_nonpublic_final_events_cannot_replace_collected_answer() done, defined at <REPO>/skills/adk-tool-auth-and-secrets/tests/test_public_text.py:143> result=None created at /opt/homebrew/Cellar/python@3.12/3.12.9/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py:100> took 0.746 seconds
+...........
+----------------------------------------------------------------------
+Ran 28 tests in 0.938s
+
+OK
+
+=== adk-workflow-design ===
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 1.415s
+
+OK
+
+=== deploy-adk-on-google-cloud ===
+...........................
+----------------------------------------------------------------------
+Ran 27 tests in 3.323s
+
+OK
+
+=== optimise-adk-on-google-cloud ===
+................................................................................<RUN>/runtime/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+Local artifact storage is disabled; using in-memory artifact service. Set --artifact_service_uri for production deployments.
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/cli/fast_api.py:263: UserWarning: [EXPERIMENTAL] InMemoryCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  credential_service = InMemoryCredentialService()
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/auth/credential_service/in_memory_credential_service.py:33: UserWarning: [EXPERIMENTAL] BaseCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  super().__init__()
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/models/llm_request.py:298: UserWarning: [EXPERIMENTAL] feature FeatureName.JSON_SCHEMA_FOR_FUNC_DECL is enabled.
+  declaration = tool._get_declaration()
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+Node execution failed with exception
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1359, in _run_one_step_async
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1836, in _call_llm_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1814, in _call_llm_with_tracing
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1897, in _run_and_handle_error
+    async for response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 465, in _run_and_handle_error
+    raise model_error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 442, in _run_and_handle_error
+    async for llm_response in agen:
+  File "<REPO>/skills/optimise-adk-on-google-cloud/tests/test_gke_http_contract.py", line 79, in generate_content_async
+    raise RuntimeError("synthetic model failure")
+RuntimeError: synthetic model failure
+Root node synthetic_answer_agent failed.
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 748, in _drive_root_node
+    await root_ctx._run_node_internal(
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/context.py", line 608, in _run_node_internal
+    raise DynamicNodeFailError(
+google.adk.workflow._errors.DynamicNodeFailError: Dynamic node synthetic_answer_agent failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 1061, in _cleanup_root_task
+    await task
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 757, in _drive_root_node
+    raise e.error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1359, in _run_one_step_async
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1836, in _call_llm_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1814, in _call_llm_with_tracing
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1897, in _run_and_handle_error
+    async for response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 465, in _run_and_handle_error
+    raise model_error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 442, in _run_and_handle_error
+    async for llm_response in agen:
+  File "<REPO>/skills/optimise-adk-on-google-cloud/tests/test_gke_http_contract.py", line 79, in generate_content_async
+    raise RuntimeError("synthetic model failure")
+RuntimeError: synthetic model failure
+Error in event_generator: synthetic model failure
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 748, in _drive_root_node
+    await root_ctx._run_node_internal(
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/context.py", line 608, in _run_node_internal
+    raise DynamicNodeFailError(
+google.adk.workflow._errors.DynamicNodeFailError: Dynamic node synthetic_answer_agent failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/cli/api_server.py", line 1915, in event_generator
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 1359, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 803, in _run_node_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 773, in _run
+    await self._cleanup_root_task(task, self.agent.name)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 1061, in _cleanup_root_task
+    await task
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 757, in _drive_root_node
+    raise e.error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1359, in _run_one_step_async
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1836, in _call_llm_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1814, in _call_llm_with_tracing
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1897, in _run_and_handle_error
+    async for response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 465, in _run_and_handle_error
+    raise model_error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 442, in _run_and_handle_error
+    async for llm_response in agen:
+  File "<REPO>/skills/optimise-adk-on-google-cloud/tests/test_gke_http_contract.py", line 79, in generate_content_async
+    raise RuntimeError("synthetic model failure")
+RuntimeError: synthetic model failure
+.Local artifact storage is disabled; using in-memory artifact service. Set --artifact_service_uri for production deployments.
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/cli/fast_api.py:263: UserWarning: [EXPERIMENTAL] InMemoryCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  credential_service = InMemoryCredentialService()
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/auth/credential_service/in_memory_credential_service.py:33: UserWarning: [EXPERIMENTAL] BaseCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  super().__init__()
+Overriding of current TracerProvider is not allowed
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+.Local artifact storage is disabled; using in-memory artifact service. Set --artifact_service_uri for production deployments.
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/cli/fast_api.py:263: UserWarning: [EXPERIMENTAL] InMemoryCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  credential_service = InMemoryCredentialService()
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/auth/credential_service/in_memory_credential_service.py:33: UserWarning: [EXPERIMENTAL] BaseCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  super().__init__()
+Overriding of current TracerProvider is not allowed
+.Local artifact storage is disabled; using in-memory artifact service. Set --artifact_service_uri for production deployments.
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/cli/fast_api.py:263: UserWarning: [EXPERIMENTAL] InMemoryCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  credential_service = InMemoryCredentialService()
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/auth/credential_service/in_memory_credential_service.py:33: UserWarning: [EXPERIMENTAL] BaseCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  super().__init__()
+Overriding of current TracerProvider is not allowed
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+.Local artifact storage is disabled; using in-memory artifact service. Set --artifact_service_uri for production deployments.
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/cli/fast_api.py:263: UserWarning: [EXPERIMENTAL] InMemoryCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  credential_service = InMemoryCredentialService()
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/auth/credential_service/in_memory_credential_service.py:33: UserWarning: [EXPERIMENTAL] BaseCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  super().__init__()
+Overriding of current TracerProvider is not allowed
+Local artifact storage is disabled; using in-memory artifact service. Set --artifact_service_uri for production deployments.
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/cli/fast_api.py:263: UserWarning: [EXPERIMENTAL] InMemoryCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  credential_service = InMemoryCredentialService()
+<RUN>/runtime/lib/python3.12/site-packages/google/adk/auth/credential_service/in_memory_credential_service.py:33: UserWarning: [EXPERIMENTAL] BaseCredentialService: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  super().__init__()
+Overriding of current TracerProvider is not allowed
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+Skipping missing token usage metadata for agent synthetic_answer_agent and model offline-http-contract
+............................................Skipping missing token usage metadata for agent alpha_agent and model offline-part-one-budget
+Skipping missing token usage metadata for agent beta_agent and model offline-part-one-budget
+Skipping missing token usage metadata for agent root_agent and model offline-part-one-budget
+Node execution failed with exception
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1359, in _run_one_step_async
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1836, in _call_llm_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1765, in _call_llm_with_tracing
+    invocation_context.increment_llm_call_count()
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/invocation_context.py", line 413, in increment_llm_call_count
+    self._invocation_cost_manager.increment_and_enforce_llm_calls_limit(
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/invocation_context.py", line 99, in increment_and_enforce_llm_calls_limit
+    raise LlmCallsLimitExceededError(
+google.adk.agents.invocation_context.LlmCallsLimitExceededError: Max number of llm calls limit of `1` exceeded
+Root node root_agent failed.
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 748, in _drive_root_node
+    await root_ctx._run_node_internal(
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/context.py", line 608, in _run_node_internal
+    raise DynamicNodeFailError(
+google.adk.workflow._errors.DynamicNodeFailError: Dynamic node root_agent failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 1061, in _cleanup_root_task
+    await task
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 757, in _drive_root_node
+    raise e.error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1359, in _run_one_step_async
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1836, in _call_llm_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1765, in _call_llm_with_tracing
+    invocation_context.increment_llm_call_count()
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/invocation_context.py", line 413, in increment_llm_call_count
+    self._invocation_cost_manager.increment_and_enforce_llm_calls_limit(
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/invocation_context.py", line 99, in increment_and_enforce_llm_calls_limit
+    raise LlmCallsLimitExceededError(
+google.adk.agents.invocation_context.LlmCallsLimitExceededError: Max number of llm calls limit of `1` exceeded
+.Skipping missing token usage metadata for agent alpha_agent and model offline-part-one-budget
+Skipping missing token usage metadata for agent beta_agent and model offline-part-one-budget
+Skipping missing token usage metadata for agent root_agent and model offline-part-one-budget
+Node execution failed with exception
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1359, in _run_one_step_async
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1836, in _call_llm_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1814, in _call_llm_with_tracing
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1897, in _run_and_handle_error
+    async for response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 465, in _run_and_handle_error
+    raise model_error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 442, in _run_and_handle_error
+    async for llm_response in agen:
+  File "<REPO>/skills/optimise-adk-on-google-cloud/tests/test_part1_adk_budget.py", line 74, in generate_content_async
+    admit(self.agent_name)
+  File "<REPO>/skills/optimise-adk-on-google-cloud/tests/test_part1_adk_budget.py", line 63, in admit
+    raise AggregateLimitExceeded("The shared test generation allowance is exhausted")
+test_part1_adk_budget.AggregateLimitExceeded: The shared test generation allowance is exhausted
+Root node root_agent failed.
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 748, in _drive_root_node
+    await root_ctx._run_node_internal(
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/context.py", line 608, in _run_node_internal
+    raise DynamicNodeFailError(
+google.adk.workflow._errors.DynamicNodeFailError: Dynamic node root_agent failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 1061, in _cleanup_root_task
+    await task
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/runners.py", line 757, in _drive_root_node
+    raise e.error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 136, in run
+    await self._execute_node(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 274, in _execute_node
+    await self._run_node_loop(ctx, node_input)
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_node_runner.py", line 288, in _run_node_loop
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_base_node.py", line 170, in run
+    async for item in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 627, in _run_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/workflow/_llm_agent_wrapper.py", line 484, in run_llm_agent_as_node
+    async for event in run_iter:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 339, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 100, in _with_caller_context
+    async for item in a:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/base_agent.py", line 326, in _run
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/agents/llm_agent.py", line 576, in _run_async_impl
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1278, in run_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1359, in _run_one_step_async
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1836, in _call_llm_async
+    async for event in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1814, in _call_llm_with_tracing
+    async for llm_response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 1897, in _run_and_handle_error
+    async for response in agen:
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 465, in _run_and_handle_error
+    raise model_error
+  File "<RUN>/runtime/lib/python3.12/site-packages/google/adk/flows/llm_flows/base_llm_flow.py", line 442, in _run_and_handle_error
+    async for llm_response in agen:
+  File "<REPO>/skills/optimise-adk-on-google-cloud/tests/test_part1_adk_budget.py", line 74, in generate_content_async
+    admit(self.agent_name)
+  File "<REPO>/skills/optimise-adk-on-google-cloud/tests/test_part1_adk_budget.py", line 63, in admit
+    raise AggregateLimitExceeded("The shared test generation allowance is exhausted")
+test_part1_adk_budget.AggregateLimitExceeded: The shared test generation allowance is exhausted
+.<REPO>/skills/optimise-adk-on-google-cloud/tests/test_runtime_contract.py:57: UserWarning: [EXPERIMENTAL] EventsCompactionConfig: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  events_compaction_config=EventsCompactionConfig(
+Skipping missing token usage metadata for agent support_agent and model offline-runtime-contract
+Skipping missing token usage metadata for agent support_agent and model offline-runtime-contract
+Skipping missing token usage metadata for agent support_agent and model offline-runtime-contract
+.Skipping missing token usage metadata for agent support_agent and model offline-runtime-contract
+Skipping missing token usage metadata for agent support_agent and model offline-runtime-contract
+Skipping missing token usage metadata for agent support_agent and model offline-runtime-contract
+.<REPO>/skills/optimise-adk-on-google-cloud/tests/test_runtime_token_compaction.py:106: UserWarning: [EXPERIMENTAL] EventsCompactionConfig: This feature is experimental and may change or be removed in future versions without notice. It may introduce breaking changes at any time.
+  events_compaction_config=EventsCompactionConfig(
+...
+----------------------------------------------------------------------
+Ran 135 tests in 13.928s
+
+OK
+
+=== protect-adk-sensitive-data ===
+............................................
+----------------------------------------------------------------------
+Ran 44 tests in 0.083s
+
+OK
+
+=== safe-api-tool-calls ===
+............
+----------------------------------------------------------------------
+Ran 12 tests in 1.772s
+
+OK
+
+Package and offline helper checks passed. Review any optional SDK skips above.
+Live evaluations, cloud behavior and skill-selection quality were not tested.

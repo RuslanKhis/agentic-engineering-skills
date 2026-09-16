@@ -56,7 +56,14 @@ python scripts/inspect_project.py --help
 python scripts/inspect_project.py . --dry-run
 ```
 
-The package has no mandatory third-party dependency. Tests optionally check a real installed ADK event shape; when absent, that one check is skipped and must be reported. The public-text canary assertions use synthetic events and never call a provider. Projection deliberately preserves a canary already in allowed final text, proving the documented redaction limit.
+The package has no mandatory third-party dependency. Tests optionally check real installed ADK events; when absent, those checks are skipped and must be reported. The public-text canary assertions use synthetic events and never call a provider. Projection deliberately preserves a canary already in allowed final text, proving the documented redaction limit.
+
+The projection also requires non-partial model content without function calls
+or responses. ADK 2.8.0 can mark partial/tool-bearing events final through
+`skip_summarization` or `long_running_tool_ids`; user events can also be final.
+Optional real-ADK regressions exercise these cases directly and through the
+collector, proving they cannot replace an approved public answer. Report all
+optional skips when ADK is absent; no provider calls are made.
 
 The inspector exits **0** for a completed static inventory, **2** for invalid input, unsupported Python or an incomplete inventory, and **3** when `--expect-adk X.Y.Z` cannot establish matching static pins. Incomplete inspection takes precedence over a pin mismatch. The expectation checks declarations/locks, including unresolved requirement directives; it does not check installed packages. `--help` reports configurable file/byte bounds; traversal also caps depth at 32 and visited entries at `min(100000, max(1000, max_files * 20))`. It skips hidden/dependency/data directories, environment files and symlinks. It is not a sandbox for a hostile process changing the filesystem concurrently.
 

@@ -15,14 +15,17 @@ SPEC.loader.exec_module(adapter)
 CANARY = "SYNTHETIC_NONPUBLIC_CREDENTIAL_CANARY"
 
 
-def part(text=None, thought=None):
-    return SimpleNamespace(text=text, thought=thought)
+def part(text=None, thought=None, function_call=None, function_response=None):
+    return SimpleNamespace(text=text, thought=thought, function_call=function_call,
+                           function_response=function_response)
 
 
 class Event:
-    def __init__(self, parts, final=True):
-        self.content = SimpleNamespace(parts=parts)
+    def __init__(self, parts, final=True, *, partial=False, author="agent", role="model"):
+        self.content = SimpleNamespace(parts=parts, role=role)
         self.final = final
+        self.partial = partial
+        self.author = author
         self.raw_auth_credential = CANARY
         self.actions = {"state_delta": {"access_token": CANARY}}
         self.headers = {"Authorization": CANARY}
@@ -41,6 +44,20 @@ class ProjectionTests(unittest.TestCase):
 
     def test_nonfinal_function_or_auth_event_not_forwarded(self):
         self.assertIsNone(adapter.project_final_text(Event([part(CANARY)], False)))
+
+    def test_partial_and_non_model_events_not_forwarded(self):
+        for changes in ({"partial": True}, {"author": "user"},
+                        {"role": "user"}, {"role": "tool"}, {"role": None}):
+            with self.subTest(changes=changes):
+                self.assertIsNone(adapter.project_final_text(Event([part(CANARY)], **changes)))
+        with self.assertRaises(adapter.PublicProjectionError):
+            adapter.project_final_text(Event([part(CANARY)], partial="false"))
+
+    def test_tool_bearing_final_event_withholds_all_text(self):
+        for field in ("function_call", "function_response"):
+            with self.subTest(field=field):
+                event = Event([part(CANARY), part(**{field: SimpleNamespace(name="tool")})])
+                self.assertIsNone(adapter.project_final_text(event))
 
     def test_malformed_part_fails_without_object_dump(self):
         class Bad:
@@ -77,6 +94,37 @@ class ProjectionTests(unittest.TestCase):
         )
         self.assertEqual(adapter.project_final_text(event), "Visible")
 
+    def test_actual_adk_completion_overrides_do_not_make_events_public(self):
+        for label, event in adk_nonpublic_events():
+            with self.subTest(label=label):
+                # Reproduce ADK's permissive completion result, then verify the
+                # adapter's separate visibility boundary prevents publication.
+                self.assertTrue(event.is_final_response())
+                self.assertIsNone(adapter.project_final_text(event))
+
+
+def adk_nonpublic_events():
+    try:
+        from google.adk.events import Event as AdkEvent, EventActions
+        from google.genai import types
+    except ImportError:
+        raise unittest.SkipTest("Optional ADK shape check; SDK is not a package dependency")
+
+    def content(*parts, role="model"):
+        return types.Content(role=role, parts=[types.Part(text=CANARY), *parts])
+
+    return [
+        ("partial_skip", AdkEvent(author="agent", partial=True,
+            actions=EventActions(skip_summarization=True), content=content())),
+        ("partial_long_running", AdkEvent(author="agent", partial=True,
+            long_running_tool_ids={"pending"}, content=content())),
+        ("call_skip", AdkEvent(author="agent", actions=EventActions(skip_summarization=True),
+            content=content(types.Part(function_call=types.FunctionCall(name="tool", args={}))))),
+        ("response_skip", AdkEvent(author="agent", actions=EventActions(skip_summarization=True),
+            content=content(types.Part(function_response=types.FunctionResponse(name="tool", response={}))))),
+        ("user", AdkEvent(author="user", content=content(role="user"))),
+    ]
+
 
 class CollectionTests(unittest.IsolatedAsyncioTestCase):
     async def test_later_events_consumed_and_second_invocation_is_independent(self):
@@ -91,6 +139,17 @@ class CollectionTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(visited, [0, 1, 2])
         self.assertEqual(await adapter.collect_final_text(stream()), "last")
         self.assertEqual(visited, [0, 1, 2, 0, 1, 2])
+
+    async def test_nonpublic_final_events_cannot_replace_collected_answer(self):
+        visited = []
+        events = adk_nonpublic_events()
+        async def stream():
+            yield Event([part("Visible answer")])
+            for label, event in events:
+                visited.append(label)
+                yield event
+        self.assertEqual(await adapter.collect_final_text(stream()), "Visible answer")
+        self.assertEqual(len(visited), 5)
 
     async def test_event_budget_stops_consumption(self):
         seen = []

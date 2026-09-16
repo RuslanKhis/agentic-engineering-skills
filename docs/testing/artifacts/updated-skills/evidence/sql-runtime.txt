@@ -1,0 +1,8 @@
+Command: ['<RUN>/runtime/bin/python', '-B', '-I', '-m', 'pytest', '<REPO>/skills/adk-sql-agent-engineering/assets/test_adk_contract.py', '-q', '-p', 'no:cacheprovider']
+..........                                                               [100%]
+=============================== warnings summary ===============================
+skills/adk-sql-agent-engineering/assets/test_adk_contract.py::test_public_workflow_branches_and_final_event[FAST-False-1-0-1-OK]
+  <frozen abc>:106: DeprecationWarning: BaseAgentConfig is deprecated and will be removed in future versions. Config is now loaded via reflection so the separate config class is no longer needed.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+10 passed, 1 warning in 4.48s
