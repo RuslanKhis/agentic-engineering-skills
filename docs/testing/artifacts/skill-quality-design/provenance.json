@@ -1,0 +1,50 @@
+{
+  "date": "2026-09-15",
+  "kind": "single independent explicit-router design walkthrough",
+  "baseline_run": false,
+  "fixture_unchanged": true,
+  "model": "Codex subagent; inherited parent model, exact model identifier and usage not recorded",
+  "skill_files": {
+    "adk-memory-architecture/LICENSE": "cec7af1fa2cba8d6496f42344e091494b9c515ae7fb777ad7879fdd8cf0490fd",
+    "adk-memory-architecture/SKILL.md": "37f694261f90c765b2a28f2542322aa27ceaf1da082df40c9bb568fb3f48bf8e",
+    "adk-memory-architecture/references/rag.md": "ad184cecbfc978953844fcb07b379f484526ec867d0de7eaa435a89e6ce4c9a6",
+    "adk-memory-architecture/references/memory-bank.md": "208587a26d797e0db456276422e3a08885abbeddc48e9cedaa78030d3c46f418",
+    "adk-memory-architecture/references/provenance.md": "2ff7e03c183f141efcfe31efe3e0661a565df1481ab6fe76d9427e0cc3e101b0",
+    "adk-memory-architecture/references/operations-validation.md": "cc026b11c770a3178b0295488718076465d3a6e64467cb64056bbfdde6454dea",
+    "adk-memory-architecture/references/sessions-state.md": "489c0c5a537188f302857bd101b80def67d26304b37cf40c3f3a584662dcb531",
+    "adk-memory-architecture/references/compatibility.md": "e13db686355982f7b2dfdb8b5c2719fa82231e3165790571f0dc2f2f5d5faf2a",
+    "adk-memory-architecture/references/bigquery.md": "d965593cf198ed484c1eafd467d3daf042013d3cfd4712e247fb03e8e5a397b4",
+    "adk-memory-architecture/references/skill-validation.md": "aed11c850e8a94cf8b4b534d628cdd7009fddfb91d066dc02eed91084dd81633",
+    "adk-memory-architecture/tests/test_inspect_project.py": "73960fe366e82b4cade6785e67463038af592c1058333ca88ca519583dec9153",
+    "adk-memory-architecture/agents/openai.yaml": "bf735216ac3573dd4e62bb44a79f83733fd9694858c0bfd9ed1db6a9c7c296fc",
+    "adk-memory-architecture/scripts/inspect_project.py": "7fbd26f3671c98297d086e87c8ec11e5c5fdecf21951be0ac118dd693ba21401",
+    "adk-engineer/LICENSE": "cec7af1fa2cba8d6496f42344e091494b9c515ae7fb777ad7879fdd8cf0490fd",
+    "adk-engineer/SKILL.md": "94eef7ce2838e5613e27be64a92197028adcd13b8de5943199351f7fd2f51e21",
+    "adk-engineer/references/composition.md": "f320503ba883cd930bb2f2ac28f1d76ba2df0cc305a07bdd24c7c7b56523fa09",
+    "adk-engineer/agents/openai.yaml": "1012da72b14c2524b116dce6d359af7381fa8592aff5ef625e3bd51f4a3b1456",
+    "google-agents-cli-adk-code/SKILL.md": "e4a4c809593378d7f37e962c23a3819219169420938329bff6c3b58e6532eb57",
+    "google-agents-cli-adk-code/references/samples.md": "1179dd749304bc98689778a8f974b2d6712a27088872420c86bd3b6555f2c5d2",
+    "google-agents-cli-adk-code/references/adk-python.md": "e692199af6894af9018498b98c241ee8b55bff38b56e07355672aef1caf2eefd",
+    "google-agents-cli-adk-code/references/adk-workflows.md": "fffbbcc3263bc42a46be344658aa55175bb6da4752a8cf6db09c2d87e481115c",
+    "google-agents-cli-workflow/SKILL.md": "3f7af2536bd7daad21e28210ba9e3f4739ddf4ae6bb8fed89c46b9e64eb0143d",
+    "google-agents-cli-workflow/references/extension.md": "599fc8871c17dbd30fbd52e41618c9b91b1ab1a05886a76bf1b349ba3d44d4ca",
+    "google-agents-cli-workflow/references/commands.md": "842e0930dafdaf9ae5462ecd2fd4509e53ebf0693625376ff19bc249b47d650c",
+    "google-agents-cli-workflow/references/terminology.md": "739129d9716e373660a19d6ba688f9abfeed037fed7465dbf3c2fdd5bfa07765",
+    "google-agents-cli-workflow/references/brainstorming.md": "f907c6203066bff0df7072102eeb947ea9321ed9e0eb20f28cfbdc0cba7fcb9b",
+    "google-agents-cli-workflow/references/internals.md": "263a2ceb2786195b6e8485ec49f91104538624c8a6e6cd9a563cbb8218b62a8a",
+    "google-agents-cli-workflow/references/spec-template.md": "a7518fda56f02f735d6366c3fcb37cb76a57c88dde7e9fa25525b160ab45ad74"
+  },
+  "fixture_files": {
+    "agents-cli-manifest.yaml": "fa53451ffeffa3ea0145673b162de20261a4f50a9a9310c758127048ab954895",
+    "requirements.txt": "a07ce51a8ff6befd315e3c68b6dfdc063a04827a980d52ea7c8dc20ac7533fce",
+    ".agents-cli-spec.md": "ed065bd5bc43127587de5c2f0650a01e3ce9b8645c19d2070629a939e59e5b76",
+    "app/serving.py": "23dfd67e1c130ae3179f998f1cc804b87ff897b0149a174a28f24ddfb4935a3f",
+    "app/agent.py": "c03324b7ed7b94acce7da501ffb71012474bf6c047fa64f9a98e2c00e7a5f180",
+    "app/profiles.py": "855149285a4ba31e2a51b07b2d688be3f99cd7f765e168178538db799bfd1b6b"
+  },
+  "limits": [
+    "Natural activation not measured",
+    "No paired baseline or repeated trials",
+    "ADK implementation and cloud behavior not executed"
+  ]
+}

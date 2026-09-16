@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "router-missing-specialist",
+      "prompt": "Inspect this ADK assistant and work out how to add a language preference that survives restarts. Use the installed toolkit to guide the change; do not install any additional skills or packages in this exercise.",
+      "available_skills": ["adk-engineer"],
+      "context": "The installed catalog and filesystem contain only the entry skill, with no sibling specialists. The existing Python application has an agent factory, an authenticated request scope and a SQLite store. The user authorizes inspection and local changes but explicitly excludes installation. The entry skill remains the primary available skill while it identifies the missing domain guidance.",
+      "expected_primary": "adk-engineer",
+      "assertions": [
+        "Identifies the memory specialist as relevant and reports that its instructions are unavailable.",
+        "Continues independent source inspection and explains the existing identity and persistence seams.",
+        "Provides a concrete installation instruction for later use without executing it.",
+        "Does not invent specialist instructions, claim to have loaded them or claim specialist-guided implementation.",
+        "Keeps specialist-dependent work pending and reports what was actually inspected."
+      ]
+    },
+    {
+      "id": "existing-agents-cli-focused-memory",
+      "prompt": "In this existing Agents CLI project, add an explicitly saved response-language preference with restart persistence and a forget action. Keep the accepted specification, generated service wiring and deployment setup. Limit this change to the feature and its local tests.",
+      "available_skills": ["adk-engineer", "adk-memory-architecture", "google-agents-cli-workflow", "google-agents-cli-adk-code"],
+      "context": "An adopted Agents CLI project contains agents-cli-manifest.yaml, uv.lock, an accepted specification, generated serving entrypoints and an application-owned user identity. The user has chosen its existing lifecycle and requests a focused follow-up change. No external service calls or deployment are authorized.",
+      "expected_primary": "adk-memory-architecture",
+      "assertions": [
+        "Uses memory guidance for the feature while preserving the project's existing lifecycle, package manager and accepted specification.",
+        "Treats the exact user-controlled setting as a deterministic profile rather than automatically choosing semantic memory.",
+        "Derives scope from trusted application identity and verifies explicit consent, restart persistence, cross-user isolation and forgetting.",
+        "Preserves the manifest, generated serving and deployment wiring unless a specific feature requirement justifies a scoped change.",
+        "Does not start a second specification interview, scaffold conversion, cloud deployment or paid evaluation solely because optional lifecycle skills are installed.",
+        "Reports local evidence separately from any unverified managed-service behavior."
+      ]
+    },
+    {
+      "id": "plain-adk-no-scaffold",
+      "prompt": "Our existing ADK application runs two independent read tools in sequence. Make them run concurrently before the summarizer, and ensure either failure prevents a success claim. Preserve our package manager, public interfaces and deployment files.",
+      "available_skills": ["adk-engineer", "adk-workflow-design", "google-agents-cli-workflow", "google-agents-cli-scaffold"],
+      "context": "This is a plain ADK repository with requirements.txt, an existing unittest suite, custom HTTP serving code and no Agents CLI manifest. The optional Google skills are installed globally; the user has not adopted their generated-project lifecycle. Existing dependencies include a compatible ADK version and permit scripted-model offline Runner tests.",
+      "expected_primary": "adk-workflow-design",
+      "assertions": [
+        "Chooses workflow guidance for concurrency, handoffs and terminal failure behavior.",
+        "Keeps the repository's package manager, public contracts and deployment conventions.",
+        "Does not scaffold, enhance, upgrade or convert the project merely because those optional capabilities are installed.",
+        "Tests actual concurrent execution and the failed-branch boundary through the relevant runtime seam.",
+        "Preserves real failure evidence rather than replacing an unavailable report with fabricated fallback data."
+      ]
+    },
+    {
+      "id": "chosen-test-first-workflow",
+      "prompt": "Use my selected test-first workflow to fix this ADK refund adapter. A timeout after acceptance currently creates a second refund on retry. Reproduce the duplicate, repair it, and preserve the existing successful response shape.",
+      "available_skills": ["adk-engineer", "safe-api-tool-calls", "tdd"],
+      "context": "The user explicitly selected the installed test-first development skill before this request. The repository has an existing refund adapter, durable operation store, provider replay-key contract and deterministic provider double. No live payments or external model calls are authorized.",
+      "expected_primary": "safe-api-tool-calls",
+      "assertions": [
+        "Combines the user's selected development process with API-safety domain guidance.",
+        "Reproduces the accepted-write/lost-response defect with a meaningful failing test before applying the fix.",
+        "Preserves trusted operation identity and payload binding across permitted retries or reconciliation.",
+        "Checks stored effects and provider attempts, including uncertainty, rather than asserting only response wording.",
+        "Preserves existing interfaces and avoids a redundant project-planning process or unrelated workflow adoption.",
+        "Reports the actual local tests without implying that a live refund was executed."
+      ]
+    },
+    {
+      "id": "out-of-scope-marketing-edit",
+      "prompt": "Fix the spelling of 'recieve' in the marketing page and leave everything else unchanged.",
+      "available_skills": ["adk-engineer", "adk-workflow-design", "adk-frontend-integration", "deploy-adk-on-google-cloud", "optimise-adk-on-google-cloud"],
+      "context": "A documentation-only index.html advertises an ADK service hosted on Cloud Run. The task changes one visible word; it does not change code, transport, configuration or hosting behavior.",
+      "expected_primary": null,
+      "assertions": [
+        "Makes the requested text correction without invoking an ADK specialist solely because product names appear nearby.",
+        "Does not inspect cloud credentials, generate deployment plans or change dependencies.",
+        "Keeps the change limited to the requested word and verifies that limited edit."
+      ]
+    },
+    {
+      "id": "privacy-with-observability",
+      "prompt": "Our ADK project still uploads full prompt content after we disabled content capture in traces. Inspect every enabled telemetry destination and prepare the smallest fix with synthetic local tests. Preserve useful timing and error metadata.",
+      "available_skills": ["adk-engineer", "protect-adk-sensitive-data", "optimise-adk-on-google-cloud", "google-agents-cli-observability"],
+      "context": "An existing Agents CLI project has trace-content capture disabled but a separate completion-upload path enabled, plus an analytics exporter. The user requests a privacy fix, not a performance optimization. Configuration inspection and local code changes are authorized; uploading data, changing cloud resources and reading real customer logs are excluded.",
+      "expected_primary": "protect-adk-sensitive-data",
+      "assertions": [
+        "Uses data-boundary guidance as the primary specialist and optional observability guidance only for the configured telemetry paths.",
+        "Inspects trace spans/events, completion uploads and analytics export independently.",
+        "Does not treat a disabled trace-capture setting as proof that all prompt-content export is disabled.",
+        "Tests a synthetic canary against each forbidden export payload while retaining the approved timing and error metadata.",
+        "Does not load the optimization specialist merely because traces and timing appear in the request.",
+        "Reports the tested local export boundaries and leaves live export verification explicitly unverified."
+      ]
+    }
+  ]
+}

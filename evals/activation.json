@@ -1,0 +1,173 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "id": "engineer-positive",
+      "skill": "adk-engineer",
+      "prompt": "Our Python Google ADK assistant needs to remember a customer's preferred language and show its responses in our web app. Inspect the project, work out which parts need changing, and implement the feature with local tests.",
+      "should_trigger": true,
+      "rationale": "An outcome spanning memory and browser integration needs the entry point to select the relevant specialists."
+    },
+    {
+      "id": "engineer-near-miss",
+      "skill": "adk-engineer",
+      "prompt": "Change the loading spinner's color in our React app. The app happens to call an ADK backend, but leave the request handling and backend unchanged.",
+      "should_trigger": false,
+      "rationale": "An isolated styling change does not require ADK engineering guidance."
+    },
+    {
+      "id": "workflow-positive",
+      "skill": "adk-workflow-design",
+      "prompt": "Our ADK agent fetches two independent reports, then summarizes both. Run the fetches concurrently and make sure a failed branch cannot turn into a successful summary. Preserve the existing result schema.",
+      "should_trigger": true,
+      "rationale": "This changes parallel orchestration, handoffs and the workflow's failure contract."
+    },
+    {
+      "id": "workflow-near-miss",
+      "skill": "adk-workflow-design",
+      "prompt": "Our existing ADK agent already has the right execution flow. Add retrieval over the approved policy documents, including filtering documents by the caller's entitlement. Keep its orchestration unchanged.",
+      "should_trigger": false,
+      "rationale": "Governed document retrieval belongs to memory architecture; the request excludes control-flow changes."
+    },
+    {
+      "id": "api-positive",
+      "skill": "safe-api-tool-calls",
+      "prompt": "The refund API sometimes times out after accepting a request, and our Python agent retries it as a new refund. Fix the adapter so it preserves the same authorized operation and reports uncertain outcomes honestly.",
+      "should_trigger": true,
+      "rationale": "Ambiguous external writes and unsafe replay are the core API safety boundary."
+    },
+    {
+      "id": "api-near-miss",
+      "skill": "safe-api-tool-calls",
+      "prompt": "Our local SQLite report query is slow. Review its query plan and suggest an index; there is no HTTP client or external API involved.",
+      "should_trigger": false,
+      "rationale": "Ordinary query optimization has no external-call retry, deadline or replay problem."
+    },
+    {
+      "id": "guardrails-positive",
+      "skill": "adk-operational-guardrails",
+      "prompt": "Our ADK assistant keeps repeating a tool that returns a terminal failure. Stop the repetition before another tool execution and enforce a model-call allowance across the whole invocation.",
+      "should_trigger": true,
+      "rationale": "The requested controls bound agent-level work and repeated tool dispatch."
+    },
+    {
+      "id": "guardrails-near-miss",
+      "skill": "adk-operational-guardrails",
+      "prompt": "Add a timeout and bounded retries for transient errors to this one Python HTTP GET helper. Its caller already bounds agent invocations; leave those controls alone.",
+      "should_trigger": false,
+      "rationale": "A single HTTP retry policy belongs to API safety, not invocation-level guardrails."
+    },
+    {
+      "id": "deploy-positive",
+      "skill": "deploy-adk-on-google-cloud",
+      "prompt": "Prepare our existing Python ADK service for Cloud Run. Review the container entrypoint, runtime identity and session persistence, then produce the configuration and validation commands. Deployment is not authorized yet.",
+      "should_trigger": true,
+      "rationale": "Local preparation and review of ADK hosting are deployment work even without permission to execute cloud changes."
+    },
+    {
+      "id": "deploy-near-miss",
+      "skill": "deploy-adk-on-google-cloud",
+      "prompt": "Our ADK agent is already hosted successfully. Design how it should remember a user's explicitly saved language preference across conversations; no hosting or deployment changes are needed.",
+      "should_trigger": false,
+      "rationale": "Memory design alone is explicitly outside the deployment skill's activation scope."
+    },
+    {
+      "id": "optimise-positive",
+      "skill": "optimise-adk-on-google-cloud",
+      "prompt": "Traces show our ADK service on Cloud Run spends most of each request repeatedly creating its session client. Inspect that lifetime, reduce the measured overhead, and check that user isolation and cancellation still work.",
+      "should_trigger": true,
+      "rationale": "A measured session-handling bottleneck calls for optimization with correctness checks."
+    },
+    {
+      "id": "optimise-near-miss",
+      "skill": "optimise-adk-on-google-cloud",
+      "prompt": "We have a new ADK agent and need to choose between Cloud Run and managed Agent Runtime for its first deployment. Compare the hosting fit and prepare a deployment plan; we have no performance problem to investigate.",
+      "should_trigger": false,
+      "rationale": "Hosting selection and first deployment alone belong to the deployment specialist."
+    },
+    {
+      "id": "frontend-positive",
+      "skill": "adk-frontend-integration",
+      "prompt": "Connect our existing ADK agent to a CopilotKit interface. Stream public text and tool progress, verify that the caller owns the conversation, and handle failures after a partial answer.",
+      "should_trigger": true,
+      "rationale": "The request concerns the browser transport, ownership and streamed-result contract."
+    },
+    {
+      "id": "frontend-near-miss",
+      "skill": "adk-frontend-integration",
+      "prompt": "Make the message bubbles in our ADK chat page use a larger border radius and fix their mobile spacing. Keep the API, streaming and session behavior unchanged.",
+      "should_trigger": false,
+      "rationale": "Pure React styling does not need the agent-to-browser integration skill."
+    },
+    {
+      "id": "memory-positive",
+      "skill": "adk-memory-architecture",
+      "prompt": "Add a response-language preference to our ADK assistant. Save it only when the user explicitly agrees, keep it across restarts, isolate users, and let each user change or forget their own setting.",
+      "should_trigger": true,
+      "rationale": "An exact cross-session profile setting needs trusted scope, consent, persistence and erasure decisions."
+    },
+    {
+      "id": "memory-near-miss",
+      "skill": "adk-memory-architecture",
+      "prompt": "Tune the database server's buffer cache for our unrelated inventory application. This is database administration, with no agent sessions, retrieval or cross-session memory feature.",
+      "should_trigger": false,
+      "rationale": "General database administration and non-agent caching are excluded."
+    },
+    {
+      "id": "evaluation-positive",
+      "skill": "adk-agent-evaluation",
+      "prompt": "Our ADK evaluation command reports success even when some cases have no score. Audit the result handling and add checks for missing cases, failed observations and the expected metric thresholds.",
+      "should_trigger": true,
+      "rationale": "Evaluation coverage, incomplete evidence and result auditing are the requested outcome."
+    },
+    {
+      "id": "evaluation-near-miss",
+      "skill": "adk-agent-evaluation",
+      "prompt": "Add unit tests for this standalone Python date-formatting helper. It has no model, tools, runner or agent behavior to evaluate.",
+      "should_trigger": false,
+      "rationale": "Ordinary non-agent unit tests are outside the specialist's scope."
+    },
+    {
+      "id": "sensitive-data-positive",
+      "skill": "protect-adk-sensitive-data",
+      "prompt": "Our ADK service must keep customer email addresses out of model requests, saved events and telemetry. Trace those paths, add the required screening boundaries, and use synthetic canaries to test them locally.",
+      "should_trigger": true,
+      "rationale": "The task requires sensitive-data controls across model, storage and export boundaries."
+    },
+    {
+      "id": "sensitive-data-near-miss",
+      "skill": "protect-adk-sensitive-data",
+      "prompt": "Configure Cloud Armor rate limiting for a public marketing website. There is no ADK application, prompt screening or personal-data processing change in this task.",
+      "should_trigger": false,
+      "rationale": "Cloud Armor WAF configuration is distinct from agent sensitive-data protection and Model Armor."
+    },
+    {
+      "id": "auth-positive",
+      "skill": "adk-tool-auth-and-secrets",
+      "prompt": "An ADK tool can select another customer's OAuth connection by passing their user ID. Move credential selection behind verified caller identity and test refresh and disconnect ownership.",
+      "should_trigger": true,
+      "rationale": "Model-controlled credential selection and delegated-token lifecycle need the tool-authentication specialist."
+    },
+    {
+      "id": "auth-near-miss",
+      "skill": "adk-tool-auth-and-secrets",
+      "prompt": "Redesign our sign-in page's typography and password-field visibility button. Authentication already works; do not change identity verification, OAuth, credentials or agent tools.",
+      "should_trigger": false,
+      "rationale": "A sign-in UI change does not alter the tool authentication or credential boundary."
+    },
+    {
+      "id": "sql-positive",
+      "skill": "adk-sql-agent-engineering",
+      "prompt": "Build an ADK analytics assistant that answers revenue questions using reviewed query templates. Retrieve only the relevant schema and keep tenant scope and read-only query execution under application control.",
+      "should_trigger": true,
+      "rationale": "Natural-language analytics, selective schema context and controlled SQL execution define this specialist's task."
+    },
+    {
+      "id": "sql-near-miss",
+      "skill": "adk-sql-agent-engineering",
+      "prompt": "Review indexes for a slow hand-written reporting query in our backend. No natural-language interface or agent-generated SQL is involved.",
+      "should_trigger": false,
+      "rationale": "Ordinary SQL tuning is explicitly excluded from the SQL-agent skill."
+    }
+  ]
+}

@@ -27,6 +27,11 @@ implementation or a review, and what observable result would satisfy it.
 Preserve the project's domain and working conventions. Resolve routine choices
 from the repository; ask only for missing decisions that affect the result.
 
+If the project has `agents-cli-manifest.yaml`, the user asks to use Agents CLI,
+or another collection already supplies the development workflow, read
+[working with other skill collections](references/composition.md). It explains
+how to preserve that workflow while selecting the ADK guidance for this task.
+
 ## Select and load the specialist
 
 Choose one primary skill from the table. Add another only when the requested
@@ -79,12 +84,6 @@ sessions or document retrieval before selecting a store. Add data-protection
 guidance when the requested data flow needs that work. Add evaluation guidance
 when the task calls for an agent evaluation strategy; ordinary regression tests
 remain part of the memory implementation itself.
-
-If the user has chosen a workflow skill such as Matt Pocock's `tdd`, combine its
-development process with the ADK specialist's domain guidance. Use only skills
-actually available in the current environment. Optional workflow skills are not
-dependencies, and selecting an ADK specialist does not initiate a separate
-interview, ticketing process, publication or commit.
 
 Finish with the requested explanation or the change made, validation actually
 performed, and any unresolved decision or unverified behaviour. Naming a

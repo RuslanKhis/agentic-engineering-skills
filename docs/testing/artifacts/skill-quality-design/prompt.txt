@@ -1,0 +1,1 @@
+Review this existing Agents CLI support assistant and propose how to add a saved response-language preference, including consent, restart persistence and forgetting. Keep the accepted design and existing service wiring. This is a read-only design task: no implementation, installations, external calls or deployment.

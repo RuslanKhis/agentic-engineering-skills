@@ -1,0 +1,4 @@
+# Maintainer package checks only; installed skills do not need these packages.
+PyYAML==6.0.3
+markdown-it-py==4.0.0
+pytest==9.1.1

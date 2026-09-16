@@ -757,6 +757,22 @@ skill before it is available through the GitHub install command.
 
 </details>
 
+## Improving and Contributing
+
+*Make the instructions easier to select, then verify the work they produce.*
+
+The [maintainer guide](CONTRIBUTING.md) provides a local check command and the
+conventions for changing a skill. Automated checks validate all twelve packages
+and run their offline helper suites; GitHub Actions is configured to run them
+on Python 3.11 and 3.12. These checks do not establish model or cloud behavior.
+
+The [quality evaluation guide](docs/testing/skill-quality.md) separates natural
+skill selection, explicit invocation, composition and implementation results.
+It includes positive and near-miss cases for every skill, contextual scenarios,
+and a procedure for comparing a change against an old-version or no-skill
+baseline. See [the research behind these practices](docs/research/skill-quality-practices.md)
+for sources and the limits of the available evidence.
+
 ## About the Book
 
 These skills turn the engineering lessons in **Agentic Engineering: Building
