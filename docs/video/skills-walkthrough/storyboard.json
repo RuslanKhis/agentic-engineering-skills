@@ -1,0 +1,364 @@
+[
+  {
+    "id": "opening",
+    "chapter": "I · Understand",
+    "duration": 14,
+    "layout": "title_page",
+    "title": "A working agent. The next feature.",
+    "notes": [
+      "Your ADK agent already works. Now you need memory or a browser interface.\nSkills give your coding agent an approach to the engineering decisions."
+    ]
+  },
+  {
+    "id": "two-agents",
+    "chapter": "I · Understand",
+    "duration": 20,
+    "layout": "cards",
+    "title": "Which agent uses the skill?",
+    "cards": [
+      {
+        "label": "YOUR CODING AGENT",
+        "text": "Claude Code, Codex or Antigravity\n\nReads the skill and your project.\nHelps you design, edit and test.",
+        "size": 26
+      },
+      {
+        "label": "YOUR APPLICATION AGENT",
+        "text": "The Google ADK program\n\nRuns inside your application.\nResponds to your users.",
+        "size": 28
+      }
+    ],
+    "notes": [
+      "Install skills into the coding client you use to work on the project.",
+      "Skills guide development. They do not automatically become\npart of the ADK application that your users run."
+    ]
+  },
+  {
+    "id": "skill-folder",
+    "chapter": "I · Understand",
+    "duration": 20,
+    "layout": "folder",
+    "title": "A folder of useful instructions",
+    "items": [
+      [
+        "SKILL.md",
+        "When to use it · how to approach the task"
+      ],
+      [
+        "References",
+        "Detailed recipes, decisions and constraints"
+      ],
+      [
+        "Scripts & tests",
+        "Helpers and checks, where provided"
+      ]
+    ],
+    "notes": [
+      "A skill is a small folder your coding agent can read while working.",
+      "The coding agent reads relevant material alongside your own code.\nThe instructions still need to be applied to your particular project."
+    ]
+  },
+  {
+    "id": "entry-point",
+    "chapter": "I · Understand",
+    "duration": 16,
+    "layout": "router",
+    "title": "One entry point. Eleven specialists.",
+    "items": [
+      [
+        "Memory architecture",
+        "adk-memory-architecture"
+      ],
+      [
+        "Frontend integration",
+        "adk-frontend-integration"
+      ],
+      [
+        "Reliable API tools",
+        "safe-api-tool-calls"
+      ]
+    ],
+    "notes": [
+      "Start with adk-engineer when you know the outcome\nbut have not chosen a specialist. Three of the eleven are shown here.",
+      "It selects the relevant installed instructions. You can also name\na specialist directly. You do not need to have read the book."
+    ]
+  },
+  {
+    "id": "existing-project",
+    "chapter": "II · Install",
+    "duration": 18,
+    "layout": "cards",
+    "title": "Begin where your application lives",
+    "cards": [
+      {
+        "label": "ILLUSTRATIVE EXISTING PROJECT",
+        "text": "support-agent/\n  agent.py\n  database/\n  auth/\n  tests/\n  web/",
+        "mono": true,
+        "size": 25
+      },
+      {
+        "label": "TERMINAL",
+        "text": "cd /path/to/support-agent\n\nUse your actual project path.\nKeep its existing structure.",
+        "mono": true,
+        "size": 23
+      }
+    ],
+    "notes": [
+      "Our example already has Python code, a database, login, tests and a React app.",
+      "Open a terminal inside your application's project directory.\nYou do not need to copy the book's example application."
+    ]
+  },
+  {
+    "id": "prerequisites",
+    "chapter": "II · Install",
+    "duration": 18,
+    "layout": "cards",
+    "title": "A short setup checklist",
+    "cards": [
+      {
+        "label": "HAVE THESE READY",
+        "text": "A coding client that supports skills\nAlready installed and signed in\n\nGit\nNode.js 22.20+ with npm",
+        "size": 25
+      },
+      {
+        "label": "CHECK IN YOUR TERMINAL",
+        "text": "git --version\nnode --version\nnpm --version\n\nThe npm install provides npx.",
+        "mono": true,
+        "size": 25
+      }
+    ],
+    "notes": [
+      "npx runs the installer that downloads the skill collection.",
+      "Downloading the skills needs no cloud credentials.\nYour application keeps its own ADK dependencies."
+    ]
+  },
+  {
+    "id": "install",
+    "chapter": "II · Install",
+    "duration": 26,
+    "layout": "terminal",
+    "title": "Run this in the terminal",
+    "command": "npx skills@latest add \\\n  RuslanKhis/agentic-engineering-skills \\\n  --skill '*'",
+    "items": [
+      [
+        "All twelve skills",
+        "entry point + eleven specialists"
+      ],
+      [
+        "Choose your client",
+        "follow the installer prompts"
+      ],
+      [
+        "Project scope",
+        "use the same application folder"
+      ]
+    ],
+    "notes": [
+      "Keep the quotes around '*'. The backslashes continue the command\nonto the next line in a macOS or Linux shell.",
+      "This downloads the instructions and their supporting files.\nOpen the same project in your coding agent after installation."
+    ]
+  },
+  {
+    "id": "invocation",
+    "chapter": "II · Install",
+    "duration": 22,
+    "layout": "clients",
+    "title": "The next request goes in chat",
+    "items": [
+      [
+        "Claude Code",
+        "/adk-engineer …"
+      ],
+      [
+        "Codex",
+        "$adk-engineer …"
+      ],
+      [
+        "Google clients",
+        "Use the adk-engineer skill to …"
+      ]
+    ],
+    "notes": [
+      "Type the skill request in the coding-agent chat.\nIf a newly installed skill is missing, start a fresh session.",
+      "For Google consumer accounts, use Antigravity.\nThe README explains supported Gemini CLI access and discovery."
+    ]
+  },
+  {
+    "id": "memory-request",
+    "chapter": "III · Add memory · Illustrated example",
+    "duration": 26,
+    "layout": "prompt",
+    "title": "01 / Remember a preferred language",
+    "context": "Before: a new conversation loses the user's preferred language.",
+    "prompt": "/adk-engineer Add memory so our support agent remembers\npreferred language between conversations. Reuse our\ndatabase and login. Ask before saving; support changes\nand forgetting. Add tests for consent and user isolation.",
+    "notes": [
+      "State the outcome, what to reuse, and the behaviours to check.",
+      "The entry point selects adk-memory-architecture.\nIn Codex, replace /adk-engineer with $adk-engineer."
+    ]
+  },
+  {
+    "id": "memory-design",
+    "chapter": "III · Add memory · Illustrated example",
+    "duration": 22,
+    "layout": "memory_flow",
+    "title": "Choose what to remember",
+    "notes": [
+      "The specialist inspects identity, storage interfaces and existing ADK code.\nAn exact language setting may belong in an ordinary user profile.",
+      "Conversation history and document retrieval solve different problems.\nChoose the storage to match the information you need."
+    ]
+  },
+  {
+    "id": "memory-checks",
+    "chapter": "III · Add memory · Expected checks",
+    "duration": 20,
+    "layout": "cards",
+    "title": "What should the memory tests prove?",
+    "cards": [
+      {
+        "label": "CONTINUITY & CONSENT",
+        "text": "No consent → nothing saved.\n\nA new conversation can load\nits user's saved preference.",
+        "size": 28
+      },
+      {
+        "label": "OWNERSHIP & FORGETTING",
+        "text": "Other users cannot read it.\n\nChanging or forgetting updates\nwhat later conversations can read.",
+        "size": 26
+      }
+    ],
+    "notes": [
+      "Ask the coding agent to implement and run these checks in your project.",
+      "These are acceptance criteria. Review the actual code and test results;\nthe diagram does not establish that an implementation passed."
+    ]
+  },
+  {
+    "id": "frontend-request",
+    "chapter": "IV · Add a frontend · Illustrated example",
+    "duration": 26,
+    "layout": "prompt",
+    "title": "02 / Connect the existing React chat",
+    "context": "Before: the Python agent works, but the website cannot talk to it.",
+    "prompt": "/adk-frontend-integration Connect our React chat to\nthis ADK agent through an API. Reuse our login.\nStream replies and tool progress. Enforce conversation\nownership. Add API tests and check one browser flow.",
+    "notes": [
+      "Choose the specialist directly when you already know the task.",
+      "Preserve the current application. Ask for the connection, ownership\nchecks and a browser flow that shows the complete result."
+    ]
+  },
+  {
+    "id": "frontend-contract",
+    "chapter": "IV · Add a frontend · Illustrated example",
+    "duration": 22,
+    "layout": "sequence",
+    "title": "Connect through your backend",
+    "items": [
+      [
+        "Browser",
+        "existing React chat"
+      ],
+      [
+        "Your API",
+        "trusted application code"
+      ],
+      [
+        "ADK runner",
+        "runs the conversation"
+      ],
+      [
+        "ADK agent",
+        "does the requested work"
+      ]
+    ],
+    "notes": [
+      "The backend verifies the user and conversation before running the agent.",
+      "Your API releases only permitted text and progress.\nUse a custom API or AG-UI contract that fits the project."
+    ]
+  },
+  {
+    "id": "stream-endings",
+    "chapter": "IV · Add a frontend · Illustrated example",
+    "duration": 20,
+    "layout": "endings",
+    "title": "Streaming needs a clear finish",
+    "notes": [
+      "Give text, tool progress, completion and failure distinct meanings.",
+      "A final answer should not duplicate text already displayed.\nIf a request fails after partial text, show that failure."
+    ]
+  },
+  {
+    "id": "frontend-checks",
+    "chapter": "IV · Add a frontend · Expected checks",
+    "duration": 20,
+    "layout": "cards",
+    "title": "Test the whole conversation",
+    "cards": [
+      {
+        "label": "API & EVENT HANDLING",
+        "text": "Users continue only their own chats.\n\nPartial text and tool progress render.\nCompletion and failure stay distinct.",
+        "size": 25
+      },
+      {
+        "label": "BROWSER FLOW",
+        "text": "Send one complete request\nthrough the actual interface.\n\nReport what remains unverified.",
+        "size": 27
+      }
+    ],
+    "notes": [
+      "Ask for executable checks around the new connection.",
+      "Local tests, browser checks and live model evaluation provide different\nevidence. These expected checks are not recorded passing results."
+    ]
+  },
+  {
+    "id": "companions",
+    "chapter": "V · Keep building",
+    "duration": 18,
+    "layout": "cards",
+    "title": "Combine complementary skills",
+    "cards": [
+      {
+        "label": "MATT POCOCK'S SKILLS",
+        "text": "A development method\n\nUse the installed tdd skill\nalongside the ADK specialist.",
+        "size": 27
+      },
+      {
+        "label": "GOOGLE'S AGENTS CLI SKILLS",
+        "text": "Project conventions and commands\n\nUse them when working with\nan Agents CLI project.",
+        "size": 26
+      }
+    ],
+    "notes": [
+      "Both collections are optional. Install them separately and name them\nin the request, with a clear scope for the work.",
+      "Agents CLI supplies project tools alongside your coding client.\nThe README has installation steps and combined examples."
+    ]
+  },
+  {
+    "id": "request-review",
+    "chapter": "V · Keep building",
+    "duration": 18,
+    "layout": "cards",
+    "title": "Give the coding agent direction",
+    "cards": [
+      {
+        "label": "A USEFUL REQUEST",
+        "text": "Outcome: what should change?\nExisting code: what should stay?\nBoundaries: what must be enforced?\nEvidence: how will we check it?",
+        "size": 25
+      },
+      {
+        "label": "A USEFUL REVIEW",
+        "text": "Read the diff.\nRun the relevant checks.\nInspect the result.\nAsk what remains unverified.",
+        "size": 28
+      }
+    ],
+    "notes": [
+      "Start with one change in a project you already understand.",
+      "The skill supplies an approach. You decide whether\nthe implementation fits your application."
+    ]
+  },
+  {
+    "id": "closing",
+    "chapter": "The skills companion",
+    "duration": 12,
+    "layout": "closing",
+    "title": "Agentic Engineering Skills",
+    "notes": [
+      "Start with adk-engineer and describe the improvement you need."
+    ]
+  }
+]
