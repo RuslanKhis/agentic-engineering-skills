@@ -15,6 +15,10 @@ short central labels tell the story. The warm paper, serif type and brick-red
 accent follow the supplied editorial style. The soundtrack is
 “just turn it on and make something.” by hijaq.
 
+The [published MP4](assets/walkthrough.mp4) and [preview image](assets/preview.png)
+are kept in `assets/` for the repository README. These files are included in Git;
+intermediate renders and downloaded music remain in the ignored `output/` directory.
+
 ## What the example demonstrates
 
 The editor and interface are animated **worked examples**, grounded in the
@@ -98,6 +102,16 @@ the [publishing notes](publishing.md#music-credits) include the same credit.
 | `frames/` | Full-resolution scene frames |
 
 Generated outputs, music downloads and local environments are ignored by Git.
+After approving a new export, refresh the README's video and preview:
+
+```bash
+cp output/action-cut/agentic-engineering-skills-action-hijaq.mp4 assets/walkthrough.mp4
+cp output/action-cut/frames/03-frontend-prompt.png assets/preview.png
+```
+
+Keep the [music attribution](publishing.md#music-credits) with the video. The
+soundtrack belongs to hijaq. and is used under the artist's published free-use
+permission; it is not covered by this repository's MIT licence.
 
 ## Copy the requests
 

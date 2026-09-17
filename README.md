@@ -3,6 +3,7 @@
 </p>
 
 <p align="center">
+  <a href="#watch-the-walkthrough">Watch the walkthrough</a> ·
   <a href="#getting-started">Getting started</a> ·
   <a href="#the-skills">The skills</a> ·
   <a href="#using-skills-together">Using skills together</a> ·
@@ -39,6 +40,27 @@ If you already know the topic, you can call a specialist directly.
 You do not need the book or its example repository to use the skills. Install
 them in the project you want to work on. They guide your **coding agent**;
 your application's ADK agents do not load them automatically.
+
+<p align="center">
+  <img src="docs/editorial/section-break.svg" alt="" width="240">
+</p>
+
+## Watch the Walkthrough
+
+*Install. Ask. Review. · 2 minutes 20 seconds.*
+
+Already have an ADK agent? See how to install the skills, ask for a streaming
+frontend, and add a remembered language preference. This animated worked example
+is backed by [runnable local code and checks](docs/video/skills-walkthrough/demo/README.md).
+
+[![Watch the walkthrough: use adk-frontend-integration to connect an existing React chat to an ADK agent.](docs/video/skills-walkthrough/assets/preview.png)](docs/video/skills-walkthrough/assets/walkthrough.mp4)
+
+**[Watch or download the video — 2:20, MP4](docs/video/skills-walkthrough/assets/walkthrough.mp4)**
+
+Music: “just turn it on and make something.” by
+[hijaq.](https://hijaqmusic.bandcamp.com/track/just-turn-it-on-and-make-something),
+used under the artist's published free-use permission.
+[Full music credits](docs/video/skills-walkthrough/publishing.md#music-credits).
 
 <p align="center">
   <img src="docs/editorial/section-break.svg" alt="" width="240">
