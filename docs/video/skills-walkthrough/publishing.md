@@ -2,43 +2,56 @@
 
 ## Suggested title
 
-How to use Agentic Engineering Skills: install, add memory, connect a frontend
+Your ADK agent works. Now add a frontend and memory — with skills.
 
 ## Description
 
-A silent, illustrated introduction to using coding-agent skills with an existing Google ADK application. Learn what a skill is, install the collection, and ask for two practical changes: remembered user preferences and a React chat interface.
+Already have a Google ADK agent? Install Agentic Engineering Skills, name the
+change you need, and work through the implementation with your coding agent.
 
-The video shows requests, architecture and expected checks. The application diagrams illustrate the workflow; they are not a recording of generated code or passing tests.
+In 2 minutes 20 seconds: install the collection, request a streaming frontend,
+inspect the code, then add a remembered language preference with consent.
+
+This is an animated worked example, with real local code and test evidence.
+Model responses and sign-in identities use offline doubles. The React code is
+an integration excerpt. This is not a recording of a live coding-client session.
 
 Repository, installation and copyable examples:
 https://github.com/RuslanKhis/agentic-engineering-skills
 
-Google coding-client setup and account guidance:
-https://github.com/RuslanKhis/agentic-engineering-skills/blob/main/docs/integrations/google-coding-agents.md
+Runnable example and verification scope:
+https://github.com/RuslanKhis/agentic-engineering-skills/tree/main/docs/video/skills-walkthrough/demo
 
 ## Chapters
 
-00:00 A working agent. The next feature.
-00:14 Which agent uses the skill?
-00:34 A folder of useful instructions
-00:54 One entry point. Eleven specialists.
-01:10 Begin where your application lives
-01:28 A short setup checklist
-01:46 Run this in the terminal
-02:12 The next request goes in chat
-02:34 01 / Remember a preferred language
-03:00 Choose what to remember
-03:22 What should the memory tests prove?
-03:42 02 / Connect the existing React chat
-04:08 Connect through your backend
-04:30 Streaming needs a clear finish
-04:50 Test the whole conversation
-05:10 Combine complementary skills
-05:28 Give the coding agent direction
-05:46 Agentic Engineering Skills
+00:00 Install inside your existing project
+00:12 The frontend connection
+00:20 Ask the frontend skill
+00:34 Your project and the skill instructions
+00:42 Backend and browser code
+00:56 A streaming reply
+01:08 Ask the memory skill
+01:22 Save and load a preference
+01:34 A new conversation in Spanish
+01:46 Review the local checks
+01:54 Claude Code, Codex and Google clients
+02:06 Install. Ask. Review.
+
+## Music credits
+
+Music: “just turn it on and make something.” by hijaq.
+
+Original video: https://www.youtube.com/watch?v=Itn9lI0VK0U
+Artist: https://soundcloud.com/hijaqmusic
+Download / support the artist:
+https://hijaqmusic.bandcamp.com/track/just-turn-it-on-and-make-something
+
+Used under the artist’s published free-use permission. Music belongs to hijaq.
+Looped and faded to fit this video; playback level adjusted.
 
 ## Book
 
-The skills accompany Agentic Engineering: Building Production-Grade Multi-Agent Systems with Google ADK on GCP, by Ruslan Khissamiyev. You do not need the book to use the skills.
+The skills accompany *Agentic Engineering: Building Production-Grade Multi-Agent
+Systems with Google ADK on GCP*, by Ruslan Khissamiyev.
 
-Add the public Amazon preorder link here when it becomes available.
+Amazon preorder: [ADD PUBLIC AMAZON PREORDER URL]

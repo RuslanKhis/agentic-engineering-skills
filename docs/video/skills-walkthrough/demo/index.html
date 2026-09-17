@@ -1,0 +1,39 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Order assistant · local demo</title>
+<style>
+body{background:#f4f1ea;color:#1c1c1c;font:22px Georgia,serif;max-width:860px;margin:6vh auto;padding:24px}h1{font-size:52px;font-weight:normal}main{background:#fffdf8;border:1px solid #b6aea0;padding:28px;min-height:230px}button,input,select{font:18px Georgia;padding:12px;border:1px solid #b6aea0;background:#fffdf8;color:#1c1c1c}button{cursor:pointer}button:disabled{opacity:.5}form{display:flex;margin-top:24px;gap:8px}input{flex:1}small{color:#756d61;font-size:15px}#status{color:#8b2635;font-size:18px}#answer{font-size:32px;min-height:64px}.preferences{margin:25px 0;display:flex;align-items:center;gap:10px}label input{width:18px;height:18px}
+</style>
+<small>OFFLINE DEMO · deterministic model substitute</small>
+<h1>Your order assistant.</h1>
+<main><div id="status">Ready</div><p id="answer">Ask about your delivery.</p>
+<form><input id="message" value="When will my order arrive?" aria-label="Message"><button id="send">Send</button></form></main>
+<div class="preferences"><select id="language" aria-label="Preferred language"><option>Spanish</option><option>English</option></select><label><input id="consent" type="checkbox">Remember my preference</label><button id="save">Save</button></div>
+<button id="fresh">New conversation</button> <button id="forget">Forget preference</button>
+<p><small>Demo user: Alice. Real local HTTP + SQLite; no cloud calls.</small></p>
+<script type="module">
+import {streamReply} from './client.js';
+const $ = id => document.getElementById(id);
+let sessionId = null;
+const token = 'demo-alice'; // Intentionally fake identity for localhost only.
+document.querySelector('form').onsubmit = async e => {
+  e.preventDefault(); $('send').disabled = true; $('answer').textContent = '';
+  $('status').textContent = 'Working…';
+  try { await streamReply({message:$('message').value, sessionId, token, onEvent:event => {
+    if(event.type === 'session') sessionId = event.session_id;
+    if(event.type === 'text') $('answer').textContent += event.text;
+    if(event.type === 'tool') $('status').textContent = event.label;
+    if(event.type === 'done') $('status').textContent = 'Complete';
+    if(event.type === 'error') $('status').textContent = event.message;
+  }}); } catch { $('status').textContent = 'The reply could not finish.'; }
+  finally { $('send').disabled = false; }
+};
+async function preference(method, body) {
+ const response = await fetch('/api/preference', {method, headers:{'Content-Type':'application/json',Authorization:`Bearer ${token}`}, ...(body ? {body:JSON.stringify(body)} : {})});
+ const data = await response.json();
+ $('status').textContent = response.ok ? (method === 'DELETE' ? 'Preference forgotten' : `${data.language} remembered`) : data.error;
+}
+$('save').onclick = () => preference('PUT',{language:$('language').value,consent:$('consent').checked});
+$('forget').onclick = () => preference('DELETE');
+$('fresh').onclick = () => {sessionId=null; $('answer').textContent='Ask about your delivery.'; $('status').textContent='New conversation';};
+</script>

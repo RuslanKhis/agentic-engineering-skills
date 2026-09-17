@@ -1,0 +1,133 @@
+{
+  "backend": {
+    "file": "app.py",
+    "lines": [
+      "with self.lock:",
+      "    if session_id is None:",
+      "        session_id = uuid.uuid4().hex",
+      "        self.sessions[session_id] = owner",
+      "    elif (not isinstance(session_id, str)",
+      "          or self.sessions.get(session_id) != owner):",
+      "        raise Rejected(404, \"Conversation not found.\")"
+    ]
+  },
+  "frontend": {
+    "file": "Chat.jsx",
+    "lines": [
+      "if (e.type === 'text')",
+      "  setReply(text => text + e.text);",
+      "if (e.type === 'tool')",
+      "  setStatus(e.label);",
+      "if (e.type === 'done')",
+      "  setStatus('Complete');"
+    ],
+    "scope": "Integration excerpt, not compiled"
+  },
+  "memory_save": {
+    "file": "app.py",
+    "lines": [
+      "def remember(self, owner, language, consent):",
+      "    if consent is not True:",
+      "        raise Rejected(422, \"Consent required.\")",
+      "    with self.lock, self.db:",
+      "        self.db.execute(",
+      "            UPDATE_PREFERENCE, (owner, language)",
+      "        )"
+    ]
+  },
+  "memory_load": {
+    "file": "app.py",
+    "lines": [
+      "def language_for(self, owner):",
+      "    with self.lock:",
+      "        row = self.db.execute(",
+      "            \"SELECT language FROM preferences \"",
+      "            \"WHERE owner = ?\", (owner,)",
+      "        ).fetchone()",
+      "    return row[0] if row else \"English\""
+    ]
+  },
+  "replay": {
+    "question": "Where is my order?",
+    "progress": "Order checked",
+    "answer": "Your order arrives on Friday.",
+    "spanish_answer": "Tu pedido llega el viernes."
+  },
+  "tests": {
+    "passed": 25,
+    "http_python": 19,
+    "javascript_stream_helper": 6
+  },
+  "python_version": "3.12.9",
+  "scope": "Real localhost HTTP, SQLite and JS stream helper; deterministic model/ADK event double. React rendering not tested.",
+  "first_conversation": [
+    {
+      "type": "session",
+      "session_id": "c8a8ff2fd8b545869b2185f3162d9f41"
+    },
+    {
+      "type": "tool",
+      "label": "Order checked"
+    },
+    {
+      "type": "text",
+      "text": "Your "
+    },
+    {
+      "type": "text",
+      "text": "order "
+    },
+    {
+      "type": "text",
+      "text": "arrives "
+    },
+    {
+      "type": "text",
+      "text": "on "
+    },
+    {
+      "type": "text",
+      "text": "Friday. "
+    },
+    {
+      "type": "done"
+    }
+  ],
+  "saved_preference": {
+    "saved": true,
+    "language": "Spanish"
+  },
+  "new_conversation": [
+    {
+      "type": "session",
+      "session_id": "6a5ec6053ff74d5d95dc60a08b10098b"
+    },
+    {
+      "type": "tool",
+      "label": "Order checked"
+    },
+    {
+      "type": "text",
+      "text": "Tu "
+    },
+    {
+      "type": "text",
+      "text": "pedido "
+    },
+    {
+      "type": "text",
+      "text": "llega "
+    },
+    {
+      "type": "text",
+      "text": "el "
+    },
+    {
+      "type": "text",
+      "text": "viernes. "
+    },
+    {
+      "type": "done"
+    }
+  ]
+}

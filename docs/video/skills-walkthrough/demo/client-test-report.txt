@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: UTF-8 text and NDJSON lines survive chunk boundaries
+ok 1 - UTF-8 text and NDJSON lines survive chunk boundaries
+  ---
+  duration_ms: 31.855083
+  type: 'test'
+  ...
+# Subtest: auth travels in header, owner cannot be supplied in body
+ok 2 - auth travels in header, owner cannot be supplied in body
+  ---
+  duration_ms: 0.778875
+  type: 'test'
+  ...
+# Subtest: missing terminal frame rejects an interrupted stream
+ok 3 - missing terminal frame rejects an interrupted stream
+  ---
+  duration_ms: 0.309042
+  type: 'test'
+  ...
+# Subtest: malformed public event is rejected
+ok 4 - malformed public event is rejected
+  ---
+  duration_ms: 0.153917
+  type: 'test'
+  ...
+# Subtest: late error remains terminal, not success
+ok 5 - late error remains terminal, not success
+  ---
+  duration_ms: 0.16575
+  type: 'test'
+  ...
+# Subtest: event after terminal rejects invalid ordering
+ok 6 - event after terminal rejects invalid ordering
+  ---
+  duration_ms: 0.15925
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 129.306583

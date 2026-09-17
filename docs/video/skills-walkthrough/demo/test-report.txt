@@ -1,0 +1,24 @@
+test_client_cannot_select_owner (test_demo.DemoTests.test_client_cannot_select_owner) ... ok
+test_complete_reply_and_tool (test_demo.DemoTests.test_complete_reply_and_tool) ... ok
+test_consent_denial_does_not_persist (test_demo.DemoTests.test_consent_denial_does_not_persist) ... ok
+test_empty_provider_is_error (test_demo.DemoTests.test_empty_provider_is_error) ... ok
+test_first_frame_arrives_before_provider_completion (test_demo.DemoTests.test_first_frame_arrives_before_provider_completion) ... ok
+test_foreign_session_is_unavailable (test_demo.DemoTests.test_foreign_session_is_unavailable) ... ok
+test_input_limits_reject_before_invocation (test_demo.DemoTests.test_input_limits_reject_before_invocation) ... ok
+test_invalid_auth_never_invokes (test_demo.DemoTests.test_invalid_auth_never_invokes) ... ok
+test_invalid_preference_is_not_stored (test_demo.DemoTests.test_invalid_preference_is_not_stored) ... ok
+test_late_error_never_emits_done (test_demo.DemoTests.test_late_error_never_emits_done) ... ok
+test_missing_auth_never_invokes (test_demo.DemoTests.test_missing_auth_never_invokes) ... ok
+test_no_thought_or_duplicated_aggregate (test_demo.DemoTests.test_no_thought_or_duplicated_aggregate) ... ok
+test_owned_session_continues (test_demo.DemoTests.test_owned_session_continues) ... ok
+test_preference_correction_and_erasure (test_demo.DemoTests.test_preference_correction_and_erasure) ... ok
+test_preference_does_not_cross_users (test_demo.DemoTests.test_preference_does_not_cross_users) ... ok
+test_preference_restored_for_new_conversation (test_demo.DemoTests.test_preference_restored_for_new_conversation) ... ok
+test_profile_persists_after_restart (test_demo.DemoTests.test_profile_persists_after_restart) ... ok
+test_truthy_strings_are_not_consent (test_demo.DemoTests.test_truthy_strings_are_not_consent) ... ok
+test_unknown_session_is_not_created (test_demo.DemoTests.test_unknown_session_is_not_created) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 9.609s
+
+OK

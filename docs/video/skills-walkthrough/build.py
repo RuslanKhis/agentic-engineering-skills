@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render and package the silent Agentic Engineering Skills walkthrough."""
+"""Render and package the action-led Agentic Engineering Skills walkthrough."""
 from __future__ import annotations
 
 import argparse
@@ -13,7 +13,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parent
-BASENAME = "agentic-engineering-skills"
+BASENAME = "agentic-engineering-skills-action"
 
 
 def run(arguments: list[str], *, env: dict[str, str] | None = None) -> None:
@@ -33,7 +33,7 @@ def metadata_escape(value: str) -> str:
 
 
 def chapter_metadata(timeline: list[dict], output: Path) -> Path:
-    lines = [";FFMETADATA1", "title=Agentic Engineering Skills — a practical introduction", "comment=Silent illustrated walkthrough; application changes and checks are illustrative."]
+    lines = [";FFMETADATA1", "title=Agentic Engineering Skills — install, ask, review", "comment=Animated worked example with real local test evidence; model replies use an offline double."]
     previous_end = 0.0
     for record in timeline:
         start, end = float(record["start"]), float(record["end"])
@@ -80,7 +80,9 @@ def additional_diagram_text(page: dict, scene: int, layout_checks: list[dict]) -
 def write_transcript(pages: list[dict], output: Path) -> None:
     layout_path = output / "layout-checks.json"
     layout_checks = json.loads(layout_path.read_text(encoding="utf-8")) if layout_path.is_file() else []
-    lines = ["# Agentic Engineering Skills — screen transcript", "", "A silent, illustrated walkthrough. These are the source cards, explanatory notes and additional rendered diagram labels, not a record of generated code or passing tests. Timings below describe the full-length cut; the preview compresses the holds.", ""]
+    lines = ["# Agentic Engineering Skills — screen transcript", "", "An animated worked example with on-screen explanations and no narration. Code excerpts and replay events come from the runnable demo. Local tests use an offline model double; this is not a live coding-client recording. Timings describe the full cut; preview holds are compressed.", ""]
+    evidence = json.loads((ROOT / "demo" / "video-evidence.json").read_text())
+    all_code_lines = {line.strip() for key in ("backend", "frontend", "memory_save", "memory_load") for line in evidence[key]["lines"]}
     elapsed = 0.0
     for index, page in enumerate(pages, 1):
         end = elapsed + float(page["duration"])
@@ -108,7 +110,12 @@ def write_transcript(pages: list[dict], output: Path) -> None:
         for key, value in page.items():
             if key not in known and isinstance(value, str):
                 lines.extend([f"**{key.replace('_', ' ').capitalize()}:** {value}", ""])
-        extras = additional_diagram_text(page, index, layout_checks)
+        code_keys = {"frontend-code": ["backend", "frontend"], "memory-code": ["memory_save", "memory_load"]}.get(page["id"], [])
+        for key in code_keys:
+            snippet = evidence[key]
+            language = "jsx" if snippet["file"].endswith(".jsx") else "python"
+            lines.extend([f"### {snippet['file']} · excerpt", "", f"```{language}", "\n".join(snippet["lines"]), "```", ""])
+        extras = [value for value in additional_diagram_text(page, index, layout_checks) if value.strip() not in all_code_lines]
         if extras:
             lines.extend(["### Additional diagram text", ""])
             for value in extras:
@@ -122,7 +129,7 @@ def write_transcript(pages: list[dict], output: Path) -> None:
                     lines.append(f"- {' '.join(value.split())}")
             lines.append("")
         elapsed = end
-    lines.extend(["## Resources", "", "- [Repository and installation instructions](https://github.com/RuslanKhis/agentic-engineering-skills)", "- [Google coding-client setup and account guidance](https://github.com/RuslanKhis/agentic-engineering-skills/blob/main/docs/integrations/google-coding-agents.md)", "", "Companion to *Agentic Engineering: Building Production-Grade Multi-Agent Systems with Google ADK on GCP*, by Ruslan Khissamiyev. The skills can be used without the book.", ""])
+    lines.extend(["## Resources", "", "- [Repository and installation instructions](https://github.com/RuslanKhis/agentic-engineering-skills)", "- [Google coding-client setup and account guidance](https://github.com/RuslanKhis/agentic-engineering-skills/blob/main/docs/integrations/google-coding-agents.md)", "", "Companion to *Agentic Engineering: Building Production-Grade Multi-Agent Systems with Google ADK on GCP*, by Ruslan Khissamiyev.", ""])
     (output / "transcript.md").write_text("\n".join(lines), encoding="utf-8")
 
 
@@ -176,7 +183,7 @@ def main() -> None:
     ffmpeg, ffprobe = shutil.which("ffmpeg"), shutil.which("ffprobe")
     if not ffmpeg or not ffprobe:
         parser.error("ffmpeg and ffprobe are required on PATH; see README.md for setup.")
-    output = ROOT / "output"
+    output = ROOT / "output" / "action-cut"
     if args.preview:
         output /= "preview"
     output.mkdir(parents=True, exist_ok=True)

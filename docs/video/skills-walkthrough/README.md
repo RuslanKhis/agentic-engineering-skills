@@ -1,162 +1,147 @@
-# Agentic Engineering Skills — the video walkthrough
+# Agentic Engineering Skills — the action cut
 
-*A short introduction, from installation to the next useful change.*
+*Install. Ask. Review.*
 
-This **5 minute 58 second silent video** explains what coding-agent skills are,
-shows how to install this collection, and walks through two requests against an existing
-Python Google ADK application:
+A **2 minute 20 second** walkthrough for someone who already has a Google ADK
+agent. It opens with the installation command, then shows two practical requests:
 
-1. Remember a user's preferred language using the existing database and login.
-2. Connect an existing React chat with private conversations and streamed replies.
+1. Connect an existing React chat: name the frontend skill, inspect code excerpts,
+   and watch a reply stream into the interface.
+2. Remember a preferred language: name the memory skill, save with consent, and
+   carry the preference into a new conversation.
 
-The diagrams explain the changes to ask for and the checks to review. They are
-**illustrations, not recordings of generated code or passing tests**. No cloud
-deployment is performed. All explanation appears on screen; there is no
-narration or soundtrack.
+There is **no voice-over**. Animated typing, code excerpts, interface changes and
+short central labels tell the story. The warm paper, serif type and brick-red
+accent follow the supplied editorial style. The soundtrack is
+“just turn it on and make something.” by hijaq.
+
+## What the example demonstrates
+
+The editor and interface are animated **worked examples**, grounded in the
+[runnable local demo](demo/README.md). Its HTTP endpoint, browser stream handling,
+SQLite preferences, consent and ownership checks are real. Its model/event source
+and sign-in identities are explicit offline doubles. The React file is an
+integration excerpt, not a claim that an existing React application was built.
+
+The film does not record a live coding-client session. It demonstrates the
+request → implementation → review workflow, with exact code excerpts and actual
+local test results. No cloud deployment is performed.
+
+The previous 5:58 silent and music editions remain in `output/`. The new cut has
+its own `output/action-cut/` directory, which also retains the earlier
+“Life of Riley” export.
 
 ## Build locally
 
-Use **Python 3.12** in an isolated virtual environment. Manim needs native Cairo
-and Pango libraries; the export step needs **FFmpeg**, including `ffprobe`.
-On macOS with Homebrew, install the native dependencies:
+Use Python 3.12, Manim, Cairo/Pango and FFmpeg:
 
 ```bash
 brew install python@3.12 cairo pango pkg-config ffmpeg
-```
-
-From this directory:
-
-```bash
 python3.12 -m venv .venv
-.venv/bin/python -m pip install --upgrade pip
 .venv/bin/python -m pip install -r requirements.txt
 ```
 
-The renderer defaults to **Georgia** for prose and **Menlo** for commands. It
-checks that both fonts are installed before rendering. On another platform,
-install those fonts or choose available serif and monospace fonts explicitly:
+The default fonts are **Georgia** and **Menlo**. You can override them with
+`ADK_VIDEO_SERIF` and `ADK_VIDEO_MONO` using installed fonts.
+
+From this directory, first generate the demo evidence as described in
+[its README](demo/README.md), then render:
 
 ```bash
-ADK_VIDEO_SERIF="Liberation Serif" ADK_VIDEO_MONO="DejaVu Sans Mono" \
-  .venv/bin/python build.py --preview
-```
-
-Preview the layout and animation with compressed reading holds at
-**960 × 540, 15 fps**:
-
-```bash
+# Quick layout/motion preview; compresses reading holds.
 .venv/bin/python build.py --preview
-```
 
-Build the complete **1920 × 1080, 30 fps** video with full reading time:
-
-```bash
+# Full 1920 × 1080, 30 fps cut with reading time.
 .venv/bin/python build.py
+
+# Add the downloaded track to a separate export.
+python3 add_music.py
 ```
 
-The build uses the same Python interpreter for Manim. It renders a silent video,
-then exports H.264 with `yuv420p` pixels, chapter metadata, and MP4 fast-start for
-playback. It checks the exported resolution, duration and absence of an audio
-stream. The preview is shorter than the final video because it compresses holds.
+`build.py --skip-render` repeats packaging without rendering again. The preview
+uses `output/action-cut/preview/`; full output uses `output/action-cut/`.
 
-To repeat only packaging after a successful render:
+### Soundtrack source
 
-```bash
-.venv/bin/python build.py --skip-render
-# Or repackage the preview:
-.venv/bin/python build.py --preview --skip-render
-```
+Download **“just turn it on and make something.” by hijaq.** from the
+[official Bandcamp track page](https://hijaqmusic.bandcamp.com/track/just-turn-it-on-and-make-something).
+Choose **Buy Digital Track**, enter **0**, then use **download to your computer**
+and **Download Now**. Save the MP3 as
+`output/music-hijaq/just-turn-it-on-and-make-something-hijaq.mp3` before running
+`add_music.py`. Bandcamp also lets you pay to support the artist.
+
+This edition uses the artist's published free-use permission on
+[SoundCloud](https://soundcloud.com/hijaqmusic), also confirmed in the
+[artist's FAQ](https://docs.google.com/document/d/1lfkvGJJ3mN4bo0tguU4oWIpVdwTAC_HdWL0Isv8aIKo/edit?usp=sharing).
+The track remains credited to hijaq.; no Creative Commons licence is asserted.
+
+The script preserves the opening and outro, repeats an interior passage with a
+two-second crossfade to cover the full film, and normalizes to −18 LUFS before
+opening and closing fades. It copies the video and chapters unchanged and verifies
+stream duration, video identity and decoding. Paste the
+[plain-text music credit](youtube-music-credit.txt) into the YouTube description;
+the [publishing notes](publishing.md#music-credits) include the same credit.
 
 ## Outputs
 
-The full build writes to `output/`; the preview writes to `output/preview/`.
-Both directories contain:
-
-| File | Purpose |
+| File in `output/action-cut/` | Purpose |
 | --- | --- |
-| `agentic-engineering-skills.mp4` | The final silent video |
-| `contact-sheet.jpg` | Numbered frames for reviewing all scenes together |
-| `transcript.md` | Copyable screen text, commands and example requests |
-| `timeline.json` | Actual scene start/end times from the renderer |
-| `chapters.ffmetadata` | Chapter markers embedded in the video |
-| `build-report.json` | Export properties and duration checks |
-| `layout-checks.json` | Renderer font sizes and text widths for review |
-| `frames/` | One complete frame per scene |
-| `media/` | Manim render files and intermediate video |
+| `agentic-engineering-skills-action-hijaq.mp4` | Finished video with hijaq. soundtrack |
+| `agentic-engineering-skills-action-with-music.mp4` | Earlier “Life of Riley” edition |
+| `agentic-engineering-skills-action.mp4` | Silent master |
+| `contact-sheet.jpg` | Complete frames from all twelve scenes |
+| `transcript.md` | Copyable screen text and requests |
+| `timeline.json` | Actual scene times |
+| `build-report.json` | Resolution, duration and chapter checks |
+| `mix-report-hijaq.json` | Current soundtrack edits and validation |
+| `layout-checks.json` | Text size and width evidence |
+| `frames/` | Full-resolution scene frames |
 
-Generated outputs and the local virtual environment are ignored by Git.
-Review the full export before publishing it. There is no public video URL until
-a reviewed version is uploaded.
+Generated outputs, music downloads and local environments are ignored by Git.
 
-## Copy the examples
+## Copy the requests
 
-### Install in your application's project directory
-
-Run this in the **terminal**, not the coding-agent chat:
+Run this in the terminal inside your application's project directory:
 
 ```bash
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*'
 ```
 
-Choose your client when prompted. The installer requires Git and Node.js
-**22.20 or later** with npm. Open the same project in your coding agent afterward;
-start a fresh session if the skills do not appear.
+Choose your coding client in the installer. Use the same project in that client;
+start a new session if newly installed skills do not appear. Installation needs
+Git and Node.js 22.20+ with npm. Full setup is in the [repository README](../../../README.md).
 
-### Add memory
-
-Send this in the **coding-agent chat**:
+Then send a request in the coding-agent chat:
 
 ```text
-/adk-engineer Add memory so our support agent remembers
-preferred language between conversations. Reuse our
-database and login. Ask before saving; support changes
-and forgetting. Add tests for consent and user isolation.
+/adk-frontend-integration
+Connect our React chat to this ADK agent.
+Reuse our login. Stream replies and tool progress.
+Check session ownership. Add tests.
 ```
-
-### Connect the frontend
 
 ```text
-/adk-frontend-integration Connect our React chat to
-this ADK agent through an API. Reuse our login.
-Stream replies and tool progress. Enforce conversation
-ownership. Add API tests and check one browser flow.
+/adk-memory-architecture
+Remember my language between conversations.
+Reuse our login and database. Ask before saving.
+Let me change or forget it. Add tests.
 ```
 
-These examples use Claude Code's slash form. In Codex, replace the leading `/`
-with `$`. In Google clients, use “Use the adk-engineer skill to…” or “Use the
-adk-frontend-integration skill to…”. For Google consumer accounts, use
-Antigravity; see the [Google setup guide](../../integrations/google-coding-agents.md)
-for Gemini CLI's supported account routes and installation details.
+Claude Code uses `/skill-name`; Codex uses `$skill-name`. In Google clients,
+write “Use the adk-engineer skill to…”. When you have not chosen a specialist,
+start with `adk-engineer` and describe the change. See the
+[Google client guide](../../integrations/google-coding-agents.md) for account
+requirements and installation details.
 
-## Editing the video
+## Editing
 
-- [storyboard.json](storyboard.json) contains the page order, planned durations,
-  cards, prompts and explanatory text.
-- [walkthrough.py](walkthrough.py) draws and animates the scenes in Manim.
-- [build.py](build.py) renders, exports, writes chapters and produces the review
-  contact sheet and transcript.
-- [publishing.md](publishing.md) provides a suggested title, description and
-  chapter timestamps for the finished cut.
+- [storyboard.json](storyboard.json): twelve beats and their reading time.
+- [walkthrough.py](walkthrough.py): animated terminal, prompts, code and chat.
+- [demo/](demo/README.md): tested source, excerpts and replay evidence.
+- [build.py](build.py): render, package, chapters, transcript and contact sheet.
+- [add_music.py](add_music.py): soundtrack normalization and muxing.
+- [publishing.md](publishing.md): title, description, timestamps and attribution.
 
-The intended full duration is **358 seconds across 18 scenes**. Keep the
-installation command and both prompts readable long enough to pause and copy.
-After changing text, review the contact sheet for clipping and the full video
-for reading time; a passing layout assertion alone does not establish clarity.
-
-### Editorial style
-
-The supplied style guide defines warm paper (`#F4F1EA`), charcoal ink (`#1C1C1C`)
-and one brick-red accent (`#8B2635`). Use classic serif typography, fine lines,
-square data packets, restrained motion and subtle paper shadows. Code and
-commands use monospace. Avoid dark terminal backgrounds, neon and glow.
-
-Keep the distinction between the **coding agent** that reads a skill and the
-**ADK application** whose code it changes. Skill installation does not deploy
-an application or automatically load skill instructions into its runtime.
-Never present illustrative checklists as actual test results.
-
-For publishing, include the [repository](https://github.com/RuslanKhis/agentic-engineering-skills)
-and the copyable transcript in the description. The skills accompany Ruslan
-Khissamiyev's *Agentic Engineering: Building Production-Grade Multi-Agent Systems
-with Google ADK on GCP*. Add a book purchase or preorder link only when a real
-customer-facing URL is available.
+Keep code excerpts short and legible. Keep explanatory copy attached to the
+current action; do not reintroduce paragraphs across the lower screen. Review
+both the contact sheet and the final animation after edits.
