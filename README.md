@@ -947,7 +947,7 @@ contains runnable chapter examples and their setup instructions. Start there
 if you want to learn an idea through a small application. Start here when you
 want your coding agent to help apply that idea to your own code.
 
-The book publication link will be added when it is available.
+**[Preorder the book on Amazon](https://www.amazon.com/dp/B0HK78328V?spcref=PUBLISHED_PREORDER_LIVE).**
 
 ## License
 
