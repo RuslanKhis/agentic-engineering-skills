@@ -1,35 +1,24 @@
-I’ve turned the practical engineering guidance from my upcoming book into 12 open-source skills for Claude Code, Codex and Google Antigravity.
+Your ADK agent works. Now it needs memory, a frontend, and tests you can trust.
 
-They help your coding agent build and improve applications using Google ADK and Google Cloud.
+I’ve turned the engineering guidance from my upcoming book into 12 free, open-source skills for Claude Code, Codex and Google Antigravity.
 
-Install the toolkit, open your project, and describe the change you need:
+A skill gives your coding agent a practical playbook: implementation recipes, helper code, and checks to run against its changes.
 
-/adk-engineer Add memory so my agent remembers a user’s preferences across sessions.
+Install them in your existing Google ADK project, then ask:
 
-/safe-api-tool-calls Make this refund tool handle timeouts without issuing the same refund twice.
+→ “Remember a user’s preferred language between conversations.”
+→ “Connect our React chat and stream the agent’s replies.”
+→ “Handle refund timeouts without issuing the same refund twice.”
 
-/adk-agent-evaluation Add tests that check which tools my agent calls and what actually happens.
+Start with adk-engineer. It selects the relevant specialists and works through the change with you. You review the code and results.
 
-In Codex, use $ instead of /. In Gemini CLI, say “Use the adk-engineer skill to…” and describe your request. You can also ask for skills by name in Antigravity.
-
-There’s one entry point, adk-engineer, and eleven specialists covering workflows, API calls, guardrails, deployment, performance, frontend integration, memory, evaluation, sensitive data, authentication and SQL agents.
-
-The collection includes implementation recipes, reusable helpers, failure scenarios and checks your coding agent can run against the code it changes.
-
-We tested installation and code generation through real Claude Code and Codex sessions. The current revision passed 476 repository and SDK checks; two generated examples passed another 71 tests after independent review and repairs.
-
-We also tested Antigravity IDE with Gemini: it used the API-safety skill to repair a local adapter and passed 21 project tests plus nine independent checks. Gemini CLI discovers all twelve skills, but Google rejected our consumer-account generation attempt. Its supported enterprise and paid API-key routes remain untested for generation.
-
-For Google consumer accounts, use Antigravity. Google has retired Gemini CLI access through Code Assist for individuals, AI Pro and AI Ultra: https://developers.google.com/gemini-code-assist/docs/deprecations/code-assist-individuals
-
-You can use the skills without reading the book first. They’re free, MIT-licensed, and designed to work in your own projects.
-
-Explore the skills and installation instructions:
+The README includes installation, copyable prompts, and a 2:20 walkthrough showing frontend and memory examples:
 https://github.com/RuslanKhis/agentic-engineering-skills
 
-The book explains the engineering decisions behind these practices: Agentic Engineering: Building Production-Grade Multi-Agent Systems with Google ADK on GCP.
+The book goes deeper into the engineering decisions behind these practices:
+Agentic Engineering: Building Production-Grade Multi-Agent Systems with Google ADK on GCP.
 
-#AIEngineering #GoogleADK #GoogleCloud #AgentSkills
+#AIEngineering #GoogleADK #AgentSkills
 
 Preorder the book on Amazon:
 https://www.amazon.com/dp/B0HK78328V?spcref=PUBLISHED_PREORDER_LIVE
