@@ -31,4 +31,5 @@ The book explains the engineering decisions behind these practices: Agentic Engi
 
 #AIEngineering #GoogleADK #GoogleCloud #AgentSkills
 
-Preorder the book on Amazon: [AMAZON PREORDER LINK]
+Preorder the book on Amazon:
+https://www.amazon.com/dp/B0HK78328V?spcref=PUBLISHED_PREORDER_LIVE
