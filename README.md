@@ -27,6 +27,10 @@ Development Kit (ADK)** and **Google Cloud Platform (GCP)**. They accompany
 **Agentic Engineering: Building Production-Grade Multi-Agent Systems with
 Google ADK on GCP** by Ruslan Khissamiyev.
 
+Let's connect on [LinkedIn](https://www.linkedin.com/in/ruslan-k-b6a48a1a6/).
+Questions, feedback or ideas about the skills or the book? Feel free to write
+to me at [khissamiyev@proton.me](mailto:khissamiyev@proton.me).
+
 A **skill** is a folder of instructions, references and, where useful, helper
 scripts that your coding agent can read while working on your project. These
 skills help it apply the book's engineering practices to your own application:

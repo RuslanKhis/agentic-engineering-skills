@@ -1,0 +1,46 @@
+Your Google ADK agent works. Now give it a frontend and memory.
+
+This 2:20 walkthrough shows how to install Agentic Engineering Skills and ask
+your coding agent to connect a React chat, stream replies, and remember a user's
+preferred language between conversations.
+
+Get the 12 free, open-source skills and copyable prompts:
+https://github.com/RuslanKhis/agentic-engineering-skills
+
+Use them with Claude Code, Codex or Google Antigravity. Client-specific setup
+and commands are in the README.
+
+This is an animated worked example, with real local code and test evidence.
+Model responses and sign-in identities use offline doubles. The React code is
+an integration excerpt. This is not a recording of a live coding-client session.
+
+Runnable example and verification scope:
+https://github.com/RuslanKhis/agentic-engineering-skills/tree/main/docs/video/skills-walkthrough/demo
+
+The skills accompany Agentic Engineering: Building Production-Grade Multi-Agent
+Systems with Google ADK on GCP, by Ruslan Khissamiyev.
+
+Preorder my book on Amazon:
+https://www.amazon.com/dp/B0HK78328V?spcref=PUBLISHED_PREORDER_LIVE
+
+CHAPTERS
+00:00 Install the skills in your project
+00:20 Ask the frontend skill
+00:42 Backend and browser code
+01:08 Ask the memory skill
+01:34 A new conversation in Spanish
+01:46 Review checks and client commands
+02:06 Install. Ask. Review.
+
+MUSIC
+Music: “just turn it on and make something.” by hijaq.
+
+Original video: https://www.youtube.com/watch?v=Itn9lI0VK0U
+Artist: https://soundcloud.com/hijaqmusic
+Download / support the artist:
+https://hijaqmusic.bandcamp.com/track/just-turn-it-on-and-make-something
+
+Used under the artist’s published free-use permission. Music belongs to hijaq.
+Looped and faded to fit this video; playback level adjusted.
+
+#GoogleADK #AgentSkills #AIEngineering
