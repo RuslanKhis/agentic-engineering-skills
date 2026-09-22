@@ -722,10 +722,31 @@ scope, then name the skills you want your coding agent to combine.
 [Google's Agents CLI](https://github.com/google/agents-cli) supplies commands,
 project templates and seven skills for scaffolding, writing ADK code, evaluating,
 deploying, publishing and observing agents. Its recipes also cover capabilities
-such as memory, tool approval and credentials. This toolkit adds detailed
+such as memory, frontends, tool approval and credentials. This toolkit adds detailed
 guidance for adapting those capabilities to your application's data, tools,
 identity boundaries and tests. Agents CLI runs alongside the coding client
 you use to work on the application.
+
+**How are these different from Google's skills?** This collection concentrates
+on implementing and checking the application-specific details in an existing
+Python ADK project, while preserving its authentication, storage and dependency
+pins. It can be used without adopting the Agents CLI lifecycle:
+
+- **[Memory](skills/adk-memory-architecture/SKILL.md):** choose between session
+  state, exact preferences, semantic memory and retrieval; test consent, user
+  isolation and whether a retry can restore forgotten data.
+- **[API tools](skills/safe-api-tool-calls/SKILL.md):** preserve one logical
+  operation across retries and reconcile a refund whose reply was lost after
+  the provider accepted it.
+- **[Frontends](skills/adk-frontend-integration/SKILL.md):** connect JSON or
+  AG-UI/CopilotKit interfaces with session ownership, cancellation and correct
+  handling of errors after streamed text.
+- **[Evaluation](skills/adk-agent-evaluation/SKILL.md):** assert actual tool
+  effects through deterministic Runner tests, audit missing results, and
+  distinguish offline evidence from live-model evaluation.
+
+This adds focused implementation and verification guidance on topics that
+overlap with Google's recipes. See the [source comparison](docs/research/agents-cli-comparison-2026-09-23.md).
 
 Use Google's workflow when you want an Agents CLI project. Bring in an Agentic
 Engineering specialist for the particular feature or engineering decision:

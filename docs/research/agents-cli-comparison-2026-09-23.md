@@ -1,0 +1,36 @@
+# Agents CLI comparison refresh — 23 September 2026
+
+## Scope and conclusion
+
+This is a primary-source documentation review, not a comparative benchmark or a fresh execution of either collection. It supplements the [15 September review](agents-cli-comparison.md). Our side is the current local skill files; Google's side is its official documentation and upstream `main` files fetched on 23 September. Those web responses have different cache dates: the ADK code skill declares `1.6.1`, while the workflow response declares `1.5.0`. No immutable upstream commit was established, so this is not a version-pinned audit. The earlier downloaded snapshot is insufficient evidence of today's upstream coverage. [ADK code](https://raw.githubusercontent.com/google/agents-cli/main/skills/google-agents-cli-adk-code/SKILL.md), [workflow](https://raw.githubusercontent.com/google/agents-cli/main/skills/google-agents-cli-workflow/SKILL.md)
+
+The strongest positioning is **focused ADK engineering guidance for adapting and verifying application behavior**, alongside Google's CLI-driven lifecycle and reference implementations. This is a difference in organization, emphasis and specificity; it does not establish exclusive capabilities or superior results.
+
+## What Google already covers
+
+The official [skills reference](https://google.github.io/agents-cli/reference/skills/) still lists seven skills: ADK code, deployment, evaluation, observability, publishing, scaffolding and workflow. Its code skill explicitly covers implementation and directs assistants to study and adapt recipes. The catalog includes cross-session memory, RAG, OAuth consent, per-user credentials, tool guardrails, durable human approval, long-running agents and full-stack examples. Therefore, “Google only scaffolds and deploys” is inaccurate. [Recipe catalog](https://raw.githubusercontent.com/google/agents-cli/main/skills/google-agents-cli-adk-code/references/samples.md)
+
+Concrete overlap matters:
+
+- **Memory:** the cross-session recipe configures Memory Bank writes and recall, explains asynchronous consolidation and persistence differences, and includes a real Runner test with a mock model. [Memory recipe](https://raw.githubusercontent.com/google/adk-samples/main/core/python/cross-session-memory/AGENTS.md)
+- **Auth, privacy and retries:** Horizon documents owner-scoped secrets, verified request identity, per-user memory, OAuth, durable approval, transient database retries, and credentialed-URL redaction. These are substantive application patterns. [Horizon guide](https://raw.githubusercontent.com/google/adk-samples/main/core/python/long-horizon-harness/AGENTS.md), [security model](https://raw.githubusercontent.com/google/adk-samples/main/core/python/long-horizon-harness/docs/security-model.md)
+- **Testing:** Horizon explicitly uses deterministic unit/integration tests for contracts, persistence and tool I/O. Google's evaluation skill includes deterministic Python metrics, holdouts, per-case score inspection and comparisons. “Ours tests effects; theirs only judges prose” would overstate the difference. [Horizon guide](https://raw.githubusercontent.com/google/adk-samples/main/core/python/long-horizon-harness/AGENTS.md), [evaluation skill](https://raw.githubusercontent.com/google/agents-cli/main/skills/google-agents-cli-eval/SKILL.md)
+- **Frontend and protection:** Horizon has a React web application and A2A stream conversion; the safety recipe implements Runner-wide Model Armor/judge plugins, including protection of session history. Do not claim Google lacks frontend, auth or privacy coverage. [Horizon guide](https://raw.githubusercontent.com/google/adk-samples/main/core/python/long-horizon-harness/AGENTS.md), [safety recipe](https://raw.githubusercontent.com/google/adk-samples/main/core/python/safety-plugins/AGENTS.md)
+
+## Substantiated examples of our emphasis
+
+These are things our reusable specialist guidance explicitly asks an assistant to implement or verify. They are not claims that no upstream recipe can implement them.
+
+| Concern | Concrete value in this collection |
+| --- | --- |
+| Memory lifecycle | Consent at the write boundary; distinguishing accepted, completed and retrievable memories; coordinating erasure with in-flight writes; preventing old request replay from recreating erased content. [Memory guidance](../../skills/adk-memory-architecture/references/memory-bank.md) |
+| External API mutations | Preserve one authorized operation and canonical payload across retries; recover from a refund committed before its response was lost; reconcile an unknown outcome instead of inviting another refund. [Write guidance](../../skills/safe-api-tool-calls/references/writes-and-confirmation.md) |
+| Browser integration | A dedicated custom JSON/AG-UI/CopilotKit path; ownership checks across conversation operations; rejected requests invoke no agent; a late stream error remains a failure after text has appeared. [Frontend validation](../../skills/adk-frontend-integration/references/validation.md), [AG-UI contracts](../../skills/adk-frontend-integration/references/ag-ui.md) |
+| Evaluation evidence | Scripted model decisions through the real Runner, assertions on prohibited effects, complete invocation collection, and missing or unavailable scores reported as incomplete evaluation. [Deterministic tests](../../skills/adk-agent-evaluation/references/deterministic-tests.md), [result auditing](../../skills/adk-agent-evaluation/references/result-auditing.md) |
+| Privacy and credentials | Trace protected content across model requests, persisted events, tool effects, diagnostics and public output; test credential ownership and OAuth lifecycle behavior. [Data specialist](../../skills/protect-adk-sensitive-data/SKILL.md), [auth specialist](../../skills/adk-tool-auth-and-secrets/SKILL.md) |
+
+Our [entry skill](../../skills/adk-engineer/SKILL.md) selects a specialist for the requested change and preserves project conventions; its [composition reference](../../skills/adk-engineer/references/composition.md) accommodates an adopted Agents CLI workflow. Google's code skill requires scaffolding or enhancement before implementation, and its workflow prescribes `uv`. Google also explicitly supports existing projects and preserving unrelated code, so the distinction is **using our focused guidance without adopting that CLI lifecycle**, not exclusive support for existing projects. [Google code skill](https://raw.githubusercontent.com/google/agents-cli/main/skills/google-agents-cli-adk-code/SKILL.md), [Google workflow](https://raw.githubusercontent.com/google/agents-cli/main/skills/google-agents-cli-workflow/SKILL.md), [Google README](https://github.com/google/agents-cli)
+
+## Limits for public wording
+
+Prefer “mine puts more emphasis on…” followed by the concrete examples above. Avoid “production-ready,” “safer,” or “better tested” as comparative results without matched experiments. Our own references distinguish local tests, historical hosted evidence and unresolved production work. This review did not exhaustively inspect every current upstream implementation, prove an absence across Google's repositories, run cloud operations, or test the collections together.
