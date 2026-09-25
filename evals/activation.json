@@ -2,6 +2,41 @@
   "version": 1,
   "cases": [
     {
+      "id": "system-designer-positive",
+      "skill": "adk-system-designer",
+      "prompt": "Help me design a Python Google ADK support assistant on Google Cloud before we write code. It should answer policy questions and eventually change customer bookings. Talk through the product requirements with me, challenge the architecture choices, and capture a design we can implement later.",
+      "should_trigger": true,
+      "rationale": "An early system design conversation spans product requirements, authority boundaries and architecture decisions before implementation."
+    },
+    {
+      "id": "system-designer-review-positive",
+      "skill": "adk-system-designer",
+      "prompt": "Review our proposed ADK system architecture with me. A browser sends a tenant ID to an agent on Cloud Run, all tenants share a document index, and the agent retries booking changes after a timeout. Help us revise the design and define how to validate its failure cases; do not implement it yet.",
+      "should_trigger": true,
+      "rationale": "A system-level architecture review needs connected decisions about identity, retrieval, external effects and failure validation."
+    },
+    {
+      "id": "system-designer-feature-near-miss",
+      "skill": "adk-system-designer",
+      "prompt": "Our ADK assistant already has an accepted architecture and a profile store. Implement an explicitly saved response-language preference with a forget action and local tests. Keep the existing design and deployment setup.",
+      "should_trigger": false,
+      "rationale": "A focused implementation under an accepted architecture belongs to the memory specialist and should not restart a system design interview."
+    },
+    {
+      "id": "system-designer-deploy-near-miss",
+      "skill": "adk-system-designer",
+      "prompt": "Deploy this existing ADK service to the approved Cloud Run target using the reviewed configuration. Run the rollout checks and report the service endpoint; the architecture decisions are already settled.",
+      "should_trigger": false,
+      "rationale": "Executing an approved deployment belongs to the deployment specialist rather than pre-implementation system design."
+    },
+    {
+      "id": "system-designer-generic-near-miss",
+      "skill": "adk-system-designer",
+      "prompt": "Help me design a conventional Django inventory application on Google Cloud. It needs a web interface, a database and scheduled stock imports. There are no agents or Google ADK components.",
+      "should_trigger": false,
+      "rationale": "Google Cloud hosting alone does not make generic application architecture an ADK system-design task."
+    },
+    {
       "id": "engineer-positive",
       "skill": "adk-engineer",
       "prompt": "Our Python Google ADK assistant needs to remember a customer's preferred language and show its responses in our web app. Inspect the project, work out which parts need changing, and implement the feature with local tests.",

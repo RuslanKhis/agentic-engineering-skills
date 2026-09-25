@@ -49,7 +49,7 @@ the intended dependencies and test design; the runner is not a network sandbox.
 ## Test natural activation
 
 [activation.json](../../evals/activation.json) contains a positive and a nearby
-negative request for each of the twelve skills. `should_trigger` means that
+negative request for each skill. `should_trigger` means that
 the named skill is relevant; it does not require exclusive selection.
 
 For each case:
@@ -73,7 +73,8 @@ requests when a real misrouting appears.
 
 [scenarios.json](../../evals/scenarios.json) covers missing specialists, existing
 Agents CLI projects, an ordinary ADK project with optional Google skills,
-Matt's test-first workflow, an unrelated edit and privacy/observability overlap.
+Matt's test-first workflow, an unrelated edit, privacy/observability overlap,
+and system-design conversations and architecture reviews.
 
 Provide the `prompt`, a fixture matching `context`, and only the declared
 `available_skills`. Keep `expected_primary` and `assertions` with the grader.

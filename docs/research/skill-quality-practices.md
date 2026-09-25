@@ -46,7 +46,7 @@ cases. Explicit instructions improved results, with wording and inspection
 order affecting behavior. Its persistent documentation index performed best in
 that particular evaluation. This establishes a discovery failure in its setup;
 it does not establish that persistent instructions outperform every ADK skill
-or that all twelve specialists should be loaded on every task.
+or that every specialist should be loaded on every task.
 [Vercel's first-party evaluation report](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals)
 
 **Apply here:** retain the explicit `/adk-engineer` and `$adk-engineer` examples,

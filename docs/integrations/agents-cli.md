@@ -30,7 +30,7 @@ npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*' -a claud
 
 For Codex, replace `-a claude-code` with `-a codex` on both commands. Keep the
 quotes around `'*'`. The normal project installation makes seven Google skills
-and twelve Agentic Engineering skills available. Restart the coding-agent
+and thirteen Agentic Engineering skills available. Restart the coding-agent
 session if they do not appear. Google's README explicitly offers the
 Skills CLI installation route and names both Claude Code and Codex.
 [Google's installation instructions](https://github.com/google/agents-cli#readme)
@@ -81,6 +81,10 @@ another copy.
 
 ## Decide which workflow leads
 
+- **Architecture before implementation:** use `adk-system-designer` to work
+  through requirements, trade-offs and application guarantees. Keep an existing
+  Agents CLI specification as input and carry agreed decisions forward; design
+  work does not itself initiate scaffolding or cloud commands.
 - **New Agents CLI project:** begin with `google-agents-cli-workflow`. Use its
   scaffold and project conventions, then select an Agentic Engineering
   specialist for the feature being implemented.

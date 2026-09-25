@@ -1,0 +1,7 @@
+Explicit **Save draft** is now settled: a generated preview becomes a saved plan when the teacher chooses to save it. Shared editing changes the saved-plan contract: each plan needs named collaborators and a revision number. I would still use your application database, with the backend checking the caller’s current permission whenever it loads or saves a plan. Sharing a plan and granting access to its source notes should be separate permissions.
+
+For edits, I recommend checking the revision the editor started from. The backend must check that revision and write the update as one atomic operation. If someone else has saved first, it rejects the stale save and returns a conflict; the editor keeps the teacher’s attempted changes and shows the latest saved version for resolution. This meets your requirement without introducing automatic merging, at the cost of some manual reconciliation when teachers edit concurrently. The same rule should apply to any assistant-generated update to an existing plan.
+
+The acceptance check changes accordingly: two colleagues open the same revision, one saves successfully, and the other gets a conflict with their edits preserved. A user without permission must be denied, including a colleague whose access was removed while their editor was open. These remain proposed checks.
+
+The next permission decision is whether every invited colleague can edit, with only the creator managing invitations, or whether you also need view-only invitations. Is the simpler creator-managed, all-editors arrangement enough for this release?

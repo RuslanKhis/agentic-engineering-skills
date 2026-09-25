@@ -41,6 +41,11 @@ Start with **adk-engineer** and describe the change you need. It selects the
 relevant specialist and follows its workflow through the requested work.
 If you already know the topic, you can call a specialist directly.
 
+Designing the whole application first? Use **adk-system-designer** to work through
+requirements and trade-offs, then capture the architecture and implementation plan.
+Follow the [design → tickets → implementation walkthrough](#from-design-to-working-tickets)
+to continue with Matt Pocock's skills.
+
 You do not need the book or its example repository to use the skills. Install
 them in the project you want to work on. They guide your **coding agent**;
 your application's ADK agents do not load them automatically.
@@ -88,8 +93,9 @@ From your application's project directory, run:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*'
 ```
 
-Choose your coding agent when prompted. This installs **all twelve skills**
-for the current project: `adk-engineer` and the eleven specialists it uses.
+Choose your coding agent when prompted. This installs **all thirteen skills**
+for the current project: `adk-engineer`, `adk-system-designer` and the eleven
+chapter specialists.
 Keep the quotes around `'*'` so your shell passes it unchanged.
 
 **Choosing a Google client?** Use Antigravity for Google consumer accounts.
@@ -218,15 +224,16 @@ For installation problems or later changes, see
 
 ## The Skills
 
-*The contents · One entry point and eleven independently usable specialists.*
+*The contents · One entry point, a system designer and eleven chapter specialists.*
 
 Choose a skill by the problem you need to solve. Each entry below explains
-when it helps, what to ask for, and the command that selects it. The numbers
-follow Chapters 0–10 of the book; no chapter reading is required.
+when it helps, what to ask for, and the command that selects it. The numbered
+specialists follow Chapters 0–10 of the book; no chapter reading is required.
 
 | What you need | Skill |
 | --- | --- |
 | Help choosing an approach or combining concerns | [adk-engineer](#adk-engineer) |
+| A system-design conversation and architecture before implementation | [adk-system-designer](#adk-system-designer) |
 | Sequential steps, parallel work or bounded loops | [adk-workflow-design](#adk-workflow-design) |
 | Reliable API calls and protection against duplicate actions | [safe-api-tool-calls](#safe-api-tool-calls) |
 | Usage limits, repeated-tool protection or human approval | [adk-operational-guardrails](#adk-operational-guardrails) |
@@ -277,6 +284,63 @@ Trace the tool call, fix the cause and add a regression test.
 /adk-engineer We have a working Python ADK agent and an existing React app.
 Plan how to connect them with streamed replies and private user sessions.
 Identify the code and tests we will need.
+```
+
+</details>
+
+### [adk-system-designer](skills/adk-system-designer/SKILL.md)
+
+*Design first · Work out what the application must guarantee.*
+
+Use this to design a new ADK/GCP application, rethink an existing architecture,
+or review decisions that span several parts of the system. It asks a few useful
+questions at a time, explains trade-offs and helps choose the smallest architecture
+that meets your requirements.
+
+It explains important decisions as **requirement → design choice → reason →
+tradeoff → verification**: what you need, what it proposes, why it fits, what
+you give up, and how to check it. As your answers change the requirements, it
+updates the choices and their checks.
+
+The result is a system design with component and request-flow diagrams where
+useful, data ownership, identity and tool permissions, failure recovery, latency
+and cost assumptions, plus an implementation plan. Each important choice includes
+an ADK or application component, its GCP responsibility and the skill that can
+help implement it. Goals record dependencies, acceptance checks, blockers and a
+prompt for continuing the work in another session. Decisions and open questions
+stay explicit. A focused request such as “add memory” still belongs with the
+memory specialist.
+
+The usual artifacts are `docs/architecture/<topic>.md` and
+`docs/plans/<topic>.md`, adapted to your project. A small plan can stay in the
+design document. See the [copyable design-to-tickets walkthrough](#from-design-to-working-tickets)
+and [guide to continuing the work](docs/integrations/design-to-implementation.md).
+
+**Invoke:** Claude Code `/adk-system-designer` · Codex `$adk-system-designer`
+
+Gemini CLI / Antigravity: “Use the adk-system-designer skill to…”
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-system-designer I want a customer-support agent using ADK and GCP.
+It should explain case status and create escalations. Talk me through
+the requirements and trade-offs, then write the architecture before we code.
+```
+
+```text
+/adk-system-designer We already have React, OIDC login and PostgreSQL.
+Help design an ADK assistant that can request refunds. Work through user
+permissions, approval, duplicate requests, recovery and cost controls.
+Keep our existing stack and capture the decisions in docs/architecture/.
+```
+
+```text
+/adk-system-designer Review our proposed multi-agent architecture on GCP.
+Trace a successful request, a denied user, a lost tool response and a worker
+restart. Identify unnecessary components and gaps in our guarantees.
+Give us a revised design and acceptance plan; do not implement it yet.
 ```
 
 </details>
@@ -808,7 +872,9 @@ Some useful combinations:
 
 | When you need to… | Matt's skill | ADK companion |
 | --- | --- | --- |
-| Clarify a feature and record its terminology | `grill-with-docs` | `adk-engineer` to carry out the resulting ADK work |
+| Clarify a feature and record its terminology | `grill-with-docs` | `adk-system-designer` for ADK/GCP decisions when needed |
+| Resolve a large set of open architecture decisions | `wayfinder` | The designer's accepted decisions, open questions and relevant specialists |
+| Turn an agreed design into a multi-session build | `to-spec` → `to-tickets` → `implement` | The designer's goal plan and each goal's primary specialist |
 | Build a change through failing tests and small fixes | `tdd` | The relevant specialist, such as `adk-memory-architecture` |
 | Investigate a slow agent | `diagnosing-bugs` | `optimise-adk-on-google-cloud` |
 | Review the resulting change | `code-review` | The specialist's acceptance and validation guidance |
@@ -827,20 +893,197 @@ That setup configures his workflow preferences. If you already use his Claude
 Code plugin, keep that installation and use its command picker instead of
 installing another copy through the CLI.
 
-Then you can combine the installed skills in a request. In Claude Code:
+#### From design to working tickets
+
+*One example · A support assistant with saved preferences and streamed replies.*
+
+Give the next skill the saved architecture and plan paths. You can continue
+in the same conversation or start a new one in the **same application project**.
+The documents carry the decisions between sessions.
+
+These examples use **Claude Code chat commands**. In **Codex**, replace the
+leading `/` with `$`: `/to-spec` becomes `$to-spec`. In Google clients, ask
+“Use the to-spec skill to…” and keep the rest of the prompt. Name supporting
+skills in the request; one skill leads each step. Plugin-installed commands may
+have a prefix—select the matching command from your client's picker.
+
+For this walkthrough, choose **local Markdown** during Matt's project setup:
 
 ```text
-/adk-engineer Use the installed tdd skill to add cross-session memory
-to this agent. Test user isolation and forgetting through our existing
-storage interface.
+/setup-matt-pocock-skills Use local Markdown for this project's issue tracker.
 ```
 
-In Codex, use `$adk-engineer` and mention `$tdd` in the same request.
+Follow the setup questions and review its configuration. It stores specs and
+tickets under `.scratch/`. If your team already uses a configured tracker,
+keep it and use the issue links it returns in place of the example file paths.
+[Matt's setup and local tracker conventions](https://github.com/mattpocock/skills/blob/main/skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md).
 
-The development method supplies the test-first loop; the memory specialist
-supplies the ADK and data-lifecycle guidance. This is composition through the
-coding agent's instructions, with no special integration service to configure.
-The result still depends on the coding agent following both sets of guidance.
+**1. Discuss the application and save the decisions**
+
+```text
+/adk-system-designer Help design a support assistant using our existing
+React app, OIDC login, PostgreSQL and Google ADK on GCP. Users should save
+and forget a preferred language and receive streamed replies.
+Ask me about requirements and explain the choices and tradeoffs.
+When we have agreed the design, save it to docs/architecture/support-assistant.md
+and the goal plan to docs/plans/support-assistant.md. Include dependencies,
+ADK/GCP implementation routes, relevant skills and acceptance checks.
+Identify the first goal we can build locally. Design and planning only for now.
+```
+
+Answer its questions and review the proposals. For example: “Preferences belong
+to individual users; save only when they click Save; forgetting takes effect on
+the next conversation.” The designer translates those answers into storage,
+identity, invocation and testing decisions. **If these documents already exist,
+start at step 2.** Substitute your actual paths throughout.
+
+**2. Turn the agreed design into a specification**
+
+A specification describes what the finished feature must do and how to verify it.
+
+```text
+/to-spec Read docs/architecture/support-assistant.md and
+docs/plans/support-assistant.md. Turn the agreed local implementation goals
+into the support-assistant spec using our configured local Markdown tracker.
+Preserve accepted decisions, scope and acceptance checks; link both documents.
+Use adk-memory-architecture and adk-frontend-integration to check the relevant
+contracts while writing the spec. If an open decision blocks these goals,
+identify it so we can resolve it before making those goals ready to build.
+Check the proposed test boundaries with me. Create the spec only.
+```
+
+Expect `.scratch/support-assistant/spec.md` with user stories, module/interface
+decisions and testing decisions. The agent may ask where tests should observe
+behaviour—for example, through the authenticated API and browser. Concrete
+code-path notes stay in the linked plan. [How `to-spec` works](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-spec/SKILL.md).
+
+Resolve decisions blocking the selected goals with the designer or Wayfinder
+before proceeding; unrelated future decisions can stay open.
+
+**3. Break the specification into tickets**
+
+```text
+/to-tickets Read .scratch/support-assistant/spec.md and its linked design
+and goal plan. Propose tickets that each deliver a small, testable user outcome.
+Carry the relevant goal/decision references, dependencies, primary ADK skill,
+supporting skills and observable acceptance checks into every ticket.
+Use adk-memory-architecture for preference behaviour, adk-frontend-integration
+for streaming, and adk-agent-evaluation for the verification plan.
+Review the breakdown with me, then write one file per approved ticket under
+.scratch/support-assistant/issues/. Print their paths and the first ready ticket.
+Make docs/plans/support-assistant.md point to the spec and tickets for work status.
+```
+
+Review the proposed size and order before the skill writes tickets. A useful
+ticket might deliver **save → new conversation uses the preference → forget**,
+including the UI, API, storage and checks. Another might deliver streamed text
+with visible completed, failed and interrupted states. Each ticket should name
+its blockers and skills. These are build tickets; you only need a Wayfinder map
+if substantial design decisions remain open. [How `to-tickets` works](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md).
+
+**4. Implement one ready ticket with the relevant ADK skills**
+
+Open a fresh session in the same project. Paste the **actual ticket path**
+printed in step 3; the filename below illustrates a memory ticket.
+
+```text
+/implement Implement .scratch/support-assistant/issues/01-save-language.md.
+Read its linked spec, architecture and goal plan; check that its blockers are done.
+Use adk-memory-architecture for the preference lifecycle, adk-tool-auth-and-secrets
+for user ownership, and adk-frontend-integration for the changed UI/API boundaries.
+Keep the accepted design and implement only this ticket with local tests.
+Review the ticket's full changes, including staged and unstaged edits, against
+its spec and the state before this ticket. Resolve actionable review findings.
+Record checks and results in the ticket, and mark it complete only when its
+acceptance checks pass.
+Report any blocked or unverified checks. Keep live services and deployment
+for their own tickets. Leave the changes uncommitted for my review.
+```
+
+Matt's `implement` leads development, testing and code review; the ADK skills
+supply guidance for the affected parts. It **normally commits to the current
+branch**; this example explicitly leaves changes for your review. Review the
+diff and evidence, commit the accepted changes, then repeat with the next
+unblocked ticket. The prompt explicitly includes uncommitted edits in the review.
+For a streaming ticket, name `adk-frontend-integration` as its primary ADK skill.
+[How `implement` works](https://github.com/mattpocock/skills/blob/main/skills/engineering/implement/SKILL.md).
+
+**5. Check the application across ticket boundaries**
+
+```text
+/adk-agent-evaluation Review the support-assistant spec and completed tickets
+under .scratch/support-assistant/. Run the relevant local checks for the whole
+journey: save a language, start a new conversation, stream the reply, forget the
+preference, and start again. Include another user's denied access and a stream
+that fails after showing partial text. Report actual results and remaining gaps.
+Separate local evidence from live-model and hosted checks still to be run.
+```
+
+Passing individual tickets is one part of verification. The combined journey
+needs its own evidence; live-model behaviour and a deployed GCP application need
+the corresponding evaluation and deployment work.
+
+<details>
+<summary>Return to an ADK specialist during planning or implementation</summary>
+
+You can ask for a focused review before starting a ticket:
+
+```text
+/adk-memory-architecture Review the saved-language ticket in
+.scratch/support-assistant/issues/ against the linked design and existing code.
+Check ownership, persistence between conversations and forgetting. Propose
+specific corrections to its implementation approach and acceptance checks.
+Keep this step to planning; return the ticket path to resume with implement.
+```
+
+If implementation uncovers a product decision, return to the designer with the
+ticket and the new information:
+
+```text
+/adk-system-designer While working on our saved-language ticket, we discovered
+that several people share an account. Read docs/architecture/support-assistant.md,
+docs/plans/support-assistant.md and the ticket in .scratch/support-assistant/issues/.
+Help us decide whether the preference belongs to a person or the shared account.
+Explain the implementation and testing consequences. After we agree, update the
+design and affected ticket requirements; preserve unrelated accepted decisions.
+Then give me a prompt to resume that ticket with implement and the relevant ADK skills.
+```
+
+For several unresolved decisions, use Wayfinder as described below. Continue
+ready, independent tickets while other decisions are being resolved.
+
+</details>
+
+<details>
+<summary>Use Wayfinder when substantial design decisions remain open</summary>
+
+A Wayfinder map organizes **questions to resolve** before the build. For example:
+individual versus team preferences, or the recovery behaviour after a disconnect.
+Start from the same saved documents:
+
+```text
+/wayfinder Read docs/architecture/support-assistant.md and
+docs/plans/support-assistant.md. Map the substantial unresolved design decisions.
+Use support-assistant-design as the effort name. Preserve and link accepted
+decisions; put adk-system-designer and the relevant ADK specialists in the map's
+Notes. Our destination is a design ready for the local implementation spec.
+Keep ready implementation goals in the linked plan.
+```
+
+With the local tracker, expect `.scratch/support-assistant-design/map.md` and
+decision tickets in that effort's `issues/` directory. On a later session, use
+`/wayfinder Continue .scratch/support-assistant-design/map.md` to work through
+the next ready decision. Use the actual path returned by the agent. Keeping the
+design effort separate from `support-assistant` keeps decision and build tickets
+in their own directories.
+
+When the relevant decisions are resolved, update the architecture and plan,
+then return to **step 2** and include the map path in the `to-spec` request.
+See the [handoff guide](docs/integrations/design-to-implementation.md) for artifact
+ownership, session resumption and direct implementation without Matt's collection.
+[How Wayfinder works](https://github.com/mattpocock/skills/blob/main/skills/engineering/wayfinder/SKILL.md).
+
+</details>
 
 <p align="center">
   <img src="docs/editorial/section-break.svg" alt="" width="240">
@@ -899,7 +1142,25 @@ recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
 
-### Current revision · 16 September 2026
+### System designer · 25 September 2026
+
+All **13 packages** pass validation. Five independent Codex subagent trials
+exercised the new designer: a requirements conversation, a one-pass review of a
+flawed architecture, a conversation with a changed requirement, and a runtime
+and release review, plus a practical implementation handoff. The outputs
+preserved the existing stack,
+identified failure and authority boundaries, and kept assumptions and planned
+checks explicit. See the [prompts, designs and assessment](docs/testing/system-designer.md).
+
+The [source coverage review](docs/research/system-designer-source-coverage.md)
+maps the system-design guidance to its instructions and supporting references.
+
+The offline repository checks passed **395 tests**, with **59 optional SDK
+checks skipped** in the clean maintainer environment. These trials used the
+skill directly; automatic selection and installation of the new package in each
+client have not been tested. The client results below cover the earlier 12-skill set.
+
+### Implementation skill checks · 16 September 2026
 
 | Check | Result | Evidence |
 | --- | --- | --- |
@@ -950,7 +1211,7 @@ investigation, installation checks and design rationale.
 *Make the instructions easier to select, then verify the work they produce.*
 
 The [maintainer guide](CONTRIBUTING.md) provides a local check command and the
-conventions for changing a skill. Automated checks validate all twelve packages
+conventions for changing a skill. Automated checks validate all skill packages
 and run their offline helper suites; GitHub Actions is configured to run them
 on Python 3.11 and 3.12. These checks do not establish model or cloud behavior.
 

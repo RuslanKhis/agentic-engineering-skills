@@ -2,6 +2,97 @@
   "version": 1,
   "cases": [
     {
+      "id": "system-design-adaptive-discovery",
+      "prompt": "Help me work out the architecture for a Python Google ADK support assistant on Google Cloud. It should answer policy questions and change customer bookings. Start by talking through the requirements with me, then write an architecture note and a failure-validation plan. We are designing the system before building it.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "adk-tool-auth-and-secrets", "safe-api-tool-calls", "deploy-adk-on-google-cloud"],
+      "context": "A greenfield workspace has a short product brief but no source code or chosen runtime. The brief identifies a browser interface, multiple customer organizations and an existing booking API, but leaves booking authorization, API replay guarantees, document entitlements, expected traffic and budget open. The user is available for a design conversation and authorizes local documentation only. No implementation, package installation, model calls or cloud mutations are authorized.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Uses the brief to ask a small set of high-impact questions and adapts follow-up questions to the user's answers instead of delivering a fixed exhaustive questionnaire.",
+        "Separates confirmed requirements from assumptions and unresolved decisions, preserving unknown traffic, budget and provider behavior rather than fabricating them.",
+        "Derives explicit invariants for authenticated tenant scope, entitled retrieval and authorized booking changes before recommending components.",
+        "Compares viable control-flow and hosting options against the discovered requirements, including whether deterministic code can own a step that does not need an agent.",
+        "Explains consequential recommendations by connecting the requirement, specific design choice, reason, meaningful tradeoff and observable verification without imposing five headings on every turn.",
+        "Identifies the user outcome to improve and treats unmeasured benefits as hypotheses, with product evidence separate from model quality and technical correctness.",
+        "Produces a proportionate architecture note with component responsibilities, trust and data boundaries, consequential decisions and open questions, plus a validation plan tied to failure cases.",
+        "Keeps implementation and deployment as a potential later handoff; creating the design does not initiate code changes, installation or cloud actions."
+      ]
+    },
+    {
+      "id": "system-design-review-existing-proposal",
+      "prompt": "Review the ADK architecture proposal in this workspace with me and revise the design. We need tenant-isolated document answers and approved booking changes, including recovery when an API response is lost. Keep this as a design review and leave the application code unchanged.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "adk-tool-auth-and-secrets", "safe-api-tool-calls", "adk-agent-evaluation"],
+      "context": "The proposal uses a browser chat client, a Python ADK service on Cloud Run, a shared document index and an external booking API. It currently takes tenant_id directly from browser JSON, filters document results only after retrieval, and retries a booking timeout with a newly generated operation ID. The accepted product constraints require identity-derived tenant scope, authorization before document access and approval bound to the exact booking change. The provider's replay and reconciliation support remains unknown. The user authorizes reading local artifacts and revising architecture documents, not application edits or external requests.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Starts from the supplied proposal and accepted constraints, asking only questions that affect unresolved design decisions.",
+        "Connects the browser, agent, retrieval and API boundaries when explaining how the proposed design violates the required tenant and operation invariants.",
+        "Revises the design to derive scope from verified identity and enforce document entitlement before exposing retrieved content to the model.",
+        "Binds approval to a specific operation and payload, preserves operation identity across recovery, and treats an accepted write with a lost response as uncertain until provider evidence resolves it.",
+        "Records unknown replay or reconciliation capabilities as a dependency to verify and proposes a safe stopping or manual-reconciliation path without claiming exactly-once execution.",
+        "Defines observable validation cases for forged tenant scope, disallowed document access, changed approved payloads and lost API responses, distinguishing planned checks from executed evidence.",
+        "Makes the requirement, revised choice, reason, tradeoff and verification traceable for important changes rather than presenting an unexplained component list.",
+        "Produces scoped design changes and a future implementation handoff without editing application code or invoking deployment."
+      ]
+    },
+    {
+      "id": "system-design-changed-collaboration-requirement",
+      "prompt": "We need to revise our ADK lesson-planning design: teachers must now share plans with named colleagues and edit together. A stale save must not silently overwrite someone else's work. Our first release can show a conflict and ask the editor to resolve it. Explain the next design decision briefly; no full architecture or code yet.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "adk-tool-auth-and-secrets"],
+      "context": "The prior design assumed one teacher per plan and proposed a versioned application-owned plan record in the existing PostgreSQL database, separate from ADK chat history. Existing React UI and login are accepted. Planned checks covered owner-only access and reopening the saved revision after restart. The updated requirement supersedes owner-only editing: named collaborators may edit but uninvited teachers must still be denied. The user accepts explicit conflict resolution for the first release. Only conversational design is requested.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Connects named collaboration and prevention of lost updates to explicit access checks and shared revision/concurrency handling in the existing stack.",
+        "Explains why the proposed mechanism serves the requirement and the user-visible tradeoff of conflict resolution, comparing heavier collaboration infrastructure only when relevant.",
+        "Updates the prior owner-only permission assumption and verification: invited colleagues can access, uninvited users cannot, and competing stale saves do not silently replace committed edits.",
+        "Keeps decisions proposed unless accepted and distinguishes planned tests from observed evidence.",
+        "Keeps the answer conversational and scoped to the next decision, without repeating the entire design, requiring a fixed interview, or starting implementation."
+      ]
+    },
+    {
+      "id": "system-design-runtime-and-release-review",
+      "prompt": "Review our ADK reporting-assistant design. Customers need private conversation continuity, incremental progress, truthful outcomes and full-result downloads after reconnecting. Keep the existing stack and give the important decisions and planned checks, without implementation or deployment.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-frontend-integration", "adk-memory-architecture", "optimise-adk-on-google-cloud"],
+      "context": "React, OIDC and PostgreSQL are accepted. Three replicas persist conversation events but send only the last 20 events to the model, which the proposal calls history deletion. Exports use replica-local temporary disk. Tool results are paired by tool name, any final-response event marks success, and reconnect resubmits the message. Per-process session locks and immediate reservation release on browser disconnect are proposed. A gradual SDK rollout will change the session storage format. Only a design review is authorized.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Separates model-context selection from retention and erasure, preserving required facts and complete tool exchanges while bounding data before materialization and model input.",
+        "Defines durable owner-scoped downloads and authorized reconnection to existing work without assuming another request should resubmit it.",
+        "Correlates exact tool calls and preserves partial success and late failure in the public contract, including real incremental delivery and bounded slow-consumer state.",
+        "Coordinates same-session work across replicas and fences stale ownership; cancellation or browser disconnect does not alone release capacity still consumed by remote work.",
+        "Plans old/new storage compatibility, bounded drain and rollback evidence before the proposed rolling upgrade.",
+        "Connects the choices to requirements, tradeoffs and observable checks while leaving version/provider guarantees provisional and keeping implementation out of scope."
+      ]
+    },
+    {
+      "id": "system-design-practical-handoff",
+      "prompt": "Design our ADK support assistant and give us a plan another coding-agent session can use. Keep React, OIDC, PostgreSQL and Cloud Run. Add an explicitly saved response-language preference with forgetting, plus streamed replies and honest failure states. Identify the first useful local implementation goal. No coding or deployment yet; we may use Matt Pocock's skills later.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "adk-frontend-integration", "adk-tool-auth-and-secrets", "adk-agent-evaluation"],
+      "context": "The accepted pilot uses individual preferences; a future group-account preference question is outside this release. Verified login supplies the user ID. No source tree, selected ADK version or cloud credentials have been provided. Local implementation/testing is the intended next phase, while this request authorizes documentation only. Optional third-party planning skills are not installed in this fixture.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Maps requirements to concrete ADK or ordinary application components, integration points, GCP responsibilities and relevant skills, with proposed modules and version verification clearly labelled.",
+        "Produces a portable architecture and goal plan with stable IDs, dependencies, prerequisites, one primary skill per goal, observable acceptance cases, state and blockers.",
+        "Identifies a useful local implementation slice, with public boundaries and test evidence, without treating absent cloud credentials or the out-of-scope future group feature as a blocker to all progress.",
+        "Separates discovery questions from implementation goals and distinguishes design readiness, authorization and executed evidence.",
+        "Provides a continuation prompt pointing to the generated documents and chosen goal; optional Wayfinder or spec/ticket workflows remain source-checked suggestions, not installed or executed capabilities.",
+        "Preserves the design-only scope: no application code, dependency installation, issue creation or cloud actions."
+      ]
+    },
+    {
+      "id": "router-resumes-accepted-goal",
+      "prompt": "Use adk-engineer to continue G01 from the saved support-assistant plan. Preserve accepted decisions, implement the local language-preference slice and its acceptance checks, then record actual results in the plan. No cloud work.",
+      "available_skills": ["adk-engineer", "adk-system-designer", "adk-memory-architecture", "adk-tool-auth-and-secrets"],
+      "context": "The fixture contains linked architecture and implementation-plan documents. G01 is a ready, authorized local goal for exact user-controlled preferences, with an existing profile API, trusted caller context, supported database adapter, pinned dependencies and deterministic tests. Its acceptance cases cover save/use/forget across sessions, restart and cross-user denial. A future group-sharing goal is explicitly out of scope. The design names memory as the primary specialist and reuses the current app and test runner.",
+      "expected_primary": "adk-memory-architecture",
+      "assertions": [
+        "Reads the canonical design and goal, checks actual code and prerequisites, and loads the memory specialist without restarting the architecture interview.",
+        "Implements the requested slice within the existing interfaces and dependency pins, using auth guidance only when the changed boundary requires it.",
+        "Checks the goal's public acceptance cases and records actual changes, commands, results and remaining limits in the canonical plan.",
+        "Leaves the out-of-scope group feature and cloud work outside this goal; naming optional planning tools does not start a ticketing or installation workflow."
+      ]
+    },
+    {
       "id": "router-missing-specialist",
       "prompt": "Inspect this ADK assistant and work out how to add a language preference that survives restarts. Use the installed toolkit to guide the change; do not install any additional skills or packages in this exercise.",
       "available_skills": ["adk-engineer"],
@@ -18,7 +109,7 @@
     {
       "id": "existing-agents-cli-focused-memory",
       "prompt": "In this existing Agents CLI project, add an explicitly saved response-language preference with restart persistence and a forget action. Keep the accepted specification, generated service wiring and deployment setup. Limit this change to the feature and its local tests.",
-      "available_skills": ["adk-engineer", "adk-memory-architecture", "google-agents-cli-workflow", "google-agents-cli-adk-code"],
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "google-agents-cli-workflow", "google-agents-cli-adk-code"],
       "context": "An adopted Agents CLI project contains agents-cli-manifest.yaml, uv.lock, an accepted specification, generated serving entrypoints and an application-owned user identity. The user has chosen its existing lifecycle and requests a focused follow-up change. No external service calls or deployment are authorized.",
       "expected_primary": "adk-memory-architecture",
       "assertions": [

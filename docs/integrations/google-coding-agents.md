@@ -42,7 +42,7 @@ gemini skills list
 gemini
 ```
 
-The Skills CLI places the twelve complete packages in `.agents/skills/`.
+The Skills CLI places the complete skill packages in `.agents/skills/`.
 Gemini discovers that shared directory. If this is a new project, use Gemini's
 workspace-trust flow for a project you trust; untrusted project skills are not
 loaded. Check `/skills list` in the session. After installing or changing skills,

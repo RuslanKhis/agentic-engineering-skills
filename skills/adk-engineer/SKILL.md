@@ -1,7 +1,7 @@
 ---
 name: adk-engineer
 description: >-
-  Help build, change or review a Python Google ADK agent by selecting the
+  Help design, build, change or review a Python Google ADK application by selecting the
   relevant Agentic Engineering specialist skills. Use as the starting point
   for an ADK engineering request when the user has not chosen a specialist,
   or when a change spans several ADK concerns. For a focused task already
@@ -27,6 +27,12 @@ implementation or a review, and what observable result would satisfy it.
 Preserve the project's domain and working conventions. Resolve routine choices
 from the repository; ask only for missing decisions that affect the result.
 
+When continuing a design or implementation plan, read its linked decisions,
+requested goal, dependencies, acceptance cases and execution scope. Check the
+current repository and skill availability, preserve settled choices, and work
+on the next authorized goal. Record actual evidence and unresolved blockers in
+the canonical plan or tracker; restart discovery only for a material new gap.
+
 If the project has `agents-cli-manifest.yaml`, the user asks to use Agents CLI,
 or another collection already supplies the development workflow, read
 [working with other skill collections](references/composition.md). It explains
@@ -39,6 +45,7 @@ change crosses its boundary. Say briefly which skill you are applying and why.
 
 | Request concerns | Specialist skill |
 | --- | --- |
+| Whole-application architecture, requirements and trade-offs before coding, or a cross-cutting system review | `adk-system-designer` |
 | Workflow structure, handoffs, parallel work, loops, events or callbacks | `adk-workflow-design` |
 | External API retries, deadlines, duplicate writes or uncertain outcomes | `safe-api-tool-calls` |
 | Runaway invocations, usage budgets or human approval of agent actions | `adk-operational-guardrails` |
@@ -50,6 +57,11 @@ change crosses its boundary. Say briefly which skill you are applying and why.
 | Personal data in prompts, tools, storage, logs or streamed answers | `protect-adk-sensitive-data` |
 | Tool identity, credentials, Secret Manager or delegated OAuth | `adk-tool-auth-and-secrets` |
 | Natural-language SQL agents, schema retrieval or controlled query execution | `adk-sql-agent-engineering` |
+
+Use `adk-system-designer` for the system-design conversation. A focused feature
+design or code fix stays with its topic specialist; it does not need a new
+architecture interview. Preserve the user's requested design-only scope and
+already agreed architecture when handing work between skills.
 
 Locate the selected skill through the coding agent's available-skills catalogue
 and read its `SKILL.md`. When using a filesystem installation without a catalogue

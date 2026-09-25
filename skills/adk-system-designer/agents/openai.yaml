@@ -1,0 +1,4 @@
+interface:
+  display_name: "ADK System Designer"
+  short_description: "Design an ADK application through a focused conversation"
+  default_prompt: "Use $adk-system-designer to design this ADK application and create a practical implementation plan with goals, ADK/GCP integration points, relevant skills and acceptance checks."
