@@ -1,0 +1,159 @@
+{
+  "version": 1,
+  "review_status": "AI-authored provisional expectations; no domain-competent human review and no live-model calibration.",
+  "judgments": [
+    {
+      "case_id": "s01",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The exact selected field states this roof finish."
+    },
+    {
+      "case_id": "s02",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "Nine in the morning is a faithful paraphrase of 09:00; exact wording is unnecessary."
+    },
+    {
+      "case_id": "s03",
+      "source_identity": "valid",
+      "span_completeness": "incomplete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The answer is true elsewhere on the page but absent from the selected question-only span."
+    },
+    {
+      "case_id": "s04",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The same observation as s03 now has the question and its explicit answer selected."
+    },
+    {
+      "case_id": "s05",
+      "source_identity": "valid",
+      "span_completeness": "incomplete",
+      "applicability": "not_applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The selected rule loses its exception. The full source explicitly exempts this rolled flexible mat."
+    },
+    {
+      "case_id": "s06",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The complete passage includes the applicable exception."
+    },
+    {
+      "case_id": "s07",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "A complete quotation still contradicts an unconditional conclusion that discards its exception."
+    },
+    {
+      "case_id": "s08",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "This observation is directly supported by the shared excerpt."
+    },
+    {
+      "case_id": "s09",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "not_applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The same excerpt as s08 is a complete colour field, not mass evidence; truth elsewhere on the page cannot repair the selection."
+    },
+    {
+      "case_id": "s10",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The written dimension is explicit and does not require converting pixels to metres."
+    },
+    {
+      "case_id": "s11",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "An unscaled 160-pixel line supplies no physical measurement; the written width is a different basis for a claim."
+    },
+    {
+      "case_id": "s12",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The same reading and time have an explicit incompatible value of 12 litres."
+    },
+    {
+      "case_id": "s13",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "A blank field gives no value. Absence does not establish a contradictory value."
+    },
+    {
+      "case_id": "s14",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "unresolved",
+      "support": "unresolved",
+      "rationale": "The selected record supports 12, but an equally authoritative record states 15. Precedence is unresolved."
+    },
+    {
+      "case_id": "s15",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "not_applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The cited ID and complete name field are valid but unrelated to width."
+    },
+    {
+      "case_id": "s16",
+      "source_identity": "invalid",
+      "span_completeness": "unresolved",
+      "applicability": "unresolved",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The source ID is unresolvable; familiar quotation text does not supply a valid citation."
+    },
+    {
+      "case_id": "s17",
+      "source_identity": "invalid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The selected content addresses the width question, but occurs in the access form rather than the cited roof document. Applicable content cannot repair invalid source identity."
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "review_status": "AI-authored provisional expectations; no domain-competent human review and no live-model calibration.",
+  "result": {
+    "case_count": 17,
+    "exact_matches": 15,
+    "false_accepts": [],
+    "false_rejects": [],
+    "mismatches_by_dimension": {
+      "source_identity": [],
+      "span_completeness": [
+        "s17"
+      ],
+      "applicability": [
+        "s17"
+      ],
+      "contrary_evidence": [
+        "s11"
+      ],
+      "support": [
+        "s11"
+      ]
+    }
+  }
+}

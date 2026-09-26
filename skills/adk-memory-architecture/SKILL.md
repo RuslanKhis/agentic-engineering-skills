@@ -62,6 +62,10 @@ mutations. Exact user-controlled settings belong in a deterministic profile.
 Neither semantic memory nor retrieved prose authorises an action. Do not add
 all four stores merely because they are available.
 
+For local PDFs, supplementary authorities or image-only evidence, read
+[local-document-coverage.md](references/local-document-coverage.md) for the
+coverage fixture and the visual-review or unresolved-evidence boundary.
+
 When implementing the HTTP/ADK boundary, read
 [integration-recipes.md](references/integration-recipes.md) for concrete
 assembly, trusted-context, event and replay contracts. When connecting or

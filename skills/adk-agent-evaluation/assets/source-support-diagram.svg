@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="140" viewBox="0 0 300 140">
+  <rect width="300" height="140" fill="white"/>
+  <g fill="#162433" font-family="sans-serif" font-size="16">
+    <text x="20" y="28">Written width: 3.2 m.</text>
+    <text x="20" y="124">Drawing not to scale.</text>
+  </g>
+  <g stroke="#162433" stroke-width="2">
+    <path d="M60 68H220 M60 58V78 M220 58V78"/>
+  </g>
+</svg>

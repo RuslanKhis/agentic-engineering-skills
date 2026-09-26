@@ -34,13 +34,24 @@ a substituted HTTP transport can test that path but not provider behaviour. Mark
 these evidence levels separately. A negative case needs a populated/authorised
 control where otherwise an implementation that rejects everything could pass.
 
+For evidence-heavy review schemas, use [review-contracts.md](review-contracts.md)
+to establish an honest passing reference before tuning the model. It includes a
+claim-only coverage defect, a separate issue-disposition pattern, transformation
+tests and the distinction between an accepted review and a publishable decision.
+
 ## Bundled local checks
 
 From the installed skill folder, with Python 3.11 or later:
 
 ```bash
 python -m unittest discover -s tests -p 'test_inspect_project.py' -v
+python -m unittest discover -s tests -p 'test_review_contract.py' -v
 ```
+
+The second suite exercises a synthetic server-owned frame and checker, including
+required controls, stale replay, source coverage and publication warnings. It
+does not exercise ADK, provider schema acceptance or independent evidence support;
+adapt its cases through the target application's actual boundary.
 
 The optional real-ADK contract tests need the recorded ADK dependencies already
 available in the selected environment; they do not install them:

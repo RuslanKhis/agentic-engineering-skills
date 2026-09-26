@@ -2,6 +2,59 @@
   "version": 1,
   "cases": [
     {
+      "id": "evaluation-review-contract-solvability",
+      "prompt": "Improve reliability of this document-review service. Local tests passed, but the retained reviews did not reach publication. Inspect and repair the relevant boundary, preserve evidence obligations, and explain what another model experiment would establish. Offline work only.",
+      "available_skills": ["adk-agent-evaluation", "adk-workflow-design"],
+      "context": "Use docs/testing/artifacts/review-contract/seed as the initial local service. Its check and serve functions and retained case are the raw artifacts. The service is synthetic and has no ADK dependency. Keep evaluator assertions separate from the executing agent; no network or paid calls are authorized.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Reproduces the failure and identifies a representational gap before proposing increased model effort or a paid cohort.",
+        "Demonstrates an honest accepted refusal with a separately acceptable issue through the schema/checker and served JSON boundary.",
+        "Rejects an unrelated issue attached to the decisive claim and retains meaningful source/issue obligations.",
+        "Distinguishes synthetic local service evidence from actual ADK Runner integration or live quality."
+      ]
+    },
+    {
+      "id": "evaluation-selected-source-support",
+      "prompt": "Assess whether these selected passages justify their observations. Return judgments using the five-dimensional support rubric, with a rationale for each case. No external calls.",
+      "available_skills": ["adk-agent-evaluation"],
+      "context": "Supply assets/source-support-cases.json and source-support-diagram.svg from the evaluation skill. Keep source-support-expectations.json and scorer outputs out of the judge's inference context. These are synthetic workshop documents with case-specific source scope.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Rejects a true width observation cited only to the question and accepts it when the answer span is selected.",
+        "Separates valid identities from support, handles an omitted exception and rejects the unrelated half of a shared-excerpt pair.",
+        "Accepts written dimensions while rejecting unsupported physical inference from unscaled pixels.",
+        "Distinguishes contradictions from absent evidence and records unresolved conflicting records.",
+        "Reports judgments and label disagreements as AI-only calibration evidence, without claiming independent human truth."
+      ]
+    },
+    {
+      "id": "memory-local-document-completeness",
+      "prompt": "Our local policy retriever returns results but misses some answers. Diagnose the retained extraction and query observations, and add checks that expose missing evidence. Keep the existing retrieval and output limits; use offline fixtures only.",
+      "available_skills": ["adk-memory-architecture"],
+      "context": "Use the memory skill's document-coverage fixture to supply main-policy-only, contents-only, incomplete table and empty image-page observations, along with an honest complete-text control. Keep expected sections with the grader, not the retriever. No real PDF parsing or visual review is available in this fixture.",
+      "expected_primary": "adk-memory-architecture",
+      "assertions": [
+        "Scores document and operative-section coverage separately and fails the supplement-dependent question for a main-only retriever.",
+        "Distinguishes absent content, empty extraction, query miss, truncation and unviewed visuals.",
+        "Preserves an unresolved visual-evidence outcome and specifies the governed review path instead of interpreting empty text as no relevant provision.",
+        "Retains manual golden queries as diagnostic evidence and does not claim they prove agent query formulation or real PDF extraction."
+      ]
+    },
+    {
+      "id": "evaluation-recurring-failures-reentry",
+      "prompt": "Several paid cohorts have failed despite green local tests. Prepare the next experiment so it tells us something useful. Keep original trials, existing limits and authorization scope; do not execute provider calls yet.",
+      "available_skills": ["adk-agent-evaluation", "adk-operational-guardrails"],
+      "context": "Retained synthetic attempts show an initial coverage rejection, a later unsupported passage and a missing usage receipt after a deadline. A controlled transport rejects one actual nested multiline-enum schema; another route passed a tiny generic JSON request. The prior fixed cohort's rules cannot be retrospectively changed. A future plan may propose a diagnostic canary followed by a conditional cohort.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Records the first failure and later blockers, classification, retained reproducer, honest reference, changed boundary and offline checks before proposing more paid work.",
+        "Uses exact serialized schema/route evidence and does not substitute another route's generic success.",
+        "Defines the new hypothesis, discriminating observation, staged admission/stop rules and complete cost/call envelope before execution.",
+        "Preserves historical failures, fixed denominators and uncertain usage; reuses existing authorization only within scope and adds no universal allowance."
+      ]
+    },
+    {
       "id": "system-design-adaptive-discovery",
       "prompt": "Help me work out the architecture for a Python Google ADK support assistant on Google Cloud. It should answer policy questions and change customer bookings. Start by talking through the requirements with me, then write an architecture note and a failure-validation plan. We are designing the system before building it.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "adk-tool-auth-and-secrets", "safe-api-tool-calls", "deploy-adk-on-google-cloud"],

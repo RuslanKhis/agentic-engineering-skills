@@ -1,0 +1,15 @@
+{
+  "draft": {
+    "revision": "draft-1",
+    "outcome": "refuse",
+    "claims": [{"id": "reason-access", "issue_ids": ["access"], "source_ids": ["access-report"]}]
+  },
+  "issues": {
+    "access": {"resolved": true, "material": true, "source_ids": ["access-report"], "observation": "Access is unsafe; this is the decisive refusal reason."},
+    "roof": {"resolved": true, "material": false, "source_ids": ["roof-report"], "observation": "Roof is acceptable and does not contribute to the refusal reason."}
+  },
+  "review": {
+    "claims": [{"claim_id": "reason-access", "issue_ids": ["access"], "support": "supported", "evidence": ["access-report"]}],
+    "gaps": []
+  }
+}

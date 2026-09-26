@@ -28,6 +28,23 @@ If activation was separately approved, persist its operation identity, poll with
 
 ## Enforce the campaign, not just its written plan
 
+After recurring structural failures, complete a short re-entry record before
+proposing another broad paid experiment: first reached failure and later known
+blockers; classification (transport/schema, unrepresentable outcome, copying/coverage,
+retrieval or semantic); retained reproducer and honest passing reference through the
+actual schema/checker/runtime; changed boundary and offline regressions; new hypothesis
+and discriminating observation; diagnostic/release phases and their stop/continue
+rules; exact cost/call envelope. A reference that invents relationships or drops
+required safeguards is invalid. There is no universal repeat threshold or new paid
+allowance. This checkpoint is offline work; reuse valid authorization within scope.
+
+Declare a diagnostic canary and conditional fixed cohort in the plan before approval
+when that sequence answers the question. Preserve an already-approved fixed cohort's
+protocol: no invented early-stop rule, substituted cases or added retries after seeing
+failures. Budget/safety stops still apply and leave missing cases visible. Keep replay
+results separate from original historical failures. Optimize what the next experiment
+can distinguish, not just whether it fits the spending ceiling.
+
 Create a reviewable envelope containing exact target/identity, models/endpoints, allowed operations, synthetic inputs, maximum submissions, maximum actual provider attempts, output limit, deadline for new submissions, cleanup deadline, estimated cost, allowance and retained resources. Get approval for that envelope. Reserve room for required negative cases and targeted retests rather than spending it all on happy paths.
 
 Implement or inspect the transport-level bound before paid work:

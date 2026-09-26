@@ -1,0 +1,174 @@
+{
+  "judgments": [
+    {
+      "case_id": "s01",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The quoted roof-finish field occurs in the stated inspection, is a complete answer about the inspected roof, and directly states the observation. The inspector field adds no relevant qualification."
+    },
+    {
+      "case_id": "s02",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The complete opening-record sentence specifies 09:00 on Mondays. Nine in the morning is a faithful paraphrase, and the selected span preserves the day boundary."
+    },
+    {
+      "case_id": "s03",
+      "source_identity": "valid",
+      "span_completeness": "incomplete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The quotation is a genuine question about the requested access width, but omits its answer. The full page confirms that the answer exists; it cannot substitute for the selected question-only span."
+    },
+    {
+      "case_id": "s04",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The selected span contains both the access-width question and its 3.2 m answer, establishing what the measurement refers to and supporting the observation."
+    },
+    {
+      "case_id": "s05",
+      "source_identity": "valid",
+      "span_completeness": "incomplete",
+      "applicability": "not_applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The selected general rule is genuine but omits the exception governing this flexible mat stored rolled. In the supplied application context, treating width above 2 m as requiring a permit conflicts with that explicit exemption; the selected general requirement does not govern this exempt item."
+    },
+    {
+      "case_id": "s06",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The complete selected policy includes the exception, and the supplied mat meets both conditions: it is flexible and stored rolled. The exception supports no permit despite its width."
+    },
+    {
+      "case_id": "s07",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The entire governing policy is selected and is applicable to summarizing the policy. Its explicit rolled-mat exception contradicts the observation's claim that the requirement has no exceptions."
+    },
+    {
+      "case_id": "s08",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The complete colour statement occurs in Crate A's record and directly supports the observation about its colour."
+    },
+    {
+      "case_id": "s09",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "not_applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The selected colour statement is a complete field about Crate A, but has no evidentiary bearing on its mass. The full page's separate 8 kg statement is not selected and cannot repair this citation."
+    },
+    {
+      "case_id": "s10",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The selected written dimension states 3.2 m and is also present in the SVG. The task asks for that annotation; the drawing's lack of scale does not qualify what number is written."
+    },
+    {
+      "case_id": "s11",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The selected warning is complete and directly governs whether this sketch can establish physical measurements from pixels. The SVG's 160-unit horizontal line and a separate 3.2 m annotation do not provide a scale. 'Drawing not to scale' contradicts the claimed inference from pixels."
+    },
+    {
+      "case_id": "s12",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The selected complete record concerns the requested meter reading and time, but states 12 litres rather than 15. No other registry record is available as evidence for this case."
+    },
+    {
+      "case_id": "s13",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The complete selected meter field concerns the requested time but has no recorded value. A blank supplies neither support for 15 litres nor a competing reading, and this case excludes other records."
+    },
+    {
+      "case_id": "s14",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "unresolved",
+      "support": "unresolved",
+      "rationale": "The selected complete record supports 12 litres in isolation, but the expressly available second record says 15 litres for the same meter and time. With neither precedence nor a verified correction, the competing evidence remains unresolved."
+    },
+    {
+      "case_id": "s15",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "not_applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The applicant-name field is a complete authentic field, but does not concern the requested width. Although the width answer is elsewhere on the page, that unselected answer cannot justify this citation."
+    },
+    {
+      "case_id": "s16",
+      "source_identity": "invalid",
+      "span_completeness": "unresolved",
+      "applicability": "unresolved",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The source ID does not resolve, so the apparent quotation cannot be checked for surrounding qualifications or association with the inspected roof. No valid evidence supports the observation, and an unavailable source is missing evidence rather than a contradictory record. The unrelated registry entries are not case evidence."
+    },
+    {
+      "case_id": "s17",
+      "source_identity": "invalid",
+      "span_completeness": "unresolved",
+      "applicability": "not_applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The cited ID resolves to the roof inspection, but the quoted access question and answer do not occur there. The purported evidence unit cannot be authenticated or checked for completeness; the actual cited document concerns roof finish and inspector identity, not access width. Its silence on width is not a contradiction."
+    }
+  ],
+  "rubric_ambiguities": [
+    "For invalid citations, the rubric does not specify whether completeness and applicability should assess the supplied quotation as text or only authenticated evidence. I treated an unauthenticated span's completeness as unresolved; applicability is unresolved for a missing source and not_applicable when the resolved source demonstrably concerns a different subject.",
+    "In s05 the observation repeats a general-rule sentence without explicitly saying that this mat requires a permit. I interpreted it in its stated application context, where omitting the applicable exception yields a contradicted conclusion. Applicability is not_applicable for the selected general requirement because this mat is exempt; a rubric treating applicability as broad policy-topic relevance could instead label it applicable.",
+    "In s11 I treated 'Drawing not to scale' as applicable evidence that contradicts the claimed pixel-based inference. The rubric should distinguish relevance of a warning to an inference from suitability of the drawing as a measurement method."
+  ],
+  "provenance": {
+    "pass_type": "One independent AI judgment pass; not human review",
+    "rubric": "Supplied skill/references/source-support-calibration.md, five-dimensional rubric",
+    "case_version": 1,
+    "inputs_used": [
+      "skill/SKILL.md",
+      "skill/references/source-support-calibration.md",
+      "skill/assets/source-support-cases.json",
+      "skill/assets/source-support-diagram.svg"
+    ],
+    "excluded": "No expectations, prior results, scorer outputs, other repository files, external resources, network, installs, or provider calls used."
+  }
+}

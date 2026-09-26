@@ -1,0 +1,573 @@
+{
+  "python": "3.12.9",
+  "scope": "offline synthetic check and JSON serve; no model, Runner, HTTP server, or publication side effect",
+  "review_sha256": "c58458bb7b8ca6c51fb975bc3d578f61962f6aa716e4118a4c92afaa29fce98e",
+  "reference_bytes_utf8": 1147,
+  "records": {
+    "original": {
+      "input": {
+        "draft": {
+          "revision": "draft-1",
+          "outcome": "refuse",
+          "claims": [
+            {
+              "id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "source_ids": [
+                "access-report"
+              ]
+            }
+          ]
+        },
+        "issues": {
+          "access": {
+            "resolved": true,
+            "material": true,
+            "source_ids": [
+              "access-report"
+            ],
+            "observation": "Access is unsafe; this is the decisive refusal reason."
+          },
+          "roof": {
+            "resolved": true,
+            "material": false,
+            "source_ids": [
+              "roof-report"
+            ],
+            "observation": "Roof is acceptable and does not contribute to the refusal reason."
+          }
+        },
+        "review": {
+          "claims": [
+            {
+              "claim_id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "support": "supported",
+              "evidence": [
+                "access-report"
+              ]
+            }
+          ],
+          "gaps": []
+        }
+      },
+      "before": {
+        "check": [
+          "issue coverage"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "issue coverage"
+          ]
+        }
+      },
+      "after": {
+        "check": [
+          "issue coverage"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "issue coverage"
+          ]
+        }
+      }
+    },
+    "honest_reference": {
+      "input": {
+        "draft": {
+          "revision": "draft-1",
+          "outcome": "refuse",
+          "claims": [
+            {
+              "id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "source_ids": [
+                "access-report"
+              ]
+            }
+          ]
+        },
+        "issues": {
+          "access": {
+            "resolved": true,
+            "material": true,
+            "source_ids": [
+              "access-report"
+            ],
+            "observation": "Access is unsafe; this is the decisive refusal reason."
+          },
+          "roof": {
+            "resolved": true,
+            "material": false,
+            "source_ids": [
+              "roof-report"
+            ],
+            "observation": "Roof is acceptable and does not contribute to the refusal reason."
+          }
+        },
+        "review": {
+          "claims": [
+            {
+              "claim_id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "support": "supported",
+              "evidence": [
+                "access-report"
+              ]
+            }
+          ],
+          "gaps": [],
+          "issue_dispositions": [
+            {
+              "issue_id": "roof",
+              "disposition": "nondecisive",
+              "support": "supported",
+              "evidence": [
+                "roof-report"
+              ]
+            }
+          ]
+        }
+      },
+      "before": {
+        "check": [
+          "issue coverage"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "issue coverage"
+          ]
+        }
+      },
+      "after": {
+        "check": [],
+        "serve": {
+          "accepted": true,
+          "errors": []
+        }
+      }
+    },
+    "false_association": {
+      "input": {
+        "draft": {
+          "revision": "draft-1",
+          "outcome": "refuse",
+          "claims": [
+            {
+              "id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "source_ids": [
+                "access-report"
+              ]
+            }
+          ]
+        },
+        "issues": {
+          "access": {
+            "resolved": true,
+            "material": true,
+            "source_ids": [
+              "access-report"
+            ],
+            "observation": "Access is unsafe; this is the decisive refusal reason."
+          },
+          "roof": {
+            "resolved": true,
+            "material": false,
+            "source_ids": [
+              "roof-report"
+            ],
+            "observation": "Roof is acceptable and does not contribute to the refusal reason."
+          }
+        },
+        "review": {
+          "claims": [
+            {
+              "claim_id": "reason-access",
+              "issue_ids": [
+                "access",
+                "roof"
+              ],
+              "support": "supported",
+              "evidence": [
+                "access-report"
+              ]
+            }
+          ],
+          "gaps": []
+        }
+      },
+      "before": {
+        "check": [],
+        "serve": {
+          "accepted": true,
+          "errors": []
+        }
+      },
+      "after": {
+        "check": [
+          "claim issue association",
+          "missing required issue evidence"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "claim issue association",
+            "missing required issue evidence"
+          ]
+        }
+      }
+    },
+    "missing_independent_evidence": {
+      "input": {
+        "draft": {
+          "revision": "draft-1",
+          "outcome": "refuse",
+          "claims": [
+            {
+              "id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "source_ids": [
+                "access-report"
+              ]
+            }
+          ]
+        },
+        "issues": {
+          "access": {
+            "resolved": true,
+            "material": true,
+            "source_ids": [
+              "access-report"
+            ],
+            "observation": "Access is unsafe; this is the decisive refusal reason."
+          },
+          "roof": {
+            "resolved": true,
+            "material": false,
+            "source_ids": [
+              "roof-report"
+            ],
+            "observation": "Roof is acceptable and does not contribute to the refusal reason."
+          }
+        },
+        "review": {
+          "claims": [
+            {
+              "claim_id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "support": "supported",
+              "evidence": [
+                "access-report"
+              ]
+            }
+          ],
+          "gaps": [],
+          "issue_dispositions": [
+            {
+              "issue_id": "roof",
+              "disposition": "nondecisive",
+              "support": "supported",
+              "evidence": []
+            }
+          ]
+        }
+      },
+      "before": {
+        "check": [
+          "issue coverage"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "issue coverage"
+          ]
+        }
+      },
+      "after": {
+        "check": [
+          "issue evidence identity",
+          "missing required issue evidence"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "issue evidence identity",
+            "missing required issue evidence"
+          ]
+        }
+      }
+    },
+    "unsupported_material": {
+      "input": {
+        "draft": {
+          "revision": "draft-1",
+          "outcome": "refuse",
+          "claims": [
+            {
+              "id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "source_ids": [
+                "access-report"
+              ]
+            }
+          ]
+        },
+        "issues": {
+          "access": {
+            "resolved": true,
+            "material": true,
+            "source_ids": [
+              "access-report"
+            ],
+            "observation": "Access is unsafe; this is the decisive refusal reason."
+          },
+          "roof": {
+            "resolved": true,
+            "material": false,
+            "source_ids": [
+              "roof-report"
+            ],
+            "observation": "Roof is acceptable and does not contribute to the refusal reason."
+          }
+        },
+        "review": {
+          "claims": [
+            {
+              "claim_id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "support": "unsupported",
+              "evidence": [
+                "access-report"
+              ]
+            }
+          ],
+          "gaps": [],
+          "issue_dispositions": [
+            {
+              "issue_id": "roof",
+              "disposition": "nondecisive",
+              "support": "supported",
+              "evidence": [
+                "roof-report"
+              ]
+            }
+          ]
+        }
+      },
+      "before": {
+        "check": [
+          "unsupported claim",
+          "issue coverage"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "unsupported claim",
+            "issue coverage"
+          ]
+        }
+      },
+      "after": {
+        "check": [
+          "unsupported claim"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "unsupported claim"
+          ]
+        }
+      }
+    },
+    "unresolved_material": {
+      "input": {
+        "draft": {
+          "revision": "draft-1",
+          "outcome": "refuse",
+          "claims": [
+            {
+              "id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "source_ids": [
+                "access-report"
+              ]
+            }
+          ]
+        },
+        "issues": {
+          "access": {
+            "resolved": false,
+            "material": true,
+            "source_ids": [
+              "access-report"
+            ],
+            "observation": "Access is unsafe; this is the decisive refusal reason."
+          },
+          "roof": {
+            "resolved": true,
+            "material": false,
+            "source_ids": [
+              "roof-report"
+            ],
+            "observation": "Roof is acceptable and does not contribute to the refusal reason."
+          }
+        },
+        "review": {
+          "claims": [
+            {
+              "claim_id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "support": "supported",
+              "evidence": [
+                "access-report"
+              ]
+            }
+          ],
+          "gaps": [],
+          "issue_dispositions": [
+            {
+              "issue_id": "roof",
+              "disposition": "nondecisive",
+              "support": "supported",
+              "evidence": [
+                "roof-report"
+              ]
+            }
+          ]
+        }
+      },
+      "before": {
+        "check": [
+          "issue coverage"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "issue coverage"
+          ]
+        }
+      },
+      "after": {
+        "check": [
+          "unresolved material issue"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "unresolved material issue"
+          ]
+        }
+      }
+    },
+    "material_laundered_as_nondecisive": {
+      "input": {
+        "draft": {
+          "revision": "draft-1",
+          "outcome": "refuse",
+          "claims": [
+            {
+              "id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "source_ids": [
+                "access-report"
+              ]
+            }
+          ]
+        },
+        "issues": {
+          "access": {
+            "resolved": true,
+            "material": true,
+            "source_ids": [
+              "access-report"
+            ],
+            "observation": "Access is unsafe; this is the decisive refusal reason."
+          },
+          "roof": {
+            "resolved": true,
+            "material": true,
+            "source_ids": [
+              "roof-report"
+            ],
+            "observation": "Roof is acceptable and does not contribute to the refusal reason."
+          }
+        },
+        "review": {
+          "claims": [
+            {
+              "claim_id": "reason-access",
+              "issue_ids": [
+                "access"
+              ],
+              "support": "supported",
+              "evidence": [
+                "access-report"
+              ]
+            }
+          ],
+          "gaps": [],
+          "issue_dispositions": [
+            {
+              "issue_id": "roof",
+              "disposition": "nondecisive",
+              "support": "supported",
+              "evidence": [
+                "roof-report"
+              ]
+            }
+          ]
+        }
+      },
+      "before": {
+        "check": [
+          "issue coverage"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "issue coverage"
+          ]
+        }
+      },
+      "after": {
+        "check": [
+          "material issue requires claim"
+        ],
+        "serve": {
+          "accepted": false,
+          "errors": [
+            "material issue requires claim"
+          ]
+        }
+      }
+    }
+  }
+}

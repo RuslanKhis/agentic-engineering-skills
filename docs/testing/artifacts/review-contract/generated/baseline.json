@@ -1,0 +1,14 @@
+{
+  "classification": "offline synthetic service boundary; no model or ADK Runner",
+  "original_review_sha256": "828de9435acef965cbd51829b76bb5959fcaf22fd8ca11480dd308e3e60998a9",
+  "case_sha256": "a98b5c14b2f3e4cdb3a4d72fd16c6d29186b97c93dd8f456914bdd95354fafcf",
+  "check": [
+    "issue coverage"
+  ],
+  "serve": {
+    "accepted": false,
+    "errors": [
+      "issue coverage"
+    ]
+  }
+}

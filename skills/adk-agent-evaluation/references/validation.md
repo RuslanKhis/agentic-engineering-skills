@@ -2,6 +2,25 @@
 
 Initial checks completed on 15 September 2026; the 16 September depth review is recorded separately below. These are results for the packaged skill, separate from the historical ADK integration evidence in [compatibility.md](compatibility.md) and [provenance.md](provenance.md).
 
+## Synthetic document-review controls — 27 September 2026
+
+Python 3.12.9 ran 26 evaluation helper tests, including six new source-support
+scorer tests and five new provider-request evidence tests. The 17-case synthetic
+grounding pack exposes ID-only and substring acceptance errors; label replay is
+only a scorer self-check. The provider double rejects a nested multiline enum
+and prevents another route/request from substituting evidence. Neither result
+establishes a real provider restriction or semantic correctness.
+
+A fresh agent, without expected labels, judged all 17 grounding cases. Supported
+versus rejected outcomes agreed for all cases; full five-dimensional agreement
+was 15/17 and the scorer returned failure. Differences on `s11` (unsupported
+measurement versus contradicted inference) and `s17` (secondary dimensions under
+invalid attribution) remain visible; expectations were not changed to erase them.
+The calibration reference now calls for adjudicating those conventions before a
+strict gate. That post-trial clarification was not rerun. These are AI-only
+development observations without human domain review or a comparative baseline.
+SDK compatibility and `last-tested` metadata remain unchanged.
+
 ## Environments
 
 | Environment | Actual configuration and scope |

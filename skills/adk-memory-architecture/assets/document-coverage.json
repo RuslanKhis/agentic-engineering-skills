@@ -1,0 +1,47 @@
+{
+  "kind": "synthetic_extracted_pages_not_pdf_bytes",
+  "release": "synthetic-park-v1",
+  "segments": {
+    "contents": {
+      "document": "main-policy", "page": 1, "section": "contents",
+      "text": "Contents: section 2 Route requirements, page 2; Table 1 Route widths, pages 3–4. Related authority: Supplement S1, Exceptions; Notice N1, Route closures."
+    },
+    "route-rule": {
+      "document": "main-policy", "page": 2, "section": "route-rule",
+      "text": "Section 2. Route widths follow Table 1, subject to Supplement S1. Apply both the relevant table row and any applicable exception."
+    },
+    "table-first": {
+      "document": "main-policy", "page": 3, "section": "width-table",
+      "text": "Table 1. Route type | Minimum clear width | Additional control. Ground-level public route | 2.0 m | Keep the full width clear. Continued on page 4."
+    },
+    "table-continuation": {
+      "document": "main-policy", "page": 4, "section": "width-table",
+      "text": "Table 1 continued. Route type | Minimum clear width | Additional control. Raised public route | 2.4 m | Provide edge protection. Supplement S1 may qualify this row."
+    },
+    "maintenance-exception": {
+      "document": "supplement-s1", "page": 1, "section": "maintenance-exception",
+      "text": "Supplement S1. A raised route used only for maintenance may have a 1.5 m clear width if access is locked against public use. Edge protection remains required. Public routes cannot use this exception."
+    },
+    "closure-notice": {
+      "document": "notice-n1", "page": 1, "section": "closure-notice",
+      "text": "",
+      "visual_required": true,
+      "visual_asset_present": false,
+      "visual_metadata": "Placeholder for an image-only route-closure authority. No image bytes or reviewed transcription are supplied; its provisions remain unknown."
+    }
+  },
+  "questions": {
+    "maintenance-route": {
+      "question": "What width and safeguards apply to a raised route used only for maintenance?",
+      "required_sections": ["route-rule", "width-table", "maintenance-exception"]
+    },
+    "complete-table": {
+      "question": "List the route widths and controls in the complete Table 1.",
+      "required_sections": ["width-table"]
+    },
+    "closure-status": {
+      "question": "Is Route Cedar closed under Notice N1?",
+      "required_sections": ["closure-notice"]
+    }
+  }
+}

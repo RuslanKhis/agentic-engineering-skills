@@ -229,3 +229,21 @@ The new references preserve unimplemented production guidance and the missing
 hosted memory/restart/privacy gates. This depth review provides more actionable
 implementation and recovery instructions; it does not certify full hosted
 acceptance or prove exhaustive coverage of every production failure.
+
+## Local-document coverage controls — 27 September 2026
+
+The [local-document reference](local-document-coverage.md), synthetic extracted
+page pack and standard-library scorer make missing supplements, incomplete
+tables, empty extraction and unviewed visual material observable. The package
+suite passed **29 tests** on Python 3.12.9, including **13 new coverage controls**:
+
+```bash
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONDONTWRITEBYTECODE=1 "$PYTHON" -m pytest \
+  "$SKILL_DIR/tests" -q -p no:cacheprovider
+```
+
+These are deterministic fixture and helper tests. The pack contains no PDF or
+image bytes, so it establishes neither PDF/OCR extraction quality nor successful
+visual review. No agent-generated query, provider call or hosted integration
+was executed by these tests, and no independent domain review of the fictional
+policy is claimed. The main skill's SDK `last-tested` date remains unchanged.

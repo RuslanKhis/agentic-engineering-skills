@@ -1,0 +1,108 @@
+
+=== Skill packages ===
+adk-agent-evaluation: SKILL.md 66 lines / 1273 words; 14 Markdown files; 6 Python files
+adk-engineer: SKILL.md 102 lines / 797 words; 2 Markdown files; 0 Python files
+adk-frontend-integration: SKILL.md 75 lines / 1137 words; 11 Markdown files; 4 Python files
+adk-memory-architecture: SKILL.md 137 lines / 1044 words; 13 Markdown files; 4 Python files
+adk-operational-guardrails: SKILL.md 66 lines / 1195 words; 12 Markdown files; 5 Python files
+adk-sql-agent-engineering: SKILL.md 90 lines / 1256 words; 11 Markdown files; 5 Python files
+adk-system-designer: SKILL.md 198 lines / 1555 words; 8 Markdown files; 0 Python files
+adk-tool-auth-and-secrets: SKILL.md 57 lines / 925 words; 9 Markdown files; 4 Python files
+adk-workflow-design: SKILL.md 127 lines / 1006 words; 12 Markdown files; 5 Python files
+deploy-adk-on-google-cloud: SKILL.md 65 lines / 1135 words; 11 Markdown files; 2 Python files
+optimise-adk-on-google-cloud: SKILL.md 128 lines / 1129 words; 24 Markdown files; 16 Python files
+protect-adk-sensitive-data: SKILL.md 121 lines / 1121 words; 11 Markdown files; 6 Python files
+safe-api-tool-calls: SKILL.md 70 lines / 1109 words; 14 Markdown files; 7 Python files
+Checked 13 skill packages: 0 errors, 0 warnings.
+Evaluation case structure valid; model activation has not been evaluated.
+
+=== Repository check tests ===
+...................................
+----------------------------------------------------------------------
+Ran 35 tests in 0.266s
+
+OK
+
+=== adk-agent-evaluation ===
+..........................
+----------------------------------------------------------------------
+Ran 26 tests in 3.436s
+
+OK
+
+=== adk-frontend-integration ===
+.....................................................
+----------------------------------------------------------------------
+Ran 53 tests in 1.766s
+
+OK
+
+=== adk-memory-architecture ===
+.............................                                            [100%]
+29 passed in 0.34s
+
+=== adk-operational-guardrails ===
+..............................
+----------------------------------------------------------------------
+Ran 30 tests in 1.035s
+
+OK
+
+=== adk-sql-agent-engineering ===
+.............................................
+----------------------------------------------------------------------
+Ran 45 tests in 6.027s
+
+OK
+
+=== adk-tool-auth-and-secrets ===
+.................s.s.s......
+----------------------------------------------------------------------
+Ran 28 tests in 0.202s
+
+OK (skipped=3)
+
+=== adk-workflow-design ===
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 1.498s
+
+OK
+
+=== adk-workflow-design review contract ===
+..............
+----------------------------------------------------------------------
+Ran 14 tests in 0.004s
+
+OK
+
+=== deploy-adk-on-google-cloud ===
+...........................
+----------------------------------------------------------------------
+Ran 27 tests in 3.448s
+
+OK
+
+=== optimise-adk-on-google-cloud ===
+s...s..............................................ss..............ssssssssssssssssssssssssssssssss.............................sssssss
+----------------------------------------------------------------------
+Ran 135 tests in 6.115s
+
+OK (skipped=43)
+
+=== protect-adk-sensitive-data ===
+sssssssssssss...............................
+----------------------------------------------------------------------
+Ran 44 tests in 0.058s
+
+OK (skipped=13)
+
+=== safe-api-tool-calls ===
+............
+----------------------------------------------------------------------
+Ran 12 tests in 1.834s
+
+OK
+
+Package and offline helper checks passed. Review any optional SDK skips above.
+Live evaluations, cloud behavior and skill-selection quality were not tested.

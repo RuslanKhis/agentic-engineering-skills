@@ -79,6 +79,12 @@ model judgement from known calculations and policy checks. Agent separation only
 creates a code boundary; shared credentials, tools and state can still give every
 agent the same authority. Record which checks need enforcement outside prompts.
 
+When a reviewer repeatedly reconstructs known claim/source/issue IDs, consider
+the optional [draft-bound review frame](review-contracts.md#optional-server-owned-frame).
+Keep established identities and obligations in ordinary code; reserve model work
+for evidence and disposition judgments. Use it only where the application's
+contract benefits, and rebuild the frame after corrections.
+
 For the checked compatibility API, import `LlmAgent`, `SequentialAgent`,
 `ParallelAgent` and `LoopAgent` from `google.adk.agents`, configure named children,
 and export the chosen root through the project's existing entry point. Preserve

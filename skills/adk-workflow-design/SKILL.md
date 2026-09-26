@@ -106,6 +106,12 @@ path where applicable. Prove concurrent branches overlap, state survives only as
 claimed, and failure cannot be reported as success. Repeat setup/adaptation to
 check that it preserves existing work rather than duplicating it.
 
+For structured review/correction, read [review-contracts.md](references/review-contracts.md)
+before tuning model reliability: pass honest references for decisive and
+nondecisive issues, required controls and unresolved/contradictory evidence through
+the actual schema, checker and Runner/served boundary. Invented relationships or
+dropped obligations do not establish solvability.
+
 For strict paid-request limits, SDK retries or campaign restart, read
 [model-call-controls.md](references/model-call-controls.md) before choosing the
 enforcement point. A callback counter alone does not establish a transport cap.

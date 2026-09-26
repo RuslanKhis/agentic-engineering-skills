@@ -96,6 +96,11 @@ The source standalone promotion script does not provide this durable recovery.
 - Measure retrieval independently from generation: expected document/section recall, irrelevant and unanswerable questions, scope negatives, citation support and bounded work. A positive document-hit fixture does not establish answer quality.
 - Use deterministic doubles for boundary failures, then authorised live checks with the actual serving identity for provider behaviour. Label unexecuted or blocked gates explicitly; a historic pass does not validate a changed target.
 
+For local PDFs, supplements, continued tables or empty text extraction, use
+[local-document-coverage.md](local-document-coverage.md) and its synthetic
+fixture/scorer. It distinguishes document hits from complete operative sections,
+classifies missing evidence and requires visual review or an unresolved result.
+
 Two particularly discriminating fixtures prevent misleading passes:
 
 - **Multiple documents:** case A expects document A; case B expects B. Returning

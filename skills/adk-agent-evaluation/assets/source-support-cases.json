@@ -1,0 +1,264 @@
+{
+  "version": 1,
+  "scope": "Synthetic selected-passage calibration, not real policy. Only selected sources and each case's additional_context_source_ids are evidence for that case; the remaining source registry is not case evidence.",
+  "sources": {
+    "roof-p1": {
+      "document": "Workshop inspection",
+      "page": 1,
+      "text": "Roof finish: dark grey.\nInspector: Sam."
+    },
+    "hours-p1": {
+      "document": "Workshop opening record",
+      "page": 1,
+      "text": "The workshop opens at 09:00 and closes at 17:00 on Mondays."
+    },
+    "access-p1": {
+      "document": "Access form",
+      "page": 1,
+      "text": "What is the clear access width?\nAnswer: 3.2 m.\nApplicant name: Lee."
+    },
+    "bay-p1": {
+      "document": "Synthetic bay policy",
+      "page": 1,
+      "text": "Items wider than 2 m require a bay permit. Exception: flexible mats stored rolled need no bay permit."
+    },
+    "crate-p1": {
+      "document": "Crate A record",
+      "page": 1,
+      "text": "Crate A is blue.\nCrate A weighs 8 kg."
+    },
+    "diagram-p1": {
+      "document": "Unscaled access sketch",
+      "page": 1,
+      "text": "Written width: 3.2 m.\nDrawing not to scale.",
+      "visual_asset": "source-support-diagram.svg"
+    },
+    "meter-p1": {
+      "document": "Meter record",
+      "page": 1,
+      "text": "Meter reading at 10:00: 12 litres."
+    },
+    "meter-blank-p1": {
+      "document": "Uncompleted meter form",
+      "page": 1,
+      "text": "Meter reading at 10:00: [blank]."
+    },
+    "meter-copy-p1": {
+      "document": "Second meter record",
+      "page": 1,
+      "text": "Meter reading at 10:00: 15 litres."
+    }
+  },
+  "cases": [
+    {
+      "case_id": "s01",
+      "context": "Describe the inspected workshop roof.",
+      "observation": "Roof finish: dark grey.",
+      "selected_evidence": [
+        {
+          "source_id": "roof-p1",
+          "quote": "Roof finish: dark grey."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s02",
+      "context": "Describe Monday opening time, using only the opening record.",
+      "observation": "On Mondays the workshop starts opening at nine in the morning.",
+      "selected_evidence": [
+        {
+          "source_id": "hours-p1",
+          "quote": "The workshop opens at 09:00 and closes at 17:00 on Mondays."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s03",
+      "context": "Report the clear access width from the access form.",
+      "observation": "The clear access width is 3.2 m.",
+      "selected_evidence": [
+        {
+          "source_id": "access-p1",
+          "quote": "What is the clear access width?"
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s04",
+      "context": "Report the clear access width from the access form.",
+      "observation": "The clear access width is 3.2 m.",
+      "selected_evidence": [
+        {
+          "source_id": "access-p1",
+          "quote": "What is the clear access width?\nAnswer: 3.2 m."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s05",
+      "context": "A flexible mat is 3 m wide and is stored rolled. Apply the synthetic bay policy.",
+      "observation": "Items wider than 2 m require a bay permit.",
+      "selected_evidence": [
+        {
+          "source_id": "bay-p1",
+          "quote": "Items wider than 2 m require a bay permit."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s06",
+      "context": "A flexible mat is 3 m wide and is stored rolled. Apply the synthetic bay policy.",
+      "observation": "This mat needs no bay permit.",
+      "selected_evidence": [
+        {
+          "source_id": "bay-p1",
+          "quote": "Items wider than 2 m require a bay permit. Exception: flexible mats stored rolled need no bay permit."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s07",
+      "context": "State what the complete synthetic bay policy requires.",
+      "observation": "All items wider than 2 m require a bay permit without exception.",
+      "selected_evidence": [
+        {
+          "source_id": "bay-p1",
+          "quote": "Items wider than 2 m require a bay permit. Exception: flexible mats stored rolled need no bay permit."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s08",
+      "context": "Report the colour of Crate A.",
+      "observation": "Crate A is blue.",
+      "selected_evidence": [
+        {
+          "source_id": "crate-p1",
+          "quote": "Crate A is blue."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s09",
+      "context": "Report the mass of Crate A.",
+      "observation": "Crate A weighs 8 kg.",
+      "selected_evidence": [
+        {
+          "source_id": "crate-p1",
+          "quote": "Crate A is blue."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s10",
+      "context": "Report the written width on the sketch.",
+      "observation": "The written width is 3.2 m.",
+      "selected_evidence": [
+        {
+          "source_id": "diagram-p1",
+          "quote": "Written width: 3.2 m."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s11",
+      "context": "Infer a physical width from the sketch pixels. No pixel-to-metre scale is supplied.",
+      "observation": "The line's 160 pixels establish a physical width of 3.2 m.",
+      "selected_evidence": [
+        {
+          "source_id": "diagram-p1",
+          "quote": "Drawing not to scale."
+        }
+      ],
+      "additional_context_source_ids": [],
+      "visual_measurement": {
+        "width_pixels": 160,
+        "metres_per_pixel": null
+      }
+    },
+    {
+      "case_id": "s12",
+      "context": "Report the meter reading at 10:00 from the completed record.",
+      "observation": "The meter reading at 10:00 is 15 litres.",
+      "selected_evidence": [
+        {
+          "source_id": "meter-p1",
+          "quote": "Meter reading at 10:00: 12 litres."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s13",
+      "context": "Report the meter reading at 10:00 from the uncompleted form. No other record is available for this case.",
+      "observation": "The meter reading at 10:00 is 15 litres.",
+      "selected_evidence": [
+        {
+          "source_id": "meter-blank-p1",
+          "quote": "Meter reading at 10:00: [blank]."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s14",
+      "context": "These two records describe the same meter and time. Neither has established precedence; neither is verified as a correction.",
+      "observation": "The meter reading at 10:00 is 12 litres.",
+      "selected_evidence": [
+        {
+          "source_id": "meter-p1",
+          "quote": "Meter reading at 10:00: 12 litres."
+        }
+      ],
+      "additional_context_source_ids": [
+        "meter-copy-p1"
+      ]
+    },
+    {
+      "case_id": "s15",
+      "context": "Report the clear access width from the access form.",
+      "observation": "The clear access width is 3.2 m.",
+      "selected_evidence": [
+        {
+          "source_id": "access-p1",
+          "quote": "Applicant name: Lee."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s16",
+      "context": "Report the roof finish, verifying the cited source identity.",
+      "observation": "Roof finish: dark grey.",
+      "selected_evidence": [
+        {
+          "source_id": "missing-p1",
+          "quote": "Roof finish: dark grey."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "s17",
+      "context": "Report the access width, verifying the quoted span against its cited document.",
+      "observation": "The clear access width is 3.2 m.",
+      "selected_evidence": [
+        {
+          "source_id": "roof-p1",
+          "quote": "What is the clear access width?\nAnswer: 3.2 m."
+        }
+      ],
+      "additional_context_source_ids": []
+    }
+  ]
+}

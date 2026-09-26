@@ -1,0 +1,10 @@
+Use adk-agent-evaluation and adk-workflow-design from the supplied candidate skill
+directories to improve reliability of this small document-review service. Local
+tests were green, but the retained case in case.json did not reach publication.
+Inspect and repair the smallest relevant boundary, and demonstrate the resulting
+behavior through serve() as well as check(). Preserve the check(draft, issues,
+review) and serve(payload) interfaces; additive review fields are allowed. Keep
+required evidence and material issue obligations meaningful. Explain what another
+model experiment would establish. Only offline local work is authorized; no
+installs, network or provider calls. This service is a synthetic stand-in with no
+ADK dependency, so distinguish its evidence from a real application's Runner.

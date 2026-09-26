@@ -1,0 +1,53 @@
+{
+  "date": "2026-09-27",
+  "condition": "candidate only; fresh agents without parent history",
+  "model": "inherited parent; no override requested; exact hosted model revision and usage unavailable",
+  "trials": {
+    "review_service": 1,
+    "grounding_judgment": 1
+  },
+  "python": "3.12.9",
+  "dependencies": {
+    "PyYAML": "6.0.3",
+    "markdown-it-py": "4.0.0",
+    "pytest": "9.1.1"
+  },
+  "review_seed": {
+    "seed/case.json": "a98b5c14b2f3e4cdb3a4d72fd16c6d29186b97c93dd8f456914bdd95354fafcf",
+    "seed/review.py": "828de9435acef965cbd51829b76bb5959fcaf22fd8ca11480dd308e3e60998a9"
+  },
+  "review_prompt_sha256": "afc4bab55e9cf0a7bd7aefd27de801c7b5651633f8fe44a6614fc0ab7dbdafb1",
+  "candidate_package_sha256": {
+    "adk-agent-evaluation": "cda2e71ab3b4fb609b09aecd318ab15770e4012e93864a26fd3b5ff0745adc54",
+    "adk-workflow-design": "7b7eea7f98367b25aa01451283a01b44a6bdba06eea46373227c7bfe859ae289"
+  },
+  "grounding_loaded_inputs": {
+    "skill/SKILL.md": "6a26c09a530a05bf688d419908bd838609d77790e453e9a528043d6958602179",
+    "skill/references/source-support-calibration.md": "b6c549e9e03bc27436f9418c70d4899086b4a9cf4e841d3817e152caa0d734ce",
+    "skill/assets/source-support-cases.json": "357425a9143f2ed74c1357342dda4d4bc165f49afee00e50a51bed96e3575204",
+    "skill/assets/source-support-diagram.svg": "af1b8c2722fca18df21fc54313bb88e3e1c7fb2a8b0e17b7aa05a08595a1bf07"
+  },
+  "expectations_sha256": "17c23cb68d1b292b0533da315944af6d05d16acbab689f4792c84164fdda908f",
+  "limits": [
+    "No old-skill or no-skill comparison",
+    "No domain-competent human label review",
+    "No ADK Runner, real PDF extraction, application provider calls or cloud changes",
+    "Full agent transcripts not retained; raw inputs, outputs, commands and grader observations retained",
+    "Rubric ambiguity guidance added after the retained grounding trial; no rerun to obtain agreement"
+  ],
+  "retained_artifact_sha256": {
+    "seed/case.json": "a98b5c14b2f3e4cdb3a4d72fd16c6d29186b97c93dd8f456914bdd95354fafcf",
+    "seed/review.py": "828de9435acef965cbd51829b76bb5959fcaf22fd8ca11480dd308e3e60998a9",
+    "generated/REPORT.md": "2a004db98058cceee524c8b5f253d956c1aba8c3a32e2b1e7ac8184b0921ac3e",
+    "generated/baseline.json": "062725d183946f178070c16ab5219fd9d97714c3e43472e722e608c709903e9a",
+    "generated/boundary-results.json": "8e29083592d8af3ef50387d4b2b445176d6cf16c38ac6c5866aa45a6b58a1ee9",
+    "generated/case.json": "a98b5c14b2f3e4cdb3a4d72fd16c6d29186b97c93dd8f456914bdd95354fafcf",
+    "generated/reference.json": "01edad77c7e85147f75e18ffa1d2f6a8b83d7da6d2a299c0790974e6caf01735",
+    "generated/review.py": "c58458bb7b8ca6c51fb975bc3d578f61962f6aa716e4118a4c92afaa29fce98e",
+    "generated/review_before.py": "828de9435acef965cbd51829b76bb5959fcaf22fd8ca11480dd308e3e60998a9",
+    "generated/test_review.py": "bc1a6ca71e7590eb004eb9b305cd0706102f380171735320b3393d9ce02d78bf",
+    "grounding/judgments.json": "0b0f42923b8d7b64301ae3e7c01bc4b0309fe74a15857fa5c910664d8b6aebfe",
+    "grounding/rubric-at-trial.md": "b6c549e9e03bc27436f9418c70d4899086b4a9cf4e841d3817e152caa0d734ce",
+    "grounding/score.json": "3f7977018d0013a9fea6e2a6d88924e339c1250d41e1a5e9323c1e8710ae7359"
+  }
+}
