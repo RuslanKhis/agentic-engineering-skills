@@ -59,6 +59,51 @@ The historical harness used a transactional SQLite ledger across local processes
 
 Treat estimates as estimates: input/context growth, reasoning, retries, transport failures and retained infrastructure can change cost. A campaign allowance is not a provider-enforced currency cap.
 
+### Admit continuations within explicit quotas
+
+Include stage/case continuation quotas in the envelope: permitted repair/recovery
+operations, maximum new submissions and actual sends (including SDK retries),
+reserved cost and remaining admission window. These are allocations within the
+shared campaign ceiling, not fresh budgets. Distinguish reconnecting to existing
+work from dispatching a new attempt. Check consumed counts and uncertain outcomes
+durably across failures, interruption and restart before admitting either path.
+
+Retry only the affected stage with verified unaffected upstream artifacts and
+invalidate its dependent descendants. Bind reuse to source/full inputs,
+instructions/schema, model configuration, authoritative response/native projection
+and relevant code; reviews also need the exact draft/frame/invocation/images.
+Qualify persistence through realistic Runner/write/reopen/reuse checks first.
+Keep originals immutable and link each new attempt separately. Where installed,
+evaluation and workflow guidance provide the detailed progressive-validation and
+checkpoint procedures; neither is required to enforce this envelope.
+
+Reuse approval already covering the exact continuation, target, operation and
+limits. Local code repair does not grant unlimited paid retries. Expanded paid
+scope needs a reviewable updated envelope and new approval; preserve prior
+consumption. If no allocation remains, stop paid dispatch and continue offline
+diagnosis. A changed failure does not reset quotas. Deduplication must look up
+failed, interrupted and no-response attempts as well as successes; a permitted
+new attempt is explicit, rather than a blind replay of an uncertain request.
+
+### Keep the accounting categories visible
+
+| Category | Meaning and admission treatment |
+| --- | --- |
+| Settled charges | Authoritative reconciled charges, deduplicated by receipt/attempt; retain even if output is rejected |
+| Conservative request reservations | Pre-dispatch allowance for admitted work, derived from verified request bounds; settle or transfer to an unknown hold without counting twice |
+| Unknown-charge holds | Unreconciled possible spend after failure, interruption or missing receipt; remain encumbered until authoritative reconciliation |
+| Observed provider balance | Timestamped external observation that may lag settlement; not interchangeable with the campaign ledger |
+| Remaining campaign allowance | Approved monetary allowance less settled campaign charges, open reservations and unknown holds; counts and time limits still apply independently |
+
+Use mutually exclusive accounting states for each reserved amount so transitions
+do not double-charge capacity or release it early. Report overruns explicitly;
+negative remaining allowance blocks further admission. A small actual charge on
+one request does not justify lowering an unverified conservative bound for future
+requests. Revise estimates only from verified pricing and effective input/output/
+retry bounds, within existing approval. A displayed balance does not prove that
+an uncertain request was free. Use [token budgets](token-budgets.md) for atomic
+admission/settlement and actual-store crash/late-receipt tests.
+
 ### Turn the envelope into a coverage and cost worksheet
 
 List every affected path/model configuration and its required input classes before allocating submissions. For example, a **proposed** 12-submission campaign across two local servers and one CLI could allocate three cases per path—complete low-value request, complete high-value request and missing required input—then reserve one slot per path for continuity or a targeted retest. If a correction uses a reserve, the displaced continuity case remains unrun. Additional models or configurations require their own coverage decision; twelve is an illustration, not a recommended limit or inherited approval.
@@ -78,6 +123,11 @@ Check real function calls/responses and the final user-facing claim. Low-value a
 For browser work, observe loading, disabled input, restored input, meaningful result and a subsequent successful request after an injected offline provider error. Confirm the actual streaming setting and network path rather than inferring token streaming from an SSE connection. Read session/tool evidence through the application's authorised interface when available. Model prose about a team, queue or future update is not a delivery receipt.
 
 Measure timing only when relevant to the request. Separate process startup, first meaningful content and final completion; identify cold/warm state and observation uncertainty. Preserve target misses. Streaming can expose content before completion but cannot expose text that inference has not produced. Avoid changing model, region and token settings simultaneously during diagnosis.
+
+Human pauses, laptop closure and connection loss confound a timing sample; retain
+its failure and charges without inferring a latency defect. Reconnect to an
+existing operation where supported before considering another counted dispatch.
+Saved-stage recovery and clean end-to-end latency require separate evidence.
 
 ## Close with scoped evidence
 

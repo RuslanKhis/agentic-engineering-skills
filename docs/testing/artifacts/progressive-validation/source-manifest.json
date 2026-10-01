@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-01",
+  "base_commit": "6e03b9dcb3b8b639569a7c0e5a4e0b7772d20355",
+  "scope": "Modified skill instructions and authored scenarios; full suite plus final package/case checks as recorded in the validation note.",
+  "files_sha256": {
+    "evals/scenarios.json": "e5f7e8fb9384188dddff0d4daefac5fb120461bc551aa1a2939b14f0858ac1ad",
+    "skills/adk-agent-evaluation/SKILL.md": "a80c674c58020dc56acfe568ae04f9a75086ed5102b4f1c536e572f23c57d1c7",
+    "skills/adk-agent-evaluation/references/experiment-reentry.md": "b2bc8a002b81e784969addbd1ea6389617ca971e73e4de92cdab37ed194b3801",
+    "skills/adk-agent-evaluation/references/live-evaluations.md": "7fd3a95096b84b7edc8b9a424f48b512852e35b41287db073fed16a7b18881bb",
+    "skills/adk-agent-evaluation/references/progressive-validation.md": "5f664279d9082634d8c06d79a290b5f32c22d65351b04487143e5a0fffc9995d",
+    "skills/adk-operational-guardrails/SKILL.md": "d2b63b2b91ea9d1025586f04b694b0d1c43870f1efa3e0116bf00f82c50b5ee5",
+    "skills/adk-operational-guardrails/references/live-campaigns.md": "4f06d6b7a9a74c8cc159084bd2c2c39a1f962f1a7a16ca16fc9d13760945a90c",
+    "skills/adk-operational-guardrails/references/token-budgets.md": "63978949c07d85ced92aa51a5a24c4240b3c711b41b6987f483da3e7752c0dc5",
+    "skills/adk-operational-guardrails/references/validation.md": "5313efd3ab617c4befc75e03ee24010659b80e44cba263bfcfdcc9974e4e7a16",
+    "skills/adk-operational-guardrails/tests/forward-cases.md": "4fd4d30eaa9ca552d2c91784f699da59ff950e851de9f201ab31addd953db1e9",
+    "skills/adk-workflow-design/SKILL.md": "0c3ec826f60ae4f1d4195d9abc6e00d1538bc7ce8eb31cec409e7f18abdaf631",
+    "skills/adk-workflow-design/references/checkpoint-reuse.md": "4d27aca76e0b2cea1ca2297a4bcba88ef5a3926fa2576f6128ddba14e4d8ded3",
+    "skills/adk-workflow-design/references/model-call-controls.md": "9dbdc7e1a9f9eda1237307bf4840c33a7e17bf160e9f09e2263a816dae1c9421",
+    "skills/adk-workflow-design/references/review-contracts.md": "c367b436c05b4c2cd60bc9b137afa91131528c802cab683d18f906be0fa0803b",
+    "skills/adk-workflow-design/references/runtime.md": "08a600c55a16eafc7156f089520feaa55fa5bc68bc4daf912b42c7e9e5e69219",
+    "skills/adk-workflow-design/references/validation.md": "b433fa82d5d5697d6c4dfd72a2bc77322dd6500fcc4faf18fdbf3bbba0124b44"
+  },
+  "behavioral_trials": "Not run",
+  "provider_calls": 0
+}

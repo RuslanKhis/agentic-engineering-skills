@@ -25,6 +25,11 @@ Define the production store-failure contract explicitly. If strict admission can
 
 Output-token limits bound one response, not all input/context tokens, retries, tool costs or total spend. Streaming usage may be cumulative snapshots. Detect the adapter's semantics and aggregate completed responses once; avoid adding reasoning to a total that already includes it. Prefer provider totals where reliable and explicitly record a conservative fallback when metadata is missing. The companion's zero-for-missing behaviour is a known limitation, not a recommended production policy.
 
+For paid continuations, use the [live-campaign accounting categories](live-campaigns.md#keep-the-accounting-categories-visible)
+to distinguish settled charges, open reservations, unknown holds, observed
+provider balance and remaining allowance. Continuation quotas stay within the
+original durable campaign ceiling; restart and local repair do not replenish it.
+
 ## Degradation
 
 Keep models and thresholds configurable. Select a policy before admitting new work and enforce a kill switch at every relevant invocation/expensive-operation boundary. Mid-flight changes need a documented consistency policy. Reduce optional work, choose a suitable lower-cost model or lower output allowance, then refuse new work with a static message. Validate quality as well as expenditure; a model named `cheaper_model` may cost more for a particular input/output mix.

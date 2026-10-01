@@ -83,6 +83,24 @@ policy, not an untrusted response that can downgrade its own obligations.
 
 ## Adapt and verify at the actual boundary
 
+### Preserve the scope of a narrow correction
+
+Bind review repair to the unchanged draft, frame, invocation and images, retaining
+unresolved findings. For a warning-only writer correction, compare decision,
+reasons, conditions, citations, conflicts and existing gaps before/after; permit
+only the intended warning change. The resulting draft revision invalidates its
+old review under [checkpoint qualification](checkpoint-reuse.md). Correction
+instructions must permit another rejection rather than demand a passing verdict.
+
+Coverage means the source/issue was accounted for; it does not mean its underlying
+material uncertainty was resolved. Inspect the exact proposition, contrary
+evidence, policy qualification and judgment before repairing either writer or
+reviewer. Relevance may follow from source facts even when a keyword is absent
+from application text. Preserve decisive citations and attributed uncertainty;
+removing them to clear a checker is not a narrow repair.
+
+### Verify the adapted contract
+
 1. Run the retained reproducer and positive references locally. Add the target
    application's important outcome classes, including control deletion and
    adding an independently acceptable issue without changing decision claims.

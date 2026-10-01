@@ -5,6 +5,9 @@ unlikely to distinguish hypotheses. Prepare this short record during offline
 diagnosis; it is not a new approval step for local fixes or work already covered
 by valid authorization. There is no universal repeat threshold or extra allowance.
 
+Use [progressive validation](progressive-validation.md) for scheduling the repair
+and targeted continuation; this record governs re-entry to a broader experiment.
+
 ## Diagnose before another cohort
 
 Retain the first reached failure and all later known blockers. A checker that

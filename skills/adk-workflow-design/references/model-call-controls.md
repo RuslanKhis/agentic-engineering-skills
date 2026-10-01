@@ -107,9 +107,12 @@ affected workflow. Local cancellation does not prove the provider stopped work.
 Repeated preparation and cold process restarts reuse the journal and original
 cutoff. Validate backend/project/model and approval boundaries against that
 journal before proceeding. Refuse an expired or mismatched record, duplicate
-invocation replay, and unreviewed pending attempts. A separately authorised
-continuation preserves the earlier record, counts and failures; record the new
-window and exact permitted changes separately. A new directory is not a refund.
+invocation replay, and unreviewed pending attempts. A continuation covered by
+existing or separately granted authority preserves the earlier record, counts
+and failures; record its window and exact permitted changes separately. A new
+directory is not a refund. If reusing stage artifacts, qualify their dependencies
+through [checkpoint-reuse.md](checkpoint-reuse.md) before a new send; reconnecting
+to existing work is distinct from another provider attempt.
 
 ## 5. Close clients and prove the wiring offline
 

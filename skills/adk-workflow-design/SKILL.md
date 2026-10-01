@@ -51,6 +51,7 @@ and validation path are known, or their specific blockers are recorded.
 | Known rules; no model judgement needed | Prefer ordinary Python. Use [orchestration.md](references/orchestration.md) only if ADK coordination adds value. |
 | Fixed order, independent concurrent work, bounded refinement, typed graph, or runtime-sized work | Selection/implementation/review: read [orchestration.md](references/orchestration.md). Preserve an existing supported pattern unless changing it solves the requested problem. |
 | Missing final result, lost state, streaming, restart or paused-run semantics | Runtime contract: read [runtime.md](references/runtime.md). |
+| Saved-stage continuation or changed dependencies during recovery | Checkpoint qualification: read [checkpoint-reuse.md](references/checkpoint-reuse.md) before reusing artifacts or dispatching a continuation. |
 | Logging hooks, deterministic short-circuits, tool visibility or call-time policy | Callback boundary: read [callbacks.md](references/callbacks.md). |
 | Local startup, actual HTTP/UI checks, buffering, timing or retained sessions | Reader/runtime operation: read [local-runbook.md](references/local-runbook.md). |
 

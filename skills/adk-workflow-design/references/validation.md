@@ -15,6 +15,7 @@ unexpected model request fail rather than silently returning a generic answer.
 | Dynamic | Empty, scalar/list and repeated-ID contracts; actual child orchestration; populated independent sessions where partitioning is claimed. |
 | Callback/policy | Order across the real hook/plugin chain; `None` passthrough; nonempty denial prevents the underlying action; denied repeat attempts stay denied; authorised controls work. |
 | Runtime/UI | Entire event stream consumed or explicitly cancelled; selected output is correct; actual process restart if durability is claimed; failures visible; partial text differs from final commits. |
+| Checkpoint continuation | Use [checkpoint-reuse.md](checkpoint-reuse.md): zero unnecessary upstream sends, dependency invalidation, duplicate blocking across failure/restart, realistic persistence and recovery evidence separate from full-route acceptance. |
 
 Use the real HTTP/UI route when supplied. Assert data, not only a health endpoint.
 Measure from browser Submit and keep cold/warm and streaming settings explicit.

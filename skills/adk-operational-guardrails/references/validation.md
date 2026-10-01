@@ -23,11 +23,19 @@ An optional [ADK integration fixture](../tests/adk_boundary.py) uses the actual 
 | Runtime | Side-effect counter unchanged after blocked call; legitimate read repeat succeeds; parallel calls cannot bypass cap; partial calls cause zero dispatch; model that never yields is interrupted by the outer deadline; final-answer-like events do not lose later accounting; exhausted model-call budget triggers static stop; iterator cleanup completes |
 | Accounting | Already-spent usage charged to every scope despite rejection; same session accumulates; a different tenant cannot reuse identity; exhausted allowance means zero model dispatch; duplicate/partial/missing usage handled explicitly |
 | Shared reservations | Concurrent admission is atomic; conflicting request IDs rejected; settlement is once-only; crash/late-usage/expiry recovery tested with actual storage semantics |
+| Paid continuation | Downstream repair sends zero unnecessary upstream calls; stage quota and shared campaign ceiling both hold; failed/interrupted/no-response duplicates send nothing; restart preserves counts and unknown holds; expanded scope stops before dispatch |
 | Review | Pending retry returns same durable operation; unauthorised reviewer and forged identity cause zero writes; concurrent delivery executes once; timeout persists unknown outcome and reconciles; UI distinguishes approval from completion |
 | Cost policy | Kill switch prevents new dispatch; invalid/untrusted/stale billing events cannot reduce restrictions; intentional reset works; read/dry-run causes no cloud mutation; accepted asynchronous operations are reconciled |
 | Serving/traffic | Saturated queues reject before provider work; cancelled waits leak no capacity; separate replicas cannot each spend the same allowance; actual SDK model/output settings change according to policy, including a reused runner |
 
 Pair incomplete and complete business inputs: an omitted required reason should produce clarification with zero tool/publication effects; a complete request should produce the expected operation exactly once. Keep the clarification result separate from a successful review sample. For production review, exercise the crash points and authorised status lookup in [human review](human-review.md); those are acceptance requirements, not tests already supplied by this skill.
+
+For continuation accounting, exercise reservation → unknown hold → settled receipt
+and a duplicate late receipt with the real store. Remaining capacity must reflect
+each amount exactly once. A stale provider balance or one cheap settled request
+cannot clear a hold or lower an unverified bound. Assert both attempt counts and
+monetary state, including failures and restart; a passing saved stage must leave
+fresh full-route and release gates unverified until independently exercised.
 
 For ADK changes, instantiate the installed real runner/session service with a scripted `BaseLlm` double. Return real `LlmResponse`/function-call objects and observe the registered tool's actual executions. Test parallel calls and the next serialised model request after tool execution. Avoid hand-built event lists as the sole proof of framework ordering. Keep event iteration and closure in the same async task.
 

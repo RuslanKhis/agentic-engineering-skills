@@ -117,6 +117,10 @@ are separate work, not a toggle this skill silently supplies.
 
 ## Recovery claims
 
+For application-stage reuse, read [checkpoint qualification](checkpoint-reuse.md).
+Framework replay capability does not establish that a retained result is valid
+for changed inputs, current authority or a new draft.
+
 Dynamic parents using `ctx.run_node` can use `rerun_on_resume=True` so completed
 child results can be replayed. This is a framework capability, not a guarantee
 that arbitrary external actions execute exactly once. Put side effects in

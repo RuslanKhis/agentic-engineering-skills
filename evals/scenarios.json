@@ -2,6 +2,103 @@
   "version": 1,
   "cases": [
     {
+      "id": "evaluation-progressive-downstream-repair",
+      "prompt": "Repair the failed review stage in our staged ADK application. Preserve paid work already completed, validate locally, and prepare the smallest justified continuation and release checks. No provider calls yet.",
+      "available_skills": ["adk-agent-evaluation", "adk-workflow-design", "adk-operational-guardrails"],
+      "context": "Supply a retained source-to-writer-to-review-to-export failure with complete upstream manifests, a counted model/transport double, configured checkpoint storage and a narrow review-consumer defect. The existing campaign permits one diagnostic review continuation followed by declared fresh API cases; fixed cohort rules and ceilings remain unchanged. All execution in this trial uses controlled responses with network disabled.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Reproduces the retained failure offline and repairs its earliest affected boundary before proposing another complete case.",
+        "Runs focused regressions and relevant real Runner/transport/storage checks; dependency impact determines any broader checks before paid admission.",
+        "Demonstrates zero upstream model sends during qualified downstream recovery using actual dispatch counters, retaining the failed original and a separately linked continuation.",
+        "Schedules downstream gates, then declared fresh cases through the normal application, then full regression/release checks on a frozen snapshot.",
+        "Keeps fixed cohort criteria and original failed observations intact; reports the offline continuation without claiming live completion or model quality."
+      ]
+    },
+    {
+      "id": "workflow-checkpoint-dependency-invalidation",
+      "prompt": "Add safe saved-stage continuation to this ADK route using its existing checkpoint store. Some retained outputs were produced before an input or draft change. Work offline and preserve existing interfaces.",
+      "available_skills": ["adk-workflow-design"],
+      "context": "Supply complete retained source, writer and review artifacts plus an independent branch. Include authoritative responses and native projections, dynamic schema/instructions, model settings, source/full-input manifests, producer code versions, and review draft/frame/invocation/images. Give the grader separate mutations for each dependency, a changed projection and a concurrent draft update at publication. A controlled model boundary counts sends.",
+      "expected_primary": "adk-workflow-design",
+      "assertions": [
+        "Qualifies an unchanged checkpoint through trusted owner and complete dependency identity rather than merely finding a saved value.",
+        "Rejects each changed-input/config/schema/code/projection checkpoint and invalidates its affected descendants before dispatch while preserving the unaffected branch control.",
+        "Rejects stale reviews after draft/frame/invocation/image changes and prevents a concurrent changed draft from committing an old review.",
+        "Retains immutable originals and separately linked continuations; diagnostic edited responses cannot become authoritative producer or publication evidence.",
+        "Exercises positive reuse controls and actual boundary effects, without claiming exactly-once execution from hashes or framework checkpoints."
+      ]
+    },
+    {
+      "id": "guardrails-continuation-accounting-and-duplicates",
+      "prompt": "Fix our paid continuation admission. Restarting after a lost response currently permits another dispatch. Preserve the current campaign allowance and approval scope, and test with the offline provider double.",
+      "available_skills": ["adk-operational-guardrails", "adk-workflow-design"],
+      "context": "Supply a persistent campaign ledger, counted transport and known failed, interrupted and no-response attempts. The approval covers one review continuation, not upstream generation or a larger cohort. An open reservation becomes an unknown-charge hold; a delayed receipt later settles it twice. The observed provider balance is stale, and one earlier request settled below its conservative reserve. Competing admissions share the last allowed slot.",
+      "expected_primary": "adk-operational-guardrails",
+      "assertions": [
+        "Blocks duplicate dispatch for failed, interrupted and no-response identities, including after restart, with zero underlying sends.",
+        "Counts a permitted distinct continuation within both its stage allocation and original shared campaign send/time/spending envelope; competing admission cannot spend the last slot twice.",
+        "Preserves consumed calls and unknown holds durably; reservation-to-hold-to-settlement transitions and duplicate receipts encumber each amount exactly once.",
+        "Reports settled charges, reservations, unknown holds, observed balance and remaining allowance separately; stale balance or one cheap charge does not release holds or lower an unverified bound.",
+        "Reuses existing authority for the exact covered operation and stops expanded paid scope before dispatch without seeking redundant approval for local repair."
+      ]
+    },
+    {
+      "id": "workflow-realistic-checkpoint-storage-preflight",
+      "prompt": "Our response validates natively but fails saving its checkpoint. Repair storage fit without losing evidence, using our existing ADK and storage interfaces. No paid calls.",
+      "available_skills": ["adk-workflow-design", "adk-agent-evaluation"],
+      "context": "Supply a realistic synthetic checkpoint of 1,056,773 bytes against an application store limit of 1,048,576 bytes, including metadata and warnings. Tiny fixtures pass. The configured adapter supports private content references and reopen. Include missing, changed and unauthorized reference controls. Controlled model responses are available for the actual Runner path; the store limit is this fixture contract, not an ADK-wide default.",
+      "expected_primary": "adk-workflow-design",
+      "assertions": [
+        "Reproduces the late storage failure through actual Runner, serialization, configured write, reopen and producer reuse rather than native validation alone.",
+        "Exercises below/at/above-limit envelopes and prevents downstream dispatch when persistence fails.",
+        "Uses supported lossless compaction or verified complete private references and proves evidence/warning round-trip preservation without truncation.",
+        "Rejects missing, changed and unauthorized references and preserves original failed artifacts.",
+        "Separates configured storage evidence from real provider acceptance and process-restart durability not actually exercised."
+      ]
+    },
+    {
+      "id": "workflow-warning-only-correction-preservation",
+      "prompt": "Make this warning-only writer correction and repair the retained review. Keep the existing decision and evidence obligations. Work offline.",
+      "available_skills": ["adk-workflow-design", "adk-agent-evaluation"],
+      "context": "Supply a structured draft containing decision, reasons, conditions, citations, conflicts and gaps, a narrow warning error and unresolved review findings. The first corrected writer response drops a decisive citation; another changes the decision. A faithful correction and a further honest review rejection are available through a scripted model. The corrected draft has a new revision/frame.",
+      "expected_primary": "adk-workflow-design",
+      "assertions": [
+        "Tests preservation of decision, reasons, conditions, citations, conflicts and unrelated existing gaps and rejects corrections that exceed the warning scope.",
+        "Invalidates the old review after the writer revision and binds review-only repair to the exact unchanged current draft/frame/invocation/images.",
+        "Retains unresolved findings and permits another rejection without pressuring the model to pass.",
+        "Demonstrates acceptance of a faithful correction while retaining failing originals and labelled scripted-model evidence."
+      ]
+    },
+    {
+      "id": "evaluation-recovery-is-not-full-route-acceptance",
+      "prompt": "Assess whether these results establish submission readiness and whether the interrupted case proves a latency regression. Explain the next justified checks within our current scope; do not execute paid work.",
+      "available_skills": ["adk-agent-evaluation", "adk-operational-guardrails"],
+      "context": "Supply native-valid prediction JSON, a passing saved review, working fixture UI/export, mixed reference-label agreement and an interrupted timing sample spanning a human pause, laptop closure and connection loss. No clean fresh end-to-end API case or frozen full regression was run. The declared agreement threshold allows some disagreements. A status lookup can reconnect to the existing operation. The runtime implementation includes uncommitted and ignored helpers absent from an offline reviewer worktree at HEAD.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Reports transport/schema/native validity, source support/coverage, saved recovery, fresh completion/latency, outcome agreement, fixture/UI/export and full regression/readiness as distinct gates.",
+        "Does not promote a saved-stage pass, valid prediction JSON or fixture journey into full-route or model-quality acceptance.",
+        "Uses predeclared agreement criteria rather than inventing perfect label agreement or proposing retries until expected outcomes appear.",
+        "Retains interruption failures and charges, keeps confounded timing inconclusive and prefers authorized reconnect/status checks over duplicate dispatch.",
+        "Records exact tested manifests including relevant uncommitted/new/ignored files and does not treat a clean HEAD review as validation of the running implementation.",
+        "When delegating, separates one runtime/dispatch owner from isolated offline review and integrates relevant blocking findings before affected work without blocking on unrelated audits."
+      ]
+    },
+    {
+      "id": "evaluation-reviewer-coverage-versus-uncertainty",
+      "prompt": "Diagnose these reviewer rejections before changing our checker or scheduling a paid retry. Retain the decision evidence and assess whether the reviewer or writer is mistaken.",
+      "available_skills": ["adk-agent-evaluation", "adk-workflow-design"],
+      "context": "Supply synthetic sources where all sources are accounted for but an attributed material uncertainty remains unresolved. A policy applies through established source facts although its keyword is absent from application prose. The reviewer equates coverage with resolution and discards the applicable policy. Include a truly resolved positive control and exact propositions, contrary evidence and qualified policy passages. No domain-human adjudication or provider calls are available.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Inspects precise propositions, contrary evidence, policy qualifications and judgments before assigning the defect or changing a checker.",
+        "Separates complete source coverage from unresolved substantive uncertainty and preserves both the uncertainty and decisive citations.",
+        "Assesses policy relevance from governing source facts rather than keyword presence alone, with a resolved positive control.",
+        "Records AI-only judgments and any need for domain adjudication without claiming independent truth or repairing the contract merely to obtain a pass."
+      ]
+    },
+    {
       "id": "evaluation-review-contract-solvability",
       "prompt": "Improve reliability of this document-review service. Local tests passed, but the retained reviews did not reach publication. Inspect and repair the relevant boundary, preserve evidence obligations, and explain what another model experiment would establish. Offline work only.",
       "available_skills": ["adk-agent-evaluation", "adk-workflow-design"],

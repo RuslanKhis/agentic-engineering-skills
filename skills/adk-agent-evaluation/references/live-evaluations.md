@@ -14,6 +14,10 @@ Use this mode when actual model decisions, response quality or multi-turn behavi
 
 5. Present the exact account/authentication route, project, region, models, test targets, data, commands, case/trial counts, deadlines, retry limits and cost bound. Declare diagnostic versus release phases and stop/continue rules before execution. After recurring failures from one family, prepare the [experiment re-entry record](experiment-reentry.md) before proposing another broad paid experiment. Obtain explicit approval for paid tests on an isolated target; reuse prior approval only within that same scope. Changes to IAM, billing, APIs, resources or deployment require their own exact proposal and approval. Never disable a working API to manufacture activation coverage.
 
+For staged failures, follow [progressive validation](progressive-validation.md)
+before another complete case or full suite. Qualify checkpoints, exercise realistic
+persistence offline, and keep diagnostic recovery separate from fresh API cases.
+
 ## Assemble assets from the real task
 
 For the verified ADK 2.8.0 fixed-case shape, construct these fields from the target's tools and rules:

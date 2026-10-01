@@ -41,6 +41,7 @@ Load additional implementation detail only for the relevant branch:
 - **Dataset curation, judge calibration, work budgets, ambiguous writes or release gates:** [evaluation design](references/evaluation-design.md) gives production implementation procedures and acceptance criteria, explicitly separate from historical companion coverage.
 - **Document-grounded claims or citation judges:** [source-support calibration](references/source-support-calibration.md) provides synthetic contrasts and an offline scorer that separates valid citations from supported conclusions.
 - **Dynamic output schemas or provider rejection:** [provider compatibility](references/provider-compatibility.md) checks the actual serialized contract and plans a representative canary. **Recurring structural failures:** [experiment re-entry](references/experiment-reentry.md) records the reproducer, honest reference and new hypothesis before another broad paid cohort.
+- **Staged paid failures, saved-stage recovery or repeated full-suite runs:** [progressive validation](references/progressive-validation.md) schedules focused checks, qualified continuation and fresh end-to-end evidence before the frozen release suite.
 
 ## Apply the pattern
 
