@@ -20,6 +20,10 @@ plan before observations, rather than rerunning until the desired outcome appear
    source/config/code identities, state transitions, storage result and charges.
    Reproduce offline where possible through the earliest failing boundary. Inspect
    later known blockers too; the first exception may conceal another failure.
+   Classify retrieval, observation, reconciliation, drafting, review and evaluator
+   separately. A reviewer cannot repair operative policy absent from its inputs.
+   Use [contract qualification](contract-qualification.md) for prompt/schema/validator
+   disagreement or an unrepresentable document shape before another paid attempt.
 2. Fix that boundary. If changing schemas shared across stages, authorization,
    accounting, cancellation, persistence or publication, run the affected wider
    invariants before further paid execution. Dependency impact, rather than patch

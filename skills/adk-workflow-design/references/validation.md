@@ -54,6 +54,14 @@ required controls, stale replay, source coverage and publication warnings. It
 does not exercise ADK, provider schema acceptance or independent evidence support;
 adapt its cases through the target application's actual boundary.
 
+For pre-inference contract qualification, drive the normal served entrypoint with
+external access denied and the provider boundary substituted. Assert real Runner,
+validator and storage wiring, including zero dispatch on impossible contracts.
+A standalone correction probe is not proof the served route uses those controls.
+Qualify fresh live end-to-end cases only within authorization after staged repair;
+run final regression on the frozen snapshot, broadening earlier checks when shared
+authority, persistence or contracts change.
+
 The optional real-ADK contract tests need the recorded ADK dependencies already
 available in the selected environment; they do not install them:
 

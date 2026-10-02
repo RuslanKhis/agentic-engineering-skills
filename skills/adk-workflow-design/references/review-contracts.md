@@ -4,6 +4,15 @@ Read this when a structured critic repeatedly fails coverage/identity checks, or
 when a review schema combines decision claims with an issue register. Establish
 expressibility before changing prompts, model effort or live sample size.
 
+Trace mandatory labels, uniqueness and evidence obligations to their effective
+instructions, wire-schema constraints, application validators and authoritative
+sources before dispatch. Derive these from one contract where practical. Review
+valid fixtures independently against sources and pass them through the actual
+boundaries; invalid controls must fail for their intended reason. Native/Pydantic
+acceptance, provider schema enforcement and semantic support are separate evidence.
+When available, evaluation guidance supplies the full contract qualification
+procedure; these requirements remain usable without that optional skill.
+
 ## Worked failure: decision claims cannot carry every issue
 
 The synthetic draft refuses a venue because its only exit is obstructed. A
@@ -113,6 +122,10 @@ removing them to clear a checker is not a narrow repair.
    reduce copying without proving provider compatibility. Test limits before
    asserting the new contract fits. A real provider canary remains a separate
    authorized observation on the exact model/adapter/schema route.
+   Exercise nested numbering, cross-page clauses, footnotes, repeated cells, dense
+   tables, missing neighbours and unsupported visual input. Preserve operative
+   qualifications and occurrence identities; physical-page adjacency is distinct
+   from selected-pack order. Report unrepresentable shapes before generation.
 4. Check support independently on fixed evidence. The model's `supports` or
    `acceptable` label is a judgment, not independent evidence that the passage
    proves the claim. This fixture tests contract solvability and consumption,

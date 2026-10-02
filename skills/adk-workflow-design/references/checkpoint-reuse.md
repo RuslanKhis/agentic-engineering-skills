@@ -13,6 +13,7 @@ For each reusable stage, retain an immutable manifest that resolves:
 | Dependency | Qualification |
 | --- | --- |
 | Source snapshot and full inputs | Exact source/content identities, all effective inputs and upstream artifact versions; references resolve to complete unchanged private content |
+| Parsing and representation | Parser/extractor version, normalization rules, source-coordinate/label conventions and grouping/selection configuration used to construct stage inputs |
 | Instructions and schema | Effective instructions, tool contract and serialized response schema, including dynamically compiled definitions |
 | Model configuration | Backend/route, requested and available returned model identity, generation/reasoning/output settings and relevant adapter configuration |
 | Response and projection | Authoritative raw response with attempt identity, native validated projection and their verified correspondence |
@@ -33,6 +34,12 @@ output with the new identity. Revalidate current authorization and publication
 policy before effects even when inference is reusable.
 
 ## Invalidate by dependency, preserve history
+
+Locate the earliest defective producer across retrieval, observation, reconciliation,
+drafting, review and evaluator before selecting a restart stage. A missing policy
+span in retrieval cannot be recovered by tuning a reviewer that never receives it.
+Source/parser or representation changes invalidate the stages that consume their
+changed outputs, even when their prompts and models are unchanged.
 
 Represent which stage consumes each artifact. A changed dependency invalidates
 its consumer and every descendant that depends on it, including saved reviews

@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "review_status": "AI-authored synthetic controls; no independent domain review",
+  "parser_version": "synthetic-parser-v1",
+  "passages": [
+    {
+      "id": "rule-head",
+      "label": "policy-v1/p2/1.2(a)(i)",
+      "document": "policy",
+      "version": "v1",
+      "page": 2,
+      "kind": "clause",
+      "text": "1.2(a)(i) A low-\nrisk workshop may use the standard route,",
+      "requires": [
+        "rule-tail",
+        "note-1"
+      ]
+    },
+    {
+      "id": "rule-tail",
+      "label": "policy-v1/p3/1.2(a)(i)-continued",
+      "document": "policy",
+      "version": "v1",
+      "page": 3,
+      "kind": "continuation",
+      "text": "except where the floor is raised. In that case provide a ramp.",
+      "requires": []
+    },
+    {
+      "id": "note-1",
+      "label": "policy-v1/p3/footnote-1",
+      "document": "policy",
+      "version": "v1",
+      "page": 3,
+      "kind": "footnote",
+      "text": "Footnote 1: The ramp exception applies even for low-risk workshops.",
+      "requires": []
+    },
+    {
+      "id": "table-head",
+      "label": "policy-v1/p4/table-A/header",
+      "document": "policy",
+      "version": "v1",
+      "page": 4,
+      "kind": "table-header",
+      "text": "Table A: Type | Access | Condition (see footnote 1)",
+      "requires": [
+        "note-1"
+      ]
+    },
+    {
+      "id": "cell-1",
+      "label": "policy-v1/p4/table-A/r1/c2",
+      "document": "policy",
+      "version": "v1",
+      "page": 4,
+      "kind": "cell",
+      "text": "Standard",
+      "requires": [
+        "table-head"
+      ]
+    },
+    {
+      "id": "cell-2",
+      "label": "policy-v1/p4/table-A/r2/c2",
+      "document": "policy",
+      "version": "v1",
+      "page": 4,
+      "kind": "cell",
+      "text": "Standard",
+      "requires": [
+        "table-head"
+      ]
+    },
+    {
+      "id": "cell-3",
+      "label": "policy-v1/p4/table-A/r3/c2",
+      "document": "policy",
+      "version": "v1",
+      "page": 4,
+      "kind": "cell",
+      "text": "Ramp",
+      "requires": [
+        "table-head",
+        "note-1"
+      ]
+    },
+    {
+      "id": "cell-4",
+      "label": "policy-v1/p4/table-A/r4/c2",
+      "document": "policy",
+      "version": "v1",
+      "page": 4,
+      "kind": "cell",
+      "text": "Ramp",
+      "requires": [
+        "table-head",
+        "note-1"
+      ]
+    },
+    {
+      "id": "image-1",
+      "label": "policy-v1/p8/image/region-A",
+      "document": "policy",
+      "version": "v1",
+      "page": 8,
+      "kind": "unreviewed-image",
+      "text": null,
+      "requires": []
+    }
+  ],
+  "selected_pack": [
+    "rule-head",
+    "table-head",
+    "cell-1",
+    "cell-2",
+    "cell-3",
+    "cell-4",
+    "rule-tail",
+    "note-1"
+  ],
+  "required_ids": [
+    "rule-head",
+    "rule-tail",
+    "note-1",
+    "table-head",
+    "cell-1",
+    "cell-2",
+    "cell-3",
+    "cell-4"
+  ],
+  "fixture_meanings": {
+    "workshop-rule": [
+      "Low-risk workshops may use the standard route except on raised floors, which require a ramp.",
+      "A ramp is required on a raised floor even for a low-risk workshop."
+    ],
+    "unsupported": [
+      "A low-risk workshop never requires a ramp."
+    ]
+  }
+}

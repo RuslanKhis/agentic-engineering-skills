@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-02",
+  "base_commit": "1001674dc0f214f176e063188e6311dcf987f43d",
+  "scope": "Final modified instruction/case snapshot; full suite before last three saved-stage controls, followed by the final affected evaluation suite and package checks.",
+  "files_sha256": {
+    "evals/scenarios.json": "425d53a47bb6f6eb608b7ec2195da0e608044c76cd1245a2b2e6e167b61bc9b0",
+    "skills/adk-agent-evaluation/SKILL.md": "e6e96c454ccc257697770e8d1ec1193dd51ed907fe0f2ed4b44261c34ff4d30c",
+    "skills/adk-agent-evaluation/assets/contract-qualification.json": "57f61825452c69969d6d9e6847810ce3a3b5a3860b8bfc19031042b96cb34bd7",
+    "skills/adk-agent-evaluation/references/contract-qualification.md": "06f2b14026d3f8ef684d6520fbddd12b02dfaa433ded625d0b99142dc6ff0f73",
+    "skills/adk-agent-evaluation/references/evaluation-design.md": "ec73743c16adcd43cd94942fa7b61c2d343b10058f4f47bc6919aa664623cabd",
+    "skills/adk-agent-evaluation/references/progressive-validation.md": "85599a8976242d70433eee236d068356354e8e77e0ec8cc91a51e6b24fb3917f",
+    "skills/adk-agent-evaluation/references/provider-compatibility.md": "2b304784d723be0ce1a8b0933084b11e36d30745cee18d9441b339877c27ef35",
+    "skills/adk-agent-evaluation/references/validation.md": "e43e0987564b254b84ca4db0abecb68cc66d8fd58090881a2233634a43be06f0",
+    "skills/adk-agent-evaluation/tests/test_contract_qualification.py": "786a385c15e6ac3ad0d019e6f5e8ed3c38332bf1fac78ecf3c0c9a5c962cbc2d",
+    "skills/adk-memory-architecture/references/local-document-coverage.md": "0d4adf8c3c71cd9427586ea157fa06d16961065dec326d661c0f881590ae7b3f",
+    "skills/adk-workflow-design/references/checkpoint-reuse.md": "41c6205839a8769181f03cf6e4f928a12bb9723d0baa4eb2919618be25ed625b",
+    "skills/adk-workflow-design/references/review-contracts.md": "3a20306e33b99d24f8b1a70c2e6be164a63413b45e61cfcc3787125a348137e9",
+    "skills/adk-workflow-design/references/validation.md": "ede2614666805342afa3804d9839caf7a1d67aa6ebf90f79fcc9742599eb2351"
+  },
+  "fresh_agent_trials": "Not run",
+  "provider_calls": 0,
+  "semantic_review": "AI-authored fixture expectations, no independent domain review"
+}

@@ -5,6 +5,11 @@ rejections. Compatibility belongs to the exact provider, endpoint, model, adapte
 version, request mode and serialized request. No example here establishes a
 restriction for all ADK or OpenAI-compatible routes.
 
+Qualify [contract solvability](contract-qualification.md) offline first. Keep native
+Pydantic/custom validation, provider-enforced wire schema and semantic source checks
+as separate gates; local parsing and an OpenAI-compatible endpoint prove neither
+keyword enforcement nor factual correctness on the selected route.
+
 ## Populate the compatibility matrix
 
 Generate requests through the application's pinned SDK/adapter and intercept the

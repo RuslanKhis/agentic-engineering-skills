@@ -40,6 +40,37 @@ contains no applicable provision. Keep irrelevant neighbours out of the coverage
 numerator. Increasing retrieval limits requires evidence that the chosen limits
 caused the miss and that the new bounds fit the authorised workload.
 
+## Qualify the source representation before generation
+
+Exercise nested numbering, cross-page clauses, footnotes, repeated table cells,
+dense policy tables, image-only pages and required missing neighbours. Bind each
+unit to document/version, physical page, hierarchy and table/row/column/occurrence
+as applicable. Equal text or identical local clause numbers do not merge identities.
+Check that all necessary content and qualifications fit the representation; a
+fixed one-span/one-row limit can make dense content unrepresentable.
+
+Physical-page adjacency comes from source coordinates within one document/version,
+not selected-pack position. Link continued clauses and footnotes explicitly;
+splitting/grouping must preserve header, exception and note associations. Missing
+required content or unsupported shapes produce a clear preflight disposition before
+model dispatch, rather than a copying/model-quality failure. Unreviewed visual
+material stays unresolved through the governed branch below.
+
+Keep known IDs, literal spans, hashes and calculations deterministic where practical.
+Models can select supplied references and explain relevance/support; resolve exact
+source text server-side instead of regenerating extraction-sensitive strings.
+Version any permitted normalization and retain original text/coordinates. Joining
+line-wrap hyphens in a paraphrase is distinct from mutating an authoritative quote;
+quantities, negations and policy qualifications must survive either representation.
+
+Qualify actual-sized input/result persistence and reopen without truncation through
+the configured storage path. Parser/extractor versions and representation settings
+are checkpoint dependencies: change them at the earliest affected producer and
+invalidate descendants while preserving eligible upstream work and failed originals.
+A reviewer cannot recover policy text absent from its inputs. Optional evaluation
+guidance supplies prompt/schema/validator qualification; independently source-reviewed
+valid references and discriminating invalid controls are required at actual boundaries.
+
 ## Govern the visual branch
 
 Resolve the original page through the same source/version and entitlement

@@ -2,6 +2,49 @@
   "version": 1,
   "cases": [
     {
+      "id": "evaluation-preinference-contract-qualification",
+      "prompt": "Qualify this document-grounded ADK contract before we pay for another experiment. Diagnose the retained failures, repair ordinary engineering defects offline and prove the normal application path enforces the same gates as the correction probe. Preserve source and spending obligations.",
+      "available_skills": ["adk-agent-evaluation", "adk-workflow-design", "adk-memory-architecture"],
+      "context": "Supply the contract-qualification synthetic source pack without fixture_meanings or expected assertions to generation. Build a target fixture with an omitted label instruction, duplicate occurrence labels, a too-small source representation, real installed Runner and configured storage, and an OpenAI-compatible adapter intercepted at its transport. Keep separately source-reviewed references and invalid controls with the grader. No remote access is authorized; if real Runner dependencies are absent, that boundary stays unverified rather than being installed or replaced by hand-built events.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Traces each mandatory output requirement to authoritative source, rendered instruction, emitted schema and actual application validator; derives shared definitions where practical.",
+        "Demonstrates valid source-reviewed references passing and invalid labels, identity mutations, omitted qualifications and unsupported meaning failing for their intended reasons.",
+        "Blocks impossible prompt/schema/representation contracts before counted provider dispatch and repairs the earliest affected boundary rather than increasing model effort.",
+        "Keeps Pydantic/native validation, provider-enforced wire schema and semantic support separate; OpenAI-compatible transport does not imply provider keyword enforcement.",
+        "Exercises normal orchestration/storage with external access denied, preserving real boundaries; reports absent SDK/provider or domain-review evidence explicitly.",
+        "Schedules authorized fresh normal-route live cases after staged stability, then final frozen regression, without executing unapproved inference."
+      ]
+    },
+    {
+      "id": "memory-document-shape-and-source-coordinates",
+      "prompt": "Our document retriever returns policy text, but the staged reviewer cannot account for several clauses. Diagnose representation and input completeness using offline sources before another model retry. Preserve the current source and evidence limits.",
+      "available_skills": ["adk-memory-architecture", "adk-agent-evaluation", "adk-workflow-design"],
+      "context": "Supply synthetic extracted records with nested clause numbering, a cross-page exception, linked footnotes, repeated table cells, a dense table and an unreviewed image-only page. Selected-pack order separates physical neighbours and places non-neighbours consecutively. One required continuation is absent. The storage adapter can persist and reopen realistic complete envelopes; original PDFs/image bytes and domain-human review are unavailable.",
+      "expected_primary": "adk-memory-architecture",
+      "assertions": [
+        "Keeps document/version/page/hierarchy and cell occurrence identities unambiguous despite equal text or local numbering.",
+        "Distinguishes physical-page adjacency from selected-pack order and preserves clause/header/note qualifications during grouping or splitting.",
+        "Classifies missing operative input or unsupported image/shape before generation, without blaming a reviewer that cannot see the missing policy.",
+        "Tests complete representation and actual-sized storage/reopen without truncation and keeps unavailable real extraction/visual evidence explicit.",
+        "Changes the earliest affected producer and invalidates parser/representation-dependent descendants while preserving eligible upstream artifacts and failed originals."
+      ]
+    },
+    {
+      "id": "evaluation-bound-spans-versus-model-paraphrase",
+      "prompt": "A substantively supported observation was rejected because the generated quote joined a line-wrap hyphen. Repair the contract offline without weakening identity or semantic checks, and retain a failing reproduction.",
+      "available_skills": ["adk-agent-evaluation", "adk-workflow-design"],
+      "context": "Supply immutable source spans with line-wrap hyphenation, exact occurrence IDs, approved paraphrases and a contrary claim that removes an exception. The target can bind server-owned text and accept model-selected references with explanation. A correction probe uses this path but the served route still asks the model to regenerate quotations. Grader expectations are separate from model inputs and are explicitly AI-authored unless independent review is supplied.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Retains the exact-quote false rejection and resolves immutable literal spans deterministically from supplied selections where supported.",
+        "Permits authorized paraphrase variation while preserving identity, quantities, negations and exceptions; broad text normalization is not used to erase mutations.",
+        "Rejects unsupported meaning independently of valid IDs or model self-declared support, with honest positive controls.",
+        "Tests the served route as well as the probe, using real orchestration and storage where available with counted substituted provider calls.",
+        "Records source/parser/prompt/schema/settings dependencies for saved stages and distinguishes synthetic bookkeeping from real-provider or independently reviewed semantic evidence."
+      ]
+    },
+    {
       "id": "evaluation-progressive-downstream-repair",
       "prompt": "Repair the failed review stage in our staged ADK application. Preserve paid work already completed, validate locally, and prepare the smallest justified continuation and release checks. No provider calls yet.",
       "available_skills": ["adk-agent-evaluation", "adk-workflow-design", "adk-operational-guardrails"],

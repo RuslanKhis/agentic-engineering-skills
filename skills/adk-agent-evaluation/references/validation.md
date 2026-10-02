@@ -1,5 +1,29 @@
 # Validation evidence
 
+## Pre-inference contract controls — 2 October 2026
+
+Added a synthetic source pack and 18 standard-library examples for prompt/schema/
+validator disagreement, duplicate occurrence labels, dense representation bounds,
+missing continuations/footnotes, unreviewed visual input, physical versus pack
+adjacency, bound quotations with allowed paraphrases, unsupported meaning, identity
+mutation, parser/settings freshness and lossless file write/reopen. Unchanged saved
+stages reuse with zero further provider-double calls; stale or mutated projections
+fail without rewriting retained records. Deliberately broken quote/adjacency
+controls retain the failures rather than relaxing substantive gates.
+
+The final evaluation suite passed all **44 tests** on CPython **3.12.9**, with zero
+skips. The full repository run before the last three saved-stage controls passed
+**448 tests**, with **59 optional SDK tests skipped**; after those additions only
+the affected evaluation suite and package checks were repeated. All 13 packages
+validated with zero errors/warnings. Official skill validation and diff checks
+passed. Existing dependency pins and historical `last-tested` metadata are unchanged.
+
+These tests exercise a small test-only JSON entrypoint, a counted provider double
+and local file persistence. They do not exercise real ADK/Pydantic, provider schema
+enforcement, PDF/OCR/image handling, production storage, authentication or independent
+semantic source review. Fixture expectations are AI-authored and provisional.
+Three authored evaluation scenarios remain unexecuted. No paid inference ran.
+
 Initial checks completed on 15 September 2026; the 16 September depth review is recorded separately below. These are results for the packaged skill, separate from the historical ADK integration evidence in [compatibility.md](compatibility.md) and [provenance.md](provenance.md).
 
 ## Synthetic document-review controls — 27 September 2026

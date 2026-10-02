@@ -16,6 +16,10 @@ Read this when curating a dataset, calibrating a judge, enforcing work limits, t
 
 ## Establish an honest review contract
 
+For mandatory labels, extraction-sensitive text or dense representations, also use
+[contract qualification](contract-qualification.md) to trace effective prompt,
+schema and validator agreement and establish representability before dispatch.
+
 Before model tuning or a quality cohort, retain an honestly constructed reference for each consequential outcome combination and execute it through the actual schema, validators and relevant Runner/served boundary. For document review, cover approval with required controls, refusal with separate favourable or manageable issues, unresolved evidence and contradictions. Acceptance must preserve the domain obligations as well as structural validity.
 
 Use this transformation as a diagnostic: a refusal justified by unsafe access can coexist with a separately acceptable roof. Add the roof issue without adding it to the refusal reason; the review contract must have an honest disposition for it. Attaching its ID to the access reason merely to satisfy coverage is a failing negative control. Also delete a required approval safeguard and verify rejection. If the only passing response invents a relationship, the contract needs a representation for that outcome before another model run can usefully test it.
