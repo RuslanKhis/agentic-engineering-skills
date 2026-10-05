@@ -25,7 +25,8 @@ produce an empty successful run. Per-suite processes also avoid collisions
 between files sharing names such as `test_inspect_project.py`.
 
 Memory's suite uses pytest. Workflow's normal job selects
-`test_inspect_project.py` and the synthetic `test_review_contract.py` separately;
+`test_inspect_project.py`, the synthetic `test_review_contract.py` and
+`test_draft_consistency.py` separately;
 its runtime suite imports ADK. Optimization and auth
 include optional SDK checks that report skips when their dependencies are
 absent. The full inspector suite requires POSIX filesystem operations; Windows

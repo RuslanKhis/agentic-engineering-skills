@@ -42,7 +42,11 @@ caused the miss and that the new bounds fit the authorised workload.
 
 ## Qualify the source representation before generation
 
-Exercise nested numbering, cross-page clauses, footnotes, repeated table cells,
+Start from the per-page ingestion report in
+[document-ingestion.md](document-ingestion.md): density class, route (text,
+OCR or vision, both) and origin label for every page, so a header-only scan
+is never passed through as a text page. Then exercise nested numbering,
+cross-page clauses, footnotes, repeated table cells,
 dense policy tables, image-only pages and required missing neighbours. Bind each
 unit to document/version, physical page, hierarchy and table/row/column/occurrence
 as applicable. Equal text or identical local clause numbers do not merge identities.

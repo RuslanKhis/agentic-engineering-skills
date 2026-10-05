@@ -1,0 +1,34 @@
+{
+  "kind": "generator_knowledge_not_extraction_result",
+  "note": "Text, image and vector counts are what make_ingestion_fixture.py wrote. Produce a separate inventory from your own extractor and compare.",
+  "pages": [
+    {
+      "document": "text-page.pdf",
+      "page": 1,
+      "text": "Policy H3 Residential extensions\nExtensions to dwellings are supported where the proposal respects the\nscale, form and materials of the host building and the character of the\nstreet. Rear extensions should not exceed a depth of 4.0 m for terraced\ndwellings or 6.0 m for detached dwellings unless the applicant shows that\nno material loss of daylight or outlook results to a neighbouring room.\nSide extensions are set back from the front elevation and keep a minimum\n1.0 m gap to the side boundary where a terracing effect would otherwise\noccur. Off-street parking is assessed against Table 2 of the Design SPD,\nwhich sets the minimum spaces by bedroom count and accessibility.\nProposals that remove a parking space must show that the replacement\nprovision meets that table or that the site lies within Zone A.",
+      "image_count": 0,
+      "vector_drawing_ops": 0
+    },
+    {
+      "document": "scanned-page.pdf",
+      "page": 1,
+      "text": "Synthetic Local Plan 2021 - page 7",
+      "image_count": 1,
+      "vector_drawing_ops": 0
+    },
+    {
+      "document": "table-page.pdf",
+      "page": 1,
+      "text": "Dwelling size | Minimum spaces | Cycle spaces | Note\n1 bedroom | 1 | 1 | Zone A: 0\n2-3 bedrooms | 2 | 2 | see note 2\n4+ bedrooms | 3 | 2 | Tandem spaces count once\nNote 2: within 400 m of a frequent bus stop the standard reduces by 1 space.",
+      "image_count": 0,
+      "vector_drawing_ops": 10
+    },
+    {
+      "document": "drawing-page.pdf",
+      "page": 1,
+      "text": "Proposed site plan - 14 Synthetic Road\n6.0 m\n0\n5\n10 m\nScale 1:200 @ A3\nN\nProposed extension\nExisting dwelling",
+      "image_count": 0,
+      "vector_drawing_ops": 14
+    }
+  ]
+}

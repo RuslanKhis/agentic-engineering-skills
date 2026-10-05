@@ -247,3 +247,28 @@ image bytes, so it establishes neither PDF/OCR extraction quality nor successful
 visual review. No agent-generated query, provider call or hosted integration
 was executed by these tests, and no independent domain review of the fictional
 policy is claimed. The main skill's SDK `last-tested` date remains unchanged.
+
+## Ingestion and retrieval controls — 6 October 2026
+
+Two references and two standard-library helpers were added after the
+planning-assignment retrospective: [document ingestion](document-ingestion.md)
+with a four-PDF fixture of real bytes and a per-page qualification report, and
+[retrieval strategy](retrieval-strategy.md) with a synthetic gold set, heading
+units, SQLite FTS5 BM25, deterministic reference lookup, one bounded second
+round, reciprocal rank fusion and a sufficiency report. The package suite
+passed **57 tests with 1 skip** on Python 3.12.9 (the skip is the optional
+`pypdf` extraction path):
+
+```bash
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 PYTHONDONTWRITEBYTECODE=1 "$PYTHON" -m pytest \
+  "$SKILL_DIR/tests" -q -p no:cacheprovider
+```
+
+The same ingestion tests passed with `pypdf` installed in a throwaway
+environment (13 passed, 0 skipped), and `pypdf` read 35 characters from the
+scanned page and 809 from the text page. No OCR engine, vision model,
+embedding model or provider was run; lexical recall of 1.0 on the synthetic
+gold set, with mean precision near 0.48 and listed irrelevant hits reported
+per question, is a fixture control for the mechanism, not evidence about a
+target corpus. The fictional policies received no domain review. The skill's SDK
+`last-tested` date is unchanged.

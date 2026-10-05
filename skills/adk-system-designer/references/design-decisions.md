@@ -23,6 +23,41 @@ editing later becomes a requirement, revisit writer permissions and concurrent
 updates instead of presenting this initial choice as a complete collaboration
 design. Keep checks proposed until executed.
 
+## Size the first slice to the judge
+
+Before any component is chosen, write down the three scope-gate answers: the
+time and money available, who evaluates the result and what they will read,
+and the artifact type (exploration, assignment, pilot, production). These
+answers decide how much of this reference applies. A four-hour assignment
+judged on five holdout predictions and a report needs the core judgment
+working on real inputs and one quality measurement; it does not need officer
+revisions, export acknowledgement, durable approval records or a hosting
+roadmap. A production service that changes money needs most of this file.
+
+**Proportionality rule.** When the artifact is judged on output quality, the
+first implementation slice is the core judgment end to end on real inputs,
+with a measured quality result and only the controls that keep spend safe
+(a call budget and a stop). Identity, revisions, export acknowledgement,
+recovery, checkpoint freezes and campaign tooling wait until that
+measurement exists. Each deferred control gets one line in the design's
+"Scope, evaluator and deferred controls" block: what it is, why it waits,
+and what would bring it forward.
+
+For example, with "3 to 4 hours, judged on holdout predictions, method and
+report, an assignment":
+
+> First slice: ingest the supplied documents, retrieve the operative policy
+> for each case, draft a decision with reasons and conditions, score the
+> five labelled development cases against their reasons, and regenerate the
+> holdout predictions with the final method. Spend control: one model-call
+> budget per case and a total stop. Deferred: officer revision workflow,
+> export acknowledgement, saved-stage recovery, cloud hosting; each would
+> start only after the development-case score is measured.
+
+When `adk-agent-evaluation` is installed, its quality-iteration reference
+gives the measurement loop for that first slice; the proportionality rule
+stands on its own without it.
+
 ## Outcome and orchestration
 
 Define the useful result and its authoritative source before choosing agents.

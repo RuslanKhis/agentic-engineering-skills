@@ -33,13 +33,15 @@ the book and companion repository are optional provenance, not prerequisites.
    Replace the skill path with its installed location. Read
    [compatibility.md](references/compatibility.md) before using an SDK recipe or
    interpreting the helper. A different/missing version blocks claims of tested
-   compatibility, not independent planning. Resolve the target API contract or
-   report the exact blocker; never silently change dependency pins.
+   compatibility; independent planning continues. Resolve the target API
+   contract or report the exact blocker, keeping dependency pins as they are.
 3. Define acceptance in observable terms: ordered handoff, two preserved branch
    outputs, bounded refinement with an explicit result, typed node output, or a
-   callback action. An import, HTTP 200 or plausible paragraph is insufficient.
-   List missing prerequisites together. Ask only for decisions the project and
-   request cannot settle; continue independent offline work.
+   callback action. For example, "the reviewer node receives the writer's
+   actual draft text, and a reviewer exception leaves the draft saved and the
+   run marked failed" is acceptance; an import or an HTTP 200 is a precondition.
+   List missing prerequisites together. Ask for the decisions only the user
+   can settle and continue independent offline work meanwhile.
 
 Inspection is complete when the chosen mode, version baseline, output contract
 and validation path are known, or their specific blockers are recorded.
@@ -68,14 +70,15 @@ recommendations; implementing them is a separate scope decision.
 2. For authorised implementation, reproduce the reported failure through the
    public runner, CLI, HTTP or UI path before a narrow correction. Reuse existing
    orchestration and change only the boundary causing the defect. Keep a regression
-   case. Greenfield work starts from the actual user task, not a travel/clock demo.
-3. Account for each output, model/tool attempt and state writer. A prompt is not
-   authorisation; a loop limit is not a request budget; a checkpoint is not
-   exactly-once execution. Label simulated inputs/results explicitly.
+   case. Greenfield work starts from the actual user task.
+3. Account for each output, model/tool attempt and state writer. Authorisation
+   lives in code, a request budget in a reservation before dispatch, and
+   exactly-once execution in an idempotency key; a prompt, a loop limit and a
+   checkpoint each do a different job. Label simulated inputs/results explicitly.
 4. Keep proposed production controls distinct from implemented controls. Add
    deadlines, idempotency, persistence or observability when the task requires
-   them, and validate each claim. Do not copy a historical campaign's limits or
-   hard-coded identities into a new project.
+   them, and validate each claim. Derive limits and identities from the new
+   project's own measurements; a historical campaign's numbers are provenance.
 
 ## Authority and external work
 
@@ -104,24 +107,32 @@ Follow [validation.md](references/validation.md) for mode-specific assertions,
 offline boundary doubles, browser timings and a concise result format. Run the
 project's relevant tests and static/build checks, including a real application
 path where applicable. Prove concurrent branches overlap, state survives only as
-claimed, and failure cannot be reported as success. Repeat setup/adaptation to
+claimed, and a failed branch yields a failed result. Repeat setup/adaptation to
 check that it preserves existing work rather than duplicating it.
 
 For structured review/correction, read [review-contracts.md](references/review-contracts.md)
 before tuning model reliability: pass honest references for decisive and
 nondecisive issues, required controls and unresolved/contradictory evidence through
-the actual schema, checker and Runner/served boundary. Invented relationships or
-dropped obligations do not establish solvability.
+the actual schema, checker and Runner/served boundary. Solvability is shown by
+an honest reference that keeps every obligation and passes.
+
+When a drafting stage produces officer-facing decisions, read
+[content-safeguards.md](references/content-safeguards.md): check internal
+consistency in code on every fresh draft (a condition cannot require what a
+reason waives; a refusal carries no conditions), rank warnings by whether
+they could change the decision, treat source documents as data, and ask the
+reviewer for the strongest objection.
 
 For strict paid-request limits, SDK retries or campaign restart, read
 [model-call-controls.md](references/model-call-controls.md) before choosing the
-enforcement point. A callback counter alone does not establish a transport cap.
+enforcement point: a transport cap is enforced where the HTTP attempt is made,
+with a callback counter as the observer.
 
 Report changed files, exact commands and versions, actual outcomes, warnings,
 manual prerequisites and outstanding work. Separate PASS/FAIL/BLOCKED/NOT RUN/N/A
 for offline execution, live behaviour, browser functionality, latency and cleanup
-as applicable; use INCONCLUSIVE when observations cannot resolve a threshold.
-Historical companion results are provenance, not a pass for the
+as applicable; use INCONCLUSIVE when observations leave a threshold open.
+Historical companion results are provenance for the rule, and the pass for the
 target project. Read [provenance.md](references/provenance.md) only to trace a rule
 or assess the scope of that prior evidence.
 

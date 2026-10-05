@@ -29,7 +29,7 @@ unresolved gap. It permits neither a fabricated draft claim nor a resolved gap.
 | Attach sign-colour ID to the exit claim without assessing its evidence | Accept | Reject invented association; require independent assessment |
 
 The missing disposition is a representational defect. A validator pass obtained
-by inventing a relationship is not a positive control. Retain the broken checker
+by inventing a relationship is a failing negative control. Retain the broken checker
 as a reproducer, construct an honest accepted reference, then retain both the
 honest transformation and the misleading association as regressions. The
 [executable fixture](../tests/test_review_contract.py) demonstrates all five
@@ -38,7 +38,7 @@ paths; its test-only `broken_claim_only_checker` intentionally preserves the bug
 ## Optional server-owned frame
 
 The [stdlib example](../scripts/review_contract.py) demonstrates an application
-pattern, not an ADK class or required architecture. The server compiles a frame
+pattern to adapt into the target's own stores and routes. The server compiles a frame
 from its current draft, issue registry and evidence. Existing, reviewed
 claim-to-issue/source associations stay server-owned. Every issue has a separate
 disposition slot, whether or not it contributes a draft claim. Each claim/issue
@@ -46,10 +46,21 @@ slot has its own evidence judgments because one passage can support one
 assertion and fail to support another.
 
 The model receives text plus short slots (`c1`, `i1`, `s1`) and assesses support,
-contradiction, relevance/uncertainty and issue disposition. It cannot add IDs or
-rewrite known associations. Complete required evidence slots are assessed
-explicitly; merely attaching a source never grants support. An empty evidence
-map can honestly accompany `no_relevant_evidence`; it cannot justify publication.
+contradiction, relevance/uncertainty and issue disposition. The schema gives it no slot for
+new IDs or changed associations. Complete required evidence slots are assessed
+explicitly; support is granted by the judgment on the slot, and attaching a
+source is a reference. An empty evidence map can honestly accompany
+`no_relevant_evidence`, and it leaves publication blocked. For example, a draft
+refusing a venue for an obstructed exit receives slots `c1` (the exit claim),
+`i1` (exit), `i2` (sign colour) and `s1`..`s3`; the model fills `i2` as
+acceptable with `s3` supporting it and leaves `c1`'s association untouched:
+
+```json
+{"claims": {"c1": {"supported_by": {"s1": "supports"}, "contradicted_by": {}}},
+ "issues": {"i1": "unresolved_material", "i2": "acceptable"},
+ "issue_evidence": {"i2": {"s3": "supports"}}}
+```
+
 The deliberately small schema omits free-text rationale/remedies. Add those to
 the application's model judgment when needed, and test their actual size and
 downstream use; keep established control IDs and release obligations authoritative.
@@ -57,19 +68,20 @@ downstream use; keep established control IDs and release obligations authoritati
 `compile_frame` binds draft revision, claim text, associations, controls, issue
 materiality and evidence contents to a fingerprint. `consume_review` recompiles
 from trusted current state, checks the exact JSON slots and rejects stale
-responses after any correction. Rebuild the request/schema after a correction;
-do not mechanically relabel an old response with the new fingerprint. A hash is
-not authentication: fetch state under the verified caller/session, and perform
+responses after any correction. Rebuild the request/schema after a correction,
+so the rebuilt request carries a fresh fingerprint. Authentication is the
+caller/session check, with the hash confirming content: fetch state under the
+verified caller/session, and perform
 an atomic revision check when committing a release to prevent a concurrent
 draft update between validation and publication. Those application boundaries
 are intentionally outside this side-effect-free helper.
 
 ### Shape acceptance and publication are separate
 
-An honest report of uncertainty should be representable. It need not authorize
-a final decision. The example returns `accepted`, `publishable`, `blockers` and
-`warnings`; callers must retain all four, rather than treating accepted JSON as
-successful release. No actual publication occurs in the helper.
+An honest report of uncertainty is representable, and representable is the
+first of two results; publishable is the second. The example returns `accepted`,
+`publishable`, `blockers` and `warnings`; callers retain all four, and accepted
+JSON is the first result only. Publication itself happens in the application.
 
 | Synthetic reference | Shape accepted | Publication result |
 | --- | --- | --- |
@@ -85,10 +97,10 @@ successful release. No actual publication occurs in the helper.
 These are explicit toy policy choices. In particular, registered contrary
 observations conservatively remain unresolved until an upstream adjudication
 changes the issue registry and frame. A target application may permit a
-reasoned resolution, but must encode and verify that resolution instead of
-allowing a disposition to silently bypass contradictions. Materiality and
-necessary approval controls must come from the application's established
-policy, not an untrusted response that can downgrade its own obligations.
+reasoned resolution by encoding and verifying it in the registry and frame, so
+a disposition resolves a contradiction only through that path. Materiality and
+necessary approval controls come from the application's established policy,
+and a response reports dispositions within them.
 
 ## Adapt and verify at the actual boundary
 
@@ -99,14 +111,17 @@ unresolved findings. For a warning-only writer correction, compare decision,
 reasons, conditions, citations, conflicts and existing gaps before/after; permit
 only the intended warning change. The resulting draft revision invalidates its
 old review under [checkpoint qualification](checkpoint-reuse.md). Correction
-instructions must permit another rejection rather than demand a passing verdict.
+instructions permit another rejection. For example, correcting a mislabelled
+page number in a warning leaves decision `refuse`, reasons r1 and r2, condition
+c1 and citation s2 byte-identical; a correction that also drops s2 is rejected
+as out of scope.
 
-Coverage means the source/issue was accounted for; it does not mean its underlying
-material uncertainty was resolved. Inspect the exact proposition, contrary
+Coverage means the source/issue was accounted for; resolution of its material
+uncertainty is recorded on its own. Inspect the exact proposition, contrary
 evidence, policy qualification and judgment before repairing either writer or
 reviewer. Relevance may follow from source facts even when a keyword is absent
 from application text. Preserve decisive citations and attributed uncertainty;
-removing them to clear a checker is not a narrow repair.
+a narrow repair leaves them in place.
 
 ### Verify the adapted contract
 
@@ -116,7 +131,8 @@ removing them to clear a checker is not a narrow repair.
 2. Map references through the **actual** response schema and checker. Then send
    the same references through the real Runner or served route with a controlled
    model boundary. Inspect the stored draft/revision, selected final output,
-   failed correction and publication gate. The bundled helper is not that test.
+   failed correction and publication gate. The bundled helper exercises the
+   frame; the Runner path is the test.
 3. Inspect the serialized schema/request, frame and largest realistic response.
    Measure bytes and the target route's token/output limits; fixed slot IDs can
    reduce copying without proving provider compatibility. Test limits before
@@ -127,9 +143,9 @@ removing them to clear a checker is not a narrow repair.
    qualifications and occurrence identities; physical-page adjacency is distinct
    from selected-pack order. Report unrepresentable shapes before generation.
 4. Check support independently on fixed evidence. The model's `supports` or
-   `acceptable` label is a judgment, not independent evidence that the passage
-   proves the claim. This fixture tests contract solvability and consumption,
-   not recommendation quality, retrieval completeness or factual correctness.
+   `acceptable` label is a judgment to verify against the evidence. This fixture
+   tests contract solvability and consumption; recommendation quality, retrieval
+   completeness and factual correctness need their own fixtures.
 
 Run from this skill directory with Python 3.11 or later:
 
@@ -141,5 +157,5 @@ The fixture uses only invented observations, makes no network/model calls and
 requires no SDK installation. It exercises `consume_review` with serialized
 JSON, including exact byte-boundary rejection, rather than checking documentation
 wording. `sizes_bytes` reports UTF-8 frame/schema/response sizes for the actual
-consumed reference; these counts do not establish token use or production fit.
+consumed reference; token use and production fit are measured on the real route.
 Dependency pins and the skill's SDK compatibility record are unchanged.

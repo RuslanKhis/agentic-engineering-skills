@@ -9,6 +9,23 @@ non-goals and existing systems. Name the outcome to improve and any known baseli
 Separate confirmed requirements, observed repository facts and proposed assumptions.
 State what the model contributes and what ordinary code controls.
 
+## Scope, evaluator and deferred controls
+
+| Scope-gate answer | Value |
+| --- | --- |
+| Time and money available | <hours or days; spending allowance and its reserve for the deliverable> |
+| Who judges the result and what they read | <reviewer; predictions, report, demo or running service> |
+| Artifact type | exploration / assignment / pilot / production |
+
+List, explicitly, the controls this design chooses not to build yet and why:
+
+| Deferred control | Why it waits | What would bring it forward |
+| --- | --- | --- |
+
+When the artifact is judged on output quality, the first slice is the core
+judgment end to end on real inputs with a measured result; deferred controls
+start after that measurement exists.
+
 ## Guarantees and acceptance
 
 | Invariant or target | Enforcing component and authoritative evidence | Failure outcome | Planned verification |
@@ -63,6 +80,12 @@ Identify existing evidence without presenting it as a fresh test.
 Where a design claims improved user or business outcomes, state the baseline,
 measurement and guardrails separately from technical correctness and model quality.
 Keep unmeasured benefits explicit as hypotheses.
+
+Name the deliverable the evaluator will judge (predictions, exports, answers)
+and the rule that it is produced by the method the report describes: when the
+method changes, the deliverable is regenerated, or the report states that it
+was not and why. Reserve the budget for that final run before any experiment
+draws on it.
 
 Link the implementation plan, or include its goals here for a small effort.
 Map consequential choices to ADK/application components, concrete integration

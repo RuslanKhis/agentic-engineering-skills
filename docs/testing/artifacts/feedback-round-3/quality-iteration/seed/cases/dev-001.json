@@ -1,0 +1,58 @@
+{
+  "id": "dev-001",
+  "facts": [
+    {
+      "source_id": "form-1",
+      "text": "Proposal: single storey rear extension to a semi-detached house."
+    },
+    {
+      "source_id": "site-plan-A",
+      "text": "Extension projects 3.0 m from the rear wall; footprint 18 sq m."
+    },
+    {
+      "source_id": "elevation-B",
+      "text": "Walls in red brick to match the existing house; grey concrete roof tiles to match."
+    },
+    {
+      "source_id": "statement-1",
+      "text": "Existing private garden 120 square metres; 102 square metres retained after the extension."
+    }
+  ],
+  "retrieved_policies": [
+    {
+      "policy_id": "H3",
+      "heading": "Policy H3 Residential extensions",
+      "text": "Extensions to dwellings are supported where: (a) the extension is subordinate in scale to the host dwelling; (b) materials match or complement the host dwelling; (c) there is no significant loss of light or outlook to a habitable room of a neighbouring dwelling, and a projection of more than 3.0 m beyond the rear wall of an attached neighbour is presumed to cause such loss; (d) at least 50 per cent of the private garden area is retained."
+    },
+    {
+      "policy_id": "D1",
+      "heading": "Policy D1 Design quality",
+      "text": "Development shall use external materials that complement the host building and the street. Where the materials are not specified on the drawings, a condition requiring samples to be agreed before the relevant works begin will be imposed."
+    }
+  ],
+  "label": {
+    "decision": "approve",
+    "reasons": [
+      {
+        "issue": "scale and neighbour amenity",
+        "policy_ids": [
+          "H3"
+        ],
+        "finding": "The 3.0 m projection (site-plan-A) is within the H3(c) presumption and 102 of 120 square metres of garden is retained, so criteria (a), (c) and (d) are met."
+      },
+      {
+        "issue": "materials",
+        "policy_ids": [
+          "D1"
+        ],
+        "finding": "Brick and tiles to match the host (elevation-B) comply with D1."
+      }
+    ],
+    "conditions": [
+      {
+        "purpose": "design quality",
+        "text": "The external materials shall be those specified on drawing elevation-B and retained as such."
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 ---
 name: adk-operational-guardrails
-description: Implement, adapt or audit invocation limits, token budgets, repeated-tool protection, human approval and application cost controls in Python Google ADK agents. Use for runaway agent loops, cross-turn budget enforcement, risky actions awaiting review, or staged cost shutdown. Do not activate for a single HTTP retry policy, deployment alone, prompt-only editing, or general cloud billing administration.
+description: Implement, adapt or audit invocation limits, token budgets, repeated-tool protection, human approval and application cost controls in Python Google ADK agents. Use for runaway agent loops, cross-turn budget enforcement, risky actions awaiting review, or staged cost shutdown. Do not activate for a single HTTP retry policy, deployment alone, prompt-only editing (adk-agent-evaluation owns decision quality), or general cloud billing administration.
 license: MIT
 metadata:
   author: Ruslan Khissamiyev
@@ -19,12 +19,12 @@ Make the application decide whether another model call, tool action or expensive
 
 1. Read project instructions, dependency declarations and locks, Python constraints, package-manager configuration and existing tests. Inspect import/startup side effects before executing project code or collecting tests. Record the selected interpreter and installed `google-adk`/`google-genai` versions. Keep pins unchanged. Use [compatibility](references/compatibility.md) before copying or adapting an ADK API.
 2. For a repeatable, read-only inventory, run the [inspector](scripts/inspect_project.py) with the target project's Python. From the installed skill directory, run `python scripts/inspect_project.py --project "$PROJECT_ROOT"`, setting `PROJECT_ROOT` to the target directory first. Inspect the reported files yourself; the helper does not prove safety or execute project code. Credentials are unnecessary for this step.
-3. Trace each served path (CLI, web agent, API, worker) to its runner, registered tools, identity source, state stores and error handling. Record which controls actually wrap each path. A wrapper existing in the repository proves nothing about a server that never calls it.
+3. Trace each served path (CLI, web agent, API, worker) to its runner, registered tools, identity source, state stores and error handling. Record which controls actually wrap each path by following the call from the server to the wrapper. For example, a `budget_guard` module that only the CLI imports leaves the web path unguarded.
 4. Establish the units and scope: model calls, tool calls, workflow rounds, wall-clock seconds, tokens per invocation/session/user/tenant, and currency costs are different limits. Determine concurrency, restart requirements, external side effects and whether approval means permission or completed execution.
 
 Inspection is complete when each relevant entry point has an identified enforcement boundary, version baseline and state lifetime. Ask only for unresolved product limits, deployment targets or authority decisions that materially change the work; continue offline work while those answers are pending.
 
-If no project interpreter exists, use an available Python only for read-only inspection and label its package metadata as the inspector environment. A successful scan with no relevant source/configuration files establishes no application coverage; do not install dependencies just to inspect a plan or inventory fixture.
+If no project interpreter exists, use an available Python only for read-only inspection and label its package metadata as the inspector environment. A successful scan with no relevant source/configuration files establishes no application coverage. Inspect a plan or inventory fixture with the available interpreter and install nothing for it.
 
 ## Choose the relevant mode
 
@@ -46,10 +46,10 @@ For a greenfield project, confirm Python/ADK selection before installing depende
 
 1. State a short plan naming the boundary to change, affected files and observable acceptance test before broad edits. Separate local implementation from external operations.
 2. Implement only the selected controls. The [invocation guard asset](assets/invocation_guard.py) is an optional, tested local starter for asynchronous tools. Read runtime guidance before adapting it: it supplies neither ADK orchestration nor distributed budgets, authentication, durable approval or provider idempotency. Compare with existing code before copying and preserve its licence notice.
-3. Bind user/tenant and operation authority outside the model's arguments. Enforce permission and repeat policy before dispatch. A prompt or a `pending_approval` string is not an execution gate.
+3. Bind user/tenant and operation authority outside the model's arguments. Enforce permission and repeat policy before dispatch, in the code that dispatches; a prompt or a `pending_approval` string is the message that gate sends, and the gate itself is the code.
 4. Record spent usage even when output delivery is stopped. Return a bounded, static explanation when a guard fires; spending another model call to explain exhausted allowance defeats the control.
 5. Run the target project's tests using its existing environment and conventions. Select the relevant cases from [validation](references/validation.md), including a real runner with a fake model for ADK boundary changes. Test the served path as well as the helper, and assert actual outgoing configuration and effects. Repeat the invocation to check cumulative state and avoid duplicate files or registrations.
-6. Stop only when the relevant invariants have evidence or are explicitly unverified. Distinguish new offline tests, historical live evidence, mocks and proposed production work using [evidence](references/evidence.md). Do not infer live provider or human-review success from a fixture response.
+6. Stop only when the relevant invariants have evidence or are explicitly unverified. Distinguish new offline tests, historical live evidence, mocks and proposed production work using [evidence](references/evidence.md). Record a fixture response as fixture evidence; live provider and human-review success each need their own observation.
 
 ## Permissions and safe execution
 

@@ -1,0 +1,22 @@
+{
+  "iteration": 6,
+  "date": "2026-10-06",
+  "run": "runs/07-exemplars",
+  "change": "draft_stage.py: exemplars_for(case_id, labelled, n=2) selects two labelled decisions from OTHER cases (leave-one-out), trimmed to reasons and conditions, appended to the request as EXEMPLAR blocks; prompt.txt WHAT YOU RECEIVE gained the EXEMPLARS line (examples of form; this case's facts and policies decide this case). 298 words. Nothing else changed.",
+  "why": "Not a counted category: the schema asks for {purpose, text} conditions but outputs carried strings, which a downstream consumer would reject. The reference's skeleton ends with two exemplars and names them as the means for condition structure and tone. Added last so it could be measured alone.",
+  "evidence": {"request_bytes": {"dev-001": 3948, "dev-002": 4175, "dev-003": 4078, "dev-004": 3977, "dev-005": 4211}, "own_label_leak_check": "for each case, its own label text is absent from its exemplars (checked before the run)", "outputs_vs_run_06": "decision, reasons and facts_used byte-identical for all five; only the conditions' shape changed"},
+  "rows": [
+    {"case": "dev-004", "category": "weak_condition", "detail": "unchanged: 'match' condition where D1 requires samples", "stage": "model", "fix_candidate": "none among the double's documented triggers"},
+    {"case": "dev-005", "category": "irrelevant_finding", "detail": "unchanged: driveway fact attached to H3 scale", "stage": "model", "fix_candidate": "none among the double's documented triggers"}
+  ],
+  "observations_not_counted": [
+    {"case": "all approvals", "note": "conditions are now {purpose, text} objects with purposes matching the labels (design quality, highway safety, parking)"}
+  ],
+  "counts": {"missed_policy": 0, "wrong_outcome": 0, "weak_condition": 1, "wrong_attribution": 0, "irrelevant_finding": 1, "unsupported_fact": 0, "contract_failure": 0},
+  "previous_counts": {"missed_policy": 0, "wrong_outcome": 0, "weak_condition": 1, "wrong_attribution": 0, "irrelevant_finding": 1, "unsupported_fact": 0, "contract_failure": 0},
+  "quality_denominator": 5,
+  "score": {"decisions_matched": "5/5", "mean_policy_recall": 1.00, "schema_failures": 0},
+  "kept": true,
+  "cases_moved": [],
+  "decision": "No category grew; the uncounted shape mismatch is closed. Stop: the two remaining rows are limits of the double with no documented trigger, and the three-iterations-of-churn overfitting signal did not occur (no kept iteration broke another case)."
+}

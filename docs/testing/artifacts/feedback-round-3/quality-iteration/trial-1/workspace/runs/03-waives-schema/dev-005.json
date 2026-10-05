@@ -1,0 +1,8 @@
+{
+  "case": "dev-005",
+  "schema_valid": false,
+  "error": "Unterminated string starting at: line 1 column 80 (char 79)",
+  "raw": "{\"decision\": \"approve\", \"reasons\": [{\"issue\": \"parking\", \"policy_ids\": [\"T2\"], \"fin",
+  "request_bytes": 10574,
+  "retrieval_added": []
+}

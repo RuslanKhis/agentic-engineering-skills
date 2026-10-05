@@ -1,0 +1,24 @@
+{
+  "iteration": 3,
+  "date": "2026-10-06",
+  "run": "runs/04-prompt-restart",
+  "change": "prompt.txt restarted from the quality-iteration skeleton (version 42, 211 words): role and task, the judgment owned, inputs by label, a plain output schema (decision, reasons, conditions, uncertainties). Deliberately no exemplars, no waives entry, and the existing FACTS / SOURCE IDS layout, so that the restart can be measured on its own. Nothing else changed.",
+  "why": "Iteration 2 showed the ~1,590-word prompt leaves no byte headroom (any addition breaks dev-005), which the reference names as the restart signal. Restarting first, alone, lets later single changes be judged without a contract failure confounding them.",
+  "evidence": {"request_bytes": {"dev-001": 2455, "dev-002": 2484, "dev-003": 2553, "dev-004": 2452, "dev-005": 2686}, "outputs_vs_run_02": "all five byte-identical apart from request_bytes"},
+  "rows": [
+    {"case": "dev-003", "category": "weak_condition", "detail": "unchanged: splay imposed despite written waiver", "stage": "schema", "fix_candidate": "waives entry in the output schema (the iteration-2 change, now with headroom)"},
+    {"case": "dev-004", "category": "wrong_attribution", "detail": "unchanged", "stage": "request layout", "fix_candidate": "inline [source-id] fact labels"},
+    {"case": "dev-004", "category": "weak_condition", "detail": "unchanged", "stage": "model", "fix_candidate": "none among the double's documented triggers"},
+    {"case": "dev-005", "category": "irrelevant_finding", "detail": "unchanged", "stage": "model", "fix_candidate": "none among the double's documented triggers"}
+  ],
+  "observations_not_counted": [
+    {"case": "all", "note": "the schema now asks for {purpose, text} conditions but the outputs still carry strings; the double only writes objects when exemplars are present, so the shape is unchanged by the schema text alone"}
+  ],
+  "counts": {"missed_policy": 0, "wrong_outcome": 0, "weak_condition": 2, "wrong_attribution": 1, "irrelevant_finding": 1, "unsupported_fact": 0, "contract_failure": 0},
+  "previous_counts": {"missed_policy": 0, "wrong_outcome": 0, "weak_condition": 2, "wrong_attribution": 1, "irrelevant_finding": 1, "unsupported_fact": 0, "contract_failure": 0},
+  "quality_denominator": 5,
+  "score": {"decisions_matched": "5/5", "mean_policy_recall": 1.00, "schema_failures": 0},
+  "kept": true,
+  "cases_moved": [],
+  "decision": "No category grew and the contract headroom is restored (about 8 KB per request): keep. Iteration 4 re-applies the waives entry, targeting weak_condition (largest, 2) via its movable row dev-003."
+}

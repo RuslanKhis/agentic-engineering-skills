@@ -1,0 +1,45 @@
+{
+  "case": "dev-005",
+  "schema_valid": true,
+  "output": {
+    "decision": "approve",
+    "reasons": [
+      {
+        "issue": "scale and neighbour amenity",
+        "policy_ids": [
+          "H3"
+        ],
+        "finding": "Subordinate scale and amenity acceptable under H3: Driveway 11.0 m long by 5.5 m wide retained, accommodating two cars side by side. (site-plan-J)"
+      },
+      {
+        "issue": "parking",
+        "policy_ids": [
+          "T2"
+        ],
+        "finding": "Parking: Driveway 11.0 m long by 5.5 m wide retained, accommodating two cars side by side. (site-plan-J)"
+      },
+      {
+        "issue": "materials",
+        "policy_ids": [
+          "D1"
+        ],
+        "finding": "Materials: Garage door replaced with a window and brick infill to match the existing house. (elevation-K)"
+      }
+    ],
+    "conditions": [
+      "Two off-street parking spaces shall be retained.",
+      "External materials shall match those specified on the drawings."
+    ],
+    "facts_used": [
+      {
+        "source_id": "site-plan-J",
+        "measurements": [
+          "11.0 m",
+          "5.5 m"
+        ]
+      }
+    ]
+  },
+  "request_bytes": 10097,
+  "retrieval_added": []
+}

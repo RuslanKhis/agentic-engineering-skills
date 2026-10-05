@@ -1,0 +1,44 @@
+{
+  "case": "dev-004",
+  "schema_valid": true,
+  "output": {
+    "decision": "approve",
+    "reasons": [
+      {
+        "issue": "scale and neighbour amenity",
+        "policy_ids": [
+          "H3"
+        ],
+        "finding": "Subordinate scale and amenity acceptable under H3: Rear dormer 4.2 m wide, set 0.5 m below the ridge and 0.5 m in from each side. (roof-plan-G)"
+      },
+      {
+        "issue": "materials",
+        "policy_ids": [
+          "D1"
+        ],
+        "finding": "Materials: No fact bears on this policy."
+      }
+    ],
+    "conditions": [
+      "External materials shall match those specified on the drawings."
+    ],
+    "facts_used": [
+      {
+        "source_id": "roof-plan-G",
+        "measurements": [
+          "4.2 m",
+          "0.5 m",
+          "0.5 m"
+        ]
+      },
+      {
+        "source_id": "roof-plan-G",
+        "measurements": [
+          "7.8 m"
+        ]
+      }
+    ]
+  },
+  "request_bytes": 10340,
+  "retrieval_added": []
+}

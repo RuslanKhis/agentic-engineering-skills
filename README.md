@@ -44,7 +44,9 @@ If you already know the topic, you can call a specialist directly.
 Designing the whole application first? Use **adk-system-designer** to work through
 requirements and trade-offs, then capture the architecture and implementation plan.
 Follow the [design → tickets → implementation walkthrough](#from-design-to-working-tickets)
-to continue with Matt Pocock's skills.
+to continue with Matt Pocock's skills, or the
+[time-boxed, quality-judged build order](#build-order-for-time-boxed-quality-judged-work)
+when an evaluator will judge the output under a time limit.
 
 You do not need the book or its example repository to use the skills. Install
 them in the project you want to work on. They guide your **coding agent**;
@@ -934,7 +936,12 @@ Identify the first goal we can build locally. Design and planning only for now.
 Answer its questions and review the proposals. For example: “Preferences belong
 to individual users; save only when they click Save; forgetting takes effect on
 the next conversation.” The designer translates those answers into storage,
-identity, invocation and testing decisions. **If these documents already exist,
+identity, invocation and testing decisions. Its first questions are the scope
+gate: how much time and money there is, who judges the result and what they
+read, and whether this is an exploration, an assignment, a pilot or a production
+service. Those answers size everything that follows; for work judged on output
+quality under a time limit, use the [time-boxed build order](#build-order-for-time-boxed-quality-judged-work)
+instead of the ticket sequence below. **If these documents already exist,
 start at step 2.** Substitute your actual paths throughout.
 
 **2. Turn the agreed design into a specification**
@@ -1085,6 +1092,43 @@ ownership, session resumption and direct implementation without Matt's collectio
 
 </details>
 
+#### Build order for time-boxed, quality-judged work
+
+*One example · Decisions over a document pack, judged on unseen cases in a few hours.*
+
+The ticket sequence above builds every control before any decision has been
+measured. That is the right order for a production service. It is the wrong
+order for an assignment, a pilot or an exploration that an evaluator will judge
+on output quality: there, the core judgment is measured first and every other
+control is a deferred ticket. Use this sequence instead:
+
+1. **Scope gate.** Time, evaluator, artifact type, and the controls deferred with
+   their reasons, at the top of the design (`adk-system-designer`).
+2. **Qualify the inputs, about an hour.** An ingestion report for the supplied
+   documents (scans, tables, drawings routed to OCR or vision) and a retrieval
+   recall measurement on a small gold set of operative sections
+   (`adk-memory-architecture`).
+3. **Core judgment end to end, the largest share of time.** Draft decisions on
+   the labelled development cases with exemplars, categorise the errors, change
+   one thing per iteration, re-measure (`adk-agent-evaluation`).
+4. **Content safeguards in code.** Consistency checks on every fresh draft,
+   warnings ranked by materiality, documents treated as data
+   (`adk-workflow-design`).
+5. **Deliverable run with the frozen method.** The predictions the evaluator
+   reads come from the method the report describes; the reserved budget is
+   spent here first (`adk-agent-evaluation`, `adk-operational-guardrails`).
+6. **Report within a reader's budget.** One living evaluation summary, raw runs
+   as data, at most three documents named for the reviewer.
+7. **Only then:** interface, revisions, export flows, recovery, hosting roadmap,
+   each as a separate deferred control with its own ticket.
+
+The [time-boxed, quality-judged walkthrough](docs/integrations/quality-judged-build.md)
+runs this order on synthetic documents with real bytes, using the bundled
+ingestion, retrieval, consistency and evaluation helpers, in under an hour of
+agent time. When `to-tickets` is used under this order, the first ready ticket
+is the core judgment path, and no interface ticket precedes the first quality
+measurement.
+
 <p align="center">
   <img src="docs/editorial/section-break.svg" alt="" width="240">
 </p>
@@ -1141,6 +1185,24 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Planning-assignment retrospective · 6 October 2026
+
+A third round of feedback, from a time-boxed assignment judged on unseen
+cases, found that the skills taught how to verify an application but not how
+to make its output good. This round adds the missing half: a scope and
+proportionality gate in the designer, a measured decision-quality loop with
+prompt and exemplar guidance in the evaluation skill, deliverable and
+cross-case rules, a document-ingestion reference with a real-byte PDF fixture,
+a local retrieval-strategy reference with a gold set, in-code content
+safeguards in the workflow skill, coverage columns in stage contracts, a
+reader's budget for evidence, and the
+[time-boxed build order](#build-order-for-time-boxed-quality-judged-work).
+All **13 packages** pass validation and the offline suites pass with the three
+new standard-library helpers. See the
+[change record](docs/testing/feedback-validation-2026-10-06.md), which
+includes two fresh-agent trials of the scope gate and the quality loop; the
+other new scenarios have not yet been run.
 
 ### System designer · 25 September 2026
 

@@ -1,0 +1,47 @@
+{
+  "id": "dev-003",
+  "facts": [
+    {
+      "source_id": "form-3",
+      "text": "Proposal: new sliding gate across the vehicular access onto Mill Road, a classified road with a thirty miles per hour limit."
+    },
+    {
+      "source_id": "site-plan-E",
+      "text": "Gate set back 5.2 m from the carriageway edge; gate slides parallel to the boundary and does not open over the highway."
+    },
+    {
+      "source_id": "elevation-F",
+      "text": "Gate in powder-coated steel, matching the existing boundary railings in height and finish."
+    },
+    {
+      "source_id": "statement-3",
+      "text": "Highway authority letter dated 10 February 2026 confirms in writing that a visibility splay is not required for this access."
+    }
+  ],
+  "retrieved_policies": [
+    {
+      "policy_id": "G4",
+      "heading": "Policy G4 Gates and boundaries",
+      "text": "A gate across an access onto a classified road shall be set back at least 5.0 m from the carriageway edge and shall open inward. Visibility splays shall be provided in accordance with Table 2 of the Design SPD unless the highway authority confirms in writing that a splay is not required for the access."
+    }
+  ],
+  "label": {
+    "decision": "approve",
+    "reasons": [
+      {
+        "issue": "highway safety",
+        "policy_ids": [
+          "G4",
+          "SPD-T2"
+        ],
+        "finding": "The gate is set back 5.2 m (site-plan-E) and the highway authority has confirmed in writing that no splay is required (statement-3), which is the G4 exception and Table 2 Note 1; the Table 2 splay is therefore not imposed."
+      }
+    ],
+    "conditions": [
+      {
+        "purpose": "highway safety",
+        "text": "The gate shall be retained set back at least 5.0 m from the carriageway edge and shall not open outward over the highway."
+      }
+    ]
+  }
+}

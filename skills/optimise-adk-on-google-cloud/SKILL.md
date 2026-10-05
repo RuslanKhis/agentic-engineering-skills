@@ -1,6 +1,6 @@
 ---
 name: optimise-adk-on-google-cloud
-description: Diagnose, implement or review Python Google ADK optimisations on Cloud Run, Agent Runtime and GKE involving model/tool work, history, streaming completion, session handling, startup, concurrency or workload scaling. Use for measured changes or actionable optimisation plans. Do not activate for hosting selection or first deployment alone, general Kubernetes administration, standalone RAG or memory architecture, non-ADK performance work, or unrelated prompt and UI edits.
+description: Diagnose, implement or review Python Google ADK optimisations on Cloud Run, Agent Runtime and GKE involving model/tool work, history, streaming completion, session handling, startup, concurrency or workload scaling. Use for measured changes or actionable optimisation plans. Do not activate for hosting selection or first deployment alone, general Kubernetes administration, standalone RAG or memory architecture, non-ADK performance work, or unrelated prompt and UI edits (adk-agent-evaluation owns decision quality).
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

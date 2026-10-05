@@ -134,9 +134,11 @@ def main(argv: list[str] | None = None) -> int:
         if not run_command(name, command, root):
             return 1
         if name == "adk-workflow-design":
-            if not run_command(name + " review contract", runner + [
-                    "--suite", str(directory), "--pattern", "test_review_contract.py"], root):
-                return 1
+            for label, pattern in (("review contract", "test_review_contract.py"),
+                                   ("draft consistency", "test_draft_consistency.py")):
+                if not run_command(f"{name} {label}", runner + [
+                        "--suite", str(directory), "--pattern", pattern], root):
+                    return 1
     print("\nPackage and offline helper checks passed. Review any optional SDK skips above.")
     print("Live evaluations, cloud behavior and skill-selection quality were not tested.")
     return 0

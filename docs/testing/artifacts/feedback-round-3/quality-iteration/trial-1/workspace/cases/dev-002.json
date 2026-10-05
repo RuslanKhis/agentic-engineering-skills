@@ -1,0 +1,41 @@
+{
+  "id": "dev-002",
+  "facts": [
+    {
+      "source_id": "form-2",
+      "text": "Proposal: two-storey side extension to a semi-detached house."
+    },
+    {
+      "source_id": "site-plan-C",
+      "text": "The extension projects 4.5 m beyond the rear wall of the attached neighbour at number 12."
+    },
+    {
+      "source_id": "elevation-D",
+      "text": "First-floor side window faces the rear garden and kitchen window of number 12 at a distance of about two metres."
+    },
+    {
+      "source_id": "statement-2",
+      "text": "The applicant states the extension is needed for a growing family."
+    }
+  ],
+  "retrieved_policies": [
+    {
+      "policy_id": "D1",
+      "heading": "Policy D1 Design quality",
+      "text": "Development shall use external materials that complement the host building and the street. Where the materials are not specified on the drawings, a condition requiring samples to be agreed before the relevant works begin will be imposed."
+    }
+  ],
+  "label": {
+    "decision": "refuse",
+    "reasons": [
+      {
+        "issue": "neighbour amenity",
+        "policy_ids": [
+          "H3"
+        ],
+        "finding": "A 4.5 m projection beyond the attached neighbour's rear wall (site-plan-C) and a facing first-floor window about two metres away (elevation-D) cause significant loss of light and outlook to a habitable room, contrary to H3(c)."
+      }
+    ],
+    "conditions": []
+  }
+}

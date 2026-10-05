@@ -1,0 +1,64 @@
+{
+  "id": "dev-005",
+  "facts": [
+    {
+      "source_id": "form-5",
+      "text": "Proposal: conversion of the integral garage to a bedroom, giving a four-bedroom house."
+    },
+    {
+      "source_id": "site-plan-J",
+      "text": "Driveway 11.0 m long by 5.5 m wide retained, accommodating two cars side by side."
+    },
+    {
+      "source_id": "elevation-K",
+      "text": "Garage door replaced with a window and brick infill to match the existing house."
+    },
+    {
+      "source_id": "statement-5",
+      "text": "The applicant confirms the driveway will remain available for parking."
+    }
+  ],
+  "retrieved_policies": [
+    {
+      "policy_id": "H3",
+      "heading": "Policy H3 Residential extensions",
+      "text": "Extensions to dwellings are supported where: (a) the extension is subordinate in scale to the host dwelling; (b) materials match or complement the host dwelling; (c) there is no significant loss of light or outlook to a habitable room of a neighbouring dwelling, and a projection of more than 3.0 m beyond the rear wall of an attached neighbour is presumed to cause such loss; (d) at least 50 per cent of the private garden area is retained."
+    },
+    {
+      "policy_id": "T2",
+      "heading": "Policy T2 Parking",
+      "text": "Dwellings with three or more bedrooms shall retain at least two off-street parking spaces. Where a garage is converted or lost, equivalent replacement provision shall be shown and retained."
+    },
+    {
+      "policy_id": "D1",
+      "heading": "Policy D1 Design quality",
+      "text": "Development shall use external materials that complement the host building and the street. Where the materials are not specified on the drawings, a condition requiring samples to be agreed before the relevant works begin will be imposed."
+    }
+  ],
+  "label": {
+    "decision": "approve",
+    "reasons": [
+      {
+        "issue": "parking",
+        "policy_ids": [
+          "T2"
+        ],
+        "finding": "Two spaces remain on the 11.0 m by 5.5 m driveway (site-plan-J) for a four-bedroom house, so T2 is met provided they are retained."
+      },
+      {
+        "issue": "materials",
+        "policy_ids": [
+          "D1",
+          "H3"
+        ],
+        "finding": "Brick infill to match (elevation-K) complies with D1 and H3(b)."
+      }
+    ],
+    "conditions": [
+      {
+        "purpose": "parking",
+        "text": "The two parking spaces on the driveway shown on site-plan-J shall be retained and kept available for parking."
+      }
+    ]
+  }
+}

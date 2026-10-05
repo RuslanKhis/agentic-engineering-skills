@@ -2,9 +2,9 @@
 
 Read before resuming an application stage from saved producer output. Define
 the contract in the target application's existing stores and interfaces; this
-reference is a design and acceptance procedure, not a bundled recovery service.
-Framework checkpoints and populated state keys alone grant neither reuse nor
-exactly-once effects.
+reference is a design and acceptance procedure for those stores. Reuse and
+exactly-once effects come from the manifest and guards below, on top of
+framework checkpoints and state keys.
 
 ## Retain a complete dependency identity
 
@@ -20,9 +20,18 @@ For each reusable stage, retain an immutable manifest that resolves:
 | Producer implementation | Relevant code/dependency versions and runtime manifest, including new, uncommitted or ignored files that affect execution |
 | Review dependencies | Exact draft revision/content, frame, producing invocation and full image/visual inputs or verified references |
 
-Store hashes alongside retrievable content or verified references. A hash does
-not authenticate the producer or owner: resolve evidence under trusted
-caller/session authority and retain origin/attempt identities separately. A
+A manifest for a review checkpoint looks like this:
+
+```json
+{"stage": "review", "parent_attempt": "a17", "draft_revision": "r4",
+ "frame_sha256": "…", "instructions_sha256": "…", "schema_sha256": "…",
+ "model": {"route": "gemini-2.5-pro", "effort": "high"},
+ "producer": {"commit": "a1b2c3", "untracked": ["checkpoint_controls/repair.py"]}}
+```
+
+Store hashes alongside retrievable content or verified references. Authentication comes from the caller/session check, with the hash confirming
+content: resolve evidence under trusted caller/session authority and retain
+origin/attempt identities on their own. A
 sanitized public log can point to authorized private evidence; it need not expose
 complete inputs. Missing evidence leaves reuse unqualified.
 
@@ -37,7 +46,7 @@ policy before effects even when inference is reusable.
 
 Locate the earliest defective producer across retrieval, observation, reconciliation,
 drafting, review and evaluator before selecting a restart stage. A missing policy
-span in retrieval cannot be recovered by tuning a reviewer that never receives it.
+span in retrieval is recovered at retrieval; the reviewer sees it after that.
 Source/parser or representation changes invalidate the stages that consume their
 changed outputs, even when their prompts and models are unchanged.
 
@@ -45,20 +54,27 @@ Represent which stage consumes each artifact. A changed dependency invalidates
 its consumer and every descendant that depends on it, including saved reviews
 and exports. Independent unaffected branches may remain qualified. A warning
 change to a draft still changes a review's exact input and invalidates that review.
-Use an atomic version check or equivalent fencing at commit so a concurrent
-change cannot publish a review validated against the previous draft.
+For example, a warning text change in draft r4 produces r5; the review stored
+for r4 is invalidated, retrieval and reconciliation stay qualified, and the
+continuation record links r5's review to attempt a17. Use an atomic version
+check or equivalent fencing at commit so a review publishes only against the
+draft revision it validated.
 
 Keep the failed original, its response and warnings immutable. Append a separate
 continuation record with parent attempt/checkpoint IDs, reason for continuation,
 qualified and invalidated dependencies, tested snapshot, authority/envelope
-reference and new attempt identities. Diagnostic counterfactuals stay explicitly
-non-authoritative; edited or fabricated responses cannot become producer evidence.
+reference and new attempt identities. Producer evidence comes from authoritative
+responses alone; diagnostic counterfactuals and edited responses stay in the
+diagnostic record.
 
 Deduplicate logical operation identity plus its bound inputs/authority before
 dispatch. Include failed, interrupted, pending and no-response attempts in the
-lookup, not only successes. Reconnect/reconcile an existing accepted operation
+lookup as well as successes. For example, the same case submitted twice after a
+lost response resolves to the one operation ID, and the second attempt
+reconnects to it with zero new sends. Reconnect/reconcile an existing accepted operation
 where supported. A permitted new attempt has a separately recorded identity and
-consumes continuation quota; it does not erase the prior call or unknown cost.
+consumes continuation quota, and the prior call and its unknown cost stay on
+the ledger.
 Without an authorized reconciliation or safe retry contract, leave the outcome
 uncertain and stop rather than dispatching a duplicate. Use
 [model-call controls](model-call-controls.md) when transport caps are required.
@@ -67,15 +83,16 @@ uncertain and stop rather than dispatching a duplicate. Use
 
 Drive realistic complete outputs through the actual Runner, serialization,
 configured checkpoint write, reopen and producer-reuse path with controlled model
-responses. Measure the whole stored envelope in bytes, not just native fields or
+responses. Measure the whole stored envelope in bytes, beyond native fields or
 tokens. Exercise just below, at and above the storage limit, with metadata,
 warnings and visual inputs represented. Verify failure before the next paid stage.
-An in-memory alias or tiny fixture does not establish durable storage fit.
+An in-memory alias or tiny fixture establishes fit for that fixture; durable
+fit is measured at the configured store.
 
 Where supported, remove redundant copies through lossless compaction or verified,
 access-controlled references to complete private inputs. Prove round-trip evidence
 and warning preservation and safe failure on missing, changed or unauthorized
-references. Truncation is not successful compaction. Reopen via the configured
+references. Compaction is lossless; a truncated envelope fails the round-trip check. Reopen via the configured
 service; claims of process-restart durability require an actual restart.
 
 ## Observable acceptance cases

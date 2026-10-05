@@ -1,0 +1,23 @@
+{
+  "iteration": 4,
+  "date": "2026-10-06",
+  "run": "runs/05-waives-schema",
+  "change": "prompt.txt (version 42 skeleton): output schema gained a 'waives' list (requirement, policy_ids, source_id) with one positive instruction to record a written highway-authority confirmation there and rely on it instead of imposing the condition. 262 words. Nothing else changed.",
+  "why": "weak_condition was the largest category (2); dev-003 was the movable row. Same change as the reverted iteration 2, now with byte headroom.",
+  "evidence": {"request_bytes": {"dev-001": 2806, "dev-002": 2835, "dev-003": 2904, "dev-004": 2803, "dev-005": 3037}, "outputs_vs_run_04": "dev-001/002/004/005 byte-identical apart from request_bytes"},
+  "rows": [
+    {"case": "dev-004", "category": "wrong_attribution", "detail": "unchanged: facts_used attributes 7.8 m (elevation-H) to roof-plan-G", "stage": "request layout", "fix_candidate": "inline [source-id] fact labels in build_request"},
+    {"case": "dev-004", "category": "weak_condition", "detail": "unchanged: 'match' condition where D1 requires samples", "stage": "model", "fix_candidate": "none among the double's documented triggers"},
+    {"case": "dev-005", "category": "irrelevant_finding", "detail": "unchanged: driveway fact attached to H3 scale", "stage": "model", "fix_candidate": "none among the double's documented triggers"}
+  ],
+  "observations_not_counted": [
+    {"case": "dev-003", "note": "finding 'Setback acceptable and splay waived in writing' (site-plan-E); condition 'gate shall open inward and remain set back at least 5.0 m'; no splay. Matches the label's reason and condition in substance. The output does not echo a waives entry because the double does not emit one; the decision is what the label measures"}
+  ],
+  "counts": {"missed_policy": 0, "wrong_outcome": 0, "weak_condition": 1, "wrong_attribution": 1, "irrelevant_finding": 1, "unsupported_fact": 0, "contract_failure": 0},
+  "previous_counts": {"missed_policy": 0, "wrong_outcome": 0, "weak_condition": 2, "wrong_attribution": 1, "irrelevant_finding": 1, "unsupported_fact": 0, "contract_failure": 0},
+  "quality_denominator": 5,
+  "score": {"decisions_matched": "5/5", "mean_policy_recall": 1.00, "schema_failures": 0},
+  "kept": true,
+  "cases_moved": ["dev-003 (weak_condition -> none)"],
+  "decision": "Targeted category 2 -> 1, nothing grew: keep. Remaining categories are tied at 1; the only row with a fix among the double's documented behaviour is dev-004 wrong_attribution, so iteration 5 changes the request layout (inline source IDs)."
+}

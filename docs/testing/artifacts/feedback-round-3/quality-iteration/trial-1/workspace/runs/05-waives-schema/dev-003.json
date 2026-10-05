@@ -1,0 +1,38 @@
+{
+  "case": "dev-003",
+  "schema_valid": true,
+  "output": {
+    "decision": "approve",
+    "reasons": [
+      {
+        "issue": "highway safety",
+        "policy_ids": [
+          "G4"
+        ],
+        "finding": "Setback acceptable and splay waived in writing: Gate set back 5.2 m from the carriageway edge; gate slides parallel to the boundary and does not open over the highway. (site-plan-E)"
+      },
+      {
+        "issue": "visibility splay",
+        "policy_ids": [
+          "SPD-T2"
+        ],
+        "finding": "Table 2 applies to a classified road: Proposal: new sliding gate across the vehicular access onto Mill Road, a classified road with a thirty miles per hour limit. (form-3)"
+      }
+    ],
+    "conditions": [
+      "The gate shall open inward and remain set back at least 5.0 m from the carriageway edge."
+    ],
+    "facts_used": [
+      {
+        "source_id": "site-plan-E",
+        "measurements": [
+          "5.2 m"
+        ]
+      }
+    ]
+  },
+  "request_bytes": 2904,
+  "retrieval_added": [
+    "SPD-T2"
+  ]
+}

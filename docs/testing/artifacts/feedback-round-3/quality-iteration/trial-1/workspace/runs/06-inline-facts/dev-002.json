@@ -1,0 +1,36 @@
+{
+  "case": "dev-002",
+  "schema_valid": true,
+  "output": {
+    "decision": "refuse",
+    "reasons": [
+      {
+        "issue": "materials",
+        "policy_ids": [
+          "D1"
+        ],
+        "finding": "Materials: No fact bears on this policy."
+      },
+      {
+        "issue": "scale and neighbour amenity",
+        "policy_ids": [
+          "H3"
+        ],
+        "finding": "Projection beyond the attached neighbour exceeds 3.0 m, contrary to H3(c): The extension projects 4.5 m beyond the rear wall of the attached neighbour at number 12. (site-plan-C)"
+      }
+    ],
+    "conditions": [],
+    "facts_used": [
+      {
+        "source_id": "site-plan-C",
+        "measurements": [
+          "4.5 m"
+        ]
+      }
+    ]
+  },
+  "request_bytes": 2840,
+  "retrieval_added": [
+    "H3"
+  ]
+}

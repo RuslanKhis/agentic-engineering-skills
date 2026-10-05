@@ -1,0 +1,36 @@
+{
+  "case": "dev-001",
+  "schema_valid": true,
+  "output": {
+    "decision": "approve",
+    "reasons": [
+      {
+        "issue": "scale and neighbour amenity",
+        "policy_ids": [
+          "H3"
+        ],
+        "finding": "Subordinate scale and amenity acceptable under H3: Extension projects 3.0 m from the rear wall; footprint 18 sq m. (site-plan-A)"
+      },
+      {
+        "issue": "materials",
+        "policy_ids": [
+          "D1"
+        ],
+        "finding": "Materials: Walls in red brick to match the existing house; grey concrete roof tiles to match. (elevation-B)"
+      }
+    ],
+    "conditions": [
+      "External materials shall match those specified on the drawings."
+    ],
+    "facts_used": [
+      {
+        "source_id": "site-plan-A",
+        "measurements": [
+          "3.0 m",
+          "18 sq m"
+        ]
+      }
+    ]
+  },
+  "request_bytes": 9866
+}

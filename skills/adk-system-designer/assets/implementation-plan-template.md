@@ -49,6 +49,19 @@ goals coarse when an unresolved decision could change their scope.
 Repeat for currently actionable goals. Discovery goals state the question,
 bounded investigation, expected decision/evidence and what it unblocks.
 
+## What the reviewer reads
+
+At most three documents, named, that establish method, results and limits:
+
+| Document | Establishes |
+| --- | --- |
+| <report or design> | Method and accepted decisions |
+| <living evaluation summary> | Latest result per case, linked to raw run records |
+| <this plan or the tracker> | Remaining limits and deferred controls |
+
+Raw run records, ledgers and checkpoint logs are data under a data directory;
+they are linked from the summary, never read as documents.
+
 ## Open decisions for further planning
 
 | Decision / question | Known facts and alternatives | Evidence or user decision needed | Blocks which goals? |

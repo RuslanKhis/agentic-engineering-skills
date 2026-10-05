@@ -1,0 +1,31 @@
+{
+  "iteration": 1,
+  "date": "2026-10-06",
+  "run": "runs/02-retrieval",
+  "change": "draft_stage.py: added retrieve(case), a deterministic retrieval repair over policies.json run before build_request. Rule 1: a policy named inside an already-retrieved policy's text is added (G4 names 'Table 2 of the Design SPD' -> SPD-T2). Rule 2: a policy sharing >= 2 content terms with the case facts is added. Output records retrieval_added. The double (model, _facts) and the prompt were not touched.",
+  "why": "missed_policy was the largest category (2 rows) and the only wrong_outcome was caused by one of them. Both misses are retrieval-stage: the operative policy existed in policies.json but was not supplied to the model.",
+  "evidence": {
+    "retrieval_added": {"dev-001": [], "dev-002": ["H3"], "dev-003": ["SPD-T2"], "dev-004": [], "dev-005": []},
+    "term_overlap_counts": {"dev-001": {"H3": 7, "D1": 0, "T2": 1, "G4": 0, "SPD-T2": 0}, "dev-002": {"H3": 7, "D1": 0, "T2": 0, "G4": 0, "SPD-T2": 0}, "dev-003": {"H3": 0, "D1": 0, "T2": 0, "G4": 16, "SPD-T2": 12}, "dev-004": {"H3": 3, "D1": 0, "T2": 0, "G4": 0, "SPD-T2": 0}, "dev-005": {"H3": 2, "D1": 0, "T2": 4, "G4": 1, "SPD-T2": 1}},
+    "cross_reference_hits": {"dev-003": "G4 -> SPD-T2"},
+    "request_bytes": {"dev-001": 9866, "dev-002": 9895, "dev-003": 9964, "dev-004": 9863, "dev-005": 10097}
+  },
+  "rows": [
+    {"case": "dev-003", "category": "weak_condition", "detail": "unchanged: splay condition imposed although statement-3 records a written waiver; G4 and SPD-T2 Note 1 both allow the exception", "stage": "prompt/schema", "fix_candidate": "give the output a 'waives' entry (requirement, policy_ids, source_id) so the decision can record and rely on the written confirmation"},
+    {"case": "dev-004", "category": "wrong_attribution", "detail": "unchanged: 7.8 m attributed to roof-plan-G", "stage": "request layout", "fix_candidate": "inline [source-id] fact labels"},
+    {"case": "dev-004", "category": "weak_condition", "detail": "unchanged: 'match' condition where D1 requires samples", "stage": "model", "fix_candidate": "none among the double's documented triggers"},
+    {"case": "dev-005", "category": "irrelevant_finding", "detail": "unchanged: driveway fact attached to H3 scale", "stage": "model", "fix_candidate": "none among the double's documented triggers"}
+  ],
+  "observations_not_counted": [
+    {"case": "dev-002", "note": "now refuses with an H3(c) finding on the 4.5 m projection (site-plan-C) and no conditions, matching the label. It also carries a D1 reason with 'No fact bears on this policy'; the label has no D1 reason. The reason states no unsupported fact, so not counted; noted as surplus"},
+    {"case": "dev-003", "note": "SPD-T2 finding cites the classified-road fact (form-3); decision approve matches"},
+    {"case": "D1 retrieval", "note": "D1 overlaps 0 terms with every case; the term rule could not retrieve D1 on its own. D1 is supplied by the upstream retrieval in all five cases, so this is untested, not failing"}
+  ],
+  "counts": {"missed_policy": 0, "wrong_outcome": 0, "weak_condition": 2, "wrong_attribution": 1, "irrelevant_finding": 1, "unsupported_fact": 0, "contract_failure": 0},
+  "previous_counts": {"missed_policy": 2, "wrong_outcome": 1, "weak_condition": 2, "wrong_attribution": 1, "irrelevant_finding": 1, "unsupported_fact": 0, "contract_failure": 0},
+  "quality_denominator": 5,
+  "score": {"decisions_matched": "5/5", "mean_policy_recall": 1.00, "schema_failures": 0},
+  "kept": true,
+  "cases_moved": ["dev-002 (missed_policy, wrong_outcome -> none)", "dev-003 (missed_policy -> none)"],
+  "decision": "Targeted category went 2 -> 0 and no other category grew: keep. Largest remaining category is weak_condition (2); the movable row is dev-003, so iteration 2 is the output schema (a place to record a written waiver)."
+}

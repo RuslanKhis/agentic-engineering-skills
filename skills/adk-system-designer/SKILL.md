@@ -49,7 +49,20 @@ turn, with concrete options when useful. Use the host's question interface if
 available; ordinary chat works too.
 Let the user answer before treating a material product choice as settled.
 
-Work from the journey towards the constraints, as needed:
+Open with the scope gate, three questions whose answers set the size of
+everything that follows:
+
+- How much time and money is there for this work?
+- Who judges the result, and what will they read: predictions, a report, a
+  demo, a running service?
+- What kind of artifact is this: an exploration, an assignment, a pilot or a
+  production service?
+
+Record the answers at the top of the design document, with the controls the
+design chooses to defer. Size the documents to the time budget as well: a
+four-hour assignment gets a design and plan a reviewer reads in ten minutes,
+with the template's sections kept only where they carry a decision. Then work
+from the journey towards the constraints, as needed:
 
 - What may the system read, decide and change, and for whom?
 - What would a correct completed result be? Which outcomes are unacceptable?
@@ -57,11 +70,17 @@ Work from the journey towards the constraints, as needed:
 - What already exists: login, authoritative records, frontend, storage, platform?
 - What traffic, latency, cost, retention, availability and recovery targets matter?
 
+When the artifact is judged on output quality, apply the proportionality rule
+in [design decisions](references/design-decisions.md#size-the-first-slice-to-the-judge):
+the first slice is the core judgment end to end on real inputs, measured,
+with only the controls that keep spend safe.
+
 Avoid turning these into an upfront questionnaire. Infer repository facts by
 inspection. Offer a reasoned default for reversible choices. When the user does
 not know a target, show how it affects the design and propose a labelled assumption
-or a measurement task. Never invent a numeric requirement, provider guarantee or
-user approval. If asked for a one-pass draft, proceed with explicit assumptions
+or a measurement task. A numeric requirement, provider guarantee or user
+approval enters the design only from the user, a cited source or a labelled
+assumption. If asked for a one-pass draft, proceed with explicit assumptions
 and open decisions instead of requiring an interview.
 
 Explain each consequential recommendation through:
@@ -85,7 +104,7 @@ without repeating the whole design. A user correction can supersede an earlier
 proposal; update its dependent contracts and checks as well. Compare only credible
 alternatives, including ordinary code or one agent when sufficient. Additional
 agents need a distinct responsibility, context, tool set or evaluation reason;
-names alone do not create security boundaries.
+a security boundary comes from separate credentials, tools and state.
 
 ## Turn requirements into contracts
 
@@ -104,8 +123,10 @@ memory stores, agents or infrastructure. Capture the cross-boundary consequences
 - Model proposals, user confirmation and backend authorization are separate.
 - Partial output, persisted conversation state and external effects have separate
   completion rules. A timeout or cancellation can leave a write uncertain.
-- A stored conversation does not by itself recover interrupted work.
-- Screening after storage, tool execution or streaming cannot undo that exposure.
+- Recovering interrupted work needs a durable operation record beyond the
+  stored conversation.
+- Screening happens before storage, tool execution and streaming, because
+  each of those is already an exposure.
 - Model/tool fan-out and nested retries consume the same application allowance.
 
 Read [runtime and delivery](references/runtime-and-delivery.md) when requirements
@@ -126,7 +147,7 @@ limits and prices before relying on them; cite sources and dates in the design.
 If lookup or credentials are unavailable, keep those decisions provisional and
 name the exact verification needed. Architecture planning can proceed without
 provisioning or installing an SDK. Examples from the source material are teaching
-evidence, not a guarantee for this application's versions or deployment.
+evidence; this application's versions and deployment supply their own.
 
 ## Make the recommendation implementable
 
@@ -135,14 +156,16 @@ block or ordinary application component, its concrete integration point, the GCP
 responsibility if needed, and the primary specialist that can implement it. Read
 [implementation handoff](references/implementation-handoff.md) for the mapping
 and plan contract. Distinguish inspected paths and supported APIs from proposed
-modules and version checks still needed. Explain where enforcement lives; a
-service name or list of skills alone is not an implementation route.
+modules and version checks still needed. Explain where enforcement lives. For
+example, "tenant scope is derived from the verified OIDC subject in the request
+middleware and passed to the retrieval tool as trusted context" is a route; a
+service name or a list of skills is a pointer to one.
 
 Bring this detail into the conversation as choices become clear. Use a small
 interface sketch or pseudocode only when it resolves an integration question;
 keep unverified code labelled and preserve a design-only request. A feasibility
-gap becomes a bounded investigation with an expected decision, not a fictional
-working integration.
+gap becomes a bounded investigation with an expected decision and a stopping
+condition.
 
 ## Review the design through requests and failures
 
@@ -151,7 +174,7 @@ design ready for implementation. Trace a successful request and applicable failu
 paths across the actual components. Explain the visible result, retained state,
 possible external effects, permitted next action and recovery owner.
 
-Revise mechanisms that cannot enforce an invariant. Record unresolved decisions
+Revise a mechanism until it enforces its invariant. Record unresolved decisions
 with their impact and who or what can settle them. A significant unknown can
 block a particular implementation step while independent work remains possible.
 Present the trade-offs to the user; a diagram or an unanswered proposal does not
@@ -172,7 +195,8 @@ verification plans, and unresolved decisions. Mark the document **draft** while
 material assumptions remain unsettled; distinguish user-accepted decisions from
 your recommendations. Design review is complete when each critical invariant has
 an owner/mechanism/test or an explicit unresolved gap, and the user can assess the
-next step. It is not evidence that the system has been implemented or tested.
+next step. Implementation and test evidence come later, from the goals' own
+recorded runs.
 
 Finish with dependency-ordered goals for useful end-to-end behavior. Each needs
 a stable ID, linked requirement/decision, bounded changes and integration points,

@@ -1,0 +1,25 @@
+{
+  "kind": "synthetic_policy_set",
+  "policies": {
+    "H3": {
+      "heading": "Policy H3 Residential extensions",
+      "text": "Extensions to dwellings are supported where: (a) the extension is subordinate in scale to the host dwelling; (b) materials match or complement the host dwelling; (c) there is no significant loss of light or outlook to a habitable room of a neighbouring dwelling, and a projection of more than 3.0 m beyond the rear wall of an attached neighbour is presumed to cause such loss; (d) at least 50 per cent of the private garden area is retained."
+    },
+    "D1": {
+      "heading": "Policy D1 Design quality",
+      "text": "Development shall use external materials that complement the host building and the street. Where the materials are not specified on the drawings, a condition requiring samples to be agreed before the relevant works begin will be imposed."
+    },
+    "T2": {
+      "heading": "Policy T2 Parking",
+      "text": "Dwellings with three or more bedrooms shall retain at least two off-street parking spaces. Where a garage is converted or lost, equivalent replacement provision shall be shown and retained."
+    },
+    "G4": {
+      "heading": "Policy G4 Gates and boundaries",
+      "text": "A gate across an access onto a classified road shall be set back at least 5.0 m from the carriageway edge and shall open inward. Visibility splays shall be provided in accordance with Table 2 of the Design SPD unless the highway authority confirms in writing that a splay is not required for the access."
+    },
+    "SPD-T2": {
+      "heading": "Design SPD Table 2 Minimum visibility splays",
+      "text": "Table 2 Minimum visibility splays. Classified road, 30 mph: 2.4 m by 43 m. Classified road, 40 mph: 2.4 m by 90 m. Unclassified cul-de-sac: 2.0 m by 25 m. Note 1: the highway authority may confirm in writing that no splay is required where the gate is set back at least 5.0 m and opens inward."
+    }
+  }
+}

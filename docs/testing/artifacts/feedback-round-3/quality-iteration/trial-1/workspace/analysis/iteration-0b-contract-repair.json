@@ -1,0 +1,27 @@
+{
+  "iteration": "0b",
+  "date": "2026-10-06",
+  "run": "runs/01-contract-repair",
+  "change": "prompt.txt: removed Section 10 (verbatim repetition of Section 1 prohibitions), 497 bytes. No other edit.",
+  "why": "Contract failures are repaired before any decision-quality change is judged. dev-005 was 94 bytes over REQUEST_BYTE_LIMIT; Section 10 was the only content in the prompt that duplicated another section word for word, so removing it is the smallest change that touches nothing the double keys on.",
+  "rows": [
+    {"case": "dev-002", "category": "missed_policy", "detail": "unchanged from baseline", "stage": "retrieval", "fix_candidate": "deterministic applicability lookup from policies.json"},
+    {"case": "dev-002", "category": "wrong_outcome", "detail": "unchanged from baseline", "stage": "retrieval", "fix_candidate": "moves with the missed_policy row"},
+    {"case": "dev-003", "category": "missed_policy", "detail": "unchanged from baseline (SPD-T2)", "stage": "retrieval", "fix_candidate": "deterministic lookup of policy numbers/tables cited in a retrieved policy's text"},
+    {"case": "dev-003", "category": "weak_condition", "detail": "unchanged from baseline (splay imposed despite written waiver)", "stage": "prompt/schema", "fix_candidate": "schema field for a written waiver"},
+    {"case": "dev-004", "category": "wrong_attribution", "detail": "unchanged from baseline (7.8 m)", "stage": "request layout", "fix_candidate": "inline [source-id] fact labels"},
+    {"case": "dev-004", "category": "weak_condition", "detail": "unchanged from baseline (match vs samples)", "stage": "model", "fix_candidate": "none among the double's documented triggers"},
+    {"case": "dev-005", "category": "irrelevant_finding", "detail": "H3 'scale' finding cites the driveway dimensions (site-plan-J), which bear on T2 not on H3(a); the label applies H3(b) to the brick infill. Domain category added: a real fact attached to a criterion it does not bear on", "stage": "model", "fix_candidate": "none among the double's documented triggers (it attaches the first measured fact to H3); recorded as a limit of the double"}
+  ],
+  "observations_not_counted": [
+    {"case": "dev-005", "note": "decision approve and T2, D1, H3 all cited; recall 1.0"},
+    {"case": "dev-005", "note": "two conditions where the label has one; the extra 'materials shall match' condition follows the same practice the dev-001 label uses, so not counted"},
+    {"case": "dev-001..004", "note": "outputs byte-identical to baseline apart from request_bytes"}
+  ],
+  "counts": {"missed_policy": 2, "wrong_outcome": 1, "weak_condition": 2, "wrong_attribution": 1, "irrelevant_finding": 1, "unsupported_fact": 0, "contract_failure": 0},
+  "quality_denominator": 5,
+  "score": {"decisions_matched": "4/5", "mean_policy_recall": 0.70, "schema_failures": 0},
+  "kept": true,
+  "cases_moved": ["dev-005 (contract_failure -> none; now in the quality denominator)"],
+  "decision": "Largest decision-quality category remains missed_policy (2 rows + downstream wrong_outcome). Iteration 1 = retrieval."
+}

@@ -1,0 +1,28 @@
+{
+  "case": "dev-003",
+  "schema_valid": true,
+  "output": {
+    "decision": "approve",
+    "reasons": [
+      {
+        "issue": "highway safety",
+        "policy_ids": [
+          "G4"
+        ],
+        "finding": "Setback acceptable: Gate set back 5.2 m from the carriageway edge; gate slides parallel to the boundary and does not open over the highway. (site-plan-E)"
+      }
+    ],
+    "conditions": [
+      "A visibility splay of 2.4 m by 43 m shall be provided before the gate is first used."
+    ],
+    "facts_used": [
+      {
+        "source_id": "site-plan-E",
+        "measurements": [
+          "5.2 m"
+        ]
+      }
+    ]
+  },
+  "request_bytes": 10113
+}

@@ -191,6 +191,41 @@
       "rationale": "A sign-in UI change does not alter the tool authentication or credential boundary."
     },
     {
+      "id": "evaluation-quality-iteration-positive",
+      "skill": "adk-agent-evaluation",
+      "prompt": "Our ADK assistant's decisions on the labelled development cases are often wrong. Work out which kinds of error dominate, improve the prompt and exemplars, and re-measure. Keep the holdout untouched.",
+      "should_trigger": true,
+      "rationale": "Wrong decisions, error analysis and prompt or exemplar design are the evaluation skill's quality-iteration branch."
+    },
+    {
+      "id": "memory-ingestion-positive",
+      "skill": "adk-memory-architecture",
+      "prompt": "Before our ADK agent reads this planning document pack, work out which pages are scans, tables or drawings and route them to OCR or a vision pass. Produce a per-page ingestion report.",
+      "should_trigger": true,
+      "rationale": "Document ingestion qualification before retrieval belongs to the memory and retrieval specialist."
+    },
+    {
+      "id": "memory-prompt-only-near-miss",
+      "skill": "adk-memory-architecture",
+      "prompt": "Rewrite the drafting prompt so the agent's decisions cite policies more consistently. Retrieval and storage already work; change the prompt and exemplars only.",
+      "should_trigger": false,
+      "rationale": "Prompt-only editing for decision quality is the evaluation skill's quality-iteration work, not memory architecture."
+    },
+    {
+      "id": "workflow-content-safeguards-positive",
+      "skill": "adk-workflow-design",
+      "prompt": "Our drafting stage sometimes imposes a condition that its own reason says is waived, and it floods the officer with repeated warnings. Add in-code consistency checks and warning triage to the workflow.",
+      "should_trigger": true,
+      "rationale": "Consistency checks between stage outputs and warning triage are workflow contract repairs."
+    },
+    {
+      "id": "system-designer-scope-gate-positive",
+      "skill": "adk-system-designer",
+      "prompt": "I have four hours to build an ADK assistant that drafts decisions over a document pack, judged on five unseen cases and a report. Help me decide what to build first and what to leave out.",
+      "should_trigger": true,
+      "rationale": "Scoping a time-boxed, quality-judged build is the designer's scope gate and proportionality rule."
+    },
+    {
       "id": "sql-positive",
       "skill": "adk-sql-agent-engineering",
       "prompt": "Build an ADK analytics assistant that answers revenue questions using reviewed query templates. Retrieve only the relevant schema and keep tenant scope and read-only query execution under application control.",

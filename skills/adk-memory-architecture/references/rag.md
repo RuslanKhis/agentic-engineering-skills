@@ -1,14 +1,14 @@
 # Govern approved reference knowledge with RAG
 
-Use this reference when designing, reviewing or implementing retrieval of approved documents. Use semantic memory for remembered preferences and a scoped structured-data tool for owned records; neither establishes the current approved policy.
+Use this reference when designing, reviewing or implementing retrieval of approved documents. Use semantic memory for remembered preferences and a scoped structured-data tool for owned records; the approved release is the only source of current policy.
 
 ## 1. Choose the retrieval boundary
 
-- Establish the requested mode: in a review, trace and report existing behaviour; in an implementation, change the requested boundary; in validation, execute only the authorised checks. A design request does not authorise corpus creation or promotion.
+- Establish the requested mode: in a review, trace and report existing behaviour; in an implementation, change the requested boundary; in validation, execute only the authorised checks. A design request covers the design; corpus creation or promotion needs its own authorisation.
 - Inspect the target's installed ADK, model provider, retrieval SDK, root-agent construction, tools and content-protection hooks. Retain its supported interfaces and dependency conventions rather than transplanting example imports or replacing its root agent.
 - Prefer explicit application retrieval when passages must pass entitlement, provenance or content checks before model consumption. Trace the exact order from authenticated request to released answer.
-- Consider model-service retrieval only when its inspection boundary and tool composition meet the requirement. Verify the exact SDK/model path: an application before-model hook cannot inspect passages fetched later inside the model service. A separate agent can address composition without creating that missing inspection point.
-- For metadata filtering, verify enforcement in the selected API, backend and deployment mode. A stored tenant field is not an access control. Use separate collections where required isolation cannot be established.
+- Consider model-service retrieval only when its inspection boundary and tool composition meet the requirement. Verify the exact SDK/model path: an application before-model hook sees what the application fetched, and passages fetched later inside the model service pass it by. A separate agent can address composition without creating that missing inspection point.
+- For metadata filtering, verify enforcement in the selected API, backend and deployment mode. Enforcement is what makes a stored tenant field an access control; where the backend enforces nothing, give each tenant its own collection.
 
 Complete this decision with the chosen retrieval path, the checks it permits, and the target files or components that own them.
 
@@ -16,14 +16,14 @@ Complete this decision with the chosen retrieval path, the checks it permits, an
 
 - Find the trusted mapping from authenticated subject to retrieval entitlement. Resolve tenant, role/classification and collection scope on the server; keep them out of model-supplied tool arguments.
 - Separate read-only serving authority from document ingestion, publication and retirement. Verify permissions using the serving workload identity, including required metadata reads; operator success proves a different access path.
-- Identify how a request resolves its active release and whether a cache exists in code. Record cache expiry, invalidation and behaviour during an unavailable registry; a configuration variable alone does not establish implemented caching.
+- Identify how a request resolves its active release and whether a cache exists in code. Record cache expiry, invalidation and behaviour during an unavailable registry; a configuration variable names a cache, and the code that reads it establishes one.
 - Require approved content to have stable document identity, release/version, access scope, reviewed-byte digest and useful location metadata. Treat effective date, publication time and active release as different facts.
 - Trace each retrieved source back to the selected release's manifest or equivalent trusted registry. Reject unknown sources and mismatched release/scope metadata before evidence reaches the model.
 
 Complete inspection with a concrete authority and provenance chain, plus any missing enforcement points.
 
 Use this minimal relationship to design the target's own schemas; these are
-conceptual field names, not an SDK request to paste unchanged:
+conceptual field names to adapt into the target's own request types:
 
 ```text
 entitlement: tenant, scope, allowed_classifications
@@ -36,47 +36,58 @@ document: source_uri, document_id, version, release, tenant, classification,
 Require agreement between entitlement, active release and index; unique,
 nonempty source keys; and a supported version/approval policy. Optional section
 or page metadata must remain optional. Pin metadata reads with the actual
-object-generation precondition. A digest-shaped field is not a source-byte
-verification: identify the stage that checked the digest and the immutable
-source version it approved. SDK snake-case response fields and REST camel-case
+object-generation precondition. A digest-shaped field becomes a source-byte
+verification once you identify the stage that checked the digest and the
+immutable source version it approved. For example, a `reviewed_sha256` written
+by the ingestion job after it hashed the staged bytes is a verification; the
+same field copied from the publisher's manifest is a claim to check. SDK snake-case response fields and REST camel-case
 payloads belong in separate adapters; normalise them into one evidence type.
 
 Diagnose serving access in stages: registry object read → pinned index read →
 corpus metadata read → scoped query → source mapping → content protection.
 The lab once passed operator evaluation while runtime lacked
-`aiplatform.ragCorpora.get`; adding query permission alone was insufficient.
+`aiplatform.ragCorpora.get`; the repair was the metadata read permission as
+well as query.
 Check the selected SDK's actual calls and narrow permissions rather than
 copying a role wholesale. Keep internal denied-stage codes separate from a safe
-public no-answer result. Verify that serving cannot import or promote releases.
+public no-answer result. Verify that the serving identity holds read permissions only; import and
+promotion belong to the publishing identity.
 
 ## 3. Implement the serving contract
 
-1. Accept a bounded question and only the business arguments the model needs. Use the target's supported context injection to obtain trusted identity; do not manufacture ADK context from request text.
-2. Resolve the caller's entitlement, then the active release and its pinned manifest/index version. An empty scoped search must remain empty; it must not widen to another tenant or unapproved collection.
-3. Retrieve within that scope, map source metadata and recheck passage classification and ownership. Retrieval similarity selects candidates; it does not authorise access or establish answer support.
-4. Project an explicit evidence schema. Preserve passage text with document, release/version and available section/page metadata. Represent unavailable locations honestly rather than inventing them.
-5. Apply required content protection before publishing the complete tool result. Treat retrieved instructions as evidence, never as authority to change scope or invoke otherwise forbidden actions. On an incomplete protection check, release no partly screened passages.
-6. Set a total deadline covering entitlement lookup, registry reads, retrieval and required screening. Bound question size, candidate count, passage size and complete serialised UTF-8 payload; top-k alone does not bound bytes. Choose limits from the target workload and quota budget.
-7. Drop complete evidence units or return a safe no-answer outcome when bounds cannot be met. Preserve text/citation association and avoid truncating an exception into a contradictory claim.
-8. Where internal source locations must remain private, issue opaque invocation-bound citation IDs and retain their source/passage mapping server-side. Validate answer citations against that invocation before release. Separately evaluate whether the cited evidence supports the claim; valid identifiers do not prove semantic support.
+1. Accept a bounded question and only the business arguments the model needs. Obtain trusted identity through the target's supported context injection alone; request text supplies the question, never the caller.
+2. Resolve the caller's entitlement, then the active release and its pinned manifest/index version. An empty scoped search returns empty, with the scope fixed for the whole request.
+3. Retrieve within that scope, map source metadata and recheck passage classification and ownership. Retrieval similarity selects candidates; the entitlement check grants access and the support judgment establishes support, each on its own. For how to chunk, formulate queries by issue, resolve named references in code, run one bounded second round and fuse a local index, read [retrieval-strategy.md](retrieval-strategy.md).
+4. Project an explicit evidence schema. Preserve passage text with document, release/version and available section/page metadata. Represent an unavailable location as unavailable:
 
-Define a stable public unavailable/no-supported-answer contract that does not reveal inaccessible collections. Keep safe internal reason codes for absent evidence, denied scope, registry inconsistency and dependency failure. Make the agent decline unsupported claims instead of reconstructing policy from memory.
+   ```python
+   evidence = {"document_id": doc.document_id, "release": active.release,
+               "page": hit.page,            # None when the source has no page map
+               "text": hit.text, "citation": f"s{n}"}
+   ```
+
+5. Apply required content protection before publishing the complete tool result. Treat an instruction found in a retrieved passage as evidence about that document; scope and permitted actions come from the application. On an incomplete protection check, release no partly screened passages.
+6. Set a total deadline covering entitlement lookup, registry reads, retrieval and required screening. Bound question size, candidate count, passage size and the complete serialised UTF-8 payload, with a byte bound beside top-k. Choose limits from the target workload and quota budget.
+7. Drop complete evidence units or return a safe no-answer outcome when bounds cannot be met. Preserve text/citation association and avoid truncating an exception into a contradictory claim.
+8. Where internal source locations must remain private, issue opaque invocation-bound citation IDs and retain their source/passage mapping server-side. Validate answer citations against that invocation before release. Evaluate whether the cited evidence supports the claim as its own step; a valid identifier establishes identity. For example, a tenant-scoped question about a parking standard returns passage `s1`; the answer cites `s1`, the server maps `s1` back to the passage, and the support judgment checks that the passage states the standard claimed.
+
+Define a stable public unavailable/no-supported-answer contract that discloses the outcome only. Keep safe internal reason codes for absent evidence, denied scope, registry inconsistency and dependency failure. Make the agent decline unsupported claims instead of reconstructing policy from memory.
 
 ## 4. Implement publication only when in scope
 
-- Admit approved sources through a separate ingestion identity. Inspect/classify them under the target policy and quarantine incomplete checks. A credential-pattern scan or self-declared `clean` manifest does not establish full privacy or hostile-content review.
+- Admit approved sources through a separate ingestion identity. Inspect/classify them under the target policy and quarantine incomplete checks. A credential-pattern scan or self-declared `clean` manifest covers one check; privacy review and hostile-content review each need their own pass.
 - Preserve document structure needed to understand headings, tables and exceptions. Evaluate chunking and overlap against representative questions rather than copying fixture settings.
 - Stage immutable source/index versions and bind review to their bytes. Associate the evaluation artefact with the exact candidate digest, collection and release; reject mismatches or stale results.
 - Promote with a compare-and-swap or generation precondition on the active pointer. On conflict, re-read and report the competing state rather than overwriting it blindly.
-- Define cutover semantics. An atomic pointer change does not revoke evidence already resolved by in-flight requests; caches can extend visibility. Preserve release provenance and implement stronger admission/release checks only where required.
+- Define cutover semantics. An atomic pointer change takes effect for new requests; in-flight requests keep the evidence they resolved, and caches extend visibility further. Preserve release provenance and implement stronger admission/release checks only where required.
 - Record accepted import and other long-running operation handles before retrying uncertain work. Resume or reconcile the known operation instead of creating an untracked replacement.
-- Define retirement separately for inactive collections, source/staging objects, index versions, caches and evaluation copies. Read [operations-validation.md](operations-validation.md) when planning authorised cleanup; deleting a collection is not proof that retained copies or regional backend capacity are gone.
+- Define retirement separately for inactive collections, source/staging objects, index versions, caches and evaluation copies. Read [operations-validation.md](operations-validation.md) when planning authorised cleanup; retirement is complete when retained copies and regional backend capacity are confirmed gone, beyond the collection delete.
 
 For repeatable evaluation, fingerprint the candidate/manifest and corpus,
 evaluation-set digest, retrieval adapter/version, relevant chunk/index settings,
 top-k/threshold/filter/reranker settings and metric/threshold policy. Bind the
-artifact to that fingerprint and its validity window. A candidate-only digest
-does not detect a changed evaluator or retrieval policy. Keep answer-generation
+artifact to that fingerprint and its validity window. Include the evaluator and retrieval policy in the fingerprint so their
+changes are detected. Keep answer-generation
 metrics separate from retrieval metrics. For interrupted setup, use the durable
 case-attempt recipe in [failure-recovery.md](failure-recovery.md).
 
@@ -84,8 +95,9 @@ case-attempt recipe in [failure-recovery.md](failure-recovery.md).
 digest and expected previous generation before a conditional write. On a lost
 acknowledgement, read back the pointer: the exact intended release settles the
 operation; a competing state is a conflict; failed readback remains unresolved.
-Do not fetch a new generation and blindly retry, overwriting a newer publisher.
-The source standalone promotion script does not provide this durable recovery.
+Retry only against the recorded expected generation, so a newer publisher's
+pointer survives. The source standalone promotion script stops at the
+conditional write; this durable recovery is an addition.
 
 ## 5. Validate the selected guarantees
 
@@ -93,8 +105,8 @@ The source standalone promotion script does not provide this durable recovery.
 - Test hostile passages and screening timeout/unavailability at the actual pre-model boundary. Assert no raw or partly protected content is released.
 - Exercise payload overflow, missing location metadata, fabricated/cross-invocation citations and claims unsupported by an otherwise valid citation.
 - Test failed/stale candidate evaluation, concurrent promotion and a request spanning promotion. Assert the documented release and cache behaviour.
-- Measure retrieval independently from generation: expected document/section recall, irrelevant and unanswerable questions, scope negatives, citation support and bounded work. A positive document-hit fixture does not establish answer quality.
-- Use deterministic doubles for boundary failures, then authorised live checks with the actual serving identity for provider behaviour. Label unexecuted or blocked gates explicitly; a historic pass does not validate a changed target.
+- Measure retrieval independently from generation: expected document/section recall, irrelevant and unanswerable questions, scope negatives, citation support and bounded work. A positive document-hit fixture establishes retrieval; answer quality has its own measurement. [retrieval-strategy.md](retrieval-strategy.md) gives the gold-set recall measurement and the sufficiency report that drafting consumes.
+- Use deterministic doubles for boundary failures, then authorised live checks with the actual serving identity for provider behaviour. Label unexecuted or blocked gates explicitly; a changed target gets its own pass.
 
 For local PDFs, supplements, continued tables or empty text extraction, use
 [local-document-coverage.md](local-document-coverage.md) and its synthetic
@@ -107,15 +119,15 @@ Two particularly discriminating fixtures prevent misleading passes:
   only A must fail B. Reject an expected document absent from the candidate
   before dispatch; define expected-empty cases explicitly. The managed lab
   evaluator checks its first candidate document for every case, which only
-  serves its single-document fixture. Its two positives do not generalise to a
-  multi-document evaluator. The standalone evaluation artifact also omits some
+  serves its single-document fixture. Its two positives cover that single-document
+  fixture only. The standalone evaluation artifact also omits some
   inputs from the stronger fingerprint above.
 - **Real generation semantics:** make the storage double reject a stale
   generation, then test stale read, stale write, competing promotion and commit
   with a lost response. A fake that accepts but ignores `if_generation_match`
-  cannot prove concurrency protection. Also test duplicate or unknown source
+  leaves concurrency protection untested. Also test duplicate or unknown source
   mappings and a changed pinned index; a happy-path manifest parse is weaker.
 
 ## Completion and evidence limits
 
-Report the target decision, changed components, observed validation and unresolved release conditions. The source companion demonstrates explicit scoped retrieval, manifest-backed provenance and candidate-gated pointer promotion. It does not establish a full production ingestion pipeline, opaque citation renderer, complete payload caps or one end-to-end retrieval deadline. Implement and test those controls where required before describing them as delivered.
+Report the target decision, changed components, observed validation and unresolved release conditions. The source companion demonstrates explicit scoped retrieval, manifest-backed provenance and candidate-gated pointer promotion. A full production ingestion pipeline, an opaque citation renderer, complete payload caps and one end-to-end retrieval deadline are additions: implement and test them where required before describing them as delivered.

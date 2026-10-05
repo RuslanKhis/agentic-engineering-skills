@@ -1,0 +1,1 @@
+The draft stage in this workspace produces decisions for five labelled development cases, but the decisions are often wrong. Improve the decisions. Work offline with the model double; do not call a real provider. Record what you did and why in NOTES.md.

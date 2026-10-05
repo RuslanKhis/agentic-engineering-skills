@@ -1,0 +1,13 @@
+Use the adk-system-designer skill by reading and following its instructions at
+<repo>/skills/adk-system-designer/SKILL.md and the references and assets it links.
+Ignore any copy of this skill installed elsewhere on this machine; the repository
+file above is the version under test.
+
+The request from the user:
+
+"Help me plan the work for the assignment in ../brief.md. I have 3 to 4 hours,
+it is judged on five holdout predictions, the method and a short report. I am
+not available to answer questions, so proceed with explicit assumptions where
+you need them. Write the design to docs/architecture/planning-assistant.md and
+the plan with ordered goals to docs/plans/planning-assistant.md inside the
+workspace. Design and planning only: no code, no installation, no model calls."

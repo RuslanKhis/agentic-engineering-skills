@@ -26,6 +26,9 @@ to the request. Establish whether the user wants an explanation, a design,
 implementation or a review, and what observable result would satisfy it.
 Preserve the project's domain and working conventions. Resolve routine choices
 from the repository; ask only for missing decisions that affect the result.
+Note the time budget, who judges the result and the artifact type (exploration,
+assignment, pilot, production) before sizing the work; a time-boxed task judged
+on output quality starts with the core judgment measured on real inputs.
 
 When continuing a design or implementation plan, read its linked decisions,
 requested goal, dependencies, acceptance cases and execution scope. Check the
@@ -54,6 +57,7 @@ change crosses its boundary. Say briefly which skill you are applying and why.
 | Browser interfaces, JSON APIs, AG-UI, CopilotKit or streaming contracts | `adk-frontend-integration` |
 | Conversation state, cross-session memory, document retrieval or history | `adk-memory-architecture` |
 | Agent behaviour tests, evaluation datasets, replay or result auditing | `adk-agent-evaluation` |
+| Decisions or answers are wrong; prompt design, exemplars, structured-output design or model escalation | `adk-agent-evaluation` (quality iteration) |
 | Personal data in prompts, tools, storage, logs or streamed answers | `protect-adk-sensitive-data` |
 | Tool identity, credentials, Secret Manager or delegated OAuth | `adk-tool-auth-and-secrets` |
 | Natural-language SQL agents, schema retrieval or controlled query execution | `adk-sql-agent-engineering` |

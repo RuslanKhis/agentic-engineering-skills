@@ -1,0 +1,23 @@
+{
+  "iteration": 0,
+  "date": "2026-10-06",
+  "run": "runs/00-baseline-retained (reproduced identically by re-running draft_stage.py)",
+  "method": "Each outputs/<case>.json read against cases/<case>.json label by hand; one row per defect. Quality denominator excludes contract failures.",
+  "rows": [
+    {"case": "dev-002", "category": "missed_policy", "detail": "H3 (neighbour amenity) is the operative policy for a 4.5 m projection beyond an attached neighbour; retrieval supplied only D1, so H3 was never applied", "stage": "retrieval", "fix_candidate": "deterministic applicability lookup from policies.json driven by the case facts"},
+    {"case": "dev-002", "category": "wrong_outcome", "detail": "approve instead of refuse; downstream of the missed H3", "stage": "retrieval", "fix_candidate": "same as the missed_policy row; expected to move with it"},
+    {"case": "dev-003", "category": "missed_policy", "detail": "G4 refers to 'Table 2 of the Design SPD' (SPD-T2) but the table was not supplied; label cites G4 and SPD-T2", "stage": "retrieval", "fix_candidate": "deterministic lookup of policy numbers/tables cited inside a retrieved policy's text"},
+    {"case": "dev-003", "category": "weak_condition", "detail": "Condition imposes a 2.4 m by 43 m splay although statement-3 records a written highway-authority waiver; contradicts the facts and the G4 exception; the finding does not mention the waiver", "stage": "prompt/schema", "fix_candidate": "give the output a place to record a written waiver so the decision can rely on it (schema), or an exemplar that shows a waived requirement"},
+    {"case": "dev-004", "category": "wrong_attribution", "detail": "facts_used attributes the 7.8 m ridge height to roof-plan-G; it is stated in elevation-H", "stage": "request layout", "fix_candidate": "label each fact inline with its source ID instead of a separate SOURCE IDS list"},
+    {"case": "dev-004", "category": "weak_condition", "detail": "Materials finding says 'No fact bears on this policy' although elevation-H states grey tile hanging against red clay tile; condition requires materials to 'match' when D1 requires samples to be agreed", "stage": "model", "fix_candidate": "none among the double's documented triggers; the double has no samples-condition behaviour. Recorded as a limit of the double"},
+    {"case": "dev-005", "category": "contract_failure", "detail": "request 10,594 bytes exceeds REQUEST_BYTE_LIMIT 10,500; double returned truncated non-JSON; schema_valid false", "stage": "request size", "fix_candidate": "shrink the request; the prompt is 1,600 words, of which Section 10 repeats Section 1 verbatim"}
+  ],
+  "observations_not_counted": [
+    {"case": "dev-001", "note": "conditions are free-text strings while the label uses {purpose, text}; the prompt's Section 7 asks for strings, so this is a schema-shape difference, not a decision defect. Condition text itself is enforceable and consistent with the reason"},
+    {"case": "dev-001", "note": "decision and both policies match the label"}
+  ],
+  "counts": {"missed_policy": 2, "wrong_outcome": 1, "weak_condition": 2, "wrong_attribution": 1, "unsupported_fact": 0, "contract_failure": 1},
+  "quality_denominator": 4,
+  "score": {"decisions_matched": "3/5", "mean_policy_recall": 0.50, "schema_failures": 1},
+  "decision": "Repair the contract failure first (excluded from the quality denominator). Then the largest decision-quality category is missed_policy (2 rows, plus the downstream wrong_outcome), so the first quality change is retrieval."
+}

@@ -1,0 +1,54 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Length 745 >>
+stream
+BT /F1 12 Tf 60.0 800.0 Td (Proposed site plan - 14 Synthetic Road) Tj ET
+1 w
+80 200 420 520 re S
+160 420 220 200 re S
+160 330 220 90 re S
+400 330 m 400 420 l S
+BT /F1 10 Tf 410.0 370.0 Td (6.0 m) Tj ET
+0 g 80 150 40 8 re f 0 G 80 150 40 8 re S
+1 g 120 150 40 8 re f 0 G 120 150 40 8 re S
+0 g 160 150 40 8 re f 0 G 160 150 40 8 re S
+1 g 200 150 40 8 re f 0 G 200 150 40 8 re S
+0 g
+BT /F1 9 Tf 78.0 140.0 Td (0) Tj ET
+BT /F1 9 Tf 158.0 140.0 Td (5) Tj ET
+BT /F1 9 Tf 238.0 140.0 Td (10 m) Tj ET
+BT /F1 10 Tf 80.0 120.0 Td (Scale 1:200 @ A3) Tj ET
+520 760 m 520 800 l S
+510 790 m 520 800 l 530 790 l S
+BT /F1 10 Tf 516.0 805.0 Td (N) Tj ET
+BT /F1 9 Tf 170.0 360.0 Td (Proposed extension) Tj ET
+BT /F1 9 Tf 170.0 500.0 Td (Existing dwelling) Tj ET
+
+endstream
+endobj
+xref
+0 6
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000247 00000 n 
+0000000344 00000 n 
+trailer
+<< /Size 6 /Root 1 0 R >>
+startxref
+1140
+%%EOF

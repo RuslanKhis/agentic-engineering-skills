@@ -1,0 +1,23 @@
+{
+  "iteration": 5,
+  "date": "2026-10-06",
+  "run": "runs/06-inline-facts",
+  "change": "draft_stage.py build_request: each fact rendered as '[source-id] text' on its own line; the separate SOURCE IDS list removed. prompt.txt WHAT YOU RECEIVE updated to describe that layout (one sentence). Nothing else changed.",
+  "why": "After iteration 4 the remaining categories were tied at 1 each; wrong_attribution (dev-004) was the only row with a fix among the stage's own inputs rather than inside the double.",
+  "evidence": {"request_bytes": {"dev-001": 2811, "dev-002": 2840, "dev-003": 2909, "dev-004": 2808, "dev-005": 3042}, "outputs_vs_run_05": "dev-001/002/003/005 byte-identical apart from request_bytes; dev-004 facts_used now lists 7.8 m under elevation-H"},
+  "rows": [
+    {"case": "dev-004", "category": "weak_condition", "detail": "unchanged: 'match' condition where D1 requires samples; materials finding says no fact bears although elevation-H does", "stage": "model", "fix_candidate": "none among the double's documented triggers; a real model would be given the samples rule as an exemplar or a condition library"},
+    {"case": "dev-005", "category": "irrelevant_finding", "detail": "unchanged: driveway fact attached to H3 scale", "stage": "model", "fix_candidate": "none among the double's documented triggers"}
+  ],
+  "observations_not_counted": [
+    {"case": "all", "note": "score.py has no attribution column, so this iteration is invisible in the score table and visible only in the category table and facts_used"},
+    {"case": "all", "note": "conditions still strings; schema asks for {purpose, text}; the double writes objects only with two or more exemplars present"}
+  ],
+  "counts": {"missed_policy": 0, "wrong_outcome": 0, "weak_condition": 1, "wrong_attribution": 0, "irrelevant_finding": 1, "unsupported_fact": 0, "contract_failure": 0},
+  "previous_counts": {"missed_policy": 0, "wrong_outcome": 0, "weak_condition": 1, "wrong_attribution": 1, "irrelevant_finding": 1, "unsupported_fact": 0, "contract_failure": 0},
+  "quality_denominator": 5,
+  "score": {"decisions_matched": "5/5", "mean_policy_recall": 1.00, "schema_failures": 0},
+  "kept": true,
+  "cases_moved": ["dev-004 (wrong_attribution -> none)"],
+  "decision": "Targeted category 1 -> 0, nothing grew: keep. Remaining rows are limits of the double. One uncounted shape mismatch remains (string conditions against a {purpose, text} schema); iteration 6 supplies the skeleton's two leave-one-out exemplars, which is the reference's stated means for condition shape and tone."
+}

@@ -1,0 +1,58 @@
+{
+  "id": "dev-004",
+  "facts": [
+    {
+      "source_id": "form-4",
+      "text": "Proposal: loft conversion with a rear dormer to a detached house."
+    },
+    {
+      "source_id": "roof-plan-G",
+      "text": "Rear dormer 4.2 m wide, set 0.5 m below the ridge and 0.5 m in from each side."
+    },
+    {
+      "source_id": "elevation-H",
+      "text": "Ridge height 7.8 m unchanged; dormer cheeks clad in dark grey tile hanging; existing roof is red clay tile."
+    },
+    {
+      "source_id": "statement-4",
+      "text": "No change to the footprint or the garden area."
+    }
+  ],
+  "retrieved_policies": [
+    {
+      "policy_id": "H3",
+      "heading": "Policy H3 Residential extensions",
+      "text": "Extensions to dwellings are supported where: (a) the extension is subordinate in scale to the host dwelling; (b) materials match or complement the host dwelling; (c) there is no significant loss of light or outlook to a habitable room of a neighbouring dwelling, and a projection of more than 3.0 m beyond the rear wall of an attached neighbour is presumed to cause such loss; (d) at least 50 per cent of the private garden area is retained."
+    },
+    {
+      "policy_id": "D1",
+      "heading": "Policy D1 Design quality",
+      "text": "Development shall use external materials that complement the host building and the street. Where the materials are not specified on the drawings, a condition requiring samples to be agreed before the relevant works begin will be imposed."
+    }
+  ],
+  "label": {
+    "decision": "approve",
+    "reasons": [
+      {
+        "issue": "scale",
+        "policy_ids": [
+          "H3"
+        ],
+        "finding": "A 4.2 m dormer set below the ridge (roof-plan-G) on an unchanged 7.8 m ridge (elevation-H) is subordinate, meeting H3(a)."
+      },
+      {
+        "issue": "materials",
+        "policy_ids": [
+          "D1"
+        ],
+        "finding": "Dark grey tile hanging against a red clay roof (elevation-H) does not match, so D1 requires samples to be agreed."
+      }
+    ],
+    "conditions": [
+      {
+        "purpose": "design quality",
+        "text": "Samples of the dormer cladding shall be submitted to and agreed in writing before the dormer is clad."
+      }
+    ]
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "kind": "synthetic_pages_for_retrieval_controls",
+  "release": "synthetic-plan-v1",
+  "note": "Fictional extracted page text for retrieval controls. The questions block is evaluator-side: keep required_units, named_references and irrelevant_units out of any retriever or model input. irrelevant_units are hand-listed off-topic units; a hit on one is ranking noise to report, not a sufficiency failure, and the list is not exhaustive relevance labelling.",
+  "pages": [
+    {
+      "document": "synthetic-local-plan",
+      "page": 1,
+      "text": "Contents\nPolicy H3 Residential extensions, page 2\nPolicy T2 Parking, page 3\nPolicy D1 Design quality, page 4\nPolicy G4 Gates and boundaries, page 4\nMonitoring framework, page 5"
+    },
+    {
+      "document": "synthetic-local-plan",
+      "page": 2,
+      "text": "Policy H3 Residential extensions\nExtensions to dwellings will be supported where they are subordinate to the original dwelling in scale, height and massing, respect the character of the street and retain adequate private amenity space.\nA two-storey rear extension will be acceptable where it projects no more than 3 m beyond the original rear wall and the eaves height matches the host dwelling."
+    },
+    {
+      "document": "synthetic-local-plan",
+      "page": 3,
+      "text": "Side extensions must be set back from the front elevation by at least 1 m and must not create a terracing effect with a neighbouring dwelling. Extensions must not reduce daylight to neighbouring habitable rooms below the standard in the Design SPD.\nPolicy T2 Parking\nNew dwellings must provide parking in accordance with the following minimum standards: one space for a dwelling with one or two bedrooms, two spaces for a dwelling with three bedrooms, and three spaces for a dwelling with four or more bedrooms. Each space must measure at least 2.4 m by 4.8 m."
+    },
+    {
+      "document": "synthetic-local-plan",
+      "page": 4,
+      "text": "Policy D1 Design quality\nDevelopment must achieve high quality design. External materials must complement the predominant palette of the surrounding buildings, and proposals must demonstrate how layout, scale and detailing respond to local character.\nPolicy G4 Gates and boundaries\nGates, walls and other boundary treatments on a classified road must provide the visibility splay set out in Table 2 of the Design SPD. Gates must open inwards and be set back from the carriageway so that a vehicle can wait clear of the highway. Boundary walls to the front of a dwelling must not exceed 1 m in height."
+    },
+    {
+      "document": "synthetic-local-plan",
+      "page": 5,
+      "text": "Monitoring framework\nThe council will monitor housing delivery, parking provision and design quality annually and report the indicators in the Authority Monitoring Report."
+    },
+    {
+      "document": "design-spd",
+      "page": 1,
+      "text": "Design SPD\nThis supplementary planning document explains how the design policies of the Synthetic Local Plan are applied to householder and minor development."
+    },
+    {
+      "document": "design-spd",
+      "page": 2,
+      "text": "Table 2 Minimum visibility splays\nRoad type | Speed limit | Splay (x by y)\nClassified road | 30 mph | 2.4 m by 43 m\nClassified road | 40 mph | 2.4 m by 120 m\nUnclassified road | 20 mph | 2.4 m by 25 m\nNote: the highway authority may waive the splay where a gate is set back at least 5 m from the carriageway edge and a vehicle can wait clear of the highway."
+    }
+  ],
+  "questions": {
+    "visibility-splay": {
+      "question": "What visibility splay must a new gate on a classified road provide?",
+      "required_units": [
+        "synthetic-local-plan:policy-g4-gates-and-boundaries",
+        "design-spd:table-2-minimum-visibility-splays"
+      ],
+      "named_references": [
+        "Table 2",
+        "Design SPD"
+      ],
+      "irrelevant_units": [
+        "synthetic-local-plan:policy-t2-parking",
+        "design-spd:design-spd",
+        "synthetic-local-plan:policy-h3-residential-extensions",
+        "synthetic-local-plan:policy-d1-design-quality"
+      ]
+    },
+    "rear-extension": {
+      "question": "Is a two-storey rear extension acceptable?",
+      "required_units": [
+        "synthetic-local-plan:policy-h3-residential-extensions"
+      ],
+      "named_references": [],
+      "irrelevant_units": [
+        "synthetic-local-plan:policy-t2-parking",
+        "synthetic-local-plan:policy-g4-gates-and-boundaries",
+        "design-spd:table-2-minimum-visibility-splays",
+        "synthetic-local-plan:policy-d1-design-quality"
+      ]
+    },
+    "parking-spaces": {
+      "question": "How many parking spaces does a three bedroom house need?",
+      "required_units": [
+        "synthetic-local-plan:policy-t2-parking"
+      ],
+      "named_references": [],
+      "irrelevant_units": [
+        "synthetic-local-plan:policy-h3-residential-extensions",
+        "synthetic-local-plan:policy-d1-design-quality",
+        "synthetic-local-plan:policy-g4-gates-and-boundaries",
+        "design-spd:table-2-minimum-visibility-splays",
+        "design-spd:design-spd"
+      ]
+    },
+    "external-materials": {
+      "question": "Which policy governs external materials?",
+      "required_units": [
+        "synthetic-local-plan:policy-d1-design-quality"
+      ],
+      "named_references": [],
+      "irrelevant_units": [
+        "synthetic-local-plan:policy-t2-parking",
+        "synthetic-local-plan:policy-g4-gates-and-boundaries",
+        "synthetic-local-plan:policy-h3-residential-extensions",
+        "design-spd:table-2-minimum-visibility-splays",
+        "design-spd:design-spd"
+      ]
+    }
+  }
+}

@@ -47,12 +47,19 @@ From the installed skill folder, with Python 3.11 or later:
 ```bash
 python -m unittest discover -s tests -p 'test_inspect_project.py' -v
 python -m unittest discover -s tests -p 'test_review_contract.py' -v
+python -m unittest discover -s tests -p 'test_draft_consistency.py' -v
 ```
 
 The second suite exercises a synthetic server-owned frame and checker, including
 required controls, stale replay, source coverage and publication warnings. It
 does not exercise ADK, provider schema acceptance or independent evidence support;
 adapt its cases through the target application's actual boundary.
+
+The third suite exercises the [content safeguards](content-safeguards.md)
+helper on synthetic drafts: a condition that requires what a reason waives,
+a refusal carrying conditions, warning triage across stages, abstention
+triggers and hostile source text. It runs no model and no ADK code; the
+consistency rules it encodes are a toy policy to adapt, not the target's.
 
 For pre-inference contract qualification, drive the normal served entrypoint with
 external access denied and the provider boundary substituted. Assert real Runner,

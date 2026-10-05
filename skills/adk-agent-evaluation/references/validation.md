@@ -123,3 +123,15 @@ Two fresh agents received only the copied skill, separate synthetic fixtures and
 The observer fixture explicitly guarantees complete, ordered synthetic capture. Its passing parser tests do not establish that arbitrary live telemetry is complete or that local token counts equal billed cost. The readiness scenario supplied observations rather than real credentials. Temporary fixture applications/reports remain outside the skill package; the skill itself has no dependency on them.
 
 No new ADK Runner execution, injected grading, conformance recording, cloud API request or deployed-service test occurred in this depth review. Detailed recipes retain their historical evidence labels; production budgets, judge calibration, holdouts, remote reconciliation and monitoring still require implementation and validation in the target project.
+
+## Quality-iteration reference — 6 October 2026
+
+[Quality iteration](quality-iteration.md) was added after the
+planning-assignment retrospective, with the deliverable, budget and cross-case
+rules in [progressive validation](progressive-validation.md#keep-the-deliverable-and-the-method-together),
+the generalising acceptance criteria in [evaluation design](evaluation-design.md),
+and the reader's evidence budget in [execution evidence](execution-evidence.md#keep-the-evidence-within-a-readers-budget).
+These are instruction changes with new routing and scenario cases in the
+repository's evaluation inputs; they add no helper and no test. No fresh-agent
+trial of the new branch has been executed; the maintainer tests named in the
+retrospective remain to be run and recorded.

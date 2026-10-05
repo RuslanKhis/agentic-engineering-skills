@@ -54,6 +54,30 @@ Sum usage once per logical call. Streaming responses may repeat cumulative usage
 
 The historical observer captured selected synthetic message/tool content. For a reusable production observer, start with allowlisted metadata and opaque identifiers; use the data controls in [evaluation-design.md](evaluation-design.md) before retaining content. Do not copy synthetic-audit logging wholesale into production.
 
+## Keep the evidence within a reader's budget
+
+Retained failures, exact snapshots and preserved history are data. A reader
+needs a small number of documents that point at that data:
+
+- **One living evaluation summary per project**, rewritten in place. It holds
+  a table of the latest result per case (case ID, snapshot, outcome, category
+  counts, date) and links to the raw records. Per-run records are JSON under
+  a data directory such as `evaluation/runs/`, never Markdown documents.
+- **Architecture decision records record architecture.** Budget top-ups,
+  key rotations, attempt ceilings and bounded retries are ledger entries or
+  plan amendments. Forty records of which half are funding events is a
+  signal that the ledger was written as prose.
+- **A project context file holds current state only** and has a size ceiling
+  the project sets (a few hundred lines is usual). History moves to an
+  archive file when it crosses the ceiling; the context file links to it.
+- **The plan names what the reviewer reads**: at most three documents that
+  establish method, results and limits. Everything else is reachable from
+  them.
+
+Completion: a new reader can find the method, the latest result per case and
+the known limits in three documents, and every raw record is linked rather
+than inlined.
+
 ## Calibrate browser measurements before spending on them
 
 1. Use an offline deliberately delayed response to validate the observer. Verify that it records submission, first meaningful answer text and completion, including an initially empty response area.
