@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "captured": "2026-10-01",
+  "sources": [
+    "https://ai.google.dev/gemini-api/docs/models (page dated 2026-10-01)",
+    "https://ai.google.dev/gemini-api/docs/deprecations (page dated 2026-10-01)",
+    "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions (page dated 2026-10-05; vertex_retirement values)"
+  ],
+  "note": "Snapshot of Gemini API text-model lifecycle for the audit helper. Refresh this file from the two pages above before relying on its statuses; a shutdown date listed by Google is the earliest possible date, and Vertex AI publishes its own lifecycle table. Statuses (Gemini API): stable, preview, limited (served only to users who have actively used the model), retiring (shutdown date announced), shut_down. vertex_retirement is the Vertex AI retirement date, which may be extended and is never moved earlier.",
+  "models": {
+    "gemini-3.8-flash": {"status": "stable", "release": "2026-09-02", "shutdown": null, "replacement": null},
+    "gemini-3.7-flash": {"status": "stable", "release": "2026-08-13", "shutdown": null, "replacement": null},
+    "gemini-3.6-flash": {"status": "stable", "release": "2026-07-21", "shutdown": null, "replacement": null},
+    "gemini-3.5-flash": {"status": "stable", "release": "2026-05-19", "shutdown": null, "replacement": null, "vertex_retirement": "2027-05-19 or later"},
+    "gemini-3.5-flash-lite": {"status": "stable", "release": "2026-07-21", "shutdown": null, "replacement": null, "vertex_retirement": "2027-07-21 or later"},
+    "gemini-3.1-flash-lite": {"status": "retiring", "release": "2026-05-07", "shutdown": "2027-05-07", "replacement": "gemini-3.5-flash-lite", "vertex_retirement": "2027-05-07 or later"},
+    "gemini-3.1-pro-preview": {"status": "preview", "release": "2026-02-19", "shutdown": null, "replacement": null},
+    "gemini-3-flash-preview": {"status": "preview", "release": "2025-12-17", "shutdown": null, "replacement": "gemini-3.6-flash"},
+    "gemini-3-pro-preview": {"status": "shut_down", "release": "2025-11-18", "shutdown": "2026-03-09", "replacement": "gemini-3.1-pro-preview"},
+    "gemini-2.5-pro": {"status": "limited", "release": "2025-06-17", "shutdown": null, "replacement": "gemini-3.8-flash", "vertex_retirement": "2026-10-20"},
+    "gemini-2.5-flash": {"status": "limited", "release": "2025-06-17", "shutdown": null, "replacement": "gemini-3.8-flash", "vertex_retirement": "2026-10-20"},
+    "gemini-2.5-flash-lite": {"status": "limited", "release": "2025-07-22", "shutdown": null, "replacement": "gemini-3.5-flash-lite", "vertex_retirement": "2026-10-20"},
+    "gemini-2.0-flash": {"status": "shut_down", "release": "2025-02-05", "shutdown": "2026-06-01", "replacement": "gemini-3.6-flash"},
+    "gemini-2.0-flash-001": {"status": "shut_down", "release": "2025-02-05", "shutdown": "2026-06-01", "replacement": "gemini-3.6-flash"},
+    "gemini-2.0-flash-lite": {"status": "shut_down", "release": "2025-02-25", "shutdown": "2026-06-01", "replacement": "gemini-3.1-flash-lite"},
+    "gemini-2.0-flash-lite-001": {"status": "shut_down", "release": "2025-02-25", "shutdown": "2026-06-01", "replacement": "gemini-3.1-flash-lite"}
+  }
+}

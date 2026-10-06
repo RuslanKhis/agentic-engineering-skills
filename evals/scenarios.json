@@ -452,6 +452,45 @@
         "Does not load the optimization specialist merely because traces and timing appear in the request.",
         "Reports the tested local export boundaries and leaves live export verification explicitly unverified."
       ]
+    },
+    {
+      "id": "instructions-routing-and-templating-repair",
+      "prompt": "Our ADK coordinator misroutes refund questions to the billing agent and the root instruction raises KeyError on a JSON example. Fix both and give us a test that renders the instruction and a check that the right sub-agent is chosen.",
+      "available_skills": ["adk-agent-instructions", "adk-tool-interface-design", "adk-agent-evaluation", "adk-workflow-design"],
+      "context": "Python ADK 2.8.0 project with a chat-mode coordinator, three sub-agents whose descriptions are one or two words, an instruction string containing a JSON example with simple keys, and a profile state key written by a tool. No model credentials are available.",
+      "expected_primary": "adk-agent-instructions",
+      "assertions": [
+        "Rewrites the sub-agent descriptions so each differentiates its peers and names the conditions for delegation in the coordinator instruction, without re-describing the transfer mechanism.",
+        "Explains that 2.8.0 templating treats identifier-like braces as state variables, and moves the JSON example into an InstructionProvider or optional placeholders rather than relying on an escape that only exists from 2.10.0.",
+        "Adds a contract test that renders the instruction against fixture state and asserts no unresolved placeholders, and a scripted-model check that the transfer call targets the intended sub-agent.",
+        "Hands the measured routing-accuracy comparison to adk-agent-evaluation and separates rendered, mocked and not-run evidence in the report."
+      ]
+    },
+    {
+      "id": "tool-interface-wrong-tool-diagnosis",
+      "prompt": "The model picks search_orders instead of get_order and passes names where IDs belong. Diagnose and fix the tool interface without changing the agent instruction.",
+      "available_skills": ["adk-tool-interface-design", "adk-agent-instructions", "safe-api-tool-calls", "adk-agent-evaluation"],
+      "context": "ADK 2.8.0 project with twelve FunctionTools; two have one-line docstrings and parameters named value and data; one returns a bare string; no recorded events exist.",
+      "expected_primary": "adk-tool-interface-design",
+      "assertions": [
+        "Runs the read-only linter and dumps the live declarations before editing, recording byte sizes as the baseline.",
+        "Rewrites docstrings as the whole interface (purpose, when and when not, one line per parameter with format, return structure with status values) and renames generic parameters, noting that 2.8.0 sends no per-parameter descriptions.",
+        "Changes the bare-string return to a status dict with an actionable error branch and adds a scripted-model Runner test asserting the designed tool and arguments.",
+        "Leaves retry and idempotency behaviour to safe-api-tool-calls and hands selection-accuracy measurement to adk-agent-evaluation."
+      ]
+    },
+    {
+      "id": "model-output-schema-with-tools-hardening",
+      "prompt": "Our extraction agent has output_schema plus two tools and sometimes returns prose or fenced JSON; output_key then raises. Make it reliable and prove which path the model uses.",
+      "available_skills": ["adk-model-and-output-contracts", "adk-agent-evaluation", "adk-sql-agent-engineering", "optimise-adk-on-google-cloud"],
+      "context": "ADK 2.8.0 project using the API-key backend with gemini-3.5-flash, a Pydantic output_schema of twelve fields with nested optionals, and no request capture in tests.",
+      "expected_primary": "adk-model-and-output-contracts",
+      "assertions": [
+        "Explains that on the API-key backend 2.8.0 uses the set_model_response workaround while the Vertex backend sets the native response schema, and adds a request-capture test that shows which path ran.",
+        "Runs the schema checker, reduces the schema to the decision the model owns with a first-class refusal shape, and keeps identifiers copied in code.",
+        "Wraps validate_schema failures at an owned boundary with an attempt budget and an explicit failure outcome, counting wrong-valid-schema separately from invalid output.",
+        "Keeps temperature at the Gemini 3 default and thinking in one place, and hands the development-set comparison to adk-agent-evaluation."
+      ]
     }
   ]
 }

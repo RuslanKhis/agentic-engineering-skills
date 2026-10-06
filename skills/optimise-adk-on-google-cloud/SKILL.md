@@ -54,6 +54,7 @@ permit local inspection, implementation and offline validation.
 | --- | --- | --- |
 | Remote adapter overhead, repeated schema, oversized results, unnecessary child history/output or serial independent I/O | [Application path](references/application.md) | Same authorised result, bounded handoff, complete answer and relevant request-boundary observations |
 | Large repeated instructions or uncertain prefix-cache benefit | [Skills and cache](references/skills-and-cache.md) | Actual instruction loading or outgoing request/usage metadata, with correctness and separate cache lifecycle |
+| Long sessions, token growth per turn, cache misses, oversized tool results or sub-agent context isolation | [Context window](references/context-window.md) | Captured request composition, cached-token counts, bounded tool results and preserved correctness |
 | Cloud Run startup, concurrency, CPU allocation, session locality or revision comparison | [Cloud Run](references/cloud-run.md) | Effective revision configuration, external/platform/application measurements and state/security checks |
 | Agent Runtime session reuse, App/compaction propagation, model or hosting work | [Agent Runtime](references/agent-runtime.md) | Actual execution location, retained session events, selected model input and observed capacity |
 | Agent Runtime streaming, buffered persistence, optional memory writes or deferred jobs | [State and streams](references/runtime-state-and-streams.md) | Complete outputs, bounded admission, immutable batches and correctly correlated recovery |
@@ -105,8 +106,11 @@ uncertain remote outcomes require reconciliation before replay.
 
 ## Validate and finish
 
-Read [validation.md](references/validation.md) for mode-specific tests and the
-offline [saved-event checker](scripts/check_run.py). Run relevant local tests
+Read [validation.md](references/validation.md) for mode-specific tests, the
+offline [saved-event checker](scripts/check_run.py) and the offline
+[context budget helper](scripts/context_budget.py), which estimates request
+composition, tool-result sizes and compaction coverage from a saved session
+export. Run relevant local tests
 and static/build checks first, after inspecting their side effects. Check the
 actual boundary: tool results and correlation, outgoing child input, complete
 outputs, result durability or revision configuration. Mocked execution proves

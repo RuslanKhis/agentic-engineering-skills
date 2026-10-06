@@ -1,0 +1,8 @@
+{
+  "id": "ex-status-001",
+  "purpose": "status answer that names the order and the source",
+  "input": "Where is order 1234?",
+  "output": {"answer": "Order 1234 shipped on 3 October and is due on 7 October.", "order_id": "1234", "missing": []},
+  "source_case": "dev-004",
+  "added": "2026-10-06"
+}

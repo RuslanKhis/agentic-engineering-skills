@@ -53,11 +53,14 @@ change crosses its boundary. Say briefly which skill you are applying and why.
 | External API retries, deadlines, duplicate writes or uncertain outcomes | `safe-api-tool-calls` |
 | Runaway invocations, usage budgets or human approval of agent actions | `adk-operational-guardrails` |
 | Hosting choice, packaging or deployment on Google Cloud | `deploy-adk-on-google-cloud` |
-| Measured latency, cost, concurrency, startup or scaling problems | `optimise-adk-on-google-cloud` |
+| Measured latency, cost, concurrency, startup or scaling problems; long sessions, context growth per turn or cache misses | `optimise-adk-on-google-cloud` |
 | Browser interfaces, JSON APIs, AG-UI, CopilotKit or streaming contracts | `adk-frontend-integration` |
 | Conversation state, cross-session memory, document retrieval or history | `adk-memory-architecture` |
 | Agent behaviour tests, evaluation datasets, replay or result auditing | `adk-agent-evaluation` |
-| Decisions or answers are wrong; prompt design, exemplars, structured-output design or model escalation | `adk-agent-evaluation` (quality iteration) |
+| Decisions or answers are wrong on a labelled set; error analysis, one change per iteration, model comparison | `adk-agent-evaluation` (quality iteration) |
+| Instruction text: prompt structure, state templating, tool-use guidance, sub-agent descriptions for routing, prompt versioning | `adk-agent-instructions` |
+| Wrong tool or wrong arguments chosen, tool docstrings and parameter schemas, tool count, result size, AgentTool versus sub-agents | `adk-tool-interface-design` |
+| Structured output arrives as prose or invalid JSON, response-schema design, model selection, thinking or temperature settings, model failover | `adk-model-and-output-contracts` |
 | Personal data in prompts, tools, storage, logs or streamed answers | `protect-adk-sensitive-data` |
 | Tool identity, credentials, Secret Manager or delegated OAuth | `adk-tool-auth-and-secrets` |
 | Natural-language SQL agents, schema retrieval or controlled query execution | `adk-sql-agent-engineering` |
@@ -100,6 +103,13 @@ sessions or document retrieval before selecting a store. Add data-protection
 guidance when the requested data flow needs that work. Add evaluation guidance
 when the task calls for an agent evaluation strategy; ordinary regression tests
 remain part of the memory implementation itself.
+
+The three cross-framework specialists (`adk-agent-instructions`,
+`adk-tool-interface-design`, `adk-model-and-output-contracts`) own what the model
+sees and emits: the instruction, the tool declarations and the output contract.
+A misrouted request often needs two of them; name the primary, keep one change
+set and one measurement, and hand the measured comparison to
+`adk-agent-evaluation`.
 
 Finish with the requested explanation or the change made, validation actually
 performed, and any unresolved decision or unverified behaviour. Naming a

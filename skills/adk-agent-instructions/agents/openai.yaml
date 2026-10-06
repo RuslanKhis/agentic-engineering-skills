@@ -1,0 +1,6 @@
+interface:
+  display_name: "ADK Agent Instructions"
+  short_description: "Design, lint and repair ADK agent instructions"
+  default_prompt: "Use $adk-agent-instructions to review this project's ADK agent instructions, sub-agent descriptions and tool-use guidance, then propose measured fixes."
+policy:
+  allow_implicit_invocation: true

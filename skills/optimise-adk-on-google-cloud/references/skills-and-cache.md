@@ -36,6 +36,10 @@ work explicit call, attempt, input, output and elapsed-time budgets.
 
 ## Verify a cache experiment
 
+For how ADK composes each request, the budget split to measure, prefix-stability
+checks and the sub-agent isolation evidence, read
+[context-window.md](context-window.md) before configuring a cache.
+
 If a substantial stable prefix is reused, first confirm model/backend support,
 permitted retention and freshness requirements. Keep tenant-specific material
 out of shared prefixes. Keep ordinary instructions small and consider retrieval

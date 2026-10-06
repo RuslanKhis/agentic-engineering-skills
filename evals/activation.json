@@ -238,6 +238,76 @@
       "prompt": "Review indexes for a slow hand-written reporting query in our backend. No natural-language interface or agent-generated SQL is involved.",
       "should_trigger": false,
       "rationale": "Ordinary SQL tuning is explicitly excluded from the SQL-agent skill."
+    },
+    {
+      "id": "instructions-positive",
+      "skill": "adk-agent-instructions",
+      "prompt": "Our ADK coordinator keeps sending refund questions to the billing agent instead of the refunds agent, and its 1,800-word instruction is full of MUST and NEVER rules nobody can review. Fix the sub-agent descriptions and restructure the root instruction, with a test that renders it against fixture state.",
+      "should_trigger": true,
+      "rationale": "Routing descriptions, instruction structure and a rendered-instruction test are the instruction specialist's work."
+    },
+    {
+      "id": "instructions-templating-positive",
+      "skill": "adk-agent-instructions",
+      "prompt": "Add a {customer_tier} placeholder and a JSON output example to this ADK agent's instruction without breaking state templating on google-adk 2.8.0, and explain which placeholders may be absent.",
+      "should_trigger": true,
+      "rationale": "Session-state templating, literal braces and optional placeholders are ADK instruction mechanics."
+    },
+    {
+      "id": "instructions-near-miss",
+      "skill": "adk-agent-instructions",
+      "prompt": "Our agent's answers are wrong on 30% of the labelled development set. Run the error analysis by category, change one thing per iteration and report the holdout result.",
+      "should_trigger": false,
+      "rationale": "The measured decision-quality loop belongs to the evaluation specialist; no instruction mechanics or routing change is requested."
+    },
+    {
+      "id": "tool-interface-positive",
+      "skill": "adk-tool-interface-design",
+      "prompt": "Our ADK agent keeps calling search_orders when it should call get_order, and sometimes passes the customer name where the order ID goes. Review the tool docstrings and parameters and fix the declarations the model sees.",
+      "should_trigger": true,
+      "rationale": "Wrong tool selection and wrong parameters are model-facing interface defects in the tool declarations."
+    },
+    {
+      "id": "tool-interface-toolset-positive",
+      "skill": "adk-tool-interface-design",
+      "prompt": "We are adding a 40-tool MCP server to our ADK agent. Decide which tools to expose, how to name and filter them, and keep tool results from flooding the context.",
+      "should_trigger": true,
+      "rationale": "Tool-count budgeting, filtering, naming and result shaping are tool interface design decisions."
+    },
+    {
+      "id": "tool-interface-near-miss",
+      "skill": "adk-tool-interface-design",
+      "prompt": "The payments API times out and our refund tool sometimes charges twice when it retries. Fix the retry and idempotency behaviour.",
+      "should_trigger": false,
+      "rationale": "Retries, deadlines and duplicate writes of the external call belong to safe-api-tool-calls, not to the model-facing interface."
+    },
+    {
+      "id": "model-output-positive",
+      "skill": "adk-model-and-output-contracts",
+      "prompt": "Our ADK extraction agent returns fenced JSON and sometimes plain prose instead of the Pydantic output_schema, and it also has two tools. Make the structured output reliable without breaking tool use and show how to prove which path the model took.",
+      "should_trigger": true,
+      "rationale": "Output-schema validation, fences, the schema-with-tools path and repair loops are output-contract work."
+    },
+    {
+      "id": "model-output-config-positive",
+      "skill": "adk-model-and-output-contracts",
+      "prompt": "Everything runs on gemini-2.5-pro with temperature 0.2 and thinking_budget 2048. Move the right agents to a current Flash model, set thinking per agent and add a fallback for 429 errors, with a way to verify each change.",
+      "should_trigger": true,
+      "rationale": "Model selection, thinking and temperature configuration and failover are model-contract decisions."
+    },
+    {
+      "id": "model-output-near-miss",
+      "skill": "adk-model-and-output-contracts",
+      "prompt": "Add retries with backoff and an idempotency key to the payments tool that times out.",
+      "should_trigger": false,
+      "rationale": "An external-call retry policy involves no model configuration or output schema; safe-api-tool-calls owns it."
+    },
+    {
+      "id": "optimise-context-window-positive",
+      "skill": "optimise-adk-on-google-cloud",
+      "prompt": "Our ADK support agent gets slower and more expensive every turn after about thirty messages, cached token counts stay at zero and BigQuery tool results are 200 KB JSON blobs. Shape what enters each model request and verify the saving.",
+      "should_trigger": true,
+      "rationale": "Context-window growth, cache misses and oversized tool results are the optimise skill's context-window mode."
     }
   ]
 }

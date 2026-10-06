@@ -1,0 +1,6 @@
+interface:
+  display_name: "ADK Model and Output Contracts"
+  short_description: "Design ADK output schemas, model choice and thinking"
+  default_prompt: "Use $adk-model-and-output-contracts to inspect this ADK agent's output schema, model selection, thinking and sampling settings and failover, then harden the contract with tests that prove it."
+policy:
+  allow_implicit_invocation: true

@@ -43,6 +43,12 @@ If you already know the topic, you can call a specialist directly.
 
 Designing the whole application first? Use **adk-system-designer** to work through
 requirements and trade-offs, then capture the architecture and implementation plan.
+
+Three **cross-framework specialists** cover practices that apply to any agent
+framework and are implemented here for ADK: how to write an agent's
+instructions, how to design the tools a model sees, and how to make structured
+output and model settings dependable. See
+[V. Cross-framework practices](#v-cross-framework-practices).
 Follow the [design → tickets → implementation walkthrough](#from-design-to-working-tickets)
 to continue with Matt Pocock's skills, or the
 [time-boxed, quality-judged build order](#build-order-for-time-boxed-quality-judged-work)
@@ -95,9 +101,9 @@ From your application's project directory, run:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*'
 ```
 
-Choose your coding agent when prompted. This installs **all thirteen skills**
-for the current project: `adk-engineer`, `adk-system-designer` and the eleven
-chapter specialists.
+Choose your coding agent when prompted. This installs **all sixteen skills**
+for the current project: `adk-engineer`, `adk-system-designer`, the eleven
+chapter specialists and the three cross-framework specialists.
 Keep the quotes around `'*'` so your shell passes it unchanged.
 
 **Choosing a Google client?** Use Antigravity for Google consumer accounts.
@@ -226,7 +232,7 @@ For installation problems or later changes, see
 
 ## The Skills
 
-*The contents · One entry point, a system designer and eleven chapter specialists.*
+*The contents · One entry point, a system designer, eleven chapter specialists and three cross-framework specialists.*
 
 Choose a skill by the problem you need to solve. Each entry below explains
 when it helps, what to ask for, and the command that selects it. The numbered
@@ -247,6 +253,9 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 | Sensitive-data controls across prompts, tools and replies | [protect-adk-sensitive-data](#protect-adk-sensitive-data) |
 | Tool identity, credentials or per-user OAuth | [adk-tool-auth-and-secrets](#adk-tool-auth-and-secrets) |
 | Controlled natural-language analytics and SQL execution | [adk-sql-agent-engineering](#adk-sql-agent-engineering) |
+| Agent instructions, state templating and sub-agent descriptions | [adk-agent-instructions](#adk-agent-instructions) |
+| Tool docstrings, parameter schemas, tool count and result shape | [adk-tool-interface-design](#adk-tool-interface-design) |
+| Structured output, model choice, thinking settings and failover | [adk-model-and-output-contracts](#adk-model-and-output-contracts) |
 
 **Copy any example into your coding agent's chat.** Examples use Claude Code's
 `/` prefix. In Codex, replace only the leading `/` with `$`; keep the skill name
@@ -770,6 +779,146 @@ and add tests proving rejected queries never reach the database.
 
 </details>
 
+### V. Cross-framework practices
+
+*What the model sees and emits · Practices from across the field, implemented for ADK.*
+
+These three specialists did not come from a book chapter. They came from a
+review of current AI-engineering practice (vendor guidance from Google,
+Anthropic and OpenAI, independent studies, the official ADK documentation and
+the ADK issue tracker) against what the toolkit already covered. Each one owns
+a surface the other skills only touched: the instruction text, the tool
+declarations and the output contract. Their mechanics were checked against the
+google-adk 2.8.0 source and the later changelog; see the
+[gap review](docs/research/ai-engineering-practices-gap-review.md).
+
+#### [adk-agent-instructions](skills/adk-agent-instructions/SKILL.md)
+
+*Write the instruction that carries the judgment, and keep it owned and tested.*
+
+Use this when an agent follows its prompt poorly, calls tools too eagerly or
+not at all, routes requests to the wrong sub-agent, or raises a templating
+error on a placeholder. It covers instruction structure and altitude, ADK
+session-state templating, tool-use guidance inside the prompt, sub-agent
+descriptions as routing contracts, few-shot exemplars, the division between
+prompt and code, model-generation notes and a prompt-as-code layout with a
+contract test. A read-only linter reports unresolved placeholders, literal
+braces, shouting modifiers, mandated tool calls and near-duplicate sibling
+descriptions. The measured improvement loop stays with
+[adk-agent-evaluation](#adk-agent-evaluation).
+
+**Invoke:** Claude Code `/adk-agent-instructions` · Codex `$adk-agent-instructions`
+
+Gemini CLI / Antigravity: “Use the adk-agent-instructions skill to…”
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-agent-instructions Our coordinator keeps sending refund questions to
+the billing agent instead of the refunds agent. Fix the sub-agent
+descriptions and the root instruction, and show me the request the
+model actually receives.
+```
+
+```text
+/adk-agent-instructions Rewrite the system instruction for our Gemini 3
+support agent. It is 1,800 words of MUST and NEVER rules, calls search on
+every turn and nobody can review changes to it.
+```
+
+```text
+/adk-agent-instructions Add a {customer_tier} placeholder and a JSON
+output example to this agent's instruction without breaking state
+templating on our pinned ADK, and give me a test that catches regressions.
+```
+
+</details>
+
+#### [adk-tool-interface-design](skills/adk-tool-interface-design/SKILL.md)
+
+*Design the tool the way the model will see it.*
+
+Use this when the model picks the wrong tool or fills parameters wrongly, when
+tool results flood the context, or when a new tool, toolset or MCP server needs
+a model-facing schema. It covers FunctionTool docstrings and parameter rules
+for the pinned ADK, naming and consolidation, tool-count budgets and dynamic
+toolsets, result shaping and size, actionable error returns, and the choice
+between AgentTool, sub-agents and single-turn mode. A read-only linter checks
+declarations and a second helper measures tool-result sizes from recorded
+events. Retries and idempotency of the external call stay with
+[safe-api-tool-calls](#safe-api-tool-calls).
+
+**Invoke:** Claude Code `/adk-tool-interface-design` · Codex `$adk-tool-interface-design`
+
+Gemini CLI / Antigravity: “Use the adk-tool-interface-design skill to…”
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-tool-interface-design Our agent keeps calling search_orders when it
+should call get_order, and sometimes passes the customer name where the
+order ID goes. Review the tool declarations and fix what the model sees.
+```
+
+```text
+/adk-tool-interface-design We are adding a 40-tool MCP server. Help us
+decide which tools to expose, how to name and filter them, and whether to
+load them dynamically.
+```
+
+```text
+/adk-tool-interface-design Write the docstrings, return shapes and error
+messages for three new BigQuery lookup tools so Gemini uses them
+reliably, and tell me how to check it.
+```
+
+</details>
+
+#### [adk-model-and-output-contracts](skills/adk-model-and-output-contracts/SKILL.md)
+
+*Decide what the model emits, which model emits it, and how code proves it.*
+
+Use this when structured output arrives as prose, fenced JSON or invalid data,
+when a response schema needs designing within Gemini's limits, when a model
+must be chosen or escalated, or when thinking, temperature or failover settings
+need to change. It covers output_schema contracts and their validation path on
+the pinned ADK, repair loops with an attempt budget, output_schema together
+with tools on each backend, current Gemini model IDs and lifecycle dates,
+thinking_level and sampling rules for Gemini 3, and FallbackModel. Two helpers
+check a response schema against the documented Gemini subset and audit a
+project's model configuration. Measuring quality on a labelled set stays with
+[adk-agent-evaluation](#adk-agent-evaluation).
+
+**Invoke:** Claude Code `/adk-model-and-output-contracts` · Codex `$adk-model-and-output-contracts`
+
+Gemini CLI / Antigravity: “Use the adk-model-and-output-contracts skill to…”
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-model-and-output-contracts Our extraction agent returns fenced JSON
+and sometimes plain prose instead of the Pydantic schema, and it has two
+tools. Make the structured output reliable without breaking tool use.
+```
+
+```text
+/adk-model-and-output-contracts Everything runs on gemini-2.5-pro with
+temperature 0.2 and thinking_budget 2048. Move the right agents to a
+current Flash model, set thinking per agent and add a fallback for 429s.
+```
+
+```text
+/adk-model-and-output-contracts Design the response schema for our
+classification agent: 40 enum values, a nested evidence list and a
+nullable refusal. Keep it within Gemini's limits and tell me what the
+code should validate versus what the model should decide.
+```
+
+</details>
+
 <p align="center">
   <img src="docs/editorial/section-break.svg" alt="" width="240">
 </p>
@@ -1185,6 +1334,23 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Cross-framework specialists · 6 October 2026
+
+A review of current AI-engineering practice against the toolkit found that
+the skills verified an agent's boundaries thoroughly but did not own what the
+model sees and emits. This revision adds three specialists for agent
+instructions, tool interfaces and model and output contracts, and a
+context-window reference with a session budget helper in the optimise skill.
+Their ADK mechanics were checked against the google-adk 2.8.0 source and the
+2.9 to 2.11 changelog, and the vendor, community and research sources are
+dated in each package. All **16 packages** pass validation; the offline suites
+run **562 tests** with **59 optional SDK checks skipped** in the clean
+maintainer environment, including 63 tests for the new helpers. See the
+[gap review and validation record](docs/research/ai-engineering-practices-gap-review.md).
+No live model run, skill-selection trial or cloud operation was performed for
+this revision; the activation and scenario cases for the new skills are
+written but not yet executed.
 
 ### Planning-assignment retrospective · 6 October 2026
 

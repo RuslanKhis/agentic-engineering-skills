@@ -82,6 +82,9 @@ Apply independent query/result-production limits before constructing the preview
 Reject non-finite numeric values and ragged rows in a structured handoff. Treat
 column names and cell text as untrusted data, even inside JSON or XML tags.
 
+For bounding at the `after_tool_callback` boundary, artifact offload and the
+request budget behind these limits, read [context-window.md](context-window.md).
+
 Keep complete results in a durable store when later turns or another instance
 must retrieve them. Issue an opaque result reference tied to the exact query,
 tool call, owner/tenant and expiry. A mutable `latest_result` state field can

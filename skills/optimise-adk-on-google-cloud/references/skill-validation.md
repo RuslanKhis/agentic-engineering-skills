@@ -1,7 +1,9 @@
 # Skill package validation
 
 Updated on 16 September 2026. The current Parts 1–3 package passes 135 local
-tests after the three depth reviews. The initial Part 1 record is
+tests after the three depth reviews. A context-window extension on 6 October
+2026 added five files and 15 standard-library tests; its checks are recorded in
+the final section. The initial Part 1 record is
 retained below, followed by the Part 2/3 extensions and the depth-review results.
 These are checks of this portable skill and
 synthetic fixture adaptations, separate from the historical chapter campaigns.
@@ -710,13 +712,15 @@ Updated ten files: `references/gke.md`, `references/gke-serving.md`,
 No file was removed. The entrypoint, discovery metadata, inspector, assets,
 Parts 1/2 guidance, manuscripts and companion implementation were preserved.
 The shared checker deliberately gained stricter unsupported-protocol handling.
-The complete portable package contains 43 files:
+The complete portable package contains 48 files after the context-window
+extension below:
 
 ```text
 optimise-adk-on-google-cloud/
 ├── agents/
 │   └── openai.yaml
 ├── assets/
+│   ├── bounded_tool_result.py
 │   ├── finite_answer_stream.py
 │   ├── formatting_contract.py
 │   └── session_observation.py
@@ -727,6 +731,7 @@ optimise-adk-on-google-cloud/
 │   ├── cloud-run-troubleshooting.md
 │   ├── cloud-run.md
 │   ├── compatibility.md
+│   ├── context-window.md
 │   ├── gke-application-integration.md
 │   ├── gke-deployment-troubleshooting.md
 │   ├── gke-lifecycle.md
@@ -746,11 +751,14 @@ optimise-adk-on-google-cloud/
 │   └── validation.md
 ├── scripts/
 │   ├── check_run.py
+│   ├── context_budget.py
 │   └── inspect_project.py
 ├── tests/
 │   ├── forward-cases.json
 │   ├── test_adk_contract.py
+│   ├── test_bounded_tool_result.py
 │   ├── test_check_run.py
+│   ├── test_context_budget.py
 │   ├── test_finite_answer_stream.py
 │   ├── test_formatting_contract.py
 │   ├── test_gke_http_contract.py
@@ -763,3 +771,44 @@ optimise-adk-on-google-cloud/
 ├── LICENSE
 └── SKILL.md
 ```
+
+## Context-window extension: executed checks
+
+Extended the same skill on 6 October 2026 with request-composition guidance.
+Five files were added: `references/context-window.md`,
+`scripts/context_budget.py`, `assets/bounded_tool_result.py`,
+`tests/test_context_budget.py` and `tests/test_bounded_tool_result.py`. Six
+files were updated: `SKILL.md` (one mode row and the validation pointer),
+`references/skills-and-cache.md` and `references/application.md` (cross-links),
+`references/validation.md`, `references/compatibility.md` and this record. No
+other skill, repository script, evaluation fixture or manuscript changed.
+
+Every SDK statement in the new reference and the asset docstring was checked
+by reading the ADK tag v2.8.0 source (`flows/llm_flows/instructions.py`,
+`contents.py`, `functions.py`, `_content_compaction.py`, `_fencing.py`,
+`apps/compaction.py`, `apps/_configs.py`, `agents/context.py`,
+`agents/context_cache_config.py`, `models/gemini_context_cache_manager.py`,
+`models/llm_request.py`, `tools/agent_tool.py`, `runners.py`,
+`plugins/context_filter_plugin.py`, `artifacts/gcs_artifact_service.py`), the
+2.11.0 main CHANGELOG and the adk-docs clone, all read-only. Vendor and
+evidence sources are cited by URL and date in the reference. External sample
+repositories, Medium posts and GitHub issues were cited, not reproduced.
+
+The checks ran in the repository's CPython 3.12.9 virtual environment, which
+has no ADK or GenAI distribution installed:
+
+| Executed command/check | Actual outcome |
+| --- | --- |
+| `.venv/bin/python scripts/validate_skills.py` | PASS for this package: 25 Markdown files, 20 Python files, no errors or warnings; errors reported for three unrelated in-progress skill directories outside this scope |
+| `.venv/bin/python scripts/check_repo.py --suite skills/optimise-adk-on-google-cloud/tests` | PASS: 150 tests, 43 skipped because ADK 2.8.0 is absent in this interpreter; the 15 new tests ran |
+| `python -m unittest discover -s tests -p test_context_budget.py` | PASS: 8 tests, including JSON/array/JSONL inputs, orphan and compaction fixtures, malformed and symlink inputs, bad arguments, read-only repetition and redaction |
+| `python -m unittest discover -s tests -p test_bounded_tool_result.py` | PASS: 7 tests, including envelope shape, UTF-8 preview boundary, version increments, preserved failure status, missing or failing artifact service and artifact round trip |
+| `git diff --check` | PASS: no whitespace errors |
+| Em-dash and trailing-whitespace scan of the new and edited files | PASS: none found |
+
+**Not run:** the ADK-dependent contract tests in this interpreter, any live
+model, cache or compaction experiment, the asset inside a real ADK Runner, and
+the helper against a real exported session. A skip is not an SDK compatibility
+pass. The recorded ADK 2.8.0 environments from earlier sections were not rerun
+for this extension; a target that installs the asset must execute its own
+`after_tool_callback` and artifact round trip through the actual Runner.

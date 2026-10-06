@@ -22,6 +22,7 @@ variable does not override a model selected directly in source.
 | Part 2 depth review, retained runtime | CPython 3.11.4; ADK 2.8.0; AI Platform SDK 1.153.1; GenAI 2.19.0; Pydantic 2.13.5; pytest 9.1.1 | All 39 new stream/token-compaction tests passed; not a second complete suite or hosted test |
 | Part 3 depth review, 16 September 2026 | CPython 3.11.4; ADK 2.8.0; AI Platform SDK 1.153.1; GenAI 2.19.0; FastAPI 0.136.3; SQLAlchemy 2.0.51; OpenTelemetry 1.41.1 | 135 package tests passed, including 11 new GKE HTTP/session contracts and three additional saved-run regressions; no provider calls |
 | Part 3 depth review, retained GKE environment | CPython 3.11.4; ADK 2.8.0; AI Platform SDK 1.153.1; GenAI 2.23.0; FastAPI 0.141.1; SQLAlchemy 2.0.52; OpenTelemetry 1.42.1 | 41 HTTP/session/checker tests passed; includes all 14 new tests and 27 pre-existing checker tests, not a second full suite or hosted check |
+| Context-window extension, 6 October 2026 | Repository CPython 3.12.9 virtual environment without ADK or GenAI installed; read-only clones of ADK tag v2.8.0, main at 2.11.0 and adk-docs | Source inspection of the pinned tag for every SDK fact in `context-window.md` and the asset docstring; standard-library helper and asset tests passed; SDK-dependent tests skipped; no live run, no provider call |
 
 The historical application declares Python `>=3.11,<3.14`; this is not an exact
 interpreter reproduction or this portable skill's dependency lock. Preserve a
@@ -68,6 +69,17 @@ identity requirements and byte budgets must match the target's decoded adapter;
 it is neither a general wire decoder nor a tool-result semantic validator.
 The token-compaction tests also require ADK 2.8.0 and use synthetic usage with
 deterministic models. No hosted compaction or real summarisation quality is implied.
+
+The optional bounded tool result asset and the context budget helper need only
+the Python 3.11 standard library. The asset imports no ADK symbol; it calls
+`tool_context.save_artifact(filename, part)` as read from the 2.8.0 source and
+builds a `types.Part` when google-genai is importable, otherwise a plain
+`inline_data` dict that `BaseArtifactService.save_artifact` normalises in that
+version. Its byte limits are an adaptable example. `context-window.md` records
+behaviour read from the 2.8.0 tag and names the 2.9.0 to 2.11.0 changelog
+entries that changed it; a target on another release needs its own source
+check. Neither the helper nor the asset was exercised against an installed ADK
+in this extension; the recorded ADK 2.8.0 environments above were not rerun.
 
 The new GKE HTTP tests require the recorded ADK 2.8.0 factory/loader contract and
 its FastAPI/TestClient dependencies; missing ADK or a different version skips

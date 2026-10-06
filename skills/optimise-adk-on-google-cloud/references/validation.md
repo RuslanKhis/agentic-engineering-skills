@@ -49,6 +49,7 @@ The inventory limits are 4 directory levels, 4,096 entries, 64 manifests,
 | Independent tool I/O | Record overlapping execution intervals under a controlled test; verify failure/cancellation behaviour and bounded concurrency; separate scripted scheduling from live model selection |
 | Output or call budget | Complete expected answer, reject reported errors and token exhaustion, test nested calls and attempt limits at the provider boundary |
 | Skills/cache | Actual instruction-loading result; cached-input metadata for reuse; correctness and independent cache cleanup |
+| Context window | Captured request composition per model call, byte-identical prefix across turns, positive cached-token counts, bounded stored tool results, child request without old history, compaction observed separately from storage |
 | Cloud Run | Real adapter HTTP/SSE contract with model doubles, build/source boundary, authentication, state continuity and effective revision settings; approved live checks must exercise the relevant tools |
 | Agent Runtime App/compaction | Actual constructed App reaches Runner; compaction metadata, next-request context and required facts observed separately from retained storage; no hosted claim from local models |
 | Managed sessions | Same authorised owner/session across turns, stored event evidence after client exit, explicit retention and recoverable cleanup; identify whether execution is remote or local |
@@ -152,6 +153,30 @@ Only counts and fixed reason codes are printed. Exit 0 means accepted saved data
 2 means invalid/unsupported input, and 3 means acceptance failed. All invocations,
 including `--dry-run`, make zero network calls and writes.
 
+## Estimate a saved session's context budget
+
+`context_budget.py` reads a saved session export (a JSON object with an
+`events` list, a JSON event array, or JSONL events) and reports per invocation:
+event counts, function call/response pairs and orphans, bytes and bytes/4
+estimates by part type and author, the largest tool results, cumulative growth,
+compaction spans with covered events and the last authoritative
+`usage_metadata`. It flags function responses above `--max-result-bytes`
+(default 20000). Output holds counts, sizes, tool names and identifiers only.
+
+```bash
+"${PYTHON:?}" "${SKILL_DIR:?}/scripts/context_budget.py" --help
+"${PYTHON:?}" "${SKILL_DIR:?}/scripts/context_budget.py" \
+  --session "${SESSION_FILE:?}" --max-result-bytes 20000 --dry-run
+```
+
+Exit 0 means inspected, 1 means malformed input or a partial report with
+skipped malformed items, and 2 means invalid arguments. Inputs are bounded to
+16 MiB and 5,000 events; symlinks are rejected. The bytes/4 figure is an
+estimate; `usage_metadata.prompt_token_count` is the measurement. The helper
+establishes the saved file's composition only, never provider usage, compaction
+quality or live behaviour. Read [context-window.md](context-window.md) for the
+budget split it reports against.
+
 ## Check this package after adaptation
 
 ```bash
@@ -204,6 +229,17 @@ logical-generation admission can reject a continuation before model dispatch.
 It also checks that a content-free error can be marked final. Socket/DNS paths
 are blocked and another ADK version skips explicitly. The test-only counter does
 not provide durable coordination, provider-attempt accounting or a live budget.
+
+`test_context_budget.py` exercises the saved-session helper with synthetic
+fixtures: a clean two-invocation session, an oversized tool result, orphan
+calls and responses, a compaction span, malformed and empty inputs, JSON,
+array and JSONL formats, bad arguments, read-only repetition and redaction of
+event text. `test_bounded_tool_result.py` checks the optional
+`after_tool_callback` asset with a fake tool context: untouched small and
+non-dict results, the bounded envelope shape, UTF-8 safe previews, version
+increments, preserved failure status, missing or failing artifact service and
+the artifact round trip. Neither needs ADK; neither establishes ADK callback
+dispatch, artifact service behaviour, provider token counts or compaction quality.
 
 `test_gke_observation.py` uses the bundled optional session-observation component
 and real OpenTelemetry in-memory export. It checks preserved service results and

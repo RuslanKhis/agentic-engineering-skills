@@ -1,0 +1,6 @@
+interface:
+  display_name: "ADK Tool Interface Design"
+  short_description: "Design model-facing ADK tool schemas and results"
+  default_prompt: "Use $adk-tool-interface-design to inspect this agent's tools and improve their names, docstrings, parameters, results and delegation interfaces."
+policy:
+  allow_implicit_invocation: true
