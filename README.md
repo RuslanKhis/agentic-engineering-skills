@@ -44,10 +44,11 @@ If you already know the topic, you can call a specialist directly.
 Designing the whole application first? Use **adk-system-designer** to work through
 requirements and trade-offs, then capture the architecture and implementation plan.
 
-Three **cross-framework specialists** cover practices that apply to any agent
+Six **cross-framework specialists** cover practices that apply to any agent
 framework and are implemented here for ADK: how to write an agent's
-instructions, how to design the tools a model sees, and how to make structured
-output and model settings dependable. See
+instructions, how to design the tools a model sees, how to make structured
+output and model settings dependable, how to threat-model and red-team the
+agent, how to observe it in production, and how to release it safely. See
 [V. Cross-framework practices](#v-cross-framework-practices).
 Follow the [design → tickets → implementation walkthrough](#from-design-to-working-tickets)
 to continue with Matt Pocock's skills, or the
@@ -101,9 +102,9 @@ From your application's project directory, run:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*'
 ```
 
-Choose your coding agent when prompted. This installs **all sixteen skills**
+Choose your coding agent when prompted. This installs **all nineteen skills**
 for the current project: `adk-engineer`, `adk-system-designer`, the eleven
-chapter specialists and the three cross-framework specialists.
+chapter specialists and the six cross-framework specialists.
 Keep the quotes around `'*'` so your shell passes it unchanged.
 
 **Choosing a Google client?** Use Antigravity for Google consumer accounts.
@@ -232,7 +233,7 @@ For installation problems or later changes, see
 
 ## The Skills
 
-*The contents · One entry point, a system designer, eleven chapter specialists and three cross-framework specialists.*
+*The contents · One entry point, a system designer, eleven chapter specialists and six cross-framework specialists.*
 
 Choose a skill by the problem you need to solve. Each entry below explains
 when it helps, what to ask for, and the command that selects it. The numbered
@@ -256,6 +257,9 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 | Agent instructions, state templating and sub-agent descriptions | [adk-agent-instructions](#adk-agent-instructions) |
 | Tool docstrings, parameter schemas, tool count and result shape | [adk-tool-interface-design](#adk-tool-interface-design) |
 | Structured output, model choice, thinking settings and failover | [adk-model-and-output-contracts](#adk-model-and-output-contracts) |
+| Prompt-injection resilience, MCP vetting, sandboxing and red-teaming | [adk-agent-security](#adk-agent-security) |
+| Tracing, metrics, SLOs, alerts and production-to-evaluation hand-off | [adk-agent-observability](#adk-agent-observability) |
+| Version pinning, CI eval gates, model migration, canary and rollback | [adk-release-engineering](#adk-release-engineering) |
 
 **Copy any example into your coding agent's chat.** Examples use Claude Code's
 `/` prefix. In Codex, replace only the leading `/` with `$`; keep the skill name
@@ -783,13 +787,15 @@ and add tests proving rejected queries never reach the database.
 
 *What the model sees and emits · Practices from across the field, implemented for ADK.*
 
-These three specialists did not come from a book chapter. They came from a
+These six specialists did not come from a book chapter. They came from a
 review of current AI-engineering practice (vendor guidance from Google,
-Anthropic and OpenAI, independent studies, the official ADK documentation and
-the ADK issue tracker) against what the toolkit already covered. Each one owns
-a surface the other skills only touched: the instruction text, the tool
-declarations and the output contract. Their mechanics were checked against the
-google-adk 2.8.0 source and the later changelog; see the
+Anthropic and OpenAI, independent studies, the official ADK documentation,
+Google's samples and the ADK issue tracker) against what the toolkit already
+covered. The first three own what the model sees and emits: the instruction
+text, the tool declarations and the output contract. The next three own the
+production lifecycle: the agent's security posture, its telemetry, and its
+releases. Their mechanics were checked against the google-adk 2.8.0 source and
+the later changelog; see the
 [gap review](docs/research/ai-engineering-practices-gap-review.md).
 
 #### [adk-agent-instructions](skills/adk-agent-instructions/SKILL.md)
@@ -915,6 +921,133 @@ current Flash model, set thinking per agent and add a fallback for 429s.
 classification agent: 40 enum values, a nested evidence list and a
 nullable refusal. Keep it within Gemini's limits and tell me what the
 code should validate versus what the model should decide.
+```
+
+</details>
+
+#### [adk-agent-security](skills/adk-agent-security/SKILL.md)
+
+*Assume the injection succeeds, and make sure it cannot do harm.*
+
+Use this when an agent reads content it did not write (emails, documents,
+search results, tool output, other agents' replies) and can also act, before
+exposing MCP servers or code execution, or for a security review before
+release. It threat-models the agent as a system (what it can read, what it can
+change, where data can leave), maps prompt-injection design patterns onto ADK
+structure, vets and pins tool and MCP supply chains, tiers tools with
+confirmation, selects a sandboxed code executor, and seeds an adversarial suite
+whose assertions are deterministic: a forbidden tool is never called and data
+never leaves. A read-only inspector reports each agent's exposure. Findings map
+to OWASP identifiers. Data screening and Model Armor stay with
+[protect-adk-sensitive-data](#protect-adk-sensitive-data).
+
+**Invoke:** Claude Code `/adk-agent-security` · Codex `$adk-agent-security`
+
+Gemini CLI / Antigravity: “Use the adk-agent-security skill to…”
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-agent-security Our support agent reads customer emails and can issue
+refunds and send replies. Review it before launch and tell me what an
+attacker could make it do through a poisoned email or tool result.
+```
+
+```text
+/adk-agent-security We are adding three third-party MCP servers. Help us
+vet, filter and pin their tools, and write tests proving a poisoned tool
+description cannot make the agent leak data.
+```
+
+```text
+/adk-agent-security Write adversarial test cases for indirect injection
+through RAG chunks and tool results, asserting the agent never calls
+delete_record or send_email without confirmation.
+```
+
+</details>
+
+#### [adk-agent-observability](skills/adk-agent-observability/SKILL.md)
+
+*See what the agent did, what it cost, and where the time went.*
+
+Use this when telemetry is missing or duplicated, when token or cost
+attribution is unclear, when you need SLOs, alerts or dashboards, or during a
+production incident. It covers the spans, metrics and logs ADK emits and the
+environment gates that control them, the exporter for each host (Cloud Run,
+GKE, Agent Runtime, OTLP third parties), BigQuery Agent Analytics, feedback
+capture, debugging from an alert to a trace to a session, and turning
+production traces into redacted evaluation cases. Two helpers summarise
+invocations from a saved session and convert sessions into an ADK eval set.
+Content-redaction policy stays with
+[protect-adk-sensitive-data](#protect-adk-sensitive-data).
+
+**Invoke:** Claude Code `/adk-agent-observability` · Codex `$adk-agent-observability`
+
+Gemini CLI / Antigravity: “Use the adk-agent-observability skill to…”
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-agent-observability p95 latency on our Agent Runtime agent doubled
+this week. Add tracing and metrics so we can tell model time from tool
+time from session loading, and set an alert on it.
+```
+
+```text
+/adk-agent-observability Define SLOs for the support agent: task success,
+tool error rate and cost per resolved conversation, wired to Cloud
+Monitoring dashboards and alerts. Keep prompts out of the traces.
+```
+
+```text
+/adk-agent-observability Pull the thumbs-down conversations from BigQuery
+Agent Analytics into an ADK eval set for regression, with personal data
+removed, and show me what was redacted.
+```
+
+</details>
+
+#### [adk-release-engineering](skills/adk-release-engineering/SKILL.md)
+
+*Ship the prompt, the model and the tools as one release, and be able to undo it.*
+
+Use this when a release, a CI gate, a model deprecation notice, a canary, a
+rollback or a stale eval set is the concern. It covers prompt and configuration
+versioning, pinned model and judge IDs, evaluation gates in CI with threshold,
+repeat and cost policy, model-version migration with re-baselining, staged
+promotion on Cloud Run and Agent Runtime, joint rollback of prompt, model,
+tool schema and secrets, and refreshing eval sets from production. It records
+that `adk eval` exits successfully even when cases fail, so the gate must use
+pytest or conformance replay. A helper inventories every model, judge, prompt
+hash, eval set and deploy artefact into a release manifest. Writing the eval
+cases stays with [adk-agent-evaluation](#adk-agent-evaluation).
+
+**Invoke:** Claude Code `/adk-release-engineering` · Codex `$adk-release-engineering`
+
+Gemini CLI / Antigravity: “Use the adk-release-engineering skill to…”
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-release-engineering Google emailed that our Gemini model is retiring
+next month. Plan the upgrade so our eval scores do not silently drop,
+including the judge model our CI uses.
+```
+
+```text
+/adk-release-engineering Add an eval gate to GitHub Actions so pull
+requests that change the agent instruction are blocked on regressions,
+without being flaky or expensive.
+```
+
+```text
+/adk-release-engineering Canary the new system prompt to 10% of traffic
+on Cloud Run and tell me how we roll back the prompt, model and tool
+schema together if it misbehaves.
 ```
 
 </details>
@@ -1334,6 +1467,26 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Production-lifecycle specialists · 8 October 2026
+
+The second round of the practice review added three specialists for the
+production lifecycle: `adk-agent-security` (threat model, injection-resistant
+structure, tool and MCP supply chain, sandboxing, an adversarial seed suite),
+`adk-agent-observability` (signals and environment gates, exporters per host,
+SLOs and alerts, BigQuery Agent Analytics, production traces into eval cases)
+and `adk-release-engineering` (version pinning, CI eval gates, model migration,
+staged promotion and joint rollback). Each was built from the google-adk 2.8.0
+source and the 2.9 to 2.11 changelog plus a second research pass over the
+official ADK documentation, Google samples and the issue tracker; the security
+skill records the 2026 ADK advisories and their fix versions, and the release
+skill records that `adk eval` exits successfully even when cases fail. All
+**19 packages** pass validation; the offline suites run **607 tests** with
+**59 optional SDK checks skipped**, including 45 tests for the three new
+inspectors and converters. See the
+[gap review and validation record](docs/research/ai-engineering-practices-gap-review.md).
+No live model run, cloud operation or skill-selection trial was performed; the
+new activation and scenario cases are written but not yet executed.
 
 ### Cross-framework specialists · 6 October 2026
 

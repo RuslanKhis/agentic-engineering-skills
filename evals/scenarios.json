@@ -491,6 +491,45 @@
         "Wraps validate_schema failures at an owned boundary with an attempt budget and an explicit failure outcome, counting wrong-valid-schema separately from invalid output.",
         "Keeps temperature at the Gemini 3 default and thinking in one place, and hands the development-set comparison to adk-agent-evaluation."
       ]
+    },
+    {
+      "id": "security-review-untrusted-content-with-write-tools",
+      "prompt": "Review our ADK support agent before launch. It reads inbound customer emails through a tool, searches a RAG index, and can issue refunds and send emails. Tell us what an attacker could make it do and give us tests that prove the fixes.",
+      "available_skills": ["adk-agent-security", "protect-adk-sensitive-data", "adk-operational-guardrails", "adk-agent-evaluation"],
+      "context": "Python ADK 2.8.0 project: one chat-mode agent with eight FunctionTools including fetch_email, search_docs, issue_refund and send_email, no before_tool_callback, refund tool without require_confirmation, Model Armor plugin on user input only. No model credentials available.",
+      "expected_primary": "adk-agent-security",
+      "assertions": [
+        "Runs the read-only inspector and reports the agent holds private data, untrusted content and egress together, naming the enforcement points that break the chain.",
+        "Proposes a structural change (quarantined reader without tools, capability checks in before_tool_callback keyed on state, confirmation on refund and send) rather than relying on Model Armor, and explains that an agent's own tool results are not fenced by ADK 2.8.0.",
+        "Adds deterministic scripted-model tests from the adversarial seed set asserting the forbidden tools are never called and no egress happens when a tool result carries instructions.",
+        "Maps each finding to an OWASP identifier with the owning skill, and leaves PII redaction policy with protect-adk-sensitive-data and approval mechanics with adk-operational-guardrails."
+      ]
+    },
+    {
+      "id": "observability-agent-runtime-latency-and-alerts",
+      "prompt": "Our Agent Runtime agent's p95 doubled. Instrument it so we can attribute time to model, tools and session loading, define an SLO, and alert on it. Keep prompts out of the traces.",
+      "available_skills": ["adk-agent-observability", "optimise-adk-on-google-cloud", "protect-adk-sensitive-data", "deploy-adk-on-google-cloud"],
+      "context": "ADK 2.8.0 agent deployed with adk deploy agent_engine; no telemetry flags set; a saved session export with usage metadata is available; Cloud project has Cloud Trace but the Telemetry API is not enabled.",
+      "expected_primary": "adk-agent-observability",
+      "assertions": [
+        "Names the exact environment gates and their precedence, keeps span content off, and lists the APIs and IAM roles that must be enabled as an approval item rather than enabling them.",
+        "Explains the request-driven metric exporter on Agent Runtime and its tail-loss caveat, and uses the built-in reasoning_engine metrics plus gen_ai spans to separate model, tool and session time.",
+        "Defines a good/total SLI from a measured baseline with an error-budget alert, and runs the offline invocation summary on the saved session as the local evidence.",
+        "Hands any hosting-level optimisation to optimise-adk-on-google-cloud and content policy to protect-adk-sensitive-data."
+      ]
+    },
+    {
+      "id": "release-model-retirement-and-ci-gate",
+      "prompt": "Our Gemini model retires in three weeks and our GitHub Actions only run unit tests. Plan the model upgrade and add an eval gate that blocks regressions without being flaky.",
+      "available_skills": ["adk-release-engineering", "adk-agent-evaluation", "adk-model-and-output-contracts", "deploy-adk-on-google-cloud"],
+      "context": "ADK 2.8.0 project with a 40-case evalset, no eval config, judge model unset, model ID gemini-2.5-pro in three places, Cloud Run deployment, prompts as Python constants.",
+      "expected_primary": "adk-release-engineering",
+      "assertions": [
+        "Runs the release inventory, pins the judge model explicitly because the 2.8.0 default retires, and records every model, prompt hash and eval set in a release manifest.",
+        "Designs the gate with pytest and AgentEvaluator or conformance replay as the failing step, explaining that adk eval returns exit code 0 on failures, with repeats, a cost ceiling and NOT RUN treated as failure to produce evidence.",
+        "Plans the migration as a side-by-side comparison on the frozen development set with a holdout run once, handing the measurement to adk-agent-evaluation and the thinking and temperature settings to adk-model-and-output-contracts.",
+        "Describes the Cloud Run tagged-revision canary and the joint rollback bundle without executing any deployment."
+      ]
     }
   ]
 }

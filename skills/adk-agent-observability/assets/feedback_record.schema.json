@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/adk-agent-observability/feedback_record.schema.json",
+  "title": "ADK agent feedback record",
+  "description": "Structured log record for user or operator feedback on one agent invocation. Keyed by the same opaque identifiers as spans (gen_ai.conversation.id, gcp.vertex.agent.invocation_id) and BigQuery Agent Analytics rows (session_id, invocation_id). Free text retains personal data until redacted; apply the project's protect-adk-sensitive-data policy before storage or omit it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["log_type", "service_name", "session_id", "invocation_id", "score"],
+  "properties": {
+    "log_type": {"const": "feedback"},
+    "service_name": {"type": "string", "minLength": 1, "maxLength": 128},
+    "session_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "invocation_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "user_id": {"type": "string", "minLength": 1, "maxLength": 256, "description": "Opaque application user key; never an email address or display name."},
+    "trace_id": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+    "score": {"type": "integer", "minimum": -1, "maximum": 5, "description": "Choose one scale per deployment: -1/1 or 1 to 5."},
+    "category": {"type": "string", "enum": ["wrong_answer", "tool_failed", "too_slow", "unsafe", "other"]},
+    "text": {"type": "string", "maxLength": 2000, "description": "Optional free text; redact before storage."},
+    "submitted_at": {"type": "string", "format": "date-time"}
+  }
+}

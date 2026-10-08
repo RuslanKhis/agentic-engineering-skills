@@ -1,0 +1,6 @@
+interface:
+  display_name: "ADK Release Engineering"
+  short_description: "Version, gate, migrate and roll back ADK agent releases"
+  default_prompt: "Use $adk-release-engineering to inventory this ADK agent's release references (models, judge, prompts, eval sets, deploy configs) and design its eval gate, model migration or staged rollout."
+policy:
+  allow_implicit_invocation: true

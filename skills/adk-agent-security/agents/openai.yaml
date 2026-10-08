@@ -1,0 +1,6 @@
+interface:
+  display_name: "ADK Agent Security"
+  short_description: "Threat-model and harden ADK agents against injection"
+  default_prompt: "Use $adk-agent-security to inventory this ADK agent's tools, MCP servers, code executors and identity sources, build its threat model and propose injection-resistant structure with an adversarial regression suite."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,9 @@
+{
+  "_comment": "Template for invocation_summary.py --prices. The numbers below are placeholders, not published prices. Replace every entry with the provider's current price per one million tokens for the exact model_version strings your sessions record, and record the date you copied them. Keys: input (non-cached prompt tokens), output (candidates plus thoughts tokens), cached_input (optional; cached prompt tokens; omitted means charged at the input rate and flagged). The optional 'default' entry prices models missing from the table and is flagged on every row it touches.",
+  "currency": "USD",
+  "as_of": "YYYY-MM-DD",
+  "per_million": {
+    "replace-with-model-version-a": {"input": 0.0, "output": 0.0, "cached_input": 0.0},
+    "replace-with-model-version-b": {"input": 0.0, "output": 0.0}
+  }
+}

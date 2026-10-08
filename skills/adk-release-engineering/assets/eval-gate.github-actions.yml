@@ -1,0 +1,195 @@
+# Evaluation gate for an ADK agent. Template; every <PLACEHOLDER> must be replaced.
+#
+# Tiers (see references/ci-eval-gates.md):
+#   deterministic  every pull request; no model calls; blocks merge
+#   live-gate      label "run-live-eval" or push to main; agent inference, no judge; blocks promotion
+#   judge-nightly  schedule; judge metrics with the judge pinned; reported, compared with the previous run
+#
+# Gate choice: `adk eval` exits 0 whatever the pass/fail counts (google-adk 2.8.0 and main),
+# so the failing steps are pytest + AgentEvaluator (writes the CSV, then asserts), the strict
+# CSV checker from the adk-agent-evaluation skill, and `adk conformance test` (replay mode).
+# No secrets appear here; provider credentials come from the repository's secret store through
+# Workload Identity Federation or a named secret, never from this file.
+
+name: adk-eval-gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, labeled]
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 3 * * *"   # nightly judge run; adjust to the team's quiet hours
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write   # needed only for Workload Identity Federation in the live tiers
+
+env:
+  PYTHON_VERSION: "3.11"
+  # Release pins. Change them only in a reviewed pull request; the inventory helper reports drift.
+  ADK_VERSION: "2.8.0"                           # <PIN: must match the lockfile>
+  AGENT_MODEL_ID: "<PIN: e.g. gemini-3.8-flash>" # stable or dated ID, never -latest/-preview
+  JUDGE_MODEL_ID: "<PIN: e.g. gemini-3.8-flash>" # the 2.8.0 default gemini-2.5-flash is unpinned and retiring
+  JUDGE_NUM_SAMPLES: "5"
+  EVAL_NUM_RUNS: "3"
+  # Cost ceiling enforced by the pytest module before dispatch (ADK does not enforce spend):
+  # the test skips with a NOT RUN marker when cases x runs exceeds EVAL_MAX_CASES x EVAL_MAX_RUNS.
+  EVAL_MAX_CASES: "120"
+  EVAL_MAX_RUNS: "3"
+  # Path of the installed adk-agent-evaluation skill. The checker is reused, not copied:
+  # install the skill as a submodule, a vendored directory or a pinned archive and point here.
+  ADK_AGENT_EVALUATION_DIR: "<PATH: e.g. .skills/adk-agent-evaluation>"
+  EVAL_SET: "<PATH: e.g. evals/ci.evalset.json>"
+  EVAL_CONFIG: "<PATH: e.g. evals/test_config.json>"
+  EVAL_EXPECTATIONS: "<PATH: e.g. evals/ci-expectations.json>"
+  RESULTS_DIR: "results/${{ github.sha }}"
+
+jobs:
+  deterministic:
+    name: Tier 1 deterministic (no model calls)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install pinned dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt   # <ADJUST: lockfile or `pip install -e .`>
+          python -c "import importlib.metadata as m; v=m.version('google-adk'); assert v=='${ADK_VERSION}', v"
+      - name: Inventory release references (read-only, hashes only)
+        run: |
+          python "<PATH to adk-release-engineering>/scripts/inventory_release_refs.py" --project . --dry-run > inventory.json
+          python - <<'PY'
+          import json, sys
+          data = json.load(open("inventory.json"))
+          bad = [s for s in data["signals"] if s["signal"] in ("judge_model_unset", "judge_model_alias", "judge_model_retiring_default", "model_alias")]
+          print(json.dumps(bad, indent=2))
+          sys.exit(1 if bad else 0)
+          PY
+      - name: Validate eval assets against the pinned ADK models
+        run: |
+          python - <<'PY'
+          import json, os
+          from google.adk.evaluation.eval_set import EvalSet
+          from google.adk.evaluation.eval_config import EvalConfig
+          EvalSet.model_validate(json.load(open(os.environ["EVAL_SET"])))
+          EvalConfig.model_validate(json.load(open(os.environ["EVAL_CONFIG"])))
+          PY
+      - name: Scripted-model unit and Runner tests
+        run: python -m pytest tests/unit -q   # <ADJUST: the project's offline suite>
+      - name: Conformance replay (exits non-zero on mismatch)
+        run: adk conformance test tests/conformance --mode replay   # <ADJUST: recorded baseline directory>
+      - name: Dry-run the gate contract against the expectations file
+        run: |
+          printf 'eval_set_id,eval_id,metric_name,threshold,score,eval_status\n' > header-only.csv
+          python "${ADK_AGENT_EVALUATION_DIR}/scripts/check_eval_results.py" --csv header-only.csv --expectations "${EVAL_EXPECTATIONS}" --dry-run
+
+  live-gate:
+    name: Tier 2 bounded live (deterministic criteria, repeats)
+    needs: deterministic
+    if: >-
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.pull_request.labels.*.name, 'run-live-eval')
+    runs-on: ubuntu-latest
+    environment: eval   # <ADJUST: a GitHub environment holding the project id and WIF provider>
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install pinned dependencies
+        run: pip install -r requirements.txt   # <ADJUST>
+      - name: Authenticate to Google Cloud (Workload Identity Federation)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}   # <SET in the environment>
+          service_account: ${{ vars.EVAL_SERVICE_ACCOUNT }}       # <SET in the environment>
+      - name: Restore previous eval results for comparison (results cache, not a response cache)
+        uses: actions/cache@v4
+        with:
+          path: .adk/eval_history
+          key: adk-eval-history-${{ hashFiles(env.EVAL_SET, env.EVAL_CONFIG, 'prompt.py', 'prompts/**') }}-${{ env.AGENT_MODEL_ID }}
+          restore-keys: adk-eval-history-
+      - name: Run AgentEvaluator with repeats and CSV output
+        env:
+          GOOGLE_GENAI_USE_ENTERPRISE: "true"
+          GOOGLE_CLOUD_PROJECT: ${{ vars.EVAL_PROJECT }}     # <SET in the environment>
+          GOOGLE_CLOUD_LOCATION: ${{ vars.EVAL_LOCATION }}   # <SET in the environment>
+          EVAL_OUTPUT_CSV: ${{ env.RESULTS_DIR }}/ci.csv
+        run: |
+          mkdir -p "${RESULTS_DIR}"
+          # tests/eval/test_ci_gate.py calls
+          #   AgentEvaluator.evaluate(agent_module=..., eval_dataset_file_path_or_dir=EVAL_SET,
+          #                           num_runs=int(EVAL_NUM_RUNS), output_file=EVAL_OUTPUT_CSV)
+          # after checking cases x runs <= EVAL_MAX_CASES x EVAL_MAX_RUNS, and lets the AssertionError fail the step.
+          # The CSV is written before the assertion, so the next step still runs on failure.
+          python -m pytest tests/eval/test_ci_gate.py -q || echo "AGENT_EVALUATOR_FAILED=1" >> "$GITHUB_ENV"
+      - name: Strict gate over per-run rows (NOT RUN is a failure)
+        run: |
+          test -s "${RESULTS_DIR}/ci.csv" || { echo "::error::No CSV produced: eval NOT RUN"; exit 1; }
+          python "${ADK_AGENT_EVALUATION_DIR}/scripts/check_eval_results.py" --csv "${RESULTS_DIR}/ci.csv" --expectations "${EVAL_EXPECTATIONS}"
+      - name: Fail when the averaging gate failed
+        if: env.AGENT_EVALUATOR_FAILED == '1'
+        run: |
+          echo "::error::AgentEvaluator reported failures (mean over ${EVAL_NUM_RUNS} runs below threshold)"
+          exit 1
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-evidence-${{ github.sha }}
+          path: |
+            ${{ env.RESULTS_DIR }}
+            .adk/eval_history
+
+  judge-nightly:
+    name: Tier 3 judge metrics (pinned judge, majority vote)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment: eval
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install pinned dependencies
+        run: pip install -r requirements.txt   # <ADJUST>
+      - name: Authenticate to Google Cloud (Workload Identity Federation)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.EVAL_SERVICE_ACCOUNT }}
+      - name: Assert the judge config is pinned to the release values
+        run: |
+          python - <<'PY'
+          import json, os
+          cfg = json.load(open("<PATH: evals/judge_config.json>"))
+          for name, crit in cfg["criteria"].items():
+              if isinstance(crit, dict) and "judge_model_options" in crit:
+                  opts = crit["judge_model_options"]
+                  assert opts.get("judge_model") == os.environ["JUDGE_MODEL_ID"], (name, opts)
+                  assert opts.get("num_samples") == int(os.environ["JUDGE_NUM_SAMPLES"]), (name, opts)
+          PY
+      - name: Run judge metrics (final_response_match_v2, rubric_based_*, hallucinations_v1, safety_v1)
+        env:
+          GOOGLE_GENAI_USE_ENTERPRISE: "true"
+          GOOGLE_CLOUD_PROJECT: ${{ vars.EVAL_PROJECT }}
+          GOOGLE_CLOUD_LOCATION: ${{ vars.EVAL_LOCATION }}
+          EVAL_OUTPUT_CSV: ${{ env.RESULTS_DIR }}/judge.csv
+        run: |
+          mkdir -p "${RESULTS_DIR}"
+          # tests/eval/test_nightly_judge.py uses evals/judge_config.json and num_runs=1; the comparison
+          # against the previous nightly is reported, and a drop beyond the agreed margin opens a release blocker.
+          python -m pytest tests/eval/test_nightly_judge.py -q || true
+          test -s "${RESULTS_DIR}/judge.csv" || { echo "::error::No judge CSV produced: NOT RUN"; exit 1; }
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: judge-evidence-${{ github.run_id }}
+          path: ${{ env.RESULTS_DIR }}

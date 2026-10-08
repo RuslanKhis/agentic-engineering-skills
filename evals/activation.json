@@ -308,6 +308,69 @@
       "prompt": "Our ADK support agent gets slower and more expensive every turn after about thirty messages, cached token counts stay at zero and BigQuery tool results are 200 KB JSON blobs. Shape what enters each model request and verify the saving.",
       "should_trigger": true,
       "rationale": "Context-window growth, cache misses and oversized tool results are the optimise skill's context-window mode."
+    },
+    {
+      "id": "security-positive",
+      "skill": "adk-agent-security",
+      "prompt": "Our ADK support agent reads customer emails and can issue refunds and send emails. Do a security review before launch and tell me what an attacker could make it do through a poisoned email or tool result.",
+      "should_trigger": true,
+      "rationale": "Untrusted content plus consequential actions is a whole-agent threat-model question, not a data-redaction task."
+    },
+    {
+      "id": "security-mcp-positive",
+      "skill": "adk-agent-security",
+      "prompt": "We are adding three third-party MCP servers to the agent. How should we vet, filter and pin their tools, and what tests prove a poisoned tool description cannot make the agent leak data?",
+      "should_trigger": true,
+      "rationale": "MCP supply-chain vetting and adversarial assertions are security engineering."
+    },
+    {
+      "id": "security-near-miss",
+      "skill": "adk-agent-security",
+      "prompt": "Customer social security numbers are showing up in our Cloud Logging entries from the agent. Add redaction before anything is logged.",
+      "should_trigger": false,
+      "rationale": "A sensitive-data class leaking into logs belongs to protect-adk-sensitive-data; there is no whole-agent threat or adversarial question."
+    },
+    {
+      "id": "observability-positive",
+      "skill": "adk-agent-observability",
+      "prompt": "p95 latency on our Agent Runtime agent doubled this week. Add tracing and metrics so we can tell model time from tool time from session loading, and set an alert on it.",
+      "should_trigger": true,
+      "rationale": "Instrumenting signals, choosing the exporter for the host and alerting are production observability work."
+    },
+    {
+      "id": "observability-eval-handoff-positive",
+      "skill": "adk-agent-observability",
+      "prompt": "Pull the thumbs-down conversations from our BigQuery Agent Analytics table into an ADK eval set we can use for regression, with the personal data removed.",
+      "should_trigger": true,
+      "rationale": "Turning sampled production events into redacted evaluation cases is the production-to-evaluation hand-off."
+    },
+    {
+      "id": "observability-near-miss",
+      "skill": "adk-agent-observability",
+      "prompt": "Set up Cloud Logging sinks and a 30-day retention policy for our GKE cluster's system logs.",
+      "should_trigger": false,
+      "rationale": "General logging administration with no agent telemetry, SLI or trace question."
+    },
+    {
+      "id": "release-positive",
+      "skill": "adk-release-engineering",
+      "prompt": "Google emailed that our Gemini model is retiring next month. Plan the upgrade so our agent's eval scores do not silently drop, including the judge model we use in CI.",
+      "should_trigger": true,
+      "rationale": "Model migration with re-baselining and judge pinning is release lifecycle work."
+    },
+    {
+      "id": "release-ci-gate-positive",
+      "skill": "adk-release-engineering",
+      "prompt": "Add an eval gate to GitHub Actions so pull requests that change the agent instruction are blocked on regressions, and make it not flaky or expensive.",
+      "should_trigger": true,
+      "rationale": "CI gate tiers, thresholds, repeats and cost ceilings are release engineering, not eval-case design."
+    },
+    {
+      "id": "release-near-miss",
+      "skill": "adk-release-engineering",
+      "prompt": "Deploy my ADK agent to Cloud Run for the first time with a service account and a session database.",
+      "should_trigger": false,
+      "rationale": "A first deployment belongs to deploy-adk-on-google-cloud; no versioning, gate or promotion concern is raised."
     }
   ]
 }
