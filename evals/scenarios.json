@@ -543,6 +543,19 @@
         "Treats inbound peer messages as data, not user authority, and points the approval-over-A2A gap to adk-agent-security while keeping the A2A contract (task states, context and task IDs in event metadata) here.",
         "Leaves Cloud Run deployment mechanics to deploy-adk-on-google-cloud and lists registration and API enablement as approvals, not actions taken."
       ]
+    },
+    {
+      "id": "system-designer-cross-framework-coverage",
+      "prompt": "Design a customer-support agent on ADK and GCP that reads inbound emails and knowledge-base articles, can create refunds, delegates billing questions to another team's agent, and must be released weekly without regressions. Talk through the decisions and write the architecture and plan; do not implement.",
+      "available_skills": ["adk-system-designer", "adk-agent-security", "adk-agent-interoperability", "adk-release-engineering", "adk-agent-observability", "adk-model-and-output-contracts", "adk-agent-instructions", "adk-tool-interface-design", "adk-workflow-design", "safe-api-tool-calls"],
+      "context": "Greenfield project, no code yet. The other team's agent runs in Java behind its own service. The user has a two-week budget and a reviewer who will read the design document.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Raises the per-agent exposure question (private data, untrusted email content and a refund tool in one agent) as a design decision with a structural answer, and names adk-agent-security for the adversarial suite rather than relying on screening alone.",
+        "Treats the billing delegation as a topology decision across a team and language boundary, chooses a remote A2A peer over an in-process sub-agent for that reason, and names adk-agent-interoperability with the contract consequences (peer output is data, task states, card contents).",
+        "Records model, judge and prompt versions as release artefacts with an eval gate and rollback bundle in the plan, naming adk-release-engineering, and defines good/total SLIs and telemetry ownership up front, naming adk-agent-observability.",
+        "Keeps the design document at requirement, choice, tradeoff and verification altitude, routes implementation goals to the named specialists in the handoff table, and does not scaffold code or run cloud commands."
+      ]
     }
   ]
 }

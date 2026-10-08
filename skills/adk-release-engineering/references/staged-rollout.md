@@ -41,7 +41,7 @@ When the steps should advance without hand-run commands, Cloud Deploy's canary s
 
 ## Agent Runtime: revisions and manual traffic split (Pre-GA)
 
-From the Agent Runtime revisions and traffic page (https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/manage-revisions-and-traffic, page updated 2026-10-05, vendor; **Pre-GA, `v1beta1` API**):
+From the Agent Runtime revisions and traffic page (https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/manage-revisions-and-traffic, page updated 2026-10-07, vendor; **Pre-GA, `v1beta1` API**):
 
 - Creating an agent or updating its versioned fields (the package, deployment and source-code specs and the agent framework, per the page) creates an immutable revision; updating unversioned fields changes all revisions at once. Know which of your fields are versioned before relying on a revision as a rollback target. `adk deploy agent_engine --agent_engine_id` updates an existing resource (2.8.0 option verified), so under this model each such update that touches a versioned field is a new revision.
 - `traffic_config` is either `trafficSplitAlwaysLatest` (default: 100% to the newest revision, so every update is an immediate full rollout) or `trafficSplitManual` with targets of revision name and percent that sum to 100 and may only name Active revisions; naming an archived revision returns `FAILED_PRECONDITION`.
@@ -50,7 +50,7 @@ From the Agent Runtime revisions and traffic page (https://docs.cloud.google.com
 - A single revision can be queried directly (`runtimeRevisions/REVISION_ID:query`), bypassing the split; this is the official path for shadow and canary tests before the revision receives traffic.
 - The page recommends tracking the revision number as metadata in logs; put it in the startup log beside the prompt hash and model ID.
 
-Set a manual split before the first production update, otherwise "always latest" promotes every update to 100%. A manual split keeps both revisions warm, so size `min_instances` and `max_instances` for two revisions during the canary (Google staff on the developer forum, 2026-07-06, community; the same thread says `agents-cli` does not expose traffic splitting yet). The `agents-cli` deploy skill (v1.8.0, fetched 2026-10-07) still says "Agent Runtime doesn't support revision-based rollback"; the Google page dated 2026-10-05 documents revisions and traffic splitting as a Preview feature. Treat the skill text as stale and the feature as Pre-GA: rehearse it in a non-production project, keep "fix and redeploy" as the fallback, and expect the API to change.
+Set a manual split before the first production update, otherwise "always latest" promotes every update to 100%. A manual split keeps both revisions warm, so size `min_instances` and `max_instances` for two revisions during the canary (Google staff on the developer forum, 2026-07-06, community; the same thread says `agents-cli` does not expose traffic splitting yet). The `agents-cli` deploy skill (v1.8.0, fetched 2026-10-07) still says "Agent Runtime doesn't support revision-based rollback"; the Google page dated 2026-10-07 documents revisions and traffic splitting as a Preview feature. Treat the skill text as stale and the feature as Pre-GA: rehearse it in a non-production project, keep "fix and redeploy" as the fallback, and expect the API to change.
 
 ## GKE
 

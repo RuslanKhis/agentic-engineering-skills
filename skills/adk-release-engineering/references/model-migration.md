@@ -8,11 +8,11 @@ Dates below are a snapshot; verify them on the cited pages at use time.
 
 | Fact | Source (page date) | Evidence |
 | --- | --- | --- |
-| Gemini 2.0 Flash and Flash-Lite shut down 2026-06-01 | https://ai.google.dev/gemini-api/docs/deprecations (2026-10-01) | vendor |
+| Gemini 2.0 Flash and Flash-Lite shut down 2026-06-01 | https://ai.google.dev/gemini-api/docs/deprecations (2026-10-07, re-read 2026-10-08) | vendor |
 | Gemini 2.5 models limited to users who have actively used them; "for any new projects, use 3.5 Flash-Lite or 3.8 Flash" | same | vendor |
 | `gemini-3.1-flash-lite` earliest shutdown 2027-05-07, replacement `gemini-3.5-flash-lite` | same | vendor |
 | Shutdown dates are the earliest possible dates | same | vendor |
-| Vertex AI: models available at least 12 months after release; short-term models give at least 45 days to migrate; dates may be extended and are never moved earlier | https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions (2026-10-05) | vendor |
+| Vertex AI: models available at least 12 months after release; short-term models give at least 45 days to migrate; dates may be extended and are never moved earlier | https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions (2026-10-07, re-read 2026-10-08) | vendor |
 | `gemini-2.5-pro`, `gemini-2.5-flash`, `gemini-2.5-flash-lite` retire on Vertex 2026-10-20; `gemini-3.8-flash` listed as a replacement | same | vendor |
 | `gemini-3.5-flash` released 2026-05-19 (the ADK 2.8.0 default) | same | vendor |
 | Short-term models: `gemini-3.6-flash` retires 2026-11-19 and `gemini-3.7-flash` 2027-01-28, replacement `gemini-3.8-flash`; `gemini-3.8-flash` has no retirement date announced | same | vendor |

@@ -50,6 +50,14 @@ than repeating them; keep this record proportionate to the design.
 Distinguish application runtime, model backend and data services. Record relevant
 versions, current provider sources and any capability still needing verification.
 
+### Model-facing contracts
+
+| Surface | Contract | Implementing skill and verification |
+| --- | --- | --- |
+| Instructions and routing descriptions | <judgment each agent owns; sub-agent descriptions as routing contracts; what stays in code> | `adk-agent-instructions`; rendered-request test |
+| Tool interfaces and budgets | <tool source per capability; per-agent tool count; result bound; read/write/irreversible tier> | `adk-tool-interface-design`; `adk-agent-interoperability` for MCP or A2A; declaration dump and size |
+| Output contract, model and backend | <schema with refusal shape; pinned model ID and lifecycle date; backend; thinking; failover> | `adk-model-and-output-contracts`; scripted invalid-output test |
+
 ## Data and authority
 
 | Data / operation | Owner and authorized scope | Writers / readers | Source and freshness | Lifetime / erasure |
@@ -57,6 +65,17 @@ versions, current provider sources and any capability still needing verification
 
 Capture session/invocation/business-operation identities, tool schemas, approval
 binding, credential ownership and public-output policy where relevant.
+
+### Security posture
+
+| Agent | Private data | Untrusted content | Write or egress | Resolution (split, remove a leg, or accepted risk) |
+| --- | --- | --- | --- | --- |
+
+Record the tool tiers (read, write, irreversible) and the confirmation each
+tier needs in code, the code executor and its sandbox, and the adversarial
+cases that assert the forbidden action never runs. `adk-agent-security` owns
+the threat model; omit this block with a one-line reason for a read-only
+product with no untrusted input.
 
 ## Budgets and capacity
 
@@ -86,6 +105,16 @@ and the rule that it is produced by the method the report describes: when the
 method changes, the deliverable is regenerated, or the report states that it
 was not and why. Reserve the budget for that final run before any experiment
 draws on it.
+
+Observability and release, at the depth the artifact type needs:
+
+- SLIs tied to the guarantees above, each with baseline, target and alert owner.
+- Telemetry owner per process; content-capture gates and sinks with retention.
+- Release bundle: image or revision, prompt version, model and judge IDs, tool
+  schema hash, secret versions, and where it is recorded.
+- Promotion gate (deterministic checks, judge schedule, cost ceiling) and the
+  canary's comparable sample.
+- Rollback unit and how long the previous revision stays ready.
 
 Link the implementation plan, or include its goals here for a small effort.
 Map consequential choices to ADK/application components, concrete integration

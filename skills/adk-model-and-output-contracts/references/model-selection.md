@@ -4,7 +4,7 @@ Read this when choosing a model for a new agent, replacing one that is retiring,
 
 ## Current Gemini text models
 
-From the Gemini API models page (https://ai.google.dev/gemini-api/docs/models, page dated 2026-10-01) and deprecations page (https://ai.google.dev/gemini-api/docs/deprecations, page dated 2026-10-01), both vendor documentation:
+From the Gemini API models page (https://ai.google.dev/gemini-api/docs/models, page dated 2026-10-06) and deprecations page (https://ai.google.dev/gemini-api/docs/deprecations, page dated 2026-10-07; both re-read 2026-10-08), both vendor documentation:
 
 | Model ID | Status (Gemini API) | Release | Shutdown or note |
 | --- | --- | --- | --- |
@@ -19,7 +19,7 @@ From the Gemini API models page (https://ai.google.dev/gemini-api/docs/models, p
 | `gemini-2.5-pro`, `gemini-2.5-flash`, `gemini-2.5-flash-lite` | Limited | 2025 | Served only to users who have actively used them; "For any new projects, use our latest models: 3.5 Flash-Lite or 3.8 Flash" |
 | `gemini-2.0-flash`, `-001`, `gemini-2.0-flash-lite`, `-001` | Shut down | 2025 | Shutdown 2026-06-01 |
 
-Shutdown dates on the deprecations page "indicate the earliest possible dates on which a model might be retired". The Vertex AI model lifecycle page (https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions, page dated 2026-10-05, vendor documentation) commits to at least 12 months of availability after release and states that retirement dates "may be extended" and "won't be moved to an earlier date". Its table lists `gemini-3.5-flash` retiring 2027-05-19 or later, `gemini-3.5-flash-lite` 2027-07-21 or later, `gemini-3.1-flash-lite` 2027-05-07 or later, and `gemini-2.5-pro`, `gemini-2.5-flash` and `gemini-2.5-flash-lite` retiring **2026-10-20** with `gemini-3.8-flash` among the replacements. A 2.5 model in a Vertex deployment is therefore an urgent finding at the time of writing.
+Shutdown dates on the deprecations page "indicate the earliest possible dates on which a model might be retired". The Vertex AI model lifecycle page (https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions, page dated 2026-10-07, vendor documentation) commits to at least 12 months of availability after release and states that retirement dates "may be extended" and "won't be moved to an earlier date". Its table lists `gemini-3.5-flash` retiring 2027-05-19 or later, `gemini-3.5-flash-lite` 2027-07-21 or later, `gemini-3.1-flash-lite` 2027-05-07 or later, and `gemini-2.5-pro`, `gemini-2.5-flash` and `gemini-2.5-flash-lite` retiring **2026-10-20** with `gemini-3.8-flash` among the replacements. A 2.5 model in a Vertex deployment is therefore an urgent finding at the time of writing. The same page's shorter-availability table lists `gemini-3.6-flash` retiring 2026-11-19 and `gemini-3.7-flash` 2027-01-28, replacement `gemini-3.8-flash`, although the Gemini API announces no shutdown for either; the JSON carries these as `vertex_retirement`.
 
 Use explicit version strings. An alias ending in `-latest` moves without a code change; the audit flags it. Models reached through `projects/.../publishers/google/models/...` paths force enterprise mode in `Gemini` (verified in `models/google_llm.py`).
 

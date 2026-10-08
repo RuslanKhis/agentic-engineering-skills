@@ -1,0 +1,82 @@
+[
+ {
+  "name": "adk-agent-evaluation",
+  "description": "Build, adapt or audit a Python ADK agent's testing strategy: deterministic tool and Runner tests, live evaluation sets, simulated conversations, conformance replay and strict result checks. Use for agent behaviour, regression coverage or evaluation reliability, and for improving wrong decisions through a labelled development set, error analysis, prompt and exemplar design or model escalation. Do not activate for ordinary non-agent unit tests, standalone model benchmarks, deployment, or cloud cleanup alone."
+ },
+ {
+  "name": "adk-agent-instructions",
+  "description": "Design, review or repair the instructions of Python Google ADK agents, covering instruction structure and altitude, session-state templating, tool-use guidance inside the prompt, sub-agent descriptions for routing, few-shot exemplars, the instruction-versus-code division, model-generation prompt notes and prompt-as-code layout with change tests. Use when an agent follows its prompt poorly, over- or under-calls tools, routes to the wrong sub-agent, raises templating KeyErrors, or a prompt must move to a new model generation. Do not activate for the measured evaluation loop itself (adk-agent-evaluation), orchestration structure (adk-workflow-design), tool docstrings and parameter schemas (adk-tool-interface-design), output schemas or model configuration (adk-model-and-output-contracts), or prompt-injection screening products (protect-adk-sensitive-data)."
+ },
+ {
+  "name": "adk-agent-interoperability",
+  "description": "Connect, expose or audit Python Google ADK agents across process boundaries with MCP and A2A. Covers tool-source selection (FunctionTool, OpenAPIToolset, McpToolset, Toolbox, Application Integration), consuming MCP servers (connection params, lifecycle, tool_filter, tool_name_prefix, header_provider, caching, confirmation, SDK pin), exposing an agent as an MCP server, the sub-agents versus remote A2A topology decision, consuming a remote agent with RemoteA2aAgent (agent cards, task states, streaming, timeouts, error events), exposing with to_a2a or adk api_server --a2a and registering on Agent Runtime or Gemini Enterprise, and evaluating across boundaries. Use when an agent must call or be called by another service or framework, or to review MCP and A2A wiring. Do not activate for the MCP threat model (adk-agent-security), in-process orchestration (adk-workflow-design), OAuth plumbing (adk-tool-auth-and-secrets), one API call's retry policy (safe-api-tool-calls) or deployment (deploy-adk-on-google-cloud)."
+ },
+ {
+  "name": "adk-agent-observability",
+  "description": "Instrument, monitor, alert on and debug Python Google ADK agents in production. Covers which spans, metrics and logs ADK emits and which environment gates control them, exporters per host (Cloud Run, GKE, Agent Runtime, OTLP third parties), SLIs, SLOs and alerts including Online Monitors, BigQuery Agent Analytics, feedback capture, turning production traces into evaluation cases, and debugging from a trace to a session. Use for missing or duplicated telemetry, token or cost accounting, alert design, dashboards, or a production incident on an ADK agent. Do not activate for content-redaction policy (protect-adk-sensitive-data), GKE exporter allowlists and custom spans (optimise-adk-on-google-cloud), evaluation design (adk-agent-evaluation), first deployment (deploy-adk-on-google-cloud), or Terraform and CLI scaffolding of telemetry infrastructure (Google's agents-cli skills)."
+ },
+ {
+  "name": "adk-agent-security",
+  "description": "Threat-model, harden or review a Python Google ADK agent as a whole system against prompt injection, tool and MCP supply-chain compromise, excessive agency, insecure output handling and unsafe code execution. Covers the lethal-trifecta check per agent, injection-resistant structure (quarantined readers, plan-then-execute, before_tool_callback capability checks), MCP allowlists and pinning, tool tiering with confirmation, code-executor selection, an adversarial suite with deterministic forbidden-action assertions, and findings mapped to OWASP LLM and Agentic IDs. Use when an agent reads untrusted content and can act, before exposing MCP servers or code execution, or for a security review. Do not activate for PII or credential screening and Model Armor templates (protect-adk-sensitive-data), credential plumbing (adk-tool-auth-and-secrets), budgets and approval mechanics (adk-operational-guardrails), eval harness execution (adk-agent-evaluation) or document delimiting inside drafts (adk-workflow-design)."
+ },
+ {
+  "name": "adk-engineer",
+  "description": ">- Help design, build, change or review a Python Google ADK application by selecting the relevant Agentic Engineering specialist skills. Use as the starting point for an ADK engineering request when the user has not chosen a specialist, or when a change spans several ADK concerns. For a focused task already covered by an active specialist, continue with that skill directly."
+ },
+ {
+  "name": "adk-frontend-integration",
+  "description": "Implement, adapt, review or select a web interface for a Google ADK agent using a custom JSON API or AG-UI with CopilotKit, including gateways to managed Agent Runtime. Use for agent-to-browser contracts, session ownership, streaming text and tool displays. Do not activate for ordinary React styling, agent prompting alone (adk-agent-evaluation owns decision quality), general cloud provisioning or non-ADK chat applications."
+ },
+ {
+  "name": "adk-memory-architecture",
+  "description": ">- Design, implement, adapt or audit memory and retrieval in Python Google ADK agents. Select and combine conversation sessions/state, governed RAG, Agent Platform Memory Bank and scoped BigQuery history; enforce identity, consent, retention, replay and erasure boundaries. Use for agent memory, knowledge retrieval or cross-session continuity work. Do not activate for general database administration, arbitrary SQL generation, deployment alone, prompt-only editing (adk-agent-evaluation owns decision quality) or non-agent caching."
+ },
+ {
+  "name": "adk-model-and-output-contracts",
+  "description": "Design, harden or review what a Python Google ADK agent asks the model to emit and which model and settings produce it. Covers output_schema contracts and their validation, repair loops, output_schema together with tools, Gemini model selection and lifecycle, thinking_level and sampling configuration, and model failover. Use for structured output that arrives as prose, fenced JSON or invalid data, for designing a response schema, for choosing or escalating a Gemini model, for temperature or thinking settings, or for FallbackModel decisions. Do not activate for measuring agent quality on a labelled set (adk-agent-evaluation), SQL wire schemas (adk-sql-agent-engineering), prompt wording (adk-agent-instructions), tool parameter schemas (adk-tool-interface-design), hosting-level latency (optimise-adk-on-google-cloud) or budget and degradation policy (adk-operational-guardrails)."
+ },
+ {
+  "name": "adk-operational-guardrails",
+  "description": "Implement, adapt or audit invocation limits, token budgets, repeated-tool protection, human approval and application cost controls in Python Google ADK agents. Use for runaway agent loops, cross-turn budget enforcement, risky actions awaiting review, or staged cost shutdown. Do not activate for a single HTTP retry policy, deployment alone, prompt-only editing (adk-agent-evaluation owns decision quality), or general cloud billing administration."
+ },
+ {
+  "name": "adk-release-engineering",
+  "description": "Design, implement or audit the release lifecycle of a Python Google ADK agent: prompt and configuration versioning, pinned model and judge IDs, evaluation gates in CI with threshold, repeat and cost policy, model-version migration with re-baselining, staged promotion and joint rollback of prompt, model, tool schema and secrets, and refreshing eval sets from production samples. Use when a release, CI gate, model deprecation notice, canary, rollback or stale eval set is the concern. Do not activate for a first deployment or packaging (deploy-adk-on-google-cloud), writing eval cases or the iteration loop (adk-agent-evaluation), choosing model settings (adk-model-and-output-contracts), prompt wording (adk-agent-instructions) or production monitoring (adk-agent-observability)."
+ },
+ {
+  "name": "adk-sql-agent-engineering",
+  "description": "Build, adapt, test or troubleshoot Google ADK SQL agents using reviewed templates, selective schemas and controlled read-only execution. Use for natural-language analytics, SQL routing, generated-query reliability, or the agent's BigQuery/Gemini identity, setup and cleanup. Do not activate for ordinary SQL tuning, general database administration, RAG-only work or unrelated cloud hosting."
+ },
+ {
+  "name": "adk-system-designer",
+  "description": ">- Work through requirements and trade-offs with the user to design or review the system architecture of a Python Google ADK application on GCP, before implementation. Use for a new application design, a substantial redesign, or a cross-cutting architecture review. For a focused memory, workflow, frontend or deployment change, use that specialist directly."
+ },
+ {
+  "name": "adk-tool-auth-and-secrets",
+  "description": "Implement or review authenticated Google ADK tools with verified user/session ownership, keyless GCP access, Secret Manager and delegated OAuth lifecycle controls. Use for tool credential selection, cross-user access bugs, consent/refresh/disconnect flows or credential exposure in agent events. Exclude generic sign-in UI, general IAM administration, model-key billing troubleshooting and content moderation without a tool-authentication boundary."
+ },
+ {
+  "name": "adk-tool-interface-design",
+  "description": "Design, diagnose or review the model-facing interface of Python Google ADK tools and tool-like sub-agents, including FunctionTool docstrings and parameter schemas, naming and namespacing, consolidation versus splitting, tool-count budgets and dynamic toolsets, result shaping and size, actionable error returns, and the choice between AgentTool, sub_agents and single_turn mode. Use when the model picks the wrong tool or arguments, tool results bloat context, or a new tool or toolset needs a schema. Do not activate for retries, deadlines or idempotency of the external call (safe-api-tool-calls), credentials and identity (adk-tool-auth-and-secrets), budgets and approval policy (adk-operational-guardrails), measurement over a case set (adk-agent-evaluation), agent instruction text (adk-agent-instructions) or output schemas (adk-model-and-output-contracts)."
+ },
+ {
+  "name": "adk-workflow-design",
+  "description": "Select, implement or review Google ADK workflow control flow, event consumption, session-state handoffs and callback boundaries. Use when choosing between ordinary code, sequential, parallel, bounded-loop, graph or dynamic orchestration, or repairing those runtime contracts in an existing agent. Do not activate for unrelated UI edits, general LLM explanations, standalone cloud deployment, or implementing RAG, memory or SQL services."
+ },
+ {
+  "name": "deploy-adk-on-google-cloud",
+  "description": "Select, implement, adapt or audit deployment of Python Google ADK agents on Cloud Run, Agent Runtime or GKE, including identity, packaging, browser validation, recovery and owned-resource cleanup. Use for ADK hosting decisions and deployment lifecycle work. Do not activate for general Kubernetes administration, non-ADK applications, prompt-only changes (adk-agent-evaluation owns decision quality), or RAG and memory design without a deployment task."
+ },
+ {
+  "name": "optimise-adk-on-google-cloud",
+  "description": "Diagnose, implement or review Python Google ADK optimisations on Cloud Run, Agent Runtime and GKE involving model/tool work, history, streaming completion, session handling, startup, concurrency or workload scaling. Use for measured changes or actionable optimisation plans. Do not activate for hosting selection or first deployment alone, general Kubernetes administration, standalone RAG or memory architecture, non-ADK performance work, or unrelated prompt and UI edits (adk-agent-evaluation owns decision quality)."
+ },
+ {
+  "name": "protect-adk-sensitive-data",
+  "description": "Inspect, implement or review sensitive-data boundaries in Python Google ADK agents using Sensitive Data Protection (SDP), Model Armor, strict tool contracts and guarded response release. Use for PII or credential exposure in prompts, tool calls, session history, logs or streamed answers, and for planning these controls and their cloud prerequisites. Do not activate for generic ADK setup, ordinary authentication work without a data-boundary concern, Cloud Armor WAF configuration, unrelated infrastructure cleanup, or non-agent document redaction."
+ },
+ {
+  "name": "safe-api-tool-calls",
+  "description": "Implement, adapt or review safe external API tools in Python and ADK projects, including selective retries, cooperative deadlines, idempotent writes and confirmation. Use for unreliable API calls, ambiguous write outcomes, unsafe tool replay or setup failures blocking ADK API verification. Do not activate for model-only tuning (adk-agent-evaluation owns decision quality), general cloud deployment, UI-only changes or database query optimisation without an external-call safety problem."
+ }
+]

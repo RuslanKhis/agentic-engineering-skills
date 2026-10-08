@@ -19,19 +19,36 @@ These are starting points, not a stack to install in every application:
 | Need | Concrete implementation route to assess | Infrastructure responsibility | Primary skill |
 | --- | --- | --- | --- |
 | Bounded language/tool orchestration | `LlmAgent` with narrow tools, invoked through the application's `App`/`Runner`; use ordinary code or a workflow agent for known ordering. Locate the agent factory and serving invocation. | Selected model endpoint; application host chosen separately | `adk-workflow-design` |
+| Agent instructions and sub-agent descriptions | Instruction text at the right altitude with session-state templating; tool-use guidance in prose; each sub-agent `description` written as the routing contract the parent reads verbatim; the prompt kept as versioned code with a rendered-request test. Anything the application already knows moves to code. | None beyond the model endpoint | `adk-agent-instructions` |
+| Model-facing tool interfaces and tool budgets | One declaration per tool as the model sees it: name, docstring, primitive parameters, bounded result dict with a status and actionable errors; per-agent tool count and toolset filtering; the delegation interface (`AgentTool` versus sub-agent modes). | None; server-supplied toolsets bring their own hosting | `adk-tool-interface-design` |
+| Output contracts, model and backend selection | `output_schema` with a first-class refusal shape; validation failure handled at a boundary the application owns with a bounded repair budget; pinned model ID with its lifecycle date; thinking and sampling settings; failover as a decision. | The chosen backend (Gemini API or Vertex) decides how a schema is enforced | `adk-model-and-output-contracts` |
+| Tools or agents across a process boundary | Tool source per capability (function tool, OpenAPI, MCP, managed toolset); `McpToolset` with an allow-list and recorded definitions; `RemoteA2aAgent` with a deliberate timeout, task-state handling and peer output treated as data; an agent card that declares capability and security schemes when exposing. | Server or peer hosting, identity between the parties, registry entries | `adk-agent-interoperability` |
 | Persistent conversation or exact preferences | Assess `DatabaseSessionService` for ADK events; use application-owned profile records for exact user settings. Load a trusted user's profile at the invocation boundary. | Reuse the existing database where compatible; Cloud SQL is a candidate when a new managed PostgreSQL service is justified | `adk-memory-architecture` |
+| Context-window shaping | Decide what enters each model request: a stable instruction and tool prefix for caching, tool results bounded at the tool boundary, compaction or filtering of retained history, and an overflow rule per slice. Measure on captured requests, not configuration. | Provider caching minimums and billing | `optimise-adk-on-google-cloud` |
 | Browser replies and progress | Authenticated API around the Runner or remote runtime; custom JSON or AG-UI adapter; application-owned text, tool-result and completion schema connected to the existing UI. | Gateway hosting, streaming transport and session access | `adk-frontend-integration` |
 | Reliable external writes | Python tool/service adapter plus a durable operation record, canonical payload and provider-backed replay/reconciliation. An asynchronous path also needs durable dispatch ownership. | Existing transactional store and approved external API; durable worker only if required | `safe-api-tool-calls` |
 | Caller authority and delegated access | Verify caller/session ownership before invocation; supply trusted scope to tools; choose credentials in backend code and maintain connection lifecycle metadata. | Workload identity and Secret Manager or the existing credential store | `adk-tool-auth-and-secrets` |
 | Budgets and human review | Assess `RunConfig.max_llm_calls` plus application admission/reservations for shared allowances and transport attempts; durable approval and executor records for cross-request review. Check native confirmation compatibility before using it. | Shared control store and separately owned recovery/notification work | `adk-operational-guardrails` |
 | Sensitive-data boundaries | Place protection at actual ingress, persistence, tool and public-release seams; define typed projections and failure behavior. | Approved inspection services when required, with scoped identity, region and capacity | `protect-adk-sensitive-data` |
+| Security posture and adversarial suite | Per-agent trifecta check (private data, untrusted content, egress or write); readers split from writers with structured state between them; capability checks in `before_tool_callback` keyed on trusted state; tool tiers with confirmation on irreversible actions; a sandboxed code executor; scripted-model tests asserting the forbidden action never runs. | Executor sandbox; egress controls of the test environment | `adk-agent-security` |
 | Governed analytical answers | Reviewed SQL or constrained authoring, selective schemas, deterministic validation/execution and evidence-backed results. | Restricted database/BigQuery access with query-cost limits | `adk-sql-agent-engineering` |
 | Runtime and release | Package the actual serving entrypoint and dependencies; configure identity, state and lifecycle; define deployment readback and recovery checks. | Cloud Run, managed Agent Runtime or GKE according to the accepted design | `deploy-adk-on-google-cloud` |
+| Telemetry, SLOs and production-to-evaluation hand-off | One telemetry provider owner per process; content-capture gates set deliberately with the sensitive-data policy; usage counted once per logical model call; good/total SLIs from measured baselines with error-budget alerts; trace, invocation and session identifiers preserved at every hop; sampled production sessions redacted into evaluation cases. | Trace, monitoring, logging and analytics sinks with their own access and retention | `adk-agent-observability` |
+| Release lifecycle, pinning, CI gates, canary and rollback | One release unit (image or revision, prompt version, model and judge IDs, tool schema hash, eval-set hash, secret versions) recorded in a manifest; a deterministic evaluation gate that fails by exit code; model retirement handled as a planned re-baseline; staged traffic with the previous revision kept ready. | CI runner; traffic split and revision retention on the chosen host | `adk-release-engineering` |
 
 Every implementation goal includes relevant local regression checks. Add
 `adk-agent-evaluation` when agent behavior or evaluation design is a substantial
 part of that goal, and `optimise-adk-on-google-cloud` for measured performance
-work. Name one primary skill and only the supporting skills the slice needs.
+work. Choose supporting skills from the boundaries a goal touches: a goal that
+adds or changes a tool gets `adk-tool-interface-design`; one that changes
+instruction text or sub-agent routing gets `adk-agent-instructions`; one that
+reads untrusted content (documents, retrieved passages, server-supplied tool
+results, peer messages) and holds a write or egress tool gets
+`adk-agent-security`; one that promises structured output or changes the model
+gets `adk-model-and-output-contracts`; one that crosses a process boundary gets
+`adk-agent-interoperability`; the first goal that reaches a shared environment
+gets `adk-agent-observability` and `adk-release-engineering`. Name one primary
+skill and only the supporting skills the slice needs.
 Verify availability through the host catalogue or sibling packages; a missing
 skill is a setup prerequisite, not a claim that its guidance was applied.
 
@@ -41,8 +58,12 @@ Official lookup points for the named interfaces:
 [RunConfig](https://adk.dev/runtime/runconfig/),
 [confirmation limitations](https://adk.dev/tools-custom/confirmation/#known-limitations),
 [Cloud Run deployment](https://adk.dev/deploy/cloud-run/).
-Names were checked on 25 September 2026; their constructors, compatibility and
-behavior still need verification against the project's chosen version.
+Interface names were checked on 25 September 2026; skill names in the table
+were checked against the installed collection on 8 October 2026. Each of the
+seven cross-framework specialists records in its `references/compatibility.md`
+the ADK version its building blocks were read against. Constructors,
+compatibility and behavior still need verification against the project's
+chosen version.
 
 ## Write goals that preserve the reasoning
 

@@ -36,11 +36,13 @@ Read this before relying on any version-dependent behaviour in this skill. The p
 | --- | --- | --- |
 | adk-docs evaluate page | Recommends `tool_trajectory_avg_score` and `response_match_score` for CI/CD, judge metrics with `num_samples` majority vote, `adk conformance test` as a PR gate; examples use `judge_model: "gemini-flash-latest"` (an alias) | fetched 2026-10-07 |
 | Cloud Run traffic | `--no-traffic --tag`, `update-traffic --to-tags`, `--to-revisions`, in-flight requests complete | https://docs.cloud.google.com/run/docs/rollouts-rollbacks-traffic-migration (fetched 2026-10-07) |
-| Agent Runtime revisions and traffic split | **Pre-GA (Preview), `v1beta1`**; immutable revisions on versioned-field updates, `trafficSplitManual` or `trafficSplitAlwaysLatest`, direct revision query, keep-n-latest garbage collection, archived revisions unrecoverable, 950 per agent and 6,000 per project-region | https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/manage-revisions-and-traffic (2026-10-05) |
+| Agent Runtime revisions and traffic split | **Pre-GA (Preview), `v1beta1`**; immutable revisions on versioned-field updates, `trafficSplitManual` or `trafficSplitAlwaysLatest`, direct revision query, keep-n-latest garbage collection, archived revisions unrecoverable, 950 per agent and 6,000 per project-region | https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/manage-revisions-and-traffic (2026-10-07) |
 | Cloud Deploy canary for Cloud Run | `automaticTrafficControl`, `canaryDeployment.percentages`, verify/predeploy/postdeploy tasks, `gcloud deploy rollouts advance` | Cloud Deploy canary documentation (2026-10-05), reviewed by the research pass |
 | Agent Platform Evaluations | GA 2026-07-31; offline over traces filtered by version or time; online monitors with sampling; metric `aiplatform.googleapis.com/online_evaluator/scores` | Reviewed by the research pass 2026-10-07; not exercised |
 | `agents-cli` deploy skill v1.8.0 | States Agent Runtime has no revision-based rollback; stale against the page above | fetched 2026-10-07 |
-| Gemini deprecations and Vertex model versions | See [model migration](model-migration.md) | 2026-10-01 and 2026-10-05 |
+| Gemini deprecations and Vertex model versions | See [model migration](model-migration.md) | both 2026-10-07 |
+
+The Gemini deprecations page, the Vertex model versions page and the Agent Runtime revisions and traffic page were re-read on 2026-10-08: the page dates above moved, and no shutdown or retirement date, replacement, Pre-GA status, traffic-split mode or revision limit used by this skill changed.
 
 ## Not verified
 

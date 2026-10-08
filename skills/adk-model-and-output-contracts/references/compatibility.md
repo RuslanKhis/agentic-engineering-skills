@@ -41,15 +41,17 @@ Behaviour attributed to the main branch (per-provider LiteLLM capabilities, `ADK
 | Page | Date on page | Used for |
 | --- | --- | --- |
 | Gemini structured output | 2026-09-23 | Keyword subset, limitations, tools versus schema |
-| Gemini models | 2026-10-01 | Current IDs and statuses |
-| Gemini deprecations | 2026-10-01 | Shutdown dates, 2.5 limited access, new-project advice |
+| Gemini models | 2026-10-06 | Current IDs and statuses |
+| Gemini deprecations | 2026-10-07 | Shutdown dates, 2.5 limited access, new-project advice |
 | Gemini thinking | 2026-09-25 | `thinking_level` defaults and levels, `max_output_tokens` |
 | Gemini 3 developer guide | 2026-09-23 | `thinking_level` versus `thinking_budget`, temperature 1.0 |
 | Vertex controlled output | 2026-10-05 | 400 on complex schemas and remedies, property ordering |
 | Vertex thinking | 2026-10-05 | `thinking_budget` deprecated on Gemini 3, `MINIMAL` and thought signatures |
-| Vertex model versions | 2026-10-05 | 12-month rule, retirement dates including 2.5 on 2026-10-20 |
+| Vertex model versions | 2026-10-07 | 12-month rule, retirement dates including 2.5 on 2026-10-20 |
 | Vertex locations | 2026-10-05 | Global endpoint availability and residency caveat |
 | adk-docs `agents/llm-agents.md`, `get-started/google-cloud.md`, LiteLLM page | fetched 2026-10-06 | Schema-with-tools warning, env variable rename, Express Mode, LiteLLM advisory |
+
+The Gemini models, deprecations, thinking, Gemini 3 and structured output pages and the Vertex model versions page were re-read on 2026-10-08: the page dates above moved, and no model ID, status, shutdown date, thinking default or temperature guidance used by this skill changed. `assets/model-lifecycle-2026-10-01.json` records that check as `checked_on`.
 
 ## Not verified here
 

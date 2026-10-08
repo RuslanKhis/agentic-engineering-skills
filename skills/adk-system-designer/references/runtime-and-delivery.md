@@ -88,3 +88,30 @@ against persisted state, queued jobs and previous external effects. Define
 candidate acceptance and rollback thresholds before a staged release; a traffic
 split alone does not produce comparable samples. Drain accepted work within a
 bound before closing its dependencies, then verify temporary capacity cleanup.
+
+Treat the release as one unit: image or revision, prompt version, model and
+judge IDs, tool schema hash, evaluation-set hash and secret versions move
+together and roll back together. An old image with a new prompt from a
+registry, or an old prompt against a new model, is a new, untested combination.
+Promotion waits on an evaluation gate that fails by exit code: deterministic
+checks on every change, judge metrics on a schedule with the judge pinned, and
+a run that did not happen reported as missing evidence, never as a pass. A
+canary earns its name only with comparable samples and thresholds decided
+before traffic moves; the previous revision stays ready until the candidate has
+served them. `adk-release-engineering` implements the manifest, gates and
+traffic steps.
+
+## Observe what the design promises
+
+Each guarantee in the design needs a signal that shows it holding: a good/total
+ratio for completed tasks, a tool-error rate by tool, tokens and cost per
+successful task, time to first and to complete output, with targets from
+measured baselines and alerts on error-budget burn rather than on a perfect
+score. Decide up front which content telemetry may capture, where it goes and
+for how long; defaults capture prompts. Preserve trace, invocation and session
+identifiers at every hop so an alert leads to the stored session, and so a
+reviewed production sample, redacted, becomes an evaluation case the next
+release gate runs. Verification: an exporter test shows one span per agent,
+tool and logical model call before any cloud sink exists.
+`adk-agent-observability` carries the signals and the runbook;
+`adk-release-engineering` consumes the samples.

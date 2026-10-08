@@ -104,6 +104,34 @@ Enterprise pages and the issue tracker:
   limited to the same project. The a2a-sdk 1.x card shape differs from 0.3,
   so the card checker accepts both.
 
+## Aligning the designer and the router
+
+The seven specialists only help if the two entry points route to them and the
+designer raises their decisions early. On 8 October 2026 three alignment
+changes were made and checked:
+
+- **Router.** `adk-engineer` carries one routing row per specialist, an
+  extended row for context-window work, a paragraph on how the seven relate,
+  and composition guidance for the overlap with Google's agents-cli
+  observability, deploy, eval and publish skills (this toolkit decides, Google's
+  skill operates the adopted mechanism).
+- **Designer.** `adk-system-designer` gained eight handoff rows, design-level
+  lessons in its decision reference (topology by boundary, tool source, "what
+  the model sees is its only interface", the per-agent lethal-trifecta check,
+  context-window shaping, model and judge and prompt versions as release
+  artefacts, structured output as a backend-dependent contract, observability
+  as a design obligation), five failure-review scenarios, a release-unit and
+  observability section in the runtime reference, and template blocks for
+  model-facing contracts, security posture, and observability and release. SDK
+  recipes, parameter names and version tables stayed in the specialists. The
+  decision reference grew by 38 percent, slightly over the intended third;
+  trimming further would have dropped a tradeoff or a verification.
+- **Selection trial.** A description-only trial over the 56-case activation
+  corpus passed 55 cases with one soft miss, and a second model agreed on every
+  primary; see the [record](../testing/activation-trial-2026-10-08.md). A
+  scenario case for the designer covering the new concerns was added to the
+  corpus but has not been run.
+
 ## What the ADK sources changed
 
 Checking against the 2.8.0 source corrected or sharpened several points that
@@ -168,6 +196,7 @@ SDK installed) on 6 and 8 October 2026:
 | Phase 2 helper suites (8 October) | `adk-agent-security` 15, `adk-agent-observability` 20, `adk-release-engineering` 10 |
 | Phase 3 helper suite (8 October) | `adk-agent-interoperability` 31, against loopback fake MCP and card servers |
 | `git diff --check` | clean |
+| Activation trial (8 October) | 55 of 56 cases PASS, 1 PARTIAL, 0 FAIL from descriptions alone; repeat run on a second model agreed on every primary; see [the record](../testing/activation-trial-2026-10-08.md) |
 
 What this does not establish: live model behaviour, provider acceptance of a
 schema, cache or compaction effects in a running session, skill selection by
@@ -180,12 +209,12 @@ run against a model.
 
 ## Follow-ups
 
-1. Run the new activation and scenario cases in fresh sessions and record
-   selection separately from execution, per the
-   [quality evaluation guide](../testing/skill-quality.md).
-2. Review router selection quality with twenty skills installed; merge tool
-   interface design into the instructions skill if the activation corpus
-   shows confusion between them.
+1. Run the scenario cases, and the activation cases inside real host sessions,
+   per the [quality evaluation guide](../testing/skill-quality.md); the
+   description-only trial is recorded but is not host behaviour.
+2. Keep tool interface design and agent instructions separate; the trial
+   showed no confusion between them. The one soft miss was the evaluation
+   loop versus instruction work, which the descriptions already separate.
 3. Re-verify the dated model, deprecation and documentation pages before the
    next revision; the model-contracts skill bundles a dated lifecycle table that
    must be refreshed.

@@ -9,6 +9,8 @@ Continuation source of truth: <this plan, existing spec or tracker>
 State the useful end result, non-goals, accepted stack and current authorization.
 Link accepted decisions and unresolved assumptions. Record inspected repository
 paths and versions separately from proposed modules or unverified interfaces.
+Name the pinned model, judge and prompt versions the goals inherit from the
+design; a goal that changes one of them is a release, not a side effect.
 Keep credentials and private resource identifiers out of a shared artifact.
 
 ## Implementation map

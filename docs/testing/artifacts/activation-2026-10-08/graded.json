@@ -1,0 +1,877 @@
+[
+ {
+  "run": "main",
+  "id": "sql-positive",
+  "target_skill": "adk-sql-agent-engineering",
+  "should_trigger": true,
+  "primary": "adk-sql-agent-engineering",
+  "supporting": [
+   "adk-tool-auth-and-secrets"
+  ],
+  "grade": "PASS",
+  "reason": "An ADK natural-language analytics agent built on reviewed query templates, selective schemas and controlled read-only execution is exactly the SQL agent skill's scope, with tenant scoping touching verified user/session ownership."
+ },
+ {
+  "run": "main",
+  "id": "instructions-positive",
+  "target_skill": "adk-agent-instructions",
+  "should_trigger": true,
+  "primary": "adk-agent-instructions",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Wrong sub-agent routing, an oversized MUST/NEVER instruction, sub-agent description repair and a prompt-as-code render test against fixture state are all named in the instructions skill's description."
+ },
+ {
+  "run": "main",
+  "id": "tool-interface-toolset-positive",
+  "target_skill": "adk-tool-interface-design",
+  "should_trigger": true,
+  "primary": "adk-tool-interface-design",
+  "supporting": [
+   "adk-agent-interoperability",
+   "adk-agent-security"
+  ],
+  "grade": "PASS",
+  "reason": "Choosing which tools to expose, naming/namespacing, tool-count budgets and keeping results from bloating context is the model-facing tool interface skill, with MCP consumption mechanics (tool_filter, tool_name_prefix) and third-party MCP allowlisting as supporting concerns."
+ },
+ {
+  "run": "main",
+  "id": "sql-near-miss",
+  "target_skill": "adk-sql-agent-engineering",
+  "should_trigger": false,
+  "primary": "none",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Index tuning of a hand-written backend query with no agent or natural-language interface is ordinary SQL tuning, which the SQL agent skill explicitly excludes and no other catalogue skill covers."
+ },
+ {
+  "run": "main",
+  "id": "tool-interface-positive",
+  "target_skill": "adk-tool-interface-design",
+  "should_trigger": true,
+  "primary": "adk-tool-interface-design",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "The model picking the wrong tool and the wrong arguments, fixed by reviewing FunctionTool docstrings and parameter schemas, is the core trigger of the tool interface design skill."
+ },
+ {
+  "run": "main",
+  "id": "tool-interface-near-miss",
+  "target_skill": "adk-tool-interface-design",
+  "should_trigger": false,
+  "primary": "safe-api-tool-calls",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Timeouts, retries and double-charging on a refund tool are the retry, deadline and idempotent-write concerns that safe-api-tool-calls owns and tool-interface-design explicitly hands off."
+ },
+ {
+  "run": "main",
+  "id": "system-designer-scope-gate-positive",
+  "target_skill": "adk-system-designer",
+  "should_trigger": true,
+  "primary": "adk-system-designer",
+  "supporting": [
+   "adk-agent-evaluation"
+  ],
+  "grade": "PASS",
+  "reason": "Deciding what to build first and what to leave out for a new ADK application under a time box is requirements and trade-off design before implementation, with the judged unseen cases pointing at evaluation strategy as support."
+ },
+ {
+  "run": "main",
+  "id": "observability-eval-handoff-positive",
+  "target_skill": "adk-agent-observability",
+  "should_trigger": true,
+  "primary": "adk-agent-observability",
+  "supporting": [
+   "adk-agent-evaluation",
+   "protect-adk-sensitive-data"
+  ],
+  "grade": "PASS",
+  "reason": "BigQuery Agent Analytics, feedback capture and turning production traces into evaluation cases are listed in the observability skill, while building the regression eval set and removing personal data belong to the evaluation and sensitive-data skills."
+ },
+ {
+  "run": "main",
+  "id": "system-designer-deploy-near-miss",
+  "target_skill": "adk-system-designer",
+  "should_trigger": false,
+  "primary": "deploy-adk-on-google-cloud",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Deploying an existing ADK service to Cloud Run with rollout checks is deployment lifecycle work, and the settled architecture rules out the system designer."
+ },
+ {
+  "run": "main",
+  "id": "deploy-near-miss",
+  "target_skill": "deploy-adk-on-google-cloud",
+  "should_trigger": false,
+  "primary": "adk-memory-architecture",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Remembering an explicitly saved user preference across conversations is cross-session continuity and memory design, and the deploy skill explicitly excludes memory design without a deployment task."
+ },
+ {
+  "run": "main",
+  "id": "memory-prompt-only-near-miss",
+  "target_skill": "adk-memory-architecture",
+  "should_trigger": false,
+  "primary": "adk-agent-instructions",
+  "supporting": [
+   "adk-agent-evaluation"
+  ],
+  "grade": "PASS",
+  "reason": "Rewriting the prompt and exemplars only, with retrieval and storage untouched, is instruction wording and few-shot design rather than memory architecture, and measuring the citation consistency is evaluation support."
+ },
+ {
+  "run": "main",
+  "id": "observability-positive",
+  "target_skill": "adk-agent-observability",
+  "should_trigger": true,
+  "primary": "adk-agent-observability",
+  "supporting": [
+   "optimise-adk-on-google-cloud"
+  ],
+  "grade": "PASS",
+  "reason": "Adding tracing and metrics that separate model, tool and session-loading time plus an alert on an Agent Runtime agent is instrumentation and alert design, with the latency fix itself being optimisation work."
+ },
+ {
+  "run": "main",
+  "id": "security-mcp-positive",
+  "target_skill": "adk-agent-security",
+  "should_trigger": true,
+  "primary": "adk-agent-security",
+  "supporting": [
+   "adk-agent-interoperability"
+  ],
+  "grade": "PASS",
+  "reason": "Vetting, pinning and allowlisting third-party MCP servers and proving a poisoned tool description cannot exfiltrate data is the MCP supply-chain threat model with an adversarial suite, while the McpToolset filtering mechanics are interoperability support."
+ },
+ {
+  "run": "main",
+  "id": "optimise-positive",
+  "target_skill": "optimise-adk-on-google-cloud",
+  "should_trigger": true,
+  "primary": "optimise-adk-on-google-cloud",
+  "supporting": [
+   "adk-tool-auth-and-secrets"
+  ],
+  "grade": "PASS",
+  "reason": "A trace-measured session-client lifetime overhead on Cloud Run is a measured ADK optimisation of session handling and startup, with the user-isolation check touching verified user/session ownership."
+ },
+ {
+  "run": "main",
+  "id": "api-near-miss",
+  "target_skill": "safe-api-tool-calls",
+  "should_trigger": false,
+  "primary": "none",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Local SQLite query-plan tuning with no external call or agent is excluded by safe-api-tool-calls (database query optimisation without an external-call safety problem) and by adk-sql-agent-engineering (ordinary SQL tuning)."
+ },
+ {
+  "run": "main",
+  "id": "security-near-miss",
+  "target_skill": "adk-agent-security",
+  "should_trigger": false,
+  "primary": "protect-adk-sensitive-data",
+  "supporting": [
+   "adk-agent-observability"
+  ],
+  "grade": "PASS",
+  "reason": "PII (SSNs) leaking from the agent into logs is exactly the sensitive-data boundary protect-adk-sensitive-data owns, and observability defers content-redaction policy to it while knowing which ADK log emitters and gates the redaction must sit in front of."
+ },
+ {
+  "run": "main",
+  "id": "memory-near-miss",
+  "target_skill": "adk-memory-architecture",
+  "should_trigger": false,
+  "primary": "none",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Database buffer-cache tuning for a non-agent application is general database administration, which adk-memory-architecture and adk-sql-agent-engineering both explicitly exclude."
+ },
+ {
+  "run": "main",
+  "id": "sensitive-data-near-miss",
+  "target_skill": "protect-adk-sensitive-data",
+  "should_trigger": false,
+  "primary": "none",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Cloud Armor WAF/rate-limit configuration for a non-ADK website is named as an exclusion by protect-adk-sensitive-data and touches no other skill's domain."
+ },
+ {
+  "run": "main",
+  "id": "workflow-content-safeguards-positive",
+  "target_skill": "adk-workflow-design",
+  "should_trigger": true,
+  "primary": "adk-workflow-design",
+  "supporting": [
+   "adk-model-and-output-contracts",
+   "adk-agent-instructions"
+  ],
+  "grade": "PASS",
+  "reason": "Adding in-code consistency checks and warning triage between stages is a repair of workflow control flow, state handoffs and callback boundaries in an existing agent; output-contract validation and repair loops and the instruction-versus-code division are the natural supporting angles."
+ },
+ {
+  "run": "main",
+  "id": "evaluation-near-miss",
+  "target_skill": "adk-agent-evaluation",
+  "should_trigger": false,
+  "primary": "none",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Ordinary unit tests for a standalone helper with no model, tools or Runner are explicitly excluded by adk-agent-evaluation and fit no other skill."
+ },
+ {
+  "run": "main",
+  "id": "evaluation-positive",
+  "target_skill": "adk-agent-evaluation",
+  "should_trigger": true,
+  "primary": "adk-agent-evaluation",
+  "supporting": [
+   "adk-release-engineering"
+  ],
+  "grade": "PASS",
+  "reason": "Auditing eval result handling for missing cases, failed observations and strict metric-threshold checks is the evaluation reliability and strict-result-check work adk-agent-evaluation owns, with release engineering relevant where those thresholds gate CI."
+ },
+ {
+  "run": "main",
+  "id": "release-positive",
+  "target_skill": "adk-release-engineering",
+  "should_trigger": true,
+  "primary": "adk-release-engineering",
+  "supporting": [
+   "adk-model-and-output-contracts",
+   "adk-agent-evaluation"
+  ],
+  "grade": "PASS",
+  "reason": "A model deprecation notice requiring migration with re-baselining and pinned judge IDs in CI is squarely release engineering, supported by Gemini model selection/lifecycle and the eval set that must be re-run."
+ },
+ {
+  "run": "main",
+  "id": "interoperability-mcp-positive",
+  "target_skill": "adk-agent-interoperability",
+  "should_trigger": true,
+  "primary": "adk-agent-interoperability",
+  "supporting": [
+   "adk-tool-auth-and-secrets",
+   "adk-agent-security"
+  ],
+  "grade": "PASS",
+  "reason": "Consuming MCP servers with tool_filter, header_provider and lifecycle handling is interoperability's core; per-user refreshing tokens belong to tool auth and the tool-list drift check is MCP allowlisting/pinning from agent security."
+ },
+ {
+  "run": "main",
+  "id": "sensitive-data-positive",
+  "target_skill": "protect-adk-sensitive-data",
+  "should_trigger": true,
+  "primary": "protect-adk-sensitive-data",
+  "supporting": [
+   "adk-agent-observability"
+  ],
+  "grade": "PASS",
+  "reason": "Keeping PII out of model requests, saved events and telemetry with screening boundaries and synthetic canaries is the sensitive-data skill's described scope, with observability needed to trace the telemetry path."
+ },
+ {
+  "run": "main",
+  "id": "instructions-near-miss",
+  "target_skill": "adk-agent-instructions",
+  "should_trigger": false,
+  "primary": "adk-agent-evaluation",
+  "supporting": [
+   "adk-agent-instructions",
+   "adk-model-and-output-contracts"
+  ],
+  "grade": "PARTIAL",
+  "reason": "Error analysis by category over a labelled development set with one change per iteration and a holdout report is the measured iteration loop adk-agent-evaluation explicitly owns, with prompt changes or model escalation as the likely interventions."
+ },
+ {
+  "run": "main",
+  "id": "optimise-context-window-positive",
+  "target_skill": "optimise-adk-on-google-cloud",
+  "should_trigger": true,
+  "primary": "optimise-adk-on-google-cloud",
+  "supporting": [
+   "adk-tool-interface-design",
+   "adk-agent-observability"
+  ],
+  "grade": "PASS",
+  "reason": "Per-turn latency and cost growth, zero cached tokens and oversized history is a measured model/tool-work and history optimisation; shrinking 200 KB tool results is result shaping from tool interface design and token accounting verifies the saving."
+ },
+ {
+  "run": "main",
+  "id": "engineer-positive",
+  "target_skill": "adk-engineer",
+  "should_trigger": true,
+  "primary": "adk-engineer",
+  "supporting": [
+   "adk-memory-architecture",
+   "adk-frontend-integration"
+  ],
+  "grade": "PASS",
+  "reason": "The request spans several ADK concerns (cross-session preference memory plus a web interface) and asks to inspect the project first, which is the adk-engineer entry point that then routes to the memory and frontend specialists."
+ },
+ {
+  "run": "main",
+  "id": "memory-ingestion-positive",
+  "target_skill": "adk-memory-architecture",
+  "should_trigger": true,
+  "primary": "adk-memory-architecture",
+  "supporting": [
+   "adk-workflow-design"
+  ],
+  "grade": "PASS",
+  "reason": "Classifying and routing document pages into OCR or vision passes before the agent can retrieve from them is knowledge-retrieval ingestion under memory architecture, with workflow design covering the routing pipeline itself."
+ },
+ {
+  "run": "main",
+  "id": "engineer-near-miss",
+  "target_skill": "adk-engineer",
+  "should_trigger": false,
+  "primary": "none",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "A spinner color change is ordinary React styling with the ADK backend explicitly untouched, which adk-frontend-integration and the other skills exclude."
+ },
+ {
+  "run": "main",
+  "id": "model-output-near-miss",
+  "target_skill": "adk-model-and-output-contracts",
+  "should_trigger": false,
+  "primary": "safe-api-tool-calls",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Retries with backoff and an idempotency key for a timing-out payments tool is exactly the selective-retry, cooperative-deadline and idempotent-write scope of safe-api-tool-calls, not a model or output-schema concern."
+ },
+ {
+  "run": "main",
+  "id": "security-positive",
+  "target_skill": "adk-agent-security",
+  "should_trigger": true,
+  "primary": "adk-agent-security",
+  "supporting": [
+   "adk-operational-guardrails"
+  ],
+  "grade": "PASS",
+  "reason": "An agent that reads untrusted emails and can refund and send mail is the lethal-trifecta prompt-injection threat model adk-agent-security owns, with guardrails supporting the human-approval mechanics for risky actions."
+ },
+ {
+  "run": "main",
+  "id": "observability-near-miss",
+  "target_skill": "adk-agent-observability",
+  "should_trigger": false,
+  "primary": "none",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Cloud Logging sinks and retention for GKE system logs is general cloud infrastructure administration with no ADK agent telemetry involved, which adk-agent-observability does not cover."
+ },
+ {
+  "run": "main",
+  "id": "guardrails-positive",
+  "target_skill": "adk-operational-guardrails",
+  "should_trigger": true,
+  "primary": "adk-operational-guardrails",
+  "supporting": [
+   "adk-tool-interface-design"
+  ],
+  "grade": "PASS",
+  "reason": "Repeated-tool protection before another execution plus a whole-invocation model-call allowance is the core of adk-operational-guardrails, with tool-interface design helping make the terminal failure an actionable error return."
+ },
+ {
+  "run": "main",
+  "id": "model-output-config-positive",
+  "target_skill": "adk-model-and-output-contracts",
+  "should_trigger": true,
+  "primary": "adk-model-and-output-contracts",
+  "supporting": [
+   "adk-agent-evaluation",
+   "adk-release-engineering"
+  ],
+  "grade": "PASS",
+  "reason": "Choosing Flash per agent, setting thinking and sampling, and adding FallbackModel for 429s is model selection and configuration owned by adk-model-and-output-contracts, with evaluation to verify each change and release engineering for re-baselining the migration."
+ },
+ {
+  "run": "main",
+  "id": "release-ci-gate-positive",
+  "target_skill": "adk-release-engineering",
+  "should_trigger": true,
+  "primary": "adk-release-engineering",
+  "supporting": [
+   "adk-agent-evaluation"
+  ],
+  "grade": "PASS",
+  "reason": "An evaluation gate in CI with threshold, repeat and cost policy for instruction changes is the release-lifecycle concern adk-release-engineering owns, with adk-agent-evaluation supplying the eval set and strict checks."
+ },
+ {
+  "run": "main",
+  "id": "interoperability-a2a-positive",
+  "target_skill": "adk-agent-interoperability",
+  "should_trigger": true,
+  "primary": "adk-agent-interoperability",
+  "supporting": [
+   "safe-api-tool-calls"
+  ],
+  "grade": "PASS",
+  "reason": "Delegating to a Java agent and deciding between A2A and a plain API, including agent cards and failure handling, is the cross-boundary A2A topology decision of adk-agent-interoperability, with safe-api-tool-calls supporting the direct-API failure path."
+ },
+ {
+  "run": "main",
+  "id": "interoperability-near-miss",
+  "target_skill": "adk-agent-interoperability",
+  "should_trigger": false,
+  "primary": "adk-workflow-design",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "A writer and reviewer sub-agent with a bounded revision loop and session-state draft handoff is in-process orchestration, which adk-workflow-design owns and adk-agent-interoperability explicitly excludes."
+ },
+ {
+  "run": "main",
+  "id": "auth-positive",
+  "target_skill": "adk-tool-auth-and-secrets",
+  "should_trigger": true,
+  "primary": "adk-tool-auth-and-secrets",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "A cross-user OAuth connection selection bug, verified caller identity, and refresh and disconnect ownership tests are named directly in the adk-tool-auth-and-secrets scope."
+ },
+ {
+  "run": "main",
+  "id": "workflow-positive",
+  "target_skill": "adk-workflow-design",
+  "should_trigger": true,
+  "primary": "adk-workflow-design",
+  "supporting": [
+   "adk-model-and-output-contracts"
+  ],
+  "grade": "PASS",
+  "reason": "Running two fetches in parallel and ensuring a failed branch cannot feed a successful summary is parallel orchestration and event-consumption contract work for adk-workflow-design, with output contracts supporting preservation of the result schema."
+ },
+ {
+  "run": "main",
+  "id": "memory-positive",
+  "target_skill": "adk-memory-architecture",
+  "should_trigger": true,
+  "primary": "adk-memory-architecture",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "A consent-gated preference that persists across restarts, isolates users and supports per-user change and erasure is cross-session continuity with identity, consent and erasure boundaries, which adk-memory-architecture owns."
+ },
+ {
+  "run": "main",
+  "id": "frontend-positive",
+  "target_skill": "adk-frontend-integration",
+  "should_trigger": true,
+  "primary": "adk-frontend-integration",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Wiring an ADK agent to CopilotKit with streamed text and tool progress, conversation ownership checks and partial-answer failure handling is the agent-to-browser contract scope of adk-frontend-integration."
+ },
+ {
+  "run": "main",
+  "id": "system-designer-feature-near-miss",
+  "target_skill": "adk-system-designer",
+  "should_trigger": false,
+  "primary": "adk-memory-architecture",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "With the architecture and deployment already accepted, implementing an explicitly saved, forgettable preference in the profile store is a focused memory change for adk-memory-architecture rather than an adk-system-designer design pass."
+ },
+ {
+  "run": "main",
+  "id": "system-designer-generic-near-miss",
+  "target_skill": "adk-system-designer",
+  "should_trigger": false,
+  "primary": "none",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "A conventional Django application with no agents or ADK components falls outside every catalogue skill, all of which are scoped to Python Google ADK agents."
+ },
+ {
+  "run": "main",
+  "id": "optimise-near-miss",
+  "target_skill": "optimise-adk-on-google-cloud",
+  "should_trigger": false,
+  "primary": "deploy-adk-on-google-cloud",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Choosing between Cloud Run and Agent Runtime for a first deployment is an ADK hosting decision owned by the deploy skill, and optimise explicitly excludes hosting selection and first deployment without a performance problem."
+ },
+ {
+  "run": "main",
+  "id": "workflow-near-miss",
+  "target_skill": "adk-workflow-design",
+  "should_trigger": false,
+  "primary": "adk-memory-architecture",
+  "supporting": [
+   "adk-tool-auth-and-secrets"
+  ],
+  "grade": "PASS",
+  "reason": "Adding governed retrieval over policy documents with entitlement-based filtering is knowledge-retrieval work owned by memory architecture, while orchestration stays unchanged so workflow design should not activate; tool auth supports verifying the caller's identity behind the entitlement filter."
+ },
+ {
+  "run": "main",
+  "id": "model-output-positive",
+  "target_skill": "adk-model-and-output-contracts",
+  "should_trigger": true,
+  "primary": "adk-model-and-output-contracts",
+  "supporting": [
+   "adk-agent-evaluation"
+  ],
+  "grade": "PASS",
+  "reason": "Fenced JSON or prose instead of the Pydantic output_schema, combined with output_schema alongside tools, is exactly the structured-output contract problem this skill covers, and evaluation supports proving which path the model took with deterministic checks."
+ },
+ {
+  "run": "main",
+  "id": "system-designer-positive",
+  "target_skill": "adk-system-designer",
+  "should_trigger": true,
+  "primary": "adk-system-designer",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Designing a new ADK application on GCP before implementation, working through requirements and challenging architecture choices, is the system designer's stated purpose."
+ },
+ {
+  "run": "main",
+  "id": "instructions-templating-positive",
+  "target_skill": "adk-agent-instructions",
+  "should_trigger": true,
+  "primary": "adk-agent-instructions",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Adding a session-state placeholder and an output example to an agent instruction without breaking templating or raising KeyErrors is squarely instruction design on a specific ADK version."
+ },
+ {
+  "run": "main",
+  "id": "evaluation-quality-iteration-positive",
+  "target_skill": "adk-agent-evaluation",
+  "should_trigger": true,
+  "primary": "adk-agent-evaluation",
+  "supporting": [
+   "adk-agent-instructions"
+  ],
+  "grade": "PASS",
+  "reason": "Error analysis over a labelled development set, prompt and exemplar improvement and re-measurement with a protected holdout is the measured evaluation loop, with instructions supporting the prompt and exemplar edits."
+ },
+ {
+  "run": "main",
+  "id": "guardrails-near-miss",
+  "target_skill": "adk-operational-guardrails",
+  "should_trigger": false,
+  "primary": "safe-api-tool-calls",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "A timeout and bounded retries on a single HTTP helper is an external-call safety concern, and operational guardrails explicitly excludes a single HTTP retry policy while the caller's invocation bounds are to be left alone."
+ },
+ {
+  "run": "main",
+  "id": "release-near-miss",
+  "target_skill": "adk-release-engineering",
+  "should_trigger": false,
+  "primary": "deploy-adk-on-google-cloud",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "A first Cloud Run deployment with a service account and session database is deployment lifecycle work, which release engineering explicitly hands to the deploy skill."
+ },
+ {
+  "run": "main",
+  "id": "system-designer-review-positive",
+  "target_skill": "adk-system-designer",
+  "should_trigger": true,
+  "primary": "adk-system-designer",
+  "supporting": [
+   "adk-memory-architecture",
+   "safe-api-tool-calls"
+  ],
+  "grade": "PASS",
+  "reason": "A cross-cutting architecture review before implementation belongs to the system designer, with memory architecture supporting the shared tenant document index concern and safe API calls supporting the non-idempotent booking retry after timeout."
+ },
+ {
+  "run": "main",
+  "id": "auth-near-miss",
+  "target_skill": "adk-tool-auth-and-secrets",
+  "should_trigger": false,
+  "primary": "none",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Sign-in page typography and a password visibility button are generic sign-in UI, which tool auth explicitly excludes, and no identity, credential, agent or ADK concern is involved."
+ },
+ {
+  "run": "main",
+  "id": "deploy-positive",
+  "target_skill": "deploy-adk-on-google-cloud",
+  "should_trigger": true,
+  "primary": "deploy-adk-on-google-cloud",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Reviewing the container entrypoint, runtime identity and session persistence and producing Cloud Run configuration and validation commands is ADK deployment packaging and identity work, even with the actual deploy not yet authorized."
+ },
+ {
+  "run": "main",
+  "id": "api-positive",
+  "target_skill": "safe-api-tool-calls",
+  "should_trigger": true,
+  "primary": "safe-api-tool-calls",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "An API that times out after accepting a write and is then retried as a new refund is the ambiguous write outcome and idempotency problem this skill owns, including honest reporting of uncertain results."
+ },
+ {
+  "run": "main",
+  "id": "frontend-near-miss",
+  "target_skill": "adk-frontend-integration",
+  "should_trigger": false,
+  "primary": "none",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Border radius and mobile spacing on chat bubbles with API, streaming and session behavior unchanged is ordinary styling, which frontend integration explicitly excludes."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "instructions-positive",
+  "target_skill": "adk-agent-instructions",
+  "should_trigger": true,
+  "primary": "adk-agent-instructions",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Sub-agent routing descriptions and restructuring a bloated root instruction with a render test is core prompt-design work."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "instructions-templating-positive",
+  "target_skill": "adk-agent-instructions",
+  "should_trigger": true,
+  "primary": "adk-agent-instructions",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Session-state templating placeholders and KeyError behaviour in an ADK instruction are covered by the instructions skill."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "instructions-near-miss",
+  "target_skill": "adk-agent-instructions",
+  "should_trigger": false,
+  "primary": "adk-agent-evaluation",
+  "supporting": [
+   "adk-agent-instructions"
+  ],
+  "grade": "PARTIAL",
+  "reason": "Labelled dev set error analysis with one change per iteration and holdout reporting is the measured evaluation loop."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "tool-interface-positive",
+  "target_skill": "adk-tool-interface-design",
+  "should_trigger": true,
+  "primary": "adk-tool-interface-design",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Wrong tool or argument selection fixed via docstrings and parameter schemas is tool interface design."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "tool-interface-toolset-positive",
+  "target_skill": "adk-tool-interface-design",
+  "should_trigger": true,
+  "primary": "adk-tool-interface-design",
+  "supporting": [
+   "adk-agent-interoperability",
+   "adk-agent-security"
+  ],
+  "grade": "PASS",
+  "reason": "Tool exposure, naming, filtering and result size are interface concerns, with MCP wiring and vetting as support."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "tool-interface-near-miss",
+  "target_skill": "adk-tool-interface-design",
+  "should_trigger": false,
+  "primary": "safe-api-tool-calls",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Retry and idempotency for a double-charging external API call is exactly safe API tool calls."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "model-output-positive",
+  "target_skill": "adk-model-and-output-contracts",
+  "should_trigger": true,
+  "primary": "adk-model-and-output-contracts",
+  "supporting": [
+   "adk-agent-evaluation"
+  ],
+  "grade": "PASS",
+  "reason": "Unreliable output_schema with tools is an output contract problem, and proving the path taken needs tests."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "model-output-config-positive",
+  "target_skill": "adk-model-and-output-contracts",
+  "should_trigger": true,
+  "primary": "adk-model-and-output-contracts",
+  "supporting": [
+   "adk-agent-evaluation"
+  ],
+  "grade": "PASS",
+  "reason": "Model selection, thinking settings and FallbackModel for 429s belong to the model contracts skill, with eval to verify changes."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "model-output-near-miss",
+  "target_skill": "adk-model-and-output-contracts",
+  "should_trigger": false,
+  "primary": "safe-api-tool-calls",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Retries with backoff and idempotency key on a timing-out API tool is external-call safety."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "optimise-context-window-positive",
+  "target_skill": "optimise-adk-on-google-cloud",
+  "should_trigger": true,
+  "primary": "optimise-adk-on-google-cloud",
+  "supporting": [
+   "adk-tool-interface-design"
+  ],
+  "grade": "PASS",
+  "reason": "History growth, context caching and oversized tool results affecting latency and cost are ADK optimisation, with result shaping as support."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "security-positive",
+  "target_skill": "adk-agent-security",
+  "should_trigger": true,
+  "primary": "adk-agent-security",
+  "supporting": [
+   "adk-operational-guardrails"
+  ],
+  "grade": "PASS",
+  "reason": "Prompt injection through untrusted email with refund and send capabilities is a whole-agent security review, with approval controls as support."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "security-mcp-positive",
+  "target_skill": "adk-agent-security",
+  "should_trigger": true,
+  "primary": "adk-agent-security",
+  "supporting": [
+   "adk-agent-interoperability",
+   "adk-agent-evaluation"
+  ],
+  "grade": "PASS",
+  "reason": "Vetting and pinning third-party MCP tools with adversarial tests is the MCP supply-chain security case."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "security-near-miss",
+  "target_skill": "adk-agent-security",
+  "should_trigger": false,
+  "primary": "protect-adk-sensitive-data",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "SSNs leaking into logs and redaction before logging is a sensitive-data boundary issue."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "observability-positive",
+  "target_skill": "adk-agent-observability",
+  "should_trigger": true,
+  "primary": "adk-agent-observability",
+  "supporting": [
+   "optimise-adk-on-google-cloud"
+  ],
+  "grade": "PASS",
+  "reason": "Tracing, metrics and alerts to split model, tool and session time on Agent Runtime is production observability."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "observability-eval-handoff-positive",
+  "target_skill": "adk-agent-observability",
+  "should_trigger": true,
+  "primary": "adk-agent-observability",
+  "supporting": [
+   "adk-agent-evaluation",
+   "protect-adk-sensitive-data"
+  ],
+  "grade": "PASS",
+  "reason": "Turning BigQuery Agent Analytics feedback into eval cases is an observability handoff, with eval set design and PII removal as support."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "observability-near-miss",
+  "target_skill": "adk-agent-observability",
+  "should_trigger": false,
+  "primary": "none",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "GKE cluster system log sinks and retention is general infrastructure, not ADK agent work."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "release-positive",
+  "target_skill": "adk-release-engineering",
+  "should_trigger": true,
+  "primary": "adk-release-engineering",
+  "supporting": [
+   "adk-model-and-output-contracts",
+   "adk-agent-evaluation"
+  ],
+  "grade": "PASS",
+  "reason": "Model deprecation migration with re-baselining and pinned judge IDs is release engineering."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "release-ci-gate-positive",
+  "target_skill": "adk-release-engineering",
+  "should_trigger": true,
+  "primary": "adk-release-engineering",
+  "supporting": [
+   "adk-agent-evaluation"
+  ],
+  "grade": "PASS",
+  "reason": "CI eval gates with threshold, repeat and cost policy are release lifecycle work."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "release-near-miss",
+  "target_skill": "adk-release-engineering",
+  "should_trigger": false,
+  "primary": "deploy-adk-on-google-cloud",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "First Cloud Run deployment with identity and session database is deployment."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "interoperability-mcp-positive",
+  "target_skill": "adk-agent-interoperability",
+  "should_trigger": true,
+  "primary": "adk-agent-interoperability",
+  "supporting": [
+   "adk-tool-auth-and-secrets",
+   "adk-agent-security"
+  ],
+  "grade": "PASS",
+  "reason": "Consuming MCP servers with tool_filter and tool list pinning is interoperability, with per-user token refresh and supply-chain checks as support."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "interoperability-a2a-positive",
+  "target_skill": "adk-agent-interoperability",
+  "should_trigger": true,
+  "primary": "adk-agent-interoperability",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "A2A versus API decision, agent card and failure handling for a remote Java agent is the A2A topology case."
+ },
+ {
+  "run": "repeat-sonnet",
+  "id": "interoperability-near-miss",
+  "target_skill": "adk-agent-interoperability",
+  "should_trigger": false,
+  "primary": "adk-workflow-design",
+  "supporting": [],
+  "grade": "PASS",
+  "reason": "Writer and reviewer sub-agents with a bounded loop and state handoff is in-process workflow orchestration."
+ }
+]

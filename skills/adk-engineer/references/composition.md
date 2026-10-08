@@ -40,6 +40,18 @@ is absent, report that limitation and continue work supported by this toolkit;
 offer installation only when its capability is needed. This differs from a
 missing primary specialist, which the entry skill handles explicitly.
 
+Three of this toolkit's specialists overlap with Google's lifecycle skills in
+scope but not in role. `adk-agent-observability` decides which signals, gates,
+SLIs and exporters the application needs; `google-agents-cli-observability`
+provisions the generated telemetry infrastructure. `adk-release-engineering`
+designs the eval gate, pinning, migration and rollback bundle;
+`google-agents-cli-deploy` and `google-agents-cli-eval` run the generated
+pipeline and the Agents CLI evaluation commands. `adk-agent-interoperability`
+owns the agent card and MCP or A2A contracts; `google-agents-cli-publish`
+performs the requested Gemini Enterprise registration. When both are installed,
+this toolkit's skill decides and Google's skill operates the adopted mechanism;
+neither replaces the other.
+
 Google's code skill points to its full workflow, including scaffolding and live
 evaluation. Honour the user's actual task when combining those instructions.
 For a local feature request, complete the local change and report any separate

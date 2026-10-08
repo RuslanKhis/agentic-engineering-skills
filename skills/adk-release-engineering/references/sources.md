@@ -14,11 +14,11 @@ Every claim in this skill is one of: **source** (read in a local checkout of goo
 
 | URL | Page date | Used for |
 | --- | --- | --- |
-| https://ai.google.dev/gemini-api/docs/deprecations | 2026-10-01 | 2.0 Flash shutdown 2026-06-01; 2.5 limited to prior users; 3.1 Flash-Lite shutdown 2027-05-07; earliest-date semantics; new-project recommendation |
-| https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions | 2026-10-05 | 12-month availability; 45-day short-term migration; dates may extend, never earlier; 2.5 retirement 2026-10-20; 3.5 Flash release 2026-05-19 |
+| https://ai.google.dev/gemini-api/docs/deprecations | 2026-10-07 (re-read 2026-10-08) | 2.0 Flash shutdown 2026-06-01; 2.5 limited to prior users; 3.1 Flash-Lite shutdown 2027-05-07; earliest-date semantics; new-project recommendation |
+| https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/model-versions | 2026-10-07 (re-read 2026-10-08) | 12-month availability; 45-day short-term migration; dates may extend, never earlier; 2.5 retirement 2026-10-20; 3.5 Flash release 2026-05-19 |
 | https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/migrate | fetched 2026-10-07 | Three regression types; repeat every eval; component-level evaluation; token-count changes; re-tune hyperparameters |
 | https://docs.cloud.google.com/run/docs/rollouts-rollbacks-traffic-migration | fetched 2026-10-07 | `--no-traffic --tag`, `update-traffic --to-tags`, `--to-revisions`, in-flight requests complete |
-| https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/manage-revisions-and-traffic | 2026-10-05 | Pre-GA `v1beta1`; immutable revisions; manual split or always-latest; archived unrecoverable; 950 and 6,000 limits; direct revision query |
+| https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/manage-revisions-and-traffic | 2026-10-07 (re-read 2026-10-08) | Pre-GA `v1beta1`; immutable revisions; manual split or always-latest; archived unrecoverable; 950 and 6,000 limits; direct revision query |
 | https://docs.cloud.google.com/vertex-ai/generative-ai/docs/model-reference/prompt-classes | fetched 2026-10-07 | `vertexai.prompts` `create_version`, `list_versions`, `restore_version` |
 | https://raw.githubusercontent.com/google/agents-cli/main/skills/google-agents-cli-deploy/SKILL.md (v1.8.0) and the sibling eval skill | fetched 2026-10-07 | Three-stage pipeline with environment approval; Cloud Run `update-traffic` rollback; stale "Agent Runtime doesn't support revision-based rollback"; "`eval run` exits 0 whatever the scores are"; flaky-eval guidance; `eval grade --qps 5`; absence of prompt versioning, migration and eval-gate guidance |
 | Cloud Deploy canary strategy for Cloud Run | 2026-10-05, reviewed by the research pass | `automaticTrafficControl`, percentages, verify tasks, `rollouts advance` |

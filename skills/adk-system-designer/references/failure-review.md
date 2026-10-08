@@ -35,6 +35,11 @@ For every chosen failure, answer:
 | Screening or telemetry path fails | Required policy is enforced before exposure; each enabled sink has a known policy. |
 | Policy changes before an old conversation resumes | Incompatible retained or derived data is handled before reuse; changing a policy label alone is insufficient. |
 | Burst traffic or exhausted budget | Admission, queueing and downstream saturation behavior are explicit; time and work remain bounded. |
+| Tool result or retrieved document carries instructions while the agent holds a write tool | Which structure, not which sentence, prevents the action: the reader has no write or egress tool, or a capability check in code refuses; the forbidden call never runs and a test asserts its absence. |
+| Remote A2A peer is unavailable, slow, or returns a state that needs user input | What the parent does on a deliberate timeout and on an error event; a pause reaches only the controlling user; peer text never acts as user authority or an approval. |
+| Model returns prose or invalid data where a schema was required | How many repair attempts, what the explicit failure shape is, and that wrong-but-valid data is counted separately; nothing acts on an unvalidated payload. |
+| Model or judge retirement lands mid-release | Pinned IDs and a dated calendar made it a planned migration; the re-baseline is its own release with a side-by-side on the frozen development set, and judge scores are not compared across judges. |
+| Incident arrives and the telemetry needed to attribute it was never enabled | Which SLIs, gates, sinks and correlation identifiers the design named before the first shared deployment; the alert leads to a stored session and that session reproduces the turn. |
 | Rollback or cleanup | Owned resources and retained data are accounted for; unrelated control data survives. |
 
 ## Define a verification ladder

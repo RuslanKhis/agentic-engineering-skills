@@ -14,14 +14,14 @@ Every claim in this skill is one of: **source** (read in a local checkout of goo
 
 | URL | Page date | Used for |
 | --- | --- | --- |
-| https://ai.google.dev/gemini-api/docs/structured-output | 2026-09-23 | Supported keywords, limitations, structured outputs versus function calling |
-| https://ai.google.dev/gemini-api/docs/models | 2026-10-01 | Current model IDs and statuses |
-| https://ai.google.dev/gemini-api/docs/deprecations | 2026-10-01 | Shutdown dates, limited 2.5 access, new-project recommendation |
-| https://ai.google.dev/gemini-api/docs/thinking | 2026-09-25 | `thinking_level` defaults and levels, token limit behaviour |
-| https://ai.google.dev/gemini-api/docs/gemini-3 | 2026-09-23 | `thinking_level` versus `thinking_budget`, temperature 1.0, concise prompts |
+| https://ai.google.dev/gemini-api/docs/structured-output | 2026-09-23 (re-read 2026-10-08) | Supported keywords, limitations, structured outputs versus function calling |
+| https://ai.google.dev/gemini-api/docs/models | 2026-10-06 (re-read 2026-10-08) | Current model IDs and statuses |
+| https://ai.google.dev/gemini-api/docs/deprecations | 2026-10-07 (re-read 2026-10-08) | Shutdown dates, limited 2.5 access, new-project recommendation |
+| https://ai.google.dev/gemini-api/docs/thinking | 2026-09-25 (re-read 2026-10-08) | `thinking_level` defaults and levels, token limit behaviour |
+| https://ai.google.dev/gemini-api/docs/gemini-3 | 2026-09-23 (re-read 2026-10-08) | `thinking_level` versus `thinking_budget`, temperature 1.0, concise prompts |
 | https://docs.cloud.google.com/vertex-ai/generative-ai/docs/multimodal/control-generated-output | 2026-10-05 | 400 on complex schemas, remedies, property ordering |
 | https://docs.cloud.google.com/vertex-ai/generative-ai/docs/thinking | 2026-10-05 | `thinking_budget` deprecation on Gemini 3, `MINIMAL` and thought signatures |
-| https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions | 2026-10-05 | 12-month availability, retirement dates |
+| https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions | 2026-10-07 (re-read 2026-10-08) | 12-month availability, retirement dates |
 | https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/locations | 2026-10-05 | Global endpoint availability and residency caveat |
 
 ## Other vendor documentation

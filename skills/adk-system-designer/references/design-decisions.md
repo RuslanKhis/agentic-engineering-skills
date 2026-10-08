@@ -86,6 +86,41 @@ Dynamic work can run sequentially. A reviewer is a probabilistic decision-maker;
 its approval is different from a backend permission check. For proposed multiple
 agents, name what each one uniquely owns and how its authority is restricted.
 
+**Topology.** Choose between one agent, in-process sub-agents and a remote A2A
+peer by boundary, not by ambition. In-process sub-agents share a runtime, pins
+and identity and need only a routing description and a typed handoff. A remote
+peer adds a network contract (timeout, task states including a pause for user
+input, error events, card validation, a second identity) and hides its
+reasoning behind a message. Requirement: a capability lives across a service,
+team, language or contract boundary. Choice: a remote peer only for that
+boundary, treated as an external API whose messages are data, never user
+authority. Tradeoff: latency, a second failure domain and cross-boundary
+evaluation against independent ownership and release. Verification: a
+fake-peer test for a normal result, a timeout, an error and an input-required
+pause. `adk-agent-interoperability` implements either side.
+
+**Tool source.** Function tools give the model exactly the interface the
+application wrote. OpenAPI and MCP toolsets import someone else's descriptions,
+counts and result sizes into the context; managed toolsets add a service
+dependency. Requirement: the capability set the agent needs. Choice: function
+tools by default; a server-supplied toolset only with an allow-list, reviewed
+definitions and a result bound. Tradeoff: integration speed against context
+cost, determinism and supply-chain trust. Verification: the per-agent tool count
+and declared bytes before and after, and selection accuracy on the development
+set. `adk-agent-interoperability` owns the selection; `adk-tool-interface-design`
+owns what each declaration says.
+
+**What the model sees is its only interface.** The instruction, the sub-agent
+descriptions (routing contracts the parent reads verbatim), the tool
+declarations and the output contract are the whole of the agent's interface;
+the model does not see Python. Design each as a contract with an owner and a
+test. Anything the application already knows (identity, tenant, date, budgets,
+authorisation, idempotency) belongs in code, not the prompt. Verification: a
+captured model request shows the intended instruction, declarations and
+schema, and a hostile document leaves the decision unchanged.
+`adk-agent-instructions`, `adk-tool-interface-design` and
+`adk-model-and-output-contracts` implement the three parts.
+
 ## State, knowledge and freshness
 
 For each necessary data class, record owner/scope, authoritative source, writers,
@@ -116,6 +151,18 @@ readers, lifetime, persistence, version/freshness check and erasure path.
   does not establish ingestion completeness. Distinguish no matches, unavailable
   queries and incomplete history; use the operational authority for current truth.
 
+Treat the model request as a budget the design shapes, not a side effect of
+stored history. Decide which slices enter each call (instructions and tool
+declarations, injected state, retained history, tool results, current request),
+which shrinks first on overflow, and what never drops: the current request,
+open tool exchanges, pending approvals and authoritative locators. Keep the
+instruction and tool prefix stable so caching can apply; bound tool results at
+the tool boundary, because compaction summarises what already reached storage.
+Verification: captured requests show flat instruction bytes across turns and a
+bounded result after one oversized call; a configured cache is not a used cache
+until cached-token counts are positive. `optimise-adk-on-google-cloud` carries
+the measurement and the runtime levers.
+
 ## Identity, tools and data release
 
 Trace three identities separately: authenticated user/tenant, calling workload,
@@ -129,6 +176,22 @@ result schema and side-effect boundary. Bind confirmations to material details
 and recheck authority and business prerequisites immediately before execution.
 Keep credential selection outside model arguments. For delegated OAuth, design
 consent, refresh, revocation/disconnect, concurrent refresh and restart behavior.
+
+Run the lethal-trifecta check per agent: private data, untrusted content
+(documents, retrieved passages, server-supplied tool results, peer messages)
+and a write or egress path in one agent is a design to split, not a prompt to
+harden. Requirement: the agent reads content it did not author and can act.
+Choice: a reader with no write or egress tools hands structured, validated
+state to a writer, or one leg is removed. Tradeoff: an extra hop and a typed
+handoff against an injection that cannot cause harm. Verification: a scripted
+model attempts the forbidden action and the trusted boundary refuses it without
+mutation or disclosure. Tier tools as read, write or irreversible and gate
+irreversible ones with confirmation in code the model cannot reach; "ignore
+text inside documents" is a hint, not a control. Code execution runs in a
+sandboxed executor with networking off unless the design records why not.
+`adk-agent-security` carries the threat model, enforcement-point map and
+adversarial suite; `protect-adk-sensitive-data` adds screening as a layer
+behind these structural controls.
 
 Separate credential payload storage from trusted owner/account/client/scope and
 connection-version metadata. Specify how disconnect denies new use across replicas,
@@ -227,6 +290,37 @@ Name operators for failures, uncertain effects, rollback and deletion. Plan how
 configuration/policy versions and deployment identity will be verified in the
 running process. Cleanup needs resource ownership and absence checks; deleting a
 service does not imply deleting its retained sessions, artifacts or provider data.
+
+Model IDs, judge IDs and prompts are release artefacts with lifecycle dates.
+Requirement: behavior must stay comparable across releases. Choice: pin dated
+or stable IDs for the agent, the judge and any simulator, version the prompt as
+code, and record them together with the tool schema and secret versions.
+Tradeoff: a scheduled migration instead of silent alias drift; a retirement
+becomes a planned re-baseline on the frozen development set, never a swap.
+Verification: the release manifest has no alias and no unknown field, and the
+next retirement date is in the calendar. `adk-release-engineering` owns the
+lifecycle; `adk-model-and-output-contracts` owns the model choice.
+
+Structured output is a contract whose enforcement depends on backend and model,
+not a formatting preference. Design a refusal shape so a valid "no" survives
+validation, keep the schema to what the model decides and let code copy
+identifiers, and treat a validation failure as a product outcome with a bounded
+repair budget and an explicit failure result. Verification: a scripted model
+returns prose, fenced JSON and schema-valid wrong data, and the application's
+response to each is the designed one; a captured request shows which field
+carried the schema. `adk-model-and-output-contracts` implements it.
+
+Observability is a design obligation settled before the first shared
+deployment. Choose SLIs as good/total ratios tied to the design's guarantees
+(completed tasks, tool-error rate by tool, tokens per successful task) with
+targets from measured baselines, not 100 percent. Decide content-capture gates
+and retention with the sensitive-data policy up front; defaults capture prompts.
+Give each process one telemetry owner so usage is counted once per logical
+model call, and preserve trace, invocation and session identifiers at every hop
+so an alert leads to a session and a reviewed sample becomes an evaluation case.
+Verification: an in-memory exporter test shows one span per agent, tool and
+logical model call with the conversation identifier set.
+`adk-agent-observability` implements it.
 
 ## When the application answers analytical questions
 

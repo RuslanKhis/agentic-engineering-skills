@@ -1515,6 +1515,18 @@ recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
 
+### Designer and router alignment · 8 October 2026
+
+The system designer now routes to all seven cross-framework specialists and
+raises their design-level decisions during the architecture conversation:
+topology by boundary, tool source, the model's interface as a contract, the
+per-agent exposure check, context-window shaping, versions as release
+artefacts, output contracts and observability as design obligations. The entry
+skill gained composition guidance for the overlap with Google's agents-cli
+lifecycle skills. The dated model and vendor pages were re-read the same day
+with no material change. See the
+[alignment notes](docs/research/ai-engineering-practices-gap-review.md).
+
 ### Interoperability specialist · 8 October 2026
 
 The third and final round of the practice review added `adk-agent-interoperability`
@@ -1530,8 +1542,12 @@ and the issue tracker. All **20 packages** pass validation; the offline suites
 run **638 tests** with **59 optional SDK checks skipped**, including 31 tests
 for the two protocol helpers against loopback fakes. See the
 [gap review and validation record](docs/research/ai-engineering-practices-gap-review.md).
-No live server, cloud operation or skill-selection trial was performed; the new
-activation and scenario cases are written but not yet executed.
+No live server or cloud operation was performed. A description-based
+selection trial over the whole 56-case activation corpus followed on the same
+day: 55 of 56 cases passed and one near-miss loaded the target as a supporting
+skill, with a second model agreeing on every primary selection. See the
+[activation trial record](docs/testing/activation-trial-2026-10-08.md); it
+measures selection from descriptions, not host behaviour or execution quality.
 
 ### Production-lifecycle specialists · 8 October 2026
 
@@ -1550,8 +1566,8 @@ skill records that `adk eval` exits successfully even when cases fail. All
 **59 optional SDK checks skipped**, including 45 tests for the three new
 inspectors and converters. See the
 [gap review and validation record](docs/research/ai-engineering-practices-gap-review.md).
-No live model run, cloud operation or skill-selection trial was performed; the
-new activation and scenario cases are written but not yet executed.
+No live model run or cloud operation was performed; selection was later
+measured in the [8 October activation trial](docs/testing/activation-trial-2026-10-08.md).
 
 ### Cross-framework specialists · 6 October 2026
 
@@ -1566,9 +1582,9 @@ dated in each package. All **16 packages** pass validation; the offline suites
 run **562 tests** with **59 optional SDK checks skipped** in the clean
 maintainer environment, including 63 tests for the new helpers. See the
 [gap review and validation record](docs/research/ai-engineering-practices-gap-review.md).
-No live model run, skill-selection trial or cloud operation was performed for
-this revision; the activation and scenario cases for the new skills are
-written but not yet executed.
+No live model run or cloud operation was performed for this revision;
+selection was later measured in the
+[8 October activation trial](docs/testing/activation-trial-2026-10-08.md).
 
 ### Planning-assignment retrospective · 6 October 2026
 

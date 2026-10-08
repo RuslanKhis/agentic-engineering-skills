@@ -128,6 +128,14 @@ memory stores, agents or infrastructure. Capture the cross-boundary consequences
 - Screening happens before storage, tool execution and streaming, because
   each of those is already an exposure.
 - Model/tool fan-out and nested retries consume the same application allowance.
+- What the model sees is its only interface: instruction, sub-agent descriptions,
+  tool declarations and output contract are contracts with owners and tests;
+  what the application already knows belongs in code, not the prompt.
+- A remote peer's message, a server-supplied tool description or a tool result
+  is data, never authority or an instruction. An agent that reads untrusted
+  content and can write or send needs a structural split, not a warning sentence.
+- Model, judge and prompt versions are release artefacts with lifecycle dates;
+  they roll forward and back together with the image, tool schema and secrets.
 
 Read [runtime and delivery](references/runtime-and-delivery.md) when requirements
 depend on context limits, result downloads, browser streams, concurrent sessions,
@@ -159,7 +167,10 @@ and plan contract. Distinguish inspected paths and supported APIs from proposed
 modules and version checks still needed. Explain where enforcement lives. For
 example, "tenant scope is derived from the verified OIDC subject in the request
 middleware and passed to the retrieval tool as trusted context" is a route; a
-service name or a list of skills is a pointer to one.
+service name or a list of skills is a pointer to one. Seven cross-framework
+specialists (instructions, tool interfaces, model and output contracts,
+security, observability, release engineering, interoperability) sit beside the
+topic specialists; the handoff mapping names which one owns each route.
 
 Bring this detail into the conversation as choices become clear. Use a small
 interface sketch or pseudocode only when it resolves an integration question;
