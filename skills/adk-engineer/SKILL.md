@@ -64,6 +64,7 @@ change crosses its boundary. Say briefly which skill you are applying and why.
 | Prompt-injection resilience, MCP or tool supply-chain vetting, excessive agency, code-execution sandboxing or a pre-release security review | `adk-agent-security` |
 | Missing or duplicated telemetry, token and cost attribution, SLOs and alerts, dashboards, production incidents, production traces into eval cases | `adk-agent-observability` |
 | Model deprecation notices, prompt and model version pinning, eval gates in CI, canary or rollback of a release | `adk-release-engineering` |
+| Consuming or exposing MCP servers, remote A2A agents and agent cards, the in-process versus remote topology choice, Gemini Enterprise or Agent Registry registration | `adk-agent-interoperability` |
 | Personal data in prompts, tools, storage, logs or streamed answers | `protect-adk-sensitive-data` |
 | Tool identity, credentials, Secret Manager or delegated OAuth | `adk-tool-auth-and-secrets` |
 | Natural-language SQL agents, schema retrieval or controlled query execution | `adk-sql-agent-engineering` |
@@ -107,11 +108,12 @@ guidance when the requested data flow needs that work. Add evaluation guidance
 when the task calls for an agent evaluation strategy; ordinary regression tests
 remain part of the memory implementation itself.
 
-Six cross-framework specialists sit outside the chapter sequence. Three own
+Seven cross-framework specialists sit outside the chapter sequence. Three own
 what the model sees and emits (`adk-agent-instructions`,
 `adk-tool-interface-design`, `adk-model-and-output-contracts`); three own the
 production lifecycle (`adk-agent-security`, `adk-agent-observability`,
-`adk-release-engineering`).
+`adk-release-engineering`); one owns the process boundary
+(`adk-agent-interoperability`, for MCP and A2A).
 A misrouted request often needs two of them; name the primary, keep one change
 set and one measurement, and hand the measured comparison to
 `adk-agent-evaluation`.

@@ -1,0 +1,48 @@
+{
+  "protocolVersion": "0.3.0",
+  "name": "catalog_agent",
+  "description": "Answers questions about products in the catalogue by SKU, name or category. Reports SKUs it could not find.",
+  "url": "https://catalog.example.com/a2a/catalog_agent",
+  "preferredTransport": "JSONRPC",
+  "version": "1.2.0",
+  "provider": {
+    "organization": "Example Org",
+    "url": "https://example.com"
+  },
+  "documentationUrl": "https://example.com/docs/catalog-agent",
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false,
+    "stateTransitionHistory": false,
+    "extensions": [
+      {
+        "uri": "https://google.github.io/adk-docs/a2a/a2a-extension/",
+        "description": "Ability to use the new ADK agent executor implementation",
+        "required": false
+      }
+    ]
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain", "application/json"],
+  "skills": [
+    {
+      "id": "product_lookup",
+      "name": "Product lookup",
+      "description": "Find a product by SKU or name and return price, availability and category.",
+      "tags": ["catalogue", "lookup"],
+      "examples": ["What is the price of SKU 12345?"],
+      "inputModes": ["text/plain"],
+      "outputModes": ["application/json"]
+    }
+  ],
+  "securitySchemes": {
+    "google_oidc": {
+      "type": "openIdConnect",
+      "openIdConnectUrl": "https://accounts.google.com/.well-known/openid-configuration"
+    }
+  },
+  "security": [
+    {"google_oidc": []}
+  ],
+  "supportsAuthenticatedExtendedCard": false
+}

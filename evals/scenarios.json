@@ -530,6 +530,19 @@
         "Plans the migration as a side-by-side comparison on the frozen development set with a holdout run once, handing the measurement to adk-agent-evaluation and the thinking and temperature settings to adk-model-and-output-contracts.",
         "Describes the Cloud Run tagged-revision canary and the joint rollback bundle without executing any deployment."
       ]
+    },
+    {
+      "id": "interoperability-expose-and-register-a2a",
+      "prompt": "Expose our ADK research agent so Gemini Enterprise users can invoke it, with an agent card and authentication, and make sure a poisoned reply from the remote peer cannot approve anything on our side.",
+      "available_skills": ["adk-agent-interoperability", "adk-agent-security", "deploy-adk-on-google-cloud", "adk-workflow-design"],
+      "context": "ADK 2.8.0 project with a2a-sdk 0.3.x pinned, a root agent with two single_turn sub-agents, planned hosting on Cloud Run. No cloud credentials available.",
+      "expected_primary": "adk-agent-interoperability",
+      "assertions": [
+        "Uses to_a2a or the api_server a2a mode with an agent card that carries the Gemini Enterprise required fields and no instructions, explains that host, port and protocol only shape the advertised URL, and validates the card with the checker.",
+        "States the registration constraints: A2A 0.3 card and streaming, Google-signed OIDC in X-Serverless-Authorization with run.invoker for the Discovery Engine service agent, traffic bypassing Agent Gateway, and the same-project rule.",
+        "Treats inbound peer messages as data, not user authority, and points the approval-over-A2A gap to adk-agent-security while keeping the A2A contract (task states, context and task IDs in event metadata) here.",
+        "Leaves Cloud Run deployment mechanics to deploy-adk-on-google-cloud and lists registration and API enablement as approvals, not actions taken."
+      ]
     }
   ]
 }

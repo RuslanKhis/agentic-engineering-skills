@@ -1,0 +1,6 @@
+interface:
+  display_name: "ADK Agent Interoperability"
+  short_description: "Wire ADK agents to MCP servers and A2A peers safely"
+  default_prompt: "Use $adk-agent-interoperability to inspect this ADK agent's tool sources, MCP toolsets, remote A2A agents and agent cards, decide between in-process sub-agents and remote agents, and wire or audit MCP and A2A boundaries with pinned tool manifests and validated cards."
+policy:
+  allow_implicit_invocation: true

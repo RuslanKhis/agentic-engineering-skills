@@ -44,11 +44,12 @@ If you already know the topic, you can call a specialist directly.
 Designing the whole application first? Use **adk-system-designer** to work through
 requirements and trade-offs, then capture the architecture and implementation plan.
 
-Six **cross-framework specialists** cover practices that apply to any agent
+Seven **cross-framework specialists** cover practices that apply to any agent
 framework and are implemented here for ADK: how to write an agent's
 instructions, how to design the tools a model sees, how to make structured
 output and model settings dependable, how to threat-model and red-team the
-agent, how to observe it in production, and how to release it safely. See
+agent, how to observe it in production, how to release it safely, and how to
+connect it to MCP servers and other agents over A2A. See
 [V. Cross-framework practices](#v-cross-framework-practices).
 Follow the [design → tickets → implementation walkthrough](#from-design-to-working-tickets)
 to continue with Matt Pocock's skills, or the
@@ -102,9 +103,9 @@ From your application's project directory, run:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*'
 ```
 
-Choose your coding agent when prompted. This installs **all nineteen skills**
+Choose your coding agent when prompted. This installs **all twenty skills**
 for the current project: `adk-engineer`, `adk-system-designer`, the eleven
-chapter specialists and the six cross-framework specialists.
+chapter specialists and the seven cross-framework specialists.
 Keep the quotes around `'*'` so your shell passes it unchanged.
 
 **Choosing a Google client?** Use Antigravity for Google consumer accounts.
@@ -233,7 +234,7 @@ For installation problems or later changes, see
 
 ## The Skills
 
-*The contents · One entry point, a system designer, eleven chapter specialists and six cross-framework specialists.*
+*The contents · One entry point, a system designer, eleven chapter specialists and seven cross-framework specialists.*
 
 Choose a skill by the problem you need to solve. Each entry below explains
 when it helps, what to ask for, and the command that selects it. The numbered
@@ -260,6 +261,7 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 | Prompt-injection resilience, MCP vetting, sandboxing and red-teaming | [adk-agent-security](#adk-agent-security) |
 | Tracing, metrics, SLOs, alerts and production-to-evaluation hand-off | [adk-agent-observability](#adk-agent-observability) |
 | Version pinning, CI eval gates, model migration, canary and rollback | [adk-release-engineering](#adk-release-engineering) |
+| MCP servers, remote A2A agents, agent cards and registration | [adk-agent-interoperability](#adk-agent-interoperability) |
 
 **Copy any example into your coding agent's chat.** Examples use Claude Code's
 `/` prefix. In Codex, replace only the leading `/` with `$`; keep the skill name
@@ -787,14 +789,15 @@ and add tests proving rejected queries never reach the database.
 
 *What the model sees and emits · Practices from across the field, implemented for ADK.*
 
-These six specialists did not come from a book chapter. They came from a
+These seven specialists did not come from a book chapter. They came from a
 review of current AI-engineering practice (vendor guidance from Google,
 Anthropic and OpenAI, independent studies, the official ADK documentation,
 Google's samples and the ADK issue tracker) against what the toolkit already
 covered. The first three own what the model sees and emits: the instruction
 text, the tool declarations and the output contract. The next three own the
 production lifecycle: the agent's security posture, its telemetry, and its
-releases. Their mechanics were checked against the google-adk 2.8.0 source and
+releases. The last owns the process boundary: MCP servers and A2A peers. Their
+mechanics were checked against the google-adk 2.8.0 source and
 the later changelog; see the
 [gap review](docs/research/ai-engineering-practices-gap-review.md).
 
@@ -1048,6 +1051,50 @@ without being flaky or expensive.
 /adk-release-engineering Canary the new system prompt to 10% of traffic
 on Cloud Run and tell me how we roll back the prompt, model and tool
 schema together if it misbehaves.
+```
+
+</details>
+
+#### [adk-agent-interoperability](skills/adk-agent-interoperability/SKILL.md)
+
+*Cross a process, team or protocol boundary without losing the contract.*
+
+Use this when an agent must consume or offer capabilities across a boundary:
+connecting to MCP servers, exposing an ADK agent as an MCP server, deciding
+between in-process sub-agents and a remote A2A agent, consuming a remote agent
+through its agent card, exposing an agent over A2A, or registering it with
+Agent Runtime, Agent Registry or Gemini Enterprise. It covers tool-source
+selection, McpToolset lifecycle and session pooling, filters and per-user
+headers, SDK version contracts for both protocols, agent-card contents, task
+states and failure handling, and how to test a remote peer with a fake server.
+Two helpers inventory an MCP server's tools into a pinned manifest and validate
+an agent card in both the 0.3 and 1.0 shapes. The MCP threat model stays with
+[adk-agent-security](#adk-agent-security); in-process orchestration stays with
+[adk-workflow-design](#adk-workflow-design).
+
+**Invoke:** Claude Code `/adk-agent-interoperability` · Codex `$adk-agent-interoperability`
+
+Gemini CLI / Antigravity: “Use the adk-agent-interoperability skill to…”
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-agent-interoperability Connect our agent to the company's GitHub and
+Postgres MCP servers on Cloud Run, exposing only read tools with per-user
+tokens, and pin the tool lists so we notice when a server changes them.
+```
+
+```text
+/adk-agent-interoperability The billing team's agent runs in Java. Should
+our ADK agent delegate refund questions to it over A2A or call their API,
+and what must the agent card and failure handling look like?
+```
+
+```text
+/adk-agent-interoperability Expose our research agent so Gemini Enterprise
+users can invoke it, with an agent card and authentication, and validate
+the card before we register it.
 ```
 
 </details>
@@ -1467,6 +1514,24 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Interoperability specialist · 8 October 2026
+
+The third and final round of the practice review added `adk-agent-interoperability`
+for the process boundary: tool-source selection, consuming and exposing MCP
+servers, the in-process versus remote topology decision, remote A2A agents and
+agent cards, exposure over A2A and registration with Agent Runtime, Agent
+Registry or Gemini Enterprise. Its two helpers speak the protocols themselves:
+one inventories an MCP server's tools into a pinned manifest and diffs it, the
+other validates an agent card in both the 0.3 and 1.0 shapes. Mechanics were
+checked against the google-adk 2.8.0 source and the later changelog, with a
+research pass over the official documentation, Google Cloud registration pages
+and the issue tracker. All **20 packages** pass validation; the offline suites
+run **638 tests** with **59 optional SDK checks skipped**, including 31 tests
+for the two protocol helpers against loopback fakes. See the
+[gap review and validation record](docs/research/ai-engineering-practices-gap-review.md).
+No live server, cloud operation or skill-selection trial was performed; the new
+activation and scenario cases are written but not yet executed.
 
 ### Production-lifecycle specialists · 8 October 2026
 

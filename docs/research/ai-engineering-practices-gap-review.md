@@ -1,8 +1,8 @@
 # AI-engineering practices: gap review and build record
 
-Reviewed on **6 October 2026**, with Phase 2 completed on **8 October 2026**.
-This records why six cross-framework specialists and a context-window
-reference were added, what evidence they rest on, and what the checks
+Reviewed on **6 October 2026**, with Phases 2 and 3 completed on
+**8 October 2026**. This records why seven cross-framework specialists and a
+context-window reference were added, what evidence they rest on, and what the checks
 establish. Upstream documentation, model line-ups and
 issue trackers change; every dated URL below should be re-read before it is
 relied on for a new target.
@@ -40,11 +40,11 @@ fragments across the evaluation and workflow skills with no owner.
 | Agent security | Data screening, credentials and approval covered; no whole-agent threat model or adversarial suite | New `adk-agent-security` (Phase 2) |
 | Observability | Defensive pieces, GKE-centric; Google's agents-cli has an observability skill to defer scaffolding to | New `adk-agent-observability` (Phase 2) |
 | Release engineering | Seam between deploy (excludes prompt-only changes) and evaluation (excludes deployment) | New `adk-release-engineering` (Phase 2) |
-| MCP and A2A | Incidental mentions only | Proposed `adk-agent-interoperability` (Phase 3) |
+| MCP and A2A | Incidental mentions only | New `adk-agent-interoperability` (Phase 3) |
 
-The Phase 3 proposal is recorded as a decision to make, not as work done. Its
-research notes (modes, reference list, helper ideas, trigger and near-miss
-prompts) should be re-verified before implementation.
+All three phases are complete. Merging tool interface design into the
+instructions skill remains an option if the router grows past what a coding
+agent selects reliably; the activation corpus is the evidence for that call.
 
 ## What the Phase 2 sources added
 
@@ -79,6 +79,30 @@ that changed the skills most:
   metrics are informational and reject thresholds. Agent Runtime revisions can
   be queried directly, bypassing the traffic split, which is the documented
   shadow-test path.
+
+## What the Phase 3 sources added
+
+The interoperability pass read the MCP and A2A code paths in 2.8.0 and on
+`main`, the protocol specifications, Google's Agent Platform and Gemini
+Enterprise pages and the issue tracker:
+
+- McpToolset pools sessions by a hash of the request headers, evicts idle
+  sessions after fifteen minutes, caches tool lists per pool key and never
+  subscribes to list-changed notifications, so a pinned tool manifest with a
+  diff is the detector for a changed server. Agents and toolsets must be
+  defined synchronously in the agent module for deployment. The default MCP SDK
+  remains 1.x in 2.9.0 and later even though 2.x is supported.
+- RemoteA2aAgent already validated card RPC targets in 2.8.0 (https or
+  loopback, same origin); 2.9.0 extended the rule to the card URL itself. Task
+  and context identifiers travel in event metadata under `a2a:` keys. The
+  agent-card builder publishes tool descriptions and sub-agent skills and
+  never the instruction. `to_a2a` only shapes the advertised URL; a served
+  Workflow must emit a message event or the A2A task stays in progress.
+- Agent Runtime serves the A2A card only behind authentication; Gemini
+  Enterprise registration speaks A2A 0.3 and streaming, authenticates Cloud Run
+  agents with a Google-signed OIDC header, bypasses Agent Gateway, and is
+  limited to the same project. The a2a-sdk 1.x card shape differs from 0.3,
+  so the card checker accepts both.
 
 ## What the ADK sources changed
 
@@ -138,10 +162,11 @@ SDK installed) on 6 and 8 October 2026:
 
 | Check | Result |
 | --- | --- |
-| `scripts/validate_skills.py` | 19 packages, 0 errors, 0 warnings (16 after Phase 1 on 6 October) |
-| `scripts/check_repo.py` | 607 tests passed, 59 optional SDK checks skipped (562 after Phase 1) |
+| `scripts/validate_skills.py` | 20 packages, 0 errors, 0 warnings (16 after Phase 1, 19 after Phase 2) |
+| `scripts/check_repo.py` | 638 tests passed, 59 optional SDK checks skipped (562 after Phase 1, 607 after Phase 2) |
 | Phase 1 helper suites | `adk-agent-instructions` 12, `adk-tool-interface-design` 18, `adk-model-and-output-contracts` 18, optimise context helpers 15 |
 | Phase 2 helper suites (8 October) | `adk-agent-security` 15, `adk-agent-observability` 20, `adk-release-engineering` 10 |
+| Phase 3 helper suite (8 October) | `adk-agent-interoperability` 31, against loopback fake MCP and card servers |
 | `git diff --check` | clean |
 
 What this does not establish: live model behaviour, provider acceptance of a
@@ -158,9 +183,9 @@ run against a model.
 1. Run the new activation and scenario cases in fresh sessions and record
    selection separately from execution, per the
    [quality evaluation guide](../testing/skill-quality.md).
-2. Decide on Phase 3 (MCP and A2A interoperability) and whether to merge
-   tool interface design into the instructions skill if the collection grows
-   past what the router can hold.
+2. Review router selection quality with twenty skills installed; merge tool
+   interface design into the instructions skill if the activation corpus
+   shows confusion between them.
 3. Re-verify the dated model, deprecation and documentation pages before the
    next revision; the model-contracts skill bundles a dated lifecycle table that
    must be refreshed.

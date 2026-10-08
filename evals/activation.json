@@ -371,6 +371,27 @@
       "prompt": "Deploy my ADK agent to Cloud Run for the first time with a service account and a session database.",
       "should_trigger": false,
       "rationale": "A first deployment belongs to deploy-adk-on-google-cloud; no versioning, gate or promotion concern is raised."
+    },
+    {
+      "id": "interoperability-mcp-positive",
+      "skill": "adk-agent-interoperability",
+      "prompt": "Connect our ADK agent to the company's GitHub and Postgres MCP servers on Cloud Run, exposing only read tools, with per-user tokens that refresh and a check that the servers' tool lists have not changed since we reviewed them.",
+      "should_trigger": true,
+      "rationale": "Consuming MCP servers with filters, per-user headers and a pinned tool inventory is interoperability work."
+    },
+    {
+      "id": "interoperability-a2a-positive",
+      "skill": "adk-agent-interoperability",
+      "prompt": "The billing team runs their agent in Java. Our ADK agent should delegate refund questions to it. Should we use A2A or just call their API, and what does the agent card and failure handling need to look like?",
+      "should_trigger": true,
+      "rationale": "The topology decision across a team and language boundary and the A2A contract are the interoperability specialist's modes."
+    },
+    {
+      "id": "interoperability-near-miss",
+      "skill": "adk-agent-interoperability",
+      "prompt": "Split our pipeline into a writer and a reviewer sub-agent with a bounded revision loop and pass the draft through session state.",
+      "should_trigger": false,
+      "rationale": "In-process sub-agent orchestration with no process, team or protocol boundary belongs to adk-workflow-design."
     }
   ]
 }
