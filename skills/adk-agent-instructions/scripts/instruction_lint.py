@@ -21,6 +21,8 @@ import stat
 EXCLUDED = {".git", ".hg", ".svn", ".venv", "venv", "env", "node_modules",
             "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox",
             "dist", "build", "site-packages", "vendor", ".aws", ".ssh", ".config"}
+# Coding-agent skill install directories hold these skills' own fixtures, not the project.
+EXCLUDED = EXCLUDED | {".claude", ".agents", ".agent", ".codex", ".gemini", ".cursor", ".windsurf", ".antigravity", ".adk-evidence"}
 AGENT_CLASSES = {"Agent", "LlmAgent"}
 STATE_PREFIXES = ("app:", "user:", "temp:")
 FRAMEWORK_TOOLS = {"transfer_to_agent", "finish_task", "load_artifacts", "load_memory",

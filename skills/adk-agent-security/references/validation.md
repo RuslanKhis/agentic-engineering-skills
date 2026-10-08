@@ -7,9 +7,9 @@ call.
 ## 1. Inventory before and after
 
 ```bash
-python "$SKILL_DIR/scripts/inspect_security_surface.py" --project . > /tmp/security-before.json
+python "$SKILL_DIR/scripts/inspect_security_surface.py" --project . > .adk-evidence/security-before.json
 # ... change ...
-python "$SKILL_DIR/scripts/inspect_security_surface.py" --project . > /tmp/security-after.json
+python "$SKILL_DIR/scripts/inspect_security_surface.py" --project . > .adk-evidence/security-after.json
 ```
 
 Compare `counts` and each agent's `trifecta`. Expect the targeted findings to

@@ -74,6 +74,17 @@ class LintTests(unittest.TestCase):
     def findings(self, data, kind):
         return [f for f in data["findings"] if f["finding"] == kind]
 
+    def test_installed_skill_and_evidence_folders_are_not_scanned(self):
+        bad = ('from google.adk.agents import LlmAgent\n'
+               'def f(x):\n    return "s"\n'
+               'agent = LlmAgent(name="a", description="d", tools=[f])\n')
+        for folder in (".claude/skills/demo", ".agents/skills/demo", ".adk-evidence"):
+            self.write(f"{folder}/agent.py", bad)
+        _, data = self.scan()
+        paths = {f.get("path", "") for f in data["findings"]}
+        self.assertFalse(any(part in p for p in paths for part in (".claude", ".agents", ".adk-evidence")), paths)
+        self.assertEqual(data.get("tools", []), [])
+
     def test_help_and_invalid_arguments(self):
         result = self.run_cli("--help", project=False)
         self.assertEqual(result.returncode, 0)

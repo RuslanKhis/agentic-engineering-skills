@@ -1,0 +1,11 @@
+ M support_agent/__init__.py
+ M support_agent/agent.py
+ M support_agent/tools.py
+ M tickets/T-104.md
+?? REPORT.md
+?? docs/security/T-104-security-review.md
+?? docs/security/inventory-after.json
+?? docs/security/inventory-before.json
+?? support_agent/security.py
+?? tests/test_security_policy.py
+?? tests/test_security_runner.py

@@ -37,6 +37,8 @@ SKIP_DIRS = frozenset({
     "private", "secrets", "credentials", "logs", "log", "output", "outputs",
     "artifacts", "audit", "dist", "build", "coverage", "htmlcov",
 })
+# Coding-agent skill install directories hold these skills' own fixtures, not the project.
+SKIP_DIRS = SKIP_DIRS | frozenset({".claude", ".agents", ".agent", ".codex", ".gemini", ".cursor", ".windsurf", ".antigravity", ".adk-evidence"})
 LOCKS = {
     "uv.lock": "uv", "poetry.lock": "poetry", "pdm.lock": "pdm",
     "Pipfile.lock": "pipenv", "package-lock.json": "npm",

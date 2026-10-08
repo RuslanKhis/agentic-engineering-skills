@@ -25,6 +25,8 @@ SKIP_DIRS = {
     ".git", ".venv", "venv", "env", "node_modules", "__pycache__",
     "dist", "build", "verification", "audit-evidence", "skills",
 }
+# Coding-agent skill install directories hold these skills' own fixtures, not the project.
+SKIP_DIRS = SKIP_DIRS | {".claude", ".agents", ".agent", ".codex", ".gemini", ".cursor", ".windsurf", ".antigravity", ".adk-evidence"}
 SIGNALS = {
     "sessions": ("SessionService", "get_session", "create_session"),
     "rag": (

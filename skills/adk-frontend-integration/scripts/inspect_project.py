@@ -67,6 +67,8 @@ EXCLUDED_DIRS = {
     ".nox", ".next", ".nuxt", ".cache", "dist", "build", "coverage",
     ".turbo", ".idea", ".vscode", "site-packages",
 }
+# Coding-agent skill install directories hold these skills' own fixtures, not the project.
+EXCLUDED_DIRS = EXCLUDED_DIRS | {".claude", ".agents", ".agent", ".codex", ".gemini", ".cursor", ".windsurf", ".antigravity", ".adk-evidence"}
 LOCKFILES = {
     "uv.lock", "poetry.lock", "Pipfile.lock", "pdm.lock", "package-lock.json",
     "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb",

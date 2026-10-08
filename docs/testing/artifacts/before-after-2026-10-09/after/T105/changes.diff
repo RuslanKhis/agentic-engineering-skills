@@ -1,0 +1,127 @@
+diff --git a/support_agent/__init__.py b/support_agent/__init__.py
+index 427a205..6e2b25f 100644
+--- a/support_agent/__init__.py
++++ b/support_agent/__init__.py
+@@ -1 +1,7 @@
+-from .agent import root_agent  # noqa: F401
++# Lazy, so SDK-free modules (tools, triage_contract) import without google.adk installed.
++def __getattr__(name):
++    if name == "root_agent":
++        from .agent import root_agent
++
++        return root_agent
++    raise AttributeError(name)
+diff --git a/support_agent/agent.py b/support_agent/agent.py
+index f93cdc5..1bed75b 100644
+--- a/support_agent/agent.py
++++ b/support_agent/agent.py
+@@ -1,16 +1,34 @@
+ """Support agent definition."""
+-from google.adk.agents import LlmAgent
++from google.adk.agents import LlmAgent, SequentialAgent
++from google.adk.agents.callback_context import CallbackContext
++from google.adk.models.llm_response import LlmResponse
+ from google.genai import types
+-from pydantic import BaseModel
+ 
+ from . import tools
++from .triage_contract import Triage, cannot_triage, triage_or_failure
+ 
+ 
+-class Triage(BaseModel):
+-    category: str
+-    priority: int
+-    summary: str
+-    order_id: str | None = None
++def guard_triage(callback_context: CallbackContext, llm_response: LlmResponse) -> LlmResponse | None:
++    """Replace an invalid or errored final triage response with the CANNOT_TRIAGE shape,
++    so the output_key save never raises and state["triage"] always holds one shape."""
++    if llm_response.partial:
++        return None
++    if llm_response.error_code:  # SAFETY, RECITATION, blocked prompt: no repair, explicit failure
++        failure, failed = cannot_triage(f"model error: {llm_response.error_code}"), True
++    else:
++        parts = llm_response.content.parts if llm_response.content else []
++        text = "".join(p.text for p in parts if p.text and not p.thought)
++        if not text.strip():
++            return None
++        failure, failed = triage_or_failure(text)
++        if not failed:
++            return None
++    return LlmResponse(
++        content=types.Content(role="model", parts=[types.Part(text=failure.model_dump_json())]),
++        finish_reason=llm_response.finish_reason,
++        usage_metadata=llm_response.usage_metadata,
++        custom_metadata={"contract_failure": True},
++    )
+ 
+ 
+ billing_agent = LlmAgent(
+@@ -32,17 +50,46 @@ refunds_agent = LlmAgent(
+     tools=[tools.issue_refund, tools.get_order, tools.send_email],
+ )
+ 
+-triage_agent = LlmAgent(
+-    name="triage_agent",
++# The API-key backend (README) ignores response_schema when tools are present and falls back
++# to a best-effort set_model_response tool, which is how prose reached output_key (T-105).
++# So the tool-using reader writes plain notes and a tool-free formatter emits the schema natively.
++triage_reader = LlmAgent(
++    name="triage_reader",
+     model="gemini-2.5-pro",
+-    description="Triage",
+-    instruction="Classify the inbound email into a category and priority. Use fetch_email to read it and search_kb for context.",
++    description="Reads an inbound email and writes triage notes",
++    instruction=(
++        "Use fetch_email to read the inbound email and search_kb for context. "
++        "Then write short plain-text notes: the category, the priority, a one-sentence summary "
++        "and the order ID exactly as written in the email, if there is one. "
++        "If the email cannot be read or classified, say so and why."
++    ),
+     tools=[tools.fetch_email, tools.search_kb],
++    output_key="triage_notes",
++    generate_content_config=types.GenerateContentConfig(temperature=0.2, thinking_config=types.ThinkingConfig(thinking_budget=2048)),
++)
++
++triage_formatter = LlmAgent(
++    name="triage_formatter",
++    model="gemini-2.5-pro",
++    description="Turns triage notes into the Triage record",
++    instruction=(
++        "Convert these triage notes into the Triage record. Use status TRIAGED with category, priority, "
++        "summary and order_id taken from the notes; copy order_id exactly or leave it out. "
++        "If the notes are missing or say the email could not be classified, use status CANNOT_TRIAGE "
++        "and put the reason in summary.\n\nNotes:\n{triage_notes?}"
++    ),
+     output_schema=Triage,
+     output_key="triage",
++    after_model_callback=guard_triage,
+     generate_content_config=types.GenerateContentConfig(temperature=0.2, thinking_config=types.ThinkingConfig(thinking_budget=2048)),
+ )
+ 
++triage_agent = SequentialAgent(
++    name="triage_agent",
++    description="Triage",
++    sub_agents=[triage_reader, triage_formatter],
++)
++
+ root_agent = LlmAgent(
+     name="support_root",
+     model="gemini-2.5-pro",
+diff --git a/tickets/T-105.md b/tickets/T-105.md
+index 71e74dd..83892cf 100644
+--- a/tickets/T-105.md
++++ b/tickets/T-105.md
+@@ -1,2 +1,12 @@
+ # T-105 Triage output arrives as prose
+ The triage agent sometimes returns a paragraph instead of the Triage JSON and output_key then raises. Make it reliable.
++
++## Evidence
++Status: implemented; offline checks pass; SDK-dependent tests written but **not run** (google-adk not installed). No live model call.
++
++- Cause: `triage_agent` combined `tools` with `output_schema`. On the API-key backend (README), ADK 2.8.0 does not send `response_schema` when tools are present; it adds a best-effort `set_model_response` tool. Prose then reaches `validate_schema`, which raises on save. The audit helper flagged `schema_with_tools_path_depends_on_backend` at agent.py:35.
++- Fix: `triage_agent` is now a `SequentialAgent` made of two agents. `triage_reader` uses tools and writes plain notes to `triage_notes`. `triage_formatter` has no tools and keeps `output_schema=Triage, output_key="triage"`, so the schema is enforced natively on every backend. `guard_triage` (after_model_callback) replaces invalid JSON, fenced JSON with surrounding prose, and provider errors (SAFETY etc.) with a valid `CANNOT_TRIAGE` record, so the save never raises.
++- Contract change: `Triage` gains `status: TRIAGED | CANNOT_TRIAGE`. `category` and `priority` are now nullable. Saved with `exclude_none`, so consumers must treat a missing key as None.
++- Offline (Python 3.9.13 + pydantic 2.11.2, not the project's 3.11): `pytest` → 11 passed, 1 skipped (tests/test_triage_agent.py, needs google.adk). check_response_schema.py: no unsupported keywords (info: 3 optional > 2 required).
++- Not run: tests/test_triage_agent.py (guard callback, scripted-model save path, request-capture of native schema). This also needs pytest-asyncio, which is not in the dependencies. No live check.
++- Retry budget inside the agent is 0: a callback cannot re-call the model. A genuine retry needs the Runner owner to re-invoke on `custom_metadata.contract_failure`; there is no such caller in this repo.

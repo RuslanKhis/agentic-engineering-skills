@@ -15,6 +15,8 @@ PACKAGES = ("google-adk", "google-genai")
 IDENTIFIERS = ("SafeAgentRuntime", "MockBudgetStore", "max_llm_calls", "before_model_callback",
                "after_model_callback", "before_tool_callback", "usage_metadata", "payment_processed")
 SKIP_DIRS = {"venv", "env", "build", "dist", "node_modules", "site-packages", "__pycache__"}
+# Coding-agent skill install directories hold these skills' own fixtures, not the project.
+SKIP_DIRS = SKIP_DIRS | {".claude", ".agents", ".agent", ".codex", ".gemini", ".cursor", ".windsurf", ".antigravity", ".adk-evidence"}
 CONFIGS = {"pyproject.toml", "Pipfile", "setup.cfg", "pytest.ini", "tox.ini", "uv.lock",
            "poetry.lock", "Pipfile.lock", "pdm.lock", "setup.py", "Makefile", ".python-version"}
 MAX_FILES, MAX_BYTES, MAX_DEPTH = 5000, 262144, 12

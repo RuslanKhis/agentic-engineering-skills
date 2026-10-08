@@ -7,7 +7,7 @@ model call.
 ## 1. Lint and compare
 
 ```bash
-python "$SKILL_DIR/scripts/lint_tool_schemas.py" --project . --max-tools 20 > /tmp/lint-after.json
+python "$SKILL_DIR/scripts/lint_tool_schemas.py" --project . --max-tools 20 > .adk-evidence/lint-after.json
 ```
 
 Compare `counts` with the pre-change run. Expect no new findings of the types

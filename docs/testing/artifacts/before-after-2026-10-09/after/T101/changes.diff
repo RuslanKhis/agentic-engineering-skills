@@ -1,0 +1,241 @@
+diff --git a/support_agent/__init__.py b/support_agent/__init__.py
+index 427a205..6c73d93 100644
+--- a/support_agent/__init__.py
++++ b/support_agent/__init__.py
+@@ -1 +1,7 @@
+-from .agent import root_agent  # noqa: F401
++def __getattr__(name):
++    # Load the ADK agent lazily so support_agent.tools imports without google-adk.
++    if name == "root_agent":
++        from .agent import root_agent
++
++        return root_agent
++    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+diff --git a/support_agent/agent.py b/support_agent/agent.py
+index f93cdc5..f0295a1 100644
+--- a/support_agent/agent.py
++++ b/support_agent/agent.py
+@@ -17,7 +17,11 @@ billing_agent = LlmAgent(
+     name="billing_agent",
+     model="gemini-2.5-pro",
+     description="Billing agent",
+-    instruction="You handle billing. ALWAYS call search_orders first. NEVER answer without calling a tool.",
++    instruction=(
++        "You handle billing. When the customer gives an order ID, call get_order with that ID. "
++        "Call search_orders only when no order ID is known, to find the customer's orders by name or e-mail. "
++        "If you lack the information to look up an order, ask the customer for the order ID."
++    ),
+     tools=[tools.search_orders, tools.get_order],
+ )
+ 
+diff --git a/support_agent/tools.py b/support_agent/tools.py
+index 56bc057..1e864de 100644
+--- a/support_agent/tools.py
++++ b/support_agent/tools.py
+@@ -1,9 +1,15 @@
+ """Tools for the support agent."""
+ import json
++import re
++
+ import httpx
+ 
+ ORDERS_API = "https://orders.internal.example/api"
+ 
++# One token of letters, digits, "-" or "_" that contains at least one digit.
++# Rejects customer names and e-mail addresses passed where an order ID belongs.
++ORDER_ID = re.compile(r"(?=[^0-9]*[0-9])[A-Za-z0-9_-]{3,64}")
++
+ 
+ def fetch_email(message_id: str) -> dict:
+     """Fetch an email."""
+@@ -18,16 +24,85 @@ def search_kb(query: str) -> str:
+     return "\n\n".join(a["body"] for a in resp.json()["articles"])
+ 
+ 
+-def search_orders(value: str) -> dict:
+-    """Search orders."""
+-    resp = httpx.get(f"{ORDERS_API}/orders", params={"q": value}, timeout=10)
++def search_orders(query: str) -> dict:
++    """Search for a customer's orders by customer name, e-mail address or a description of the purchase.
++
++    Use this tool ONLY when the customer has NOT given an order ID, for example
++    "my orders from last month" or "the order for Jane Smith". If the customer
++    gives an order ID, call get_order instead; do not search for an order ID.
++
++    Args:
++        query: Free text identifying the customer or purchase, for example
++            "Jane Smith", "jane.smith@example.com" or "blue kettle March".
++
++    Returns:
++        On success, status is "success" and "orders" holds the matches; each
++        match carries the "order_id" to pass to get_order.
++        On failure, status is "error" with "error" and "hint".
++        Example success: {"status": "success", "orders": [{"order_id": "A10023", "status": "shipped"}]}
++        Example error: {"status": "error", "error": "order service unavailable", "hint": "Tell the customer the order system is temporarily unavailable.", "retryable": true}
++    """
++    try:
++        resp = httpx.get(f"{ORDERS_API}/orders", params={"q": query}, timeout=10)
++    except httpx.HTTPError:
++        return _orders_unavailable()
++    if resp.status_code != 200:
++        return _orders_unavailable()
+     return {"status": "success", "orders": resp.json()}
+ 
+ 
+-def get_order(data: str) -> dict:
+-    """Get an order."""
+-    resp = httpx.get(f"{ORDERS_API}/orders/{data}", timeout=10)
+-    return {"status": "success", "order": resp.json()}
++def get_order(order_id: str) -> dict:
++    """Fetch one order by its order ID and return its current details.
++
++    Use this tool whenever the customer gives an order ID (for example "A10023"
++    or "ORD-123456"). Pass the ID exactly as the customer wrote it. Never pass a
++    customer name or e-mail address here; when no order ID is known, call
++    search_orders to find it first.
++
++    Args:
++        order_id: The order ID, a single word of letters, digits, "-" or "_"
++            that contains at least one digit, for example "A10023".
++
++    Returns:
++        On success, status is "success" with "order_id" and the "order" details.
++        On failure, status is "error" with "error", "hint" and "retryable".
++        Example success: {"status": "success", "order_id": "A10023", "order": {"status": "shipped"}}
++        Example error: {"status": "error", "error": "'Jane Smith' is not an order ID", "hint": "Ask the customer for the order ID, or call search_orders with their name.", "retryable": false}
++    """
++    order_id = order_id.strip()
++    if not ORDER_ID.fullmatch(order_id):
++        return {
++            "status": "error",
++            "error": f"{order_id!r} is not an order ID",
++            "hint": "Ask the customer for the order ID, or call search_orders "
++                    "with their name or e-mail address. Do not guess an ID.",
++            "retryable": False,
++        }
++    try:
++        resp = httpx.get(f"{ORDERS_API}/orders/{order_id}", timeout=10)
++    except httpx.HTTPError:
++        return _orders_unavailable()
++    if resp.status_code == 404:
++        return {
++            "status": "error",
++            "error": f"no order with ID {order_id!r}",
++            "hint": "Confirm the order ID with the customer; a typo is likely. "
++                    "If they do not have it, call search_orders.",
++            "retryable": False,
++        }
++    if resp.status_code != 200:
++        return _orders_unavailable()
++    return {"status": "success", "order_id": order_id, "order": resp.json()}
++
++
++def _orders_unavailable() -> dict:
++    return {
++        "status": "error",
++        "error": "order service unavailable",
++        "hint": "Tell the customer the order system is temporarily unavailable. "
++                "Do not call this tool again in this turn.",
++        "retryable": True,
++    }
+ 
+ 
+ def issue_refund(order_id: str, amount: float, user_id: str) -> dict:
+diff --git a/tests/test_tools.py b/tests/test_tools.py
+index 839f566..231947b 100644
+--- a/tests/test_tools.py
++++ b/tests/test_tools.py
+@@ -3,3 +3,75 @@ from support_agent import tools
+ 
+ def test_orders_api_constant():
+     assert tools.ORDERS_API.startswith("https://")
++
++
++import httpx
++import pytest
++
++
++class _Resp:
++    def __init__(self, status_code, payload):
++        self.status_code = status_code
++        self._payload = payload
++
++    def json(self):
++        return self._payload
++
++
++def _record_get(monkeypatch, status_code=200, payload=None):
++    calls = []
++
++    def fake_get(url, **kwargs):
++        calls.append((url, kwargs))
++        return _Resp(status_code, payload)
++
++    monkeypatch.setattr(tools.httpx, "get", fake_get)
++    return calls
++
++
++@pytest.mark.parametrize("order_id", ["A10023", "ORD-123456", " 98765 "])
++def test_get_order_accepts_order_ids(monkeypatch, order_id):
++    calls = _record_get(monkeypatch, payload={"status": "shipped"})
++    result = tools.get_order(order_id)
++    assert result == {"status": "success", "order_id": order_id.strip(), "order": {"status": "shipped"}}
++    assert calls[0][0] == f"{tools.ORDERS_API}/orders/{order_id.strip()}"
++
++
++@pytest.mark.parametrize("value", ["Jane Smith", "Smith", "jane.smith@example.com", "", "../refunds"])
++def test_get_order_rejects_names_without_calling_the_api(monkeypatch, value):
++    calls = _record_get(monkeypatch)
++    result = tools.get_order(value)
++    assert result["status"] == "error"
++    assert result["retryable"] is False
++    assert "search_orders" in result["hint"]
++    assert calls == []
++
++
++def test_get_order_not_found_returns_hint(monkeypatch):
++    _record_get(monkeypatch, status_code=404)
++    result = tools.get_order("A10023")
++    assert result["status"] == "error" and result["retryable"] is False
++    assert "Confirm the order ID" in result["hint"]
++
++
++def test_get_order_unavailable_is_retryable(monkeypatch):
++    def boom(url, **kwargs):
++        raise httpx.ConnectTimeout("timeout")
++
++    monkeypatch.setattr(tools.httpx, "get", boom)
++    result = tools.get_order("A10023")
++    assert result["status"] == "error" and result["retryable"] is True
++
++
++def test_search_orders_passes_query(monkeypatch):
++    calls = _record_get(monkeypatch, payload=[{"order_id": "A10023"}])
++    result = tools.search_orders("Jane Smith")
++    assert result == {"status": "success", "orders": [{"order_id": "A10023"}]}
++    assert calls[0][1]["params"] == {"q": "Jane Smith"}
++
++
++def test_order_tool_docstrings_name_each_other():
++    # On google-adk 2.8.0 the docstring is the whole model-facing description.
++    assert "search_orders" in tools.get_order.__doc__
++    assert "get_order" in tools.search_orders.__doc__
++    assert tools.get_order.__doc__.startswith("Fetch one order by its order ID")
+diff --git a/tickets/T-101.md b/tickets/T-101.md
+index 2a20825..99b5ba4 100644
+--- a/tickets/T-101.md
++++ b/tickets/T-101.md
+@@ -1,2 +1,13 @@
+ # T-101 Wrong tool picked for order lookups
+ The agent keeps calling search_orders when the customer gives an order ID, and sometimes passes the customer's name where the ID belongs. Fix it.
++
++## Evidence
++
++Status: interface fix implemented; selection accuracy on a real model **not measured** (hand-off to adk-agent-evaluation pending).
++
++- `get_order(data)` → `get_order(order_id)`; `search_orders(value)` → `search_orders(query)`. Each docstring now says when to use the tool, names the other one, documents the ID format and gives example result dicts (13/14 bytes → 907/939 bytes).
++- `get_order` rejects values that are not order IDs (names, e-mail addresses, whitespace, path characters) with `{"status": "error", "hint": "... call search_orders ..."}` before any HTTP call. A 404 and an unavailable service also return error dicts with a hint.
++- billing_agent instruction no longer says "ALWAYS call search_orders first" (that instruction forced the reported behaviour).
++- `pytest` (python3.9, httpx 0.28.1): 13 passed, 1 skipped (`tests/test_tool_declarations.py` needs google-adk; **not run**).
++- `lint_tool_schemas.py`: `generic_parameter_name` 2→0 and `short_docstring` 5→3 in support_agent; no new findings.
++- Not run: declaration dump on google-adk 2.8.0, scripted-model Runner test, live evaluation.

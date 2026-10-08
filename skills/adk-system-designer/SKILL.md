@@ -90,6 +90,10 @@ or a measurement task. A numeric requirement, provider guarantee or user
 approval enters the design only from the user, a cited source or a labelled
 assumption. If asked for a one-pass draft, proceed with explicit assumptions
 and open decisions instead of requiring an interview.
+When the user cannot answer (a one-pass draft, a headless run, or no reply),
+keep asking nothing further: put an **Assumed answers** table at the top of the
+design, one row per question with the assumed answer and the decisions that
+depend on it, and mark those decisions provisional.
 
 Explain each consequential recommendation through:
 

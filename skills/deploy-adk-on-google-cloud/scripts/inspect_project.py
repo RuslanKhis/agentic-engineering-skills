@@ -28,6 +28,8 @@ LIMITS = {"depth": 4, "directory_entries": 4096, "manifests": 64,
           "bytes_per_manifest": 131072, "total_manifest_bytes": 1048576,
           "requirement_line_characters": 4096}
 SKIP_DIRS = {"node_modules", "venv", "env", "__pycache__", "dist", "build"}
+# Coding-agent skill install directories hold these skills' own fixtures, not the project.
+SKIP_DIRS = SKIP_DIRS | {".claude", ".agents", ".agent", ".codex", ".gemini", ".cursor", ".windsurf", ".antigravity", ".adk-evidence"}
 VERSION = r"[0-9]+(?:\.[0-9]+)*(?:(?:a|b|rc)[0-9]+)?(?:\.post[0-9]+)?(?:\.dev[0-9]+)?"
 SPEC = re.compile(rf"(?:===|==|!=|~=|<=|>=|<|>|\^|~){VERSION}(?:\.\*)?")
 NAME = re.compile(r"^([A-Za-z0-9][A-Za-z0-9._-]*)(?:\[[A-Za-z0-9,_. -]+\])?(.*)$")

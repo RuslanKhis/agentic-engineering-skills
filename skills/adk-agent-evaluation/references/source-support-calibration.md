@@ -67,7 +67,7 @@ For a real calibration, produce JSON with a `judgments` list containing one obje
 per `case_id`, the five dimensions above and a brief `rationale`. Then run:
 
 ```bash
-python3 scripts/check_source_support.py --judgments /tmp/source-judgments.json
+python3 scripts/check_source_support.py --judgments .adk-evidence/source-judgments.json
 ```
 
 The scorer reports every expected case, rejects missing/duplicate/unknown cases and

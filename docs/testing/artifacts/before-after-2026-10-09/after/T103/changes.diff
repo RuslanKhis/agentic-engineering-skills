@@ -1,0 +1,141 @@
+diff --git a/.github_workflows_ci.yml b/.github_workflows_ci.yml
+index 100aaad..b01ed9f 100644
+--- a/.github_workflows_ci.yml
++++ b/.github_workflows_ci.yml
+@@ -1,8 +1,56 @@
+ name: ci
+-on: [push, pull_request]
++on:
++  push:
++  pull_request:
++    types: [opened, synchronize, labeled]
++  workflow_dispatch:
+ jobs:
+   test:
+     runs-on: ubuntu-latest
+     steps:
+       - uses: actions/checkout@v4
+       - run: pip install -e . pytest && pytest
++
++  # Tier 2 live eval gate (T-103). Agent inference only, no judge. Opt-in until the
++  # runner can reach the tool backends; see docs/releases/T-103-model-upgrade.md.
++  # `adk eval` exits 0 whatever the scores, so the gate is pytest + AgentEvaluator
++  # (averaging) followed by the strict per-run CSV checker. A missing CSV fails the job.
++  live-eval:
++    needs: test
++    if: >-
++      github.event_name == 'workflow_dispatch' ||
++      contains(github.event.pull_request.labels.*.name, 'run-live-eval')
++    runs-on: ubuntu-latest
++    environment: eval
++    env:
++      EVAL_LIVE: "1"
++      EVAL_NUM_RUNS: "3"
++      EVAL_MAX_CASES: "120"
++      EVAL_MAX_RUNS: "3"
++      EVAL_OUTPUT_CSV: results/${{ github.sha }}/ci.csv
++      ADK_AGENT_EVALUATION_DIR: .claude/skills/adk-agent-evaluation
++      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
++    steps:
++      - uses: actions/checkout@v4
++      - uses: actions/setup-python@v5
++        with:
++          python-version: "3.11"
++      - run: pip install -e . pytest
++      - name: Run AgentEvaluator with repeats and CSV output
++        run: |
++          mkdir -p "$(dirname "$EVAL_OUTPUT_CSV")"
++          python -m pytest tests/eval/test_ci_gate.py -q || echo "AGENT_EVALUATOR_FAILED=1" >> "$GITHUB_ENV"
++      - name: Strict gate over per-run rows (NOT RUN is a failure)
++        run: |
++          test -s "$EVAL_OUTPUT_CSV" || { echo "::error::No CSV produced: eval NOT RUN"; exit 1; }
++          python "$ADK_AGENT_EVALUATION_DIR/scripts/check_eval_results.py" --csv "$EVAL_OUTPUT_CSV" --expectations evals/ci-expectations.json
++      - name: Fail when the averaging gate failed
++        if: env.AGENT_EVALUATOR_FAILED == '1'
++        run: |
++          echo "::error::AgentEvaluator reported failures (mean over $EVAL_NUM_RUNS runs below threshold)"
++          exit 1
++      - uses: actions/upload-artifact@v4
++        if: always()
++        with:
++          name: eval-evidence-${{ github.sha }}
++          path: results/${{ github.sha }}
+diff --git a/support_agent/agent.py b/support_agent/agent.py
+index f93cdc5..62c6546 100644
+--- a/support_agent/agent.py
++++ b/support_agent/agent.py
+@@ -4,6 +4,7 @@ from google.genai import types
+ from pydantic import BaseModel
+ 
+ from . import tools
++from .models import AGENT_MODEL, TRIAGE_THINKING_LEVEL
+ 
+ 
+ class Triage(BaseModel):
+@@ -15,7 +16,7 @@ class Triage(BaseModel):
+ 
+ billing_agent = LlmAgent(
+     name="billing_agent",
+-    model="gemini-2.5-pro",
++    model=AGENT_MODEL,
+     description="Billing agent",
+     instruction="You handle billing. ALWAYS call search_orders first. NEVER answer without calling a tool.",
+     tools=[tools.search_orders, tools.get_order],
+@@ -23,7 +24,7 @@ billing_agent = LlmAgent(
+ 
+ refunds_agent = LlmAgent(
+     name="refunds_agent",
+-    model="gemini-2.5-pro",
++    model=AGENT_MODEL,
+     description="Refunds",
+     instruction=(
+         "You process refunds. CRITICAL: You MUST call issue_refund when the customer asks for a refund. "
+@@ -34,18 +35,21 @@ refunds_agent = LlmAgent(
+ 
+ triage_agent = LlmAgent(
+     name="triage_agent",
+-    model="gemini-2.5-pro",
++    model=AGENT_MODEL,
+     description="Triage",
+     instruction="Classify the inbound email into a category and priority. Use fetch_email to read it and search_kb for context.",
+     tools=[tools.fetch_email, tools.search_kb],
+     output_schema=Triage,
+     output_key="triage",
+-    generate_content_config=types.GenerateContentConfig(temperature=0.2, thinking_config=types.ThinkingConfig(thinking_budget=2048)),
++    # Temperature left at the Gemini 3 default (1.0); see docs/releases/T-103-model-upgrade.md.
++    generate_content_config=types.GenerateContentConfig(
++        thinking_config=types.ThinkingConfig(thinking_level=TRIAGE_THINKING_LEVEL)
++    ),
+ )
+ 
+ root_agent = LlmAgent(
+     name="support_root",
+-    model="gemini-2.5-pro",
++    model=AGENT_MODEL,
+     description="Support root agent",
+     instruction=(
+         "You are the support assistant for ACME. You MUST be helpful. NEVER be rude. ALWAYS use tools. "
+@@ -55,5 +59,4 @@ root_agent = LlmAgent(
+     ),
+     sub_agents=[triage_agent, billing_agent, refunds_agent],
+     tools=[tools.fetch_email, tools.search_kb, tools.search_orders, tools.get_order, tools.send_email],
+-    generate_content_config=types.GenerateContentConfig(temperature=0.2),
+ )
+diff --git a/tickets/T-103.md b/tickets/T-103.md
+index 268a3be..ddcafc6 100644
+--- a/tickets/T-103.md
++++ b/tickets/T-103.md
+@@ -1,2 +1,13 @@
+ # T-103 gemini-2.5-pro is retiring
+ Google emailed that gemini-2.5-pro retires on Vertex on 20 October. Move us to a current model without silently dropping quality. Our CI only runs unit tests.
++
++## Evidence
++
++Status: **candidate prepared, go/no-go pending live evidence** (2026-10-09).
++
++- All four agents now take `AGENT_MODEL = "gemini-3.8-flash"` from `support_agent/models.py`, replacing four `gemini-2.5-pro` literals. Triage `thinking_budget=2048` became `thinking_level="medium"`; `temperature=0.2` was removed on triage and root (Gemini 3 recommendation).
++- Local: `pytest tests/test_model_pins.py tests/eval` → 3 passed, 1 skipped (the live gate skips without EVAL_LIVE=1).
++- Local: `check_eval_results.py --dry-run` on `evals/ci-expectations.json` → exit 0 (6 rows expected). Run on an empty CSV → exit 1, so NOT RUN fails the gate.
++- Not run: `tests/test_tools.py` (needs google-adk), the AgentEvaluator live gate, EvalSet/EvalConfig validation under ADK 2.8.0, the 2.5-pro vs 3.8-flash side-by-side, the canary.
++- Record: `docs/releases/T-103-model-upgrade.md`; changelog row in `PROMPT_CHANGELOG.md`.
++- CI: new opt-in `live-eval` job (label `run-live-eval` or manual dispatch). Do not deploy before the job has produced a baseline on main and passed on the branch.

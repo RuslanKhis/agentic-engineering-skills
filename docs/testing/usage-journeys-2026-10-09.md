@@ -1,5 +1,9 @@
 # Usage journeys and product pass · 9 October 2026
 
+> The reconstructed friction logs below were superseded the same day by
+> first-hand logs from fresh headless sessions, with a blind before/after
+> comparison: see [before-after-2026-10-09.md](before-after-2026-10-09.md).
+
 This records a usage trial of the two journeys the README is now built around,
 starting a new application with `adk-system-designer` and maintaining one with
 `adk-engineer`, and the changes made from what it found. The aim was to find

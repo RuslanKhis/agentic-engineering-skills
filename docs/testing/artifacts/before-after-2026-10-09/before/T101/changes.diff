@@ -1,0 +1,161 @@
+diff --git a/support_agent/agent.py b/support_agent/agent.py
+index f93cdc5..fb26043 100644
+--- a/support_agent/agent.py
++++ b/support_agent/agent.py
+@@ -17,7 +17,10 @@ billing_agent = LlmAgent(
+     name="billing_agent",
+     model="gemini-2.5-pro",
+     description="Billing agent",
+-    instruction="You handle billing. ALWAYS call search_orders first. NEVER answer without calling a tool.",
++    instruction=(
++        "You handle billing. If the customer gives an order ID, call get_order with it. "
++        "Call search_orders only when no order ID is given. NEVER answer without calling a tool."
++    ),
+     tools=[tools.search_orders, tools.get_order],
+ )
+ 
+diff --git a/support_agent/tools.py b/support_agent/tools.py
+index 56bc057..2a50e9c 100644
+--- a/support_agent/tools.py
++++ b/support_agent/tools.py
+@@ -1,5 +1,7 @@
+ """Tools for the support agent."""
+ import json
++from urllib.parse import quote
++
+ import httpx
+ 
+ ORDERS_API = "https://orders.internal.example/api"
+@@ -18,15 +20,61 @@ def search_kb(query: str) -> str:
+     return "\n\n".join(a["body"] for a in resp.json()["articles"])
+ 
+ 
+-def search_orders(value: str) -> dict:
+-    """Search orders."""
+-    resp = httpx.get(f"{ORDERS_API}/orders", params={"q": value}, timeout=10)
++def search_orders(customer_query: str) -> dict:
++    """Find a customer's orders when the customer has NOT given an order ID.
++
++    Use this tool ONLY when the customer has not given an order ID, for example
++    "my last order" or "the order I placed for Jane Smith". If the customer gives
++    an order ID, call get_order with that ID instead; do not search for it here.
++
++    Args:
++        customer_query: Free text describing the customer, such as their full
++            name or email address, e.g. "Jane Smith" or "jane@example.com".
++
++    Returns:
++        On success, status is "success" and includes an "orders" list. Each order
++        has an ID to pass to get_order as order_id.
++        Example success: {"status": "success", "orders": [{"id": "1042", "status": "shipped"}]}
++    """
++    resp = httpx.get(f"{ORDERS_API}/orders", params={"q": customer_query}, timeout=10)
+     return {"status": "success", "orders": resp.json()}
+ 
+ 
+-def get_order(data: str) -> dict:
+-    """Get an order."""
+-    resp = httpx.get(f"{ORDERS_API}/orders/{data}", timeout=10)
++def get_order(order_id: str) -> dict:
++    """Fetch one order by its order ID and return its full details.
++
++    Use this tool whenever the customer gives an order ID. To find orders by
++    customer name or email, use search_orders instead.
++
++    Args:
++        order_id: The order ID exactly as the customer gave it, e.g. "1042" or
++            "ORD-1042". Never a customer name, email address or description.
++
++    Returns:
++        On success, status is "success" and includes an "order" dictionary.
++        On failure, status is "error" and includes "error", "hint" and "retryable".
++        Example success: {"status": "success", "order": {"id": "1042", "status": "shipped"}}
++        Example error: {"status": "error", "error": "order_id 'Jane Smith' is not an order ID",
++            "hint": "Use search_orders with the customer's name, or ask for the order ID.",
++            "retryable": False}
++    """
++    order_id = order_id.strip()
++    # Order IDs contain a digit and no spaces; names and emails do not fit that shape.
++    if not order_id or any(c.isspace() for c in order_id) or "@" in order_id or not any(c.isdigit() for c in order_id):
++        return {
++            "status": "error",
++            "error": f"order_id {order_id!r} is not an order ID",
++            "hint": "Use search_orders with the customer's name or email, or ask the customer for the order ID.",
++            "retryable": False,
++        }
++    resp = httpx.get(f"{ORDERS_API}/orders/{quote(order_id, safe='')}", timeout=10)
++    if resp.status_code == 404:
++        return {
++            "status": "error",
++            "error": f"no order with order_id {order_id!r}",
++            "hint": "Confirm the order ID with the customer; a typo is likely. Do not guess another ID.",
++            "retryable": False,
++        }
+     return {"status": "success", "order": resp.json()}
+ 
+ 
+diff --git a/tests/test_tools.py b/tests/test_tools.py
+index 839f566..ec491bd 100644
+--- a/tests/test_tools.py
++++ b/tests/test_tools.py
+@@ -3,3 +3,60 @@ from support_agent import tools
+ 
+ def test_orders_api_constant():
+     assert tools.ORDERS_API.startswith("https://")
++
++
++class _Resp:
++    def __init__(self, status_code=200, payload=None):
++        self.status_code = status_code
++        self._payload = payload
++
++    def json(self):
++        return self._payload
++
++
++def test_get_order_rejects_customer_name_without_calling_api(monkeypatch):
++    calls = []
++    monkeypatch.setattr(tools.httpx, "get", lambda *a, **k: calls.append(a) or _Resp())
++    for bad in ("Jane Smith", "jane@example.com", "", "Smith"):
++        result = tools.get_order(bad)
++        assert result["status"] == "error"
++        assert "search_orders" in result["hint"]
++        assert result["retryable"] is False
++    assert calls == []
++
++
++def test_get_order_fetches_by_id(monkeypatch):
++    urls = []
++    monkeypatch.setattr(tools.httpx, "get", lambda url, **k: urls.append(url) or _Resp(200, {"id": "1042"}))
++    assert tools.get_order(" ORD-1042 ") == {"status": "success", "order": {"id": "1042"}}
++    assert urls == [f"{tools.ORDERS_API}/orders/ORD-1042"]
++
++
++def test_get_order_not_found_returns_hint(monkeypatch):
++    monkeypatch.setattr(tools.httpx, "get", lambda *a, **k: _Resp(404))
++    result = tools.get_order("9999")
++    assert result["status"] == "error"
++    assert "Confirm the order ID" in result["hint"]
++
++
++def test_search_orders_passes_customer_query(monkeypatch):
++    seen = {}
++    monkeypatch.setattr(tools.httpx, "get", lambda url, params, **k: seen.update(params) or _Resp(200, []))
++    assert tools.search_orders("Jane Smith") == {"status": "success", "orders": []}
++    assert seen == {"q": "Jane Smith"}
++
++
++def test_order_tool_declarations_name_the_alternative():
++    pytest = __import__("pytest")
++    pytest.importorskip("google.adk")
++    from google.adk.tools import FunctionTool
++
++    get_decl = FunctionTool(tools.get_order)._get_declaration()  # private API on google-adk 2.8.0
++    search_decl = FunctionTool(tools.search_orders)._get_declaration()
++    assert get_decl.description.startswith("Fetch one order by its order ID")
++    assert "search_orders" in get_decl.description
++    assert "get_order" in search_decl.description
++    get_schema = get_decl.model_dump(exclude_none=True)
++    search_schema = search_decl.model_dump(exclude_none=True)
++    assert "order_id" in str(get_schema) and "data" not in str(get_schema.get("parameters", get_schema.get("parameters_json_schema")))
++    assert "customer_query" in str(search_schema)

@@ -23,8 +23,8 @@ Decide what the model is asked to emit, which model and settings produce it, and
 
 ```bash
 python "$SKILL_DIR/scripts/audit_model_config.py" --project . --dry-run
-python -c 'from app.schemas import Decision; import json; print(json.dumps(Decision.model_json_schema()))' > /tmp/decision.json
-python "$SKILL_DIR/scripts/check_response_schema.py" --schema /tmp/decision.json --pydantic-json
+python -c 'from app.schemas import Decision; import json; print(json.dumps(Decision.model_json_schema()))' > .adk-evidence/decision.json
+python "$SKILL_DIR/scripts/check_response_schema.py" --schema .adk-evidence/decision.json --pydantic-json
 ```
 
 The audit reports model strings with a lifecycle status from a dated table (`assets/model-lifecycle-2026-10-01.json`, refresh it before trusting it), rejected `generate_content_config` fields, thinking and temperature mismatches, planner precedence and schema-with-tools combinations. The schema checker reports keywords outside the Gemini documented subset, depth, property and enum counts, nullable styles and unresolved `$ref`s. Both direct inspection; neither certifies provider acceptance. Exit 1 from the audit means a partial scan; exit 1 from the checker means unsupported keywords.

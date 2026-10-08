@@ -19,6 +19,8 @@ PACKAGES = {"google-adk", "httpx", "tenacity", "google-genai"}
 EXCLUDED = {".git", ".hg", ".svn", ".venv", "venv", "env", "node_modules",
             "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox",
             "dist", "build", "site-packages", "vendor", ".aws", ".ssh", ".config"}
+# Coding-agent skill install directories hold these skills' own fixtures, not the project.
+EXCLUDED = EXCLUDED | {".claude", ".agents", ".agent", ".codex", ".gemini", ".cursor", ".windsurf", ".antigravity", ".adk-evidence"}
 LOCKS = {"uv.lock", "poetry.lock", "Pipfile.lock", "pdm.lock", "requirements.lock"}
 VERSION = re.compile(r"(?:===|==|!=|~=|>=|<=|>|<|\^|~)?\d+(?:\.(?:\d+|\*))*"
                      r"(?:,(?:===|==|!=|~=|>=|<=|>|<|\^|~)?\d+(?:\.(?:\d+|\*))*)*")

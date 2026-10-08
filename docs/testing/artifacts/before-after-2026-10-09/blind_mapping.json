@@ -1,0 +1,26 @@
+{
+ "J1": {
+  "A": "before",
+  "B": "after"
+ },
+ "T101": {
+  "A": "after",
+  "B": "before"
+ },
+ "T102": {
+  "A": "before",
+  "B": "after"
+ },
+ "T103": {
+  "A": "before",
+  "B": "after"
+ },
+ "T104": {
+  "A": "after",
+  "B": "before"
+ },
+ "T105": {
+  "A": "after",
+  "B": "before"
+ }
+}

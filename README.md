@@ -1524,11 +1524,17 @@ Each command updates installed skills in that scope, including other collections
 Keep any personal skill edits in version control before updating.
 
 If a command is missing, confirm that you installed into the project you opened
-and selected the correct coding agent, then restart its session. If some
-skills are listed but newer ones are missing, an older copy installed for your
-user account (`-g`) is probably being read instead of the project copy: run
-`npx skills@latest update -g` as well, or remove the old global copy, then
-restart. A running session keeps the skill list it started with. If the entry
+and selected the correct coding agent, then restart its session.
+
+**If you ever installed globally (`-g`), update that copy too.** In Claude Code a
+skill installed for your user account takes precedence over a project copy with
+the same name. An older global install therefore keeps serving old instructions
+even after a fresh project install, and skills added since then appear while
+older ones stay stale. This was observed on 9 October 2026 with Claude Code
+2.1.294. Run `npx skills@latest update -g`, or remove the global copies, then
+restart; a running session keeps the skill list it started with. To check what
+a session actually loaded, ask it to quote the first words of `adk-engineer`'s
+description: the current version begins "Help design, build, change or review". If the entry
 skill reports a missing specialist, rerun the full-toolkit installation or
 install the named specialist. If `npx` fails before showing the installer,
 check `node --version` against the prerequisite above.
@@ -1562,6 +1568,23 @@ recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
 
+### Fresh-session before/after · 9 October 2026
+
+The six journeys were rerun in fresh headless Claude Code sessions, with the
+skills installed by the real installer, once with the skills before the product
+pass and once after. A blind grader preferred the after version in **all six**
+tasks (127 against 106 points of 150), mostly because more of each request was
+completed and the user was told what to do next. The runs also showed that a
+user-level install takes precedence over a project install of the same skill,
+and that the helpers scanned the installed skills themselves; both are now
+handled. One run per task, one fixture and a model grader: see the
+[measurement record](docs/testing/before-after-2026-10-09.md) for the limits.
+**20 packages** pass validation; **644 tests** pass with **59 optional SDK
+checks skipped**.
+
+<details>
+<summary>Earlier revisions, 25 September to 9 October 2026</summary>
+
 ### Usage journeys and product pass · 9 October 2026
 
 The README is now built around two journeys: design a new application with
@@ -1578,9 +1601,6 @@ pass validation; **643 tests** pass with **59 optional SDK checks skipped**.
 Four of six friction logs were reconstructed after usage limits interrupted the
 agents, and the new skills were loaded from files rather than discovered by a
 fresh host; see the [journey record](docs/testing/usage-journeys-2026-10-09.md).
-
-<details>
-<summary>Earlier revisions, 25 September to 8 October 2026</summary>
 
 ### Designer and router alignment · 8 October 2026
 

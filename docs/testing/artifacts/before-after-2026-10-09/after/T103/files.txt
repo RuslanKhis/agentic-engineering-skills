@@ -1,0 +1,12 @@
+ M .github_workflows_ci.yml
+ M support_agent/agent.py
+ M tickets/T-103.md
+?? PROMPT_CHANGELOG.md
+?? REPORT.md
+?? docs/releases/T-103-model-upgrade.md
+?? evals/ci-expectations.json
+?? evals/ci.evalset.json
+?? evals/test_config.json
+?? support_agent/models.py
+?? tests/eval/test_ci_gate.py
+?? tests/test_model_pins.py

@@ -31,6 +31,8 @@ except ModuleNotFoundError:  # Python < 3.11
 EXCLUDED = {".git", ".hg", ".svn", ".venv", "venv", "env", "node_modules",
             "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox",
             "dist", "build", "site-packages", "vendor", ".aws", ".ssh", ".config"}
+# Coding-agent skill install directories hold these skills' own fixtures, not the project.
+EXCLUDED = EXCLUDED | {".claude", ".agents", ".agent", ".codex", ".gemini", ".cursor", ".windsurf", ".antigravity", ".adk-evidence"}
 LLM_AGENT_CLASSES = {"LlmAgent", "Agent"}
 WORKFLOW_AGENT_CLASSES = {"SequentialAgent", "ParallelAgent", "LoopAgent"}
 AGENT_CLASSES = LLM_AGENT_CLASSES | WORKFLOW_AGENT_CLASSES

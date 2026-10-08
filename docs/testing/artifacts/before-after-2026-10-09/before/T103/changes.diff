@@ -1,0 +1,62 @@
+diff --git a/support_agent/agent.py b/support_agent/agent.py
+index f93cdc5..3993437 100644
+--- a/support_agent/agent.py
++++ b/support_agent/agent.py
+@@ -5,6 +5,10 @@ from pydantic import BaseModel
+ 
+ from . import tools
+ 
++# Release pin for every agent in this tree (T-103). Stable ID, never an alias.
++# Change it only together with docs/releases/ and PROMPT_CHANGELOG.md.
++MODEL_ID = "gemini-3.8-flash"
++
+ 
+ class Triage(BaseModel):
+     category: str
+@@ -15,7 +19,7 @@ class Triage(BaseModel):
+ 
+ billing_agent = LlmAgent(
+     name="billing_agent",
+-    model="gemini-2.5-pro",
++    model=MODEL_ID,
+     description="Billing agent",
+     instruction="You handle billing. ALWAYS call search_orders first. NEVER answer without calling a tool.",
+     tools=[tools.search_orders, tools.get_order],
+@@ -23,7 +27,7 @@ billing_agent = LlmAgent(
+ 
+ refunds_agent = LlmAgent(
+     name="refunds_agent",
+-    model="gemini-2.5-pro",
++    model=MODEL_ID,
+     description="Refunds",
+     instruction=(
+         "You process refunds. CRITICAL: You MUST call issue_refund when the customer asks for a refund. "
+@@ -34,18 +38,19 @@ refunds_agent = LlmAgent(
+ 
+ triage_agent = LlmAgent(
+     name="triage_agent",
+-    model="gemini-2.5-pro",
++    model=MODEL_ID,
+     description="Triage",
+     instruction="Classify the inbound email into a category and priority. Use fetch_email to read it and search_kb for context.",
+     tools=[tools.fetch_email, tools.search_kb],
+     output_schema=Triage,
+     output_key="triage",
+-    generate_content_config=types.GenerateContentConfig(temperature=0.2, thinking_config=types.ThinkingConfig(thinking_budget=2048)),
++    # Gemini 3: thinking_level (the legacy budget field is deprecated); temperature stays at the default 1.0.
++    generate_content_config=types.GenerateContentConfig(thinking_config=types.ThinkingConfig(thinking_level="medium")),
+ )
+ 
+ root_agent = LlmAgent(
+     name="support_root",
+-    model="gemini-2.5-pro",
++    model=MODEL_ID,
+     description="Support root agent",
+     instruction=(
+         "You are the support assistant for ACME. You MUST be helpful. NEVER be rude. ALWAYS use tools. "
+@@ -55,5 +60,4 @@ root_agent = LlmAgent(
+     ),
+     sub_agents=[triage_agent, billing_agent, refunds_agent],
+     tools=[tools.fetch_email, tools.search_kb, tools.search_orders, tools.get_order, tools.send_email],
+-    generate_content_config=types.GenerateContentConfig(temperature=0.2),
+ )

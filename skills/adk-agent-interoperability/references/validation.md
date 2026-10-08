@@ -6,11 +6,11 @@ before and after artefact; the offline checks need no model call.
 ## 1. Inventory and card reports before and after
 
 ```bash
-python "$SKILL_DIR/scripts/mcp_tool_inventory.py" --command "<exact server command>" --out mcp-manifest.json > /tmp/mcp-before.json
-python "$SKILL_DIR/scripts/agent_card_check.py" --url http://localhost:8001/a2a/<agent> --installed-a2a-sdk <version> > /tmp/card-before.json
+python "$SKILL_DIR/scripts/mcp_tool_inventory.py" --command "<exact server command>" --out mcp-manifest.json > .adk-evidence/mcp-before.json
+python "$SKILL_DIR/scripts/agent_card_check.py" --url http://localhost:8001/a2a/<agent> --installed-a2a-sdk <version> > .adk-evidence/card-before.json
 # ... change ...
-python "$SKILL_DIR/scripts/mcp_tool_inventory.py" --command "<exact server command>" --diff mcp-manifest.json > /tmp/mcp-after.json
-python "$SKILL_DIR/scripts/agent_card_check.py" --url http://localhost:8001/a2a/<agent> --installed-a2a-sdk <version> > /tmp/card-after.json
+python "$SKILL_DIR/scripts/mcp_tool_inventory.py" --command "<exact server command>" --diff mcp-manifest.json > .adk-evidence/mcp-after.json
+python "$SKILL_DIR/scripts/agent_card_check.py" --url http://localhost:8001/a2a/<agent> --installed-a2a-sdk <version> > .adk-evidence/card-after.json
 ```
 
 Expect: `diff.rug_pull_signal` false unless the change was a reviewed

@@ -1,0 +1,77 @@
+diff --git a/support_agent/agent.py b/support_agent/agent.py
+index f93cdc5..a9614ef 100644
+--- a/support_agent/agent.py
++++ b/support_agent/agent.py
+@@ -1,16 +1,11 @@
+ """Support agent definition."""
+-from google.adk.agents import LlmAgent
++from google.adk.agents import LlmAgent, SequentialAgent
+ from google.genai import types
+-from pydantic import BaseModel
+ 
+ from . import tools
++from .triage import Triage, guard_triage  # noqa: F401  (Triage re-exported for existing imports)
+ 
+-
+-class Triage(BaseModel):
+-    category: str
+-    priority: int
+-    summary: str
+-    order_id: str | None = None
++TRIAGE_CONFIG = types.GenerateContentConfig(temperature=0.2, thinking_config=types.ThinkingConfig(thinking_budget=2048))
+ 
+ 
+ billing_agent = LlmAgent(
+@@ -32,15 +27,45 @@ refunds_agent = LlmAgent(
+     tools=[tools.issue_refund, tools.get_order, tools.send_email],
+ )
+ 
+-triage_agent = LlmAgent(
+-    name="triage_agent",
++# Tools and output_schema on one agent take ADK's set_model_response workaround on the
++# API-key backend, where the model sometimes answers in prose (T-105). The reader uses the
++# tools; the formatter has no tools, so the schema is sent natively as response_schema.
++triage_reader = LlmAgent(
++    name="triage_reader",
+     model="gemini-2.5-pro",
+-    description="Triage",
+-    instruction="Classify the inbound email into a category and priority. Use fetch_email to read it and search_kb for context.",
++    description="Reads the inbound email and gathers knowledge-base context",
++    instruction=(
++        "Use fetch_email to read the inbound email and search_kb for context. Then write short notes: "
++        "what the customer wants, how urgent it is, and any order ID that appears in the email or tool results."
++    ),
+     tools=[tools.fetch_email, tools.search_kb],
+-    output_schema=Triage,
+-    output_key="triage",
+-    generate_content_config=types.GenerateContentConfig(temperature=0.2, thinking_config=types.ThinkingConfig(thinking_budget=2048)),
++    output_key="triage_notes",
++    generate_content_config=TRIAGE_CONFIG,
++)
++
++
++def build_triage_formatter(model="gemini-2.5-pro") -> LlmAgent:
++    return LlmAgent(
++        name="triage_formatter",
++        model=model,
++        description="Turns triage notes into the Triage record",
++        instruction=(
++            "Classify the email described in the notes below into a category and priority and summarise it "
++            "in one sentence. Copy order_id only if it appears in the notes; otherwise leave it null.\n\n"
++            "Notes:\n{triage_notes}"
++        ),
++        include_contents="none",
++        output_schema=Triage,
++        output_key="triage",
++        after_model_callback=guard_triage,
++        generate_content_config=TRIAGE_CONFIG.model_copy(deep=True),
++    )
++
++
++triage_agent = SequentialAgent(
++    name="triage_agent",
++    description="Triage",
++    sub_agents=[triage_reader, build_triage_formatter()],
+ )
+ 
+ root_agent = LlmAgent(

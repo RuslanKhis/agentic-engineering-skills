@@ -1,0 +1,7 @@
+ M support_agent/__init__.py
+ M support_agent/agent.py
+ M support_agent/tools.py
+ M tests/test_tools.py
+ M tickets/T-101.md
+?? REPORT.md
+?? tests/test_tool_declarations.py

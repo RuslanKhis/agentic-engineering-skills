@@ -37,6 +37,8 @@ SKIP_DIRS = frozenset({
     ".tox", "dist", "build", "vendor", "vendors", "third_party", ".next",
     "secrets", "credentials", "logs", "log", "data", "databases",
 })
+# Coding-agent skill install directories hold these skills' own fixtures, not the project.
+SKIP_DIRS = SKIP_DIRS | frozenset({".claude", ".agents", ".agent", ".codex", ".gemini", ".cursor", ".windsurf", ".antigravity", ".adk-evidence"})
 MANIFESTS = frozenset({"pyproject.toml", "uv.lock", "poetry.lock"})
 IDENTITY_PARAMETERS = frozenset({
     "user_id", "uid", "tenant_id", "customer_id", "account_id", "principal_id",

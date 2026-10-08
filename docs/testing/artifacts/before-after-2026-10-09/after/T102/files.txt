@@ -1,0 +1,8 @@
+ M README.md
+ M support_agent/__init__.py
+ M support_agent/agent.py
+ M tickets/T-102.md
+?? REPORT.md
+?? support_agent/mcp_config.py
+?? tests/test_agent_mcp.py
+?? tests/test_mcp_config.py

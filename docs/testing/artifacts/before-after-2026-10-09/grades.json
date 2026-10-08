@@ -1,0 +1,116 @@
+{
+  "J1": {
+    "A": {
+      "outcome": 4,
+      "correctness": 4,
+      "completeness": 4,
+      "next_step_clarity": 4,
+      "user_friction": 3
+    },
+    "B": {
+      "outcome": 4,
+      "correctness": 5,
+      "completeness": 5,
+      "next_step_clarity": 5,
+      "user_friction": 4
+    },
+    "preference": "B",
+    "reason": "Both reach the same sound core (tool-less reader, refunds in code with a ledger, code-invoked A2A billing peer, joint release unit), but B adds concrete pinned models from a dated lifecycle source, catches that ADK's default eval judge gemini-2.5-flash retires in 11 days, and specifies PII-safe telemetry. A is more proportionate (421 vs 698 lines, uses helpdesk drafts instead of a new staff console) but leaves model choice and judge risk unresolved.",
+    "key_difference": "B pins concrete current agent and judge models and flags the retiring ADK default judge; A leaves model IDs provisional (but is tighter and closer to the two-week budget)."
+  },
+  "T101": {
+    "A": {
+      "outcome": 4,
+      "correctness": 4,
+      "completeness": 5,
+      "next_step_clarity": 4,
+      "user_friction": 4
+    },
+    "B": {
+      "outcome": 4,
+      "correctness": 3,
+      "completeness": 3,
+      "next_step_clarity": 3,
+      "user_friction": 3
+    },
+    "preference": "A",
+    "reason": "Both rewrite the docstrings, rename the parameters and reject names in get_order, but A also turns transport/5xx failures into hinted error dicts, removes the 'NEVER answer without calling a tool' mandate and makes the package importable without ADK so the project's own pytest runs (13 passed). B left the forced-tool sentence, has no HTTP-error handling, could only test via a stub harness written to /tmp (a rule breach), and gave no next prompt.",
+    "key_difference": "A's tests run through the project's normal pytest (lazy __init__); B's ran only through an out-of-tree stub harness."
+  },
+  "T102": {
+    "A": {
+      "outcome": 3,
+      "correctness": 3,
+      "completeness": 4,
+      "next_step_clarity": 4,
+      "user_friction": 3
+    },
+    "B": {
+      "outcome": 4,
+      "correctness": 4,
+      "completeness": 5,
+      "next_step_clarity": 4,
+      "user_friction": 3
+    },
+    "preference": "B",
+    "reason": "B puts the GitHub/Jira toolsets on a dedicated read-only issue_tracker_agent with no send/refund tools, while A attaches them to root_agent, which also holds send_email and order data, widening the exfiltration path it then merely flags. B also fixes the eager ADK import, adds a skip-guarded wiring test and an Evidence section, though its fail-closed header_provider may abort whole turns for users without a token (honestly flagged).",
+    "key_difference": "Tool placement: B isolates untrusted issue text in a read-only sub-agent; A adds it to the agent that can send email."
+  },
+  "T103": {
+    "A": {
+      "outcome": 3,
+      "correctness": 4,
+      "completeness": 3,
+      "next_step_clarity": 4,
+      "user_friction": 3
+    },
+    "B": {
+      "outcome": 4,
+      "correctness": 4,
+      "completeness": 5,
+      "next_step_clarity": 5,
+      "user_friction": 3
+    },
+    "preference": "B",
+    "reason": "Both make the same correct model/settings change (gemini-3.8-flash, thinking_level, default temperature) with a pin test and release record, but only B adds an actual quality gate (eval set, strict CSV checker where NOT RUN fails, opt-in CI job) answering 'our CI only runs unit tests'. A stops at NO-GO with no gate, though it uniquely notices the CI file sits outside .github/workflows and may not run at all, which B edited without noticing.",
+    "key_difference": "B delivers a runnable eval gate in CI plus a dated pre-20-October checklist; A delivers only the swap and a NO-GO record."
+  },
+  "T104": {
+    "A": {
+      "outcome": 5,
+      "correctness": 4,
+      "completeness": 5,
+      "next_step_clarity": 4,
+      "user_friction": 3
+    },
+    "B": {
+      "outcome": 4,
+      "correctness": 5,
+      "completeness": 4,
+      "next_step_clarity": 3,
+      "user_friction": 3
+    },
+    "preference": "A",
+    "reason": "Both produce a solid OWASP-mapped review with the same critical findings, but A also lands structural fixes for the criticals (recipient bound to session, identity from ToolContext, ownership checks, require_confirmation, before_tool gate) with 7 passing policy tests and before/after inventories, and lists the behaviour changes to accept. B stays strictly review-only and catches the scanner's false-clean result, but its final message ends without telling the user what to do next.",
+    "key_difference": "A ships review plus gated fixes and runnable policy tests; B ships review only (cleaner scope, but no executable progress or next step)."
+  },
+  "T105": {
+    "A": {
+      "outcome": 4,
+      "correctness": 4,
+      "completeness": 5,
+      "next_step_clarity": 4,
+      "user_friction": 4
+    },
+    "B": {
+      "outcome": 4,
+      "correctness": 4,
+      "completeness": 3,
+      "next_step_clarity": 3,
+      "user_friction": 4
+    },
+    "preference": "A",
+    "reason": "Both apply the same correct fix (split tool-using reader from tool-free schema formatter, plus an after_model guard producing a failure record), and B's include_contents='none' and backward-compatible failure shape are nice touches. A however put the parsing logic in an SDK-free module with 10 tests that actually ran (11 passed), while every B test needs google.adk and none ran.",
+    "key_difference": "A has executed SDK-free contract tests; B's tests are all SDK-dependent and unrun."
+  }
+}
