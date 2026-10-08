@@ -62,10 +62,11 @@ jobs:
           python -c "import importlib.metadata as m; v=m.version('google-adk'); assert v=='${ADK_VERSION}', v"
       - name: Inventory release references (read-only, hashes only)
         run: |
-          python "<PATH to adk-release-engineering>/scripts/inventory_release_refs.py" --project . --dry-run > inventory.json
+          # Write outside the checkout: a report inside the scanned tree is read back as an empty JSON file.
+          python "<PATH to adk-release-engineering>/scripts/inventory_release_refs.py" --project . --dry-run > "${RUNNER_TEMP}/inventory.json"
           python - <<'PY'
-          import json, sys
-          data = json.load(open("inventory.json"))
+          import json, os, sys
+          data = json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "inventory.json")))
           bad = [s for s in data["signals"] if s["signal"] in ("judge_model_unset", "judge_model_alias", "judge_model_retiring_default", "model_alias")]
           print(json.dumps(bad, indent=2))
           sys.exit(1 if bad else 0)

@@ -19,8 +19,8 @@ through a conversation. Establish the application's guarantees, explore the
 decisions that change them, and connect each important claim to an enforcement
 point and a validation plan. Scale the design to the requested problem.
 
-The deliverable is an architecture and a resumable implementation plan. This skill
-does not require other skills, the book, a starter repository or cloud access.
+The deliverable is an architecture and a resumable implementation plan. It needs
+no other skills, starter repository or cloud access.
 When the user also requests implementation, finish the relevant design decisions
 and continue within that existing authorization using available specialist guidance.
 
@@ -50,18 +50,26 @@ available; ordinary chat works too.
 Let the user answer before treating a material product choice as settled.
 
 Open with the scope gate, three questions whose answers set the size of
-everything that follows:
+everything that follows. Ask only the ones the request has not already
+answered, and offer the default so a user can accept it in one word:
 
-- How much time and money is there for this work?
+- How much time and money is there for this work? (Default: no fixed budget.)
 - Who judges the result, and what will they read: predictions, a report, a
-  demo, a running service?
+  demo, a running service? (Default: the user, reading the design.)
 - What kind of artifact is this: an exploration, an assignment, a pilot or a
-  production service?
+  production service? (Default: exploration.)
 
 Record the answers at the top of the design document, with the controls the
-design chooses to defer. Size the documents to the time budget as well: a
-four-hour assignment gets a design and plan a reviewer reads in ten minutes,
-with the template's sections kept only where they carry a decision. Then work
+design chooses to defer. Size the documents to the artifact: an exploration or
+a four-hour assignment gets a design and plan a reviewer reads in ten minutes;
+a pilot, roughly two to four pages of design and one goal per useful slice; a
+production service, as long as its decisions require, with every template
+section either filled or marked not applicable with a reason.
+
+Every design reads [design decisions](references/design-decisions.md) for the
+sections its journey touches and [failure review](references/failure-review.md)
+before it is called ready. Read the other references only when their trigger
+below applies; a small design rarely needs all of them. Then work
 from the journey towards the constraints, as needed:
 
 - What may the system read, decide and change, and for whom?
@@ -150,7 +158,15 @@ conversation storage, business records, artifacts and identity. Record which
 component owns retries, authorization, shared state and recovery.
 
 Check version-dependent ADK interfaces against the target's installed/deployed
-versions and current official documentation. Check service availability, regions,
+versions and current official documentation. For a greenfield design with no
+installed version, record the ADK version the specialists were checked against
+(each specialist's `references/compatibility.md` names it) as the working
+assumption, and make "confirm against the chosen pin" an acceptance item of the
+first implementation goal. Choose model and judge IDs from the dated lifecycle
+table that `adk-model-and-output-contracts` ships
+(`assets/model-lifecycle-*.json`, with its `checked_on` date) rather than from
+memory; a model that retires within the plan's horizon is a migration you are
+designing in, not a default. Check service availability, regions,
 limits and prices before relying on them; cite sources and dates in the design.
 If lookup or credentials are unavailable, keep those decisions provisional and
 name the exact verification needed. Architecture planning can proceed without
@@ -211,17 +227,27 @@ recorded runs.
 
 Finish with dependency-ordered goals for useful end-to-end behavior. Each needs
 a stable ID, linked requirement/decision, bounded changes and integration points,
-primary and supporting skills, prerequisites, acceptance evidence, status and
-unresolved blockers. Separate discovery questions from ready implementation;
-an unknown cloud contract need not block independent local work. Give the next
-ready goal and a copyable continuation prompt naming the artifacts and scope.
-Record what actually ran when a goal is later completed.
+a `Primary skill` and `Supporting skills` line, prerequisites, acceptance
+evidence, status, unresolved blockers and its own one-line run prompt. Separate
+discovery questions from ready implementation; an unknown cloud contract need
+not block independent local work. When the user wants tickets, write one file
+per ready goal from the [ticket template](assets/ticket-template.md) under
+`docs/tickets/<topic>/`; the plan stays the source of decisions.
 
-The handoff reference explains optional Wayfinder and other planning workflows.
-Discover and read the selected installed workflow before using it; preserve
-accepted decisions and one authoritative plan. Missing optional skills do not
-block creating the artifact. `adk-engineer` can continue a requested goal with
-the relevant specialist instead of restarting architecture discovery.
+End the conversation with a short closing message in chat: where the documents
+were saved, the decisions still open, and the exact prompt for the next ready
+goal in a copyable block, for example:
+
+```text
+/adk-engineer Carry out G01 from docs/plans/<topic>.md.
+```
+
+The user should never have to work out what to type next.
+
+`adk-engineer` carries out a goal or ticket with its named specialist without
+restarting architecture discovery. If the user has chosen another planning
+workflow (for example Matt Pocock's skills), the handoff reference explains how
+to adapt the plan to it; otherwise skip that section.
 
 Preserve any workflow already chosen, including Agents CLI or another design
 method. Do not scaffold applications, change dependencies, implement code or run

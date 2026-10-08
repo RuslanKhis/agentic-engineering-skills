@@ -69,9 +69,9 @@ entries it would bring.
 
 - `lint_tool_schemas.py` makes syntactic observations: a missing docstring is
   a fact; a "short" docstring, a "generic" name, a "similar" description or an
-  "identity" parameter is a prompt for review. It cannot see tools built
-  dynamically, imported under another name, or produced by toolsets at runtime,
-  and reports those as `unresolved_tool_reference`, `tools_not_literal` or
+  "identity" parameter is a prompt for review. It resolves module attributes
+  and imports to scanned files, but cannot see tools built dynamically,
+  re-exported ambiguously, or produced by toolsets at runtime, and reports those as `unresolved_tool_reference`, `tools_not_literal` or
   `toolset_count_unknown`.
 - `report_tool_result_sizes.py` measures serialised bytes of recorded
   responses and estimates tokens as bytes/4. It does not know the model's

@@ -9,9 +9,13 @@ import os
 from pathlib import Path
 import re
 import stat
-import tomllib
-
-
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python < 3.11
+    import sys as _sys
+    _sys.stderr.write("This helper needs Python 3.11 or later (it reads TOML with tomllib). "
+                      "Run it with any available 3.11+ interpreter; the project itself can stay on its own version.\n")
+    raise SystemExit(2)
 PACKAGES = {"google-adk", "google-genai", "litellm"}
 EXCLUDED = {".git", ".hg", ".svn", ".venv", "venv", "env", "node_modules", "__pycache__",
             ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox", "dist", "build",
@@ -84,6 +88,12 @@ def model_in(text):
     return match.group(0) if match else None
 
 
+def module_matches(path, module):
+    """True when a scanned file path is the module named by the last dotted segment."""
+    path = Path(path)
+    return path.stem == module or (path.stem == "__init__" and path.parent.name == module)
+
+
 def kind_of(relative, name, parent_names):
     lower = name.lower()
     if lower.startswith("dockerfile") or lower.endswith(".dockerfile"):
@@ -125,6 +135,13 @@ class Signals(ast.NodeVisitor):
         self.bindings = {}
         self.judge_nodes = set()
         self.is_prompt_module = is_prompt_module
+        self.module_statements = set()
+        self.constants = {}
+        self.deferred_models = []
+
+    def visit_Module(self, node):
+        self.module_statements = {id(statement) for statement in node.body}
+        self.generic_visit(node)
 
     def add(self, node, label, detail=None):
         self.rows.add((node.lineno, label, detail))
@@ -145,7 +162,7 @@ class Signals(ast.NodeVisitor):
 
     def visit_ImportFrom(self, node):
         for item in node.names:
-            self.aliases[item.asname or item.name] = f"{node.module or ''}.{item.name}"
+            self.aliases[item.asname or item.name] = f"{node.module or ''}.{item.name}".lstrip(".")
 
     def deref(self, node):
         if isinstance(node, ast.Name) and node.id in self.bindings:
@@ -167,6 +184,8 @@ class Signals(ast.NodeVisitor):
             target = node.targets[0].id
             self.bindings[target] = node.value
             text = self.literal(node.value)
+            if text is not None and id(node) in self.module_statements:
+                self.constants[target] = text
             if text is not None and (PROMPT_NAME.search(target) or (self.is_prompt_module and target.isupper() and len(text) >= 40)):
                 self.prompt(node, target, text)
         self.generic_visit(node)
@@ -181,6 +200,36 @@ class Signals(ast.NodeVisitor):
                 self.add(node, "secret_version_alias" if match.group(1) == "latest" else "secret_version_pinned",
                          "versions/latest" if match.group(1) == "latest" else "versions/<n>")
         self.generic_visit(node)
+
+    def model_argument(self, node, value, short):
+        """Classify model=: literal, resolved constant, deferred reference or dynamic.
+
+        A Name bound to a string constant in this module resolves here. An
+        imported name or module attribute (`config.AGENT_MODEL`) is deferred and
+        resolved against module-level constants of the scanned files. Subscripts,
+        function calls and other expressions are model_dynamic; a capitalised
+        call (`Gemini(...)`, `LiteLlm(...)`) is a model object inspected on its own.
+        """
+        text = self.literal(value)
+        if text is not None:
+            if isinstance(value, (ast.Name, ast.Attribute)):
+                self.resolved_model(node, text)
+            return
+        target = self.deref(value)
+        if isinstance(target, (ast.Name, ast.Attribute)):
+            self.deferred_models.append((node.lineno, self.name(target).lstrip(".")))
+            return
+        if isinstance(target, ast.Call):
+            callee = self.name(target.func).rsplit(".", 1)[-1]
+            if callee[:1].isupper():
+                return
+        self.add(node, "model_dynamic", short or None)
+
+    def resolved_model(self, node, text):
+        self.add(node, "model_reference_resolved", text)
+        model = model_in(text)
+        if model and model == text:
+            self.add(node, "model_alias" if classify(model) == "alias" else "model_pinned", model)
 
     def visit_Dict(self, node):
         for key, value in zip(node.keys, node.values):
@@ -228,9 +277,7 @@ class Signals(ast.NodeVisitor):
                     else:
                         self.add(node, "prompt_dynamic", field)
         if "model" in kwargs:
-            text = self.literal(kwargs["model"])
-            if text is None and not isinstance(self.deref(kwargs["model"]), ast.Call):
-                self.add(node, "model_dynamic", short or None)
+            self.model_argument(node, kwargs["model"], short)
         if callee.endswith(("AgentEvaluator.evaluate", "AgentEvaluator.evaluate_eval_set")):
             runs = self.deref(kwargs.get("num_runs")) if "num_runs" in kwargs else None
             detail = runs.value if isinstance(runs, ast.Constant) else ("dynamic" if runs is not None else "default")
@@ -252,7 +299,7 @@ class Inventory:
                                   "excluded_directories": sorted(EXCLUDED),
                                   "sensitive_files_excluded": True, "symlinks_followed": False,
                                   "prompt_text_emitted": False},
-                       "dependencies": [], "signals": [], "issues": [],
+                       "dependencies": [], "signals": [], "issues": [], "skipped": [],
                        "manifest": {"components": {}}}
         self.models = {}
         self.judges = {}
@@ -263,6 +310,8 @@ class Inventory:
         self.secret_refs = {"pinned": 0, "latest": 0}
         self.seen = 0
         self.stopped = False
+        self.constants = {}
+        self.deferred_models = []
 
     def issue(self, path, reason):
         self.result["partial"] = True
@@ -386,6 +435,11 @@ class Inventory:
             if len(raw) > self.args.max_bytes:
                 self.issue(relative, "file_size_limit")
                 return
+            if not raw and kind in ("evalset", "legacy_test_json", "eval_config", "json"):
+                # A zero-byte JSON file is usually a report being written into the
+                # scanned tree (for example `> inventory.json`); it holds no references.
+                self.result["skipped"].append({"path": relative, "reason": "skipped_empty"})
+                return
             content = raw.decode("utf-8")
             if kind == "python":
                 visitor = Signals(Path(relative).stem in {"prompt", "prompts", "instructions", "instruction"})
@@ -401,6 +455,8 @@ class Inventory:
                     self.signal(relative, label, detail, line)
                 for item in visitor.prompts:
                     self.prompts.append({"path": relative, **item})
+                self.constants[relative] = visitor.constants
+                self.deferred_models.extend((relative, line, name) for line, name in visitor.deferred_models)
                 if "adk eval" in content or "adk conformance" in content:
                     self.text_scan(relative, content)
             elif kind == "pyproject":
@@ -480,7 +536,26 @@ class Inventory:
                 self.seen += 1
                 self.inspect(path, relative, kind)
 
+    def resolve_models(self):
+        """Resolve deferred model= references to module-level string constants in scanned files."""
+        for relative, line, name in self.deferred_models:
+            parts = [part for part in name.split(".") if part]
+            value = None
+            if len(parts) > 1:
+                for path in sorted(self.constants):
+                    if module_matches(path, parts[-2]) and parts[-1] in self.constants[path]:
+                        value = self.constants[path][parts[-1]]
+                        break
+            if value is None:
+                self.signal(relative, "model_reference_unresolved", name, line)
+                continue
+            self.signal(relative, "model_reference_resolved", value, line)
+            model = model_in(value)
+            if model and model == value:
+                self.signal(relative, "model_alias" if classify(model) == "alias" else "model_pinned", model, line)
+
     def finish(self):
+        self.resolve_models()
         unset = [row for row in self.result["signals"] if row["signal"] == "judge_model_unset"]
         pins = {d["name"]: d["constraint"] for d in self.result["dependencies"] if d["constraint"]}
         components = {
@@ -501,7 +576,7 @@ class Inventory:
         }
         self.result["manifest"] = {"components": components,
                                    "note": "Skeleton from static inspection. Fill unknown fields from the build and deploy system; verify hashes against the running revision."}
-        for field in ("dependencies", "signals", "issues"):
+        for field in ("dependencies", "signals", "issues", "skipped"):
             self.result[field].sort(key=lambda item: json.dumps(item, sort_keys=True))
 
 

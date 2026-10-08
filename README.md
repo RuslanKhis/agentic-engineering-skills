@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="#watch-the-walkthrough">Watch the walkthrough</a> ·
+  <a href="#two-ways-to-use-it">Two ways to use it</a> ·
   <a href="#getting-started">Getting started</a> ·
   <a href="#the-skills">The skills</a> ·
   <a href="#using-skills-together">Using skills together</a> ·
@@ -37,24 +37,18 @@ skills help it apply the book's engineering practices to your own application:
 handle failed tool calls, add memory, connect a browser interface, test agent
 behaviour, or prepare a deployment.
 
-Start with **adk-engineer** and describe the change you need. It selects the
-relevant specialist and follows its workflow through the requested work.
-If you already know the topic, you can call a specialist directly.
+## Two ways to use it
 
-Designing the whole application first? Use **adk-system-designer** to work through
-requirements and trade-offs, then capture the architecture and implementation plan.
+| You are… | Start with | What you get back |
+| --- | --- | --- |
+| **Starting a new ADK application** | `/adk-system-designer` | A short design conversation, then an architecture document, a goal plan, and the exact prompt for the first goal |
+| **Changing an application you already have** | `/adk-engineer` | It names the specialist it is using, makes the change with local tests, and says what is still unverified |
 
-Seven **cross-framework specialists** cover practices that apply to any agent
-framework and are implemented here for ADK: how to write an agent's
-instructions, how to design the tools a model sees, how to make structured
-output and model settings dependable, how to threat-model and red-team the
-agent, how to observe it in production, how to release it safely, and how to
-connect it to MCP servers and other agents over A2A. See
-[V. Cross-framework practices](#v-cross-framework-practices).
-Follow the [design → tickets → implementation walkthrough](#from-design-to-working-tickets)
-to continue with Matt Pocock's skills, or the
-[time-boxed, quality-judged build order](#build-order-for-time-boxed-quality-judged-work)
-when an evaluator will judge the output under a time limit.
+Both lead to the same twenty specialists. You never need to remember which one
+fits: the designer writes the specialist into every goal, and `adk-engineer`
+picks one for any ticket or request. You can also call a specialist directly
+when you already know the topic. [Journey A](#journey-a-build-a-new-application)
+and [Journey B](#journey-b-maintain-an-application) below show the prompts.
 
 You do not need the book or its example repository to use the skills. Install
 them in the project you want to work on. They guide your **coding agent**;
@@ -108,6 +102,9 @@ for the current project: `adk-engineer`, `adk-system-designer`, the eleven
 chapter specialists and the seven cross-framework specialists.
 Keep the quotes around `'*'` so your shell passes it unchanged.
 
+<details>
+<summary>Choose a client explicitly, install globally, or select one specialist</summary>
+
 **Choosing a Google client?** Use Antigravity for Google consumer accounts.
 Since 18 June 2026, Gemini CLI no longer serves Code Assist for individuals,
 Google AI Pro or Google AI Ultra through Google sign-in. Gemini CLI remains
@@ -115,9 +112,6 @@ available through Code Assist Standard/Enterprise and supported paid API-key
 routes. See the [Google setup guide](docs/integrations/google-coding-agents.md),
 [Google's account guidance](https://developers.google.com/gemini-code-assist/docs/deprecations/code-assist-individuals)
 and [supported Gemini CLI access](https://developers.googleblog.com/en/an-important-update-transitioning-gemini-cli-to-antigravity-cli/).
-
-<details>
-<summary>Choose a client explicitly, install globally, or select one specialist</summary>
 
 To select a particular coding agent, use one of these project commands:
 
@@ -175,12 +169,16 @@ Open your project after installation. If the coding agent was already running
 and the new skills do not appear, restart its session. Type skill requests
 **in the coding agent's chat**:
 
-| Coding agent | Start with | Choose a specialist directly |
-| --- | --- | --- |
-| Claude Code | `/adk-engineer` | `/adk-memory-architecture` |
-| Codex | `$adk-engineer` | `$adk-memory-architecture` |
-| Antigravity app / IDE / CLI | `Use the adk-engineer skill to…` | `Use the adk-memory-architecture skill to…` |
-| Gemini CLI, with supported access | `Use the adk-engineer skill to…` | `Use the adk-memory-architecture skill to…` |
+| Coding agent | New application | Existing application | A specialist directly |
+| --- | --- | --- | --- |
+| Claude Code | `/adk-system-designer` | `/adk-engineer` | `/adk-memory-architecture` |
+| Codex | `$adk-system-designer` | `$adk-engineer` | `$adk-memory-architecture` |
+| Antigravity app / IDE / CLI | `Use the adk-system-designer skill to…` | `Use the adk-engineer skill to…` | `Use the adk-memory-architecture skill to…` |
+| Gemini CLI, with supported access | `Use the adk-system-designer skill to…` | `Use the adk-engineer skill to…` | `Use the adk-memory-architecture skill to…` |
+
+The prompts in this README use Claude Code's `/` form. In Codex replace the
+leading `/` with `$`; in Gemini CLI or Antigravity say "Use the <skill> skill
+to…" and keep the rest of the request.
 
 <details>
 <summary>How skill activation differs between clients</summary>
@@ -206,26 +204,71 @@ an explicit command makes your intended skill clear.
 
 </details>
 
-### 3. Ask for a useful change
+### Journey A: build a new application
 
-For example, in Claude Code:
+**1. Design it in conversation.** The designer asks only what changes the
+design, offers defaults you can accept in one word, and explains each choice
+as requirement, choice, tradeoff and how to check it.
 
 ```text
-/adk-engineer Add memory so this support agent can remember a user's
-preferred language between sessions. Keep our existing database and
-include a way for the user to forget the preference.
+/adk-system-designer I want to build <one-sentence product> with ADK on GCP.
+I have <time and budget>; <who> will judge it as an <exploration, assignment,
+pilot or production service>. Design only.
 ```
 
-In Codex, replace `/adk-engineer` with `$adk-engineer`. In Antigravity or
-Gemini CLI, start with “Use the adk-engineer skill to” and keep the request.
+It saves `docs/architecture/<topic>.md` and `docs/plans/<topic>.md`, and ends
+with the prompt for the first goal. Every goal names its primary and
+supporting specialists and carries its own run prompt.
 
-The entry skill selects `adk-memory-architecture`, inspects how your application
-identifies users and stores state, and chooses an appropriate design. For
-implementation work, expect a project change, relevant checks and a clear account
-of what remains unverified. For a design question, ask for a design.
+**2. Optionally turn goals into tickets.** One file per goal, for a tracker or
+for parallel sessions:
 
-Find **three practical examples for every skill** in the contents below.
-For installation problems or later changes, see
+```text
+/adk-system-designer Turn the ready goals in docs/plans/<topic>.md into
+ticket files under docs/tickets/<topic>/.
+```
+
+**3. Build, one goal or ticket at a time.**
+
+```text
+/adk-engineer Carry out G01 from docs/plans/<topic>.md.
+```
+
+```text
+/adk-engineer Continue the next ready goal in docs/plans/<topic>.md.
+```
+
+Each run names the specialist it applies, verifies the goal's acceptance cases
+locally, records the evidence in the plan or ticket, and ends with the prompt
+for the next one. Nothing is deployed or paid for without your approval.
+
+### Journey B: maintain an application
+
+Hand `adk-engineer` a ticket, a symptom or a change. It reads the project,
+tells you which specialist it is using and why, then does the work.
+
+```text
+/adk-engineer Carry out tickets/T-101.md.
+```
+
+```text
+/adk-engineer Our agent picks the wrong tool for order lookups and passes the
+customer's name where the order ID goes. Fix it and add a regression test.
+```
+
+```text
+/adk-engineer Google says our Gemini model retires next month. Plan and make
+the upgrade without silently dropping quality.
+```
+
+```text
+/adk-engineer Which specialist should handle this, and why? Do not change
+code yet: <paste the issue>
+```
+
+For implementation work, expect a project change, the checks that actually ran
+and a clear account of what remains unverified. Find **three examples for every
+skill** in the catalogue below, and installation fixes under
 [updating and troubleshooting](#updating-and-troubleshooting).
 
 <p align="center">
@@ -1481,7 +1524,11 @@ Each command updates installed skills in that scope, including other collections
 Keep any personal skill edits in version control before updating.
 
 If a command is missing, confirm that you installed into the project you opened
-and selected the correct coding agent, then restart its session. If the entry
+and selected the correct coding agent, then restart its session. If some
+skills are listed but newer ones are missing, an older copy installed for your
+user account (`-g`) is probably being read instead of the project copy: run
+`npx skills@latest update -g` as well, or remove the old global copy, then
+restart. A running session keeps the skill list it started with. If the entry
 skill reports a missing specialist, rerun the full-toolkit installation or
 install the named specialist. If `npx` fails before showing the installer,
 check `node --version` against the prerequisite above.
@@ -1514,6 +1561,26 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Usage journeys and product pass · 9 October 2026
+
+The README is now built around two journeys: design a new application with
+`adk-system-designer`, or maintain one with `adk-engineer`. Both were tried by
+fresh agents on a fixture app with planted defects: one greenfield design
+conversation and five maintenance tickets. Every ticket routed to the intended
+specialist. The trials found a missing next-step prompt after the first goal,
+no native ticket format, lost review documents when a long change was
+interrupted, and two inspectors that missed tools referenced as `module.fn`.
+Each goal now carries its primary and supporting skills and its own run prompt,
+a ticket template was added, the router reads tickets and names the next one,
+and the helper defects were fixed with regression tests. All **20 packages**
+pass validation; **643 tests** pass with **59 optional SDK checks skipped**.
+Four of six friction logs were reconstructed after usage limits interrupted the
+agents, and the new skills were loaded from files rather than discovered by a
+fresh host; see the [journey record](docs/testing/usage-journeys-2026-10-09.md).
+
+<details>
+<summary>Earlier revisions, 25 September to 8 October 2026</summary>
 
 ### Designer and router alignment · 8 October 2026
 
@@ -1621,6 +1688,8 @@ The offline repository checks passed **395 tests**, with **59 optional SDK
 checks skipped** in the clean maintainer environment. These trials used the
 skill directly; automatic selection and installation of the new package in each
 client have not been tested. The client results below cover the earlier 12-skill set.
+
+</details>
 
 ### Implementation skill checks · 16 September 2026
 

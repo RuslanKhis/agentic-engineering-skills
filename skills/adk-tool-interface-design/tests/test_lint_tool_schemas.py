@@ -337,6 +337,51 @@ b = FunctionTool(forecast)
         self.assertEqual(result.returncode, 0)
         self.assertEqual([f["subject"] for f in self.findings(data, "unresolved_tool_reference")], ["remote"])
 
+    def test_module_attribute_and_imported_tool_references_resolve(self):
+        self.write("pkg/__init__.py", "")
+        self.write("pkg/tools.py", '''
+def search_orders(value: str) -> dict:
+    """Search orders."""
+    return {"status": "success"}
+
+
+def issue_refund(order_id: str, user_id: str) -> dict:
+    """Issue a refund."""
+    raise RuntimeError("refund failed")
+
+
+def search_kb(query: str) -> str:
+    """Search the knowledge base."""
+    return "\\n\\n".join(article for article in [query])
+
+
+def get_order(data: str) -> dict:
+    """Get an order."""
+    return {"status": "success"}
+''')
+        self.write("pkg/agent.py", '''
+from google.adk.agents import LlmAgent
+from google.adk.tools import FunctionTool
+from . import tools
+from .tools import search_kb as kb
+from pkg import tools as t
+
+root = LlmAgent(name="root", tools=[tools.search_orders, FunctionTool(t.issue_refund), kb, tools.missing_fn])
+other = LlmAgent(name="other", tools=[pkg.tools.get_order])
+''')
+        result, data = self.scan()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(sorted(t["name"] for t in data["tools"]),
+                         ["get_order", "issue_refund", "search_kb", "search_orders"])
+        self.assertEqual(sorted(f["subject"] for f in self.findings(data, "generic_parameter_name")),
+                         ["get_order", "search_orders"])
+        self.assertEqual([f["subject"] for f in self.findings(data, "identity_parameter_review")], ["issue_refund"])
+        self.assertEqual([f["subject"] for f in self.findings(data, "raise_in_tool_body")], ["issue_refund"])
+        self.assertEqual([f["subject"] for f in self.findings(data, "non_dict_return")], ["search_kb"])
+        self.assertEqual(len(self.findings(data, "short_docstring")), 4)
+        self.assertEqual([f["subject"] for f in self.findings(data, "unresolved_tool_reference")], ["tools.missing_fn"])
+        self.assertEqual(data["unresolved_tool_references"], 1)
+
     def test_partial_scan_exit_code_and_bounds(self):
         marker = "PRIVATE_SOURCE_TEXT"
         self.write("bad.py", f"def {marker}(\n")

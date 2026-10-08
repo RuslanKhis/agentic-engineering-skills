@@ -25,9 +25,13 @@ if sys.version_info < (3, 11):
     )
     raise SystemExit(2)
 
-import tomllib
-
-
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python < 3.11
+    import sys as _sys
+    _sys.stderr.write("This helper needs Python 3.11 or later (it reads TOML with tomllib). "
+                      "Run it with any available 3.11+ interpreter; the project itself can stay on its own version.\n")
+    raise SystemExit(2)
 MAX_ROOT_ENTRIES = 512
 MAX_METADATA_BYTES = 262_144
 MAX_REQUIREMENT_LINES = 4_096

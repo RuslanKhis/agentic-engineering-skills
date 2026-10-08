@@ -25,9 +25,13 @@ import platform
 import re
 import stat
 import time
-import tomllib
-
-
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python < 3.11
+    import sys as _sys
+    _sys.stderr.write("This helper needs Python 3.11 or later (it reads TOML with tomllib). "
+                      "Run it with any available 3.11+ interpreter; the project itself can stay on its own version.\n")
+    raise SystemExit(2)
 TESTED_PYTHON = "3.11.4"
 TESTED_PINS = {
     "google-adk": "2.8.0",

@@ -19,6 +19,7 @@ is evidence of project conventions, not permission to execute platform commands.
 | Focused change in an existing Agents CLI project | Select the primary ADK specialist. Preserve the manifest, generated server/transport, dependency pins, model and infrastructure ownership. Consult the relevant installed Google skill for the specific interface or command needed. |
 | Existing ADK application without Agents CLI | Work in its current layout and environment. Adopting a scaffold is a separate requested change; a downloaded recipe can be studied without converting the application. |
 | User chose Matt Pocock's `tdd`, `diagnosing-bugs` or another process skill | Follow that installed process and use the ADK specialist's domain guidance. Keep the existing task and design instead of starting another interview or ticketing workflow. |
+| User hands over a ticket or plan goal written by `adk-system-designer` | Read the ticket or goal, use its named primary and supporting skills, verify its acceptance cases and write the Evidence section. No other collection is needed. |
 | User continues a system-design handoff | Read its canonical design and goal plan. Use Wayfinder for substantial unresolved decisions when chosen; use the adopted spec/ticket workflow or a specialist for ready build goals. Keep one authoritative record of decisions and progress. |
 
 State the division of work briefly. For example: “I’ll use the memory specialist

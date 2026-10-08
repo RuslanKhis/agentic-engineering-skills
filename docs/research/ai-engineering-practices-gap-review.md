@@ -132,6 +132,13 @@ changes were made and checked:
   scenario case for the designer covering the new concerns was added to the
   corpus but has not been run.
 
+## Usage journeys (9 October)
+
+The two entry journeys were tried end to end on a fixture app; the findings and
+the resulting product changes (two-journey README, per-goal run prompts, ticket
+template, router ticket pickup, helper fixes) are recorded in
+[usage journeys](../testing/usage-journeys-2026-10-09.md).
+
 ## What the ADK sources changed
 
 Checking against the 2.8.0 source corrected or sharpened several points that

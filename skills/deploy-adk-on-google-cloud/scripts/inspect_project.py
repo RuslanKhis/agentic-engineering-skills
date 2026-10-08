@@ -16,9 +16,13 @@ if sys.version_info < (3, 11):
     print("inspect_project requires Python 3.11 or newer; select a compatible interpreter.", file=sys.stderr)
     raise SystemExit(2)
 
-import tomllib
-
-
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python < 3.11
+    import sys as _sys
+    _sys.stderr.write("This helper needs Python 3.11 or later (it reads TOML with tomllib). "
+                      "Run it with any available 3.11+ interpreter; the project itself can stay on its own version.\n")
+    raise SystemExit(2)
 BASELINE = {"google-adk": "2.8.0", "google-cloud-aiplatform": "1.153.1"}
 LIMITS = {"depth": 4, "directory_entries": 4096, "manifests": 64,
           "bytes_per_manifest": 131072, "total_manifest_bytes": 1048576,

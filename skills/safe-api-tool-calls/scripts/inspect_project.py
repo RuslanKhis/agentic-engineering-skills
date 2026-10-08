@@ -8,9 +8,13 @@ import os
 from pathlib import Path
 import re
 import stat
-import tomllib
-
-
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python < 3.11
+    import sys as _sys
+    _sys.stderr.write("This helper needs Python 3.11 or later (it reads TOML with tomllib). "
+                      "Run it with any available 3.11+ interpreter; the project itself can stay on its own version.\n")
+    raise SystemExit(2)
 PACKAGES = {"google-adk", "httpx", "tenacity", "google-genai"}
 EXCLUDED = {".git", ".hg", ".svn", ".venv", "venv", "env", "node_modules",
             "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox",

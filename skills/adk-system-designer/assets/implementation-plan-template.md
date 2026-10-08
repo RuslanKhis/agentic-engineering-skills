@@ -38,8 +38,8 @@ goals coarse when an unresolved decision could change their scope.
 - **Implementation route:** <ADK/application components, interfaces and inspected
   or proposed modules; required infrastructure and compatibility checks>
 - **Prerequisites:** <goal/decision IDs, dependencies, setup or external contract>
-- **Skills:** <one primary; supporting skills and purpose; availability checked
-  or still to check>
+- **Primary skill:** <one specialist that leads this goal>
+- **Supporting skills:** <only those this goal's boundaries need, each with its purpose>
 - **Acceptance:** <observable success, important failure and forbidden-effect cases>
 - **Verification:** <public test boundary, runnable command if known, required
   fixtures; distinguish offline, local integration and authorized live/hosted evidence>
@@ -47,9 +47,15 @@ goals coarse when an unresolved decision could change their scope.
   still needed for this goal>
 - **Status and evidence:** <planned initially; later record files, actual commands,
   results and limitations>
+- **Run this goal:** `/adk-engineer Carry out <goal ID> from <plan path>. Read <design
+  path>, use the goal's primary and supporting skills, verify its acceptance cases
+  locally and record evidence here.`
 
 Repeat for currently actionable goals. Discovery goals state the question,
 bounded investigation, expected decision/evidence and what it unblocks.
+Fill every field with real values; the designer knows the goal ID, skills and
+acceptance cases when it writes the plan. To hand goals to a tracker or to
+another session, copy each into the [ticket template](ticket-template.md).
 
 ## What the reviewer reads
 
@@ -81,12 +87,14 @@ map if present. Preserve accepted decisions. This section does not create ticket
 - **Continuation prompt:**
 
 ```text
-Use adk-engineer to continue <goal ID and name> from <plan path>.
+/adk-engineer Carry out <goal ID and name> from <plan path>.
 Read <design path> and preserve its accepted decisions.
-Use <primary skill> and <supporting skill, if relevant>.
+Use <primary skill> with <supporting skills>.
 Work within <authorized scope>, verify <acceptance cases>, and update
 the plan with actual evidence and remaining blockers.
 ```
 
+After that goal, the same request without a goal ID continues with the next
+ready one: `/adk-engineer Continue the next ready goal in <plan path>.`
 Adapt the prompt for further planning when a decision blocks implementation.
 After adopting a tracker/spec, point here to its canonical goals and statuses.

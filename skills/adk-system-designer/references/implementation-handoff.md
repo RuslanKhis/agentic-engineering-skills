@@ -58,12 +58,9 @@ Official lookup points for the named interfaces:
 [RunConfig](https://adk.dev/runtime/runconfig/),
 [confirmation limitations](https://adk.dev/tools-custom/confirmation/#known-limitations),
 [Cloud Run deployment](https://adk.dev/deploy/cloud-run/).
-Interface names were checked on 25 September 2026; skill names in the table
-were checked against the installed collection on 8 October 2026. Each of the
-seven cross-framework specialists records in its `references/compatibility.md`
-the ADK version its building blocks were read against. Constructors,
-compatibility and behavior still need verification against the project's
-chosen version.
+Each specialist's `references/compatibility.md` records the ADK version its
+building blocks were read against; constructors and behavior still need
+verification against the project's chosen version.
 
 ## Write goals that preserve the reasoning
 
@@ -92,15 +89,27 @@ Keep later work coarse when it depends on that answer. Choose the smallest
 ready implementation slice; independent local progress remains possible while
 provider or deployment checks are pending.
 
-## Continue through the user's chosen workflow
+## Continue the work
+
+The default needs nothing else installed. Each goal in the plan carries its own
+run prompt, and `adk-engineer` reads the goal's `Primary skill` and
+`Supporting skills` lines, loads them and performs the authorized work:
+
+```text
+/adk-engineer Carry out G01 from docs/plans/<topic>.md.
+/adk-engineer Continue the next ready goal in docs/plans/<topic>.md.
+```
+
+When the user wants one file per unit of work, for a tracker or for parallel
+sessions, copy each ready goal into the [ticket template](../assets/ticket-template.md)
+under `docs/tickets/<topic>/`. Each ticket ends with its own run prompt, and the
+agent that carries it out fills in its Evidence section.
+
+### Other planning workflows (skip unless the user chose one)
 
 The Markdown plan is portable input; it is not automatically a native tracker
 map or an imported set of issues. Inspect the selected workflow's installed
 instructions and project conventions before adapting it.
-
-- **Direct continuation:** `adk-engineer` reads the linked design and goal,
-  loads the primary specialist and performs the authorized work. Reuse settled
-  decisions, inspect current code, and update status/evidence in the plan.
 - **Large unresolved effort:** when the user chooses Matt Pocock's `wayfinder`,
   carry destination, accepted decisions, unresolved questions, dependencies and
   relevant skill names into its decision-planning workflow. Precisely stated
@@ -124,7 +133,7 @@ within existing authorization. Keep the active tracker/spec as the source of tru
 after adoption and turn the old plan into a pointer where necessary. Missing
 optional workflows leave the portable plan usable directly.
 
-Reviewed upstream workflow references on 25 September 2026:
+Upstream references:
 [Wayfinder](https://github.com/mattpocock/skills/blob/main/skills/engineering/wayfinder/SKILL.md),
 [workflow router](https://github.com/mattpocock/skills/blob/main/skills/engineering/ask-matt/SKILL.md).
 Installed instructions govern actual invocation and tracker layout.

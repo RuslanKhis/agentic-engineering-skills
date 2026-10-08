@@ -20,9 +20,13 @@ if sys.version_info < (3, 11):
     print('{"complete": false, "diagnostics": [{"code": "PYTHON_3_11_REQUIRED"}]}')
     raise SystemExit(2)
 
-import tomllib
-
-
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python < 3.11
+    import sys as _sys
+    _sys.stderr.write("This helper needs Python 3.11 or later (it reads TOML with tomllib). "
+                      "Run it with any available 3.11+ interpreter; the project itself can stay on its own version.\n")
+    raise SystemExit(2)
 PACKAGES = frozenset({
     "google-adk", "google-genai", "google-auth", "google-cloud-secret-manager",
     "firebase-admin", "fastapi", "pydantic", "httpx", "python",

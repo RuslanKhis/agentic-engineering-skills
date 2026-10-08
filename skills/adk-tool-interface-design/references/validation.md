@@ -16,6 +16,12 @@ the change targeted; explain any remaining `identity_parameter_review` or
 was not scanned; inspect it manually. The output names identifiers only, not
 docstrings or prompts, so it is safe to attach to a review.
 
+Tool references resolve by name (`fn`), module attribute (`tools.fn`,
+`pkg.tools.fn`) or import (`from .tools import fn`, `from pkg import tools as t`)
+to the definition in the scanned file of that module; a reference that still
+cannot be resolved is a `unresolved_tool_reference` finding, counted in
+`unresolved_tool_references`, and that tool was not linted.
+
 ## 2. Dump the live declaration
 
 ```python

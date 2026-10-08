@@ -21,9 +21,13 @@ import os
 from pathlib import Path
 import re
 import stat
-import tomllib
-
-
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python < 3.11
+    import sys as _sys
+    _sys.stderr.write("This helper needs Python 3.11 or later (it reads TOML with tomllib). "
+                      "Run it with any available 3.11+ interpreter; the project itself can stay on its own version.\n")
+    raise SystemExit(2)
 EXCLUDED = {".git", ".hg", ".svn", ".venv", "venv", "env", "node_modules",
             "__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".tox",
             "dist", "build", "site-packages", "vendor", ".aws", ".ssh", ".config"}
@@ -52,8 +56,8 @@ IDENTITY_NAMES = {"user_id", "tenant_id", "email", "user_email", "customer_id", 
 WRITE_VERBS = {"create", "update", "delete", "send", "post", "pay", "refund", "execute",
                "transfer", "remove", "write", "publish", "approve", "cancel", "purchase",
                "charge", "submit", "upload", "modify", "patch", "grant", "revoke", "deploy",
-               "drop", "insert", "email", "notify", "share", "forward", "schedule", "book"}
-EGRESS_VERBS = {"send", "post", "email", "upload", "publish", "notify", "share", "forward",
+               "drop", "insert", "notify", "share", "forward", "schedule", "book"}
+EGRESS_VERBS = {"send", "post", "upload", "publish", "notify", "share", "forward",
                 "webhook", "fetch", "download", "browse", "http", "request", "crawl", "scrape",
                 "visit", "open", "get", "call", "message"}
 EGRESS_PARAMS = {"url", "uri", "urls", "link", "links", "endpoint", "webhook", "webhook_url",
@@ -140,6 +144,22 @@ def dotted(node, aliases):
     return ""
 
 
+def source_dotted(node):
+    """Dotted text of a Name/Attribute chain as written, without alias expansion."""
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        prefix = source_dotted(node.value)
+        return f"{prefix}.{node.attr}" if prefix else ""
+    return ""
+
+
+def module_matches(path, module):
+    """True when a scanned file path is the module named by the last dotted segment."""
+    path = Path(path)
+    return path.stem == module or (path.stem == "__init__" and path.parent.name == module)
+
+
 def keyword(node, name):
     return next((k.value for k in node.keywords if k.arg == name), None)
 
@@ -174,6 +194,14 @@ def confirmation_mode(node):
     if isinstance(option, ast.Constant) and isinstance(option.value, bool):
         return "enabled" if option.value else "disabled"
     return "dynamic"
+
+
+def element_attr(node):
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        return node.attr
+    return None
 
 
 def is_true(node):
@@ -285,7 +313,7 @@ class Collector(ast.NodeVisitor):
 
     def visit_ImportFrom(self, node):
         for item in node.names:
-            self.aliases[item.asname or item.name] = f"{node.module or ''}.{item.name}"
+            self.aliases[item.asname or item.name] = f"{node.module or ''}.{item.name}".lstrip(".")
 
     def visit_ClassDef(self, node):
         bases = {annotation_name(b) for b in node.bases}
@@ -549,7 +577,7 @@ class Inventory:
         functions, agent_vars, toolset_vars, wrapper_vars, param_vars, remote_vars = {}, {}, {}, {}, {}, {}
         for collector in self.collectors:
             for node in collector.functions:
-                functions.setdefault(node.name, FunctionFacts(collector.path, node, collector.aliases))
+                functions.setdefault(node.name, []).append(FunctionFacts(collector.path, node, collector.aliases))
             for name, call in collector.agent_vars.items():
                 agent_vars.setdefault(name, (collector, call))
             for name, call in collector.toolset_vars.items():
@@ -655,8 +683,9 @@ class Inventory:
             name = call_name(call)
             if name in TOOL_WRAPPERS:
                 target = call.args[0] if call.args else keyword(call, "func")
-                function = target.id if isinstance(target, ast.Name) else None
-                self.describe_function(entry, path, line, subject, function, name, confirmation_mode(call), gated_by_callback)
+                function, facts = self.resolve_function(collector, target)
+                self.describe_function(entry, path, line, subject, function, facts, name,
+                                       confirmation_mode(call), gated_by_callback)
                 return
             if name in AGENT_WRAPPERS:
                 target = call.args[0] if call.args else keyword(call, "agent")
@@ -694,17 +723,44 @@ class Inventory:
                 return
             entry["tools"].append({"name": name, "kind": "other", "line": line, "flags": []})
             return
-        if variable is not None:
-            if variable in BUILTIN_TOOLS:
-                self.describe_builtin(entry, path, line, subject, variable)
-            elif variable in self.functions:
-                self.describe_function(entry, path, line, subject, variable, "bare", "absent", gated_by_callback)
+        if variable is not None or isinstance(element, ast.Attribute):
+            function, facts = self.resolve_function(collector, element)
+            if facts is None and element_attr(element) in BUILTIN_TOOLS:
+                self.describe_builtin(entry, path, line, subject, element_attr(element))
             else:
-                entry["tools"].append({"name": variable, "kind": "unresolved", "line": line, "flags": []})
-                self.finding(path, line, variable, "unresolved_tool_reference",
-                             "tool defined outside the scanned files or built dynamically")
+                self.describe_function(entry, path, line, subject, function, facts, "bare", "absent", gated_by_callback)
             return
         entry["tools"].append({"name": None, "kind": "other", "line": line, "flags": []})
+
+    def resolve_function(self, collector, node):
+        """Resolve a tool reference to (display name, FunctionFacts or None).
+
+        A bare, non-imported name matches a same-named top-level function,
+        preferring the referencing file. A module attribute (`tools.fn`,
+        `pkg.tools.fn`) or an imported name (`from .tools import fn`,
+        `from pkg import tools as t`; `t.fn`) matches the function in the
+        scanned file whose stem (or package directory for `__init__.py`) is the
+        last module segment; an imported name falls back to a unique
+        same-named function for re-exports.
+        """
+        display = source_dotted(node)
+        if not display:
+            return None, None
+        head, _, rest = display.partition(".")
+        imported = head in collector.aliases
+        full = collector.aliases.get(head, head) + (f".{rest}" if rest else "")
+        parts = [part for part in full.split(".") if part]
+        candidates = self.functions.get(parts[-1], [])
+        if len(parts) == 1:
+            local = [facts for facts in candidates if facts.path == collector.path]
+            chosen = (local or candidates)[:1]
+        else:
+            chosen = [facts for facts in candidates if module_matches(facts.path, parts[-2])][:1]
+            if not chosen and imported and len(candidates) == 1:
+                chosen = candidates
+        if chosen:
+            return chosen[0].name, chosen[0]
+        return display, None
 
     def describe_builtin(self, entry, path, line, subject, name):
         flags = BUILTIN_TOOLS[name]
@@ -717,13 +773,13 @@ class Inventory:
             self.finding(path, line, name, "egress_capable_tool",
                          "built-in tool fetches a model-chosen URL; data placed in the URL leaves the perimeter")
 
-    def describe_function(self, entry, path, line, subject, function, via, confirmation, gated_by_callback):
-        if function is None or function not in self.functions:
+    def describe_function(self, entry, path, line, subject, function, facts, via, confirmation, gated_by_callback):
+        if facts is None:
             entry["tools"].append({"name": function, "kind": "unresolved", "line": line, "flags": []})
             self.finding(path, line, function or "<dynamic>", "unresolved_tool_reference",
-                         "tool defined outside the scanned files or built dynamically")
+                         "tool defined outside the scanned files, re-exported or built dynamically; "
+                         "it was not classified, so the trifecta summary may be incomplete")
             return
-        facts = self.functions[function]
         flags, details = facts.classify()
         gate = []
         if confirmation in {"enabled", "dynamic"}:

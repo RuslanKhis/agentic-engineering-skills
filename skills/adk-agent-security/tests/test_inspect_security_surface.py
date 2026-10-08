@@ -226,6 +226,60 @@ root = LlmAgent(name="weather", model="m", instruction="Answer weather questions
         self.assertEqual(self.agent(data, "flow")["class"], "SequentialAgent")
         self.assertEqual(data["plugins"], [{"line": 49, "name": "LoggingPlugin", "path": "agent.py", "runner": "App"}])
 
+    def test_module_attribute_and_imported_tool_references_resolve(self):
+        self.write("support/__init__.py", "")
+        self.write("support/tools.py", '''
+import httpx
+
+
+def fetch_email(message_id: str) -> dict:
+    resp = httpx.get(f"https://mail.invalid/{message_id}")
+    return {"status": "success", "body": resp.text}
+
+
+def search_kb(query: str) -> str:
+    return httpx.get("https://kb.invalid", params={"q": query}).text
+
+
+def get_order(order_ref: str) -> dict:
+    return {"status": "success"}
+
+
+def issue_refund(order_id: str, amount: float, user_id: str) -> dict:
+    httpx.post("https://orders.invalid/refunds", json={"order_id": order_id, "user": user_id})
+    return {"status": "success"}
+
+
+def send_email(to: str, body: str) -> dict:
+    httpx.post("https://mail.invalid/send", json={"to": to, "body": body})
+    return {"status": "success"}
+''')
+        self.write("support/agent.py", '''
+from google.adk.agents import LlmAgent
+from google.adk.tools import FunctionTool
+from . import tools
+from .tools import search_kb as kb
+from support import tools as t
+
+triage = LlmAgent(name="triage", model="m", tools=[tools.fetch_email, kb])
+refunds = LlmAgent(name="refunds", model="m", tools=[FunctionTool(t.issue_refund), tools.get_order, t.send_email])
+root = LlmAgent(name="support_root", model="m", sub_agents=[triage, refunds],
+                tools=[tools.fetch_email, tools.search_kb, tools.get_order, tools.send_email, tools.not_there])
+''')
+        result, data = self.scan()
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual({f["subject"] for f in self.findings(data, "write_tool_without_gate")} & {"issue_refund", "send_email"},
+                         {"issue_refund", "send_email"})
+        self.assertEqual([f["subject"] for f in self.findings(data, "identity_parameter_review")], ["issue_refund"])
+        self.assertTrue({"fetch_email", "search_kb"} <= {f["subject"] for f in self.findings(data, "untrusted_content_source")})
+        self.assertTrue({"send_email", "issue_refund"} <= {f["subject"] for f in self.findings(data, "egress_capable_tool")})
+        self.assertIn("support_root", {f["subject"] for f in self.findings(data, "trifecta_present")})
+        refunds = self.agent(data, "refunds")
+        self.assertEqual({tool["name"]: tool["kind"] for tool in refunds["tools"]},
+                         {"issue_refund": "function_tool", "get_order": "function", "send_email": "function"})
+        self.assertEqual(next(t for t in refunds["tools"] if t["name"] == "issue_refund")["defined_at"], "support/tools.py:18")
+        self.assertEqual([f["subject"] for f in self.findings(data, "unresolved_tool_reference")], ["tools.not_there"])
+
     def test_workflow_combining_legs_is_flagged_once(self):
         self.write("agent.py", WORKFLOW_SPLIT)
         _, data = self.scan()

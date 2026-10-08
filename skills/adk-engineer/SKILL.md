@@ -30,11 +30,14 @@ Note the time budget, who judges the result and the artifact type (exploration,
 assignment, pilot, production) before sizing the work; a time-boxed task judged
 on output quality starts with the core judgment measured on real inputs.
 
-When continuing a design or implementation plan, read its linked decisions,
-requested goal, dependencies, acceptance cases and execution scope. Check the
-current repository and skill availability, preserve settled choices, and work
-on the next authorized goal. Record actual evidence and unresolved blockers in
-the canonical plan or tracker; restart discovery only for a material new gap.
+When given a ticket, a plan goal or a pasted issue, read it first. If it names
+a `Primary skill` (or `primary_skill`) and supporting skills, use them;
+otherwise choose from the table below. Read its linked design and plan,
+dependencies, acceptance cases and execution scope, and preserve settled
+choices; restart discovery only for a material new gap. For "the next ready
+goal", pick the first goal whose prerequisites are complete. On finishing, write
+actual evidence and status into the ticket's Evidence section or the plan's goal
+entry, and end with the run prompt for the next ready goal or ticket.
 
 If the project has `agents-cli-manifest.yaml`, the user asks to use Agents CLI,
 or another collection already supplies the development workflow, read
@@ -44,7 +47,8 @@ how to preserve that workflow while selecting the ADK guidance for this task.
 ## Select and load the specialist
 
 Choose one primary skill from the table. Add another only when the requested
-change crosses its boundary. Say briefly which skill you are applying and why.
+change crosses its boundary. Before any edit, tell the user in one line:
+"Specialist: <name>, because <reason>", plus any supporting skills.
 
 | Request concerns | Specialist skill |
 | --- | --- |
@@ -88,10 +92,15 @@ If a selected specialist is unavailable, name the missing skill and show:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill <specialist-name>
 ```
 
-Replace the placeholder with the actual skill name. Have the user reload the
-coding agent after installation if needed. Continue independent inspection or
-explanation, but distinguish it from work guided by the missing specialist;
-resume specialist-dependent implementation after its instructions are available.
+Replace the placeholder with the actual skill name and have the user restart
+the coding agent; an already running session keeps the skill list it started
+with. Continue independent inspection, and resume specialist-dependent work
+once its instructions are available.
+
+Specialists refer to `$SKILL_DIR` when running their helper scripts; it means
+the directory that contains that specialist's `SKILL.md`. The helpers need
+Python 3.11 or later; if the project's interpreter is older, use any available
+3.11+ interpreter for the helper only, without changing the project.
 
 ## Apply the guidance
 
@@ -100,6 +109,18 @@ Its compatibility references determine which SDK recipes fit the target.
 Preserve the user's requested scope and existing authorisation. Complete local
 work and make any proposed external operation concrete before requesting a
 missing approval for that operation.
+
+When the request asks for a document a person will read (a review, a migration
+plan, a changelog entry), write that deliverable first, then make the code
+changes it recommends; a long change can be interrupted, and the document is
+what the requester acts on.
+
+Keep tests runnable without the ADK SDK where possible: test tool functions,
+schemas and policy modules directly, and keep `google.adk` imports out of
+package `__init__.py` files so those tests can import them. Tests that need the
+SDK or a live model are written but reported as **not run** when the SDK is
+absent; never imitate the SDK with hand-built stand-ins and call the result a
+pass.
 
 For example, “add memory” starts with `adk-memory-architecture`. Determine
 whether the need is conversation state, an exact profile setting, facts across

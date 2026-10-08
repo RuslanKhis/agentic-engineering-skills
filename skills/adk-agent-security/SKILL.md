@@ -70,7 +70,7 @@ are trusted operators, and what the deployment perimeter is.
 | (c) Tool and MCP supply chain | Read [tool supply chain](references/tool-supply-chain.md): allowlist with `tool_filter`, review AI-visible descriptions, pin definitions by hash, namespace with `tool_name_prefix`, Streamable HTTP over stdio in production, per-user `header_provider`, no token passthrough, SSRF and egress rules, unfenced own tool results and OpenAPI descriptions. |
 | (d) Agency and output handling | Read [agency and output](references/agency-and-output.md): tool tiering (read, write, irreversible), confirmation policy and its pitfalls, escaping and URL rules for rendered output, code-executor selection table, `BashToolPolicy` allowlists, identity and IAM conditions. |
 | (e) Adversarial suite | Read [adversarial testing](references/adversarial-testing.md) and seed from [adversarial cases](assets/adversarial-cases.json): deterministic scripted-model Runner assertions ("forbidden tool never called", "data never egressed"), optional promptfoo, garak or PyRIT campaign, Model Armor shadow evidence. |
-| (f) Security review | Use all references; report prioritised findings with `file:line`, the OWASP LLM or ASI identifier, the observable check that would show the fix, the evidence label and the owning skill. Change nothing unless asked. |
+| (f) Security review | Use all references; report prioritised findings with `file:line`, the OWASP LLM or ASI identifier, the observable check that would show the fix, the evidence label and the owning skill. Write the review document first; when the request also says to carry the work out, then make the fixes it recommends, otherwise change nothing. |
 
 A request may need several rows; keep them in one change set and one report.
 

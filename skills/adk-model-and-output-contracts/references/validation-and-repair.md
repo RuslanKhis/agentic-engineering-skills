@@ -14,7 +14,7 @@ Read this when a structured output arrives as prose, fenced JSON, invalid data o
 
 - First strips a Markdown code fence that wraps the **entire** payload (`re.fullmatch(r"```\w*\s*(.*?)\s*```", text.strip(), re.DOTALL)`). Added in 2.6.0; 2.10.0 rewrote it to avoid cubic backtracking. Text before or after the fence, or two fences, is not repaired.
 - For a `BaseModel` schema returns `model_validate_json(text).model_dump(exclude_none=True)`, a dict. For `list[BaseModel]` the same per item. For other schema types (`dict`, `list[str]`, `types.Schema`) it returns `safe_json_loads(text)` with no Pydantic validation.
-- A JSON decode failure raises `ValueError`; a Pydantic failure raises `ValidationError`. Nothing in 2.8.0 catches either on this path, so the exception propagates out of the agent run. Code that awaits `Runner.run_async` sees the exception; the event is not saved.
+- With a Pydantic model or `list[BaseModel]` schema, both malformed JSON and a field mismatch raise Pydantic's `ValidationError` (`model_validate_json` and `TypeAdapter.validate_json` parse and validate in one step). With any other schema (`dict`, `list[str]`, a `types.Schema`), malformed JSON raises `ValueError` from `safe_json_loads`. Nothing in 2.8.0 catches either on this path, so the exception propagates out of the agent run. Code that awaits `Runner.run_async` sees the exception; the event is not saved.
 
 The ADK documentation (adk-docs `agents/llm-agents.md`, fetched 2026-10-06) says the parsed dict is stored in Python; the Java and Kotlin runtimes log and store the raw string instead. Treat the raise as the Python contract.
 

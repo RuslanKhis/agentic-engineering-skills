@@ -9,6 +9,7 @@ import unittest
 
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "inventory_release_refs.py"
+WORKFLOW = Path(__file__).resolve().parents[1] / "assets" / "eval-gate.github-actions.yml"
 
 
 class InventoryTests(unittest.TestCase):
@@ -260,6 +261,57 @@ c = LlmAgent(name="c", model="gemini-3.8-flash", instruction=f"templated {{ctx}}
         self.assertNotIn(private, result.stdout + result.stderr)
         self.assertEqual({item["reason"] for item in data["issues"]}, {"malformed_file"})
         self.assertEqual(len(data["issues"]), 3)
+
+    def test_empty_json_output_inside_project_is_skipped_not_malformed(self):
+        self.write("agent.py", 'MODEL = "gemini-3.8-flash"\n')
+        self.write("inventory.json", "")
+        result, data = self.scan()
+        self.assertEqual(result.returncode, 0, data["issues"])
+        self.assertFalse(data["partial"])
+        self.assertEqual(data["issues"], [])
+        self.assertEqual(data["skipped"], [{"path": "inventory.json", "reason": "skipped_empty"}])
+        self.write("broken.json", "{")
+        result, data = self.scan()
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(data["issues"], [{"path": "broken.json", "reason": "malformed_file"}])
+
+    def test_eval_gate_template_writes_inventory_outside_the_scanned_project(self):
+        text = WORKFLOW.read_text()
+        self.assertNotIn("> inventory.json", text)
+        self.assertNotIn('open("inventory.json")', text)
+        self.assertIn("--project . --dry-run > \"${RUNNER_TEMP}/inventory.json\"", text)
+        self.assertIn('os.environ["RUNNER_TEMP"]', text)
+
+    def test_model_constants_resolve_within_and_across_modules(self):
+        self.write("app/__init__.py", "")
+        self.write("app/config.py", 'AGENT_MODEL = "gemini-3.8-flash"\nPREVIEW_MODEL = "gemini-3.1-pro-preview"\n')
+        self.write("app/agent.py", '''import os
+from google.adk.agents import LlmAgent
+from . import config
+from .config import PREVIEW_MODEL as PREVIEW
+
+LOCAL_MODEL = "gemini-3.7-flash"
+a = LlmAgent(name="a", model=LOCAL_MODEL, instruction="Be terse.")
+b = LlmAgent(name="b", model=config.AGENT_MODEL, instruction="Be kind.")
+c = LlmAgent(name="c", model=PREVIEW, instruction="Be brief.")
+d = LlmAgent(name="d", model=os.environ["MODEL"], instruction="Be clear.")
+e = LlmAgent(name="e", model=os.environ.get("MODEL"), instruction="Be calm.")
+f = LlmAgent(name="f", model=pick_model(), instruction="Be exact.")
+g = LlmAgent(name="g", model=elsewhere.MODEL, instruction="Be short.")
+''')
+        result, data = self.scan()
+        self.assertEqual(result.returncode, 0)
+        rows = {(row["signal"], row.get("line"), str(row.get("detail"))) for row in data["signals"] if row["path"] == "app/agent.py"}
+        expected = {
+            ("model_reference_resolved", 7, "gemini-3.7-flash"), ("model_pinned", 7, "gemini-3.7-flash"),
+            ("model_reference_resolved", 8, "gemini-3.8-flash"), ("model_pinned", 8, "gemini-3.8-flash"),
+            ("model_reference_resolved", 9, "gemini-3.1-pro-preview"), ("model_alias", 9, "gemini-3.1-pro-preview"),
+            ("model_dynamic", 10, "LlmAgent"), ("model_dynamic", 11, "LlmAgent"), ("model_dynamic", 12, "LlmAgent"),
+            ("model_reference_unresolved", 13, "elsewhere.MODEL"),
+        }
+        self.assertTrue(expected <= rows, expected - rows)
+        dynamic_lines = sorted(line for signal, line, _ in rows if signal == "model_dynamic")
+        self.assertEqual(dynamic_lines, [10, 11, 12])
 
     def test_symlinks_and_entry_cap(self):
         outside = Path(self.temp.name) / "outside.py"

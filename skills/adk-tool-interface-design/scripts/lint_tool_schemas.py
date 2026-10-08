@@ -43,6 +43,7 @@ BLOCKING_PREFIXES = ("requests.", "httpx.", "urllib.", "sqlite3.", "subprocess."
                      "pymysql.", "mysql.", "boto3.", "socket.", "smtplib.", "ftplib.")
 BLOCKING_NAMES = {"open", "time.sleep", "httpx.Client", "httpx.get", "httpx.post", "httpx.put",
                   "httpx.patch", "httpx.delete", "httpx.request", "urllib.request.urlopen"}
+NON_DICT_RETURNS = {"str", "int", "float", "bool", "bytes", "list", "tuple", "set", "List", "Tuple", "Set"}
 DOMAIN_DEFAULT = re.compile(r"[A-Z0-9 ]")
 SENTENCE_END = re.compile(r"[.!?](?:\s+|$)")
 WORD = re.compile(r"[A-Za-z0-9]+")
@@ -84,6 +85,12 @@ def dotted(node):
         prefix = dotted(node.value)
         return f"{prefix}.{node.attr}" if prefix else node.attr
     return ""
+
+
+def module_matches(path, module):
+    """True when a scanned file path is the module named by the last dotted segment."""
+    path = Path(path)
+    return path.stem == module or (path.stem == "__init__" and path.parent.name == module)
 
 
 def keyword(node, name):
@@ -304,6 +311,9 @@ class FunctionFacts:
                 keys = {k.value for k in value.keys if isinstance(k, ast.Constant)}
                 if "status" not in keys:
                     found.append(("missing_status_key", f"line {statement.lineno}"))
+        returns_annotation = annotation_name(self.node.returns) if self.node.returns is not None else ""
+        if returns_annotation in NON_DICT_RETURNS and not any(kind == "non_dict_return" for kind, _ in found):
+            found.append(("non_dict_return", f"line {self.line}: annotated -> {returns_annotation}"))
         return found
 
 
@@ -320,6 +330,31 @@ class Collector(ast.NodeVisitor):
         self.classes = {}
         self.pending = []
         self.class_depth = 0
+        self.aliases = {}
+
+    def visit_Import(self, node):
+        for item in node.names:
+            if item.asname:
+                self.aliases[item.asname] = item.name
+            else:
+                head = item.name.split(".")[0]
+                self.aliases[head] = head
+
+    def visit_ImportFrom(self, node):
+        for item in node.names:
+            self.aliases[item.asname or item.name] = f"{node.module or ''}.{item.name}".strip(".")
+
+    def tool_ref(self, node, line, via):
+        """Record a function reference written as a name or a module attribute."""
+        display = dotted(node)
+        if not display:
+            return False
+        head, _, rest = display.partition(".")
+        imported = head in self.aliases
+        full = self.aliases.get(head, head) + (f".{rest}" if rest else "")
+        self.tool_refs.append({"display": display, "parts": full.split("."), "imported": imported,
+                               "path": self.path, "line": line, "via": via})
+        return True
 
     def visit_ClassDef(self, node):
         bases = {annotation_name(b) for b in node.bases}
@@ -346,14 +381,12 @@ class Collector(ast.NodeVisitor):
         self.generic_visit(node)
 
     def tool_entry(self, element, line):
-        if isinstance(element, ast.Name):
-            self.tool_refs.append({"function": element.id, "path": self.path, "line": line, "via": "bare"})
+        if isinstance(element, (ast.Name, ast.Attribute)):
+            self.tool_ref(element, line, "bare")
             return "function"
         if isinstance(element, ast.Call):
             name = call_name(element)
-            if name in TOOL_WRAPPERS and element.args and isinstance(element.args[0], ast.Name):
-                self.tool_refs.append({"function": element.args[0].id, "path": self.path,
-                                       "line": element.lineno, "via": name})
+            if name in TOOL_WRAPPERS:
                 return "function"
             if name in AGENT_WRAPPERS:
                 target = element.args[0] if element.args else keyword(element, "agent")
@@ -368,9 +401,10 @@ class Collector(ast.NodeVisitor):
 
     def visit_Call(self, node):
         name = call_name(node)
-        if name in TOOL_WRAPPERS and node.args and isinstance(node.args[0], ast.Name):
-            self.tool_refs.append({"function": node.args[0].id, "path": self.path,
-                                   "line": node.lineno, "via": name})
+        if name in TOOL_WRAPPERS:
+            target = node.args[0] if node.args else keyword(node, "func")
+            if isinstance(target, (ast.Name, ast.Attribute)):
+                self.tool_ref(target, node.lineno, name)
         elif name in AGENT_WRAPPERS:
             target = node.args[0] if node.args else keyword(node, "agent")
             if isinstance(target, ast.Name):
@@ -411,7 +445,8 @@ class Lint:
                                   "max_depth": args.max_depth, "max_entries": args.max_entries,
                                   "max_tools": args.max_tools, "excluded_directories": sorted(EXCLUDED),
                                   "sensitive_files_excluded": True, "symlinks_followed": False},
-                       "tools": [], "agents": [], "findings": [], "counts": {}, "issues": []}
+                       "tools": [], "agents": [], "findings": [], "counts": {}, "issues": [],
+                       "unresolved_tool_references": 0}
         self.seen = 0
         self.stopped = False
         self.functions = {}
@@ -499,27 +534,59 @@ class Lint:
                 self.seen += 1
                 self.inspect(path, relative)
 
+    def resolve(self, ref):
+        """Return the scanned definitions a tool reference points at.
+
+        A bare, non-imported name matches every same-named top-level function.
+        A module attribute (`tools.fn`, `pkg.tools.fn`) or an imported name
+        (`from .tools import fn`, `from pkg import tools as t`; `t.fn`) matches
+        the function in the scanned file whose stem (or package directory for
+        `__init__.py`) is the last module segment; an imported name falls back
+        to a unique same-named function for re-exports.
+        """
+        parts = [part for part in ref["parts"] if part]
+        if not parts:
+            return []
+        candidates = self.functions.get(parts[-1], [])
+        if len(parts) == 1:
+            return list(candidates)
+        matched = [facts for facts in candidates if module_matches(facts.path, parts[-2])]
+        if matched:
+            return matched
+        if ref["imported"] and len(candidates) == 1:
+            return list(candidates)
+        return []
+
     def analyse(self):
         for path, node in self.pending:
             self.functions.setdefault(node.name, []).append(FunctionFacts(path, node, self.classes))
-        referenced = {}
+        resolved, unresolved = {}, {}
         for ref in self.tool_refs:
-            referenced.setdefault(ref["function"], []).append(ref)
-        tools = []
-        for name in sorted(referenced):
-            definitions = self.functions.get(name, [])
-            ref = referenced[name][0]
+            definitions = self.resolve(ref)
             if not definitions:
-                self.finding(ref["path"], ref["line"], name, "unresolved_tool_reference",
-                             "function defined outside the scanned files or built dynamically")
+                unresolved.setdefault(ref["display"], ref)
                 continue
+            for facts in definitions:
+                resolved.setdefault(id(facts), (facts, []))[1].append(ref)
+        for display in sorted(unresolved):
+            ref = unresolved[display]
+            self.finding(ref["path"], ref["line"], display, "unresolved_tool_reference",
+                         "function defined outside the scanned files, re-exported or built dynamically; "
+                         "this tool was not linted")
+        self.result["unresolved_tool_references"] = len(unresolved)
+        by_name = {}
+        for facts, refs in resolved.values():
+            by_name.setdefault(facts.name, []).append((facts, refs))
+        tools = []
+        for name in sorted(by_name):
+            definitions = sorted(by_name[name], key=lambda item: (item[0].path, item[0].line))
             if len(definitions) > 1:
-                for facts in definitions:
+                for facts, _ in definitions:
                     self.finding(facts.path, facts.line, name, "duplicate_tool_name",
                                  "the same tool name is defined more than once; later registration shadows earlier")
-            for facts in definitions:
+            for facts, refs in definitions:
                 entry = {"name": name, "path": facts.path, "line": facts.line,
-                         "references": len(referenced[name]), "findings": []}
+                         "references": len(refs), "findings": []}
                 for kind, detail in facts.findings():
                     entry["findings"].append(kind)
                     self.finding(facts.path, facts.line, name, kind, detail)

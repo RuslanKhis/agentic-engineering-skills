@@ -20,6 +20,11 @@ scanned; inspect it by hand. The output names identifiers and flags only, so
 it can be attached to a review. `adk_pins` must show
 `at_or_above_cve_floor`, or the report says why not.
 
+Tool references resolve by name, module attribute (`tools.fn`) or import
+(`from .tools import fn`, `from pkg import tools as t`) to the definition in the
+scanned file of that module; anything else is `unresolved_tool_reference`, is
+not classified, and leaves that agent's `trifecta` possibly incomplete.
+
 ## 2. Completed checklist
 
 Attach the [threat-model checklist](../assets/threat-model-checklist.md) with
