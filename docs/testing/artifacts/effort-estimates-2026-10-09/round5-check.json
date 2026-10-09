@@ -1,0 +1,56 @@
+{
+  "round": 5,
+  "root": "scratchpad/est/after5 (copied to scratchpad/est/v5; originals untouched)",
+  "helper": "check_schedule.py md5 5848b2bc37cedaf37ca3587346763ae4, identical in H1/H4/H5; reruns with python3 -I; what-ifs via scratchpad/est/v5tools/whatif.py (imports helper's read_plan/analyse, edits goals in memory)",
+  "goals": {
+    "G1": {
+      "verdict": "FAIL",
+      "H4": {"verdict": "PASS (minor prose)", "evidence": [
+        "Rerun with --days 10 --reserve 0.25 --person Dev A/B/C=5: 57-88 h, capacity 112.5, loads 17-27/21-31/19-30 of 37.5, chain low G02>G04>G05>G11 5.6, chain high G01>G04>G10>G11 9.73, finish 6.67-11.13, fits low end only, exit 1: identical to plan block.",
+        "Prose 'set ... by Dev C working G03 > G09 > G11 in order' is wrong: shrinking G03+G09 to 1 h leaves finish 11.13; shrinking Dev B's G06 or G07 to 1 h gives 9.73. Binding resource is Dev B (G06>G07>G10), Dev C idles 7.13-9.27 at the high end. Conclusion (no reassignment closes it) still holds: G10->A 10.87, G10->C 10.87, G07->C 11.67, G06->C 11.67, G07 split B/C 10.47."]},
+      "H5": {"verdict": "FAIL", "evidence": [
+        "Rerun with --days 95, six people at 6, reviewer 1.2: 462-696 h, capacity 2650.5, all seven loads, chain high G01>G09>G08>G15>G20>G21>G22>G23>G24 102.89, finish 70.67-106.33, low end only: matches.",
+        "What-ifs reproduce: reviewer 2.4 @95 65.56-97.89 low end only (2.89 days short); @98 fits; reviewer 1.2 @107 fits.",
+        "Comparative claim 'Only a later date closes the last gap. More engineers would not help, because the remaining chain is reviewer time and external waits' is false per helper: with reviewer 2.4, the chain is G02>G25>G11>G18>G21>G22>G23>G24 with ~34 days of engineer work; putting a second engineer on G23 pilot work (total 15-23 each) gives 62.22-92.78, fits 95. Even G23 at setup-only hours (8-12) with reviewer 1.2 gives 98.78."]}
+    },
+    "G2": {
+      "verdict": "FAIL",
+      "H4": {"verdict": "PASS", "evidence": [
+        "All 7 what-ifs reproduced: G05 cancel-only 6.67-11.13; G10 2-3 h 6.13-10.6; drop G10 fold into G11 6.4-10.8 (reproduced with G11=5-8 plus the 0-1 briefing wait); G05 to phase 2 6.67-11.13; G07->Dev A 7.2-12.2; 6 h/day 5.56-9.44 fits; 12 days fits.",
+        "Plan says plainly only more focused hours or two more days close it; go/no-go at day 7 is consistent (high end: G05 done 7.67, G10 9.27; 11.13 <= 12)."]},
+      "H5": {"verdict": "FAIL", "evidence": [
+        "Fallback 'open GA to the pilot cohort only on 2027-03-09 and complete the canary ramp (G24) in the following week' does not hold under the plan's stated parameters (reviewer 1.2): pilot G23 itself ends day 96.44 (after day 95) and G24 ends 106.33, ~11 working days later, not 'the following week'. It holds only under the recommended reviewer 2.4 (G23 ends 88.0, G24 97.89); the plan does not say so.",
+        "Says only a date move closes the gap; contradicted (see G1: staffing G23 with two people closes it at 95 with reviewer 2.4).",
+        "'Shortening pilot or pen-test window would also close it' is true (e.g. pen test 10-12 with reviewer 2.4)."]}
+    },
+    "G3": {
+      "verdict": "PARTIAL",
+      "H1": "PASS: dry run is inside G03 hours (0.75-1.25); one person, no handoffs.",
+      "H4": "PARTIAL: rehearsal is a goal with hours (G11 4-7, G09 rollback rehearsal, G10 dry run). Handoff hours exist only into G11 ('includes handoff from Dev A and Dev B'). Cross-person handoffs G01(B)->G03(C), G01(B)->G04(A), G02(A)->G07(B), G04(A)->G10(B) carry no handoff hours. Reserve is not used for planned work.",
+      "H5": "PARTIAL: handoff hours stated for G26 and G28. Plan's change 4 says schema-handoff hours were 'added to both' G10 and G28, but the G10 entry and ticket show none. No handoff hours for G12(Agent lead)->G27(Frontend, 'built against the G12 contract mock' yet not blocked by G12 and scheduled 4-19 while G12 runs 23-27), G15->G20, G18->G21, G23(ML)->G24(Agent lead). Claims-operations training and run-in support are assigned to unallocated spare hours rather than goals."
+    },
+    "G4": {
+      "verdict": "PARTIAL",
+      "H1": "Minor: 'No calendar waits, provided a paid key exists (Q4)': 'Q4' is undefined (open decision 1); company-billed key is a wait owned by others with no request-now step.",
+      "H4": "PASS: changes after failing runs (split G08/G09, G10 carved out, G03/G06 reassigned) are true of the work and outcomes reproduce; all three waits are requested on day 1 (Resume here); staging API is the chain's own, so 0-1 day is plausible.",
+      "H5": "PARTIAL: no evidence of gaming in the schedule (waits at stated lengths; changes 1-3 visible in the goal set; no git history to confirm earlier runs). G02 raises Guidewire access on day one; G03/G04 waits start day one. But the external pen-test (G21, on the critical chain) has no vendor booking/contract lead time and no early booking step; G18 pre-prod connectivity (on the chain under the recommendation), G19 load-test window and G05 OIDC test client have no early request step."
+    },
+    "G5": {
+      "verdict": "PASS",
+      "H1": "Reading load 1,938 words (design+plan 1,355 in one file; tickets 181/216/186 whole files). Ticket bodies excluding front matter and run prompt 99/129/102 (G02 slightly over 120). Estimates in quarter hours, components add up (G01 0.5-0.75, G02 1.75-3.25, G03 0.75-1.25), phase sum 3.0-5.25 by hand, capacity 6x0.8x0.75=3.6; no yaml block or helper run."
+    },
+    "G6": {
+      "verdict": "PASS",
+      "evidence": "All 11 H4 and 28 H5 tickets link to their plan entry by anchor (0 broken links/anchors across H1/H4/H5); implementation route and rationale are not copied (outcome/scope/acceptance are). Ticket bodies excl. front matter and run prompt: H4 113-148 words (files 196-234); H5 84-231 (files 169-323; G01 231, G10 204, G02 193 heaviest). Helper --tickets compare: 0 mismatches; wait_days also match (checked separately)."
+    },
+    "G7": {
+      "items": [
+        "H5 high end is likely overstated and drives the date decision: G23 (30-46 h, daily review during pilot) and G24 (14-22 h, canary) are modelled as work then wait, though much of the work happens during the pilot/ramp; G23 at setup-only hours gives 98.78 with reviewer unchanged.",
+        "H5 stale goal IDs: G15 plan entry and ticket say 'Out: External pen test (G19)' (it is G21; G19 is the load test). Plan open-decisions table maps O4/O5 to G20 and O7 to 'G20 conclusion', design maps them to G14/G23; O3 'G08, G12' vs design 'G08, G09, G27'.",
+        "H1 fallback 'G03 shrinks to five demo questions plus the dry run' cannot make the high end fit: even G03=0 leaves 4.0 h > 3.6 h; it silently consumes reserve. Plan should say the high end eats the reserve or the demo is at risk.",
+        "Document size: H5 plan 10,228 + design 5,590 words; H4 plan 4,763 + design 3,180, well past the 2-4 page target.",
+        "H5 '95 working days' = 107 weekdays less 12 holidays, while text says 'about 10' (minor)."
+      ]
+    }
+  }
+}

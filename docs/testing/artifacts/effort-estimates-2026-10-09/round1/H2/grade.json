@@ -1,0 +1,43 @@
+{
+  "A": {
+    "assertions": [
+      {"assertion": 1, "result": "pass", "reason": "Every phase 1 goal in plan ('Hands-on 2–3 h, review and verify 2–3 h, total 4–6 h') and every ticket front matter (estimate: hands_on / review_and_verify / total, '# human hours, agent-assisted') gives ranges split hands-on vs review; phase 2 goals carry totals only."},
+      {"assertion": 2, "result": "pass", "reason": "Tickets G01–G05 totals equal plan goals; plan states 'Phase 1 adds up to 4–6 + 3–5 + 4–6 + 3–5 + 4–6 = 18–28 hours' vs 36 h less 8 h reserve (22%) = 28 h, 'even the high end fits'."},
+      {"assertion": 3, "result": "pass", "reason": "Each goal/ticket has a separate 'Calendar wait' / calendar_waits field: Atlassian token 1–3 days, helpdesk lead's hour, IAP group 0–2 days, 3 working days of pilot use; G04 'none'; 'Start on day 1 (calendar waits)' list in plan."},
+      {"assertion": 4, "result": "pass", "reason": "Plan person table: Engineer A G01,G02,half G05 = 9–14 vs ~14; Engineer B G03,G04,half G05 = 9–14 vs ~14; 'Longest dependent chain: G01 → G04 → G05 = 11–17 hours'; owners in each ticket."}
+    ],
+    "arithmetic": "Goals: G01 4–6, G02 3–5, G03 4–6, G04 3–5, G05 4–6; sum 18–28 = stated 18–28. Split sums all check (G01 2–3+2–3, G02 2–3+1–2, G03 1.5–2.5+2.5–3.5, G04 1–2+2–3, G05 2.5–3.5+1.5–2.5). Capacity 2×0.5×10×6×0.6 = 36; reserve 8 (22%) -> 28; high end 28 = 28, fits with zero slack beyond reserve. Tickets match goals exactly (totals and splits). Per person: A = 4–6+3–5+2–3 = 9–14; B = 4–6+3–5+2–3 = 9–14; each vs ~14 (28/2) - consistent. Chain G01->G04->G05 = 4–6+3–5+4–6 = 11–17 (G03->G04->G05 equal length; not mentioned but harmless). No mismatches.",
+    "scores": {"estimate_coverage": 5, "consistency": 5, "plausibility": 4, "waits_and_risks": 5, "usability": 5},
+    "least_believable_estimate": "G05 at 4–6 h: container, service account, Cloud Run, IAP, Firestore TTL, budget alert, log policy, rollback demo and collecting pilot feedback from 3+ technicians is tight even reusing a template; G04 at 3–5 h (IAP JWT middleware, session ownership, static page, state_delta) is also on the low side."
+  },
+  "B": {
+    "assertions": [
+      {"assertion": 1, "result": "partial", "reason": "Every goal and ticket has a range ('estimate: 6-8 h'; plan 'Estimate (focused h)') but no hands-on vs review-and-verify split anywhere and no explicit 'developer with a coding agent' framing."},
+      {"assertion": 2, "result": "pass", "reason": "Ticket estimates equal plan goals (2-3, 6-8, 5-7, 6-9); phase 1 19–27 vs '36 h; 25% reserve ≈ 9 h → 27 h', 'high end of phase 1 exactly meets capacity minus reserve'."},
+      {"assertion": 3, "result": "fail", "reason": "No calendar-wait fields or durations; Atlassian admin access, helpdesk lead supplying ~15 questions, GCP project authorisation appear only as prerequisites/blockers with no separate wait listing or day estimates."},
+      {"assertion": 4, "result": "fail", "reason": "Only prose 'one takes G02 while the other does G01 and the G03 scaffolding...'; no owner per ticket, no per-person hours vs capacity, no longest dependent chain named."}
+    ],
+    "arithmetic": "Goals: G01 2–3, G02 6–8, G03 5–7, G04 6–9; sum 19–27 = stated 19–27. Capacity 36; reserve 9 (25%) -> 27; high end 27 = 27, zero slack. Tickets match goals. Per-person load not given; computing it myself from the prose split (A: G02 = 6–8 plus share of G04; B: G01 + G03 scaffolding 2–3 + part of 5–7) roughly 9.5–13.5 each vs 13.5, plausible but unstated. Unstated longest chain: G02 -> G03 -> G04 (hosted check) = 17–24 h, which exceeds one person's ~13.5 h and only works if split - not surfaced. Phase 2 sum 5–8+4–6+6–9+4–6+3–5 = 22–34 matches stated.",
+    "scores": {"estimate_coverage": 3, "consistency": 4, "plausibility": 4, "waits_and_risks": 2, "usability": 2},
+    "least_believable_estimate": "G03 at 5–7 h: FastAPI app, IAP JWT middleware, per-user daily counter, session ownership, static page, Dockerfile, Cloud Run+IAP, Secret Manager, budget alert, structured logs, revision labels and rollback - a lot for 5–7 h even with a template. G01 2–3 h of discovery also depends on an admin whose availability is not budgeted."
+  },
+  "preference": "A",
+  "reasons": [
+    "A gives per-goal and per-ticket hands-on vs review-and-verify splits plus separate calendar waits with day ranges (Atlassian tokens 1–3 days, IAP group 0–2 days, 3-day pilot); B gives single totals and no waits.",
+    "A assigns owners, checks each engineer's 9–14 h against ~14 h and names the longest chain (11–17 h); B has only a prose split with no per-person loads or critical path, so a manager cannot plan people's time from it."
+  ],
+  "notable_defects": {
+    "A": [
+      "Phase 1 high end (28 h) equals capacity after reserve exactly: no slack beyond the 22% reserve (acknowledged with the 3–5 technician pilot fallback).",
+      "G05 4–6 h bundles deploy, IAP, budget, rollback demo and pilot feedback - likely optimistic.",
+      "Parallel chain G03 -> G04 -> G05 is equal length to the named chain but not mentioned.",
+      "Phase 2 goals carry totals only, no split (acceptable as coarse)."
+    ],
+    "B": [
+      "No hands-on vs review-and-verify split on any goal or ticket.",
+      "No calendar waits listed or sized (Atlassian admin, helpdesk lead questions, GCP project authorisation).",
+      "No per-person assignment with hours, no owner fields in tickets, no longest dependent chain; the implied G02 -> G03 -> G04 chain (17–24 h) exceeds one person's ~13.5 h.",
+      "High end 27 h equals capacity after reserve exactly, with no slack."
+    ]
+  }
+}

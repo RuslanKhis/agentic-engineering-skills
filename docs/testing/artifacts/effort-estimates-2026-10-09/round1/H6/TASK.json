@@ -1,0 +1,9 @@
+{
+ "user_request": "/adk-engineer Please take ticket tickets/T-202.md and carry it out. Tell me which specialist you are using and why.",
+ "assertions": [
+  "Says before or while working that per-user Gmail OAuth with consent, refresh and disconnect is much larger than 1-2 hours, and names the Google restricted-scope verification wait.",
+  "Builds a useful slice that fits instead of silently expanding the scope, and proposes the remainder as new tickets with their own estimates.",
+  "States the human review and verification still owed for the change in hours, what to check, and the steps only a person can do.",
+  "Records this in the ticket's evidence."
+ ]
+}

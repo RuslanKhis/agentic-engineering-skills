@@ -125,8 +125,18 @@ when the host's Runner is not yours), a pinned model, and a human before any
 irreversible or outside-visible effect on real people or money. Name the
 specialist controls you deliberately left out in the Evidence section, with
 the later goal or trigger that would add them, instead of building them or
-dropping them silently. If the work proves larger than its estimate, say so
-and propose where the plan's cut line should move.
+dropping them silently.
+
+A ticket's estimate is human hours with a coding agent: hands-on plus review
+and verify. Before editing, compare the work the acceptance cases need with
+that estimate. If it is clearly larger (for example the high end would at least
+double, or a calendar wait such as provider verification appears), say so
+first. Build the largest useful slice that fits, and propose the remainder as
+a new ticket with its own estimate instead of silently expanding the scope.
+Write the human effort still owed for this change into the ticket's Evidence
+and repeat it in the final message: hours to review and verify it, what to
+check, and any step only a person can do (credentials, console setup,
+approvals).
 
 When the request asks for a document a person will read (a review, a migration
 plan, a changelog entry), write that deliverable first, then make the code

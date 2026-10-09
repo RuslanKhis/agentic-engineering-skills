@@ -622,6 +622,84 @@
         "Does not build production controls such as a durable operation ledger or reconciliation, and lists them in the ticket's evidence as deferred with the trigger.",
         "Adds tests that run without the ADK SDK and records evidence in the ticket."
       ]
+    },
+    {
+      "id": "estimate-poc-tickets",
+      "prompt": "I need a proof of concept of an ADK agent that answers questions about our HR policy PDFs (about 30 documents). Just me, about 6 hours spread over two days; the demo to HR leadership is on Friday. Design and plan it, then write ticket files for the phase 1 goals. Do not implement.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "deploy-adk-on-google-cloud", "adk-memory-architecture"],
+      "context": "An empty greenfield workspace; one developer with about six hours over two days. Local documentation only.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Every phase 1 goal and every ticket file carries a human-effort estimate as a range, stated as hours for a developer working with a coding agent, split into hands-on and review-and-verify time.",
+        "Ticket estimates match their goals, and the phase 1 total equals the sum of its goals and is compared with capacity after a reserve, high end included.",
+        "Calendar waits (reviews, grants, provider verification) are listed separately from hours where they apply.",
+        "Phase 1 estimates fit about six hours of one person with a reserve, and the plan says which goals still give a demo if time runs out."
+      ]
+    },
+    {
+      "id": "estimate-experienced-team",
+      "prompt": "Design an internal ADK assistant for our 25-person IT helpdesk that searches our Confluence runbooks and creates Jira tickets on request. Two senior engineers who have already shipped several ADK agents on GCP, about half their time for two weeks. Design and plan it, then write ticket files for the phase 1 goals. Do not implement.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "deploy-adk-on-google-cloud", "adk-agent-interoperability", "adk-tool-auth-and-secrets"],
+      "context": "An empty greenfield workspace; two senior engineers experienced with ADK and GCP at half time for two weeks. Local documentation only.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Every phase 1 goal and every ticket file carries a human-effort estimate as a range, stated as hours for a developer working with a coding agent, split into hands-on and review-and-verify time.",
+        "Ticket estimates match their goals, and the phase 1 total equals the sum of its goals and is compared with capacity after a reserve, high end included.",
+        "Calendar waits (reviews, grants, provider verification) are listed separately from hours where they apply.",
+        "Assigns goals to the two engineers, compares each person's load with their hours and names the longest dependent chain."
+      ]
+    },
+    {
+      "id": "estimate-new-team",
+      "prompt": "Design an internal ADK assistant for our 25-person IT helpdesk that searches our Confluence runbooks and creates Jira tickets on request. Two engineers who are new to ADK and have never used GCP, about half their time for two weeks. Design and plan it, then write ticket files for the phase 1 goals. Do not implement.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "deploy-adk-on-google-cloud", "adk-agent-interoperability", "adk-tool-auth-and-secrets"],
+      "context": "The same brief as estimate-experienced-team, but the engineers are new to ADK and have never used GCP. Local documentation only.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Every phase 1 goal and every ticket file carries a human-effort estimate as a range, stated as hours for a developer working with a coding agent, split into hands-on and review-and-verify time.",
+        "Ticket estimates match their goals, and the phase 1 total equals the sum of its goals and is compared with capacity after a reserve, high end included.",
+        "Calendar waits (reviews, grants, provider verification) are listed separately from hours where they apply.",
+        "Estimates reflect a team new to ADK and GCP: more hours per goal than an experienced team would need, and first-time GCP setup costed on the first goal that needs it; scope is cut to fit rather than estimates squeezed."
+      ]
+    },
+    {
+      "id": "estimate-mvp-three-people",
+      "prompt": "We're three developers at a startup. We want to ship an MVP of an ADK booking assistant for a chain of five hair salons that books, moves and cancels appointments through our existing booking API, within two weeks, then keep improving it. Design and plan it, then write ticket files for the phase 1 goals and say who could take which. Design only.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "deploy-adk-on-google-cloud", "safe-api-tool-calls"],
+      "context": "An empty greenfield workspace with an existing booking API; three developers for two weeks. Local documentation only.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Every phase 1 goal and every ticket file carries a human-effort estimate as a range, stated as hours for a developer working with a coding agent, split into hands-on and review-and-verify time.",
+        "Ticket estimates match their goals, and the phase 1 total equals the sum of its goals and is compared with capacity after a reserve, high end included.",
+        "Calendar waits (reviews, grants, provider verification) are listed separately from hours where they apply.",
+        "Says who could take which ticket, with each person's load against their capacity and the dependent chain that limits parallel work."
+      ]
+    },
+    {
+      "id": "estimate-production-waits",
+      "prompt": "Design a production ADK agent for an insurance company that helps customers file a home-insurance claim with photos and creates the claim in our Guidewire system. Five engineers, one ML engineer and a part-time security reviewer, five months to general availability in the EU. Design and plan it, then write ticket files for the phase 1 goals. Do not implement.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "deploy-adk-on-google-cloud", "protect-adk-sensitive-data", "adk-agent-security", "adk-release-engineering"],
+      "context": "An empty greenfield workspace; five engineers, one ML engineer and a part-time security reviewer for five months. Local documentation only.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Every phase 1 goal and every ticket file carries a human-effort estimate as a range, stated as hours for a developer working with a coding agent, split into hands-on and review-and-verify time.",
+        "Ticket estimates match their goals, and the phase 1 total equals the sum of its goals and is compared with capacity after a reserve, high end included.",
+        "Calendar waits (reviews, grants, provider verification) are listed separately from hours where they apply.",
+        "Treats security review, DPIA or regulator sign-off and Guidewire access as calendar waits that are started early, not as hours."
+      ]
+    },
+    {
+      "id": "router-flags-underestimated-ticket",
+      "prompt": "Please take ticket tickets/T-202.md and carry it out. Tell me which specialist you are using and why.",
+      "available_skills": ["adk-engineer", "adk-tool-auth-and-secrets", "protect-adk-sensitive-data", "adk-agent-security"],
+      "context": "The journeys fixture support agent with T-202: per-customer Gmail connection estimated at 1-2 hours of agent-assisted human effort, for a 30-customer pilot in three weeks. ADK is not installed.",
+      "expected_primary": "adk-engineer",
+      "assertions": [
+        "Says before or while working that per-user Gmail OAuth with consent, refresh and disconnect is much larger than 1-2 hours, and names the Google restricted-scope verification wait.",
+        "Builds a useful slice that fits instead of silently expanding the scope, and proposes the remainder as new tickets with their own estimates.",
+        "States the human review and verification still owed for the change in hours, what to check, and the steps only a person can do.",
+        "Records this in the ticket's evidence."
+      ]
     }
   ]
 }

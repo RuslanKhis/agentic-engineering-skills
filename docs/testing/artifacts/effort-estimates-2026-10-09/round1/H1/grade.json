@@ -1,0 +1,41 @@
+{
+  "A": {
+    "assertions": [
+      {"assertion": 1, "result": "fail", "reason": "Plan table and ticket frontmatter give single ranges only (e.g. G02 'estimate: 1.25–1.75 h (includes about 0.5 h first-time ADK setup)'); no hands-on vs review-and-verify split, and nothing says these are developer-with-coding-agent hours."},
+      {"assertion": 2, "result": "pass", "reason": "Tickets match plan (0.75–1.25, 1.25–1.75, 0.75–1.0, 0.25); hr-policy-qa.md §5 'phase 1 = G01 to G04, 3.0 to 4.25 h. Only the low end fits inside the reserve' against 3.6 h after 25% reserve."},
+      {"assertion": 3, "result": "partial", "reason": "Data approval is named as blocking live calls in G02 (blocked_by, open decision 1), but there is no separate calendar-wait field or duration; G04 console quota/budget setup is not treated as a wait."},
+      {"assertion": 4, "result": "pass", "reason": "§5 cut line: 'G01 → G02 gives a demo, G03 makes it credible', G03 drops to 6 questions, G04 shrinks to spend cap; low end 3.0 h fits 3.6 h."}
+    ],
+    "arithmetic": "G01 0.75–1.25 + G02 1.25–1.75 + G03 0.75–1.0 + G04 0.25 = 3.0–4.25 h; matches stated total. Capacity 6×0.8=4.8, minus 25% = 3.6 h; low end fits, high end exceeds by 0.65 h, which the plan states. All four ticket estimates equal their goal estimates. No mismatches. Phase 2 goals G05–G09 have coarse ranges (13–24 h total), not summed.",
+    "scores": {"estimate_coverage": 3, "consistency": 5, "plausibility": 3, "waits_and_risks": 3, "usability": 3},
+    "least_believable_estimate": "G04 at a flat 0.25 h: set an API-key quota and budget alert in the console, write docs/demo.md, pick demo questions, and do a full 6-question rehearsal in adk web. That cannot fit in 15 minutes, and it is a point value, not a range."
+  },
+  "B": {
+    "assertions": [
+      {"assertion": 1, "result": "partial", "reason": "Every ticket has hands_on / review_and_verify / total / calendar_waits (e.g. G01 0.25-0.5 + 0.25-0.5 = 0.5-1.0), and §5 says 'human hours with a coding agent (hands-on plus review), at new-to-ADK rates'; the plan goal table shows totals only, with no split."},
+      {"assertion": 2, "result": "pass", "reason": "Ticket totals match the plan; §5 'Phase 1 2.5–4.0', 'the low end (2.5 h) fits within 3.6 h. The high end (4.0 h) does not fit.'"},
+      {"assertion": 3, "result": "pass", "reason": "calendar_waits field in each ticket; G02 'O1 (data-use approval for the Gemini API)'; P2-2 '5–8 h plus waiting for a GCP project and IAM'; O1 adds 0.5–1 h if Vertex is required."},
+      {"assertion": 4, "result": "pass", "reason": "Cut line: 'After G02 alone, the agent can already be demonstrated'; G03 drops to 6 questions; low end 2.5 h fits 3.6 h."}
+    ],
+    "arithmetic": "G01 0.5–1.0 + G02 1.0–1.5 + G03 1.0–1.5 = 2.5–4.0 h; matches stated total. Capacity 4.8 h, minus 25% = 3.6 h; low end fits, high end exceeds by 0.4 h, which the plan states. Ticket splits sum correctly: G01 0.25–0.5+0.25–0.5=0.5–1.0; G02 0.5–0.75+0.5–0.75=1.0–1.5; G03 0.75–1.0+0.25–0.5=1.0–1.5. All tickets equal their goals. Minor inconsistency: final message says building and checking an index would take '4.5–9 hours', while P2-1 estimates the index at 3–5 h. Phase 2 '15–25 h' vs listed items 14–23 h plus a wait is roughly consistent.",
+    "scores": {"estimate_coverage": 4, "consistency": 4, "plausibility": 3, "waits_and_risks": 4, "usability": 4},
+    "least_believable_estimate": "G02 at 1.0–1.5 h for a builder new to ADK: first ADK install and version check, catalogue-rendered instruction, read_policy tool, offline tool tests, a scripted-model Runner call-limit test, and a live adk web check. The scripted-model test alone can eat most of that range, and unlike A there is no first-time setup allowance."
+  },
+  "preference": "B",
+  "reasons": [
+    "B gives every ticket a hands-on / review-and-verify split with a calendar_waits field, and the parts add up. A gives single ranges with no split and no separate waits.",
+    "Both are arithmetically consistent and state that only the low end fits the 3.6 h after the reserve. B has no implausible line item, while A's flat 0.25 h for spend controls plus a full rehearsal (G04) is not credible."
+  ],
+  "notable_defects": {
+    "A": [
+      "No hands-on vs review-and-verify split anywhere; estimates are not stated as developer-with-coding-agent hours.",
+      "G04 is a point estimate of 0.25 h covering console quota and budget setup, demo doc and a 6-question rehearsal.",
+      "Calendar waits (data approval) appear only as blockers, with no separate wait listing."
+    ],
+    "B": [
+      "The plan's goal table shows total hours only; the split exists only in the tickets.",
+      "Justification figure '4.5–9 hours' for an index contradicts P2-1's 3–5 h for the same index.",
+      "G02 at 1.0–1.5 h looks tight for a first-time ADK builder, with no explicit setup allowance."
+    ]
+  }
+}

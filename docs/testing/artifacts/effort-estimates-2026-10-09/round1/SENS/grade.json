@@ -1,0 +1,35 @@
+{
+  "X": {
+    "per_goal": [
+      {"goal": "Setup / contracts", "experienced": "G01 confirm Atlassian, model, pin contracts 2-3 h", "new": "G01 agent answers locally on Vertex, incl. first GCP project, IAM, ADC, budget alert 4-6 h", "ratio": 2.0, "note": "the new-team goal also includes the agent skeleton"},
+      {"goal": "Cited runbook search", "experienced": "G02 6-8 h", "new": "G02 8-11 h", "ratio": 1.36},
+      {"goal": "Hosted on Cloud Run behind IAP", "experienced": "G03 5-7 h", "new": "G03 6-8 h", "ratio": 1.17, "note": "small uplift for a team that has never deployed to GCP"},
+      {"goal": "Jira ticket creation", "experienced": "G04 API create with confirmation 6-9 h (phase 1)", "new": "G04 prefilled draft link 3-6 h (phase 1); G05 direct API create 10-14 h (phase 2)", "ratio": 1.6, "note": "ratio compares new G05 with experienced G04; phase 1 scope was cut to a draft link"}
+    ],
+    "totals": {"experienced_phase1": "19-27 h (G01-G04)", "new_phase1": "21-31 h (G01-G04, reduced scope)", "capacity_after_reserve": "27 h for both", "new_equivalent_full_scope": "28-39 h (G01+G02+G03+G05)"},
+    "ratio": {"phase1_totals": 1.13, "like_for_like_scope": 1.46},
+    "scores": {"sensitivity": 3, "honesty": 3, "explanation": 2},
+    "notes": "The direction is right. First-time GCP project, IAM and ADC are costed in G01, and Jira API creation and a custom front end (replaced by the ADK dev UI with an accepted session-isolation risk) were moved out of phase 1. That is a real scope cut. The uplift is uneven, though: hosting for a team that has never used GCP rises only 1.17x, and the phase 1 hours barely change. The new plan's high end (31 h) is over the 27 h usable; it says so ('fits at the low/middle only') and gives G04 as the item to drop, but it is still over. The only explanation for why the numbers differ is a parenthetical on G01. There is no stated multiplier, and the experienced plan does not say what experience it assumes."
+  },
+  "Y": {
+    "per_goal": [
+      {"goal": "GCP project, IAM, model and Atlassian access setup", "experienced": "none (calendar waits only; existing GCP knowledge)", "new": "G01 4-7 h, explicitly 'the team's first GCP project and IAM'; billing link is a 1-5 day calendar wait", "ratio": null, "note": "new work, no experienced counterpart"},
+      {"goal": "Runbook answers + measured on gold questions", "experienced": "G01 4-6 + G02 3-5 = 7-11 h", "new": "G02 3-5 + G03 4-7 = 7-12 h", "ratio": 1.06, "note": "the stated x1.5 is not visible here"},
+      {"goal": "Ticket draft, confirm, create once", "experienced": "G03 4-6 h", "new": "G04 4-7 h", "ratio": 1.1},
+      {"goal": "Signed-in web page with per-user scope", "experienced": "G04 3-5 h (phase 1)", "new": "G05 IdP decision 1-2 + G06 5-9 = 6-11 h (phase 2)", "ratio": 2.1},
+      {"goal": "Cloud Run behind IAP", "experienced": "G05 4-6 h (phase 1)", "new": "G07 6-10 h (phase 2)", "ratio": 1.6}
+    ],
+    "totals": {"experienced_phase1": "18-28 h (G01-G05, hosted pilot)", "new_phase1": "15-26 h (G01-G04, local pilot only)", "capacity_after_reserve": "28 h experienced, 27 h new", "new_equivalent_full_scope": "26-45 h (G01-G07)"},
+    "ratio": {"phase1_totals": 0.89, "like_for_like_scope": 1.54},
+    "scores": {"sensitivity": 4, "honesty": 5, "explanation": 4},
+    "notes": "Matched like for like, the new team's work costs about 1.5x the experienced team's. First-time GCP setup is its own goal, and billing and admin approvals are listed as calendar waits rather than hidden in the hours. Deployment is costed higher (1.6x) and adds a separate identity-provider decision. Instead of squeezing the numbers, the plan cut scope: hosting, IAP and the signed-in page moved to phase 2, and phase 1 became a local pilot that fits at 15-26 of 27 h. The per-person table shows Engineer B 0.5 h over at the high end, and the plan says what to drop if time runs out. Both plans explain their numbers: the experienced plan says no multiplier was applied because the engineers are senior with ADK and GCP, and the new plan says base hours x1.5 plus GCP first-project setup. The weak spot is consistency. The agent-coding goals (runbook answers, tickets) rise only about 1.05-1.1x, despite the stated x1.5 for a team new to ADK."
+  },
+  "preference": "Y",
+  "reasons": [
+    "Y states and justifies its experience adjustment in both plans (no multiplier for seniors; x1.5 plus first-project setup for the new team). X explains it only in a parenthetical on G01.",
+    "Y's like-for-like uplift (~1.54x) matches its stated assumption, and setup and deployment are clearly costed. X's uplift is uneven (hosting only 1.17x for a team that has never used GCP).",
+    "Y cut scope (hosting and IAP to phase 2) so phase 1 fits inside capacity at 15-26 of 27 h. X's new-team phase 1 is 21-31 h against 27 h usable, so the high end is over capacity.",
+    "Y lists GCP billing and admin approvals as calendar waits, apart from the hours, which makes the effort figures more honest.",
+    "Y's flaw: the agent-coding goals do not show the claimed x1.5 (they rise only ~1.05-1.1x). X has the merit of a real scope cut on Jira writes and the front end."
+  ]
+}

@@ -1,0 +1,142 @@
+{
+  "round": 3,
+  "root": "scratchpad/est/after3",
+  "method": "Copied docs/ of H1, H4, H5 to scratchpad/est/r3tmp and reran the identical check_schedule.py (md5 bd5c768d... in all three) with python3.11 -I and the parameters each plan states. Variants were run on copies only. Nothing under after3 was modified.",
+  "R1_numbers_match_helper": {
+    "H1": {
+      "verdict": "PASS",
+      "command": "--plan docs/architecture/hr-policy-qa.md --tickets docs/tickets/hr-policy-qa/ --capacity 3.6 --days 2 --person Builder=1.8",
+      "helper": "2.3-3.6 h; fits yes; Builder 2.3-3.6 of 3.6; chain G01->G02->G03 1.28/2.0 d; finish 1.28-2 d; calendar fits; exit 0; no problems",
+      "plan_says": "2.3-3.6 h, fits (high end exactly); chain G01->G02->G03; finish 1.3-2 d; fits only if O1 requested before day 1; with 1-day wait high end 3 d",
+      "hand_chain": "G01 0.8 + G02 1.5 + G03 1.3 = 3.6 h / 1.8 h/day = 2.0 d. blocked_by G02=[G01] and G03=[G02] in both the YAML and the tickets. Matches.",
+      "notes": "1.8 h/day = 6 x 0.8 x 0.75 / 2, so the calendar rate includes the reserve and the plan is self-consistent. There is zero slack at the high end."
+    },
+    "H4": {
+      "verdict": "PASS (numbers) / see R5 for the reserve inconsistency",
+      "command": "--capacity 81 --days 10 --person 'Dev A=3.6' --person 'Dev B=3.6' --person 'Dev C=3.6' with --tickets",
+      "helper": "44.5-74 h; fits yes; A 15.5-26.5, B 13.5-21.5, C 15.5-26 of 36; chain G04->G07->G08->G09 5.14/9.61 d; finish 5.83-10.58; calendar low end only; exit 1",
+      "plan_says": "Identical, and the plan states exit 1 and low end only.",
+      "hand_chain": "G04 10/3.6=2.78 + G07 5/3.6=1.39 + G08 9/3.6=2.5 + G09 7/3.6=1.94 + wait 1 = 9.61 d. Deps G07<-G04, G08<-[G02,G07], G09<-[G03,G05,G06,G08]. Matches.",
+      "fallback_claim": "Reproduced: G03 cut to 6.5-10.5 plus G09 wait 0-0.5 gives 43-71.5 h and a 5.42-9.81 d finish, which fits. Wait alone gives 10.08 and the cut alone gives 10.31, so both are needed, as stated.",
+      "assignment_claim": "Reproduced by brute force over all 3^9 owner assignments: the best high-end finish is 10.58 d.",
+      "unverifiable": "REPORT says earlier runs gave 11.97-12.25 d and were fixed 'by changing the plan'. There is no git history, so what changed cannot be checked."
+    },
+    "H5": {
+      "verdict": "PASS (numbers) / FAIL on one prose claim",
+      "command": "--phase 1|2 --capacity 690|1540 --days 30|67, Eng A-E and ML=4.8, Sec=1.9, with --tickets",
+      "helper_phase1": "267-418 h; fits; loads match the plan table exactly; chain G01->G06->G12 16.75/26.04 d; finish 16.75-26.04; fits; exit 0",
+      "helper_phase2": "332-540 h; fits; chain high G14->G21->G24 61.25 d, low G15->G17->G21->G22 35.92 d; finish 35.92-61.25; fits; exit 0",
+      "plan_says": "Same figures (rounded to 16.8-26.0 and 35.9-61.3, about 6 days of margin). Capacity arithmetic 30 x (6x4.8+1.9) = 921, x0.75 = 690 checks. Phase 1 has 30 weekdays. Phase 2 has 75 weekdays, minus 8 holidays = 67, which is plausible.",
+      "hand_chain": "G01 21/4.8=4.375 + wait 5 = 9.375; + G06 60/4.8=12.5 = 21.875; + G12 20/4.8=4.17 = 26.04 d. G06 blocked_by [G01]; G12 blocked_by includes G06. Matches.",
+      "false_claim": "The plan says 'Phase 1 uses well under half of the reserved capacity'. The high end is 418/690 = 61% and the low end is 39%. REPORT itself says 'about 60%'."
+    }
+  },
+  "R2_dependency_honesty": {
+    "H5_G13": {
+      "verdict": "FAIL",
+      "reproduced": "With G13 blocked_by [G06] (or [G06,G08]): finish 20.57-32.4 d, low end only, as the plan says.",
+      "analysis": [
+        "G13's own scope is an independent review of D2, D5, D6 and I1-I4. D5 and I2 are the submission ledger and the exactly-once Guidewire write, which G06 builds. After the change, G13 reviews only 'ledger design from G01 contract and G06 work in progress'. The review of the highest-risk finished code was moved out of the goal.",
+        "The moved re-check went to G14, which Eng A owns. No Sec hours were added anywhere. Sec's phase 2 load is only G23 (18-30 h), and G14 shows no visible increase. Sec works 1.9 h/day, so a 6-10 h code re-check takes 3-5 calendar days, and G14 sits on the phase 2 critical path (G14->G21->G24) with about 6 days of margin. The work and its calendar time are hidden.",
+        "The change was not needed to protect a milestone. G13 is a sink in phase 1, so it does not block G12, the 'phase 1 done' staging end-to-end. The honest statement was: G12 done by day 26, and the security review finishes about day 32, still well before the pilot that it gates. The dependency was rewritten to make the helper's single finish number fit.",
+        "It is disclosed in prose ('What the check changed', the G13 ticket Out line). That makes it partially transparent, but it is not costed."
+      ],
+      "related_H5_G24": "G24 (GA) was changed from depending on G22 (pilot quality iteration) to G21 for the same reason (74.58 d -> 61.25 d, reproduced). The design's GA graduation list does not include G22, so this is defensible. But it is a scope or risk decision presented as a dependency fix, and the cut line ('defer G22's second iteration if GA is at risk') no longer means anything."
+    },
+    "H1_O1_wait_0": {
+      "verdict": "PARTIAL",
+      "analysis": [
+        "The wait is approval latency from someone else (data-use sign-off), not request timing. 'Requested before day 1' does not make the approval arrive by the time G01 ends (0.3-0.8 h later).",
+        "The risk is disclosed: the plan says a 1-day wait gives 3 days and misses Friday.",
+        "Understated scope: O1 is described as blocking 'only G02's live check'. It also blocks G03 (10 live gold questions and the recorded dry run) and the live demo itself.",
+        "The precondition never became an action. The 'next prompt' goes straight to G01, with no 'send the O1 request today' step.",
+        "Mitigation the plan missed: the demo is a week away (Fri 2026-10-09 to Fri 2026-10-16) and the builder's 2 work days can be placed after approval. The real constraint is the calendar week, not 2 consecutive days."
+      ]
+    },
+    "H4_day6_fallback": {
+      "verdict": "PARTIAL",
+      "analysis": [
+        "The numbers reproduce, and the plan honestly leaves the YAML in the failing state (exit 1, 10.58 d) instead of rewriting it to pass. That is good.",
+        "The 9.81 d fit assumes both moves apply from day 0. The plan triggers the cut at a day-6 checkpoint, by which time Dev B is about 4 days into G03 and much of the propose_move work may be sunk. The real saving is smaller. The margin is only 0.19 d even in the best case.",
+        "Hidden customer risk: replacing move with 'cancel, then book' (two cards) can leave a customer with no appointment if the cancel succeeds and the new slot is then taken or the book fails. That is the very harm G03 exists to prevent. The plan says each cut leaves 'a working product' and does not mention this risk or a book-new-then-cancel-old ordering.",
+        "The G09 wait of 0-0.5 from pre-booking the salon manager walkthrough is reasonable, and it was turned into an action in 'Resume here' (book for day 9)."
+      ]
+    }
+  },
+  "R3_review_sizing_H5": {
+    "verdict": "PASS (weak gradient)",
+    "ratios_review_over_hands_on": {
+      "G03 auth/session ownership": "0.40-0.42",
+      "G15 production IAM": "0.42-0.43",
+      "G06 ledger/exactly-once write": "0.43",
+      "G14 production Guidewire write + Sec re-check": "0.36-0.39",
+      "G08 adversarial suite/guards": "0.43-0.45",
+      "G23 pen test": "0.50",
+      "G16 screening/erasure": "0.36-0.41",
+      "G13 security review (review is the work)": "0.20-0.25",
+      "G05 photo upload/analysis": "0.38-0.42",
+      "G04 agent + draft tools": "0.33-0.36",
+      "G12 E2E": "0.43-0.50",
+      "G10 staging deploy/config": "0.28-0.29",
+      "G11 widget": "0.28-0.29",
+      "G18 SLOs/dashboards": "0.31-0.33",
+      "G17 CI gate/rollback": "0.33",
+      "G19 surge": "0.33",
+      "G20 load test": "0.33-0.40",
+      "G09 data map docs": "0.25",
+      "G25 UX polish": "0.25-0.26",
+      "G01/G02 discovery": "0.17-0.25",
+      "G07/G21/G22 eval/labelling": "0.17-0.27"
+    },
+    "assessment": "The ordering is right: authorization, exactly-once and security goals sit at 0.40-0.50, while templates, config, dashboards and UI sit at 0.25-0.33. The helper's flat-ratio warning does not fire. The gradient is shallow (about 1.5x). G14, the production exactly-once write that also absorbed the moved Sec re-check, is at 0.36-0.39: below G03/G15 and level with G20 load testing. That is inconsistent with it now carrying the code review that was moved from G13. G06's review of 12-18 h is reasonable in absolute terms."
+  },
+  "R4_proportionality_H1": {
+    "verdict": "PARTIAL",
+    "evidence": [
+      "One design+plan file of 117 lines and 1,709 words (the skill target is about 1,200, so 42% over), plus 3 tickets of about 1,070 words. That is about 2,800 words to read for a 6-hour job.",
+      "The schedule machinery itself is modest: a 28-line YAML block and a 2-line check result. But estimates now appear three times (YAML, per-goal prose, ticket front matter) with a 0.1 h hands_on/review split (for example, review 0.2-0.3 h). That is false precision for a POC.",
+      "Phase 2 has 4 costed goals plus a 'Later' list. That is useful but adds length.",
+      "The cut line and per-goal acceptance are clear and short. A builder can start in under 5 minutes."
+    ],
+    "small_issue": "The 25% reserve is 'for demo preparation and the dry run', but G03 also contains the recorded dry run. Planned work is conservatively double-counted."
+  },
+  "R5_manager_misleading": [
+    {
+      "id": "M1",
+      "severity": "high",
+      "scenarios": ["H4", "H5"],
+      "issue": "Calendar fit uses full focused rates (3.6 h/day in H4, 4.8 in H5) while the hours check uses reserve-adjusted capacity (81 of 108 h, 690 of 921 h). So the calendar silently spends the whole 25% reserve. With reserve-adjusted rates (H4 2.7 h/day; H5 3.6 h/day, Sec 1.44): H4 finishes 7.78-13.78 d against 10; H5 phase 1 21.67-34.44 d against 30 (new chain G04->G08->G13); H5 phase 2 45.22-75 d against 67. All are low end only. H4's REPORT admits this ('the calendar check consumes the reserve'), but the plan does not say it, and its per-person table shows 36 h each (108 total) beside an 81 h phase capacity. H1 is consistent (1.8 h/day includes the reserve)."
+    },
+    {
+      "id": "M2",
+      "severity": "high",
+      "scenarios": ["H5"],
+      "issue": "'Exit status 0 for both phases' is presented as validation after G13 and G24 dependencies were rewritten to pass. Sec's moved G06 re-check has no hours or calendar time, on a phase 2 critical path with only 6 days of margin."
+    },
+    {
+      "id": "M3",
+      "severity": "medium",
+      "scenarios": ["H5"],
+      "issue": "'Phase 1 uses well under half of the reserved capacity' is false at the high end (61%)."
+    },
+    {
+      "id": "M4",
+      "severity": "medium",
+      "scenarios": ["H4"],
+      "issue": "The fallback fit (9.81 d) assumes the cuts apply from day 0, but they are triggered on day 6. The 'cancel then book' move substitute can lose a customer's appointment, which is not stated."
+    },
+    {
+      "id": "M5",
+      "severity": "low",
+      "scenarios": ["H1"],
+      "issue": "O1 approval is described as blocking only G02's live check. It blocks G03 and the live demo. The wait of 0 rests on an approval nobody has been asked to send yet."
+    }
+  ],
+  "summary_table": {
+    "R1": {"H1": "PASS", "H4": "PASS", "H5": "PASS on helper figures; FAIL on the 'well under half' prose"},
+    "R2": {"H5_G13": "FAIL", "H1": "PARTIAL", "H4": "PARTIAL"},
+    "R3": "PASS (weak gradient; G14 under-reviewed)",
+    "R4": "PARTIAL",
+    "R5": "FAIL (reserve double-use in H4/H5; G13 hidden work)"
+  }
+}

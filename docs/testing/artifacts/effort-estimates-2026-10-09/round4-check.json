@@ -1,0 +1,47 @@
+{
+  "round": 4,
+  "root": "scratchpad/est/after4",
+  "method": "Copied H1/H4/H5 to scratchpad/est/r4tmp; reran check_schedule.py with each plan's stated parameters; ran what-if variants on copies (reviewer hours, G23 out of phase 1, 1-week pilot); replayed the helper's list scheduler to find which goal sets each finish. Originals untouched.",
+  "helper_note": "--reserve defaults to 0.25, so the calendar always holds the reserve unless --reserve 0 is passed. All three plans pass it explicitly.",
+  "results": {
+    "F1_reserve_and_numbers": {
+      "H1": {"verdict": "FAIL (minor)", "evidence": "Rerun matches exactly: 2.5-3.5 h of 3.6 h; G01->G02->G03 1.39-1.94 of 2 days; --reserve 0.25 used. But the plan says 'The reserve covers the demo rehearsal' and Day 2 is 'G03 and a rehearsal'. That spends the reserve on planned work, so the overrun buffer is partly used up. Phase 2 prose says 'at this week's pace of 2.4 h a day, 14.5-28 working days'. The helper's rate is 1.8 h/day after reserve, and the high end is 28.33."},
+      "H4": {"verdict": "PASS", "evidence": "Rerun matches exactly: 60-94 h of 135 h; A 20-31, B 21-34, C 19-29 of 45; chain G01->G03->G10->G11 5.61/9 days; finish 6.94-9.89 of 10; exit 0. 'Margin a tenth of a day' is correct (0.11). The architecture shows the same figures."},
+      "H5": {"verdict": "PASS on numbers", "evidence": "All three reruns match the plan's quoted output exactly (phase 1 36.6-61.53 low end only; phase 2 33.8-48.33; whole programme 67.47-106.13; loads per person). The architecture repeats the same figures. See F6 for the mitigation claims that are not true."}
+    },
+    "F2_no_gaming": {
+      "H1": {"verdict": "PASS (n/a)", "evidence": "No failing run was reported, and there is no list of changes."},
+      "H4": {"verdict": "PASS (minor notes)", "evidence": "The plan lists 5 changes made after the failing run (7.39-12.11 days). The eval split (G06 labelling with no blocker, G10 keeps G02/G03/G06) and the deploy split (G07 foundation, G08 keeps G02) reflect the real work. Notes: (a) the splits add 0 h of integration even though G07->G08 hands work from Dev B to Dev C (H5 adds 4-10 h per split); (b) changes 3 and 4 cut scope (widget becomes a chat page; 5 salons become 1 pilot) yet sit under the heading 'these changes reflect the work itself'. They are marked as a cut line for the user to confirm."},
+      "H5": {"verdict": "PASS (gap)", "evidence": "The plan lists 9 changes. The splits add integration hours (6-10, 2-4, 4-6). The CIAM and G22 waits are kept. The G04 dependency moved to G03's trusted-state interface, and G24 still needs G04. Gap: two moved items do not show their hours moving with them: G05's live bucket check went to G16, and the dashboard and alert went from G17 to G26. Change 7 says the production Guidewire wait 'starts earlier' (day 1), but the helper schedules G22 at day 27.7 behind G07 for Eng D. The modelled schedule and the claim disagree. This is conservative, but it is not what the plan says."}
+    },
+    "F3_waits_owned_by_others": {
+      "H1": {"verdict": "FAIL (minor)", "evidence": "The approval to send confidential PDFs to Vertex AI is a company-policy wait. It is set to wait_days 0 ('ask today'). Ingest can start without it, but G02 and G03 need live calls on a 2-day calendar. There is no nonzero wait and no stated risk to the Friday demo beyond the API-key fallback, which needs the same approval."},
+      "H4": {"verdict": "PASS", "evidence": "The salon manager's approval of eval outcomes is 0.5-1 day on G06, which starts on day 1. The go-live agreement is 0.5-1 day. G07/G08/G11 'team go-ahead' is the team's own decision. Phase 2 pilot observation is 3-5 days."},
+      "H5": {"verdict": "PASS (minor)", "evidence": "Waits are realistic and requested on day 1: Guidewire sandbox 5-10, EU projects 3-5, DPO 20-30, production access 10-15 (as its own request goal G22), pen test 10-15 booked in G18, UX review 3-5. Minor: the CIAM staging client wait has no length and appears on no goal (G04 wait_days 0; G24 'none'). It is unmodelled rather than shown to be harmless."}
+    },
+    "F4_review_sizing": {
+      "H1": {"verdict": "PASS", "evidence": "Review/hands-on is 0.33 for G01 and G03, and 1.0 for G02 (checking citations by hand)."},
+      "H4": {"verdict": "PASS", "evidence": "G03 writes/exactly-once 0.5; G04 auth 0.5-0.6; G05 0.5; G09 0.33-0.5; G02 0.25-0.33; G10 0.25; G11 0.2-0.33."},
+      "H5": {"verdict": "PASS (note)", "evidence": "Identity G04 0.53-0.56, confirm binding G09 0.5-0.54, G14 0.42-0.45, setup and data work 0.16-0.3. Note: G10, the worker that actually dispatches the Guidewire create, is 0.36-0.375. That is below the photo upload G05 (0.44-0.47), although the plan says the Guidewire write gets heavier review."}
+    },
+    "F5_H1_proportionality": {
+      "verdict": "FAIL",
+      "evidence": "About 3,100 words to read for a 6 h job: the design and plan file has 1,877 and the three tickets about 1,230. REPORT itself says the compact target is about 1,200. Estimates are in quarter hours (0.5-0.75, 0.25), and calendar days are given to two decimals (1.39-1.94). Duplication: each ticket restates the plan's goal bullets (scope, acceptance, estimate). Phase 2 is both a YAML schedule with wait_days and a bullet list. It also gets a 14.5-28 day forecast, which is not needed for a Friday demo."
+    },
+    "F6_other_misleading_or_overengineered": [
+      {"case": "H5", "severity": "material", "issue": "The recommended fix for the GA slip does not work. The plan and design recommend option (a), raising the reviewer to about 4 h/day in weeks 8-12, because 'the critical chain runs through the reviewer'. A helper rerun with the reviewer at 4 h/day for the whole programme still finishes at 105.53 of 100 days, against 106.13 before: it recovers about 0.6 of the 6 days. The phase 1 finish stays at 61.53. Option (b) on its own gives 101.13, and (a)+(b) gives 100.53. Only (c), moving the GA date, closes the gap. The recommendation was never checked against the helper."},
+      {"case": "H5", "severity": "material", "issue": "'What moves if work runs high: G23 moves to phase 2' does not change the phase 1 finish. With G23 moved, the finish is still 36.6-61.53. The high end is set by G24 (Eng B), which waits on G14 (Eng E, path G02->G16->G14, ending at day 49.8). The reviewer passes G19 and G20 are not what sets it."},
+      {"case": "H5", "severity": "minor", "issue": "Line 79: 'If the security reviewer cannot reach 4 h/day, Eng A is the natural second reader for G19.' The capacity assumes 2 h/day. Also, G19 reviews G13, which Eng A owns, so this breaks the plan's own rule in the next sentence that a review needs a reader independent of the author."},
+      {"case": "H5", "severity": "minor", "issue": "Over-engineering of the schedule: REPORT says the agent wrote a throwaway exhaustive search over owner assignments to show that 61.5 days is the floor. The finish also depends on the order the helper's list scheduler picks goals."},
+      {"case": "H4", "severity": "minor", "issue": "About 15.7k words (plan 6,951 + design 4,731 + tickets about 4,100) for a 2-week MVP. The G01-G11 sections in the plan are nearly copied into the tickets."},
+      {"case": "helper", "severity": "minor", "issue": "--reserve defaults to 0.25, so 'reserve used' can be true by default even when no one intended it. --capacity is still computed by hand (people x days x h x (1 - reserve)), although the helper has all the inputs."}
+    ]
+  },
+  "top_remaining_defects": [
+    "H5: the recommended fix for the GA slip (reviewer to 4 h/day) recovers about 0.6 of 6 days in the helper, and moving G23 changes nothing. The mitigations shown to the decision-makers are untested and wrong.",
+    "H1: still out of proportion for 6 h (about 3,100 words, quarter-hour and hundredth-of-a-day precision, duplicated tickets, a scheduled phase 2), and the reserve is spent on the planned rehearsal.",
+    "H1: the data-governance approval for Vertex AI is a zero-day wait on a 2-day calendar.",
+    "H5: moved checks (bucket check to G16, dashboard to G26) do not show their hours; the G22 'day-1' request is modelled at day 27.7; the suggested G19 reader breaks the plan's own independence rule.",
+    "H4: goal splits carry no integration or handoff hours; scope cuts are listed as 'true of the work'."
+  ]
+}

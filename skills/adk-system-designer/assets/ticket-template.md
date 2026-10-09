@@ -8,7 +8,12 @@ supporting_skills: [<only those this goal's boundaries need>]
 blocked_by: [<goal IDs or open decisions, empty when ready>]
 phase: <1, 2 or later>
 profile: <proof of concept / assignment / internal tool / MVP or pilot / production>
-estimate: <focused-hour range>
+estimate:                # human hours, agent-assisted
+  hands_on: <range, e.g. 1-2>
+  review_and_verify: <range>
+  total: <range>
+  calendar_waits: <none, or what and how long>
+owner: <person or role, when several people share the work>
 status: ready
 ---
 
@@ -38,9 +43,10 @@ integration or authorised live>.
 ## Evidence
 
 <Filled in by the agent that carries the ticket out: files changed, commands
-run with results, controls deliberately deferred, what remains unverified, and
-whether the work proved larger than its estimate. Leave empty when writing the
-ticket.>
+run with results, controls deliberately deferred, what remains unverified, the
+human review and verification still owed (hours, and what to check), steps only
+a person can do, and whether the work proved larger than its estimate. Leave
+empty when writing the ticket.>
 
 ## Run this ticket
 

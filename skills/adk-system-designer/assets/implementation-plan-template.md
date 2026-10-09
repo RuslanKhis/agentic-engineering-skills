@@ -18,14 +18,38 @@ Keep credentials and private resource identifiers out of a shared artifact.
 Profile: <proof of concept / assignment / internal tool / MVP or pilot /
 production>, linked to the design's delivery constraints.
 
-| Phase | Delivers | Goals | Estimate (focused hours) | Capacity and reserve |
+| Phase | Delivers | Goals | Human hours, agent-assisted (range) | Capacity and reserve |
 | --- | --- | --- | --- | --- |
 | 1, ship | <the profile's "done"> | <G01 to G0n> | <range> | <people × hours × focus; reserve> |
 | 2, harden or graduate | <graduation conditions for the next audience> | <IDs> | <range> | <when the team has time> |
 
-Estimates are assumptions for the stated team; record actual effort in each
-goal's evidence and move the cut line when phase 1 runs over. If time may run
-out early, the goals are ordered so each completed one is still useful.
+Estimates are person-hours of human effort with a coding agent (hands-on plus
+review and verify), assumptions for the stated team. Calendar waits (reviews,
+grants, provider verification) are listed on their goals, not added to hours.
+With several people, add a load table:
+
+| Person or role | Goals | Hours | Their capacity |
+| --- | --- | --- | --- |
+
+Schedule block, the single machine-readable source of each estimate (the
+designer's `scripts/check_schedule.py` reads it; tickets copy it):
+
+```yaml
+- goal: G01
+  phase: 1
+  hands_on: 1-2          # human hours, agent-assisted
+  review: 0.5-1
+  total: 1.5-3
+  owner: Dev A
+  blocked_by: []
+  calendar_waits: none   # or what, e.g. security review
+  wait_days: 0           # working days the wait adds, as a range if unsure
+```
+
+Longest dependent chain and finish range: <from the schedule check, with the
+command and date it was run>. Record effort in each goal's
+evidence and move the cut line when phase 1 runs over. If time may run out
+early, the goals are ordered so each completed one is still useful.
 
 ## Implementation map
 
@@ -37,7 +61,7 @@ Explain ordinary application enforcement alongside framework/service choices.
 
 ## Goals and dependencies
 
-| ID and goal | Phase | Type: discovery / implementation | Estimate | Depends on | Primary skill | State / blocker |
+| ID and goal | Phase | Type: discovery / implementation | Human hours | Depends on | Primary skill | State / blocker |
 | --- | --- | --- | --- | --- | --- | --- |
 
 Use stable IDs and readable names. State may be proposed, ready, blocked,
@@ -47,7 +71,9 @@ goals coarse when an unresolved decision could change their scope.
 
 ### G01 — <first useful behavior or precise decision>
 
-- **Phase and estimate:** <1, 2 or later; focused-hour range for the stated team>
+- **Phase and estimate:** <1, 2 or later>; human hours, agent-assisted:
+  hands-on <range>, review and verify <range>, total <range>; calendar
+  waits <none, or what and how long>; owner <person or role>
 - **Outcome and linked decisions:** <what changes for the user; design links>
 - **Scope:** <included behavior and excluded follow-up work>
 - **Depth:** <profile depth for the concerns this goal touches; the floor it

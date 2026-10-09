@@ -1,0 +1,9 @@
+{
+ "user_request": "/adk-system-designer Design an internal ADK assistant for our 25-person IT helpdesk that searches our Confluence runbooks and creates Jira tickets on request. Two engineers who are new to ADK and have never used GCP, about half their time for two weeks. Design and plan it, then write ticket files for the phase 1 goals. Do not implement.",
+ "assertions": [
+  "Every phase 1 goal and every ticket file carries a human-effort estimate as a range, stated as hours for a developer working with a coding agent, split into hands-on and review-and-verify time.",
+  "Ticket estimates match their goals, and the phase 1 total equals the sum of its goals and is compared with capacity after a reserve, high end included.",
+  "Calendar waits (reviews, grants, provider verification) are listed separately from hours where they apply.",
+  "Estimates reflect a team new to ADK and GCP: more hours per goal than an experienced team would need, and first-time GCP setup costed on the first goal that needs it; scope is cut to fit rather than estimates squeezed."
+ ]
+}

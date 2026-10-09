@@ -1,0 +1,44 @@
+{
+  "A": {
+    "assertions": [
+      {"id": 1, "result": "partial", "reason": "Every goal (plan table) and ticket (frontmatter 'estimate: 3-5 h' etc.) has a range, but only as 'focused h'; never split into hands-on vs review-and-verify and never framed as a developer working with a coding agent."},
+      {"id": 2, "result": "pass", "reason": "Ticket estimates equal plan goal estimates for G00-G07; plan says phase 1 '65 to 94' which equals the sum, compared with 126 focused h less 30 h reserve = 96, 'fits at the high end, with little margin'."},
+      {"id": 3, "result": "partial", "reason": "No separate calendar-wait field; waits appear only inline (C 'requests the GCP and Secret Manager access' days 1-2, G07 blocked_by 'user authorization', G03 waits on 'A6 answer')."},
+      {"id": 4, "result": "partial", "reason": "'Who could take which' table gives Dev A/B/C goals and hour ranges, but no per-person capacity is stated, Dev A's range is misstated (23-31 vs actual 21-31), and the limiting dependency chain is not named, only a day-by-day calendar."}
+    ],
+    "arithmetic": "Phase 1 goals: G00 3-5, G01 8-10, G02 14-20, G03 8-12, G04 12-18, G05 6-9, G06 4-6, G07 10-14. Sum = 65-94, which matches the stated 65-94. Capacity is 3x10x7x0.6 = 126; minus 30 h reserve = 96 >= 94, so it fits by 2 h. All 8 ticket estimates match their goals. Per person: Dev A G00+G02+G06 = 21-31 (stated 23-31: low end wrong by 2); Dev B G01+G03+G05 = 22-31 (correct); Dev C G04+G07 = 22-32 (correct). Implied per-person capacity is 96/3 = 32, never stated; Dev C's high end equals it exactly. Chain: Dev A runs G00 -> G02 -> G06 serially (up to 31 h), and G07 (Dev C, 10-14 h) needs G02 and G06, so the high-end chain is about 45 focused h. At 4.2 focused h/day that is about 10.7 days, more than the 10-day window. The plan's calendar ('G02 days 3-6', 'G06 days 7-8', 'production day 9') does not check this.",
+    "scores": {"estimate_coverage": 3, "consistency": 4, "plausibility": 4, "waits_and_risks": 3, "usability": 3},
+    "least_believable_estimate": "G05 6-9 h for 20-25 live eval cases plus fixing prompt failures, for a team new to ADK (the rest are reasonable to generous)."
+  },
+  "B": {
+    "assertions": [
+      {"id": 1, "result": "pass", "reason": "Every plan goal and ticket frontmatter has 'human hours, agent-assisted' with hands_on, review_and_verify, total and calendar_waits ranges (e.g. G05 hands_on 4-6, review 6-10, total 10-16)."},
+      {"id": 2, "result": "pass", "reason": "All 10 ticket totals equal the plan's goal hours; phase 1 '54-86 (58-94 if G04 is needed)' equals the sum, compared with 126 h at 25% reserve, about 95 h, high end included."},
+      {"id": 3, "result": "pass", "reason": "There is a calendar_waits field per goal: G10 'privacy-notice update and salon-owner sign-off (start day 1); Vertex quota check'; G04 ticket 'the booking API's normal release'. Minor: the plan's G04 line says 'waits none'."},
+      {"id": 4, "result": "partial", "reason": "The person table gives load against 'about 32' each and flags Dev C 'over at the high end'. But the named 'longest dependent chain' (G02->G05->G09->G10, 19-28 h) is shorter than Dev C's real chain G01->G06->G07->G10 (25-39 h)."}
+    ],
+    "arithmetic": "Phase 1 goals: G01 3-5, G02 4-7, G03 4-7, G04 4-8 (conditional), G05 10-16, G06 8-12, G07 6-10, G08 3-5, G09 8-12, G10 8-12. Sum without G04 = 54-86 and with G04 = 58-94, both matching the stated figures. Capacity is 126 x 0.75 = 94.5, about 95, so the high end of 94 fits by about 1 h. On every goal, hands_on + review equals the total. All 10 ticket estimates match their goals. Per person: Dev A 3-5 + 4-7 + 10-16 = 17-28 (correct); Dev B 4-7 + 3-5 + 8-12 = 15-24, or 19-32 with G04 (correct); Dev C 8-12 + 6-10 + 8-12 = 22-34 (correct, and flagged as over 32). Chain: the stated 19-28 h understates. G10 also depends on G06 and G07, so G01 (3-5) -> G06 (8-12) -> G07 (6-10) -> G10 (8-12) = 25-39 h. That is about 6-9.3 days at 4.2 focused h/day: it still fits in 10 days but with almost no slack at the high end. Inconsistency: the G04 calendar wait is 'none' in the plan but 'the booking API's normal release' in the ticket.",
+    "scores": {"estimate_coverage": 5, "consistency": 4, "plausibility": 3, "waits_and_risks": 5, "usability": 4},
+    "least_believable_estimate": "G02 4-7 h total (hands-on 1.5-3 h) for the agent factory, instruction, 4 read tools, a 5-salon fake API and scripted-model tests, for a team new to ADK, while claiming '×1.5 for a team new to ADK' is already included. G05 at 10-16 h for the full ledger, executor, concurrency and reconciliation is also lean."
+  },
+  "preference": "B",
+  "reasons": [
+    "B gives every goal and ticket the hands-on / review-and-verify / total / calendar-waits split as agent-assisted human hours, and the figures add up throughout. A gives only one 'focused h' range per goal, with no review split and no wait field.",
+    "B states each person's capacity (about 32), flags Dev C's overload, names a dependency chain and lists the real calendar waits (privacy notice, owner sign-off, booking API release). A has no per-person capacity, misstates Dev A's load and never checks that its serial chain may exceed two weeks. A's hours are somewhat more believable, but that does not outweigh these gaps."
+  ],
+  "notable_defects": {
+    "A": [
+      "There is no hands-on vs review-and-verify split, and estimates are never framed as agent-assisted.",
+      "Dev A's load is stated as 23-31 h, but G00+G02+G06 = 21-31.",
+      "Per-person capacity is never stated, and Dev C's high end equals the implied 32 h exactly.",
+      "There is no explicit dependency chain. At the high end, G00->G02->G06 (Dev A) and then G07 is about 45 focused h, about 10.7 days, which does not fit two weeks. The calendar does not catch this.",
+      "Calendar waits (GCP access, user authorisation, the A6 answer) are only implicit."
+    ],
+    "B": [
+      "The named longest chain (19-28 h) is wrong. G01->G06->G07->G10 on Dev C is 25-39 h.",
+      "The G04 calendar wait is 'none' in the plan but 'the booking API's normal release' in the ticket.",
+      "Several estimates look lean for a team new to ADK even with an agent: G02 4-7 h, G05 10-16 h, G10 8-12 h.",
+      "Phase 1 high end with G04 (94 h) leaves about 1 h against the 95 h after reserve."
+    ]
+  }
+}

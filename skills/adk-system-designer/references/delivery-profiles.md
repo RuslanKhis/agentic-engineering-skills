@@ -97,9 +97,113 @@ real data or outside people. Those conditions become the next phase's goals.
 
 ## Check the plan fits the people
 
-Estimate each goal as a range of focused hours for the team's stated
-familiarity, and label the estimates as assumptions. Compare phase 1 with the
-capacity:
+### Estimate human effort per goal
+
+An estimate is the person-hours of human effort for a developer working with a
+coding agent and these skills. It is not the agent's run time, and not the time
+to type the code by hand. Give every goal and ticket a range in two parts:
+
+- **Hands-on:** reading the goal, the decisions only a person can make,
+  accounts, keys, GCP projects, IAM and OAuth clients, gathering or labelling
+  data, judging model output on real inputs, demo preparation, conversations
+  with stakeholders.
+- **Review and verify:** reading the agent's change, running the tests and the
+  application, checking the acceptance cases by hand, fixing what review finds.
+
+Round to quarter hours for a proof of concept and whole hours above it; finer
+splits suggest a precision the estimate does not have. Size review to the
+change, not by a fixed ratio: an authorization boundary,
+a write to money or a security control needs a careful read and adversarial
+checks; a template, a configuration line or a test fixture needs a glance.
+
+A coding agent shortens code writing. It does not shorten console setup,
+labelling, judging output quality, debugging a live integration or waiting for
+someone's decision, so a goal made mostly of those costs nearly as much as
+it would without an agent.
+
+Record **calendar waits** separately, not as hours: a security review,
+an IAM grant from another team, provider app verification (Google's
+verification of restricted Gmail scopes takes weeks), a DPIA sign-off. A wait
+blocks a goal's start or finish; it does not consume capacity. Put it on the
+goal and start it early.
+
+Starting points for an experienced ADK developer, agent-assisted, hands-on
+plus review. Label them as assumptions and adjust to the project:
+
+| Slice | Human hours |
+| --- | --- |
+| Local `LlmAgent` with one or two function tools and offline tests | 1–2 |
+| A tool against a real API, with confirmation and actionable error results | 2–4 |
+| Retrieval over a small document set, checked against a few gold questions | 3–6 |
+| Per-user identity through existing SSO, with cross-user denial tests | 4–8 |
+| Delegated per-user OAuth with consent, refresh and disconnect | 8–16, plus provider verification wait |
+| Evaluation set of 20 to 50 labelled cases with a runner (mostly labelling) | 4–8 |
+| First Cloud Run deployment with a service account and secrets | 3–6 |
+| Evaluation gate in CI | 3–6 |
+
+For a team new to ADK, multiply by about 1.5. State the multiplier once in
+the plan and apply it to every goal, hands-on and review alike, rather than
+to some. For a team new to GCP, add a day for the first project, billing, IAM
+and deployment, on the first goal that needs them. A range whose high end is more than twice its low end hides an
+unresolved question: make that question a short discovery goal.
+
+Keep the numbers consistent. The plan's goal entry is the only source of each
+estimate and calendar wait: the phase total is the sum of its goals, each
+ticket copies its goal's figures and acceptance cases but links to the plan
+for the route and rationale instead of repeating them, and prose elsewhere refers to the goal ID
+instead of restating a number. With several people, assign goals to people and
+compare each person's load with their own hours. The phase cannot finish
+before its longest chain of dependent goals, nor before the busiest person
+works through their own goals in order; name whichever is longer, high end
+included, and compare it with the calendar.
+
+For one person on a proof of concept, add the goals by hand in the plan; the
+chain is the sum. With several people or several weeks, do not do this
+arithmetic in your head. Write the phase's goals into the
+plan's `yaml` schedule block (see the [plan template](../assets/implementation-plan-template.md)),
+then run the helper with the team's focused hours per day and the working days
+available:
+
+```bash
+python3 "$SKILL_DIR/scripts/check_schedule.py" --plan docs/plans/<topic>.md \
+  --tickets docs/tickets/<topic>/ --days <working days> \
+  --reserve 0.25 --person "Dev A=3.6" --person "Dev B=3.6"
+```
+
+Give each person's full focused hours per day; `--reserve` holds the same
+share back on the calendar as on the hours, so the reserve is not spent twice.
+
+It adds up the phase, compares every ticket with the plan, and reports each
+person's load, the longest dependent chain and a finish range in working days
+that respects dependencies, one goal at a time per person and calendar waits
+(`wait_days`). Exit status 1 means something does not fit or disagrees. Quote
+its figures in the plan instead of your own, including any comparison such as
+"half the capacity", and fix the plan or the cut line until the result is what
+you tell the user.
+
+When a run fails, change the plan only in ways that are true of the work: cut
+or move scope, add people, or extend the date. Do not remove a dependency,
+shorten a wait or drop a review to make the numbers fit. A wait that depends on
+someone else stays at its real length until they confirm otherwise; add a goal
+or first step that requests it today. When a review or check moves to another
+goal, its hours and calendar time move with it. List in the plan what you
+changed after a failing run and why; a passing run checks the arithmetic, not
+the assumptions. Run every remedy you offer for a slip (another person, more
+hours from a reviewer, a moved goal, a cut) as a what-if with the helper and
+quote the finish it gives; offer only remedies that close the gap. A negative
+claim ("more people would not help", "only a later date works") needs the same
+what-ifs: try splitting the goals on the longest chain and adding hours to the
+busiest person before saying it. State the assumptions a fallback depends on.
+
+The reserve is for overruns and surprises, not for planned work: a rehearsal,
+a demo dry run or a handoff between people is a goal or part of one, with its
+own hours. When work passes from one person to another, add the handoff hours
+to the receiving goal. If Python 3.11 or later is not
+available, say the schedule was not checked.
+
+### Compare with capacity
+
+Compare phase 1 with the capacity:
 
 - Capacity is people × available hours × a focus factor. Use about 0.6 for
   part-time or interrupted people and about 0.8 for a dedicated block such as
@@ -161,6 +265,10 @@ marking each section not applicable:
    primary skill, acceptance, run prompt), the capacity sum and cut line,
    phase 2 goals of one to three lines each, and the later list.
 6. **Open decisions and next prompt.**
+
+If the user asks for tickets, each stays under about 120 words: front matter,
+outcome, acceptance and run prompt, linking to the plan for everything else.
+Estimates are in quarter hours, added by hand; no schedule block or helper run.
 
 Failure tables, data-authority tables and observability sections appear only
 when the journey actually holds that risk, and then as two or three rows.

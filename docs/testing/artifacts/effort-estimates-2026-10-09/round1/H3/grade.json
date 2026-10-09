@@ -1,0 +1,44 @@
+{
+  "A": {
+    "assertions": [
+      {"id": 1, "verdict": "pass", "reason": "Plan column 'Human hours, agent-assisted'; each goal states 'Hands-on X, review and verify Y, total Z' and every ticket front matter has estimate.hands_on / review_and_verify / total ranges (e.g. G01 3-5 / 1-2 / 4-7)."},
+      {"id": 2, "verdict": "pass", "reason": "Tickets equal goals (4-7, 3-5, 4-7, 4-7); plan shows 'Phase 1: 4+3+4+4 = 15 to 7+5+7+7 = 26' against '36 h; 25% reserve (9 h) -> 27 h available', high end 26 <= 27."},
+      {"id": 3, "verdict": "pass", "reason": "'Calendar waits are listed on their goals and are not counted as hours'; G01 lists GCP project/billing and Atlassian bot waits (1-5 working days each), G03 lead labelling time, G04 Jira admin decision O4; tickets carry calendar_waits fields."},
+      {"id": 4, "verdict": "partial", "reason": "States 'base hours x 1.5 for a team new to ADK, plus GCP first-project setup on G01' and cuts hosting/IAP to phase 2 to fit; but G02 (first ADK agent, two tools, fakes, Runner tests) at hands-on 1-2 h / total 3-5 h and G04 confirmation state machine at hands-on 1-3 h look like experienced-team numbers."}
+    ],
+    "arithmetic": "Phase 1 goals: G01 4-7, G02 3-5, G03 4-7, G04 4-7; sum 15-26 = stated 15-26. Split check: G01 3-5+1-2=4-7, G02 1-2+2-3=3-5, G03 2-4+2-3=4-7, G04 1-3+3-4=4-7, all consistent. Capacity 2x0.5x10x6x0.6=36, reserve 9 -> 27; high end 26 fits. Tickets match goals exactly. Per person: Engineer A G02+G03 = 7-12 vs 13.5 (fits); Engineer B G01+G04 = 8-14 vs 13.5, 0.5 h over, correctly flagged with mitigation. Phase 2 sum 23-42 also checks. Design text says 'fits at the high end' which is slightly odd wording but numerically correct. No mismatches.",
+    "scores": {"estimate_coverage": 5, "consistency": 5, "plausibility": 3, "waits_and_risks": 5, "usability": 5},
+    "least_believable_estimate": "G02 Runbook answers with citations offline: 3-5 h total (1-2 h hands-on) for a team that has never used ADK to build the agent, two Confluence tools, fakes and scripted-Runner tests."
+  },
+  "B": {
+    "assertions": [
+      {"id": 1, "verdict": "partial", "reason": "Every goal and ticket has a range ('Estimate (focused h)', ticket 'estimate: 4-6 h' etc.) but no hands-on vs review-and-verify split and no explicit 'developer with a coding agent' framing."},
+      {"id": 2, "verdict": "partial", "reason": "Tickets match goals and 21-31 is the correct sum compared with 27 usable after 25% reserve; but the high end 31 exceeds 27, handled only by 'G04 moves to phase 2' fallback, and per-person load is not checked."},
+      {"id": 3, "verdict": "fail", "reason": "No separate calendar waits; prerequisites mention 'GCP project (user-owned)', 'bot account and API token (user to supply)', 'helpdesk@ group' with no wait durations or day-1 requests, and admin/IAM grant waits are absent."},
+      {"id": 4, "verdict": "partial", "reason": "G01 '4-6 h (includes first GCP project, IAM and ADC setup for a team new to GCP)' and Jira API create cut to phase 2; but first-ever Cloud Run + IAP (possibly via load balancer) in 6-8 h for GCP novices is squeezed, and phase 1 is kept at a high end over capacity rather than cut."}
+    ],
+    "arithmetic": "Phase 1 goals: G01 4-6, G02 8-11, G03 6-8, G04 3-6; sum 21-31 = stated 21-31. Tickets match goals. Capacity 36, reserve 9 -> 27; high end 31 exceeds by 4 h (acknowledged: 'fits only at the low/middle'). Fallback G01-G03 = 18-25, correct. Per person (suggested split): Engineer A G01+G03 = 10-14, Engineer B G02+G04 = 11-17 vs 13.5 each; Engineer B high end 3.5 h over, not reported anywhere. Design D4 says draft ~3-5 h while G04 is 3-6 h (minor mismatch).",
+    "scores": {"estimate_coverage": 3, "consistency": 3, "plausibility": 3, "waits_and_risks": 2, "usability": 3},
+    "least_believable_estimate": "G03 Colleagues use it behind IAP on Cloud Run: 6-8 h for engineers who have never used GCP, covering container deploy, service account, IAP group restriction (possibly external load balancer), log hygiene and deploy note."
+  },
+  "preference": "A",
+  "reasons": [
+    "A gives hands-on vs review-and-verify splits, explicit calendar waits with durations and day-1 requests, and per-person loads that it checks against capacity (flagging Engineer B's 0.5 h overrun); B has single-number ranges, no waits, and an unreported 3.5 h overrun for Engineer B.",
+    "A cuts scope (hosting/IAP moved to phase 2) so the phase 1 high end (26 h) fits 27 h after reserve; B keeps first-time Cloud Run+IAP in phase 1 with a 31 h high end over the 27 h available, relying on squeezed estimates."
+  ],
+  "notable_defects": {
+    "A": [
+      "G02 hands-on 1-2 h and G04 hands-on 1-3 h look low for a team new to ADK despite the stated x1.5 factor.",
+      "Design says phase 1 'fits at the high end', awkward wording for 26 of 27 h with no slack.",
+      "Final message estimates the critical path is admin waits but G01 owner is also carrying the over-capacity high end."
+    ],
+    "B": [
+      "No hands-on / review-and-verify split on any goal or ticket.",
+      "No calendar waits listed (GCP project/billing, Atlassian bot token, helpdesk@ group, IAM grants).",
+      "Phase 1 high end 31 h exceeds 27 h usable.",
+      "Per-person load not computed; Engineer B (G02+G04) 11-17 h vs 13.5 h.",
+      "Design D4 '~3-5 h' disagrees with G04 '3-6 h'.",
+      "Ticket run prompts reference filenames (G01-agent-answers-locally.md etc.) - consistent, but phase 1 includes first-time IAP hosting at 6-8 h."
+    ]
+  }
+}

@@ -227,7 +227,9 @@ with the prompt for the first goal. The plan is split into phases: phase 1
 fits the hours you have, phase 2 hardens or graduates it, and a later list
 keeps each deferred item with what would bring it forward, so you can ship
 first and continue when there is time. Every goal names its primary and
-supporting specialists, an estimate and its own run prompt.
+supporting specialists, an estimate of the human hours it needs when working
+with a coding agent (hands-on time plus reviewing and verifying the change,
+with waits such as security reviews listed separately), and its own run prompt.
 
 **2. Optionally turn goals into tickets.** One file per goal, for a tracker or
 for parallel sessions:
@@ -1581,6 +1583,30 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Human-effort estimates · 9 October 2026
+
+Every planned goal and ticket now carries the human hours it needs when
+working with a coding agent. The hours are split into hands-on time and time
+to review and verify the change, and waits such as security reviews are listed
+separately. A new helper, `check_schedule.py`, adds up the plan and checks
+tickets against it. It works out each person's load, the longest chain of
+dependent goals and a finish range in working days, so plans quote computed
+figures rather than mental arithmetic. The router flags a ticket whose
+estimate is clearly too small and records the review hours still owed.
+
+- **Blind comparison:** across six scenarios, a blind grader preferred the new
+  skills **every time** (132 against 92 points of 150; 20 of 24 assertions
+  passed against 5).
+- **Four repair rounds**, each checked by an independent recomputation, fixed:
+  - finish dates that ignored dependencies;
+  - a reserve counted twice;
+  - plans adjusted to make the numbers fit;
+  - overweight POC documents.
+
+Judgement in long production plans, such as whether a proposed remedy really
+closes a gap, is still imperfect. See the
+[measurement record](docs/testing/effort-estimates-2026-10-09.md).
 
 ### Delivery constraints · 9 October 2026
 

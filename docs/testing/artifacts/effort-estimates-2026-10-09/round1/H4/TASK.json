@@ -1,0 +1,9 @@
+{
+ "user_request": "/adk-system-designer We're three developers at a startup. We want to ship an MVP of an ADK booking assistant for a chain of five hair salons that books, moves and cancels appointments through our existing booking API, within two weeks, then keep improving it. Design and plan it, then write ticket files for the phase 1 goals and say who could take which. Design only.",
+ "assertions": [
+  "Every phase 1 goal and every ticket file carries a human-effort estimate as a range, stated as hours for a developer working with a coding agent, split into hands-on and review-and-verify time.",
+  "Ticket estimates match their goals, and the phase 1 total equals the sum of its goals and is compared with capacity after a reserve, high end included.",
+  "Calendar waits (reviews, grants, provider verification) are listed separately from hours where they apply.",
+  "Says who could take which ticket, with each person's load against their capacity and the dependent chain that limits parallel work."
+ ]
+}

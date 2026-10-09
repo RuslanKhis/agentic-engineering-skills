@@ -86,8 +86,11 @@ tool or pilot, roughly two to four pages; a production service, as long as its
 decisions require, with every template section either filled or marked not
 applicable with a reason.
 
-Estimate each goal in focused hours, check phase 1 against the team's capacity
-with a reserve, and cut scope rather than the floor when it does not fit. Show
+Estimate each goal and ticket in human hours for a developer working with a
+coding agent (hands-on plus review and verify, with calendar waits listed
+separately). Check phase 1 against the team's capacity with a reserve, and
+cut scope rather than the floor when it does not fit. Compute totals, loads
+and the finish range with `scripts/check_schedule.py` rather than by hand. Show
 the user the cut line between what ships now and what comes later, and ask
 them to confirm or move it. Write the later phases into the same plan so the
 work can continue when the team has time, without a new design conversation.

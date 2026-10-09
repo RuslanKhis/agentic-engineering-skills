@@ -1,0 +1,42 @@
+{
+  "A": {
+    "assertions": [
+      {"assertion": 1, "verdict": "fail", "reason": "Plan table and every ticket give a single range ('estimate: 120-180 h', 'focused hours (assumption, team new to ADK)'); there is no hands-on vs review-and-verify split and no statement that these are hours for a developer working with a coding agent."},
+      {"assertion": 2, "verdict": "pass", "reason": "All 20 ticket front-matter estimates equal the plan rows; the goals sum to 1,348-2,104, which equals the phase 1 total, compared with 2,232 h after a 25% reserve: 'Fits at the high end.' The per-role check also adds up."},
+      {"assertion": 3, "verdict": "fail", "reason": "No calendar-wait field or list. Waits appear only incidentally, such as design Q6 'sandbox tenant is available within three weeks' and G20's prerequisite 'DPIA sign-off', with no durations next to the hours."},
+      {"assertion": 4, "verdict": "partial", "reason": "G02 (Guidewire discovery) is 'ready' and in M0 in week 3, so Guidewire access starts early. But the DPIA appears only as a G20 GA gate with no early start, and security review is budgeted only as reviewer hours (48-68 of 72) rather than as a calendar wait."}
+    ],
+    "arithmetic": "Phase 1 goals: G01 40-64, G02 24-40, G03 16-24, G04 40-64, G05 64-100, G06 48-72, G07 48-80, G08 120-180, G09 100-160, G10 120-180, G11 64-100, G12 120-180, G13 80-120, G14 60-100, G15 48-80, G16 100-160, G17 64-100, G18 64-100, G19 48-80, G20 80-120. Sum = 1,348-2,104, matching the stated total. Capacity: 2,400 + 480 + 96 = 2,976; less the 744 h reserve that leaves 2,232, which is correct, and the high end fits with 128 h to spare. Per role: ML engineer 200-300 of 360 and security reviewer 48-68 of 72 both check; engineers get the remainder, 1,100-1,736 of 1,800, which checks. All 20 ticket estimates equal their plan goals. No mismatches found.",
+    "scores": {"estimate_coverage": 3, "consistency": 5, "plausibility": 3, "waits_and_risks": 2, "usability": 3},
+    "least_believable_estimate": "G01 walking skeleton at 40-64 h (and G05 at 64-100 h for four tools plus a draft table): these are sized like hand-written work by a team new to ADK, with no coding-agent assistance. Overall 1,348-2,104 h is believable without agents but looks inflated for agent-assisted work."
+  },
+  "B": {
+    "assertions": [
+      {"assertion": 1, "verdict": "pass", "reason": "Every plan goal reads 'human hours, agent-assisted: hands-on X, review and verify Y, total Z'. All 20 tickets carry estimate.hands_on / review_and_verify / total as ranges, and hands-on plus review equals the total in every case checked."},
+      {"assertion": 2, "verdict": "pass", "reason": "All 20 ticket totals equal the plan rows. The goal sum of 820-1,400 equals the stated phase 1 total and is compared with about 2,120 usable after a 25% reserve: 'It fits at the high end.' The per-person table also sums to 820-1,400."},
+      {"assertion": 3, "verdict": "pass", "reason": "Every goal and ticket has a separate calendar_waits field, for example G01 'Guidewire sandbox access ... (2-4 weeks); start in week 1', G16 'Guidewire allow-listing of the static egress IP (2-4 weeks)', and 'none' where none apply."},
+      {"assertion": 4, "verdict": "pass", "reason": "G01 Guidewire access (2-4 weeks) and G03 'DPO/legal review and DPIA sign-off (4-8 weeks); start in week 1' are both started early, and G14 'External pen test booking (3-6 weeks lead)' is scheduled for weeks 11-12. The plan states 'calendar waits are the schedule risk, not hours'."}
+    ],
+    "arithmetic": "Phase 1 goals: G01 30-50, G02 12-20, G03 16-28, G04 20-32, G05 24-40, G06 24-40, G07 30-50, G08 40-70, G09 60-100, G10 50-90, G11 40-70, G12 120-200, G13 40-70, G14 40-70, G15 24-40, G16 60-100, G17 40-70, G18 40-70, G19 30-50, G20 80-140. Sum = 820-1,400, matching the stated total. Capacity: 2,280 + 456 + 91 = 2,827, rounded to about 2,830; at 75% that is about 2,120, which is correct, and the high end fits with about 720 h unused. Per-person rows check exactly: E1 120-210, E2 114-192, E3 100-173, E4 114-190, E5 160-270, ML 152-260, security 20-35, whole team 40-70, totalling 820-1,400. Usable capacity is 342 each and 68 for the security reviewer, which is correct. One minor gap: the security reviewer's '+ ~10' review hours are outside the phase total. Critical chain G04 -> G06 -> G10 -> G11 -> G19 -> G20 = 254-422, which is correct. hands_on + review_and_verify = total in all 20 tickets. All ticket totals match the plan.",
+    "scores": {"estimate_coverage": 5, "consistency": 5, "plausibility": 4, "waits_and_risks": 5, "usability": 5},
+    "least_believable_estimate": "G06 versioned draft record, migrations, session DB and tools at 24-40 h, with review time set equal to hands-on time (12-20 / 12-20, the same pattern as G04, G05 and G15) and so looking formulaic. A manager might also question leaving about 35% of usable capacity unplanned, although the plan explains that the slack covers calendar waits."
+  },
+  "preference": "B",
+  "reasons": [
+    "B satisfies all four assertions. Every goal and ticket splits hands-on from review-and-verify time, is framed as agent-assisted, and has its own calendar_waits field, with the Guidewire (2-4 wk), DPIA (4-8 wk) and pen-test (3-6 wk) waits started in week 1 or booked ahead. A has single ranges, no hands-on/review split and no calendar-wait treatment.",
+    "B is easier to plan people's time from: named owners per goal, a per-person load table that sums exactly to the phase total, a critical-chain figure and a week-by-week calendar sketch. A gives only a per-role check and milestone weeks."
+  ],
+  "notable_defects": {
+    "A": [
+      "No hands-on vs review-and-verify split anywhere; estimates are not stated as coding-agent-assisted hours.",
+      "Calendar waits (Guidewire sandbox, DPIA sign-off, Legal copy, GCP project, security sign-off) are never listed with durations. The DPIA appears only as a G20 GA gate, with no early start.",
+      "The security reviewer sits at 48-68 of 72 usable hours with no slack, flagged only as 'Barely'."
+    ],
+    "B": [
+      "Review time is identical to hands-on time in several goals (G04, G05, G06, G15), which looks formulaic.",
+      "The security reviewer's '+ ~10' review hours are left outside the 820-1,400 sum.",
+      "About 720 usable hours are left unallocated and engineers are planned at roughly 33-80% of usable capacity. This is justified by the waits, but the plan does not say how idle time is used.",
+      "The G08 owner is 'ML engineer with E4' in the ticket but sits only under the ML engineer in the role table."
+    ]
+  }
+}
