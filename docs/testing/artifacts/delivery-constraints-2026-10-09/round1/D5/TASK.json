@@ -1,0 +1,10 @@
+{
+ "user_request": "/adk-system-designer I want to build an ADK agent that summarises our sales calls from Gong transcripts and updates the opportunity in Salesforce. Help me design it.",
+ "assertions": [
+  "Asks about the deadline and whether the work continues afterwards.",
+  "Asks how many people build it, their hours and their ADK/GCP familiarity.",
+  "Asks about the data touched and what the agent may change, and explains why that sets the risk.",
+  "Offers defaults the user can accept in one word and stops to wait instead of writing a full design.",
+  "Keeps the first reply short enough for a busy user to answer."
+ ]
+}

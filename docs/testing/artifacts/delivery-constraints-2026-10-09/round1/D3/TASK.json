@@ -1,0 +1,9 @@
+{
+ "user_request": "/adk-system-designer We're a three-person startup. We want to ship an MVP of a customer-facing ADK shopping assistant that recommends products from our catalogue and can place orders through our Shopify store within two weeks, then keep improving it when things are quieter. Design it and plan what goes into the MVP and what comes after. Design only.",
+ "assertions": [
+  "Names the profile as an MVP and fits phase 1 to three people for two weeks with estimates and a reserve.",
+  "Keeps order placement safe in the MVP: explicit customer confirmation and idempotent order creation are in phase 1 because they move money.",
+  "Writes the post-MVP work as phase 2 goals with skills and acceptance, plus a later list with triggers, so another session can continue without a new design conversation.",
+  "Orders phase 1 goals so each completed goal is still useful if time runs out."
+ ]
+}

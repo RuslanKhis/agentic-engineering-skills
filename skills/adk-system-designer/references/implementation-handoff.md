@@ -83,6 +83,12 @@ only for boundaries being changed. Acceptance exercises saving, restart, use
 in a new session, cross-user denial and forgetting. This can run locally with
 controlled external dependencies before selecting or provisioning cloud storage.
 
+Group goals into the phases of [delivery profiles](delivery-profiles.md#split-the-plan-into-phases):
+phase 1 fits the stated capacity, phase 2 graduates or hardens, and the later
+list keeps each deferred item with its trigger. A goal records its depth, so
+the agent that carries it out builds the floor and the profile's depth, not
+every control its specialist describes.
+
 Separate precise unresolved questions from build goals they block. A discovery
 goal should yield a decision or evidence artifact, with a stopping condition.
 Keep later work coarse when it depends on that answer. Choose the smallest

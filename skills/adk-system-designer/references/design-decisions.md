@@ -33,6 +33,8 @@ judged on five holdout predictions and a report needs the core judgment
 working on real inputs and one quality measurement; it does not need officer
 revisions, export acknowledgement, durable approval records or a hosting
 roadmap. A production service that changes money needs most of this file.
+For the people and hours behind those answers, the profile, the depth per
+concern and the phased plan, read [delivery profiles](delivery-profiles.md).
 
 **Proportionality rule.** When the artifact is judged on output quality, the
 first implementation slice is the core judgment end to end on real inputs,

@@ -2,6 +2,10 @@
 
 Status: draft / user-reviewed decisions recorded below
 
+For a proof of concept or a time-boxed assignment, use the compact form in
+[delivery profiles](../references/delivery-profiles.md#compact-form-for-short-work)
+instead of this full template.
+
 ## Purpose and constraints
 
 Summarize users, one concrete journey, its current friction, useful result,
@@ -9,18 +13,34 @@ non-goals and existing systems. Name the outcome to improve and any known baseli
 Separate confirmed requirements, observed repository facts and proposed assumptions.
 State what the model contributes and what ordinary code controls.
 
-## Scope, evaluator and deferred controls
+## Delivery constraints, depth and deferred controls
 
 | Scope-gate answer | Value |
 | --- | --- |
-| Time and money available | <hours or days; spending allowance and its reserve for the deliverable> |
-| Who judges the result and what they read | <reviewer; predictions, report, demo or running service> |
-| Artifact type | exploration / assignment / pilot / production |
+| First useful version due, and what happens after it | <date or hours; thrown away / continued / launched> |
+| People and hours | <who builds it, hours each, ADK/GCP familiarity; who runs it afterwards> |
+| Money | <model and cloud allowance; reserve for the deliverable> |
+| Users or judge, and what they read | <builder, demo audience, colleagues, customers; demo, predictions, report, running service> |
+| Data touched and effects allowed | <synthetic / internal / personal / regulated; read only, drafts, writes, money, messages> |
+| Delivery profile | proof of concept / assignment / internal tool / MVP or pilot / production, and why |
 
-List, explicitly, the controls this design chooses not to build yet and why:
+Depth per concern the journey touches (build now, minimal, defer):
+
+| Concern | Depth now | Trigger that raises it |
+| --- | --- | --- |
+
+Floor kept at this profile: <no secrets in code or prompts; spend stop;
+human approval before irreversible or outside-visible effects; scoped real
+data; pinned model>. Accepted risks, if any, with owner and end condition.
+
+Who may use it, on what data, and the graduation conditions before more users,
+real data or outside people:
 
 | Deferred control | Why it waits | What would bring it forward |
 | --- | --- | --- |
+
+Capacity and cut line: <capacity in focused hours, phase 1 estimate, reserve;
+what ships in phase 1 and what waits>.
 
 When the artifact is judged on output quality, the first slice is the core
 judgment end to end on real inputs with a measured result; deferred controls

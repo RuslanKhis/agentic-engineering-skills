@@ -216,9 +216,18 @@ I have <time and budget>; <who> will judge it as an <exploration, assignment,
 pilot or production service>. Design only.
 ```
 
+It first asks how much time, how many people and how much money there are,
+who will use or judge the result, and what data it touches. A five-hour demo,
+an internal tool for colleagues and a regulated production service get
+different designs: it says which concerns are built now, which stay minimal
+and which wait, and keeps a small safety floor even in a proof of concept.
+
 It saves `docs/architecture/<topic>.md` and `docs/plans/<topic>.md`, and ends
-with the prompt for the first goal. Every goal names its primary and
-supporting specialists and carries its own run prompt.
+with the prompt for the first goal. The plan is split into phases: phase 1
+fits the hours you have, phase 2 hardens or graduates it, and a later list
+keeps each deferred item with what would bring it forward, so you can ship
+first and continue when there is time. Every goal names its primary and
+supporting specialists, an estimate and its own run prompt.
 
 **2. Optionally turn goals into tickets.** One file per goal, for a tracker or
 for parallel sessions:
@@ -356,6 +365,11 @@ Use this to design a new ADK/GCP application, rethink an existing architecture,
 or review decisions that span several parts of the system. It asks a few useful
 questions at a time, explains trade-offs and helps choose the smallest architecture
 that meets your requirements.
+
+It sizes the design to the team: a proof of concept, an internal tool, an MVP
+and a production service each get a different depth per concern, a capacity
+check against the people and hours available, and a phased plan with a cut
+line you confirm.
 
 It explains important decisions as **requirement → design choice → reason →
 tradeoff → verification**: what you need, what it proposes, why it fits, what
@@ -1567,6 +1581,21 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Delivery constraints · 9 October 2026
+
+The designer now asks how much time, how many people and how much money there
+are, and what data the agent touches, before sizing anything. It plans a proof
+of concept, an internal tool, an MVP and a production service at different
+depths, keeps a small safety floor in all of them, checks phase 1 against the
+team's hours and writes later phases for when the team has time. The router
+builds a goal at its stated profile and records what it deliberately left out.
+In seven fresh-session scenarios, from a five-hour solo demo to a four-month
+bank launch, a blind grader preferred the new skills **every time** (159
+against 126 points of 175; 26 of 30 pre-registered assertions passed against
+7). A second round shortened proof-of-concept documents by about half. See the
+[measurement record](docs/testing/delivery-constraints-2026-10-09.md) for
+the scenarios and limits.
 
 ### Fresh-session before/after · 9 October 2026
 

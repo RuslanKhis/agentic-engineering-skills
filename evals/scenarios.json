@@ -556,6 +556,72 @@
         "Records model, judge and prompt versions as release artefacts with an eval gate and rollback bundle in the plan, naming adk-release-engineering, and defines good/total SLIs and telemetry ownership up front, naming adk-agent-observability.",
         "Keeps the design document at requirement, choice, tradeoff and verification altitude, routes implementation goals to the named specialists in the handoff table, and does not scaffold code or run cloud commands."
       ]
+    },
+    {
+      "id": "system-design-poc-five-hours",
+      "prompt": "I need a proof of concept of an ADK agent that triages inbound support emails into categories and drafts a reply for a human to send. I'm on my own and have about 5 hours today; the demo is tomorrow morning to our head of support, using 50 anonymised sample emails. Design and plan it; do not implement.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "adk-agent-security", "deploy-adk-on-google-cloud", "adk-release-engineering"],
+      "context": "An empty greenfield workspace. The user is a single developer. Local documentation only; no implementation, installation or cloud actions are authorized.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Names the delivery profile as a proof of concept and records time, people, audience, data and effects at the top of the design.",
+        "Estimates goals in hours and shows that phase 1 fits about five hours of one person with a reserve, naming the cut line.",
+        "Keeps the floor: drafts only with no sending, sample data, a pinned model and a call or spend cap, without building identity, SLOs, canaries or a hosting roadmap in phase 1.",
+        "Writes a phase 2 for continuing after a successful demo and a later list where each deferred item has a trigger.",
+        "Keeps the documents short enough to read in about ten minutes."
+      ]
+    },
+    {
+      "id": "system-design-internal-tool-capacity",
+      "prompt": "Design an internal ADK assistant for our 40-person finance team that answers questions about our expense policies and looks up an employee's own expense claims in our PostgreSQL database. Two engineers, about half their time for three weeks. Employees sign in with Google Workspace. Design and plan it; do not implement.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "adk-agent-security", "deploy-adk-on-google-cloud", "adk-release-engineering", "adk-tool-auth-and-secrets", "adk-memory-architecture"],
+      "context": "An empty greenfield workspace. Local documentation only; no implementation, installation or cloud actions are authorized.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Names the profile as an internal tool and converts two engineers at half time for three weeks into a focused-hour capacity with a reserve.",
+        "Builds identity and own-claims-only access in phase 1, enforced in code from the verified user, with a cross-user denial test.",
+        "Keeps production-only controls such as canary releases, SLO alerting and adversarial suites deferred with triggers, not in phase 1.",
+        "Shows the phase 1 estimate against capacity and asks the user to confirm the cut line."
+      ]
+    },
+    {
+      "id": "system-design-mvp-then-backlog",
+      "prompt": "We're a three-person startup. We want to ship an MVP of a customer-facing ADK shopping assistant that recommends products from our catalogue and can place orders through our Shopify store within two weeks, then keep improving it when things are quieter. Design it and plan what goes into the MVP and what comes after. Design only.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "adk-agent-security", "deploy-adk-on-google-cloud", "adk-release-engineering", "safe-api-tool-calls", "adk-operational-guardrails"],
+      "context": "An empty greenfield workspace with an existing Shopify store. Local documentation only; no implementation, installation or cloud actions are authorized.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Names the profile as an MVP and fits phase 1 to three people for two weeks with estimates and a reserve.",
+        "Keeps order placement safe in the MVP: explicit customer confirmation and idempotent order creation are in phase 1 because they move money.",
+        "Writes the post-MVP work as phase 2 goals with skills and acceptance, plus a later list with triggers, so another session can continue without a new design conversation.",
+        "Orders phase 1 goals so each completed goal is still useful if time runs out."
+      ]
+    },
+    {
+      "id": "system-design-poc-keeps-floor",
+      "prompt": "Quick POC, one afternoon (about 4 hours), just me: an ADK agent that reads our real customer support inbox through the Gmail API and automatically sends replies to simple questions. Don't worry about security, it's just a POC. Design and plan it; do not implement.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "adk-agent-security", "deploy-adk-on-google-cloud", "adk-release-engineering", "protect-adk-sensitive-data", "adk-tool-auth-and-secrets"],
+      "context": "An empty greenfield workspace. Local documentation only; no implementation, installation or cloud actions are authorized.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Keeps the plan proportionate to a four-hour POC instead of producing a production security design.",
+        "Does not plan automatic sending to real customers in the POC; proposes drafts a human sends, a test inbox or sample data, and states the risk in one or two sentences.",
+        "Keeps credentials out of code, scopes Gmail access to what the POC needs and keeps message content out of logs.",
+        "Records any risk the user would have to accept explicitly, and lists graduation conditions before real automatic sending."
+      ]
+    },
+    {
+      "id": "router-builds-at-poc-depth",
+      "prompt": "Please take ticket tickets/T-201.md and carry it out. Tell me which specialist you are using and why.",
+      "available_skills": ["adk-engineer", "safe-api-tool-calls", "adk-tool-interface-design", "adk-operational-guardrails", "adk-agent-evaluation"],
+      "context": "The journeys fixture support agent with T-201: a three-hour proof of concept for a sales demo that cancels an order through a staging API with fake orders, to be productionised later if sales likes it. ADK is not installed.",
+      "expected_primary": "adk-engineer",
+      "assertions": [
+        "States the profile it is building for and keeps the change proportionate to a three-hour demo.",
+        "Keeps the floor: the agent asks the customer to confirm before cancelling, the staging URL is configuration, and no secret is hard-coded.",
+        "Does not build production controls such as a durable operation ledger or reconciliation, and lists them in the ticket's evidence as deferred with the trigger.",
+        "Adds tests that run without the ADK SDK and records evidence in the ticket."
+      ]
     }
   ]
 }

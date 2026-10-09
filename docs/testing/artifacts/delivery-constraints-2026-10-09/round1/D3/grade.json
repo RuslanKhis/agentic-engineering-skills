@@ -1,0 +1,29 @@
+{
+ "A": {
+  "assertions": [
+   {"assertion": 1, "result": "pass", "reason": "plan 'Delivery profile and capacity': 'Profile: MVP', 3x25h x2wk x0.6 = ~90h, 25% reserve -> ~68h, phase 1 D01+G01-G07 estimated 57-79h with per-goal hour ranges and a day-6 cut rule."},
+   {"assertion": 2, "result": "pass", "reason": "Design D3/D4/I4: customer approves and pays on Shopify checkout (explicit confirmation); set_cart_line uses absolute quantity with read-back so retry gives 2 not 4; G02 acceptance tests this in phase 1."},
+   {"assertion": 3, "result": "partial", "reason": "Phase 2 table G08-G14 has estimate, primary/supporting skill and trigger, and the 'Later' table has trigger + accepted risk + skill; but phase 2 goals have no per-goal acceptance criteria."},
+   {"assertion": 4, "result": "pass", "reason": "Plan states 'Order of usefulness if time runs out: G01 -> G02 -> G03 (demoable local agent ...), then G04 -> G06 (hosted, bounded API), then G05 -> G07'."}
+  ],
+  "scores": {"constraint_fit": 5, "emphasis": 4, "safety_floor": 5, "continuation": 5, "usability": 4}
+ },
+ "B": {
+  "assertions": [
+   {"assertion": 1, "result": "partial", "reason": "Design names 'Limited-launch production MVP' and plan has a day-by-day 3-person calendar, but no hour estimates per goal, no capacity total and no reserve."},
+   {"assertion": 2, "result": "partial", "reason": "Checkout handoff gives explicit customer confirmation (D3, I3 'quantities the shopper confirmed'), but D3 relies on 'add/update lines' with 'one retry on timeout' and argues idempotency is unneeded because the cart is non-binding; retry may create an orphan cart and nothing stops a doubled line."},
+   {"assertion": 3, "result": "partial", "reason": "Post-MVP G05-G12 list primary/supporting skills and some triggers ('if p50 > ~6 s', 'only if founders reverse A4'), but no acceptance and no separate later list with triggers and accepted risk."},
+   {"assertion": 4, "result": "partial", "reason": "Goals are sequenced G01 (measured recs) -> G02 -> G03 -> G04 with a calendar, but there is no explicit fallback/cut rule or statement of what is still useful if time runs out; launch (G04) depends on everything."}
+  ],
+  "scores": {"constraint_fit": 3, "emphasis": 4, "safety_floor": 4, "continuation": 4, "usability": 4}
+ },
+ "preference": "A",
+ "reasons": [
+  "A sizes phase 1 to the team with per-goal hour estimates, a 25% reserve, a day-6 cut rule and an explicit usefulness order; B gives only a calendar with no estimates, reserve or fallback.",
+  "A makes cart writes retry-safe with absolute-quantity set and read-back (tested in G02), and adds a later list with triggers and accepted risk; B dismisses idempotency for cart writes and has a thinner post-MVP handoff."
+ ],
+ "notable_defects": {
+  "A": ["Phase 2 goals lack acceptance criteria", "The phase 1 upper estimate (79h) exceeds the usable 68h, so the reserve is consumed (acknowledged, with a cut rule)"],
+  "B": ["No hour estimates, capacity calculation or reserve for the two-week MVP", "Cart update uses add semantics with a retry and no idempotency guard", "No cut rule or 'if time runs out' ordering", "No separate deferred list with triggers and accepted risk; post-MVP goals lack acceptance"]
+ }
+}

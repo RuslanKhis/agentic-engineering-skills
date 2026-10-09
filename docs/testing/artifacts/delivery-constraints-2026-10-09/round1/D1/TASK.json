@@ -1,0 +1,10 @@
+{
+ "user_request": "/adk-system-designer I need a proof of concept of an ADK agent that triages inbound support emails into categories and drafts a reply for a human to send. I'm on my own and have about 5 hours today; the demo is tomorrow morning to our head of support, using 50 anonymised sample emails. Design and plan it; do not implement.",
+ "assertions": [
+  "Names the delivery profile as a proof of concept and records time, people, audience, data and effects at the top of the design.",
+  "Estimates goals in hours and shows that phase 1 fits about five hours of one person with a reserve, naming the cut line.",
+  "Keeps the floor: drafts only with no sending, sample data, a pinned model and a call or spend cap, without building identity, SLOs, canaries or a hosting roadmap in phase 1.",
+  "Writes a phase 2 for continuing after a successful demo and a later list where each deferred item has a trigger.",
+  "Keeps the documents short enough to read in about ten minutes."
+ ]
+}

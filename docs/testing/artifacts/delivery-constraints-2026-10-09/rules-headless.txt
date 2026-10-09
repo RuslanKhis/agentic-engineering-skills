@@ -1,0 +1,5 @@
+
+
+Rules for this session: you are a coding agent working for a user who is NOT available to answer questions; make reasonable assumptions and record each question you would have asked. Change files only inside the current directory. Do not run network, cloud or package-install commands; the project's Python dependencies (google-adk etc.) are not installed, so tests that import google.adk cannot run here and must be reported as not run.
+
+When done, write REPORT.md in the current directory with: (1) skills invoked and reference files opened, in order; (2) each question you would have asked the user, and the answer you assumed; (3) files written or changed and what was not finished; (4) checks run with results, and checks not run; (5) a friction log: each moment you were unsure what to do, anything heavier than needed, anything genuinely helpful, with file:line pointers into .claude/skills/...; (6) the exact next prompt the skills told the user to type, quoted verbatim, or "none given".

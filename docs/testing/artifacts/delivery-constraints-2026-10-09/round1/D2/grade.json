@@ -1,0 +1,31 @@
+{
+  "A": {
+    "assertions": [
+      {"assertion": 1, "result": "fail", "reason": "architecture A3 labels it a 'Pilot', not an internal tool. A1 converts capacity to '~15 engineer-days', with no focused hours and no reserve."},
+      {"assertion": 2, "result": "pass", "reason": "Invariant I1 has tools read employee_id from server-set state, with a code-bound WHERE claimant_id. G02 (week 1) acceptance (1): 'user A asking for user B's claim ref gets not found... SQL parameter is A's ID'."},
+      {"assertion": 3, "result": "partial", "reason": "The deferred-control table defers canary releases and online monitors with triggers. But G04 in the pilot path includes SLIs, an alert owner, a release gate, a 20-turn load check and a rehearsed rollback, and G02 carries adversarial injection cases."},
+      {"assertion": 4, "result": "fail", "reason": "Goals have no hour estimates and nothing is compared with capacity. There is no cut line for the user to confirm; final-message.md only lists open decisions."}
+    ],
+    "scores": {"constraint_fit": 2, "emphasis": 3, "safety_floor": 5, "continuation": 4, "usability": 3},
+    "notes": "Solid technical design with strong identity scoping, but it is not sized to the stated time or people. It adds a second Cloud SQL database for sessions, an HTTPS load balancer and SLIs in the first delivery."
+  },
+  "B": {
+    "assertions": [
+      {"assertion": 1, "result": "pass", "reason": "Design: 'Delivery profile | Internal tool'. Capacity: '2 x 0.5 x 15 d x 6 h x 0.6 = 54 h; reserve 11-22 h'."},
+      {"assertion": 2, "result": "pass", "reason": "In D3 and I2 the handler writes employee_id to session state, the model has no parameter for it, and SQL uses WHERE employee_id = $1. Phase 1 goal G04 acceptance: 'user A asking for B's claim ref gets not_found'."},
+      {"assertion": 3, "result": "pass", "reason": "The plan's 'Later' table defers SLOs/alerts and canary releases with triggers. The adversarial suite is phase 2 goal G10, and the deferred-control table gives triggers."},
+      {"assertion": 4, "result": "pass", "reason": "Plan: 'Phase 1 ... 32-43 h' against 54 h, with 'Cut line (for the user to confirm or move)'. final-message.md: 'Please confirm or move the cut line.'"}
+    ],
+    "scores": {"constraint_fit": 5, "emphasis": 5, "safety_floor": 5, "continuation": 5, "usability": 4},
+    "notes": "Depth is set per concern, the essential protections are kept, and the policy-only service ships first before any personal data. Every goal has an estimate and a run prompt. The plan is long (21 KB) but well structured."
+  },
+  "preference": "B",
+  "reasons": [
+    "B turns the stated team into focused hours with a reserve, estimates phase 1 against them (37 of 54 h) and asks the user to confirm the cut line. A never estimates or offers a cut line.",
+    "B frames the work as an internal tool and moves production controls (SLOs, canary releases, adversarial suite, row-level security, persistent sessions) to phase 2 or 'Later' with triggers, while keeping identity scoping and the cross-user test in phase 1. A builds pilot-production infrastructure (a second session DB, a load balancer, SLIs, a load test) into a three-week half-time budget."
+  ],
+  "notable_defects": {
+    "A": ["No hour estimates or capacity comparison", "No cut line for the user to confirm", "Profile named 'Pilot' rather than internal tool", "SLIs and alerts, a load test and a rollback rehearsal are in the initial delivery", "The design is longer than the skill's guideline, as A admits"],
+    "B": ["The plan is long (about 21 KB)", "The final message's next prompt is the short form, with the full prompt only in the plan", "gemini-3.8-flash is pinned with no confirmed Vertex retirement date (a fallback is given)"]
+  }
+}

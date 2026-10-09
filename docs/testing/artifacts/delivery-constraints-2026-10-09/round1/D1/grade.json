@@ -1,0 +1,39 @@
+{
+  "A": {
+    "assertions": [
+      {"assertion": 1, "result": "pass", "reason": "design 'Delivery constraints' table: 'Delivery profile | Proof of concept', plus rows for time (~5 h, demo tomorrow), people (one developer), judge (head of support), and 'Data and effects: 50 anonymised sample emails; effects: none'. It sits just below the Assumed answers table, near the top."},
+      {"assertion": 2, "result": "pass", "reason": "'5 h x 0.8 = 4 focused hours; keep ~1 h reserve ... Phase 1 = G01-G04, about 3 h'. Every goal has an hour estimate, and the cut line is explicit: 'stop after any goal: G01 alone is a live demo...'."},
+      {"assertion": 3, "result": "pass", "reason": "'Floor kept: no secrets in code...; spend stop; nothing sent...; anonymised data only; model ID pinned'. max_llm_calls=2, a 150-call batch stop and a console cap. Identity, observability and hosting are deferred; SLOs and the CI gate are in Later."},
+      {"assertion": 4, "result": "pass", "reason": "'Phase 2 - graduate if the demo lands' has P2-1..P2-6, each with a skill. The 'Later' table gives each item a trigger and an accepted risk."},
+      {"assertion": 5, "result": "fail", "reason": "The single design-plus-plan doc is about 3,500 words (roughly 15+ minutes). final-message.md admits it is 'well over the ten-minute read'."}
+    ],
+    "scores": {"constraint_fit": 5, "emphasis": 4, "safety_floor": 5, "continuation": 5, "usability": 3}
+  },
+  "B": {
+    "assertions": [
+      {"assertion": 1, "result": "partial", "reason": "Labels it 'Artifact type: exploration (A3)', not a proof-of-concept delivery profile, except in the title and A3 text. The scope table covers time/money and the judge, but people, data and effects are scattered across the assumptions (A1, A10), not recorded together at the top."},
+      {"assertion": 2, "result": "partial", "reason": "Plan: 'G00 0:30, G01 1:45, G02 1:15, G03 0:45 and a buffer of 0:45'. That fits 5 h with a reserve, but there is no named cut line (only a labelling-time stopping condition in G00), and the estimates sit in prose, not in the goal table."},
+      {"assertion": 3, "result": "pass", "reason": "There are no tools and nothing is sent (D4), the data is anonymised samples, gemini-3.8-flash is pinned (D5), and max_llm_calls=2 plus a 600-call global stop are set. Telemetry, SLOs, auth and hosting are deferred."},
+      {"assertion": 4, "result": "partial", "reason": "There is no phase 2 plan for continuing after the demo. The design's 'Deferred control' table gives triggers ('Pilot approval', 'Real customer mail'), but the plan ends at the demo pack."},
+      {"assertion": 5, "result": "fail", "reason": "The two docs total about 4,100 words (2,792 + 1,325). final-message.md acknowledges the length tension."}
+    ],
+    "scores": {"constraint_fit": 4, "emphasis": 4, "safety_floor": 5, "continuation": 3, "usability": 3}
+  },
+  "preference": "A",
+  "reasons": [
+    "A explicitly sizes phase 1 to 4 focused hours with about 1 h reserve and an any-goal cut line. It also names the proof-of-concept profile with time, people, judge, data and effects in one table; B calls the work an 'exploration' and has no cut line.",
+    "A includes a concrete phase 2 (P2-1..P2-6 with skills) and a Later list with triggers, so the team can continue after a successful demo without a new design conversation. B's plan stops at the demo."
+  ],
+  "notable_defects": {
+    "A": [
+      "About 3,500 words in one document, well beyond a ten-minute read.",
+      "The Assumed answers table precedes the profile and constraints, so they are not at the very top."
+    ],
+    "B": [
+      "No phase 2 and no explicit cut line. The plan ends at the demo.",
+      "The 15 dev / 35 holdout split and labelling all 50 emails add rigor but cost about 30 minutes of user time inside a 5 h budget.",
+      "Profile labelled 'exploration', not proof of concept, and people/effects are not recorded in the constraints table.",
+      "About 4,100 words across two documents."
+    ]
+  }
+}

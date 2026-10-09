@@ -1,0 +1,37 @@
+{
+  "A": {
+    "assertions": [
+      {"assertion": 1, "result": "pass", "reason": "architecture 'Artifact type | Production, with a pilot before GA' and 'This is production, so the proportionality rule does not remove controls'; threat model/adversarial suite (G06), release gates (G11), SLIs/runbook (G10), failure and recovery table all in GA scope."},
+      {"assertion": 2, "result": "fail", "reason": "plan has only a 'Suggested schedule (17 weeks, 6 engineers, assumed)' week table; no person-hours/capacity figure, no per-goal estimates, no reserve, and no check that the goals fit."},
+      {"assertion": 3, "result": "partial", "reason": "G12 'staff + limited-customer pilot', 'a 1-5% customer pilot', weeks 16-17 'GA ramp' give phases, but no explicit graduation conditions between staff pilot, customer pilot and GA (G12/G13 are coarse with no acceptance)."},
+      {"assertion": 4, "result": "pass", "reason": "Non-goals for GA (refunds, uploads read by model, voice) and Deferred controls table cut features; I3-I6 controls, step-up confirmation, fail-closed screening kept. No explicit rule that controls are never cut to fit the schedule, though."}
+    ],
+    "scores": {"constraint_fit": 3, "emphasis": 4, "safety_floor": 5, "continuation": 4, "usability": 4}
+  },
+  "B": {
+    "assertions": [
+      {"assertion": 1, "result": "pass", "reason": "architecture 'Delivery profile | Production service ... Every concern is built' with depth-per-concern table: threat model + adversarial suite (G07), CI gate/canary/rollback (G12), observability SLIs/runbook (G10), DB restore rehearsal (G11)."},
+      {"assertion": 2, "result": "pass", "reason": "'capacity ≈ 6 × 17 weeks × 40 h × 0.6 ≈ 2,450 focused hours (plus ~100 h of security review). Keeping 25% in reserve leaves ≈ 1,840 h'; per-goal estimates sum to 1,440-2,180, mid fits, high end acknowledged with cut order."},
+      {"assertion": 3, "result": "pass", "reason": "Synthetic-only until staging, staff pilot G14a, ~5% customer pilot G14b, then GA; 'Graduation conditions to GA: all invariants I1-I8 passing ... pentest no open high findings. DPIA and model-risk sign-off ... SLO targets two consecutive weeks'; G14 needs G15 sign-offs before customer exposure."},
+      {"assertion": 4, "result": "pass", "reason": "'The cut already made: one language, no uploads, no status queries ... The floor and the pilot are never cut. If they don't fit, GA slips'; plan: 'Never cut the floor, G05, G07 or G14.'"}
+    ],
+    "scores": {"constraint_fit": 5, "emphasis": 5, "safety_floor": 4, "continuation": 5, "usability": 4}
+  },
+  "preference": "B",
+  "reasons": [
+    "B converts the team into focused hours with a 25% reserve, estimates every goal and states a cut order where scope (language, uploads, status queries) gives way and the regulatory floor never does; A has only a week-based schedule with no capacity check or reserve.",
+    "B defines explicit GA graduation conditions (invariant tests, pentest, DPIA/model-risk sign-off, two weeks of SLOs) and gates customer exposure on compliance sign-off; A names staff and 1-5% pilots but leaves G12/G13 coarse with no graduation criteria."
+  ],
+  "notable_defects": {
+    "A": [
+      "No capacity arithmetic, per-goal estimates or reserve; four months is translated only into a week table that runs to week 17 with no slack.",
+      "No graduation conditions between staff pilot, limited-customer pilot and GA; G12/G13 have no acceptance criteria.",
+      "No external pentest or explicit compliance sign-off gate before customer exposure (DPIA/MRM appear only as open decisions D-06/D-07)."
+    ],
+    "B": [
+      "High-end estimate (2,180 h) exceeds post-reserve capacity (1,840 h), so the reserve may already be consumed; this is acknowledged but leaves little margin.",
+      "The cut order includes shrinking the per-customer allowance to a global limit, which weakens an abuse protection rather than cutting scope; trimming the load test is also questionable for a bank GA.",
+      "Long documents (about 75 KB in total) take a busy reader some time to get through, though the final message summarises them well."
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+ "user_request": "/adk-engineer Please take ticket tickets/T-201.md and carry it out. Tell me which specialist you are using and why.",
+ "assertions": [
+  "States the profile it is building for and keeps the change proportionate to a three-hour demo.",
+  "Keeps the floor: the agent asks the customer to confirm before cancelling, the staging URL is configuration, and no secret is hard-coded.",
+  "Does not build production controls such as a durable operation ledger or reconciliation, and lists them in the ticket's evidence as deferred with the trigger.",
+  "Adds tests that run without the ADK SDK and records evidence in the ticket."
+ ]
+}

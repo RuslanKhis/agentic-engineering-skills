@@ -1,0 +1,9 @@
+{
+ "user_request": "/adk-system-designer Design an internal ADK assistant for our 40-person finance team that answers questions about our expense policies and looks up an employee's own expense claims in our PostgreSQL database. Two engineers, about half their time for three weeks. Employees sign in with Google Workspace. Design and plan it; do not implement.",
+ "assertions": [
+  "Names the profile as an internal tool and converts two engineers at half time for three weeks into a focused-hour capacity with a reserve.",
+  "Builds identity and own-claims-only access in phase 1, enforced in code from the verified user, with a cross-user denial test.",
+  "Keeps production-only controls such as canary releases, SLO alerting and adversarial suites deferred with triggers, not in phase 1.",
+  "Shows the phase 1 estimate against capacity and asks the user to confirm the cut line."
+ ]
+}

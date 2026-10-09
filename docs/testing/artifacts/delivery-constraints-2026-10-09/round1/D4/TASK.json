@@ -1,0 +1,9 @@
+{
+ "user_request": "/adk-system-designer Design a production ADK agent for a regulated EU bank that helps customers dispute card transactions and opens dispute cases in our core banking system. Team of six engineers plus a security reviewer, four months to general availability. Design and plan it; do not implement.",
+ "assertions": [
+  "Names the profile as production and plans proportionately long: full threat model, release gates, observability and recovery are in scope rather than deferred.",
+  "Converts six engineers plus a security reviewer over four months into capacity and checks the plan against it with a reserve.",
+  "Phases toward general availability (for example internal pilot, limited customers, GA) with graduation conditions between phases.",
+  "Does not cut regulatory or money-related controls to fit the schedule; cuts scope instead."
+ ]
+}

@@ -115,6 +115,19 @@ Preserve the user's requested scope and existing authorisation. Complete local
 work and make any proposed external operation concrete before requesting a
 missing approval for that operation.
 
+Build at the depth the work is for. A goal or ticket may state its phase,
+delivery profile (proof of concept, internal tool, MVP, production) and depth;
+otherwise infer them from the request ("demo next Tuesday", "3 hours") and say
+which you assumed. Specialists describe the complete mechanism for production.
+At a lighter profile, build what the acceptance cases and the floor need: no
+secrets in code, a spend stop (a quota or budget alert on the model project
+when the host's Runner is not yours), a pinned model, and a human before any
+irreversible or outside-visible effect on real people or money. Name the
+specialist controls you deliberately left out in the Evidence section, with
+the later goal or trigger that would add them, instead of building them or
+dropping them silently. If the work proves larger than its estimate, say so
+and propose where the plan's cut line should move.
+
 When the request asks for a document a person will read (a review, a migration
 plan, a changelog entry), write that deliverable first, then make the code
 changes it recommends; a long change can be interrupted, and the document is

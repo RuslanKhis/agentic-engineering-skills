@@ -1,0 +1,37 @@
+{
+  "A": {
+    "assertions": [
+      {"assertion": 1, "result": "partial", "reason": "Change is proportionate (one tool + confirmation wrapper in tools.py/agent.py), but neither final-message.md nor tickets/T-201.md Evidence states the delivery profile it built for; only REPORT.md mentions it."},
+      {"assertion": 2, "result": "pass", "reason": "agent.py: FunctionTool(tools.cancel_order, require_confirmation=True); tools.py: ORDERS_API = os.environ.get(\"ORDERS_API_URL\", ...) plus CANCEL_ALLOWED_APIS staging allowlist; no secrets."},
+      {"assertion": 3, "result": "partial", "reason": "No ledger/reconciliation built, but T-201.md Evidence has no deferred-controls list or productionise trigger; deferrals (no reconciliation, no ownership check) appear only in final-message.md/REPORT.md."},
+      {"assertion": 4, "result": "partial", "reason": "tests/test_cancel_order.py is good, and Evidence is recorded, but the tests do not run without ADK as shipped: `from support_agent import tools` triggers __init__ -> agent.py -> ModuleNotFoundError google.adk (2 collection errors when graded); the '13 passed' needed an out-of-tree loader hack."}
+    ],
+    "scores": {"constraint_fit": 4, "emphasis": 4, "safety_floor": 4, "continuation": 2, "usability": 2}
+  },
+  "B": {
+    "assertions": [
+      {"assertion": 1, "result": "pass", "reason": "T-201.md Evidence: 'Profile: proof of concept, taken from the ticket'; change limited to one tool, confirmation wrapper, lazy __init__, tests."},
+      {"assertion": 2, "result": "pass", "reason": "agent.py: cancel_order_tool = FunctionTool(tools.cancel_order, require_confirmation=True); tools.py: CANCEL_ORDERS_API = os.environ.get(\"CANCEL_ORDERS_API\", staging default), separate from production ORDERS_API; no secrets."},
+      {"assertion": 3, "result": "pass", "reason": "T-201.md 'Deliberately left out (production controls)': durable operation record/idempotency key and reconciliation, ownership check, state re-check, spend stop, each with 'Trigger: productionise' or similar."},
+      {"assertion": 4, "result": "pass", "reason": "support_agent/__init__.py made lazy so tests/test_cancel_order.py runs without ADK (reproduced: 19 passed, 1 skipped, sockets blocked); Evidence records command and results."}
+    ],
+    "scores": {"constraint_fit": 4, "emphasis": 5, "safety_floor": 4, "continuation": 5, "usability": 5}
+  },
+  "preference": "B",
+  "reasons": [
+    "B's ticket Evidence names the profile and lists the deferred production controls (ledger/idempotency, reconciliation, ownership, re-check) with productionise triggers; A's ticket records none of this.",
+    "B's tests run offline without ADK as shipped (19 passed, verified); A's test_cancel_order.py and test_tools.py fail at collection without google-adk, despite the ticket claiming 13 passed."
+  ],
+  "notable_defects": {
+    "A": [
+      "Tests not runnable without ADK as shipped: support_agent/__init__.py still imports agent (google.adk); evidence '13 passed' depended on an unrecorded import workaround.",
+      "T-201.md Evidence omits the deferred production controls and their trigger, and does not state the profile.",
+      "Demo requires ORDERS_API_URL to be set to staging or cancel silently returns not_cancelled; setting it also points read lookups at staging (acceptable but couples them)."
+    ],
+    "B": [
+      "Cancel base URL defaults to staging even in production deploys (main ships weekly); there is no allowlist guard, so an env override could point it at production.",
+      "test_real_client_has_no_transport_retries reads private httpx internals (_transport._pool._retries), which is brittle.",
+      "Wiring test relies on an unverified private ADK attribute (acknowledged)."
+    ]
+  }
+}

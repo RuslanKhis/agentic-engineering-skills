@@ -1,0 +1,3 @@
+
+
+Rules for this session: the user IS available, but this session ends after your first reply. Do exactly what you would do before the user's first answer: inspect what you need, then write the reply you would send and stop where you would wait for the user. Do not write design documents unless you would write them before hearing from the user. Change files only inside the current directory; no network, cloud or install commands. Put your reply to the user verbatim in REPLY.md in the current directory.

@@ -1,0 +1,30 @@
+{
+ "D1": {
+  "A": "after",
+  "B": "before"
+ },
+ "D2": {
+  "A": "before",
+  "B": "after"
+ },
+ "D3": {
+  "A": "after",
+  "B": "before"
+ },
+ "D4": {
+  "A": "before",
+  "B": "after"
+ },
+ "D5": {
+  "A": "after",
+  "B": "before"
+ },
+ "D6": {
+  "A": "after",
+  "B": "before"
+ },
+ "E1": {
+  "A": "before",
+  "B": "after"
+ }
+}

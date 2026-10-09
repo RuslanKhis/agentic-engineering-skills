@@ -4,7 +4,9 @@ description: >-
   Work through requirements and trade-offs with the user to design or review
   the system architecture of a Python Google ADK application on GCP, before
   implementation. Use for a new application design, a substantial redesign,
-  or a cross-cutting architecture review. For a focused memory, workflow,
+  or a cross-cutting architecture review, including scoping a proof of
+  concept, internal tool or MVP to the time and people available and planning
+  what ships first and what follows. For a focused memory, workflow,
   frontend or deployment change, use that specialist directly.
 license: MIT
 metadata:
@@ -49,22 +51,46 @@ turn, with concrete options when useful. Use the host's question interface if
 available; ordinary chat works too.
 Let the user answer before treating a material product choice as settled.
 
-Open with the scope gate, three questions whose answers set the size of
-everything that follows. Ask only the ones the request has not already
-answered, and offer the default so a user can accept it in one word:
+Open with the scope gate: the questions whose answers set the size of
+everything that follows. Real people build the system inside fixed hours, so
+ask about capacity as well as scope. Ask only what the request has not already
+answered, in one turn, and offer the default so a user can accept it in one word:
 
-- How much time and money is there for this work? (Default: no fixed budget.)
-- Who judges the result, and what will they read: predictions, a report, a
-  demo, a running service? (Default: the user, reading the design.)
-- What kind of artifact is this: an exploration, an assignment, a pilot or a
-  production service? (Default: exploration.)
+- When must the first useful version exist, and is it continued afterwards?
+  (Default: no deadline; continued.)
+- Who builds it: how many people, how many hours each, how familiar with ADK
+  and GCP? (Default: one developer, part time, new to ADK.)
+- How much money is there for models and cloud? (Default: a small allowance.)
+- Who uses or judges it and what will they read: a demo, predictions, a
+  report, colleagues using it daily, external customers? (Default: the user,
+  reading the design.)
+- What data does it touch and what can it change? (Default: synthetic data,
+  read only.)
 
-Record the answers at the top of the design document, with the controls the
-design chooses to defer. Size the documents to the artifact: an exploration or
-a four-hour assignment gets a design and plan a reviewer reads in ten minutes;
-a pilot, roughly two to four pages of design and one goal per useful slice; a
-production service, as long as its decisions require, with every template
-section either filled or marked not applicable with a reason.
+Read [delivery profiles](references/delivery-profiles.md) to turn the answers
+into a profile (proof of concept, quality-judged assignment, internal tool, MVP
+or pilot, production), the depth of each concern, the floor kept at every
+profile, a capacity check and a phased plan. State the profile in one line and
+let the user correct it. The data and effects answers set the risk whatever the
+label: "just a POC, don't worry about security" lowers the depth of controls,
+never the floor, so propose the cheapest design that keeps the floor (drafts a
+human sends, staging targets, sample data) and record what the user accepts.
+
+Record the answers at the top of the design document, with the depth per
+concern and the controls deferred, each with the trigger that brings it
+forward. Size the documents to the profile: a proof of concept or a four-hour
+assignment gets one file in the compact form of
+[delivery profiles](references/delivery-profiles.md#compact-form-for-short-work),
+about 1,200 words, that a reviewer reads in ten minutes; an internal
+tool or pilot, roughly two to four pages; a production service, as long as its
+decisions require, with every template section either filled or marked not
+applicable with a reason.
+
+Estimate each goal in focused hours, check phase 1 against the team's capacity
+with a reserve, and cut scope rather than the floor when it does not fit. Show
+the user the cut line between what ships now and what comes later, and ask
+them to confirm or move it. Write the later phases into the same plan so the
+work can continue when the team has time, without a new design conversation.
 
 Every design reads [design decisions](references/design-decisions.md) for the
 sections its journey touches and [failure review](references/failure-review.md)
@@ -229,8 +255,11 @@ an owner/mechanism/test or an explicit unresolved gap, and the user can assess t
 next step. Implementation and test evidence come later, from the goals' own
 recorded runs.
 
-Finish with dependency-ordered goals for useful end-to-end behavior. Each needs
-a stable ID, linked requirement/decision, bounded changes and integration points,
+Finish with dependency-ordered goals for useful end-to-end behavior, grouped
+into phases: phase 1 fits the stated capacity, phase 2 graduates or hardens
+the result, and a later list holds deferred items with their triggers. Each
+goal needs a stable ID, phase, estimate, linked requirement/decision, bounded
+changes and integration points,
 a `Primary skill` and `Supporting skills` line, prerequisites, acceptance
 evidence, status, unresolved blockers and its own one-line run prompt. Separate
 discovery questions from ready implementation; an unknown cloud contract need
@@ -239,8 +268,9 @@ per ready goal from the [ticket template](assets/ticket-template.md) under
 `docs/tickets/<topic>/`; the plan stays the source of decisions.
 
 End the conversation with a short closing message in chat: where the documents
-were saved, the decisions still open, and the exact prompt for the next ready
-goal in a copyable block, for example:
+were saved, the profile and the cut line (what phase 1 delivers in how many of
+the available hours, and what waits), the decisions still open, and the exact
+prompt for the next ready goal in a copyable block, for example:
 
 ```text
 /adk-engineer Carry out G01 from docs/plans/<topic>.md.

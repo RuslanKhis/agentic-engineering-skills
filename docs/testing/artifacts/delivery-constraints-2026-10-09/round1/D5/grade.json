@@ -1,0 +1,31 @@
+{
+  "A": {
+    "assertions": [
+      {"assertion": "Asks about the deadline and whether the work continues afterwards.", "result": "pass", "reason": "\"Deadline: when must the first useful version exist, and will it be continued afterwards? [No deadline; continued]\""},
+      {"assertion": "Asks how many people build it, their hours and their ADK/GCP familiarity.", "result": "pass", "reason": "\"Builders: how many people, roughly how many hours each, and how familiar are they with ADK and GCP?\""},
+      {"assertion": "Asks about the data touched and what the agent may change, and explains why that sets the risk.", "result": "pass", "reason": "\"Data and effects. These set the risk level\" - real vs anonymised transcripts, prod vs sandbox org, and a/b/c write scope with \"forecast fields... a wrong value reaches people beyond the AE\""},
+      {"assertion": "Offers defaults the user can accept in one word and stops to wait instead of writing a full design.", "result": "pass", "reason": "\"you can reply 'defaults' or just answer the ones that differ\"; ends with what it will do after answers, no full design written"},
+      {"assertion": "Keeps the first reply short enough for a busy user to answer.", "result": "partial", "reason": "~650 words with a proposed shape section before 8 numbered questions; scannable but longer than needed"}
+    ],
+    "scores": {"constraint_fit": 5, "emphasis": 4, "safety_floor": 5, "continuation": 5, "usability": 4}
+  },
+  "B": {
+    "assertions": [
+      {"assertion": "Asks about the deadline and whether the work continues afterwards.", "result": "partial", "reason": "\"Budget and time: how much time and money is available?\" - no explicit deadline or continuation question"},
+      {"assertion": "Asks how many people build it, their hours and their ADK/GCP familiarity.", "result": "fail", "reason": "No question about team size, hours or ADK/GCP familiarity anywhere in the reply"},
+      {"assertion": "Asks about the data touched and what the agent may change, and explains why that sets the risk.", "result": "partial", "reason": "Strong on write scope (\"should the agent write to Salesforce directly, or propose changes...\" with forecast-field rationale) but never asks real vs sample transcripts or prod vs sandbox org"},
+      {"assertion": "Offers defaults the user can accept in one word and stops to wait instead of writing a full design.", "result": "pass", "reason": "\"Each has a default you can accept in one word\"; stops and defers ingestion, identity, hosting until answers"},
+      {"assertion": "Keeps the first reply short enough for a busy user to answer.", "result": "partial", "reason": "~600 words; three prose design-risk paragraphs precede only 3-4 questions, so the ask is buried"}
+    ],
+    "scores": {"constraint_fit": 2, "emphasis": 4, "safety_floor": 5, "continuation": 4, "usability": 3}
+  },
+  "preference": "A",
+  "reasons": [
+    "A establishes the delivery constraints before sizing (deadline + continuation, builder count/hours/ADK-GCP familiarity, budget, audience); B omits the team/skill question and folds deadline into a vague 'time and money' question.",
+    "A ties risk to both data sensitivity (real vs anonymised, prod vs sandbox) and write scope with a one-word 'defaults' reply path; B covers write scope and idempotency well but skips the data/environment question."
+  ],
+  "notable_defects": {
+    "A": ["Includes a fairly long proposed-architecture section before the questions, making the reply longer than necessary", "Default for Users ('You, reading the design') may undersize a CRM-writing tool"],
+    "B": ["Never asks how many people build it, their hours or ADK/GCP familiarity", "No explicit deadline/continuation question", "No question on real vs anonymised transcripts or production vs sandbox Salesforce", "Questions are buried after three dense risk paragraphs"]
+  }
+}

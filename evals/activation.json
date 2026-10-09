@@ -226,6 +226,13 @@
       "rationale": "Scoping a time-boxed, quality-judged build is the designer's scope gate and proportionality rule."
     },
     {
+      "id": "system-designer-capacity-positive",
+      "skill": "adk-system-designer",
+      "prompt": "Three of us have two weeks to ship an MVP of an ADK booking assistant, and we want to keep improving it afterwards. Plan what goes into the MVP, what waits, and how it fits the time we have.",
+      "should_trigger": true,
+      "rationale": "Fitting a design to a team's capacity and phasing MVP and later work is the designer's scope gate and delivery profiles."
+    },
+    {
       "id": "sql-positive",
       "skill": "adk-sql-agent-engineering",
       "prompt": "Build an ADK analytics assistant that answers revenue questions using reviewed query templates. Retrieve only the relevant schema and keep tenant scope and read-only query execution under application control.",

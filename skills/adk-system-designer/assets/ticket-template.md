@@ -6,6 +6,9 @@ plan: <relative path to the implementation plan>
 primary_skill: <one specialist, e.g. adk-tool-interface-design>
 supporting_skills: [<only those this goal's boundaries need>]
 blocked_by: [<goal IDs or open decisions, empty when ready>]
+phase: <1, 2 or later>
+profile: <proof of concept / assignment / internal tool / MVP or pilot / production>
+estimate: <focused-hour range>
 status: ready
 ---
 
@@ -20,6 +23,8 @@ implements, e.g. D1, D3.>
 
 - In: <modules, interfaces and behaviour this ticket changes>
 - Out: <follow-up work that belongs to later tickets>
+- Depth: <build at this profile's depth; the floor kept; controls left for
+  later goals, by ID>
 
 ## Acceptance
 
@@ -33,7 +38,9 @@ integration or authorised live>.
 ## Evidence
 
 <Filled in by the agent that carries the ticket out: files changed, commands
-run with results, what remains unverified. Leave empty when writing the ticket.>
+run with results, controls deliberately deferred, what remains unverified, and
+whether the work proved larger than its estimate. Leave empty when writing the
+ticket.>
 
 ## Run this ticket
 
