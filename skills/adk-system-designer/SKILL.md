@@ -169,7 +169,9 @@ Write each critical contract with six fields:
   the model or the conversation.
 - **Enforcement:** the trusted component that checks it, and where it is
   checked again at the effect when time passes between check and effect
-  (after a confirmation, a wait or a retry).
+  (after a confirmation, a wait or a retry). Enforcement can stop or refuse
+  the violation; an alert, log or dashboard only observes it and belongs
+  under evidence. If nothing can stop it, the contract is a gap.
 - **Failure outcome:** what the user sees and what state remains when it
   cannot be kept.
 - **Evidence:** the planned check and its tier (offline, local, live,
@@ -182,6 +184,10 @@ one, not a guarantee. Size the set to the profile: a read-only assistant needs
 a few (identity, retrieval scope, grounded answers, failure); money,
 publishing or messages to real people add rights, confirmation, inventory,
 idempotency and recovery contracts.
+
+The contracts table is where each promise is stated once. Decisions, goals
+and failure rows cite its ID instead of restating the invariant, so the table
+replaces prose rather than adding to it.
 
 Contracts evolve. When a discovery tightens one (asset rights turn out to
 depend on brand, channel, territory, dates and modification), revise it in

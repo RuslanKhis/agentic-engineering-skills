@@ -97,6 +97,51 @@ after 70 turns, about 33 minutes and $13.59.
 | Enforcement overclaimed: K2 after's spend contract said "bounded" while enforced by a budget alert, which only observes | K2 after | Enforcement must be able to stop or refuse the violation; an alert or log is evidence, not enforcement |
 | One check mapped to several failure cells: K2 after sent unavailable, rejected and rate-limited model failures to a "key unset" test | K2 after | A grid cell's cited acceptance item must exercise that failure |
 
+## Round 2: corrections for the remaining defects
+
+Three corrections were made, and only the after condition was rerun. A fresh
+blind grader per scenario compared round 1's after output with round 2's
+([outputs](artifacts/contracts-2026-10-15/round2/outputs/),
+[mapping](artifacts/contracts-2026-10-15/round2/blind_mapping_round2.json)).
+
+| Defect | Change |
+| --- | --- |
+| Length | The contracts table states each promise once; decisions, goals and failure rows cite its ID. "Invariant restated outside its home" joins the waste list (no word count, as before) |
+| Enforcement overclaimed | Enforcement must be able to stop or refuse the violation; an alert, log or dashboard is evidence, and a contract nothing can stop is a gap. The floor and `adk-engineer` no longer offer a budget alert as a spend stop: a quota stops calls, an alert only warns |
+| Loose grid citations | A cited acceptance item must produce that failure and check its outcome |
+
+| Scenario | Words, round 1 → round 2 | Assertions | Dimensions (of 25) | Grader preferred |
+| --- | --- | --- | --- | --- |
+| K1 advertiser pilot | 14,461 → 11,464 (before: 12,910) | 14/16 → 14/16 | 20 → 19 | Round 1, narrowly |
+| K2 read-only demo | 1,855 → 1,692 | 5/8 → 6/8 | 17 → 19 | Round 2, narrowly |
+
+The round 1 after outputs scored lower here than in the first comparison
+(K1 15 → 14, K2 7 → 5): different graders, scoring against a different
+opponent, were stricter. Compare within a round, not across.
+
+What the corrections did:
+
+- **Enforcement:** fixed in both scenarios. Round 2 put the spend stop on a
+  quota and labelled the budget alert "observes only"; round 1 K2 had claimed
+  "spend bounded" from an alert. No round 2 contract was overclaimed.
+- **Length:** K1 fell by a fifth, below the before condition; K2 fell by 9%
+  but remains about 20% over the 1,200-word compact form. Restated invariants
+  were rarer in round 2 than round 1.
+- **Grid citations:** the gross mismatches went (a credential cell citing a
+  gitignore check), but each round 2 output still had one or two loose cells,
+  for example "rate limited" citing a console check that never reaches the
+  limit.
+
+What round 2 lost in K1, not obviously caused by the change: five of nine
+contracts named no evidence tier, no pending outcome was defined for an
+uncertain booking write, and the continuation prompt omitted the new rights
+test. Round 1 had all three. With one run per condition, run-to-run variance
+cannot be separated from the change; the length and enforcement effects
+repeat in both scenarios, the K1 losses appear once.
+
+Effort, round 2 after: 58 turns and about $8.69 over three sessions, against
+70 turns and $13.59 in round 1.
+
 ## What this establishes and what it does not
 
 Two scenarios, one run per condition, one grader each, using assertions

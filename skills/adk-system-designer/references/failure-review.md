@@ -28,7 +28,10 @@ slot, price or record changed.
 
 Every cell either cites the acceptance item that tests it, as `G04/A2` (goal
 G04, acceptance item A2), or says `n/a: <reason>` with a reason of at least
-two words, such as "n/a: read only". Number acceptance items A1, A2 in each
+two words, such as "n/a: read only". The cited item must produce that
+failure and check its outcome: a "key unset" test does not cover a rate limit
+or an outage, so several cells cite one item only when it exercises each of
+them. Number acceptance items A1, A2 in each
 goal or ticket so they can be cited. "Untrusted or malformed content" covers
 invalid model output, injected text in tool results and unexpected provider
 payloads. Run `scripts/check_schedule.py` with `--design` to confirm every

@@ -122,9 +122,9 @@ delivery profile (proof of concept, internal tool, MVP, production) and depth;
 otherwise infer them from the request ("demo next Tuesday", "3 hours") and say
 which you assumed. Specialists describe the complete mechanism for production.
 At a lighter profile, build what the acceptance cases and the floor need: no
-secrets in code, a spend stop (a quota or budget alert on the model project
-when the host's Runner is not yours), a pinned model, and a human before any
-irreversible or outside-visible effect on real people or money. Name the
+secrets in code, a spend stop (a quota on the model project when the host's
+Runner is not yours; a budget alert only warns), a pinned model, and a human
+before any irreversible or outside-visible effect on real people or money. Name the
 specialist controls you deliberately left out in the Evidence section, with
 the later goal or trigger that would add them, instead of building them or
 dropping them silently.

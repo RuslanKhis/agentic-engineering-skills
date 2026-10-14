@@ -84,7 +84,8 @@ lowers the depth, never the floor.
 - A spend stop: `RunConfig.max_llm_calls` where the application owns the
   Runner, and a model-spend cap the user set. When a demo runs through
   `adk web` or another host you do not configure, put the cap on the model
-  project instead (a quota or budget alert).
+  project instead: a quota stops calls, while a budget alert only warns
+  someone who must then act.
 - Nothing irreversible or visible to a real outside person (money moved, a
   message sent, a record changed) happens without a human approving it, unless
   the user explicitly accepts that risk after hearing it in one sentence.
@@ -337,12 +338,14 @@ from repetition.
 - **Cut waste, never substance.** Do not set a word count for larger
   profiles: in testing, a number made the model cut a kill switch and a
   staging test while keeping filler. Remove instead: facts restated outside
-  their home, run-history and change logs beyond one row per change, pasted
+  their home (a contract's invariant repeated in decision rationale, goal
+  outcomes or failure rows instead of its ID), run-history and change logs
+  beyond one row per change, pasted
   helper output (quote the four figures that matter), tables that only point
   elsewhere, later-list items repeated from the depth table, and phase 2
   detail. Keep every floor item, failure row, test, acceptance case, wait and
   handoff. Write the design at the profile's depth: an internal tool does not
-  need a production service's guarantee and failure tables for paths it
+  need a production service's contract and failure tables for paths it
   does not have.
 
 ## Examples
