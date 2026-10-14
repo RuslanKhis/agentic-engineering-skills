@@ -118,6 +118,20 @@ class ScheduleTests(unittest.TestCase):
                                           "--person", "Ben=2", "--days", "10", "--reserve", "0.25", "--json")
             self.assertEqual(json.loads(out)["capacity_hours"], 30.0)
 
+    def test_cross_person_dependencies_are_listed_until_handoff_recorded(self):
+        with tempfile.TemporaryDirectory() as root:
+            code, out, _ = self.run_check("--plan", str(self.write_plan(root)), "--json")
+            self.assertEqual(json.loads(out)["handoffs_without_hours"],
+                             ["G01 (Ana) -> G02 (Ben)", "G03 (Ana) -> G04 (Ben)"])
+            plan = Path(root) / "plan.md"
+            plan.write_text(plan.read_text().replace("  owner: Ben\n  blocked_by: [G01]",
+                                                     "  owner: Ben\n  handoff: 0.5\n  blocked_by: [G01]"))
+            code, out, _ = self.run_check("--plan", str(plan), "--json")
+            self.assertEqual(json.loads(out)["handoffs_without_hours"], ["G03 (Ana) -> G04 (Ben)"])
+            plan.write_text(plan.read_text().replace("handoff: 0.5", "handoff: 0"))
+            code, out, _ = self.run_check("--plan", str(plan), "--json")
+            self.assertEqual(len(json.loads(out)["handoffs_without_hours"]), 2)
+
     def test_capacity_low_end_only_is_reported(self):
         with tempfile.TemporaryDirectory() as root:
             code, out, _ = self.run_check("--plan", str(self.write_plan(root)), "--capacity", "16")

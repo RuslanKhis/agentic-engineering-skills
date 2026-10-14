@@ -121,6 +121,11 @@ labelling, judging output quality, debugging a live integration or waiting for
 someone's decision, so a goal made mostly of those costs nearly as much as
 it would without an agent.
 
+A wait that is requested on day 1 runs in parallel with the work. Give it its
+own schedule entry (for example `W1` with `total: 0` and `wait_days`, no
+owner) and make the goals that need it depend on it, rather than adding the
+wait to the end of a goal.
+
 Record **calendar waits** separately, not as hours: a security review,
 an IAM grant from another team, provider app verification (Google's
 verification of restricted Gmail scopes takes weeks), a DPIA sign-off. A wait
@@ -198,7 +203,13 @@ busiest person before saying it. State the assumptions a fallback depends on.
 The reserve is for overruns and surprises, not for planned work: a rehearsal,
 a demo dry run or a handoff between people is a goal or part of one, with its
 own hours. When work passes from one person to another, add the handoff hours
-to the receiving goal. If Python 3.11 or later is not
+to the receiving goal and record them as `handoff: <hours>` on its schedule
+entry; the helper lists every cross-person dependency that has none.
+
+The schedule block is the plan as it will run. Anything the text says about
+who does or reviews a goal, what a goal needs first, or which approval it
+waits for appears there as an owner, a dependency or a wait entry, so the
+helper's figures describe the plan the reader is told about. If Python 3.11 or later is not
 available, say the schedule was not checked.
 
 ### Compare with capacity
@@ -233,9 +244,10 @@ quieter" without a new design conversation.
    "done". Each is end to end and demonstrable on its own.
 2. **Phase 2, harden or graduate:** the graduation conditions and the deferred
    controls the next audience needs, written as goals with skills and
-   acceptance. Leave them coarser than phase 1 when phase 1's results could
-   change them, but give each at least its primary skill, an estimate range
-   and one observable acceptance check, so a later session can start it.
+   acceptance. Keep them to three or four lines each, because phase 1's
+   results will change them, but give each at least its primary skill, an
+   estimate range and one observable acceptance check, so a later session can
+   start it.
 3. **Later:** the remaining deferred items, one line each with the trigger that
    brings it forward (more users, real data, a measured latency, an incident,
    a model retirement date) and the risk accepted while it waits.
@@ -272,6 +284,41 @@ Estimates are in quarter hours, added by hand; no schedule block or helper run.
 
 Failure tables, data-authority tables and observability sections appear only
 when the journey actually holds that risk, and then as two or three rows.
+
+## Write each fact once, at the depth it is known
+
+Long plans drift: a figure or goal ID restated in three places is updated in
+one, and the reader acts on another. Length should come from decisions, not
+from repetition.
+
+- **Summary first.** Open the plan with a summary of at most one page for the
+  person who decides: profile, what phase 1 delivers, the finish range and
+  whether it fits, the three largest risks, and the decisions needed from
+  them. A manager should not need to read further to act.
+- **One home per fact.** Decisions and their rationale live in the design.
+  Estimates, owners, dependencies and waits live in the plan's schedule block.
+  Capacity, finish range and the largest risks live in the plan's summary;
+  the design points to it instead of restating them. Each goal's scope,
+  route and acceptance have one home: the ticket when tickets are written,
+  with the plan's goals table linking to it in place of a full goal entry;
+  otherwise the plan's goal entry. Everywhere else refers to the ID ("see
+  D4", "G07") instead of restating it. Change lists and what-if results are
+  tables of one row each, not paragraphs.
+- **Detail follows certainty.** Phase 1 goals are complete. Phase 2 goals are
+  three or four lines each: outcome, primary skill, estimate and one
+  acceptance check. The later list is one line per item. Write tickets only
+  for phase 1 unless the user asks for more, because phase 2 will change once
+  phase 1 has run.
+- **Cut waste, never substance.** Do not set a word count for larger
+  profiles: in testing, a number made the model cut a kill switch and a
+  staging test while keeping filler. Remove instead: facts restated outside
+  their home, run-history and change logs beyond one row per change, pasted
+  helper output (quote the four figures that matter), tables that only point
+  elsewhere, later-list items repeated from the depth table, and phase 2
+  detail. Keep every floor item, failure row, test, acceptance case, wait and
+  handoff. Write the design at the profile's depth: an internal tool does not
+  need a production service's guarantee and failure tables for paths it
+  does not have.
 
 ## Examples
 

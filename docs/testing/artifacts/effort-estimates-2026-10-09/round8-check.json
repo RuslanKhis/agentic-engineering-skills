@@ -1,0 +1,144 @@
+{
+  "round": 8,
+  "root": "scratchpad/est/after8 (copied to scratchpad/est/r8check; originals untouched)",
+  "compared_with": "scratchpad/est/after7 and round7-check.json",
+  "helper": "check_schedule.py md5 a92a598647e2c4ecc56665b6d6c58989 in both folders. Reruns used /opt/homebrew/bin/python3.12 -I. What-ifs edited yaml copies in r8check/<H>/wi/ via scratchpad/est/r8tools/wi.py. H2 ran the helper on Python 3.9.13 and says so; H4 ran it on 3.11.",
+  "helper_gaps_found": [
+    "handoff is a flag only: 'handoff: 0' on a cross-person goal suppresses the warning (tested: G05 Dev A -> G06 Dev B with handoff: 0 gives no warning; with the field removed the warning appears)",
+    "One handoff value covers any number of incoming givers (H4 G09 receives from Dev A and Dev B through three goals and has 1 h)",
+    "The helper cannot tell whether handoff hours are inside total (H2 G05/G06 say 'includes 0.5 h', and total = hands_on + review exactly)"
+  ],
+  "N1_handoffs": {
+    "verdict": "PASS (both)",
+    "H2": {"verdict": "PASS", "evidence": "Rerun gives 15.5-24.5 h of 27; Dev A 7.5-13.5 and Dev B 8-11 of 13.5; chain G04>G05>G06; finish 7.04-10 of 10; fits; exit 0; no handoff warnings and no ticket mismatches. Cross-person dependencies are G01(A)>G05(B) at 0.5 h and G05(B)>G06(A) at 0.5 h; phase 2 G07(B)>G08(A) is 0.5 h. Summary figures match the helper. r7 had 0 of 1.", "caveat": "G05 and G06 say 'includes 0.5 h handoff', but the deploy goal fell from 4-6 h (r7) to 3-4 h. If the 0.5 h is added on top, the finish is 7.78-10.74, low end only."},
+    "H4": {"verdict": "PASS", "evidence": "Rerun gives 67-98 h of 135; loads 23-34, 22-32, 22-32 of 45; chain G01>G02>G07>G09; finish 7.11-10; fits; exit 0; no handoff warnings. All six cross-person receivers (G02, G03, G04, G06, G07, G09) have handoff: 1. The summary and the pasted output match. r7 had 1 of 6.", "caveat": "G09 gets one hour for three incoming handoffs from two people."}
+  },
+  "N2_prose_vs_schedule": {
+    "verdict": "FAIL (both)",
+    "H2": [
+      {"item": "G02 scope: '15 real questions from a helpdesk lead'. r7's W2 (gold questions, 3-5 days) was dropped from the schedule", "modelled": "W3 3-5 days blocking G02", "finish": "7.04-10.56, low end only (base 7.04-10, fits)"},
+      {"item": "G06 'three helpdesk agents use it on real calls' has wait_days 0 and lands on day 8.5-10", "modelled": "G06 wait_days 1-2 (pilot use)", "finish": "8.04-12, low end only. With the gold wait as well: 8.04-12.56"},
+      {"item": "G05 'needs explicit authorization for the named project and IAP change; A5 answered before go-live' (design: A5 blocks G05 go-live). Neither has a W entry or a day-1 request (W1 covers only the bot account and group)", "modelled": "W4 2-5 days, day 1, blocking G05", "finish": "7.04-10, no change if requested on day 1"}
+    ],
+    "H4": [
+      {"item": "G07 scope: 'write-path cases ... run once G04 lands', but G07 is blocked_by [G02] only", "modelled": "(a) G07 split into G07 7-10 h and G07B 3-4 h after G04, same total; (b) whole G07 after G04", "finish": "(a) 7.11-10, no change; (b) 7.78-10.89, low end only"},
+      {"item": "G06 acceptance 'a real browser run books, moves and cancels' needs G04, but G06 is blocked_by [G05] only", "modelled": "G06 blocked_by [G05, G04]", "finish": "7.11-10, no change (Dev B does both in sequence anyway)"},
+      {"item": "G08 needs 'a named GCP project and permission to create resources' (Resume here: 'start G08 if a GCP project is available'). There is no W entry. Still open from r7", "modelled": "W2 2-5 days blocking G08", "finish": "7.11-10, no change"},
+      {"item": "G09 'production go-live needs the user's explicit approval'. This is separate from W1 (the chain's operations manager) and is not modelled", "modelled": "n/a (zero-length if given on time)", "finish": "no change"},
+      {"item": "G09 'serves the pilot salon in production', but G08 is 'staging only, no production traffic' and no goal builds production", "modelled": "not modelled (hidden hours)", "finish": "unknown; the production setup has no hours"},
+      {"item": "G09 'record a one-week baseline' (and the design's guardrail '<1 in 20 needs staff correction') has no calendar time and no goal that measures it", "modelled": "not counted as a defect (could be read as post-phase)", "finish": "n/a"}
+    ]
+  },
+  "N3_claims_and_remedies": {
+    "H2": {"verdict": "PASS (one stated-assumption gap)",
+      "checks": [
+        "Chosen plan 7.04-10, fits: reproduces",
+        "Row 'G03 in phase 1, 20 cases' 8.52-12.22 and row '2.4 h/day' 6.39-9.17 reproduce only if G03 runs before G05 (blocked_by [G01], with G05 waiting on G03). The table does not say so. With the block's own G03 (after G05) they give 7.41-10.74 and 5.78-8.89, so the verdicts are unchanged",
+        "Row 'G06 to Dev B, 15 cases' 8.52-12.22 and row 'G03 in phase 2, 20 cases' 7.04-10.74 reproduce exactly",
+        "Negative 'Jira ticket creation is not in phase 1; capacity forces this' holds: G03+G07+W2 in phase 1 gives 11.11-16.3 (2.4 h/day: 8.56-14.44). Drafting alone (G03) with 15 cases gives 7.41-10.37. Swapping G03 for the G06 pilot gives 7.41-10.37. G03 on Dev A after G05 gives 8.52-12.22. No tested layout fits drafting at 1.8 h/day",
+        "Risk 'W1 longer than 5 days': W1 5-7 gives 8.33-11.81. The plan is very sensitive to it, and it is flagged correctly"
+      ]},
+    "H4": {"verdict": "PARTIAL",
+      "checks": [
+        "W1 what-ifs reproduce: 7-9 days gives 8.11-10.56; 9-10 days gives 10.11-11.56",
+        "Claim 'in both cases the build finishes on time and only the go-live step in G09 moves' is not true of the block: all of G09 (staging deploy, rollback rehearsal, runbook) waits on W1. Splitting G09 into 4-6 h of pre-W1 work plus a 1 h go-live after W1 gives 7.22-10 (fits) at W1 7-9 days and 9.22-10.22 at 9-10 days. The remedy the prose implies is better than the plan models",
+        "Summary risk '(2) W1 takes longer than 5 days: each extra day moves go-live' is false: W1 at 5-6, 6-7 and 6-8 days all give 7.11-10. The high end only moves past about 8 days",
+        "Run-history claims ('every owner layout tried, best was 10.2') apply to earlier yaml and cannot be reproduced on the current one; the REPORT says an analyse() brute force was run",
+        "A2 has no what-if, although the plan says A2 changes the figures. r7 assumed 5 focused h/day; r8 assumes 6. At 5.5 h the finish is 7.76-10.91, low end only; at 5 h it is 8.53-12; at the skill's own 6 x 0.6 = 3.6 h example it is 11.85-16.67"
+      ]}
+  },
+  "N4_completeness": {
+    "H2": {"verdict": "PARTIAL; core ask further reduced",
+      "jira_in_phase_1": "NO. r6 had confirmed creation in phase 1; r7 had drafting (G02) in phase 1 and creation in phase 2; r8 has neither (G03 drafting and G07 create are both phase 2). The what-ifs justify this at 1.8 h/day; at 2.4 h/day drafting fits",
+      "r7_lists": {
+        "rollback acceptance": "worse: r7's 'previous revision kept for rollback' and its 'Rollback' failure row are both gone",
+        "concurrent double-confirm": "still missing (phase 2 G07 has timeout lookup only; r7's 'Double click' failure row is gone)",
+        "Jira 400 and no-runbook tests": "no-runbook is back (G01 empty search, G02 three no-runbook cases); Jira 400 is phase 2 with no row and no acceptance (r7's Jira 400/403 row is gone)",
+        "lead walkthrough and sign-off": "partly back as the G06 three-agent pilot and pilot note",
+        "gold set on deployed service": "still missing (G06 re-runs locally)",
+        "budget alert": "still no goal or acceptance, although it is a floor item",
+        "release manifest / pin": "G05 scope 'release manifest with pins'; G01 live model check is back",
+        "model loop failure row": "back ('Call cap reached')",
+        "restricted-page check": "changed to 'bot token cannot read a non-runbook space' (G05)",
+        "W2 gold questions wait": "lost (prose only, see N2)",
+        "latency p50/p90": "lost"
+      },
+      "intact": "Identity tests (401, 404 cross-user, ignored body user_id), escaped markdown-image test, call-cap test, injected space/CQL test, no-content logs, fresh session after redeploy, and the injection failure row are present. 8 failure rows (r7: 11; three were phase-2 Jira rows)"},
+    "H4": {"verdict": "FAIL (several floor-relevant losses)",
+      "r7_lists": {
+        "operator path": "worse: G09 writes the staff runbook, but r7's kill switch (feature and failure row), kill-switch drill, staged-uncertain reconciliation drill and staff briefing are gone",
+        "booking API read fails row": "still missing",
+        "token expires mid-chat row": "back",
+        "per-invocation cap acceptance": "still missing (I6 points to 'G05 tests', but G05 tests only the 41st daily turn)",
+        "overlapping turn 409": "back (G05)",
+        "no user-managed SA key": "partly: 'no roles beyond those listed'",
+        "budget alert": "G08 scope only, no acceptance",
+        "first prod change confirmed by manager": "partly: 'production go-live needs the user's explicit approval' (not modelled)",
+        "waits: GCP project, staging booking-API credentials": "GCP is still unmodelled. The staging booking-API wait disappeared because no goal uses the real booking API any more",
+        "pass bar": "still missing (G07 'a pass or fail' per case; no threshold for release)",
+        "partial move row": "still missing (only an open decision)",
+        "browser closed after confirm row": "still missing",
+        "cancel-all row": "lost",
+        "staging journeys with exactly one real booking-API change (r7 G11)": "lost. The executor is tested only against the G01 fake before production",
+        "other four salons blocked / per-salon flag (r7 G11)": "lost. The flag moved to phase 2 G13, so no phase 1 goal enforces 'pilot salon only'"
+      },
+      "intact": "Concurrent confirm, timeout-after-commit uncertain, expired/foreign confirm, made-up slot, false-success scripted model, cross-customer 404, restart survival, token absent from events, double-click, rollback rehearsal, W1 gate. 10 failure rows (r7: 11)"}
+  },
+  "N5_length": {
+    "verdict": "H2 IMPROVED but over; H4 slightly WORSE. Both designs break the 'design at most half' rule",
+    "table": {
+      "H2": {"design": 2790, "plan": 1827, "design_plus_plan": 4617, "budget": 4000, "over_pct": 15, "design_share_limit": 2000, "design_over_pct": 40, "r7_design_plus_plan": 5734, "r7_over_pct": 43, "r7_design": 3800, "tickets": 1287, "tickets_count": 5, "avg_ticket": 257, "yaml": 197},
+      "H4": {"design": 2988, "plan": 2144, "design_plus_plan": 5132, "budget": 4000, "over_pct": 28, "design_share_limit": 2000, "design_over_pct": 49, "r7_design_plus_plan": 4994, "r7_over_pct": 25, "r7_design": 2960, "tickets": 2383, "tickets_count": 9, "avg_ticket": 265, "yaml": 228}
+    },
+    "largest_sections": {
+      "H2": [["design: Architecture and decisions", 896], ["plan: Delivery profile and capacity", 639], ["design: Assumed answers", 452], ["plan: Goals and dependencies (incl. phase 2)", 423], ["design: Delivery constraints/depth", 422]],
+      "H4": [["design: Architecture and decisions", 987], ["plan: Delivery profile and capacity (yaml, pasted helper output, 5-row run history)", 903], ["plan: Goals and dependencies (incl. phase 2 G10-G15)", 411], ["design: Delivery constraints/depth", 410]]
+    },
+    "overrun_justified": {
+      "H2": "Mostly not. Waste: a scope-gate table whose cells only point to A-rows (~70 words); the Later table repeats the depth-table triggers (~140); phase-2 Jira detail in the design (D5 cell ~110, I6, data row, failure row, contracts row; ~250 in total); model retirement dates for models not used. Justified: the what-if table, guarantees and failure rows. The design is still written at production granularity (13 assumed answers, 13 depth rows, 11 six-column decisions) for a two-person half-time internal tool",
+      "H4": "Mostly not. Waste: the 5-row run-history table (~170), the helper output pasted verbatim beside a summary that states the same figures (~90), 'calendar_waits: none / wait_days: 0 / handoff: 0' boilerplate on every entry (~60), and phase-2 acceptance for six goals (~230). The design's 987-word decision table has long cells (D7 lists retirement dates of rejected models). Meanwhile floor-relevant content (kill switch, staging API journey, per-salon restriction) was cut"
+    }
+  },
+  "N6_defects": {
+    "H2": {"total": 6, "r7": 3, "items": [
+      "Wait in prose not in schedule: gold questions from the helpdesk lead (G02). Modelled: 7.04-10.56, low end only",
+      "Calendar time in prose not in schedule: G06 pilot on real calls has 0 days. With 1-2 days: 8.04-12, low end only",
+      "Approval not modelled: A5 answer before G05 go-live (helpdesk lead / Confluence admin); no W entry or day-1 request",
+      "Approval not modelled: explicit authorization for the named project and IAP change (G05); still open from r7",
+      "Floor item without a goal: budget alert (floor) has no scope or acceptance in any goal",
+      "Stale ID: A9 'Decisions that depend on it: D3, G04'; deployment is now G05 (G04 was deploy in r7)"
+    ],
+    "minor_not_counted": [
+      "What-if rows 1 and 5 assume G03 before G05 without saying so (verdicts unchanged)",
+      "Handoff '0.5 h included' cannot be seen in the hours; the deploy estimate fell 4-6 -> 3-4. Added on top: 7.78-10.74"
+    ],
+    "fixed_from_r7": ["handoff hours on every cross-person dependency", "O1/G04 vs 'only W1 blocks' contradiction gone (A5 now consistently blocks G05 go-live)", "design 27% shorter"]},
+    "H4": {"total": 11, "r7": 11, "items": [
+      "Dependency in prose not in schedule: G07 write-path cases need G04 (split: no change; whole goal: 7.78-10.89)",
+      "Dependency in prose not in schedule: G06 browser book/move/cancel needs G04 (no change)",
+      "Approval not modelled: GCP project and permission for G08 (still from r7)",
+      "Approval not modelled: user's explicit approval for production go-live (G09)",
+      "Hidden work: no goal creates the production environment that G09 goes live on (G08 is staging only)",
+      "Claim contradicted by the block: 'only the go-live step in G09 moves'. The whole G09 waits on W1; a G09 split makes W1 7-9 days fit (7.22-10)",
+      "Risk claim false: 'W1 longer than 5 days: each extra day moves go-live'. W1 6-8 days still gives 7.11-10",
+      "Assumption change without a what-if: A2 raised from 5 (r7) to 6 focused h/day; 5.5 h gives 7.76-10.91 and 5 h gives 8.53-12, both low end only. The skill's example implies ~3.6 h (11.85-16.67)",
+      "Test gap: the real booking API is never exercised before production (r7's staging journey with exactly one real change is gone)",
+      "Floor/scope gap: 'pilot salon only' has no enforcing goal or test in phase 1 (r7 had the flag and 'other salons see the phone message')",
+      "Verification pointer unbacked: I6 call cap 'G05 tests', but no acceptance tests max_llm_calls (still from r7)"
+    ],
+    "minor_not_counted": ["G09 one-week baseline and the 1-in-20 correction guardrail have no calendar time and no measuring goal", "Run-history claims are not reproducible on the current yaml"],
+    "fixed_from_r7": ["5 missing handoffs now recorded", "'only Dev A hours' negative claim, G03-review-by-Dev-B mismatch, stale G06 ID and the overflow suggestion are gone (no named reviewer remains)", "token-expiry row and 409 test back"]}
+  },
+  "N6_overall": {
+    "H2": {"verdict": "same", "why": "Better: 20% shorter, handoffs recorded, the summary matches the helper, the what-ifs reproduce, and the cut of ticketing is honestly evidenced. Worse: phase 1 now has no Jira work at all (r7 had drafting). The gold-question wait was dropped from the schedule, and the pilot has no calendar time. Either one, modelled, turns 'fits' into 'low end only', so the headline rests on omissions again (r7: on missing handoffs). Rollback is gone entirely."},
+    "H4": {"verdict": "slightly worse", "why": "Handoff mechanics are fixed and every quoted figure reproduces. But 'fits' rests on a silent rise from 5 to 6 focused h/day: at 5.5 h it does not fit, and there is no A2 what-if. Before live customers there is no real booking-API test, no production-environment goal, no kill switch or drills, and no enforcement of the pilot-salon limit. Both W1 claims are inaccurate (one too pessimistic, one wrong about what moves). Length went up, not down, and the over-budget words are history tables and pasted output while safety content was cut."}
+  },
+  "top_issues": [
+    "The rule moved the gap rather than closing it. With handoff hours now recorded, the 'fits' headlines rest on other unmodelled prose: H2's gold-question wait and pilot days (each flips it to low end only), and H4's hours-per-day assumption (5.5 h already fails)",
+    "Prose dependencies and approvals still escape the block: H4 G07 and G06 need G04; G08 and G09 approvals; H2 A5 and project/IAP authorization. A lint for 'once X lands', 'needs approval' or 'from <person>' in tickets would catch most of them",
+    "Silent losses between rounds continue: H2 lost Jira drafting and rollback; H4 lost the kill switch, drills, the staging booking-API journey and the per-salon restriction. The budget rule says not to cut these, but they went while history tables and pasted output stayed",
+    "Neither design meets 'at most half': 2,790 and 2,988 words against ~2,000. Both are still written at production granularity",
+    "Helper gaps: 'handoff: 0' silences the cross-person warning, one handoff value covers many givers, and there is no check that handoff hours are inside total",
+    "Unchanged capacity assumptions between rounds (H4 5 -> 6 h/day) need a sensitivity row like H2's 2.4 h/day one"
+  ]
+}

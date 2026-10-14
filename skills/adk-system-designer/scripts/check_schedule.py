@@ -102,6 +102,7 @@ def normalise(entry, where):
     if total is None:
         raise InputError(f"{where} {goal}: no total estimate")
     return {"goal": goal, "phase": str(entry.get("phase", "")).strip(), "total": total,
+            "handoff": str(entry.get("handoff", "")).strip(),
             "hands_on": hands_on, "review": review, "owner": str(entry.get("owner", "")).strip(),
             "blocked_by": [b for b in blocked if b], "waits": str(waits).strip(), "wait_days": wait_days}
 
@@ -195,9 +196,16 @@ def analyse(goals, phase, capacity, days, people, default_hpd, reserve=0.0):
     for goal in selected:
         visit(goal["goal"], [])
 
+    handoffs = []
+    for goal in selected:
+        for dep in goal["blocked_by"]:
+            giver = by_id.get(dep, {}).get("owner")
+            recorded = parse_range(goal.get("handoff") or None, f"{goal['goal']} handoff")
+            if giver and goal["owner"] and giver != goal["owner"] and not (recorded and recorded[1] > 0):
+                handoffs.append(f"{dep} ({giver}) -> {goal['goal']} ({goal['owner']})")
     result = {"phase": phase or "all", "goals": len(selected), "total_hours": total, "reserve": reserve,
               "problems": problems,
-              "outside_dependencies": sorted(external)}
+              "outside_dependencies": sorted(external), "handoffs_without_hours": handoffs}
     if capacity is None and days is not None:
         owners = {g["owner"] for g in selected if g["owner"]}
         capacity = round(sum(rate(o) for o in owners) * days, 2) if owners else None
@@ -278,6 +286,8 @@ def report(result):
     if "capacity_hours" in result:
         lines.append(f"Capacity after reserve: {result['capacity_hours']:g} h; fits: {result['fits_capacity']}")
     for owner, load in sorted(result["load_by_person"].items()):
+        if owner == "(unassigned)" and load == (0.0, 0.0):
+            continue
         cap = result.get("person_capacity", {}).get(owner)
         lines.append(f"  {owner}: {fmt(load)} h" + (f" of {cap:g} h available" if cap is not None else ""))
     for label in ("low", "high"):
@@ -287,6 +297,9 @@ def report(result):
                  f"reserve: {result['finish_days_low']:g}-{result['finish_days_high']:g} working days")
     if "calendar_days" in result:
         lines.append(f"Calendar: {result['calendar_days']:g} working days; fits: {result['fits_calendar']}")
+    if result["handoffs_without_hours"]:
+        lines.append("Work passes between people with no handoff hours recorded (add them to the receiving "
+                     "goal and set handoff: <hours>): " + "; ".join(result["handoffs_without_hours"]))
     if result["outside_dependencies"]:
         lines.append("Not scheduled here (decisions, other phases, other teams): "
                      + ", ".join(result["outside_dependencies"]))

@@ -1,0 +1,74 @@
+{
+  "round": 6,
+  "root": "scratchpad/est/after6 (copied to scratchpad/est/r6check; originals untouched)",
+  "baselines": {"H2": "round1/H2/A", "H4": "round5/H4", "H5": "round5/H5"},
+  "helper": "check_schedule.py md5 5848b2bc37cedaf37ca3587346763ae4, identical in all three; reruns with python3 (-I for H5); what-ifs by editing yaml copies in r6check/<H>/",
+  "L1_summary": {
+    "verdict": "PASS",
+    "H2": {"verdict": "PASS", "words": 249, "evidence": "Profile, phase 1, 14-23 h vs 27 h, finish 5.9-9.6 of 10 'fits', 3 risks, decisions (A1-A14, esp. A4/A6/A8, cut line), next prompt. Rerun: 14-23 h, capacity 27, Dev A 8-13/13.5, Dev B 6-10/13.5, chain G01>G03>G05, finish 5.93-9.63, fits, exit 0, tickets match.", "issue": "Design Summary lists different top risks (bot attribution, injection) from plan summary (late W1, Dev A slack): 2 of 3 differ."},
+    "H4": {"verdict": "PASS", "words": 231, "evidence": "57-90 h vs 112.5, finish 6.9-11.9 'fits only at the low end', two remedies named. Rerun: identical loads 21-33/16-25/20-32, chain G01>G03>G04>G10 5.6-9.8, finish 6.93-11.93, low end only, exit 1, tickets match."},
+    "H5": {"verdict": "PASS (one overstated claim)", "words": 188, "evidence": "428-723 h vs 2,850, finish 61-97 of 100 (to 2027-03-12), 3 risks with owners, decisions, next prompt. Rerun: 7 loads identical, chain G01>G13>G17>G24>G25>G26>G27, 61.11-97.44, fits, exit 0, tickets match.", "issue": "'the calendar is set by external waits, not by engineering hours': on the high-end chain waits are 45 of 97.4 days; the 2 h/day reviewer alone adds ~18.7 days (reviewer at 4 h/day moves finish to 93.89)."}
+  },
+  "L2_length": {
+    "verdict": "FAIL (H4 near budget; H2 and H5 well over)",
+    "table": {
+      "H2": {"design": 3524, "plan": 3603, "design_plus_plan": 7127, "budget": 4000, "over_pct": 78, "earlier_design_plus_plan": 7016, "tickets": 1297, "earlier_tickets": 1771, "tickets_count": 5, "avg_ticket": 259},
+      "H4": {"design": 2716, "plan": 2241, "design_plus_plan": 4957, "budget": 4000, "over_pct": 24, "earlier_design_plus_plan": 7943, "tickets": 2599, "earlier_tickets": 2306, "tickets_count": 10, "avg_ticket": 260},
+      "H5": {"design": 4609, "plan": 8844, "design_plus_plan": 13453, "budget": 8000, "over_pct": 68, "earlier_design_plus_plan": 15818, "tickets": 6117, "earlier_tickets": 6618, "tickets_count": 27, "avg_ticket": 227}
+    },
+    "ticket_budget_note": "Skill says ~150 words per ticket; all three average 227-260.",
+    "largest_sections": {
+      "H2": [["design: Architecture and decisions", 883], ["plan: Delivery profile and capacity (incl. 205-word yaml, failing-run table, what-ifs)", 708], ["design: Assumed answers (14 headless rows)", 532], ["design: Delivery constraints, depth and deferred controls", 476], ["plan: G01 goal entry", 333]],
+      "H2_note": "Five phase-1 goal entries in the plan total 1,497 words and are restated in the tickets (1,297).",
+      "H4": [["plan: Delivery profile and capacity (incl. 217-word yaml, what-if and change tables)", 907], ["design: Architecture (diagram + D1-D7 table)", 691], ["design: Assumed answers", 420], ["design: Delivery constraints, depth and deferred controls", 391], ["design: Guarantees", 357]],
+      "H4_note": "No goal entries in the plan; goal detail lives only in tickets.",
+      "H5": [["plan: 27 phase-1 goal entries combined", 5397], ["plan: Delivery profile and capacity (incl. 618-word yaml)", 1459], ["design: Architecture and decisions", 1118], ["plan: Goals and dependencies table", 812], ["design: Assumed answers", 600]]
+    },
+    "restated_facts": {
+      "H2": ["Each goal's hours appear 4 times: yaml, goals table, goal entry, ticket front matter", "Acceptance is in the plan's goal entry and again (condensed) in the ticket", "Finish 5.93-9.63 appears in summary, helper result and what-if row (7 numeric hits); 27 h capacity 3 times", "Cut-line alternative (12 days or Dev B 2.3 h) appears in summary, what-ifs and Open decisions", "max_llm_calls=8 in 5 places; A3 budget referenced 10 times", "Top risks restated in design Summary and plan Summary, and they disagree"],
+      "H4": ["Finish 6.93-11.93 in summary, helper result and what-if row 'Plan as written' (8 hits)", "The two remedies are in summary, what-if table, cut line and Open decisions", "'Pilot salon only' in 6 places in design+plan and 4 in tickets", "Goal hours in yaml, goals table and ticket", "Invariant test cases (Turn 41, max_llm_calls=10) repeated in design and tickets"],
+      "H5": ["428-723 h, 2,850 h and 61-97 days each appear 5 times, including the design's 'Capacity and cut line' paragraph and design Summary", "Acceptance bullets are word-for-word identical in the plan goal entry and the ticket (e.g. G13), for all 27 goals", "Goal hours appear 4 times (yaml, goals table, goal entry, ticket)", "Goals table 'State / blocker' column restates 'Depends on' in every row", "gemini-3.8-flash 7x, max_llm_calls 9x, x1.5 multiplier 2x, 2027-03-12 4x"]
+    }
+  },
+  "L3_phase2_and_tickets": {
+    "verdict": "PASS",
+    "H2": "G06-G10: 2-4 lines each (outcome, skill, hours, acceptance); tickets only G01-G05.",
+    "H4": "G11-G16: one table row each with outcome, skill, hours and acceptance; tickets only G01-G10.",
+    "H5": "G28-G34: 3 lines each; tickets G01-G27 = phase 1 only. Phase 1 is the entire 5-month programme to GA, so the rule saves nothing here."
+  },
+  "L4_nothing_lost": {
+    "verdict": "PARTIAL",
+    "H2_vs_round1": {"floor": "kept (no secrets, spend stop D8, human confirm of exact payload, allowlist, pinned model)", "dropped": ["Acceptance for rollback to the previous revision is gone ('kept for rollback' only)", "Concurrent double-confirm test (2 confirms -> 1 Jira call); now only a sequential repeat", "Jira 400 -> failed, and 'no runbook found' cases: still in the failure table but have no acceptance test", "'No case cites a URL its tools did not return' check", "Restart durability and automatic reconciliation moved to phase 2 G07 (a deliberate, documented cut with what-ifs)"], "gained": ["W1 access wait with day-1 request", "Invariants table I1-I6", "trifecta analysis"]},
+    "H4_vs_round5": {"floor": "kept", "dropped": ["Operator path for uncertain operations: manager change list, runbook dry run and manager briefing (r5 G10) are gone; now 'on-duty developer', and who that is is an open decision", "Failure rows: booking API read fails; token expires mid-chat", "Acceptance: per-invocation cap (9th model call refused), overlapping turn -> 409, no user-managed SA key, budget alert configured, first prod change confirmed by a manager", "Waits: staging API credentials, GCP project/billing/Vertex access (G09 now says 'needs the GCP project' with no wait or request step)", "The only handoff hours r5 had (into G11)"], "gained": ["Kill-switch flag per salon", "Pass bar of 27/30 on 2 runs", "Concurrent-confirm test", "Partial-move failure row"]},
+    "H5_vs_round5": {"floor": "kept", "dropped": ["Failure rows: Guidewire business/validation rejection; text in a photo instructs the agent (still covered by D3 and G20); telemetry unavailable", "Waits: claims/legal review of fixed safety messages; portal team review; canary ramp period (G27 ramps 10/50/100% with 0 wait days); Guidewire pre-prod load-test window", "Handoff hours: r5 stated them for G26/G28; r6 states none anywhere", "Legal AI Act classification acceptance (now only notice wording in G04)"], "assumption_shifts_that_help_fit": ["Guidewire sandbox wait 10-20 days (r5) -> 5-10 (r6); at 15-20 the plan is low end only (107.44)", "Calendar 95 -> 100 working days; reviewer 1.2 -> 2 h/day"]}
+  },
+  "L5_defect_classes": {
+    "H2": {"stale_ids": 0, "helper_contradictions": 0, "missing_handoff_hours": 0, "waits_without_request": 2, "total": 2,
+      "evidence": ["All what-ifs reproduce: run-2 plan (G02 4-6) 6.67-10.37 low end only; with 12 days fits; Dev B 2.3 h 5.93-9.63 fits", "Contingency G05 -> Dev B +0.5 h: 6.3-10.0, fits with zero margin (plan does not claim a figure)", "Waits: gold questions 'needed by day 3' (A13 'week 1') and the lead's 1-hour walkthrough have no explicit request/booking step (minor)"]},
+    "H4": {"stale_ids": 0, "helper_contradictions": 1, "modelling_inconsistencies": 1, "missing_handoff_hours": 6, "waits_without_request": 1, "total": 9,
+      "round5": {"stale_ids": 0, "helper_contradictions": 1, "missing_handoff_hours": 4, "waits_without_request": 0, "total": 5},
+      "evidence": ["All 6 what-ifs reproduce exactly (5.78-10.11, 6.49-11.22, 12 days fits, pilot+6h 5.56-9.89, pilot 5h 6.67-11.67)", "'Two remedies close the gap' holds: Dev C=6 alone, 11 days and removing G10 wait (10.93) all stay low end only", "Contradiction: 'If someone falls behind, B helps first with G09 ... hours move with the work': moving G09 to Dev B gives 8.27-14.33 (8.53-14.6 with 1 h handoff), worse than as written", "Modelling: G10 go-live approval is 'requested on day 1' yet modelled as 0-1 day after G10 work; it adds the last day to the high end", "No handoff hours on the Dev B help contingency or on cross-person handoffs G01(A)->G02(B), G05(C)->G04(A), G02/G03->G08(B), G06/G09(C)->G10(A), G08(B)->G10(A)", "G09 'Ready (needs the GCP project)': no wait, no request step"]},
+    "H5": {"stale_ids": 1, "helper_contradictions": 4, "modelling_inconsistencies": 1, "missing_handoff_hours": "1 remedy + all cross-person handoffs (0 stated anywhere)", "waits_without_request": 3, "total_countable": 10,
+      "round5": {"stale_ids": 3, "helper_contradictions": 2, "missing_handoff_hours": 5, "waits_without_request": 4, "total": 14},
+      "evidence": ["Reproduced: reviewer 4 h 58.56-93.89; sandbox 15-20 71.11-107.44; +reviewer 4 h 68.56-103.89", "Not reproducible: '...and G13 adapter split between Dev B and Dev A -> 66-100, yes'; the split is not specified, and natural splits give 67-101.33 to 69-105 (low end only); no handoff hours for the split", "'Every person's load is well under a quarter of their hours': high end Dev B 126/450=28%, Dev D 27%, ML 28%, Sec 43/150=29%", "'otherwise GA moves by up to a week': helper says 107.44 vs 100 = 7.4 working days", "'calendar is set by external waits, not by engineering hours': waits are 45 of 97.4 chain days; Sec at 2 h/day contributes ~18.7", "Modelling: G01 says 'First step today: request sandbox access' but the 5-10 day wait is modelled after 12-20 h of G01 work. Modelled as a parallel day-1 wait: 60-94.89 as planned; with a slow sandbox plus reviewer at 4 h/day it fits (65.89-99.44) without the G13 split, against the plan's 'only ... all three together'", "Stale ID: design says output_schema behaviour 'is acceptance for G06'; implementation map and G10 own it", "Round-5 stale IDs (G15->G19 pen test, O-mapping) fixed; open-decision blocks agree between design and plan", "Waits without an early request: G08 OIDC client (requested inside G08 after G06), G12 FNOL extract approval (no request step), G22 translation vendor (no booking step). Pen test now 'book the window in week 1' (fixed vs r5)"]}
+  },
+  "L6_overall": {
+    "H2": {"verdict": "better", "why": "Has a manager summary with helper-verified finish, explicit waits with day-1 request, what-ifs that reproduce, compact phase 2, shorter tickets. Same length, still 78% over budget. Lost a few acceptance cases (rollback, concurrent confirm, 4xx and no-result tests). Design and plan summaries disagree on top risks."},
+    "H4": {"verdict": "better", "why": "38% shorter design+plan; one source per goal (ticket); every figure and what-if reproduces; clear 'fits only at low end' and two remedies. Lost the uncertain-operation runbook and manager handoff, two waits and some acceptance cases. Handoff-hour discipline is no better than r5."},
+    "H5": {"verdict": "slightly better (same class of problems)", "why": "Summary present and accurate; 15% shorter; stale IDs mostly fixed; pen-test booking step added. Still 68% over budget because 27 goal entries are duplicated verbatim in tickets. More prose claims contradict the helper (4 vs 2). Zero handoff hours. Waits dropped (canary ramp, legal review, portal review) and the sandbox wait halved vs r5, which is what makes the plan fit."}
+  },
+  "why_H2_H5_over_budget": [
+    "Rule conflict: 'Acceptance lives in its goal' plus 'Phase 1 goals are complete' plus the template's full '### G01' entry make the agents write complete goal entries in the plan and then copy them into tickets. H4 put goal detail only in tickets and came in near budget. H5 plan goal entries = 5,397 words; without them design+plan ~8,050 (on budget). H2 goal entries = 1,497; without them ~5,630.",
+    "H2: the design alone (3,524) nearly fills the 4,000 internal-tool budget. A 14-row headless Assumed-answers table, a production-grade decision table with long cells, and a full depth/deferred-controls table are each written at production granularity.",
+    "H5: phase 1 = the whole programme (27 goals), so 'tickets only for phase 1' and 'phase 2 in 3-4 lines' remove almost nothing. The design also restates capacity, finish and risks from the plan.",
+    "Tickets average 227-260 words against the ~150 guide in all three."
+  ],
+  "top_issues": [
+    "Plan goal entries duplicate tickets (H2, H5): pick one home for acceptance and scope (tickets, as H4 did) and make the plan's goals table point to it",
+    "H5 prose claims not checked against the helper: the load share, 'up to a week' and the unspecified G13 split row",
+    "Waits requested on day 1 are still modelled after the goal's work (H4 G10, H5 G01), which inflates the finish and distorts the remedy analysis; model them as W-goals as H2 did",
+    "Handoff hours are absent in H4 and H5, including on proposed reassignments/splits; in H4 the suggested reassignment (B helps with G09) makes the finish worse",
+    "H5 silently dropped waits that existed in r5 (canary ramp, legal review, portal review) and halved the sandbox wait. No rationale is given, and these changes produce the fit",
+    "Design Summary and plan Summary both list 'largest risks'; in H2 they disagree, and in H5 they repeat each other"
+  ]
+}

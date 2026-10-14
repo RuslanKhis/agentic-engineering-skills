@@ -1,0 +1,186 @@
+{
+  "round": 9,
+  "root": "scratchpad/est/after9 (copied to scratchpad/est/r9check; originals untouched)",
+  "compared_with": "after7 (H4, H5), after8 (H4), round7-check.json, round8-check.json",
+  "change_under_test": "Numeric word budget for larger profiles replaced by 'cut waste, never substance' (delivery-profiles.md:312). Structural rules kept.",
+  "helper": "check_schedule.py md5 0a76e5bdbb04d97e0c8aaecb44f619a3 in both folders. Reruns with /opt/homebrew/bin/python3.12 -I. What-ifs edit yaml copies in r9check/<H>/wi/ via r8tools/wi.py. Per-goal start/finish via r9tools/times.py, which reimplements the helper's greedy scheduler.",
+
+  "P1_completeness": {
+    "H4": {
+      "score": "6 of 9 present",
+      "kill_switch_and_drill": "PRESENT. G09 builds an env-flag kill switch, tested with no model call; G10 drill: kill switch stops model calls within 1 min",
+      "reconciliation_drill": "PRESENT. G10 drill: 'a forced uncertain booking resolved to exactly one booking'; runbook covers manual reconciliation",
+      "staging_journey_real_api": "PRESENT. G06: book, move and cancel against the staging booking API (W1) plus a forced timeout, max 20 writes; G11: staging Maya journey, then one staff-assisted real booking in production",
+      "per_salon_restriction": "PRESENT. G11 salon allow-list; acceptance: 'A customer of another salon is told the assistant is not yet available there, and no proposal is created'",
+      "cancel_all_row": "MISSING. r7's 'cancel all my bookings -> one proposal per appointment' row is not in the failure table and has no test",
+      "pass_bar": "PRESENT (proposed). G08: '>= 90 % of cases pass and 0 forbidden calls' written to eval/README; G11 gates launch on it",
+      "partial_move_row": "MISSING. The cancel-plus-rebook fallback is in G06 scope and design section 9 (A6), but there is no failure row or test for a half-done move",
+      "read_fails_row": "MISSING. The only unavailability row is 'Model unavailable or 8-call cap hit'. No row for booking-API reads failing (G01 has a Transient error class and a retry test only)",
+      "call_cap_test": "PRESENT. G02 acceptance: a scripted model that loops stops at 8 model calls with the designed refusal",
+      "other_losses": "The 'token expired mid-conversation' row (back in r8) is gone again. 'Browser closed after confirm' is still missing"
+    },
+    "H5": {
+      "score": "4 present, 1 partial, 1 missing",
+      "legal_review_wait": "PRESENT. W6 (5-10 days, after G11) blocks G21; request step is G11's acceptance 'sent to legal (W6 started)'",
+      "load_test_window": "PARTIAL. G20 is a bounded staging load test (about 25 concurrent sessions) behind W4, the Vertex EU quota wait. There is no Guidewire sandbox or pre-prod load window, though completed claims in the test hit the sandbox. The design no longer calls Guidewire rate limits binding, so the r7 concern was dropped rather than resolved",
+      "telemetry_row": "PRESENT. 'Telemetry or Model Armor outage' row: Model Armor fails closed, telemetry has no user impact, alert on screening error rate (G16)",
+      "handoff_hours": "PRESENT. Every cross-person receiver has handoff hours; the helper reports none missing. r7 had none. Caveat: G21 has one 4 h value for 13 incoming goals from 6 owners",
+      "ai_notice_test": "MISSING. G11 only has 'the wording and AI disclosure are sent to legal'. No acceptance shows the notice before the first message (D12 states it is shown)",
+      "dpia_before_employee_pilot": "PRESENT. No employee pilot on real data remains. G18 staging is synthetic only. G21 is blocked by W1 and runs the internal dry run after DPIA sign-off",
+      "other_losses": "r7's W5 portal wait (CIAM client and release-train slot) is gone, so nothing models portal-team work. r7's canary/beta calendar days are gone: the G26 ramp has 0 days"
+    }
+  },
+
+  "P2_waste": {
+    "method": "wc -w per line range, classified against the rule's list. The rule allows change logs at one row per change, so run-history tables are reported separately as 'permitted history', not as waste. Template boilerplate (ticket front matter, 'Run this ticket' blocks) is not on the list and is excluded. Partial-cell figures are estimates.",
+    "H4": {
+      "words": {"design": 4354, "plan": 2902, "design_plus_plan": 7256, "tickets": 3932, "all": 11188, "r7_design_plus_plan": 4994, "r8_design_plus_plan": 5132, "r7_tickets": 2856, "growth_vs_r7_design_plus_plan_pct": 45, "growth_vs_r7_tickets_pct": 38},
+      "waste_words": 812,
+      "waste_share_design_plus_plan_pct": 11,
+      "waste_share_all_docs_pct": 7,
+      "permitted_history_words": 265,
+      "substance_share_design_plus_plan_pct": 85,
+      "largest_waste_items": [
+        ["design: deferred-control table repeats the depth table's phase-2 rows G14-G17 and their triggers (later-list repeat)", 133],
+        ["design: scope-gate table restates A1-A10", 100],
+        ["design: guarantee table's 'Planned verification' cells restate ticket acceptance cases (I1-I4)", 90],
+        ["plan: Later rows repeating the design (tuning = depth row, preferences = memory row, deposits = A5, languages = A9)", 79],
+        ["plan: 'Schedule check' paragraph restates the command and the summary's figures (pasted helper output)", 75],
+        ["plan: person table restates yaml owners and loads", 73],
+        ["plan: goals table Hours/Owner/Depends columns restate yaml", 55],
+        ["plan: 'What the reviewer reads' pointer-only table", 51],
+        ["plan: Destination pins restated from D2/D11", 50],
+        ["plan: Authorization paragraph restated in each ticket's execution scope", 41],
+        ["design: D2 cell lists retirement dates of models not used", 35],
+        ["plan: Open-decisions pointer paragraph", 30]
+      ],
+      "permitted_but_low_value": "Run history: 4 rows, 265 words, with long 'why' cells, plus a 72-word what-if paragraph that should be table rows. Each row bundles 2-3 changes, and run 1-2 figures cannot be reproduced on the current yaml",
+      "not_counted": "yaml 'calendar_waits: none / wait_days: 0 / handoff: 0' boilerplate (~66 words); 'Run this ticket' blocks 396 words (template)",
+      "where_growth_went": "Design +1,394 words: decisions +328 (longer cells, D12 added), delivery constraints +308 (scope-gate table, deferred table, pilot and graduation rules), guarantees +156, failure +160, purpose/journey +137, data and security +104. Plan +868: run history +331 (new), implementation map +156, cut line +175 (new), goals table +93. Tickets +1,076: scope lines +721 (file-level detail), acceptance +225 (same 33 items, more specific)"
+    },
+    "H5": {
+      "words": {"design": 5470, "plan": 3347, "design_plus_plan": 8817, "tickets": 7602, "all": 16419, "r7_design_plus_plan": 9048, "r7_tickets": 5692, "growth_vs_r7_design_plus_plan_pct": -3, "growth_vs_r7_tickets_pct": 34},
+      "waste_words": 1303,
+      "waste_words_design_plus_plan": 923,
+      "waste_share_design_plus_plan_pct": 10.5,
+      "waste_share_all_docs_pct": 8,
+      "permitted_history_words": 235,
+      "substance_share_design_plus_plan_pct": 87,
+      "largest_waste_items": [
+        ["tickets: 'Route and rationale: see the design... and the plan implementation map' pointer sentence in all 27 tickets (not in the template)", 380],
+        ["design: scope-gate table restates A1, A3, A6", 130],
+        ["plan: person table restates yaml owners and loads", 109],
+        ["design: deferred-control table repeats Later and phase-2 items (P2-01, P2-04, P2-05, multi-region)", 101],
+        ["design: guarantee 'Planned verification' cells restate ticket tests", 100],
+        ["plan: Destination restates non-goals, pins and credential homes from the design", 90],
+        ["plan: schedule-check command block plus result line restating the summary", 65],
+        ["plan: waits table restates yaml durations (the 'requested in' column is substance)", 60],
+        ["plan: Later rows repeating design non-goals and the deferred table", 60],
+        ["design: verification section restates which goal tests what", 60],
+        ["plan: 'What the reviewer reads' pointer-only table", 48],
+        ["design: D8 cell lists retirement dates of rejected models", 45]
+      ],
+      "permitted_but_low_value": "Run history: 7 rows, 235 words. Compliant at one row per run",
+      "not_counted": "yaml boilerplate (~160 words); 'Run this ticket' blocks 972 words; 'Supporting skills and why' lists ~190 words (useful routing)",
+      "where_growth_went": "Design+plan flat (-231). Tickets +1,910: scope +812 (more specific behaviour), acceptance +479 (86 items vs 81), and ~590 words of new 'Supporting skills' plus 'Route and rationale' boilerplate"
+    }
+  },
+
+  "P3_structure": {
+    "H4": {
+      "summary": "PASS. 273 words. Covers profile, phase-1 outcome, 56-88.5 h of 112.5, finish 6.13-9.87 of 10 (fits), chain G01>G04>G06>G11 8.27, three risks with owners, and decisions. The helper rerun matches exactly (exit 0, no mismatches)",
+      "one_home_per_goal": "MOSTLY. Tickets are the home, and the goals table links to them. The goals table still restates hours, owner and dependencies, and the design's guarantee cells restate acceptance cases",
+      "design_points_to_plan_summary": "PASS ('Capacity, finish range and cut line: see the plan's summary')",
+      "day1_waits": "PASS. W1 (GCP project, staging key, test data, 1-2 days) and W2 (owner sign-off, 2-4 days) are their own entries with blocked_by []. Day-1 request steps are in G03 and G01 notes and in Resume here. Fixes the r7/r8 unmodelled GCP and staging-key waits",
+      "handoffs": "PASS. All 7 cross-person receivers have hours (G02, G05, G06, G07, G10, G11; G11 1 h for three givers). No helper warnings",
+      "prose_escapes": [
+        "G07 acceptance 'Maya's move completes through the widget' needs G06 (and G04's confirm endpoint); blocked_by is [G02, G03]",
+        "G08 live run needs the W1 Vertex credential; blocked_by is [G02]",
+        "Team approvals for staging writes (G06), each deployment and IAM grant (G09), and go-live (G11): no W entry",
+        "Baseline phone-change volume 'supplied by the salon owner during G11': no request step"
+      ]
+    },
+    "H5": {
+      "summary": "PASS with one error. 317 words. 668-1,122 h of 2,340 h, finish 58-95 of 100 (fits), chain 91.7, and pilot start days 41-67 / W7 end 54-88 all reproduce. Error: 'roles loaded at 17-58 %'; ML is at 136-232 of 375 h = 36-62 %",
+      "one_home_per_goal": "GOOD. The goals table has no hours. Estimates are in the yaml and copied into ticket front matter. The waits table restates durations, and the design's guarantee cells restate tests",
+      "design_points_to_plan_summary": "PASS",
+      "day1_waits": "PASS. W1, W2, W4 and W5 are entries with blocked_by [], requested in G01 on day 1. W3 runs after G18 (slot booked in G01). W6 runs after G11. W7 is the pilot run",
+      "handoffs": "PASS (all receivers). The helper gap remains: G21 has one 4 h value for 13 givers",
+      "prose_escapes": [
+        "G12 'supplies the DPIA (W1) with its data-flow evidence', but W1 starts on day 1 with no dependency on G12",
+        "G26 staged ramp 10 % > 50 % > 100 %, with a comparable sample recorded at each step, has 0 days",
+        "Guidewire production API client (G24 secret): W2 covers the sandbox only",
+        "Portal team release and CIAM client registration (O4 names the portal team): no wait",
+        "G27 adjuster review time and web-form baseline from the claims team, and G21's agreed withdrawal procedure: no request step"
+      ]
+    }
+  },
+
+  "P4_defects": {
+    "H4": {
+      "total": 7, "r7": 11, "r8": 11,
+      "items": [
+        "Dependency in prose not in schedule: G07's widget acceptance runs Maya's move (G06) and Confirm (G04), but G07 is blocked_by [G02, G03]. Modelled whole: 6.27-10.13, low end only (base 6.13-9.87, fits). Moving the browser check into a 1 h tail after G06 keeps it at 9.87, but that needs a handoff",
+        "Dependency in prose not in schedule: G08's live evaluation needs the W1 Vertex credential (no change to the finish)",
+        "Approvals not modelled: team approval for staging writes (G06) and for each deployment and IAM grant (G09)",
+        "Approval not modelled: the team's go-live approval (G11)",
+        "Unbacked verification: design D6 points 'restart mid-conversation keeps the session' to G09, and section 8 lists 'a restart during dispatch', but no ticket acceptance tests a restart. The 'Process restart mid-dispatch' failure row has no test (r7 had one)",
+        "Internal contradiction: section 8 'bounded live ... at most 50 model calls (G06, G11)', but G11 runs the G08 live evaluation at up to 300 calls",
+        "Owner inconsistency: rollback row says 'Dev C per G10 runbook', but G10 belongs to Dev A, its runbook names the on-call person per day, and the uncertain-operation row says Dev A"
+      ],
+      "verified_claims": [
+        "Summary and schedule figures reproduce exactly",
+        "Run 3 rebuilt as current + G07 +1-2 h + G11 +1 h gives 6.53-10.67 (stated 10.67). G11 to Dev A or Dev C: 10.67. Widget cut alone: 10.13. Pilot-only alone: 10.4. 4.5 h/day: 11.85. All reproduce",
+        "Full scope in 11 days: 58-91.5 h, 6.53-10.67, fits. Reproduces",
+        "A4 fallback 'pushes G11 past day 10': G03 13-21 gives 7.47-11.73. True",
+        "Negative claim that the cut is needed holds: G06 to Dev C 11.2, G10 to Dev C 10.67, G10 to Dev B 11.87, G05 to Dev B 12.27, G07 to Dev C 11.73; none fits without the cut"
+      ],
+      "minor_not_counted": [
+        "'Evaluation set moved to Dev C (13.6)' reproduces as 12.0 (12.13 with a 0.5 h handoff); the verdict is unchanged",
+        "Run 1-2 figures cannot be checked against the current yaml",
+        "The 4.5 h/day sensitivity is given for run 3 only. On the chosen plan, 4.5 h gives 6.81-10.96, low end only, and this is not stated"
+      ],
+      "fixed_from_r7_r8": ["GCP project and staging key now a day-1 wait (W1)", "production environment built (G09)", "real booking API exercised before production (G06, G11)", "pilot-salon gate enforced and tested", "kill switch, drills and pass bar back", "A2 back at 5 h with a sensitivity row", "no false W1 or 'only Dev A' claims"]
+    },
+    "H5": {
+      "total": 8, "r7": 9,
+      "items": [
+        "Negative claim contradicted: 'Spare hours do not shorten that chain'. G23 to Integration (idle, +3 h handoff) gives 56.4-92.33 (-2.7 days). Splitting G06 with Integration gives 93.93. Agent at 6 h gives 54.18-89.93",
+        "Summary figure wrong: 'individual roles are loaded at 17-58 %'. ML is at 62 % at the high end",
+        "Dependency in prose not in schedule: G12 supplies the DPIA's data-flow evidence, but W1 does not wait for G12. W1 after G12 gives 71.87-120.07; a shorter 15-25 day DPIA after G12 gives 116.96. Both are low end only and GA slips about 20 days",
+        "Calendar time in prose not in schedule: the G26 ramp (three steps, each with a comparable sample) has 0 wait days. At 3-6 days it is 61-101, low end only; at 2-4 days it is 99, fits",
+        "Wait without a request step: the Guidewire production API client (G24); W2 is sandbox only. No change to the finish if requested on day 1",
+        "Wait without a request step: portal-team release of the widget and CIAM client registration (r7 had this as W5; dropped). No change at 5-10 days after G11",
+        "Wait without a request step: G27 adjuster review time and web-form baseline, and G21's claims-team withdrawal procedure",
+        "Stale pointers: D13 'G21 rollback rehearsal' (the rehearsal is in G22) and T1 'G21 pilot measurement' (measured in G27)"
+      ],
+      "verified_claims": [
+        "Summary hours, capacity, finish and chain reproduce",
+        "'Security 2 h/day worsens to 60.9-101.7' reproduces (60.93-101.67)",
+        "Pilot start on days 41-67 and W7 end on days 54-88 reproduce (40.5-66.7 / 54.3-88.1)"
+      ],
+      "minor_not_counted": ["One 4 h handoff on G21 for 13 givers", "Hours for fixing G14/G25 critical or high findings before G21 are not budgeted"],
+      "fixed_from_r7": ["handoff hours everywhere", "legal-review wait W6", "DPIA gate before any real-data pilot", "G12 end-to-end dependency problem gone (G18 depends on G10/G11)", "wrong weekday gone", "'not by hours' claim replaced by a reproducible Security what-if"]
+    }
+  },
+
+  "P5_verdict": {
+    "H4": {
+      "verdict": "BETTER than r7 (and r8) for a manager",
+      "why": "Safety items the numeric budget had squeezed out are back: kill switch and drill, reconciliation drill, a real booking-API staging journey, the pilot-salon gate, the pass bar and the call-cap test. All waits are modelled on day 1, the summary is exact, every alternative reproduces, and the plan is back on 5 focused h/day with a sensitivity row. Defects fell from 11 to 7. The cost is length: design+plan is +45 % (7,256 vs 4,994) and tickets +38 %. About 11 % of design+plan is waste by the rule (812 words) plus 265 words of permitted run history. Of the growth, about three-quarters is substance: restored floor items, guarantees, failure rows and data/security tables. The rest is restatement, plus decision and ticket-scope cells written at production granularity for a two-week MVP. Three failure rows are still missing (cancel-all, partial move, read fails). One unmodelled dependency (G07 needs G06) turns 'fits' into 'low end only' if taken literally"
+    },
+    "H5": {
+      "verdict": "SAME (slightly better on structure, with one new high-impact gap)",
+      "why": "Design+plan is 3 % shorter, and handoffs, the legal wait, the DPIA gate and the telemetry row are fixed. The summary and what-ifs reproduce. But the AI-notice test is still missing. The 'fits at 95 of 100' headline rests on W1 (DPIA) not waiting for G12's data-flow evidence, which the tickets say it needs: modelled, GA slips to about day 120. The G26 ramp has no calendar days, and the portal wait was dropped. Tickets grew 34 %, mostly more specific scope and acceptance (substance) plus ~590 words of new pointer and skills boilerplate"
+    },
+    "overall": "The rule did what it was meant to do: substance came back (H4 most visibly) and no floor item was cut to save words. Length went up in H4, not down. Measured waste is about 7-8 % of all words (10-11 % of design+plan), so the extra length is mostly substance, but the documents are long for an MVP manager (H4 design 4,354 words). The remaining failures are schedule-modelling escapes, not length: prose dependencies and calendar time that are not in the yaml"
+  },
+
+  "top_issues": [
+    "Prose-to-schedule escapes remain the main defect class and can flip the headline: H4 G07 needs G06 (10.13); H5 W1 needs G12 (120 days); H5 G26 ramp days (101)",
+    "Approvals and third-party waits are still unmodelled: H4 deployment and go-live approvals; H5 Guidewire production client, portal release, claims-team inputs",
+    "Failure rows lost silently between rounds: H4 cancel-all, partial move, read-fails, token-expiry (back in r8, gone again); H5 AI-notice acceptance",
+    "Waste is concentrated in restated tables: scope-gate tables restating A-rows, deferred-control tables repeating the depth table, person tables restating yaml, guarantee cells restating tests, and H5's 27 pointer sentences",
+    "No length ceiling means H4's design doubled toward production granularity; the rule's 'design at the profile's depth' clause is not yet biting"
+  ]
+}

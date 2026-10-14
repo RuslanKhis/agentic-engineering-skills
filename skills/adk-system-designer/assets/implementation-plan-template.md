@@ -4,6 +4,18 @@ Status: draft / ready goals identified / in progress / complete with evidence
 Architecture: <relative link to the canonical design>
 Continuation source of truth: <this plan, existing spec or tracker>
 
+## Summary for the reader
+
+At most one page, for the person who decides; figures come from the schedule
+check, other facts are referred to by ID:
+
+- **Profile and phase 1:** <profile; what phase 1 delivers and to whom>
+- **Effort and finish:** <phase 1 human hours against capacity; finish range in
+  working days against the date; fits / low end only / no>
+- **Largest risks:** <three, each with its owner or mitigating goal>
+- **Decisions needed from you:** <the open decisions that block or move dates>
+- **Next prompt:** <the run prompt for the first ready goal>
+
 ## Destination and constraints
 
 State the useful end result, non-goals, accepted stack and current authorization.
@@ -44,6 +56,7 @@ designer's `scripts/check_schedule.py` reads it; tickets copy it):
   blocked_by: []
   calendar_waits: none   # or what, e.g. security review
   wait_days: 0           # working days the wait adds, as a range if unsure
+  handoff: 0             # hours in total for picking up work from another person
 ```
 
 Longest dependent chain and finish range: <from the schedule check, with the
@@ -94,7 +107,9 @@ goals coarse when an unresolved decision could change their scope.
   path>, use the goal's primary and supporting skills, verify its acceptance cases
   locally and record evidence here.`
 
-Repeat for currently actionable goals. Discovery goals state the question,
+Repeat for currently actionable goals. When tickets are written, the ticket is
+the goal's home: keep only the goals table here, with a link to each ticket,
+instead of these entries. Discovery goals state the question,
 bounded investigation, expected decision/evidence and what it unblocks.
 Fill every field with real values; the designer knows the goal ID, skills and
 acceptance cases when it writes the plan. To hand goals to a tracker or to

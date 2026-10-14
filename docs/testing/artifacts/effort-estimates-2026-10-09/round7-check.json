@@ -1,0 +1,144 @@
+{
+  "round": 7,
+  "root": "scratchpad/est/after7 (copied to scratchpad/est/r7check; originals untouched)",
+  "compared_with": "scratchpad/est/after6 and round6-check.json",
+  "helper": "check_schedule.py md5 fc8fa4bf3ba781ab7ec8813fe18bf9b3, identical in all three. Reruns with /opt/homebrew/bin/python3.12 -I. What-ifs were made by editing yaml copies in r7check/<H>/wi/. H4 ran its helper on Python 3.9 and said so; it still works.",
+  "M1_summary": {
+    "verdict": "PASS (all three)",
+    "H2": {"verdict": "PASS", "words": 252, "evidence": "Rerun: 17-24 h of 27; Dev A 8-11 h and Dev B 9-13 h of 13.5 each; chain G01>G02>G04; finish 6.67-9.63 of 10; fits; exit 0; no ticket mismatches. All 7 what-if rows reproduce: full request 8.15-12.59, low end only; without G05 the same; deploy plus enable goal (Dev A) 8.52-12.59; 13 days fits; both at 2.4 h 6.11-9.44; Dev A at 2.4 h 6.85-10.56. The negative 'full request does not fit' holds because the full scope is 19-28 h, over 27 h. The design no longer has its own summary, which fixes r6's risk disagreement.", "issue": "'Fits' depends on missing handoff hours (see M5). Adding 1 h into G04 gives 7.41-10.37, low end only, with Dev B at 14 h of 13.5."},
+    "H4": {"verdict": "PASS (one loose figure)", "words": 231, "evidence": "Rerun: 64-89 h of 112.5; loads 25-34, 19-28 and 20-27; chain G01>G03>G06>G09>G11; finish 7.47-10.13; low end only; exit 1. Dev A=6 gives 6.44-9.02 and fits. 11 days fits.", "issue": "'The high end is about one hour over': it is 0.13 day, about 0.5 h of Dev A's 3.75 h day."},
+    "H5": {"verdict": "PASS (two errors)", "words": 296, "evidence": "Rerun: 775-1,222 h of 2,793; 7 loads match; finish 66.89-99.67 of 98; low end only; exit 1. Reviewer at 4 h gives 72.89-93.56 and fits; --days 100 fits; cutting G08 gives 66.89-99.67, no help. Summary rounding to 67-100 and 73-94 is correct.", "issues": ["'GA on Tue 2027-03-17': 2027-03-17 is a Wednesday. Working day 100 (from Mon 2026-10-19, with 24 Dec to 1 Jan off) is Tue 2027-03-16, so the date is right and the weekday is wrong.", "'It is limited by the chain of dependent goals and calendar waits, not by hours' is contradicted by the helper (see M5)."]}
+  },
+  "M2_length": {
+    "verdict": "IMPROVED; H5 is near budget, H2 is still well over, H4 is unchanged",
+    "table": {
+      "H2": {"design": 3800, "plan": 1934, "design_plus_plan": 5734, "budget": 4000, "over_pct": 43, "r6_design_plus_plan": 7127, "r6_over_pct": 78, "tickets": 1304, "r6_tickets": 1297, "tickets_count": 5, "avg_ticket": 261},
+      "H4": {"design": 2960, "plan": 2034, "design_plus_plan": 4994, "budget": 4000, "over_pct": 25, "r6_design_plus_plan": 4957, "r6_over_pct": 24, "tickets": 2856, "r6_tickets": 2599, "tickets_count": 11, "avg_ticket": 260},
+      "H5": {"design": 5602, "plan": 3446, "design_plus_plan": 9048, "budget": 8000, "over_pct": 13, "r6_design_plus_plan": 13453, "r6_over_pct": 68, "tickets": 5692, "r6_tickets": 6106, "tickets_count": 27, "avg_ticket": 211}
+    },
+    "what_changed": "H2 and H5 plans no longer carry full goal entries; the goals table links to tickets (H2 plan -46%, H5 plan -61%). The designs grew: H2 +276 words, H4 +244, H5 +993 (H5 Architecture and decisions grew from 1,118 to 1,534 words).",
+    "largest_sections": {
+      "H2": [["design: Architecture and decisions", 850], ["design: Delivery constraints, depth and deferred controls", 657], ["plan: Delivery profile and capacity", 636], ["design: Assumed answers", 447], ["design: Guarantees", 406]],
+      "H4": [["plan: Delivery profile and capacity (incl. 284-word yaml and a 7-row change-history table)", 894], ["design: Architecture and decisions", 802], ["design: Delivery constraints", 389]],
+      "H5": [["plan: Delivery profile and capacity", 1595], ["design: Architecture and decisions (15 decisions x 7 columns)", 1534], ["yaml block (inside plan profile)", 798], ["design: Guarantees", 671], ["design: Delivery constraints", 662]]
+    },
+    "ticket_note": "The ~150-word guide is still exceeded: averages are 261, 260 and 211 words.",
+    "where_goal_facts_live_now": {
+      "H2": "Hours are in 3 places: yaml, the goals-table Hours column and ticket front matter (r6: 4). Acceptance is in 1 place (the ticket), plus one-phrase test references in the design's invariant 'Planned verification' column (r6: plan entry plus ticket). Scope is in the ticket only.",
+      "H4": "Hours are in 2 places: yaml and ticket (r6: 3). Acceptance is in the ticket, with invariant test references in the design.",
+      "H5": "Hours are in 2 places: yaml and ticket (r6: 4). Acceptance is in the ticket, but the design's guarantees table restates concrete cases (for example I1 'forged policy number, other customer's policy, cancelled policy -> no Guidewire call (G11)'), so invariant cases appear twice (r6: plan entry and ticket, word for word, for all 27)."
+    },
+    "remaining_restated_facts": {
+      "H2": ["Finish 6.67-9.63 appears 3x and 12.59 5x, all in the plan (summary, helper result, what-if table); 0 in the design (r6: 7 hits across documents)", "max_llm_calls appears 6x in the design", "Deferred items (per-user OAuth, persistent sessions, semantic index, SDP, adversarial suite) each appear in 3 places: design depth table, design deferred table and plan phase 2 or Later"],
+      "H4": ["Finish 7.47 appears 5x and 10.13 6x, all in the plan; 0 in the design", "The change-history table repeats finishes the summary already states", "'pilot salon' appears 8x"],
+      "H5": ["775 / 1,222 / 2,793 appear 3x each, plan only; the design has 0 (r6: 5x including the design)", "The yaml carries 6 phase-2 entries with hands_on/review splits, and every phase 1 entry has 'calendar_waits: none / wait_days: 0' boilerplate (~250 words)", "The person table restates yaml loads (useful; the helper prints the same)"]
+    },
+    "budget_rule_respected": "No scenario deleted floor items to reach budget. The remaining items lost against r6 (M3) are scope moves and silent drops, not budget cuts made to save words."
+  },
+  "M3_completeness": {
+    "verdict": "PARTIAL. Some r6 drops are back (H4 runbook drill, H5 injection row, portal and canary waits, conservative sandbox wait). Several are still missing, and each scenario has new losses.",
+    "H2": {
+      "r6_dropped_status": {
+        "rollback acceptance": "still missing (failure row and 'previous revision kept for rollback' only)",
+        "concurrent double-confirm": "still missing (G06 phase 2 has a sequential 'double commit makes one create call')",
+        "Jira 400 and 'no runbook found' tests": "still missing (failure rows exist; no acceptance in G01 or G06; I5 points to a 'G06 test' that is not in G06's acceptance)",
+        "no case cites a URL its tools did not return": "partly back (G03: a non-allow-listed link renders inert; G05 counts uncited answers)",
+        "restart durability / reconciliation": "still phase 2 (G07), deliberately"
+      },
+      "new_vs_r6": [
+        "Scope: confirmed Jira creation (the user's core ask) moved from phase 1 to phase 2 G06. r6 fitted it in 14-23 h; r7 re-estimates the full request at 19-28 h (G03 5-7, G04 4-6) and cuts it. The cut is documented with what-ifs.",
+        "Lost acceptance: the lead walkthrough and sign-off; 'gold set on the deployed service within 5 points' (G05 now measures only the local agent); 'expired proposal -> expired'; 'budget alert and quota visible'; 'release manifest has no aliases'; 'pin and model ID confirmed against the lifecycle file'. These are now scope lines or gone.",
+        "'Create in another project -> 403' is gone from acceptance",
+        "Failure row 'model loop or overlong turn' is gone (I7 still covers it)"
+      ],
+      "gained": ["restricted-page check (G05)", "injected-runbook draft test", "markdown-image/link rendering test", "restart creates nothing (G04)", "W2 gold questions as their own wait"]
+    },
+    "H4": {
+      "r6_dropped_status": {
+        "operator path for uncertain operations": "partly back: G10 runbook, staged-uncertain reconciliation drill, kill-switch drill, staff briefing, who is on duty. The manager change list and manager sign-off are not back.",
+        "failure rows 'booking API read fails' and 'token expires mid-chat'": "still missing",
+        "per-invocation cap acceptance": "still missing (max_llm_calls=12 is only in scope)",
+        "overlapping turn -> 409": "still missing",
+        "no user-managed SA key": "still missing",
+        "budget alert configured": "partial (G07 scope and the G11 go/no-go list; no acceptance)",
+        "first prod change confirmed by a manager": "still missing",
+        "waits: staging API credentials and GCP project/billing/Vertex": "still missing (G07 'needs the team's authorisation'; A3 budget figure from founders blocks G07; neither has a W entry or request)",
+        "handoff hours": "partly back (1 h on G06 only)"
+      },
+      "new_vs_r6": ["Pass bar >=27/30 on 2 runs is gone (G09 now 'a score per case')", "Failure row 'Move half done' (partial move) is gone, though A6 non-atomic reschedule is still open", "Failure row 'Browser closed after confirm' is gone (polling covers it partly)"],
+      "gained": ["restart-while-dispatching row and test", "staging rollback tried once (G07)", "session survives a new revision", "cancel-all row", "W1 as its own wait"]
+    },
+    "H5": {
+      "r6_dropped_status": {
+        "failure row Guidewire business/validation rejection": "partial ('policy cancelled or address mismatch at submit' is our pre-check, not a Guidewire 4xx)",
+        "failure row photo-text injection": "back",
+        "failure row telemetry unavailable": "still missing",
+        "wait: claims/legal review of fixed safety messages": "still missing (O6 legal reading blocks G12 copy and G27, but has no W entry or request step)",
+        "wait: portal team review": "back as W5 (CIAM client and release-train slot)",
+        "wait: canary ramp": "back as the G27 two-week beta with canary thresholds (10 wait days)",
+        "wait: Guidewire pre-prod load-test window": "still missing (G22 now uses a Guidewire stub, although the design calls Guidewire rate limits a binding limit)",
+        "handoff hours": "still none anywhere",
+        "AI Act classification acceptance": "still missing (O6 only)",
+        "sandbox wait halved in r6": "fixed: W1 is 15-25 days (r6 5-10, r5 10-20)"
+      },
+      "new_vs_r6": ["AI notice acceptance is gone: r6 G22 had 'AI notice shown before the first message' and G04 'notice text agreed'; r7 G12 mentions AI disclosure only in its outcome", "Failure row 'Browser disconnect mid-turn' is gone", "The DPIA is now a wait (W2) rather than a goal with acceptance; retention values move to G15"],
+      "gained": ["6 day-1 waits with a request list", "region outage row", "draft-edited-after-summary row", "worker crash row"]
+    }
+  },
+  "M4_day1_waits": {
+    "verdict": "PASS (rule applied in all three); a few non-modelled approvals remain",
+    "H2": "W1 (Atlassian bot, 2-5 days) and W2 (gold questions, 3-5 days) have total 0 and no owner. G04 and G05 depend on them; the day-1 actions are listed. The r6 'gold questions with no request' issue is fixed. Not modelled: the user naming the GCP project and approving IAM/IAP for G04.",
+    "H4": "W1 (owner sign-off, 2-4 days) blocks G11, and G01 step 1 sends it on day 1. The r6 issue (G10 approval modelled after the work) is fixed. Not modelled: GCP authorisation and the A3 budget figure for G07, and staging booking-API access for G01.",
+    "H5": "W1-W6 have total 0 and no owner, with a day-1 request list in the plan and Resume here. The r6 issue (G01 sandbox wait after 12-20 h of work) is fixed. G23/G25/G27 wait_days are real durations (pen-test window, pilot, beta), not request waits. Remedies were computed on this model and reproduce. Not modelled: O6 legal/AI Act reading (blocks G12 copy, G27) and the phone-channel baseline data for G13."
+  },
+  "M5_defects": {
+    "H2": {
+      "total": 3, "r6": 2,
+      "items": [
+        "Missing handoff hours: G04 (Dev B) integrates Dev A's G01/G02 with none. With +1 h the finish is 7.41-10.37, low end only, and Dev B is at 14 of 13.5 h, so the 'Fits' headline depends on the omission",
+        "Contradiction: the plan says 'only W1/O4 block phase 1 goals', but the design's O1 blocks 'G04 go-live'",
+        "Wait without a request: G04 'blocked by ... the user naming the GCP project and approving IAM and IAP changes' has no W entry or day-1 request"
+      ],
+      "minor_not_counted": ["Summary 'if G01-G04 run low (Dev A has >=3 h left) G06 can start in week 2': true, but G06 is 5-8 h; G06 in phase 1 gives 12.59-18.52"]
+    },
+    "H4": {
+      "total": 11, "r6": 9,
+      "items": [
+        "Negative claim 'Only more focused hours for Dev A closes the gap' is contradicted: Dev C at 6 h gives 7.33-9.96 and fits; Dev A at 5.5 h (not 6) gives 6.86-9.31 and fits",
+        "Prose not modelled: 'G03's review is done by Dev B', but the yaml keeps G03's 3-4 h review on Dev A. Modelled faithfully (G03R on Dev B) the finish is 8-11.2, and the recommended Dev A=6 remedy gives 7.38-10.36, low end only, so the remedy fails",
+        "Reassignment suggestion 'Dev C ... is the overflow for G08 labelling' is contradicted by the plan's own rejected what-if (G08 to Dev C gives 8.27-11.47) and has no handoff hours",
+        "Stale ID: D1 verification 'Tool selection on the G06 set'; the evaluation set is G08/G09",
+        "Missing handoff hours x5: G02(B)>G07(A), G07(A)>G10(C), G05(C)>G11(A), G09(B)>G11(A), G10(C)>G11(A). Only G06 states 1 h. With 1 h each the base is 8.53-11.2; Dev A=6 still fits at 9.56",
+        "Waits without a request x2: G07 GCP/IAM/spend authorisation plus the A3 budget figure from founders; G01 staging booking-API access"
+      ],
+      "minor_not_counted": ["'about one hour over' is ~0.5 h", "rejected what-if 'G08 or G07 to Dev C gave 10.4-12' reproduces as 8.27-11.47 and 8.8-12"]
+    },
+    "H5": {
+      "total": 9, "r6": 10,
+      "items": [
+        "Claim 'limited by the chain ... and calendar waits, not by hours' is contradicted: Eng B at 8 h gives 64.33-96.22 and fits; Eng C at 8 h gives 66.67-97.33 and fits; reviewer at 3 h gives 66.89-94.33 and fits",
+        "Negative claim 'Spare hours ... do not shorten the chain; only the remedies below do' is contradicted: splitting G24 between Eng C and Eng A (+2 h handoff) gives 66.89-96.33 and fits",
+        "Missing dependency: G12's acceptance 'completes Maria's journey against staging with the sandbox' needs G03/G10/G11, but G12 depends only on G04 and W5. With those dependencies the finish is 73.56-103.78, and neither remedy closes it (reviewer 4 h: 73.56-103.78; --days 100: low end only)",
+        "Floor/schedule gap: G25 is a production pilot with employees' real claims, but it does not depend on W2, against the floor 'real personal data only after DPIA sign-off (W2)'. The finish is unchanged when added",
+        "Stale ID: the design depth table puts Guidewire secret rotation in G03; it is in G21",
+        "Wrong weekday: 'Tue 2027-03-17' (Wednesday; day 100 is Tue 2027-03-16)",
+        "Handoff hours: none anywhere, for all cross-person dependencies. +2 h into each chain receiver (G05, G09, G11, G19, G23, G24, G25, G27) gives 70-103.22; the 'GA +2 days' remedy fails and reviewer 4 h still fits (96.22)",
+        "Waits without a request x2: O6 legal/AI Act reading (blocks G12 copy, G27); the G13 phone-channel baseline from the claims team"
+      ],
+      "fixed_from_r6": ["load-share claim gone", "'up to a week' gone", "the unspecified G13 split is replaced by remedies that reproduce", "the sandbox wait is modelled as day-1 W1", "output_schema stale ID fixed (G02)"]
+    }
+  },
+  "M6_overall": {
+    "H2": {"verdict": "same to slightly better", "why": "Better structure: one home per fact, plan 46% shorter, design has no restated summary, W1/W2 modelled, all what-ifs reproduce. Worse substance for a manager: phase 1 no longer creates Jira tickets (r6 did, in the same capacity), and the lead walkthrough and hosted quality check are gone. 'Fits' rests on zero handoff hours. Still 43% over budget, mostly waste: the design (3,800 words) is written at production granularity, with an 11-row decision table with long cells, a 13-row depth table plus a separate deferred table, and failure rows for phase-2 Jira paths."},
+    "H4": {"verdict": "same", "why": "Same length (+25%). W1 is modelled correctly, the runbook drill and staging rollback are back, every quoted figure reproduces. But the headline remedy (Dev A at 6 h) fails if G03's review is done by Dev B as the plan says. The 'only Dev A hours' negative claim is false, the overflow suggestion is contradicted, 5 handoffs have no hours, and the pass bar and partial-move row were lost. The over-budget part is mostly a 7-row change-history table and phase-2 yaml entries: waste for a manager."},
+    "H5": {"verdict": "better", "why": "Design+plan down 33% to 9,048 (13% over 8,000). Summary is accurate, six day-1 waits are modelled with a request list, the sandbox wait is conservative again, and the r6 contradictions about load share and 'a week' are gone. Remaining issues: the 'not by hours' / 'spare hours don't help' claims are false; G12's missing dependencies would push the finish to 103.8 days and defeat both remedies; there are zero handoff hours (which also defeat the +2-day remedy); and the AI-notice acceptance was lost. The over-budget part is mostly justified (the decision and guarantee tables carry the production floor), with ~250 words of yaml boilerplate and phase-2 hour splits as waste."}
+  },
+  "top_issues": [
+    "Handoff hours remain the most common gap: H2 0 of 1, H4 1 of 6, H5 0 of many. In H2 and H5 adding them changes the verdict or defeats a remedy",
+    "Negative and comparative claims are still not tested against the helper (H4 'only Dev A hours'; H5 'not by hours' / 'spare hours don't shorten the chain'). Goal splits and other people's hours close the gap in both",
+    "Prose arrangements not in the yaml (H4 G03 review by Dev B) and acceptance that needs goals missing from blocked_by (H5 G12 end-to-end on the sandbox) make the remedies invalid",
+    "Approvals and decisions outside the W list are still un-modelled: GCP project/IAM (H2 G04, H4 G07), the founders' budget (H4), legal/AI Act reading (H5)",
+    "Silent losses persist between rounds: H2's phase-1 Jira creation and lead sign-off, H4's pass bar and partial-move row, H5's AI-notice acceptance",
+    "Designs grew in all three (+244 to +993 words); H2's design alone is close to the whole 4,000 budget"
+  ]
+}

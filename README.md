@@ -1604,8 +1604,12 @@ estimate is clearly too small and records the review hours still owed.
   - plans adjusted to make the numbers fit;
   - overweight POC documents.
 
-Judgement in long production plans, such as whether a proposed remedy really
-closes a gap, is still imperfect. See the
+Plans open with a one-page summary for the person who decides, and each fact
+has one home. That cut a production plan from about 16,000 words to 9,000.
+Because a word limit made the model drop safety content, plans cut repetition
+instead, never tests or failure analysis. Judgement in long production plans,
+such as whether every dependency the text mentions is in the schedule, is
+still imperfect. See the
 [measurement record](docs/testing/effort-estimates-2026-10-09.md).
 
 ### Delivery constraints · 9 October 2026

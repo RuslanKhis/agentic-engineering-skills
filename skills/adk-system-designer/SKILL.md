@@ -81,10 +81,12 @@ concern and the controls deferred, each with the trigger that brings it
 forward. Size the documents to the profile: a proof of concept or a four-hour
 assignment gets one file in the compact form of
 [delivery profiles](references/delivery-profiles.md#compact-form-for-short-work),
-about 1,200 words, that a reviewer reads in ten minutes; an internal
-tool or pilot, roughly two to four pages; a production service, as long as its
-decisions require, with every template section either filled or marked not
-applicable with a reason.
+about 1,200 words, that a reviewer reads in ten minutes. Larger profiles
+follow [write each fact once](references/delivery-profiles.md#write-each-fact-once-at-the-depth-it-is-known):
+a one-page summary first, each fact in one place referred to by ID, detail
+that follows certainty, and waste cut before substance. In a production design, fill
+each template section that applies and mark the others not applicable in one
+line.
 
 Estimate each goal and ticket in human hours for a developer working with a
 coding agent (hands-on plus review and verify, with calendar waits listed

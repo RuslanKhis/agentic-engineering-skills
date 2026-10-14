@@ -2,7 +2,8 @@
 
 Status: draft / user-reviewed decisions recorded below
 
-For a proof of concept or a time-boxed assignment, use the compact form in
+Decisions and their rationale live here; the plan and tickets refer to them by
+ID instead of restating them. For a proof of concept or a time-boxed assignment, use the compact form in
 [delivery profiles](../references/delivery-profiles.md#compact-form-for-short-work)
 instead of this full template.
 
@@ -39,8 +40,7 @@ real data or outside people:
 | Deferred control | Why it waits | What would bring it forward |
 | --- | --- | --- |
 
-Capacity and cut line: <capacity in focused hours, phase 1 estimate, reserve;
-what ships in phase 1 and what waits>.
+Capacity, finish range and cut line: see the plan's summary (not restated here).
 
 When the artifact is judged on output quality, the first slice is the core
 judgment end to end on real inputs with a measured result; deferred controls

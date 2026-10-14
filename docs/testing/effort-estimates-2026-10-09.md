@@ -126,6 +126,42 @@ unless noted:
 
 The first two led to the round 5 change above; the others are open.
 
+## Rounds 6 to 9: plan length · 14 October 2026
+
+Production plans had grown to 13–16,000 words across design and plan. The
+round 5 defects (stale IDs, prose claims the helper contradicted) were the
+kind that long, repetitive documents produce. Rounds 6 to 9 reran H2, H4 and
+H5 and checked each against the round before
+([checks](artifacts/effort-estimates-2026-10-09/)).
+
+| Round | Change | Design + plan words: H2 / H4 / H5 | Checker's finding |
+| --- | --- | --- | --- |
+| 5 | (baseline) | 7,016* / 7,943 / 15,818 | — |
+| 6 | One-page summary for the reader; each fact in one place; phase 2 goals in three or four lines; a word budget of 4,000 for an internal tool or MVP and 8,000 for production | 7,127 / 4,957 / 13,453 | Summaries correct in all three. The budget was missed because the template made the plan and the tickets both carry the full goal. Day-1 waits were modelled after the work |
+| 7 | The ticket is each goal's only home; the design points to the plan summary; day-1 waits get their own schedule entries | 5,734 / 4,994 / 9,048 | H5 better, H4 the same, H2 slightly better. Waits modelled correctly. Handoff hours mostly missing; prose arrangements missing from the schedule |
+| 8 | The helper lists cross-person dependencies without handoff hours; the schedule must include what the prose describes; the design gets at most half the budget | 4,617 / 5,132 / – | Handoffs fixed. But to approach the number, H4 cut its kill switch and drill, the reconciliation drill and the real-API staging test, while keeping a run-history table and pasted helper output |
+| 9 | Numeric budget removed for larger profiles. A list of waste to cut instead (restated facts, run logs, pasted output, tables that only point elsewhere, phase 2 detail), and an explicit rule never to cut floor items, failure rows, tests, acceptance cases, waits or handoffs | – / 7,256 / 8,817 | H4 better than round 7: safety items back, defects 11 → 7, waste about 11% of the words. H5 the same: defects 9 → 8 |
+
+\* H2 baseline from round 1.
+
+The changes kept from these rounds are the structural ones: the summary, one
+home per fact and per goal, the design pointing to the plan, day-1 waits as
+schedule entries, and handoff hours. A word count was the wrong instrument: it
+made the model cut what was easiest to cut rather than what was repeated. Only
+the proof-of-concept compact form keeps a target (about 1,200 words), where it
+worked.
+
+Still open after round 9:
+
+- **Prose requirements the schedule leaves out.** Dependencies, rollout days
+  and approvals the text requires are missing from the schedule block. The
+  largest of these change a plan's "fits" headline. In H5, a DPIA that waits
+  for G12's evidence moves GA by about 20 days.
+- **Content drifting between runs.** Individual failure rows still come and
+  go from one run to the next.
+- **Negative claims in prose.** Occasionally a claim is still not checked
+  with the helper.
+
 ## What this establishes and what it does not
 
 Blind graders preferred the new estimates in every scenario. After the helper
