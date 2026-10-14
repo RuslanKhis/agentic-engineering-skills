@@ -2,26 +2,54 @@
 
 Use the questions relevant to the application's journey. A small read-only
 assistant may need a short design; a system that changes money or publishes data
-needs explicit operation and disclosure contracts. These are decision prompts,
-not a requirement to build every capability.
+needs explicit operation and disclosure contracts. A contract here is the
+observable promise a requirement turns into, as defined in the skill; these
+sections are decision prompts for finding them, not a requirement to build
+every capability.
 
 ## Explain a choice in conversation
 
 For example, after the user confirms that an editable plan must survive a chat
 disconnect:
 
-> Because the plan must survive a disconnected conversation, I would store it as
-> a versioned application record and have chat refer to it by ID. That gives the
+> Because the plan must survive a disconnected conversation, the contract is
+> that a saved revision comes back to its owner after a disconnect or restart,
+> and to no one else. I would store it as a versioned application record and
+> have chat refer to it by ID. That gives the
 > editor and later sessions the same authoritative saved plan. It adds revision
 > and access-control handling compared with keeping the draft only in chat. I
 > would verify that saving a revision, restarting the service and reopening it
 > returns that revision to its owner and denies access to another user.
 
-The requirement supports the choice; the reason explains the mechanism, the
-tradeoff exposes its cost, and verification names observable behavior. If shared
+The requirement yields the contract; the choice enforces it, the reason
+explains how, the tradeoff exposes its cost, and verification names observable
+behavior. If shared
 editing later becomes a requirement, revisit writer permissions and concurrent
 updates instead of presenting this initial choice as a complete collaboration
 design. Keep checks proposed until executed.
+
+## Decompose a requirement into contracts
+
+A requirement in the user's words is usually several promises enforced in
+different places. Split it until each contract has one enforcement point, then
+choose mechanisms. For example, an advertiser's assistant where "advertisers
+can find assets and purchase campaigns":
+
+| ID | From | Invariant | Scope | Authority | Enforcement | Failure outcome | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| C1 | R1 search | Only assets the account may use for the requested channel, territory and dates are shown | Verified advertiser account | Rights system | Retrieval filter before the model sees results; rechecked at reservation | Fewer results with the reason; never an unlicensed asset | Planned: offline denial cases per rights field |
+| C2 | R2 purchase | A quote states price and availability as of a time and is not a reservation | Quote ID, expiry | Pricing and inventory | Quote service; the model only relays it | Expired quote is requoted, not honoured silently | Planned: expired-quote test |
+| C3 | R2 purchase | A purchase runs only after the advertiser confirms the exact assets, dates and price | Quote ID and payload hash | Stored proposal | Confirmation bound to the payload; changed payload needs a new confirmation | Purchase refused, nothing reserved | Planned: changed-payload test |
+| C4 | R2 purchase | One confirmed purchase creates at most one order | Operation ID | Order system receipts | Durable operation record; replay under the provider guarantee | Uncertain outcome shown as pending and reconciled | Planned: lost-response test |
+| C5 | R3 status | Shown status (quoted, reserved, ordered, live) comes from authoritative receipts | Order | Order, payment and delivery systems | Status read from receipts, never from the model's last message | "Unknown, checking" rather than a guess | Planned: receipt-mismatch test |
+
+The four purchase contracts (C2 to C5) draw on [identity, tools and data
+release](#identity-tools-and-data-release) and [external effects and
+recovery](#external-effects-and-recovery). When a later discovery adds a rights
+condition (modification allowed, approval required, format), revise C1, note
+the revision, and update the filter, the recheck and their tests together.
+A read-only version of the same assistant keeps C1 and a status contract and
+drops the rest.
 
 ## Size the first slice to the judge
 
@@ -75,14 +103,14 @@ Model quality, valid transactions and improved user outcomes need distinct evide
 Treat an unmeasured benefit as a hypothesis; choose the first useful end-to-end
 slice around it and revisit complexity if simpler interactions work as well.
 
-| Choice | A reason to use it | Contract to record |
+| Choice | A reason to use it | What to record |
 | --- | --- | --- |
 | Ordinary application code | Inputs and rules already determine the action | Validation, output and error behavior |
 | One agent with bounded tools | Language interpretation needs access to a small set of capabilities | Allowed tools, trusted scope, termination and public result |
 | Sequential workflow | A step depends on the preceding result | Typed handoff and freshness for the current invocation |
 | Parallel branches | Independent work can overlap | Separate outputs, join/merge policy, partial-failure policy and aggregate demand |
 | Bounded refinement | Revision benefits from review | Final artifact owner, model-judged acceptance and deterministic stopping bound |
-| Graph or dynamic work | Dependencies or runtime-sized work justify it | Edge contracts, fan-out cap, completion and cancellation ownership |
+| Graph or dynamic work | Dependencies or runtime-sized work justify it | Edge handoffs, fan-out cap, completion and cancellation ownership |
 
 Dynamic work can run sequentially. A reviewer is a probabilistic decision-maker;
 its approval is different from a backend permission check. For proposed multiple
@@ -91,10 +119,10 @@ agents, name what each one uniquely owns and how its authority is restricted.
 **Topology.** Choose between one agent, in-process sub-agents and a remote A2A
 peer by boundary, not by ambition. In-process sub-agents share a runtime, pins
 and identity and need only a routing description and a typed handoff. A remote
-peer adds a network contract (timeout, task states including a pause for user
+peer adds a network interface (timeout, task states including a pause for user
 input, error events, card validation, a second identity) and hides its
 reasoning behind a message. Requirement: a capability lives across a service,
-team, language or contract boundary. Choice: a remote peer only for that
+team, language or ownership boundary. Choice: a remote peer only for that
 boundary, treated as an external API whose messages are data, never user
 authority. Tradeoff: latency, a second failure domain and cross-boundary
 evaluation against independent ownership and release. Verification: a
@@ -113,9 +141,9 @@ set. `adk-agent-interoperability` owns the selection; `adk-tool-interface-design
 owns what each declaration says.
 
 **What the model sees is its only interface.** The instruction, the sub-agent
-descriptions (routing contracts the parent reads verbatim), the tool
-declarations and the output contract are the whole of the agent's interface;
-the model does not see Python. Design each as a contract with an owner and a
+descriptions (routing text the parent reads verbatim), the tool
+declarations and the output schema are the whole of the agent's interface;
+the model does not see Python. Design each as an interface with an owner and a
 test. Anything the application already knows (identity, tenant, date, budgets,
 authorisation, idempotency) belongs in code, not the prompt. Verification: a
 captured model request shows the intended instruction, declarations and
@@ -223,7 +251,7 @@ or refusal; a policy-version marker alone does not transform stored contents.
 Choose public-output release semantics. Raw event forwarding can expose private
 arguments or diagnostics. Full-response screening adds buffering/latency; partial
 streaming cannot retract already disclosed text. State which guarantee the design
-offers and how its browser contract communicates partial and failed results.
+offers and how its browser protocol communicates partial and failed results.
 
 ## External effects and recovery
 
@@ -232,7 +260,7 @@ operation. A retry, duplicate click and restarted worker may refer to the same
 business operation. Its identity must survive the failure window being claimed.
 
 For writes, document the authoritative preconditions, durable operation identity,
-canonical payload, approval binding and provider replay contract. Verify key scope,
+canonical payload, approval binding and provider replay guarantee. Verify key scope,
 retention and lookup semantics before promising deduplication. Atomically claim or
 load the same operation, reject changed payloads, and retain uncertain outcomes.
 An expired worker lease does not establish that an earlier request stopped.
@@ -255,7 +283,7 @@ and ordinary session persistence do not supply durable execution guarantees.
 For deferred work, durably record acceptance and dispatch intent before acknowledging
 the job. Specify owner-qualified status/result access and recovery. Keep the business
 job identity distinct from a paused tool-call continuation so resumption reaches the
-right call under the chosen contract. An in-process background task is not a
+right call under the chosen design. An in-process background task is not a
 durable queue.
 
 ## Latency, capacity, budgets and operations
@@ -303,7 +331,7 @@ Verification: the release manifest has no alias and no unknown field, and the
 next retirement date is in the calendar. `adk-release-engineering` owns the
 lifecycle; `adk-model-and-output-contracts` owns the model choice.
 
-Structured output is a contract whose enforcement depends on backend and model,
+Structured output is an interface whose enforcement depends on backend and model,
 not a formatting preference. Design a refusal shape so a valid "no" survives
 validation, keep the schema to what the model decides and let code copy
 identifiers, and treat a validation failure as a product outcome with a bounded

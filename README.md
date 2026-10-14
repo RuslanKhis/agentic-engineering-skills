@@ -207,8 +207,9 @@ an explicit command makes your intended skill clear.
 ### Journey A: build a new application
 
 **1. Design it in conversation.** The designer asks only what changes the
-design, offers defaults you can accept in one word, and explains each choice
-as requirement, choice, tradeoff and how to check it.
+design, offers defaults you can accept in one word, turns each requirement
+into contracts the system must keep, and explains each choice as the contract
+it enforces, its tradeoff and how to check it.
 
 ```text
 /adk-system-designer I want to build <one-sentence product> with ADK on GCP.
@@ -373,10 +374,20 @@ and a production service each get a different depth per concern, a capacity
 check against the people and hours available, and a phased plan with a cut
 line you confirm.
 
-It explains important decisions as **requirement → design choice → reason →
-tradeoff → verification**: what you need, what it proposes, why it fits, what
-you give up, and how to check it. As your answers change the requirements, it
-updates the choices and their checks.
+It works through **requirement → contract → design choice → reason →
+tradeoff → verification → evidence**. A requirement is what you need
+("advertisers can buy campaigns"). A contract is a precise, observable promise
+derived from it ("one confirmed purchase creates at most one order"). One
+requirement usually splits into several contracts: here a quote, a
+confirmation bound to the exact order, the purchase operation and the status
+shown from real receipts. Each contract is numbered and records its invariant,
+scope, authoritative source, where it is enforced (and checked again before the
+effect), the failure outcome and its evidence. Decisions cite the contracts
+they enforce, goals cite the contracts they prove, and `adk-engineer` records
+evidence against each one, so you can always answer "what proves C3?". A
+read-only demo needs a handful of contracts; money, orders or publishing need
+more. When your answers change a requirement, it revises the affected
+contracts and the choices, goals and checks that depend on them.
 
 The result is a system design with component and request-flow diagrams where
 useful, data ownership, identity and tool permissions, failure recovery, latency

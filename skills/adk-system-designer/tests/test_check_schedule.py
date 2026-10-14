@@ -186,6 +186,42 @@ Needs the legal review before go-live.
             self.assertIn("G02/A7 is not an acceptance item of G02", problems[0])
             self.assertIn("Model / Write outcome unknown", problems[1])
             self.assertIn("Model / Rate limited", problems[2])
+            self.assertNotIn("contract_coverage", json.loads(out))
+
+    def test_every_contract_is_cited_or_marked_as_a_gap(self):
+        with tempfile.TemporaryDirectory() as root:
+            plan = self.write_plan(root)
+            text = plan.read_text().replace("  owner: Ana\n  blocked_by: []\n",
+                                            "  owner: Ana\n  blocked_by: []\n  contracts: [C1, C9]\n", 1)
+            plan.write_text(text + "\n### G02 Purchase\n- [ ] A1 changed payload is refused (C2)\n")
+            design = Path(root) / "design.md"
+            design.write_text("| ID | From | Invariant | Scope | Authority | Enforcement | Failure outcome | Evidence |\n"
+                              "| --- | --- | --- | --- | --- | --- | --- | --- |\n"
+                              "| C1 | R1 | rights | account | rights system | filter | fewer results | planned |\n"
+                              "| C2 | R2 | confirm | quote | proposal | binding | refused | planned |\n"
+                              "| C3 | R2 | one order | operation | receipts | record | pending | planned |\n"
+                              "| C4 | R3 | status | order | receipts | read | unknown | deferred: real orders |\n")
+            code, out, _ = self.run_check("--plan", str(plan), "--design", str(design), "--json")
+            result = json.loads(out)
+            self.assertEqual(code, 1)
+            self.assertEqual(len(result["problems"]), 2, result["problems"])
+            self.assertIn("G01 cites C9, which is not in the design", result["problems"][0])
+            self.assertIn("contract C3: no goal cites it", result["problems"][1])
+            self.assertEqual(result["contract_coverage"]["cited"], ["C1", "C2"])
+            self.assertEqual(list(result["contract_coverage"]["not_covered_by_choice"]), ["C4"])
+
+    def test_ticket_contracts_must_match_the_plan(self):
+        with tempfile.TemporaryDirectory() as root:
+            plan = self.write_plan(root)
+            plan.write_text(plan.read_text().replace("  owner: Ana\n  blocked_by: []\n",
+                                                     "  owner: Ana\n  blocked_by: []\n  contracts: [C1]\n", 1))
+            tickets = Path(root) / "tickets"
+            tickets.mkdir()
+            ticket = TICKET.format(goal="G01", hands_on="3-4", review="1-2", total="4-6", owner="Ana", blocked="[]")
+            (tickets / "G01.md").write_text(ticket.replace("status: ready", "contracts: [C1, C2]\nstatus: ready"))
+            code, out, _ = self.run_check("--plan", str(plan), "--tickets", str(tickets))
+            self.assertEqual(code, 1)
+            self.assertIn("G01.md: contracts ['C1', 'C2'] differ from plan ['C1']", out)
 
     def test_outside_approval_needs_a_wait_before_it(self):
         with tempfile.TemporaryDirectory() as root:

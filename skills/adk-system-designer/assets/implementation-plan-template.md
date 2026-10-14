@@ -57,6 +57,7 @@ designer's `scripts/check_schedule.py` reads it; tickets copy it):
   calendar_waits: none   # or what, e.g. security review
   wait_days: 0           # working days the wait adds, as a range if unsure
   handoff: 0             # hours in total for picking up work from another person
+  contracts: [C1, C3]    # design contracts this goal's acceptance proves
   mentions_only: []      # IDs (or wait) the prose names without depending on them
 ```
 
@@ -67,7 +68,7 @@ early, the goals are ordered so each completed one is still useful.
 
 ## Implementation map
 
-| Decision / requirement | ADK or application component and integration point | GCP service/responsibility | Primary skill | Verification still needed |
+| Contract / decision | ADK or application component and integration point | GCP service/responsibility | Primary skill | Verification still needed |
 | --- | --- | --- | --- | --- |
 
 Use actual inspected paths where available; label a greenfield layout as proposed.
@@ -88,23 +89,25 @@ goals coarse when an unresolved decision could change their scope.
 - **Phase and estimate:** <1, 2 or later>; human hours, agent-assisted:
   hands-on <range>, review and verify <range>, total <range>; calendar
   waits <none, or what and how long>; owner <person or role>
-- **Outcome and linked decisions:** <what changes for the user; design links>
+- **Outcome, contracts and decisions:** <what changes for the user; the
+  contracts it proves (C IDs) and decisions it implements (D IDs)>
 - **Scope:** <included behavior and excluded follow-up work>
 - **Depth:** <profile depth for the concerns this goal touches; the floor it
   keeps; specialist controls deliberately left for a later goal>
 - **Implementation route:** <ADK/application components, interfaces and inspected
   or proposed modules; required infrastructure and compatibility checks>
-- **Prerequisites:** <goal/decision IDs, dependencies, setup or external contract>
+- **Prerequisites:** <goal/decision IDs, dependencies, setup or provider guarantee>
 - **Primary skill:** <one specialist that leads this goal>
 - **Supporting skills:** <only those this goal's boundaries need, each with its purpose>
 - **Acceptance:** <numbered A1, A2 ...: observable success, important failure and
-  forbidden-effect cases; grid cells cite them as G01/A2>
+  forbidden-effect cases, each naming the contract it proves (A2 → C3); grid
+  cells cite them as G01/A2>
 - **Verification:** <public test boundary, runnable command if known, required
   fixtures; distinguish offline, local integration and authorized live/hosted evidence>
 - **Execution scope:** <what is already authorized; exact external prerequisites
   still needed for this goal>
 - **Status and evidence:** <planned initially; later record files, actual commands,
-  results and limitations>
+  results and limitations, with one line per contract: C3 evidenced, local, A2>
 - **Run this goal:** `/adk-engineer Carry out <goal ID> from <plan path>. Read <design
   path>, use the goal's primary and supporting skills, verify its acceptance cases
   locally and record evidence here.`

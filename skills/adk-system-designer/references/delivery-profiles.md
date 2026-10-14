@@ -67,6 +67,13 @@ Keep the depth visible in the design's scope block as a short table: concern,
 depth now, and the trigger that raises it. A concern the journey does not touch
 is left out with a word, not a row per missing feature.
 
+The contract set follows the same depth. A read-only proof of concept needs
+three to five contracts (who may ask, what data is in scope, grounded answers,
+what failure looks like) plus the floor. A tool that writes adds confirmation
+and authority contracts; money, orders or publishing add idempotency, inventory
+or rights, and recovery contracts. A deferred control removes or weakens a
+contract only by saying so: its Evidence reads `deferred: <trigger>`.
+
 ## Keep the floor at every profile
 
 These cost minutes, not days, and their absence causes harm that a demo cannot
@@ -179,7 +186,10 @@ python3 "$SKILL_DIR/scripts/check_schedule.py" --plan docs/plans/<topic>.md \
 Give each person's full focused hours per day; `--reserve` holds the same
 share back on the calendar as on the hours, so the reserve is not spent twice.
 
-It adds up the phase, compares every ticket with the plan, and reports each
+With `--design` it also checks that every coverage-grid cell cites an
+acceptance item and that every contract in the design is cited by a goal or
+marked `gap:` or `deferred:`. It adds up the phase, compares every ticket with
+the plan, and reports each
 person's load, the longest dependent chain and a finish range in working days
 that respects dependencies, one goal at a time per person and calendar waits
 (`wait_days`). Exit status 1 means something does not fit or disagrees. Quote
@@ -280,12 +290,14 @@ marking each section not applicable:
    folded in as one line each (answer and what depends on it).
 2. **Journey and shape:** the journey in three sentences, what the model
    decides and what code controls, a small diagram only if it saves words.
-3. **Decisions:** at most six, one line each in the requirement, choice,
-   tradeoff, check order.
+3. **Contracts and decisions:** three to five contracts, one line each (ID,
+   invariant with its scope, enforced where, check), including the floor
+   items the journey touches; then at most six decisions, one line each in
+   the requirement, contract, choice, tradeoff, check order.
 4. **Floor, depth and deferred:** one table of concern, depth now, trigger.
    Graduation conditions as a short list.
-5. **Plan:** phase 1 goals of four to six lines each (outcome, estimate,
-   primary skill, acceptance, run prompt), the capacity sum and cut line,
+5. **Plan:** phase 1 goals of four to six lines each (outcome, contracts,
+   estimate, primary skill, acceptance, run prompt), the capacity sum and cut line,
    phase 2 goals of one to three lines each, and the later list.
 6. **Open decisions and next prompt.**
 
@@ -306,7 +318,9 @@ from repetition.
   person who decides: profile, what phase 1 delivers, the finish range and
   whether it fits, the three largest risks, and the decisions needed from
   them. A manager should not need to read further to act.
-- **One home per fact.** Decisions and their rationale live in the design.
+- **One home per fact.** Requirements, contracts, decisions and their
+  rationale live in the design, with R, C and D IDs. Goals and tickets cite
+  contracts by ID and record evidence against them.
   Estimates, owners, dependencies and waits live in the plan's schedule block.
   Capacity, finish range and the largest risks live in the plan's summary;
   the design points to it instead of restating them. Each goal's scope,

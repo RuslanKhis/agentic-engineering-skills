@@ -50,7 +50,7 @@ Starting points:
 - [Cloud Billing budgets](https://docs.cloud.google.com/billing/docs/how-to/budgets)
 
 These are lookup entrypoints, not a frozen compatibility baseline. The intended
-application's version, provider contract and dated evidence control the decision.
+application's version, provider guarantee and dated evidence control the decision.
 
 ## Cost and capacity assumptions
 

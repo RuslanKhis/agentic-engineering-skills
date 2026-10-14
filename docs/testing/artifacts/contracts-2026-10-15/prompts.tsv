@@ -1,0 +1,4 @@
+K1	/adk-system-designer Design an ADK assistant that lets advertisers find media assets they are allowed to use and buy campaigns on them. Advertisers sign in with our existing identity provider. Asset rights live in a rights system keyed by owner, brand and channel; pricing, inventory and orders live in a separate booking system whose replay and status-lookup behaviour is undocumented. Payment and delivery are handled by other teams. One engineer has three weeks for a pilot with five advertisers. Write the design and a phased plan; no code yet.
+
+K2	/adk-system-designer I have one afternoon to show my team an ADK bot that answers questions about our travel policy PDF (one public document, no personal data, it only answers, demo locally with adk web). Give me a short design and plan.
+

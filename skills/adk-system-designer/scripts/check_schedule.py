@@ -10,7 +10,10 @@ respects dependencies, one person doing one goal at a time, and calendar waits.
 It also lists, for review without failing, goal IDs a goal's prose names that
 are neither before nor after it, and outside approvals with no matching wait.
 With ``--design`` it checks that every coverage-grid cell cites an existing
-acceptance item (``G04/A2``) or says ``n/a: <reason>``.
+acceptance item (``G04/A2``) or says ``n/a: <reason>``, and, when the design has
+a contracts table, that every contract is cited by a goal (its ``contracts``
+field or prose) or records ``gap:`` or ``deferred:``, and that no goal cites a
+contract the design lacks.
 
 Estimates are ranges of human hours (``1-2``, ``1.5 to 3``, ``2 h``). Exit
 status: 0 when consistent and within capacity and calendar, 1 when something
@@ -37,6 +40,8 @@ GENERIC_APPROVAL = ("sign", "appr", "goli")
 GRID_HEADERS = ("unavailable or slow", "partially applied", "partial multi-step change", "over-broad")
 CITATION = re.compile(r"\b([A-Z]\d+)/A(\d+)\b")
 HEADING = re.compile(r"^#{2,4}\s+(.*)$", re.MULTILINE)
+CONTRACT = re.compile(r"(?<![\w/-])C\d+(?![\w/-])")
+UNCOVERED_OK = re.compile(r"\b(?:gap|deferred)\s*:", re.IGNORECASE)
 
 
 class InputError(Exception):
@@ -119,9 +124,13 @@ def normalise(entry, where):
     settled = entry.get("mentions_only", [])
     if isinstance(settled, str):
         settled = [m.strip() for m in settled.split(",") if m.strip()]
+    contracts = entry.get("contracts", [])
+    if isinstance(contracts, str):
+        contracts = [c.strip() for c in contracts.split(",") if c.strip() and c.strip().lower() != "none"]
     return {"goal": goal, "phase": str(entry.get("phase", "")).strip(), "total": total,
             "handoff": str(entry.get("handoff", "")).strip(), "mentions_only": settled, "text": "",
             "hands_on": hands_on, "review": review, "owner": str(entry.get("owner", "")).strip(),
+            "contracts": [c for c in contracts if c],
             "blocked_by": [b for b in blocked if b], "waits": str(waits).strip(), "wait_days": wait_days}
 
 
@@ -257,6 +266,45 @@ def check_grid(path, goals):
     return problems
 
 
+def check_contracts(path, goals):
+    """Every design contract is cited by a goal or marked gap/deferred; goals cite only known contracts."""
+    contracts, header = {}, None
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line.startswith("|"):
+            header = None
+            continue
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if header is None:
+            lowered = line.lower()
+            if "invariant" in lowered and "enforcement" in lowered:
+                header = cells
+            continue
+        if set("".join(cells)) <= set("-: ") or not re.fullmatch(r"C\d+", cells[0]):
+            continue
+        contracts[cells[0]] = cells[-1]
+    if not contracts:
+        return [], {}
+    cited = {}
+    for goal in goals:
+        for contract in set(goal["contracts"]) | set(CONTRACT.findall(goal.get("text", ""))):
+            cited.setdefault(contract, []).append(goal["goal"])
+    problems = [f"{', '.join(sorted(cited[c]))} cites {c}, which is not in the design's contracts table"
+                for c in sorted(cited) if c not in contracts]
+    accepted = {}
+    for contract, evidence in contracts.items():
+        if contract in cited:
+            continue
+        if UNCOVERED_OK.search(evidence):
+            accepted[contract] = evidence
+        else:
+            problems.append(f"contract {contract}: no goal cites it; add it to a goal's contracts and acceptance, "
+                            "or write 'gap: <why>' or 'deferred: <trigger>' in its Evidence cell")
+    summary = {"contracts": len(contracts), "cited": sorted(c for c in contracts if c in cited),
+               "not_covered_by_choice": accepted}
+    return problems, summary
+
+
 def hours_per_day(people, default):
     table = {}
     for item in people or []:
@@ -384,6 +432,9 @@ def compare(plan_goals, ticket_goals):
         for field in ("total", "hands_on", "review", "owner", "waits"):
             if ticket[field] and source[field] and ticket[field] != source[field]:
                 problems.append(f"{ticket['file']}: {field} {show(ticket[field])} differs from plan {show(source[field])}")
+        if ticket["contracts"] and source["contracts"] and set(ticket["contracts"]) != set(source["contracts"]):
+            problems.append(f"{ticket['file']}: contracts {sorted(ticket['contracts'])} differ from plan "
+                            f"{sorted(source['contracts'])}")
         if set(ticket["blocked_by"]) != set(source["blocked_by"]):
             problems.append(f"{ticket['file']}: blocked_by {sorted(ticket['blocked_by'])} differs from plan "
                             f"{sorted(source['blocked_by'])}")
@@ -425,6 +476,11 @@ def report(result):
     if result["outside_dependencies"]:
         lines.append("Not scheduled here (decisions, other phases, other teams): "
                      + ", ".join(result["outside_dependencies"]))
+    coverage = result.get("contract_coverage")
+    if coverage:
+        lines.append(f"Contracts: {len(coverage['cited'])} of {coverage['contracts']} cited by goals")
+        for contract, evidence in sorted(coverage["not_covered_by_choice"].items()):
+            lines.append(f"  {contract} not covered by a goal: {evidence}")
     for problem in result["problems"]:
         lines.append(f"PROBLEM: {problem}")
     return "\n".join(lines)
@@ -434,7 +490,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--plan", type=Path, help="plan Markdown with a fenced yaml schedule block")
     parser.add_argument("--tickets", type=Path, help="directory of ticket files with front matter")
-    parser.add_argument("--design", type=Path, help="design Markdown whose coverage grid cells are checked")
+    parser.add_argument("--design", type=Path,
+                        help="design Markdown whose coverage grid and contracts table are checked")
     parser.add_argument("--phase", default="1", help="phase to check; empty for all goals")
     parser.add_argument("--capacity", type=float,
                         help="phase hours available after the reserve; computed from --days and owners if omitted")
@@ -453,21 +510,26 @@ def main(argv=None):
         ticket_goals = read_tickets(args.tickets) if args.tickets else []
         if args.tickets and not ticket_goals:
             raise InputError(f"{args.tickets}: no ticket files with a goal in their front matter")
+        mismatches = compare(plan_goals, ticket_goals) if plan_goals and ticket_goals else []
         tickets_by_goal = {t["goal"]: t for t in ticket_goals}
         for goal in plan_goals:
             ticket = tickets_by_goal.get(goal["goal"])
             if ticket:
                 goal["text"] += "\n" + ticket["text"]
                 goal["mentions_only"] = sorted(set(goal["mentions_only"]) | set(ticket["mentions_only"]))
+                goal["contracts"] = sorted(set(goal["contracts"]) | set(ticket["contracts"]))
         goals = plan_goals or ticket_goals
         if not 0.0 <= args.reserve < 1.0:
             raise InputError("--reserve is a share between 0 and 1, e.g. 0.25")
         result = analyse(goals, args.phase, args.capacity, args.days, args.person, args.hours_per_day,
                          args.reserve)
-        if plan_goals and ticket_goals:
-            result["problems"] += compare(plan_goals, ticket_goals)
+        result["problems"] += mismatches
         if args.design:
             result["problems"] += check_grid(args.design, goals)
+            contract_problems, coverage = check_contracts(args.design, goals)
+            result["problems"] += contract_problems
+            if coverage:
+                result["contract_coverage"] = coverage
     except (InputError, OSError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

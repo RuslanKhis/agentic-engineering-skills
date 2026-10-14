@@ -273,6 +273,46 @@
       ]
     },
     {
+      "id": "system-design-contracts-from-vague-requirements",
+      "prompt": "Design an ADK assistant that lets advertisers find media assets they are allowed to use and buy campaigns on them. One engineer has three weeks for a pilot with five advertisers. Write the design and a phased plan; no code yet.",
+      "available_skills": [
+        "adk-system-designer",
+        "adk-engineer",
+        "safe-api-tool-calls",
+        "adk-tool-auth-and-secrets",
+        "adk-memory-architecture"
+      ],
+      "context": "A greenfield workspace holds a one-page brief. Advertisers sign in with an existing identity provider. Asset rights live in a rights system keyed by owner, brand and channel; pricing, inventory and orders live in a separate booking system whose replay and status-lookup behavior is undocumented. Payment and delivery are handled by other teams. Midway through the conversation the user adds that rights also depend on territory, flight dates and whether the creative may be modified. Only local design documents are authorized.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Decomposes 'buy campaigns' into separate contracts for the quote, the confirmation bound to the exact payload, the single purchase operation and the status shown from authoritative receipts, rather than one requirement-level promise.",
+        "Writes each critical contract with an ID, the requirement it serves, its invariant, scope, authority, enforcement point, failure outcome and planned evidence with its tier.",
+        "Places rights eligibility before the model sees results and checks it again at reservation or purchase, naming the rights system as the authority.",
+        "Revises the rights contract when territory, dates and modification rights are added, keeping its ID and updating the dependent decisions, goals and tests.",
+        "Records the undocumented booking replay and status behavior as a provider guarantee still to verify, with a safe pending or reconciliation outcome, and does not claim exactly-once purchase.",
+        "Has every phase 1 goal cite the contracts its acceptance proves, and marks any critical contract without a goal as a gap or deferred with its trigger.",
+        "Uses 'contract' for these promises and does not label model instructions, provider behavior or the browser protocol as contracts.",
+        "Keeps the design within the pilot profile's size and leaves implementation and cloud work for later goals."
+      ]
+    },
+    {
+      "id": "system-design-contracts-stay-small-when-read-only",
+      "prompt": "I have one afternoon to show my team an ADK bot that answers questions about our travel policy PDF. Give me a short design and plan.",
+      "available_skills": [
+        "adk-system-designer",
+        "adk-engineer",
+        "adk-memory-architecture"
+      ],
+      "context": "One developer, about four hours, a single public policy PDF, no personal data, no writes, demo run locally with adk web. The user will not answer follow-up questions.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Uses the compact form of about 1,200 words with assumed answers stated, rather than the full template.",
+        "States three to five one-line contracts (for example answers come from the policy, unsupported questions say so, spend stops at the cap) with where each is enforced and checked.",
+        "Does not add confirmation, idempotency, rights or recovery contracts the read-only journey does not need.",
+        "Has each phase 1 goal cite the contracts its acceptance proves."
+      ]
+    },
+    {
       "id": "router-resumes-accepted-goal",
       "prompt": "Use adk-engineer to continue G01 from the saved support-assistant plan. Preserve accepted decisions, implement the local language-preference slice and its acceptance checks, then record actual results in the plan. No cloud work.",
       "available_skills": ["adk-engineer", "adk-system-designer", "adk-memory-architecture", "adk-tool-auth-and-secrets"],

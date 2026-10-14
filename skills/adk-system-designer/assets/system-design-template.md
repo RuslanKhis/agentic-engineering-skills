@@ -46,37 +46,47 @@ When the artifact is judged on output quality, the first slice is the core
 judgment end to end on real inputs with a measured result; deferred controls
 start after that measurement exists.
 
-## Guarantees and acceptance
+## Requirements and contracts
 
-| Invariant or target | Enforcing component and authoritative evidence | Failure outcome | Planned verification |
+| ID | Requirement | Need it serves | Status (confirmed / assumed) |
 | --- | --- | --- | --- |
 
+A contract is a precise, observable promise derived from a requirement; one
+requirement often yields several. Decisions below cite the contracts they
+enforce, and goals cite the contracts they prove.
+
+| ID | From | Invariant | Scope | Authority | Enforcement (and recheck at the effect) | Failure outcome | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+
+Evidence starts as `planned: <check>, <tier>` and becomes `evidenced: <tier>,
+<goal/acceptance>` once run, or says `gap: <why>` or `deferred: <trigger>`.
 Include only meaningful promises. Quantified targets need an owner/source or an
-explicit provisional assumption; unresolved guarantees remain visible.
+explicit provisional assumption. When a contract is revised, keep its ID, add a
+one-line note, and update the decisions and goals that cite it.
 
 ## Architecture and decisions
 
 Show a component diagram and the important request/operation sequence when useful.
 Label trust boundaries, user/workload identities, stores, public output and effects.
 
-| Requirement | Design choice | Reason | Tradeoff / alternative | Verification and expected result |
-| --- | --- | --- | --- | --- |
+| ID | Enforces | Design choice | Reason | Tradeoff / alternative | Verification and expected result |
+| --- | --- | --- | --- | --- | --- |
 
-Record decision IDs and their status (proposed, user-accepted or superseded)
-with assumptions and revisit conditions. Update dependent choices and checks
-when a requirement changes. Reference detailed contracts and tests below rather
-than repeating them; keep this record proportionate to the design.
+Record each decision's status (proposed, user-accepted or superseded) with
+assumptions and revisit conditions. Update dependent choices and checks when a
+contract changes. Refer to contracts by ID rather than restating them; keep
+this record proportionate to the design.
 
 Distinguish application runtime, model backend and data services. Record relevant
 versions, current provider sources and any capability still needing verification.
 
-### Model-facing contracts
+### Model-facing interfaces
 
-| Surface | Contract | Implementing skill and verification |
+| Surface | Interface | Implementing skill and verification |
 | --- | --- | --- |
-| Instructions and routing descriptions | <judgment each agent owns; sub-agent descriptions as routing contracts; what stays in code> | `adk-agent-instructions`; rendered-request test |
+| Instructions and routing descriptions | <judgment each agent owns; sub-agent descriptions as routing text; what stays in code> | `adk-agent-instructions`; rendered-request test |
 | Tool interfaces and budgets | <tool source per capability; per-agent tool count; result bound; read/write/irreversible tier> | `adk-tool-interface-design`; `adk-agent-interoperability` for MCP or A2A; declaration dump and size |
-| Output contract, model and backend | <schema with refusal shape; pinned model ID and lifecycle date; backend; thinking; failover> | `adk-model-and-output-contracts`; scripted invalid-output test |
+| Output schema, model and backend | <schema with refusal shape; pinned model ID and lifecycle date; backend; thinking; failover> | `adk-model-and-output-contracts`; scripted invalid-output test |
 
 ## Data and authority
 
@@ -143,7 +153,7 @@ draws on it.
 
 Observability and release, at the depth the artifact type needs:
 
-- SLIs tied to the guarantees above, each with baseline, target and alert owner.
+- SLIs tied to the contracts above, each with baseline, target and alert owner.
 - Telemetry owner per process; content-capture gates and sinks with retention.
 - Release bundle: image or revision, prompt version, model and judge IDs, tool
   schema hash, secret versions, and where it is recorded.
@@ -152,6 +162,8 @@ Observability and release, at the depth the artifact type needs:
 - Rollback unit and how long the previous revision stays ready.
 
 Link the implementation plan, or include its goals here for a small effort.
+Every critical contract is cited by at least one goal's acceptance, or its
+Evidence cell records the gap.
 Map consequential choices to ADK/application components, concrete integration
 points, GCP responsibilities and relevant specialists. Label proposed modules
 and unresolved version/provider checks. Define dependency-ordered goals with

@@ -32,12 +32,12 @@ New input belongs to another batch. Account for pending and in-flight data, and
 make required terminal processing finish before source expiry. A crash-durable
 acknowledgement needs a durable record before it is sent.
 
-## Specify the browser contract independently of hosting
+## Specify the browser protocol independently of hosting
 
 Choose completed JSON or incremental events according to user benefit. A tool
 card can display a completed JSON result; streaming earns its extra state and
 failure handling when progressive delivery matters. A gateway can preserve this
-contract while execution moves between local and remote runtimes.
+protocol while execution moves between local and remote runtimes.
 
 Define application-owned output schemas independently from tool inputs. Give
 messages and tool calls stable identities; correlate results to exact calls,

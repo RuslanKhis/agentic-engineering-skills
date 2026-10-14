@@ -17,9 +17,9 @@ metadata:
 # ADK system designer
 
 Turn a product idea or an existing architecture into a reviewable system design
-through a conversation. Establish the application's guarantees, explore the
-decisions that change them, and connect each important claim to an enforcement
-point and a validation plan. Scale the design to the requested problem.
+through a conversation. Turn requirements into contracts, explore the
+decisions that enforce them, and connect each contract to an enforcement point
+and the evidence that it holds. Scale the design to the requested problem.
 
 The deliverable is an architecture and a resumable implementation plan. It needs
 no other skills, starter repository or cloud access.
@@ -128,39 +128,70 @@ depend on it, and mark those decisions provisional.
 
 Explain each consequential recommendation through:
 
-**Requirement → design choice → reason → tradeoff → verification.**
+**Requirement → contract → design choice → reason → tradeoff → verification → evidence.**
 
-- **Requirement:** the user need or constraint, with its confirmed or assumed status.
-- **Design choice:** a specific component responsibility or interaction to adopt.
-- **Reason:** how that choice satisfies the requirement under the known contracts.
+- **Requirement:** the user need or constraint behind the journey, with its confirmed or assumed status.
+- **Contract:** the observable promise that satisfies it (see below); one requirement may yield several.
+- **Design choice:** the specific component responsibility or interaction that enforces the contract.
+- **Reason:** how that choice keeps the contract, given the known provider guarantees.
 - **Tradeoff:** the cost, limitation or capability forgone compared with a credible alternative.
-- **Verification:** an observable check and expected result; name unresolved evidence.
+- **Verification:** an observable check and expected result, planned until it runs.
+- **Evidence:** the check's actual result and tier, recorded against the contract later; name what is still unproven.
 
-Use a few sentences or a compact row; the chain guides the explanation, not five
+Use a few sentences or a compact row; the chain guides the explanation, not seven
 mandatory headings on every turn. Keep the rationale visible while asking useful
 questions. Read the opening example in [design decisions](references/design-decisions.md)
 when a concrete illustration would help.
 
-After an answer, summarize what changed in the requirement, choice and verification,
-then address the next unresolved decision. Maintain the cumulative decision record
-without repeating the whole design. A user correction can supersede an earlier
-proposal; update its dependent contracts and checks as well. Compare only credible
-alternatives, including ordinary code or one agent when sufficient. Additional
+After an answer, summarize what changed in the requirement, contract, choice and
+verification, then address the next unresolved decision. Maintain the cumulative
+decision record without repeating the whole design. A user correction can
+supersede an earlier proposal; revise the contracts it changes and update their
+dependent choices and checks. Compare only credible alternatives, including ordinary code or one agent when sufficient. Additional
 agents need a distinct responsibility, context, tool set or evaluation reason;
 a security boundary comes from separate credentials, tools and state.
 
 ## Turn requirements into contracts
 
-Write observable invariants: for example, an authenticated customer sees only
-their cases, and one confirmed escalation produces at most one external ticket
-under a verified provider replay contract. For each critical invariant identify
-the trusted enforcing component, authoritative data, failure outcome and test.
-Distinguish desired guarantees from mechanisms that actually support them.
+A **contract** is a precise, observable promise the system keeps, derived from a
+requirement. "Customers can escalate a case" is a requirement; "one confirmed
+escalation produces at most one external ticket" is a contract. Keep the word
+for this meaning: what a provider promises is a *provider guarantee*, and what
+the model reads is its *interface*.
 
-Read [design decisions](references/design-decisions.md) when translating the
-journey into component, data, identity, operation and cost contracts. Select its
-relevant topics; account briefly for omitted concerns instead of adding unused
-memory stores, agents or infrastructure. Capture the cross-boundary consequences:
+Number requirements `R1`, contracts `C1` and decisions `D1`; each contract
+names the requirement it serves and each decision the contracts it enforces.
+Write each critical contract with six fields:
+
+- **Invariant:** what must always or never hold, stated so a test can fail it.
+- **Scope:** for whom and over what: user, tenant or account, data, time window.
+- **Authority:** the authoritative source of the facts it depends on, never
+  the model or the conversation.
+- **Enforcement:** the trusted component that checks it, and where it is
+  checked again at the effect when time passes between check and effect
+  (after a confirmation, a wait or a retry).
+- **Failure outcome:** what the user sees and what state remains when it
+  cannot be kept.
+- **Evidence:** the planned check and its tier (offline, local, live,
+  release), later its actual result; or an explicit gap.
+
+Decompose a vague requirement until each contract has one enforcement point:
+"advertisers can purchase" becomes quote, confirmation, purchase-operation and
+status contracts. A contract with no mechanism behind it is a gap, recorded as
+one, not a guarantee. Size the set to the profile: a read-only assistant needs
+a few (identity, retrieval scope, grounded answers, failure); money,
+publishing or messages to real people add rights, confirmation, inventory,
+idempotency and recovery contracts.
+
+Contracts evolve. When a discovery tightens one (asset rights turn out to
+depend on brand, channel, territory, dates and modification), revise it in
+place with a one-line note and list the decisions, goals and tests it changes.
+
+Read [design decisions](references/design-decisions.md#decompose-a-requirement-into-contracts)
+for a worked decomposition and when translating the journey into outcome, data,
+identity, effect and budget contracts. Select its relevant topics; account
+briefly for omitted concerns instead of adding unused memory stores, agents or
+infrastructure. Capture the cross-boundary consequences:
 
 - Session, invocation and business-operation identities have different lifetimes.
 - Model proposals, user confirmation and backend authorization are separate.
@@ -172,7 +203,7 @@ memory stores, agents or infrastructure. Capture the cross-boundary consequences
   each of those is already an exposure.
 - Model/tool fan-out and nested retries consume the same application allowance.
 - What the model sees is its only interface: instruction, sub-agent descriptions,
-  tool declarations and output contract are contracts with owners and tests;
+  tool declarations and output schema each have an owner and a test;
   what the application already knows belongs in code, not the prompt.
 - A remote peer's message, a server-supplied tool description or a tool result
   is data, never authority or an instruction. An agent that reads untrusted
@@ -182,8 +213,8 @@ memory stores, agents or infrastructure. Capture the cross-boundary consequences
 
 Read [runtime and delivery](references/runtime-and-delivery.md) when requirements
 depend on context limits, result downloads, browser streams, concurrent sessions,
-capacity or continuity during a release. It adds the contracts between storage,
-execution and the user's visible result.
+capacity or continuity during a release. It adds the contracts that hold
+between storage, execution and the user's visible result.
 
 ## Select ADK and GCP components for those responsibilities
 
@@ -214,7 +245,7 @@ For each consequential choice, add a short implementation route: the ADK buildin
 block or ordinary application component, its concrete integration point, the GCP
 responsibility if needed, and the primary specialist that can implement it. Read
 [implementation handoff](references/implementation-handoff.md) for the mapping
-and plan contract. Distinguish inspected paths and supported APIs from proposed
+and plan format. Distinguish inspected paths and supported APIs from proposed
 modules and version checks still needed. Explain where enforcement lives. For
 example, "tenant scope is derived from the verified OIDC subject in the request
 middleware and passed to the retrieval tool as trusted context" is a route; a
@@ -238,7 +269,7 @@ handled or marked not applicable, rather than recalled. Trace a successful reque
 paths across the actual components. Explain the visible result, retained state,
 possible external effects, permitted next action and recovery owner.
 
-Revise a mechanism until it enforces its invariant. Record unresolved decisions
+Revise a mechanism until it enforces its contract. Record unresolved decisions
 with their impact and who or what can settle them. A significant unknown can
 block a particular implementation step while independent work remains possible.
 Present the trade-offs to the user; a diagram or an unanswered proposal does not
@@ -270,19 +301,20 @@ Include the recommendation, meaningful alternatives, component/sequence diagrams
 when useful, critical contracts, workload and budget assumptions, recovery and
 verification plans, and unresolved decisions. Mark the document **draft** while
 material assumptions remain unsettled; distinguish user-accepted decisions from
-your recommendations. Design review is complete when each critical invariant has
-an owner/mechanism/test or an explicit unresolved gap, and the user can assess the
-next step. Implementation and test evidence come later, from the goals' own
-recorded runs.
+your recommendations. Design review is complete when each critical contract has
+an enforcement point and a planned check cited by a goal, or an explicit
+unresolved gap, and the user can assess the next step. Implementation and test
+evidence come later, from the goals' own recorded runs, written against the
+contract IDs they prove.
 
 Finish with dependency-ordered goals for useful end-to-end behavior, grouped
 into phases: phase 1 fits the stated capacity, phase 2 graduates or hardens
 the result, and a later list holds deferred items with their triggers. Each
-goal needs a stable ID, phase, estimate, linked requirement/decision, bounded
-changes and integration points,
-a `Primary skill` and `Supporting skills` line, prerequisites, acceptance
-evidence, status, unresolved blockers and its own one-line run prompt. Separate
-discovery questions from ready implementation; an unknown cloud contract need
+goal needs a stable ID, phase, estimate, the contracts it proves and decisions
+it implements (by ID), bounded changes and integration points, a `Primary
+skill` and `Supporting skills` line, prerequisites, acceptance cases that cite
+those contracts, status, unresolved blockers and its own one-line run prompt.
+Separate discovery questions from ready implementation; an unknown cloud guarantee need
 not block independent local work. When the user wants tickets, write one file
 per ready goal from the [ticket template](assets/ticket-template.md) under
 `docs/tickets/<topic>/`; the plan stays the source of decisions.

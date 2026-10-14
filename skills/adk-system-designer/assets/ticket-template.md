@@ -6,6 +6,7 @@ plan: <relative path to the implementation plan>
 primary_skill: <one specialist, e.g. adk-tool-interface-design>
 supporting_skills: [<only those this goal's boundaries need>]
 blocked_by: [<goal IDs or open decisions, empty when ready>]
+contracts: [<design contract IDs this ticket proves, e.g. C1, C3>]
 phase: <1, 2 or later>
 profile: <proof of concept / assignment / internal tool / MVP or pilot / production>
 estimate:                # human hours, agent-assisted
@@ -33,9 +34,9 @@ implements, e.g. D1, D3.>
 
 ## Acceptance
 
-- [ ] A1 <happy path, observable>
-- [ ] A2 <important failure path>
-- [ ] A3 <forbidden effect that must not happen>
+- [ ] A1 <happy path, observable> (C1)
+- [ ] A2 <important failure path> (C3)
+- [ ] A3 <forbidden effect that must not happen> (C3)
 
 Verification: <runnable command or test boundary; say offline, local
 integration or authorised live>.
@@ -43,9 +44,9 @@ integration or authorised live>.
 ## Evidence
 
 <Filled in by the agent that carries the ticket out: files changed, commands
-run with results, controls deliberately deferred, what remains unverified, the
-human review and verification still owed (hours, and what to check), steps only
-a person can do, and whether the work proved larger than its estimate. Leave
+run with results, one line per contract (C3: evidenced, local, A2 and A3),
+controls deliberately deferred, what remains unverified, the human review and
+verification still owed (hours, and what to check), steps only a person can do, and whether the work proved larger than its estimate. Leave
 empty when writing the ticket.>
 
 ## Run this ticket

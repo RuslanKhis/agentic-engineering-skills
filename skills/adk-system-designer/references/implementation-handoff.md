@@ -7,9 +7,9 @@ goal, its integration points, relevant skills and evidence of completion.
 ## Ground each implementation route
 
 Inspect the target's entrypoint, dependencies, public interfaces and tests when
-available. Connect **decision → component/API → integration point → skill →
-acceptance**. Identify what exists and what is proposed. For greenfield work,
-propose a small module/interface layout and label it as such. Verify SDK names
+available. Connect **contract → decision → component/API → integration point →
+skill → acceptance**. Identify what exists and what is proposed. For greenfield
+work, propose a small module/interface layout and label it as such. Verify SDK names
 and provider constraints against the target version before offering executable
 code. Unknown interfaces become explicit investigation tasks with a deciding
 question and bounded evidence needed.
@@ -19,9 +19,9 @@ These are starting points, not a stack to install in every application:
 | Need | Concrete implementation route to assess | Infrastructure responsibility | Primary skill |
 | --- | --- | --- | --- |
 | Bounded language/tool orchestration | `LlmAgent` with narrow tools, invoked through the application's `App`/`Runner`; use ordinary code or a workflow agent for known ordering. Locate the agent factory and serving invocation. | Selected model endpoint; application host chosen separately | `adk-workflow-design` |
-| Agent instructions and sub-agent descriptions | Instruction text at the right altitude with session-state templating; tool-use guidance in prose; each sub-agent `description` written as the routing contract the parent reads verbatim; the prompt kept as versioned code with a rendered-request test. Anything the application already knows moves to code. | None beyond the model endpoint | `adk-agent-instructions` |
+| Agent instructions and sub-agent descriptions | Instruction text at the right altitude with session-state templating; tool-use guidance in prose; each sub-agent `description` written as the routing text the parent reads verbatim; the prompt kept as versioned code with a rendered-request test. Anything the application already knows moves to code. | None beyond the model endpoint | `adk-agent-instructions` |
 | Model-facing tool interfaces and tool budgets | One declaration per tool as the model sees it: name, docstring, primitive parameters, bounded result dict with a status and actionable errors; per-agent tool count and toolset filtering; the delegation interface (`AgentTool` versus sub-agent modes). | None; server-supplied toolsets bring their own hosting | `adk-tool-interface-design` |
-| Output contracts, model and backend selection | `output_schema` with a first-class refusal shape; validation failure handled at a boundary the application owns with a bounded repair budget; pinned model ID with its lifecycle date; thinking and sampling settings; failover as a decision. | The chosen backend (Gemini API or Vertex) decides how a schema is enforced | `adk-model-and-output-contracts` |
+| Output schemas, model and backend selection | `output_schema` with a first-class refusal shape; validation failure handled at a boundary the application owns with a bounded repair budget; pinned model ID with its lifecycle date; thinking and sampling settings; failover as a decision. | The chosen backend (Gemini API or Vertex) decides how a schema is enforced | `adk-model-and-output-contracts` |
 | Tools or agents across a process boundary | Tool source per capability (function tool, OpenAPI, MCP, managed toolset); `McpToolset` with an allow-list and recorded definitions; `RemoteA2aAgent` with a deliberate timeout, task-state handling and peer output treated as data; an agent card that declares capability and security schemes when exposing. | Server or peer hosting, identity between the parties, registry entries | `adk-agent-interoperability` |
 | Persistent conversation or exact preferences | Assess `DatabaseSessionService` for ADK events; use application-owned profile records for exact user settings. Load a trusted user's profile at the invocation boundary. | Reuse the existing database where compatible; Cloud SQL is a candidate when a new managed PostgreSQL service is justified | `adk-memory-architecture` |
 | Context-window shaping | Decide what enters each model request: a stable instruction and tool prefix for caching, tool results bounded at the tool boundary, compaction or filtering of retained history, and an overflow rule per slice. Measure on captured requests, not configuration. | Provider caching minimums and billing | `optimise-adk-on-google-cloud` |
@@ -69,8 +69,11 @@ project's existing convention. Link architecture decisions instead of copying
 their rationale into a competing document. Give goals stable IDs and names.
 Each goal delivers a testable user behavior or resolves a named uncertainty.
 
-For each goal record outcome, scope, integration points, ADK/GCP choices,
-prerequisites and dependency IDs, skills, acceptance cases and evidence tier.
+For each goal record outcome, the contracts it proves (C IDs from the design),
+scope, integration points, ADK/GCP choices, prerequisites and dependency IDs,
+skills, acceptance cases and evidence tier. Each acceptance case names the
+contract it proves, so evidence lands against a contract rather than only
+against the goal; a critical contract no goal cites is a gap to record.
 Distinguish decision readiness from authorization: a goal can be ready in design
 while its cloud execution awaits an identified target or permission. Record
 verified facts and assumptions separately; completion needs actual evidence.
