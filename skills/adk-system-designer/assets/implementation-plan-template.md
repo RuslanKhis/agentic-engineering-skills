@@ -57,6 +57,7 @@ designer's `scripts/check_schedule.py` reads it; tickets copy it):
   calendar_waits: none   # or what, e.g. security review
   wait_days: 0           # working days the wait adds, as a range if unsure
   handoff: 0             # hours in total for picking up work from another person
+  mentions_only: []      # IDs (or wait) the prose names without depending on them
 ```
 
 Longest dependent chain and finish range: <from the schedule check, with the
@@ -96,7 +97,8 @@ goals coarse when an unresolved decision could change their scope.
 - **Prerequisites:** <goal/decision IDs, dependencies, setup or external contract>
 - **Primary skill:** <one specialist that leads this goal>
 - **Supporting skills:** <only those this goal's boundaries need, each with its purpose>
-- **Acceptance:** <observable success, important failure and forbidden-effect cases>
+- **Acceptance:** <numbered A1, A2 ...: observable success, important failure and
+  forbidden-effect cases; grid cells cite them as G01/A2>
 - **Verification:** <public test boundary, runnable command if known, required
   fixtures; distinguish offline, local integration and authorized live/hosted evidence>
 - **Execution scope:** <what is already authorized; exact external prerequisites

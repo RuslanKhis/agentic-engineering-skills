@@ -232,7 +232,9 @@ condition.
 ## Review the design through requests and failures
 
 Read [failure review](references/failure-review.md) before calling a cross-cutting
-design ready for implementation. Trace a successful request and applicable failure
+design ready for implementation. Build its coverage grid from the list of
+external systems, so every failure type for every integration is either
+handled or marked not applicable, rather than recalled. Trace a successful request and applicable failure
 paths across the actual components. Explain the visible result, retained state,
 possible external effects, permitted next action and recovery owner.
 
@@ -243,6 +245,19 @@ Present the trade-offs to the user; a diagram or an unanswered proposal does not
 mean the architecture has been agreed.
 
 ## Deliver and hand off
+
+Before handing over a plan for several people or a production service, have
+it reviewed by someone who did not write it. Send the
+[independent plan review](assets/plan-review-prompt.md) to a subagent with a
+fresh context where the host supports one; otherwise give the user the prompt
+to run in a new session, and say the plan is unreviewed until they do. Settle
+every finding in the plan or its change table, and rerun the schedule check.
+A single-person proof of concept skips this.
+
+When revising an existing design or plan, compare it with the previous
+version and list every failure row, grid cell, test, acceptance case, wait
+and floor item you removed or weakened, each with its reason, in the plan's
+change table. Nothing of these leaves silently.
 
 Keep the design and build plan in the project's existing document convention.
 When none exists, use `docs/architecture/<topic>.md` and, for a multi-goal effort,

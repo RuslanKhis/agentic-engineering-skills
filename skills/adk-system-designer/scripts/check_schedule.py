@@ -7,6 +7,11 @@ the phase total against capacity, ticket and plan mismatches, the longest
 dependent chain, each person's load and a finish estimate in working days that
 respects dependencies, one person doing one goal at a time, and calendar waits.
 
+It also lists, for review without failing, goal IDs a goal's prose names that
+are neither before nor after it, and outside approvals with no matching wait.
+With ``--design`` it checks that every coverage-grid cell cites an existing
+acceptance item (``G04/A2``) or says ``n/a: <reason>``.
+
 Estimates are ranges of human hours (``1-2``, ``1.5 to 3``, ``2 h``). Exit
 status: 0 when consistent and within capacity and calendar, 1 when something
 does not fit or disagrees, 2 when the input cannot be read.
@@ -22,6 +27,16 @@ RANGE = re.compile(r"^\s*(\d+(?:\.\d+)?)\s*(?:(?:-|–|—|to)\s*(\d+(?:\.\d+)?)
                    re.IGNORECASE)
 FENCE = re.compile(r"^```(?:yaml|yml)\s*$(.*?)^```\s*$", re.MULTILINE | re.DOTALL)
 ESTIMATE_KEYS = {"hands_on", "review", "review_and_verify", "total", "calendar_waits", "wait_days"}
+# Phrases that usually mean someone outside the team must act before the work can finish.
+APPROVAL = re.compile(r"approv(?:al|ed)\s+(?:from|by)|go-live approval|sign[- ]?off|\bDPIA\b|pen[- ]?test"
+                      r"|penetration test|legal review|security review|access request|request(?:ed)? access"
+                      r"|quota (?:increase|request)|budget approval|change (?:board|approval|advisory)|\bCAB\b"
+                      r"|\bretest|vendor booking|procurement|credentials? from|provisioned by",
+                      re.IGNORECASE)
+GENERIC_APPROVAL = ("sign", "appr", "goli")
+GRID_HEADERS = ("unavailable or slow", "partially applied", "partial multi-step change", "over-broad")
+CITATION = re.compile(r"\b([A-Z]\d+)/A(\d+)\b")
+HEADING = re.compile(r"^#{2,4}\s+(.*)$", re.MULTILINE)
 
 
 class InputError(Exception):
@@ -101,8 +116,11 @@ def normalise(entry, where):
         total = (hands_on[0] + review[0], hands_on[1] + review[1])
     if total is None:
         raise InputError(f"{where} {goal}: no total estimate")
+    settled = entry.get("mentions_only", [])
+    if isinstance(settled, str):
+        settled = [m.strip() for m in settled.split(",") if m.strip()]
     return {"goal": goal, "phase": str(entry.get("phase", "")).strip(), "total": total,
-            "handoff": str(entry.get("handoff", "")).strip(),
+            "handoff": str(entry.get("handoff", "")).strip(), "mentions_only": settled, "text": "",
             "hands_on": hands_on, "review": review, "owner": str(entry.get("owner", "")).strip(),
             "blocked_by": [b for b in blocked if b], "waits": str(waits).strip(), "wait_days": wait_days}
 
@@ -124,6 +142,9 @@ def read_plan(path):
                 base = len(lines[0]) - len(lines[0].lstrip())
                 trimmed = [l[base:] if l[:base].strip() == "" else l for l in lines]
                 goals.append(normalise(flatten(parse_mapping(trimmed, str(path))), str(path)))
+            sections = goal_sections(FENCE.sub("", text), {g["goal"] for g in goals})
+            for goal in goals:
+                goal["text"] = sections.get(goal["goal"], "")
             return goals
     raise InputError(f"{path}: no fenced yaml block with '- goal:' entries")
 
@@ -139,8 +160,101 @@ def read_tickets(directory):
             raise InputError(f"{path}: front matter is not closed")
         data = flatten(parse_mapping(text[3:end].splitlines(), str(path)))
         if "goal" in data:
-            goals.append(dict(normalise(data, str(path)), file=path.name))
+            body = text[end + 4:]
+            body = body[:body.find("## Evidence")] if "## Evidence" in body else body
+            goals.append(dict(normalise(data, str(path)), file=path.name, text=body))
     return goals
+
+
+def goal_sections(text, ids):
+    """Map each goal ID to the prose under a heading that starts with that ID."""
+    sections, marks = {}, list(HEADING.finditer(text))
+    for index, mark in enumerate(marks):
+        first = re.split(r"[\s:\u2014\u2013-]+", mark.group(1).strip(), maxsplit=1)[0]
+        if first in ids:
+            stop = marks[index + 1].start() if index + 1 < len(marks) else len(text)
+            sections[first] = sections.get(first, "") + text[mark.end():stop]
+    return sections
+
+
+def check_mentions(goals, selected):
+    """Goal IDs and outside approvals named in a goal's prose but absent from the schedule."""
+    by_id = {g["goal"]: g for g in goals}
+    ids = sorted(by_id, key=len, reverse=True)
+    pattern = re.compile(r"(?<![\w-])(" + "|".join(map(re.escape, ids)) + r")(?![\w-])") if ids else None
+
+    def closure(start, edges):
+        seen, stack = set(), list(edges.get(start, []))
+        while stack:
+            node = stack.pop()
+            if node not in seen:
+                seen.add(node)
+                stack.extend(edges.get(node, []))
+        return seen
+
+    up = {g["goal"]: [d for d in g["blocked_by"] if d in by_id] for g in goals}
+    down = {}
+    for goal, deps in up.items():
+        for dep in deps:
+            down.setdefault(dep, []).append(goal)
+    found = []
+    for goal in selected:
+        name = goal["goal"]
+        text = " ".join([goal.get("text", ""), goal.get("waits", "")])
+        before, after = closure(name, up), closure(name, down)
+        for other in sorted(set(pattern.findall(text)) if pattern else ()):
+            if other != name and other not in before | after and other not in goal["mentions_only"]:
+                found.append(f"{name} mentions {other}, which is neither before nor after it in the schedule; "
+                             f"add the dependency or list {other} under mentions_only")
+        for phrase in {m.group(0) for m in APPROVAL.finditer(text)}:
+            key = approval_key(phrase)
+            waits = [n for n in before | {name} if by_id[n]["wait_days"][1] > 0]
+            matched = waits if key in GENERIC_APPROVAL else [
+                n for n in waits if key in approval_key(by_id[n]["waits"] + " " + n, whole=True)]
+            if not matched and "wait" not in goal["mentions_only"]:
+                found.append(f"{name} mentions '{phrase}' but no wait for it is scheduled before it; add a wait "
+                             "entry that names it, or list wait under mentions_only")
+    return found
+
+
+def approval_key(text, whole=False):
+    """Letters-only key, so 'pen test', 'pen-test' and 'penetration test' match each other."""
+    letters = re.sub(r"[^a-z]", "", text.lower().replace("penetration", "pen").replace("go-live", "golive"))
+    return letters if whole else letters[:4]
+
+
+def check_grid(path, goals):
+    """Every coverage-grid cell cites an existing acceptance item (G04/A2) or says n/a with a reason."""
+    by_id = {g["goal"]: g for g in goals}
+    problems, header = [], None
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line.startswith("|"):
+            header = None
+            continue
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if header is None:
+            if any(h in line.lower() for h in GRID_HEADERS):
+                header = cells
+            continue
+        if set("".join(cells)) <= set("-: "):
+            continue
+        row = cells[0] or "(row)"
+        for column, cell in zip(header[1:], cells[1:]):
+            reason = re.match(r"n/?a\s*[:\u2014-]\s*(.+)$", cell, re.IGNORECASE)
+            cited = CITATION.findall(cell)
+            if reason and len(reason.group(1).split()) >= 2:
+                continue
+            if not cited:
+                problems.append(f"grid {row} / {column}: cite an acceptance item (e.g. G04/A2) or write "
+                                f"'n/a: <reason>'; found {cell!r}")
+                continue
+            for goal, number in cited:
+                text = by_id.get(goal, {}).get("text", "")
+                label = re.compile(rf"(?m)^\s*(?:[-*]\s*)?(?:\[[ xX]\]\s*)?A{number}\b")
+                if not label.search(text):
+                    problems.append(f"grid {row} / {column}: {goal}/A{number} is not an acceptance item of {goal}")
+    return problems
 
 
 def hours_per_day(people, default):
@@ -196,6 +310,8 @@ def analyse(goals, phase, capacity, days, people, default_hpd, reserve=0.0):
     for goal in selected:
         visit(goal["goal"], [])
 
+    mentions = check_mentions(goals, selected)
+    settled = [f"{g['goal']}: {', '.join(g['mentions_only'])}" for g in selected if g["mentions_only"]]
     handoffs = []
     for goal in selected:
         for dep in goal["blocked_by"]:
@@ -205,7 +321,8 @@ def analyse(goals, phase, capacity, days, people, default_hpd, reserve=0.0):
                 handoffs.append(f"{dep} ({giver}) -> {goal['goal']} ({goal['owner']})")
     result = {"phase": phase or "all", "goals": len(selected), "total_hours": total, "reserve": reserve,
               "problems": problems,
-              "outside_dependencies": sorted(external), "handoffs_without_hours": handoffs}
+              "outside_dependencies": sorted(external), "handoffs_without_hours": handoffs,
+              "settled_as_mention_only": settled, "mentions_to_review": mentions}
     if capacity is None and days is not None:
         owners = {g["owner"] for g in selected if g["owner"]}
         capacity = round(sum(rate(o) for o in owners) * days, 2) if owners else None
@@ -297,6 +414,11 @@ def report(result):
                  f"reserve: {result['finish_days_low']:g}-{result['finish_days_high']:g} working days")
     if "calendar_days" in result:
         lines.append(f"Calendar: {result['calendar_days']:g} working days; fits: {result['fits_calendar']}")
+    for mention in result["mentions_to_review"]:
+        lines.append(f"REVIEW: {mention}")
+    if result["settled_as_mention_only"]:
+        lines.append("Settled as mention only (check both directions: does either goal need the other?): "
+                     + "; ".join(result["settled_as_mention_only"]))
     if result["handoffs_without_hours"]:
         lines.append("Work passes between people with no handoff hours recorded (add them to the receiving "
                      "goal and set handoff: <hours>): " + "; ".join(result["handoffs_without_hours"]))
@@ -312,6 +434,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--plan", type=Path, help="plan Markdown with a fenced yaml schedule block")
     parser.add_argument("--tickets", type=Path, help="directory of ticket files with front matter")
+    parser.add_argument("--design", type=Path, help="design Markdown whose coverage grid cells are checked")
     parser.add_argument("--phase", default="1", help="phase to check; empty for all goals")
     parser.add_argument("--capacity", type=float,
                         help="phase hours available after the reserve; computed from --days and owners if omitted")
@@ -330,6 +453,12 @@ def main(argv=None):
         ticket_goals = read_tickets(args.tickets) if args.tickets else []
         if args.tickets and not ticket_goals:
             raise InputError(f"{args.tickets}: no ticket files with a goal in their front matter")
+        tickets_by_goal = {t["goal"]: t for t in ticket_goals}
+        for goal in plan_goals:
+            ticket = tickets_by_goal.get(goal["goal"])
+            if ticket:
+                goal["text"] += "\n" + ticket["text"]
+                goal["mentions_only"] = sorted(set(goal["mentions_only"]) | set(ticket["mentions_only"]))
         goals = plan_goals or ticket_goals
         if not 0.0 <= args.reserve < 1.0:
             raise InputError("--reserve is a share between 0 and 1, e.g. 0.25")
@@ -337,6 +466,8 @@ def main(argv=None):
                          args.reserve)
         if plan_goals and ticket_goals:
             result["problems"] += compare(plan_goals, ticket_goals)
+        if args.design:
+            result["problems"] += check_grid(args.design, goals)
     except (InputError, OSError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2

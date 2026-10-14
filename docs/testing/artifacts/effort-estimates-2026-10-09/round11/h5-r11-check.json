@@ -1,0 +1,249 @@
+{
+ "root": "scratchpad/est/v2/H5 (copy in r11check/H5; originals untouched). What-ifs: r8tools/wi.py via r11check/run_wi.sh, yaml copies in r11check/wi/, helper on plan only.",
+ "helper": "v2/H5 check_schedule.py md5 3f7a8bb4... (v1 was 6060765b...). Mention check lists REVIEW items only; grid check via --design.",
+ "Q1_helper_rerun": {
+  "verdict": "PASS",
+  "command": "python3.11 check_schedule.py --plan docs/plans/home-claim-intake.md --tickets docs/tickets/home-claim-intake/ --design docs/architecture/home-claim-intake.md --days 95 --reserve 0.25 --person 'Eng A..E=5' --person ML=5 --person SecRev=1",
+  "result": "51 phase-1 entries, 573-853 h of 2208.75 h (fits); chain G02>G16>G18>G10>G11>W3>G21>W8>W6>G22>W11 64.6-99 d; finish 67.27-102.47 vs 95: low end only; exit 1. --days 103: fits, exit 0.",
+  "summary_figures_match": true,
+  "per_person_loads_match": true,
+  "grid_problems": 0,
+  "unsettled_mentions_for_review": 0,
+  "settled_line": "G06: G05, G12, W18; G12: G09, G14; G13: G12, wait; G14: G08, G12, wait; G15: wait; G21: wait; G23: G19; G24: G17; G25: W15, W7; G26: wait; G34: wait; G35: G33; G38: wait",
+  "claims_reproduced": [
+   "soak W11=0 -> 64.27-96.47",
+   "pen test 10-20 -> 67.27-107.47",
+   "G05 to Eng E -> no effect",
+   "G10 without G18 -> no effect on final schedule",
+   "103-day date fits with 0.53 d slack"
+  ],
+  "minor_defects": [
+   "Plan wait table lists W3 after (G11, G12, G20, G26, G33, G37, G38); yaml also has G39",
+   "Summary names one critical chain, but G02>G16>W15>G20>W3>... ties it at 99 d high end (W15 has zero slack) and is not named as a risk"
+  ]
+ },
+ "Q2_id_density": {
+  "verdict": "PASS",
+  "method": "foreign (G\\d\\d|W\\d{1,2}) IDs in ticket bodies (front matter, title and Evidence onward excluded)",
+  "v1": {
+   "words": 4569,
+   "refs": 35,
+   "per_1000": 7.7,
+   "distinct_per_ticket": 1.28,
+   "note": "same 35 refs as the earlier check; word base differs slightly (7.0 there)"
+  },
+  "v2": {
+   "words": 7401,
+   "refs": 138,
+   "per_1000": 18.6,
+   "distinct_per_ticket": 3.3,
+   "tickets": 33
+  },
+  "round9_per_1000": 18.7,
+  "paraphrases": "None standing in for a goal ID that the helper would have flagged. ID-less references are to goals already upstream (handoffs 'on the skeleton', 'the identity boundary', 'the release pipeline'; 'platform team's project' = W13) or downstream ('the external test' = W3). The remaining ID-less items are outside-party inputs with no wait at all: G25 'integration team's existing non-prod network path', G24 'comparison sample of current web-form claims', G22 'staged rollout by portal feature flag'."
+ },
+ "Q3_mentions_only": {
+  "verdict": "PASS (13 goals, 20 entries; 0 hiding a dependency; 1 assumption-dependent)",
+  "entries": [
+   {
+    "goal": "G06",
+    "item": "G05",
+    "verdict": "honest",
+    "note": "photo fixtures; G05 needs only G02's Runner"
+   },
+   {
+    "goal": "G06",
+    "item": "G12",
+    "verdict": "honest, redundant",
+    "note": "G12 is already downstream via G18; entry is stale"
+   },
+   {
+    "goal": "G06",
+    "item": "W18",
+    "verdict": "borderline",
+    "note": "disclosure wording final only after legal; text kept configurable. Legal change could force G10/G23 rework; no schedule effect modelled"
+   },
+   {
+    "goal": "G12",
+    "item": "G09",
+    "verdict": "honest",
+    "note": "pointer to G33, which depends on G09"
+   },
+   {
+    "goal": "G12",
+    "item": "G14",
+    "verdict": "honest",
+    "note": "grid re-cited to G12/A6 (reviewer M1)"
+   },
+   {
+    "goal": "G13",
+    "item": "G12",
+    "verdict": "honest",
+    "note": "reverse need (DPIA inventory) modelled as W2 blocked_by G12"
+   },
+   {
+    "goal": "G13",
+    "item": "wait",
+    "verdict": "honest",
+    "note": "W2 follows G13"
+   },
+   {
+    "goal": "G14",
+    "item": "G08/G12/wait",
+    "verdict": "honest",
+    "note": "G08 cases split into G36; 'security review' false positive from 'security reviewer'"
+   },
+   {
+    "goal": "G15",
+    "item": "wait",
+    "verdict": "honest"
+   },
+   {
+    "goal": "G21",
+    "item": "wait",
+    "verdict": "honest",
+    "note": "W3 upstream; W8/W6 downstream"
+   },
+   {
+    "goal": "G23",
+    "item": "G19",
+    "verdict": "honest",
+    "note": "G23 upstream of W6>G22; G19 gate uses design T3 thresholds"
+   },
+   {
+    "goal": "G24",
+    "item": "G17",
+    "verdict": "honest",
+    "note": "post-GA metric pointer"
+   },
+   {
+    "goal": "G25",
+    "item": "W7",
+    "verdict": "honest"
+   },
+   {
+    "goal": "G25",
+    "item": "W15",
+    "verdict": "assumption-dependent",
+    "note": "Honest only under assumed Q19 (live calls via integration team's existing network path). If staging egress is needed: G25 after W15 -> 67.27-103.27 (breaks the recommended 103-day date); with W15 10-25 d -> 108.27. Not in the risk list."
+   },
+   {
+    "goal": "G26",
+    "item": "wait",
+    "verdict": "honest"
+   },
+   {
+    "goal": "G34",
+    "item": "wait",
+    "verdict": "honest",
+    "note": "'credentials from Secret Manager' false positive"
+   },
+   {
+    "goal": "G35",
+    "item": "G33",
+    "verdict": "honest",
+    "note": "G33 writes its own runbook section"
+   },
+   {
+    "goal": "G38",
+    "item": "wait",
+    "verdict": "honest"
+   }
+  ],
+  "vs_v1": "v1: 6 entries, 2 suspicious hiding real reverse edges (G12<-G09, W6<-G13/G14). v2: none hiding an edge; the reverse-direction check visibly ran (G13/G12 became W2<-G12; G12/G14 re-cited)."
+ },
+ "Q4_independent_review": {
+  "verdict": "PASS",
+  "ran": true,
+  "evidence": "Subagent transcript ~/.claude/projects/...-est-v2-H5/d84a7a2d.../subagents/agent-adcd6954e99777fae.jsonl (general-purpose, fresh context, prompt = plan-review-prompt.md with paths). It reran the helper (62.93-94.87 fits), built its own what-if harness, and returned tables: 17 prerequisites (P1-P17), 4 mention findings (M1-M4), 7 unsupported claims (C-1..C-7), 10 coverage cells (C1-C10) + 2 smaller; combined effect 66.93-104.47 with cheapest fixes. Plan change table has rows R-P1..P16, R-M1..M4, R-C3, C-5 text; change-table v2 row lists moved acceptance items.",
+  "findings": 40,
+  "settled": 40,
+  "settled_partially": [
+   "P15: handlers and rubric got W16/W17, but access to 40 current web-form claims got no wait",
+   "P16: legal before G06's final text settled as mention-only (configurable text)",
+   "C-5: accepted; no what-if on scope cuts of chain goals (justified as floor items)"
+  ],
+  "real_fixes": "Yes. New goals with hours G35-G39 (+~24-34 h incl. G38 fixes), 10 new waits W9-W18, 12 new blocked_by edges, production egress IP moved into G16/A3, 11 grid cells re-cited to new acceptance items that test the claim (G03/A7, G04/A7, G08/A13, G08/A14, G16/A5, G33/A4, G12/A2 4xx, G12/A6, G09/A3 two workers, G16/A1 staging HA). Finish moved from 'fits' 62.93-94.87 to 'low end only' 67.27-102.47 and the summary says so with a recommended date.",
+  "unreviewed_marking": "Plan status: 'unreviewed by the user'; 'reviewed once by an independent reviewer'; REPORT: not repeated after fixes. Honest."
+ },
+ "Q5_prior_escapes": {
+  "dpia_after_evidence": {
+   "status": "fixed",
+   "detail": "W2 blocked_by [G12, G13]. G14/G33 not upstream; what-if W2 after G12,G13,G14,G33,G36: no change (slack)."
+  },
+  "ga_rollout_days": {
+   "status": "fixed",
+   "detail": "W11 3-6 d soak after G22; W11=0 what-if 64.27-96.47 reproduced"
+  },
+  "guidewire_prod_credentials": {
+   "status": "fixed",
+   "detail": "W7 prod API client + allowlist 10-20 d after G16; egress IP applied in G16/A3. W7 at 20-40 d: no change"
+  },
+  "portal_release": {
+   "status": "partly fixed",
+   "detail": "W10 covers the classic-form prefill change only. Chat panel/feature-flag release through the portal team has no wait. Release slot after W6 2-5 d: 69.27-107.47 (+2/+5); after G11 or G21: no change"
+  },
+  "claims_team_baseline": {
+   "status": "mostly fixed",
+   "detail": "W16 booking+rubric, W17 review window. No request for the 40 web-form comparison claims (PII access) and no pre-GA call-back-rate baseline (measured only after GA in G17). 10-20 d from day 1: no change"
+  },
+  "pentest_booking": {
+   "status": "fixed",
+   "detail": "W3 and W8 'booked day 1', in the day-1 request list; W8 retest 3-5 d after G21"
+  },
+  "quota_request": {
+   "status": "fixed",
+   "detail": "W4 staging quota after W13 project; W14 production quota after G16"
+  }
+ },
+ "Q6_remaining_escapes": [
+  {
+   "item": "G25 relies on assumed existing network path (Q19); otherwise needs W15",
+   "effect": "67.27-103.27 (+0.8 high; breaks 103-day recommendation); 108.27 with W15 10-25 d"
+  },
+  {
+   "item": "Second critical chain G02>G16>W15>G20>W3 ties at 99 d; W15 (non-prod allowlist, 10-20 d) has zero slack but is not in the risks",
+   "effect": "W15 15-30 d -> 67.27-109"
+  },
+  {
+   "item": "Portal release/feature flag of the chat panel by the portal team: no wait",
+   "effect": "after W6, 2-5 d: 69.27-107.47"
+  },
+  {
+   "item": "G24/A1 is performed during W17, which comes after G24; fixes for blocking UAT items have no hours between W17 and W6",
+   "effect": "8-16 h fix goal: no change"
+  },
+  {
+   "item": "G37 rotation test runs 'in staging against Guidewire non-prod' but does not wait for W15",
+   "effect": "no change"
+  },
+  {
+   "item": "G11/A2 shows 'photos partly attached' (G09 state) without depending on G09",
+   "effect": "no change"
+  },
+  {
+   "item": "Production CIAM client/audience registration for the agent API: no wait",
+   "effect": "no change if requested day 1"
+  },
+  {
+   "item": "Access to 40 current web-form claims for G24 comparison: no request",
+   "effect": "no change"
+  }
+ ],
+ "Q7_overall": {
+  "verdict": "BETTER than v1",
+  "reasons": [
+   "Helper figures, loads and grid all reproduce; 0 unsettled mentions and no mentions_only entry hiding an edge (v1: 2 of 6)",
+   "Goal-ID density back to round-9 level (18.6/1000 vs 7.7) with no evasive paraphrases",
+   "Independent review really ran, found the plan did not fit (P1 alone 72.93-114.87), and every finding was settled with real schedule edits; honest 'low end only' plus a recommended date",
+   "6 of 7 prior escapes fixed, portal release partly",
+   "Remaining escapes are smaller: worst +0.8 to +5.8 d high end vs v1 +4 to +8 d"
+  ],
+  "caveats": [
+   "Recommended 103-day date has 0.53 d slack and two tied chains; G25/W15 assumption alone breaks it",
+   "Longer: plan 5.5k words (v1 3.6k), design 5.9k, 33 tickets (v1 25), 18 waits; harder for a manager to scan",
+   "Review not repeated after fixes",
+   "Phase-1 hours fell to 573-853 from v1's 702-1070 for broadly the same scope; not examined"
+  ]
+ }
+}

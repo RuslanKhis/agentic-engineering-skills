@@ -1604,7 +1604,11 @@ estimate is clearly too small and records the review hours still owed.
   - plans adjusted to make the numbers fit;
   - overweight POC documents.
 
-Plans open with a one-page summary for the person who decides, and each fact
+Failure coverage is built from two grids rather than recalled: every external
+system and every action the agent takes, each cell citing the test that covers
+it. A fresh reviewer then checks the plan's prerequisites and claims before
+handover. Across three runs per version, the share of failure situations
+covered by every run rose from 20 to 42 of 47. Plans open with a one-page summary for the person who decides, and each fact
 has one home. That cut a production plan from about 16,000 words to 9,000.
 Because a word limit made the model drop safety content, plans cut repetition
 instead, never tests or failure analysis. Judgement in long production plans,

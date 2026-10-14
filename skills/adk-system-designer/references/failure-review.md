@@ -4,6 +4,38 @@ Use before finalizing a whole-system design or when reviewing an existing one.
 Select failures from the promised behavior. Give a reason for cases that do not
 apply; do not invent write machinery for a read-only product.
 
+## Build the coverage grid first
+
+Failure analysis written from memory differs from run to run: one design
+covers a lost read, the next a partial change. Enumerate instead. List every
+external system the design calls (each API, store, identity provider and the
+model itself) as a row, and give each row a cell for every failure type:
+
+| Integration | Unavailable or slow | Rejects the request | Write outcome unknown | Partial multi-step change | Credential expired or revoked | Rate limited or out of quota | Duplicate or concurrent request | Untrusted or malformed content |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
+Then add one row for each action the agent can take that changes something
+(book, move, cancel, send, pay, file a claim), with the failures of the
+action itself:
+
+| Action | Over-broad or wrong target | Partially applied | Confirmation stale or changed | Outcome unknown | Repeated or concurrent |
+| --- | --- | --- | --- | --- | --- |
+
+"Over-broad" covers a request such as "cancel all my appointments"; "partially
+applied" covers a move whose new booking succeeded while the old one was not
+cancelled; "confirmation stale" covers a user approving a proposal after the
+slot, price or record changed.
+
+Every cell either cites the acceptance item that tests it, as `G04/A2` (goal
+G04, acceptance item A2), or says `n/a: <reason>` with a reason of at least
+two words, such as "n/a: read only". Number acceptance items A1, A2 in each
+goal or ticket so they can be cited. "Untrusted or malformed content" covers
+invalid model output, injected text in tool results and unexpected provider
+payloads. Run `scripts/check_schedule.py` with `--design` to confirm every
+cell cites an item that exists. The grids sit in the design's failure
+section; the scenario table below adds the cross-cutting cases they cannot
+express. A proof of concept fills the rows it touches in a few words each.
+
 ## Trace the actual path
 
 Draw a short sequence through ingress, identity, session/state, model, tools,

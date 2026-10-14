@@ -162,6 +162,65 @@ Still open after round 9:
 - **Negative claims in prose.** Occasionally a claim is still not checked
   with the helper.
 
+## Rounds 10 and 11: hidden dependencies and run-to-run coverage · 14–15 October 2026
+
+Two problems remained after round 9:
+
+- **Requirements in the text but not in the schedule.** For example, a
+  data-protection assessment that needs evidence produced mid-project.
+- **Failure rows that came and went** from one run to the next.
+
+Round 10 measured variance directly: three fresh designs of the salon MVP per
+skill version, plus a revision scenario (fit the existing salon plan into 8
+days instead of 10).
+
+| Version | What changed |
+| --- | --- |
+| OLD (round 9 skills) | None |
+| MID (round 10) | A coverage grid: one row per external system, a cell for each of eight failure types. A blocking helper check for goal IDs and outside approvals named in the text but absent from the schedule. A rule to list every removal when revising a plan |
+| NEW (round 11) | An action grid as well (over-broad request, partially applied, stale confirmation, unknown outcome, repeated). Every cell cites a numbered acceptance item (`G04/A2`) or says `n/a: <reason>`, checked by the helper's `--design` option. The mention check lists items for review instead of failing. Approvals must match their own wait. An [independent plan review](../../skills/adk-system-designer/assets/plan-review-prompt.md) by a fresh subagent before handover |
+
+Coverage of 47 failure situations, three runs per version
+([analysis](artifacts/effort-estimates-2026-10-09/round11/variance-check-r11.json)):
+
+| | OLD | MID | NEW |
+| --- | --- | --- | --- |
+| Situations handled per run (mean) | 25.3 | 37.0 | 44.3 (41.7 tested by an acceptance item) |
+| Handled in all three runs | 20 | 30 | 42 |
+| Mean pairwise overlap (Jaccard) | 0.77 | 0.76 | 0.94 |
+| Known gaps closed, of 10 (mean) | 8.0 | 7.3 | 9.8 |
+| Grid citations that test what the cell claims | — | 53% | 97% |
+| Words, design + plan / tickets | 6,171 / 3,308 | 7,198 / 3,080 | 7,871 / 4,337 |
+
+What each round showed:
+
+- **The integration grid alone added coverage but not consistency.** The
+  items that kept vanishing were failures of the agent's own actions: a
+  customer asking to cancel everything, a move left half done, a stale
+  confirmation. These have rows only in the action grid.
+- **The blocking mention check was gamed.** In the MID production plan, goal
+  IDs in ticket prose fell 63%. Four dependencies were paraphrased, and two
+  "mention only" settlings hid real dependencies worth 4–8 working days.
+- **With the check non-blocking and the review added**
+  ([check](artifacts/effort-estimates-2026-10-09/round11/h5-r11-check.json)),
+  ID density returned to its earlier level, 18.6 per 1,000 words, and all 20
+  settlings were honest.
+- **The review ran as a fresh subagent in every NEW run.** It found 17–40
+  issues per plan, and the fixes were real: new goals and waits. Three of four
+  plans moved honestly from "fits" to a later date. The remaining escapes in
+  the production plan are worth about 1–6 days, against 4–8 in round 10.
+- **The revision rule worked.** The MID revision to 8 days disclosed 10 of 13
+  removals with reasons and costs; the old skills disclosed 7 of 9.
+
+Still open:
+
+- **Variance has moved from coverage to design decisions,** for example
+  whether a reschedule is atomic, or how many salons go live first.
+- **Some situations appear in only some runs,** such as model retirement
+  tests and time-zone handling.
+- **The review runs once.** Nothing re-checks the fixes it prompted.
+- **Plans are longer,** and acceptance items roughly doubled.
+
 ## What this establishes and what it does not
 
 Blind graders preferred the new estimates in every scenario. After the helper

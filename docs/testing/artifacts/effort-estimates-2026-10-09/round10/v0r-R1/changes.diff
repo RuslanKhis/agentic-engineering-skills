@@ -1,0 +1,1030 @@
+diff --git a/docs/architecture/salon-booking-assistant.md b/docs/architecture/salon-booking-assistant.md
+index a569e6f..0dba60a 100644
+--- a/docs/architecture/salon-booking-assistant.md
++++ b/docs/architecture/salon-booking-assistant.md
+@@ -1,9 +1,16 @@
+ # System design: salon booking assistant
+ 
+ Status: **draft**. The team was not available for this session, so every
+-decision below rests on the assumed answers A1 to A10, and decisions that
+-depend on them are **provisional** until the team confirms. No decision is
+-user-accepted yet.
++decision below rests on the assumed answers A1 to A13, and decisions that
++depend on them are **provisional** until the team confirms. The only stated
++facts are the 8-working-day launch and the three developers (A1, A2, revised
++2026-10-14). No design decision is user-accepted yet.
++
++**Revision 2026-10-14:** the salon owners moved the launch from 10 to 8
++working days. Phase 1 now launches **booking only** at the pilot salon; cancel
++(G05) and move (G06) become the first phase 2 goals; chat requires sign-in
++(A12). The floor is unchanged. Rationale and figures are in the plan's "What
++changed for 8 days".
+ 
+ Decisions and their rationale live here. The plan
+ ([docs/plans/salon-booking-assistant.md](../plans/salon-booking-assistant.md))
+@@ -14,16 +21,19 @@ each goal's scope and acceptance.
+ 
+ | ID | Question I would have asked | Assumed answer | Decisions that depend on it |
+ | --- | --- | --- | --- |
+-| A1 | When must the first useful version exist, and what happens after? | 10 working days from start; kept and improved afterwards | Phase 1 code is the kept form (D1–D12) |
+-| A2 | How many hours each, and how familiar with ADK and GCP? | Three developers, about 5 focused hours a day each on this project; strong in Python and web; new to ADK; some GCP. ×1.5 on every estimate | Plan capacity and estimates |
++| A1 | When must the first useful version exist, and what happens after? | **Stated 2026-10-14:** 8 working days (was 10). Assumed: kept and improved afterwards | Phase 1 code is the kept form (D1–D12); the cut line |
++| A2 | How many hours each, and how familiar with ADK and GCP? | **Stated:** three developers, unchanged. Assumed: about 5 focused hours a day each on this project, also under the shorter deadline; strong in Python and web; new to ADK; some GCP. ×1.5 on every estimate | Plan capacity and estimates |
+ | A3 | What budget is there for models and cloud? | About USD 300 a month during the MVP | D2, D9 |
+ | A4 | How do customers sign in today? | The salon website has customer accounts issued by the booking system. Its login yields a signed token (JWT) whose subject is the booking-system customer ID, and our backend can verify it. Fallback if it is not verifiable: a one-time email code, about 6–10 extra hours | D3; blocks G03 |
+ | A5 | Does booking involve deposits, prepayment or no-show fees? | No. No money moves through the assistant | D4 depth; "Later" list in the plan |
+ | A6 | What does the booking API offer for writes? | REST with list salons/services/stylists, availability search, create, reschedule, cancel and list-by-customer. An idempotency-key header is **unknown** (G01 finds out). Move is a single reschedule call | D5; shapes G04, G06 |
+-| A7 | Who enforces the cancellation and late-change policy? | The booking API rejects changes inside the policy window (assumed 24 hours) with a distinct error. Our confirm endpoint rechecks it before dispatch | G05, G06 |
+-| A8 | Who uses it, and through which channel? | External salon customers, through a chat widget on the existing salon website (web only). Anonymous visitors may browse availability; booking, moving and cancelling need sign-in. The chain owner judges the pilot | D3, D7, D8 |
++| A7 | Who enforces the cancellation and late-change policy? | The booking API rejects changes inside the policy window (assumed 24 hours) with a distinct error. Our confirm endpoint rechecks it before dispatch | G05, G06 (phase 2 since the 8-day revision) |
++| A8 | Who uses it, and through which channel? | External salon customers, through a chat widget on the existing salon website (web only). Sign-in is required to chat (A12). The chain owner judges the pilot | D3, D7, D8 |
+ | A9 | Languages and time zones? | English only. All five salons share one time zone, but the time zone is read per salon from the API anyway | D12 |
+ | A10 | What data is touched? | Personal data: customer name, contact details on file and appointment history. No health or payment data. Tools expose only what the journey needs | D10 |
++| A11 | Does any work already exist, and when do the 8 days start? | Nothing is built (every ticket's Evidence is empty); day 1 is the first working day of this plan | Every estimate and the finish range |
++| A12 | Must visitors without an account be able to chat about availability? | No: the pilot asks customers to sign in before chatting. Anonymous browsing moves to the plan's Later list | D3, D9, I5; G03 and G07 scope |
++| A13 | Which capability may wait if not everything fits: cancel, move, the evaluation depth or the pilot's scope? | Cancel and move wait (customers phone, as today). The floor and the 30-case pre-launch evaluation stay | Cut line; G05, G06 to phase 2 |
+ 
+ ## 1. Purpose and constraints
+ 
+@@ -38,6 +48,13 @@ free Thursday slots with Sam. She taps a proposal showing *Riverside · Women's
+ cut · Sam · Thu 23 Oct 14:30*, presses **Confirm**, and sees the new time taken
+ from the booking API's receipt.
+ 
++**Phase 1 slice (8-day launch).** Maya's move arrives with G06 in phase 2.
++At launch, the assistant lists her Saturday appointment and, when she asks to
++move it, gives her the Riverside phone number without proposing anything. She
++can book a new cut the same way: *Riverside · Women's cut · Sam · Thu 23 Oct
++14:30*, **Confirm**, and the status card from the receipt. The booking path
++carries every write guarantee below (I1–I4); cancel and move reuse it.
++
+ **Model versus code.** The model interprets the request: which appointment,
+ which service, which stylist, and what "Thursday afternoon" means. It chooses
+ read tools and proposes a change. Code owns everything else: who the customer
+@@ -64,27 +81,27 @@ exists in this repository yet.
+ 
+ | Scope-gate answer | Value |
+ | --- | --- |
+-| First useful version due | 10 working days (A1); continued |
++| First useful version due | 8 working days (A1, stated 2026-10-14; was 10); continued |
+ | People and hours | 3 developers × ~5 focused h/day, new to ADK (A2); the same team runs it afterwards |
+ | Money | ~USD 300/month for models and cloud (A3) |
+-| Users and judge | External customers via the web widget; the chain owner judges the pilot (A8) |
++| Users and judge | Signed-in external customers via the web widget (A8, A12); the chain owner judges the pilot |
+ | Data and effects | Customer personal data; writes that are reversible but visible to real people (bookings in staff calendars, confirmation messages sent by the booking system); no money (A5, A10) |
+ | Delivery profile | **MVP or pilot:** first external users, real bookings, the team must see failures and cost |
+ 
+ | Concern | Depth now | Trigger that raises it |
+ | --- | --- | --- |
+ | Core judgment, measured | Build: 30-case evaluation set, run locally and before launch (G08, G11) | Phase 2: gate in CI (G14) |
+-| Identity and per-customer scope | Build: verified login token, own appointments only (G03) | — |
++| Identity and per-customer scope | Build: verified login token required to chat, own appointments only (G03) | Anonymous browsing (Later list) brings back per-IP caps |
+ | Secrets | Build: workload identity and Secret Manager (G09) | Rotation when the booking-API key policy requires it |
+-| External writes | Build: click-confirmed proposals, idempotent dispatch, reconcile-before-retry (G04–G06) | Automated reconciliation (G18) when more than one uncertain operation per week |
+-| Sensitive data | Build: projected tool results, no message content in logs or traces, 30-day session retention (configured in G09) | Erasure tooling (G17) before the second salon month or the first erasure request |
++| External writes | Build for booking: click-confirmed proposals, idempotent dispatch, reconcile-before-retry (G04). Cancel and move are not offered at launch | Cancel (G05) and move (G06), the first phase 2 goals, on the same machinery; automated reconciliation (G18) when more than one uncertain operation per week |
++| Sensitive data | Build: projected tool results, no message content in logs or traces (G09), 30-day session deletion job (G22) | Erasure tooling (G17) before the second salon month or the first erasure request |
+ | Prompt injection and agency | Build at MVP depth: the structure in §5 (model has no executing write tool) | Adversarial suite (G15) in phase 2 |
+-| Budgets and loops | Build: `max_llm_calls`, per-customer and per-IP turn caps, kill switch (G02, G07, G09) | Shared allowance when traffic exceeds one instance |
++| Budgets and loops | Build: `max_llm_calls`, per-customer turn caps, unauthenticated requests refused before any model call, kill switch (G02, G03, G07, G09) | Shared allowance when traffic exceeds one instance |
+ | Memory | Conversation sessions only | Repeat customers restating preferences |
+ | Frontend | Build: plain widget with proposal cards and a Confirm button (G07) | Slot cards (G13) in phase 2 week 1 |
+ | Hosting | Build: one Cloud Run service with rollback to the previous revision (G09) | — |
+ | Observability | Build: traces and token cost, content capture off (G09) | SLOs and alerts (G16) |
+-| Release engineering | Build: pinned versions, release manifest, deterministic tests and scripted evaluation in CI (G09) | Live evaluation gate (G14) |
++| Release engineering | Build: pinned versions, release manifest (G02, G09), deterministic tests and scripted evaluation in CI (G22; by hand before each deploy until G22 lands) | Live evaluation gate (G14) |
+ | Performance tuning | Defer | Measured p95 latency or cost per booking above target |
+ 
+ **Floor kept:** no secrets in code, prompts or logs. Spend stops through
+@@ -94,17 +111,18 @@ without the customer's click on an exact proposal. Personal data is limited to
+ the signed-in customer's own records and stays out of logs. The model ID is
+ pinned. No accepted risks.
+ 
+-**Who may use it, when:** during G11 only customers of the pilot salon, with
+-staff informed (W2). **Graduation to all five salons (G12):** at least 3 days
++**Who may use it, when:** during G11 only signed-in customers of the pilot
++salon, for availability and booking, with staff informed (W2) that moves and
++cancellations still come by phone until G05 and G06 ship. **Graduation to all five salons (G12):** at least 3 days
+ of the pilot with no wrong-booking incident, no uncertain operation left
+ unresolved, and the G08 evaluation at or above the G11 threshold.
+ 
+ | Deferred control | Why it waits | What would bring it forward |
+ | --- | --- | --- |
+-| Live evaluation gate in CI (G14) | Prompt changes are rare in week 2; G11 runs evaluation by hand | First prompt or model change after launch |
++| Live evaluation gate in CI (G14) | Prompt changes are rare in the first pilot days; G11, G05 and G06 run evaluation by hand | First prompt or model change after launch |
+ | Adversarial suite (G15) | §5 structure blocks the harmful actions in code; the suite adds evidence, not the control | Any new tool, new channel, or a free-text field added to tool results |
+ | SLOs and alerts (G16) | No baseline until the pilot runs | One week of pilot traffic |
+-| Erasure tooling (G17) | Retention deletes sessions after 30 days; erasure can be done by hand at pilot scale | First erasure request or second salon month |
++| Erasure tooling (G17) | Retention (G22) deletes sessions after 30 days; erasure can be done by hand at pilot scale | First erasure request or second salon month |
+ 
+ Capacity, finish range and cut line: see the plan's summary.
+ 
+@@ -112,11 +130,11 @@ Capacity, finish range and cut line: see the plan's summary.
+ 
+ | ID | Invariant | Enforcing component and evidence | Failure outcome | Planned verification |
+ | --- | --- | --- | --- | --- |
+-| I1 | A customer reads, moves or cancels only their own appointments | `customer_id` comes from the verified token (G03), is written to session state by the chat API, and is read by tools and by the confirm endpoint. It is never a model argument. Booking API calls filter by it, and the confirm endpoint checks the appointment's owner again | Not-found response, no write | Two fixture customers: B's appointment ID offered by a scripted model is refused at the tool and at confirm (G05, G06, G07) |
++| I1 | A customer reads, moves or cancels only their own appointments | `customer_id` comes from the verified token (G03), is written to session state by the chat API, and is read by tools and by the confirm endpoint. It is never a model argument. Booking API calls filter by it, and the confirm endpoint checks the appointment's owner again | Not-found response, no write | Two fixture customers: B's appointments are not listed for A (G02); A's confirm of a proposal created for B is refused (G04); resuming B's session is refused (G03, G07). In phase 2, B's appointment ID offered by a scripted model is refused at the tool and at confirm (G05, G06) |
+ | I2 | No booking change happens without the customer clicking Confirm on a proposal showing salon, service, stylist and absolute start time | The model holds only `propose_*` tools, which write a pending proposal. Only `POST /operations/{id}/confirm` dispatches, and it needs the session's verified customer | Proposal stays pending and expires after 10 minutes | A scripted model calls every tool, and the fake booking API records zero writes until confirm (G04) |
+ | I3 | One confirmed proposal causes at most one booking change | The operation record (unique `operation_id`) moves through a state machine under a row lock; the ID is sent as the idempotency key if the API supports one (G01). An `uncertain` write is reconciled by lookup, never by fresh dispatch | Customer sees "checking with the salon" and later the result | Double click, concurrent confirms, and a lost response after a provider commit all end with one booking (G04) |
+ | I4 | A shown confirmation reflects the booking API's receipt | The widget renders status from the operation record. Model text never states that a change succeeded | Model text claiming success is not shown as a status card | Model says "booked" while the API fails: the card shows failure (G07) |
+-| I5 | Spend and work are bounded per turn, per customer and overall | `RunConfig.max_llm_calls=8` (G02); turn caps in chat API middleware (G07); kill switch (G09) | Polite refusal with the salon's phone number | Unit tests at each cap; kill-switch drill in G10 |
++| I5 | Spend and work are bounded per turn, per customer and overall | `RunConfig.max_llm_calls=8` (G02); unauthenticated requests refused before any session or model call (G03); per-customer turn caps in chat API middleware (G07); kill switch (G09) | Polite refusal with the salon's phone number | Unit tests at each cap; kill-switch drill in G10 |
+ | I6 | Message content and contact details do not reach logs or traces | Telemetry content capture is off; logs carry IDs, tool names, statuses and token counts; tool results are projected (D10) | — | Captured log and span export from a test run contain no fixture names or phone numbers (G09) |
+ 
+ ## 4. Architecture and decisions
+@@ -137,25 +155,25 @@ Capacity, finish range and cut line: see the plan's summary.
+ 
+ | ID | Requirement | Design choice | Reason | Tradeoff / alternative | Verification | Status |
+ | --- | --- | --- | --- | --- | --- | --- |
+-| D1 | Interpret booking requests using a small set of capabilities | One `LlmAgent`, no sub-agents. Read tools: `list_salons_and_services`, `find_free_slots`, `list_my_appointments`. Proposal tools: `propose_booking`, `propose_move`, `propose_cancellation`. That is six function tools | One judgment owner and a small tool set; nothing here needs a separate context or credential | Sub-agents per operation would add routing errors for no gain | Captured request shows 6 declarations; G08 tool-choice accuracy | provisional (A6) |
++| D1 | Interpret booking requests using a small set of capabilities | One `LlmAgent`, no sub-agents. Read tools: `list_salons_and_services`, `find_free_slots`, `list_my_appointments`. Proposal tools: `propose_booking` at launch; `propose_cancellation` (G05) and `propose_move` (G06) in phase 2. Four function tools at launch, six later | One judgment owner and a small tool set; nothing here needs a separate context or credential. A tool that is not registered cannot be called, which is stronger than an instruction not to | Sub-agents per operation would add routing errors for no gain | Captured request shows 4 declarations at launch; G08 tool-choice accuracy | provisional (A6, A13) |
+ | D2 | Behaviour stays comparable across releases, within budget | `gemini-3.8-flash` on Vertex AI, pinned. Stable on the Gemini API with no shutdown announced, per the `adk-model-and-output-contracts` lifecycle snapshot (checked 2026-10-08). Low thinking level; temperature left at default | `gemini-3.7-flash` reaches Vertex retirement on 2027-01-28, inside this plan's horizon; 2.5 models retire on 2026-10-20 | Price and quota not looked up (no network); refresh the snapshot before G02 | Release manifest has no alias; G08 baseline recorded against this ID | provisional (A3) |
+-| D3 | I1 | The chat API verifies the existing login token (signature, issuer, audience, expiry) and maps it to `customer_id`, which it writes to session state. Sessions are created and owned per `customer_id`; an anonymous session gets read tools only, and proposal tools return "sign in to continue" | Authority comes from the verified token, not from the model or a client-supplied ID | Depends on A4; an email one-time code would add 6–10 h | Forged, expired and wrong-issuer tokens are rejected; resuming another customer's session ID is refused | provisional (A4) |
++| D3 | I1 | The chat API verifies the existing login token (signature, issuer, audience, expiry) and maps it to `customer_id`, which it writes to session state. Sessions are created and owned per `customer_id`. A request without a valid token gets 401 before any session is created or model is called (A12) | Authority comes from the verified token, not from the model or a client-supplied ID; no anonymous sessions means no anonymous spend | Depends on A4; an email one-time code would add 6–10 h, which does not fit 8 days. Visitors without an account cannot chat | Forged, expired, wrong-issuer and missing tokens are rejected; resuming another customer's session ID is refused | provisional (A4, A12) |
+ | D4 | I2 | Propose-then-confirm outside the model. A `propose_*` tool validates input, rechecks availability and ownership, and stores a pending operation: canonical payload, `customer_id`, 10-minute expiry. The widget's Confirm calls the confirm endpoint, which rechecks ownership, expiry, slot and policy, then dispatches | The model can never execute a write; the click is bound to the stored payload, not to model text | Native ADK `require_confirmation` was considered and rejected: Google lists `DatabaseSessionService` as unsupported for it ([confirmation known limitations](https://adk.dev/tools-custom/confirmation/#known-limitations), cited via `safe-api-tool-calls` compatibility notes), and a code-owned click is stronger | I2 test; a changed payload under the same operation ID is rejected | proposed |
+ | D5 | I3 | State machine `pending → confirmed → dispatching → succeeded / failed / uncertain`, with one row per `operation_id`. The confirm handler claims the row atomically. A timeout or connection loss after send means `uncertain`, which is resolved by listing the customer's bookings at that slot, never by fresh dispatch. If the API supports an idempotency key, `operation_id` is sent as that key | A lost response cannot become a duplicate booking | Without an idempotency key, the lookup matches on slot, customer and service; two identical bookings made outside the assistant could confuse it (G01 settles) | Lost-response, double-click and concurrent-confirm tests (G04) | provisional (A6) |
+ | D6 | Conversations and operations survive restarts and multiple instances | Cloud SQL Postgres, the smallest tier, for ADK `DatabaseSessionService` and the operations and turn-counter tables. SQLite locally | Proposals need a transactional store, and one database serves both | In-memory sessions break on a second instance; Firestore would mean a second store | Restart mid-conversation keeps the session; pinned-ADK check of the session service (G09) | proposed |
+ | D7 | Serve the widget and the confirm endpoint under our auth | One Cloud Run service running a FastAPI app that owns the `Runner`; previous revision kept for rollback | We need custom endpoints (confirm, auth) anyway; one deployable unit | Agent Runtime would still need a gateway for auth and confirm; GKE is more than the team can run | Deployment readback shows the revision, model ID and prompt version (G09) | proposed |
+ | D8 | Customers see proposals and real outcomes | Custom JSON contract, non-streaming: `{messages[], proposals[{operation_id, summary fields, expires_at}], operations[{operation_id, status, receipt}]}`. A plain widget in phase 1; slot cards in phase 2 (G13) | Completed replies are simpler to secure and test; status is rendered from records (I4) | No incremental text; replies arrive after 2–6 s (unmeasured) | Contract tests and a manual run in a browser (G07, G11) | proposed |
+-| D9 | I5 | `max_llm_calls=8` per invocation; 40 turns per customer per day and 20 per anonymous IP per hour in Postgres counters; an env-flag kill switch that answers with the salon phone number; a billing budget alert at 50/90/100 % of A3 | The floor for a public service | Caps may frustrate heavy users; counters cost one query per turn | Cap and kill-switch tests; drill in G10 | provisional (A3) |
++| D9 | I5 | `max_llm_calls=8` per invocation; 40 turns per customer per day in a Postgres counter; no anonymous turns (D3); an env-flag kill switch that answers with the salon phone number; a billing budget alert at 50/90/100 % of A3 | The floor for a public service | Caps may frustrate heavy users; counters cost one query per turn | Cap and kill-switch tests; drill in G10 | provisional (A3) |
+ | D10 | I6, minimise personal data | Tools return projections: first name, salon, service, stylist first name, start time and appointment ID, without phone, email or staff notes. Content capture is off in telemetry; sessions are deleted after 30 days | Less data reaches the model and storage; staff free-text notes, which are untrusted, never reach the model | The assistant cannot answer "what number do you have for me" | I6 export check (G09) | proposed |
+-| D11 | Releases can be compared and rolled back | `release.json` records the image, `google-adk==2.8.0` (confirmed in G02), model ID, prompt version and tool-schema hash. CI runs deterministic tests and the scripted-model evaluation. Rollback goes to the previous Cloud Run revision | Model, prompt and tools change together | No canary in phase 1 (Later list) | CI fails on a broken test; rollback rehearsed in G10 | proposed |
++| D11 | Releases can be compared and rolled back | `release.json` records the image, `google-adk==2.8.0` (confirmed in G02), model ID, prompt version and tool-schema hash. CI runs deterministic tests and the scripted-model evaluation (G22); until it lands, the G10 runbook runs them by hand before a deploy. Adding a proposal tool (G05, G06) is a release with its own evaluation run. Rollback goes to the previous Cloud Run revision | Model, prompt and tools change together | No canary in phase 1 (Later list) | CI fails on a broken test; rollback rehearsed in G10 | proposed |
+ | D12 | "Thursday afternoon" resolves correctly | Code injects today's date, the salon's time zone and opening hours into session state for the instruction. `propose_*` takes ISO datetimes, validates them against the salon's hours and echoes the absolute date in the proposal | Date arithmetic is code's job; the customer checks the absolute date before confirming | Model must output ISO datetimes; invalid ones get an actionable error | G08 date cases; daylight-saving boundary case | proposed |
+ 
+ ### Model-facing contracts
+ 
+ | Surface | Contract | Implementing skill and verification |
+ | --- | --- | --- |
+-| Instruction | Prompt version in `prompts/booking_agent/`: role, a booking flow (find, propose, ask the customer to confirm), "never say a change is done; the status card does", policy wording from W2. Identity, dates and caps live in code | `adk-agent-instructions`; rendered-request test |
+-| Tools | Six function tools (D1), all results bounded dicts `{status, ...}` with actionable errors (`slot_taken`, `outside_policy_window`, `sign_in_required`); tiers: read / propose (write to our store only) — no model-reachable tool writes to the booking API | `adk-tool-interface-design`; declaration dump |
++| Instruction | Prompt version in `prompts/booking_agent/`: role, a booking flow (find, propose, ask the customer to confirm), "never say a change is done; the status card does"; at launch, a request to move or cancel gets the salon's phone number from the injected context (W2 wording), and phase 2 replaces that with the policy wording. Identity, dates and caps live in code | `adk-agent-instructions`; rendered-request test |
++| Tools | Four function tools at launch, six after G05 and G06 (D1), all results bounded dicts `{status, ...}` with actionable errors (`slot_taken`, `outside_policy_window`, `sign_in_required`); tiers: read / propose (write to our store only) — no model-reachable tool writes to the booking API | `adk-tool-interface-design`; declaration dump |
+ | Output and model | Free text reply; structured data travels through tool results and the operation record, so no `output_schema` in phase 1. Model pinned per D2 | `adk-model-and-output-contracts`; pin check in the release manifest |
+ 
+ ## 5. Data, authority and security posture
+@@ -163,7 +181,7 @@ Capacity, finish range and cut line: see the plan's summary.
+ | Data / operation | Owner and scope | Writers / readers | Source and freshness | Lifetime / erasure |
+ | --- | --- | --- | --- | --- |
+ | Appointments, availability | Booking API | Booking API; read by tools; written only by the dispatcher | Authoritative and live; rechecked at propose and at confirm | Booking system's policy |
+-| Conversation session | Chat API, per `customer_id` (or per anonymous browser) | ADK Runner; read by the owner only | Postgres | 30 days, deleted by a scheduled job (G09); erasure by hand until G17 |
++| Conversation session | Chat API, per `customer_id` | ADK Runner; read by the owner only | Postgres | 30 days, deleted by a scheduled job (G22); erasure by hand until G17 |
+ | Operation record | Chat API, per `customer_id` | Propose tools, confirm endpoint, dispatcher | Postgres; receipt from the booking API | 90 days for reconciliation and support |
+ | Turn counters | Chat API | Middleware | Postgres | 2 days |
+ 
+@@ -175,7 +193,7 @@ is no delegated OAuth.
+ 
+ | Agent | Private data | Untrusted content | Write or egress | Resolution |
+ | --- | --- | --- | --- | --- |
+-| booking agent | the signed-in customer's own appointments | The customer's own messages; free-text fields from the API (staff notes, service descriptions) | Propose only; no booking-API write and no outbound messages | Remove the write leg: dispatch happens only on the customer's click. Free-text staff notes are projected out (D10); service descriptions are staff-authored and kept. G15 adds the adversarial suite |
++| booking agent | the signed-in customer's own appointments | The customer's own messages; free-text fields from the API (staff notes, service descriptions) | Propose only (booking at launch); no booking-API write and no outbound messages | Remove the write leg: dispatch happens only on the customer's click. Free-text staff notes are projected out (D10); service descriptions are staff-authored and kept. G15 adds the adversarial suite |
+ 
+ ## 6. Budgets and capacity
+ 
+@@ -194,18 +212,20 @@ them.
+ 
+ | Failure window | User-visible outcome | Retained state / possible effects | Safe next action and recovery owner |
+ | --- | --- | --- | --- |
+-| Success (Maya's move) | Status card "Moved to Thu 23 Oct 14:30" from the receipt | Operation `succeeded` with receipt | — |
++| Success (Maya's booking; her move in phase 2) | Status card "Booked Thu 23 Oct 14:30" ("Moved to …" in phase 2) from the receipt | Operation `succeeded` with receipt | — |
+ | Token or ID for another customer | "I can't find that appointment" | No read of B's data, no proposal | — (I1 tests) |
+ | Model unavailable or 8-call cap hit | "Sorry, I can't help right now — call Riverside on …" | Session kept; no proposal | Customer retries later; spike shows in traces |
+ | Slot taken between propose and confirm | "That time was just taken" plus fresh slots | Operation `failed: slot_taken`; no write | Customer picks again |
+ | Proposal expired or payload changed | "Please confirm the new details" | Old operation `expired`; nothing sent | Customer reconfirms |
+-| Inside cancellation window (A7) | Policy text from W2 and the salon phone number | `failed: outside_policy_window` | Salon staff handle the request by phone |
++| Not signed in | "Sign in to chat" in the widget | Nothing: 401 before any session or model call | Customer signs in (G03, G07) |
++| Customer asks to move or cancel (phase 1) | "To move or cancel, call Riverside on …" (W2 wording) | Session turn only; no proposal tool exists for it | Salon staff, by phone, as today; G05 and G06 replace this row |
++| Inside cancellation window (A7, phase 2) | Policy text from W2 and the salon phone number | `failed: outside_policy_window` | Salon staff handle the request by phone |
+ | Booking API timeout after send | "Checking with the salon…" then the actual result | Operation `uncertain`; booking may exist | The dispatcher reconciles by lookup on the next status poll. If that is still unresolved, it goes on the on-call list in the G10 runbook (owner: Dev A in phase 1; automated in G18) |
+ | Double click / two tabs | One status card | One operation, one write | — (D5 claim) |
+ | Two tabs send chat messages to one session at once | The second message waits; after 10 s it gets "please resend" | The chat API serialises turns per session (Postgres advisory lock), so one turn writes events at a time; a rejected message runs no model call | Customer resends (G07) |
+ | Process restart mid-dispatch | Status shows "checking" | Operation `dispatching`; it becomes `uncertain` after a 60 s lease | Same reconciliation as above |
+ | Kill switch on / budget exhausted | Refusal with the salon phone number | No model calls | Operator turns it off (G10 runbook) |
+-| Rollback | Previous revision serves | Sessions and operations stay compatible because there is no schema change in phase 1 | Dev C per G10 runbook |
++| Rollback | Previous revision serves | Sessions and operations stay compatible because there is no schema change in phase 1. Rolling back the G05 or G06 release can leave pending cancel or move proposals; the older revision's confirm endpoint refuses an operation kind it does not know (G04 acceptance), so they expire after 10 minutes with no write | Dev C per G10 runbook |
+ 
+ Not applicable in phase 1: remote peers (none), memory erasure races (no
+ long-term memory), screening service outage (none used), model retirement
+@@ -214,12 +234,13 @@ long-term memory), screening service outage (none used), model retirement
+ ## 8. Verification and handoff
+ 
+ The ladder runs in four steps. **Offline:** tool, policy, state-machine and
+-Runner tests with a scripted model and the fake booking API (G01–G07), plus
++Runner tests with a scripted model and the fake booking API (G01–G04, G07), plus
+ the evaluation runner on the fake (G08). **Local integration:** a restart
+ during dispatch, and a browser run of the widget. **Bounded live:** book, move
+-and cancel against the staging booking API with the pinned model, at most 50
+-model calls (G06, G11). **Release:** staging rehearsal, kill-switch and
+-rollback drill (G10), then the pilot (G11).
++against the staging booking API with the pinned model, at most 50 model
++calls (G11), plus a forced uncertain booking on staging in the G10 drill;
++move and cancel get their staging check in G06. **Release:** staging
++rehearsal, kill-switch and rollback drill (G10), then the pilot (G11).
+ 
+ ADK interfaces were read against the specialists' `google-adk 2.8.0` baseline.
+ G02 confirms that pin, and G09 checks the observability notes' span-retention
+@@ -230,8 +251,8 @@ prompt are in the plan.
+ 
+ | Question or assumption | Why it changes the design | Owner / evidence needed | What it blocks |
+ | --- | --- | --- | --- |
+-| A4 customer login verifiable by our backend? | Without it, D3 needs an email one-time code (+6–10 h, which crosses the cut line) | Dev C in G03: JWKS/issuer or session introspection | G03, then G05–G07 |
+-| A6 idempotency key, reschedule endpoint | Sets D5's dedupe strength; no reschedule endpoint means a move becomes cancel plus rebook (two operations) | Dev A in G01 | G04, G06 |
+-| A7 who enforces the policy window | If the API does not, our confirm endpoint must hold the rule per salon | Dev A in G01; salon owner via W2 | G05, G06 |
++| A4 customer login verifiable by our backend? | Without it, D3 needs an email one-time code (+6–10 h, which does not fit 8 days) | Dev C in G03 on day 1: JWKS/issuer or session introspection | G03, then G07 and G11 |
++| A6 idempotency key, reschedule endpoint | Sets D5's dedupe strength; no reschedule endpoint means a move becomes cancel plus rebook (two operations) | Dev A in G01 | G04; G06 in phase 2 |
++| A7 who enforces the policy window | If the API does not, our confirm endpoint must hold the rule per salon | Dev A in G01; salon owner via W2 | G05, G06 (phase 2) |
+ | A3 budget and the price lookup | Model tier and caps | Team; price check before G09 | G09 sizing |
+-| Cut line (one salon, plain widget) versus one extra day | Scope of the two weeks | The team | G07, G11 scope |
++| Cut line for 8 days: booking only, sign-in required (A12, A13), versus keeping 10 days for booking and cancel | What the pilot customers can do on day 1 | The salon owners and the team | G03, G07, G11 scope; when G05 and G06 ship |
+diff --git a/docs/plans/salon-booking-assistant.md b/docs/plans/salon-booking-assistant.md
+index 1d0ce4f..096e23e 100644
+--- a/docs/plans/salon-booking-assistant.md
++++ b/docs/plans/salon-booking-assistant.md
+@@ -7,29 +7,34 @@ Continuation source of truth: this plan's schedule block plus the phase 1 ticket
+ 
+ ## Summary for the reader
+ 
+-- **Profile and phase 1:** MVP. Within 10 working days, signed-in customers of
++- **Revision 2026-10-14:** the salon owners moved the launch from 10 to 8
++  working days; the same three developers. Nothing has been built yet (every
++  ticket's Evidence is empty), so the 8 days start at day 1 of this plan (A11).
++- **Profile and phase 1:** MVP. Within 8 working days, signed-in customers of
+   the **pilot salon** can use a chat widget on the salon website to see
+-  availability and to book, move and cancel their own appointments. Each change
+-  is confirmed by the customer's click and carried out through the existing
+-  booking API. The other four salons follow in the first days of phase 2 (G12),
+-  once the pilot meets the graduation conditions in design §2.
+-- **Effort and finish:** phase 1 needs 56–88.5 human hours (agent-assisted)
+-  against 112.5 hours of capacity after a 25 % reserve. The schedule check gives
+-  a finish of 6.13–9.87 working days against 10, so it **fits, with little
+-  slack at the high end**. The longest dependent chain is G01 → G04 → G06 → G11
+-  (8.27 working days at the high end).
+-- **Largest risks:** (1) The booking API may lack an idempotency key, so a lost
+-  write response is uncertain. G01 finds out and the D5 reconciliation covers
+-  it (Dev A). (2) The existing customer login may not be verifiable by our
+-  backend (A4). G03 finds out on day 1; the email one-time-code fallback costs
+-  6–10 h and would push G11 past day 10 (Dev C). (3) The model may misstate
+-  times or policy. G08 measures this, and G11 gates the pilot on the result
+-  (Dev B).
+-- **Decisions needed from you:** confirm or correct A1–A10 in the design,
+-  especially A4 (login), A5 (no deposits) and A7 (policy window). Confirm the
+-  cut line below, or choose one extra working day instead.
++  availability, list their own appointments and **book** with one confirmed
++  click through the existing booking API. Moving and cancelling stay on the
++  phone for the pilot: the assistant gives the salon's number. Cancel (G05)
++  and move (G06) are the first goals of phase 2; the other four salons follow
++  (G12) once the pilot meets the graduation conditions in design §2.
++- **Effort and finish:** phase 1 needs 48–74 human hours (agent-assisted)
++  against 90 hours of capacity after a 25 % reserve. The schedule check gives
++  a finish of 5.2–8 working days against 8: it **fits, with no slack at the
++  high end**. The calendar, not the hours, is the limit: the longest
++  dependent chain is G01 → G02 → G08 → G11 (7.87 working days at the high
++  end), and Dev C's G03 → G09 → G10 feeds G11 as well.
++- **Largest risks:** (1) The existing customer login may not be verifiable by
++  our backend (A4). G03 finds out on day 1; the email one-time-code fallback
++  costs 6–10 h and does **not** fit 8 days (Dev C). (2) The booking API may
++  lack an idempotency key, so a lost write response is uncertain. G01 finds
++  out and the D5 reconciliation covers it (Dev A). (3) The model may misstate
++  times or offer changes it cannot make. G08 measures this and G11 gates the
++  pilot on the result (Dev B).
++- **Decisions needed from you:** confirm the new cut line below (booking only
++  at launch). Launching with booking **and** cancel needs the original 10
++  working days; 9 is not enough. Confirm A12 (chat requires sign-in) and A1–A10, especially A4.
+ - **Next prompt:** `/adk-engineer Carry out docs/tickets/salon-booking-assistant/G01-booking-api-contract-and-fake.md.`
+-  Dev C can start G03 the same day.
++  Dev C starts G03 the same day.
+ 
+ ## Destination and constraints
+ 
+@@ -40,13 +45,14 @@ path is **proposed**: `app/` (FastAPI app, agent, tools, operations),
+ inherits the working pins `google-adk==2.8.0` (the specialists' checked version,
+ confirmed in G02) and `gemini-3.8-flash` on Vertex AI (D2), plus the prompt
+ version in `prompts/booking_agent/`. A goal that changes any of these is a
+-release and records it in `release.json` (D11). No credentials or private
+-resource identifiers belong in these documents.
++release and records it in `release.json` (D11); adding `propose_cancellation`
++(G05) or `propose_move` (G06) after launch is such a release. No credentials
++or private resource identifiers belong in these documents.
+ 
+ Authorization: this session was design only. Goals are ready in design. Local
+-work needs nothing further. G06's staging check, G09, G10 and G11 need W1's
+-staging key and GCP project, and the team's approval for each deployment and
+-for the pilot.
++work needs nothing further. G09, G10, G11 and G22's deletion job need W1's GCP
++project and staging key, and the team's approval for each deployment and for
++the pilot.
+ 
+ ## Delivery profile and capacity
+ 
+@@ -54,22 +60,27 @@ Profile: MVP or pilot (design §2).
+ 
+ | Phase | Delivers | Goals | Human hours, agent-assisted | Capacity and reserve |
+ | --- | --- | --- | --- | --- |
+-| 1, ship | Real customers of the pilot salon book, move and cancel their own appointments safely; the team sees failures and cost | G01–G11 | 56–88.5 | 3 people × 5 focused h/day × 10 days = 150 h; 25 % reserve → 112.5 h |
+-| 2, graduate and harden | All five salons, slot cards, live evaluation gate, adversarial suite, SLOs, erasure, automated reconciliation | G12–G19 | 38–64 (rough, re-estimated after G11) | After the pilot, as time allows |
++| 1, ship | Signed-in customers of the pilot salon see availability and book safely; the team sees failures and cost | G01–G04, G07–G11, G22 | 48–74 | 3 people × 5 focused h/day × 8 days = 120 h; 25 % reserve → 90 h |
++| 2, graduate and harden | Cancel and move, all five salons, slot cards, live evaluation gate, adversarial suite, SLOs, erasure, automated reconciliation | G05, G06, G12–G19 | 46–76 (rough, re-estimated after G11) | After the pilot, as time allows |
+ 
+ Estimates are person-hours of human effort for a developer with a coding
+ agent: hands-on work plus review and verification. Every figure, hands-on and
+ review alike, already includes the **×1.5 multiplier for a team new to ADK**
+ (A2). Handoff hours are included in the receiving goal's hands-on figure.
+ Review is sized to the change: heavier for identity (G03) and writes (G04),
+-lighter for the widget and evaluation set. W1 and W2 are calendar waits
++lighter for the widget, evaluation set and CI. W1 and W2 are calendar waits
+ requested on day 1 (W1 by Dev C, W2 by Dev A); they consume no hours.
+ 
+ | Person (suggested role) | Goals | Hours | Their capacity after reserve |
+ | --- | --- | --- | --- |
+-| Dev A: knows the booking API best | G01, G04, G06, G10 | 19–29.5 | 37.5 |
+-| Dev B: agent, evaluation and frontend | G02, G07, G08, G11 | 19–31 | 37.5 |
+-| Dev C: identity and platform | G03, G05, G09 | 18–28 | 37.5 |
++| Dev A: booking API, writes, chat API | G01, G04, G07, G22 | 18–28 | 30 |
++| Dev B: agent and evaluation | G02, G08, G11 | 15–23.5 | 30 |
++| Dev C: identity and platform | G03, G09, G10 | 15–22.5 | 30 |
++
++Spare hours are not a phase 2 budget: the calendar, not the hours, binds, and
++Dev B owns G11, the last goal. If G02 and G08 finish at the low end, Dev B
++may start G05 (cancel) on the G04 code, but G05 ships in its own release
++after G11 and never joins G11's release candidate.
+ 
+ Schedule block (the single source of each estimate; tickets copy it):
+ 
+@@ -84,7 +95,7 @@ Schedule block (the single source of each estimate; tickets copy it):
+   phase: 1
+   total: 0
+   blocked_by: []
+-  calendar_waits: salon owner sign-off on assistant wording, cancellation policy text and pilot salon
++  calendar_waits: salon owner sign-off on assistant wording, the "call the salon to move or cancel" text and pilot salon
+   wait_days: 2-4
+ - goal: G01
+   phase: 1
+@@ -108,9 +119,9 @@ Schedule block (the single source of each estimate; tickets copy it):
+   handoff: 0.5
+ - goal: G03
+   phase: 1
+-  hands_on: 5-8
++  hands_on: 4.5-7
+   review: 2-3
+-  total: 7-11
++  total: 6.5-10
+   owner: Dev C
+   blocked_by: []
+   calendar_waits: none
+@@ -126,36 +137,16 @@ Schedule block (the single source of each estimate; tickets copy it):
+   calendar_waits: none
+   wait_days: 0
+   handoff: 0
+-- goal: G05
+-  phase: 1
+-  hands_on: 3-4
+-  review: 1-2
+-  total: 4-6
+-  owner: Dev C
+-  blocked_by: [G03, G04]
+-  calendar_waits: none
+-  wait_days: 0
+-  handoff: 1
+-- goal: G06
+-  phase: 1
+-  hands_on: 3-5
+-  review: 1-2
+-  total: 4-7
+-  owner: Dev A
+-  blocked_by: [G03, G04, W1]
+-  calendar_waits: none
+-  wait_days: 0
+-  handoff: 0.5
+ - goal: G07
+   phase: 1
+-  hands_on: 3-5
++  hands_on: 3-4.5
+   review: 1-2
+-  total: 4-7
+-  owner: Dev B
++  total: 4-6.5
++  owner: Dev A
+   blocked_by: [G02, G03]
+   calendar_waits: none
+   wait_days: 0
+-  handoff: 0.5
++  handoff: 1
+ - goal: G08
+   phase: 1
+   hands_on: 5-8
+@@ -168,9 +159,9 @@ Schedule block (the single source of each estimate; tickets copy it):
+   handoff: 0
+ - goal: G09
+   phase: 1
+-  hands_on: 5-8
+-  review: 2-3
+-  total: 7-11
++  hands_on: 4-6
++  review: 1.5-2.5
++  total: 5.5-8.5
+   owner: Dev C
+   blocked_by: [W1]
+   calendar_waits: none
+@@ -178,68 +169,118 @@ Schedule block (the single source of each estimate; tickets copy it):
+   handoff: 0
+ - goal: G10
+   phase: 1
+-  hands_on: 2.5-3.5
++  hands_on: 2-3
+   review: 1-1
+-  total: 3.5-4.5
+-  owner: Dev A
++  total: 3-4
++  owner: Dev C
+   blocked_by: [G09, W2]
+   calendar_waits: none
+   wait_days: 0
+-  handoff: 0.5
++  handoff: 0
+ - goal: G11
+   phase: 1
+   hands_on: 3-4
++  review: 1-1.5
++  total: 4-5.5
++  owner: Dev B
++  blocked_by: [G03, G04, G07, G08, G09, G10]
++  calendar_waits: none
++  wait_days: 0
++  handoff: 1
++- goal: G22
++  phase: 1
++  hands_on: 2-2.5
++  review: 0.5-1
++  total: 2.5-3.5
++  owner: Dev A
++  blocked_by: [G08, G09]
++  calendar_waits: none
++  wait_days: 0
++  handoff: 0.5
++- goal: G05
++  phase: 2
++  hands_on: 3-4
+   review: 1-2
+   total: 4-6
+   owner: Dev B
+-  blocked_by: [G05, G06, G07, G08, G09, G10]
++  blocked_by: [G03, G04]
+   calendar_waits: none
+   wait_days: 0
+   handoff: 1
++- goal: G06
++  phase: 2
++  hands_on: 3-5
++  review: 1-2
++  total: 4-7
++  owner: Dev A
++  blocked_by: [G03, G04, G05, W1]
++  calendar_waits: none
++  wait_days: 0
++  handoff: 0.5
+ ```
+ 
+ Schedule check, run 2026-10-14:
+-`python3.12 .claude/skills/adk-system-designer/scripts/check_schedule.py --plan docs/plans/salon-booking-assistant.md --tickets docs/tickets/salon-booking-assistant/ --days 10 --reserve 0.25 --person "Dev A=5" --person "Dev B=5" --person "Dev C=5"`
+-reported 56–88.5 h against a capacity of 112.5 h (fits). The longest chain is
+-G01 → G04 → G06 → G11 at 8.27 working days on the high end, and the finish is
+-6.13–9.87 working days against 10, so the calendar fits. It found no ticket
+-mismatches and no handoffs without hours.
+-
+-### What changed after failing runs
+-
+-| Run | Finish (working days) | Change made | Why it is true of the work |
+-| --- | --- | --- | --- |
+-| 1: nine goals, move and cancel in one goal, launch in one goal | 6.93–11.47, low end only | Split move (G06, Dev A) from cancel (G05, Dev C). G04 runs on the G01 fake, and its staging check (1 h) moves to G06, which waits for W1. Launch preparation (G10) splits from go-live (G11) | Cancel and move share G04's machinery but not each other. The fake exists after G01, and only the live check needs staging. A runbook and staff briefing do not need the finished agent |
+-| 2 | 7.73–12, low end only | G09 (infrastructure) waits only for W1. The "agent served on staging" check (1 h) moves to G11. G10 moves to Dev A, with a 0.5 h handoff | Project, database, service account, secrets and a skeleton service do not need the agent; only its deploy does |
+-| 3 | 6.53–10.67, low end only | The A4 login discovery (1 h) moves from G01 to G03, so G03 starts on day 1 | The login is the identity owner's question; it does not depend on the booking-API contract |
+-| 4 (this plan) | 6.13–9.87, fits | Cut: plain widget (G07 −1–2 h) and launch at the pilot salon only (G11 −1 h). Slot cards and the other four salons move to G13 and G12 | Scope cut; no floor item removed |
+-
+-What-ifs that did not close the gap, all on run 3's plan: G11 owned by Dev A
+-or Dev C (10.67); the widget cut alone (10.13); pilot-only alone (10.4); the
+-evaluation set moved to Dev C (13.6); 4.5 instead of 5 focused hours a day
+-(11.85). **Alternative to the cut:** the full scope (the slot-card widget and
+-all five salons on launch day) fits in **11** working days: 58–91.5 h, finish
+-6.53–10.67.
++`python3.12 .claude/skills/adk-system-designer/scripts/check_schedule.py --plan docs/plans/salon-booking-assistant.md --tickets docs/tickets/salon-booking-assistant/ --days 8 --reserve 0.25 --person "Dev A=5" --person "Dev B=5" --person "Dev C=5"`
++reported 48–74 h against a capacity of 90 h (fits). The longest chain is
++G01 → G02 → G08 → G11 at 7.87 working days on the high end, and the finish is
++5.2–8 working days against 8, so the calendar fits with no slack at the high
++end. It found no ticket mismatches and no handoffs without hours; the same
++check with `--phase 2` reads G05 and G06 (8–13 h) without mismatches.
++
++### What changed for 8 days
++
++The 10-day plan, checked against 8 days, finished in 6.13–9.87 working days
++(low end only). Each row below is one change, with the helper's finish after it.
++
++| Change | Finish after it (working days) | Why it is true of the work |
++| --- | --- | --- |
++| Move (G06) to phase 2; its staging check is covered by G10's drill (forced uncertain booking on staging) and G11's staging journey | 6.27–10.13 | Move is a separate operation on G04's machinery; nothing else waits for it |
++| Cancel (G05) to phase 2 as well; G04 creates bookings only | 6–9.87 | Cancel shares G04's machinery but nothing in the booking journey needs it. The A7 policy window no longer applies at launch |
++| G11 slimmed: −0.5 h. The staging journey is one booking, not three operations; the first days' monitoring and baseline move to G12 | 6–9.73 | Watching the pilot happens after customers have access, and G12 already waits for 3 pilot days |
++| CI and the 30-day session-deletion job split out of G09 into G22 (Dev A, after G08 and G09), which does not gate G11 | 6–9.73 | The first session is 30 days from deletion; G11 runs the same tests and scripted evaluation by hand before deploying (G10 runbook) |
++| Owners: G07 to Dev A (handoff 1 h), G10 to Dev C (no handoff; was 0.5 h) | 5.33–8.27 | Dev C built G09's platform; Dev A owns the confirm endpoint the widget calls, and Dev B owns the end of the chain |
++| Chat requires sign-in (A12): no anonymous sessions or per-IP caps. G03 −0.5 to −1 h, G07 −0.5 to −1 h | **5.2–8, fits** | Unauthenticated requests are refused before any session or model call, so the abuse floor holds with fewer controls |
++
++G08 was **not** cut: it keeps 30 cases and its hours; the move, cancel and
++policy-window cases become booking, reading and "call the salon" cases.
++
++What-ifs that did not close the gap (high-end finish, working days): G11 to
++Dev A with only move cut (10.13); G04 split into an operations core and a
++booking tool, with book and cancel kept (9.6–9.87); on the final plan, G22
++owned by Dev B (8.93), G22 gating G11 (8.93), G11 not slimmed (8.13), or
++anonymous browsing kept (8.27). **Alternative to the cut:** booking and
++cancel at launch (G05 in phase 1, gating G11) needs **10** working days:
++52.5–80.5 h, finish 6.13–9.6 with Dev B on G05. At 9 days the best placement
++(Dev C) finishes 6.27–9.2, so 9 days does not fit.
+ 
+ ### Cut line
+ 
+-**Ships in phase 1 (G01–G11, 56–88.5 of 112.5 h):** book, move and cancel for
+-signed-in customers at the pilot salon; plain widget with proposal cards and
+-Confirm; evaluation before launch; Cloud Run with traces, caps and a kill
+-switch.
+-**Waits for phase 2:** the other four salons (G12, the first goal after the
+-pilot), slot cards (G13), and G14–G19.
+-
+-If phase 1 runs high anyway, the next cut is move as cancel plus rebook (two
+-confirmed operations) instead of a single reschedule call, if G01 finds the
+-API's reschedule endpoint awkward. Identity (G03), confirmation and idempotent
+-dispatch (G04), caps and the kill switch (G09), and the pre-launch evaluation
+-(G08) are the floor or its evidence. They are not cut.
++**Ships in phase 1 (G01–G04, G07–G11, G22; 48–74 of 90 h):** availability,
++own appointments and click-confirmed booking for signed-in customers at the
++pilot salon; plain widget with proposal cards and Confirm; evaluation before
++launch; Cloud Run with traces, caps and a kill switch; CI and session
++deletion.
++**Waits for phase 2:** cancel (G05) and move (G06), the first goals after
++launch; the other four salons (G12); slot cards (G13); and G14–G19.
++
++There is no slack at the high end. If phase 1 runs high anyway, nothing more
++comes out of the floor: identity (G03), confirmation and idempotent dispatch
++(G04), caps and the kill switch (G09), the runbook drill (G10) and the
++pre-launch evaluation (G08) stay. The order of what gives is: G22 slips past
++launch day (CI runs by hand meanwhile; the deletion job must land before the
++first session is 30 days old); then launch moves to day 9.
+ 
+ If time runs out early, the goals stay useful in this order: G01 + G02 make an
+-availability demo; G03 + G04 add booking for signed-in customers locally; G05
+-+ G06 complete the journey; G07 + G09 + G10 + G11 put it in front of
+-customers, and G08 is the evidence that this is safe.
++availability demo; G03 + G04 add booking for signed-in customers locally; G07
++puts it in a browser; G09 + G10 + G11 put it in front of customers, and G08 is
++the evidence that this is safe.
++
++### The 10-day plan's run history
++
++The structure above still rests on the 10-day plan's changes: move split from
++cancel; G09 waits only for W1, with the agent's deploy in G11; the A4 login
++discovery sits in G03 on day 1; slot cards and the other four salons in phase
++2. Its detail is in this file's git history.
+ 
+ ## Implementation map
+ 
+@@ -262,21 +303,31 @@ Each ticket is the home of its goal's scope, route and acceptance.
+ | --- | --- | --- | --- | --- | --- | --- | --- |
+ | [G01 Booking API contract and fake](../tickets/salon-booking-assistant/G01-booking-api-contract-and-fake.md) | 1 | discovery + implementation | 3.5–6 | — | Dev A | `safe-api-tool-calls` | ready |
+ | [G02 Customer asks about services, free slots and their appointments](../tickets/salon-booking-assistant/G02-read-only-agent.md) | 1 | implementation | 5–8 | G01 | Dev B | `adk-tool-interface-design` | blocked on G01 |
+-| [G03 Signed-in customer is identified from the existing login](../tickets/salon-booking-assistant/G03-customer-identity.md) | 1 | discovery + implementation | 7–11 | — | Dev C | `adk-tool-auth-and-secrets` | ready |
++| [G03 Signed-in customer is identified from the existing login](../tickets/salon-booking-assistant/G03-customer-identity.md) | 1 | discovery + implementation | 6.5–10 | — | Dev C | `adk-tool-auth-and-secrets` | ready |
+ | [G04 Customer books with one confirmed click](../tickets/salon-booking-assistant/G04-book-with-confirmation.md) | 1 | implementation | 8–12 | G01 | Dev A | `safe-api-tool-calls` | blocked on G01 |
+-| [G05 Customer cancels their own appointment](../tickets/salon-booking-assistant/G05-cancel-appointment.md) | 1 | implementation | 4–6 | G03, G04 | Dev C | `safe-api-tool-calls` | blocked |
+-| [G06 Customer moves their own appointment](../tickets/salon-booking-assistant/G06-move-appointment.md) | 1 | implementation + bounded live check | 4–7 | G03, G04, W1 | Dev A | `safe-api-tool-calls` | blocked |
+-| [G07 Chat API and plain widget](../tickets/salon-booking-assistant/G07-chat-api-and-widget.md) | 1 | implementation | 4–7 | G02, G03 | Dev B | `adk-frontend-integration` | blocked |
++| [G07 Chat API and plain widget](../tickets/salon-booking-assistant/G07-chat-api-and-widget.md) | 1 | implementation | 4–6.5 | G02, G03 | Dev A | `adk-frontend-integration` | blocked |
+ | [G08 Evaluation set of 30 conversations](../tickets/salon-booking-assistant/G08-evaluation-set.md) | 1 | implementation | 6–10 | G02 | Dev B | `adk-agent-evaluation` | blocked on G02 |
+-| [G09 Staging and production on Cloud Run](../tickets/salon-booking-assistant/G09-cloud-run-platform.md) | 1 | implementation (cloud) | 7–11 | W1 | Dev C | `deploy-adk-on-google-cloud` | blocked on W1 |
+-| [G10 Launch readiness: runbook, drills, staff briefing](../tickets/salon-booking-assistant/G10-launch-readiness.md) | 1 | implementation (cloud) | 3.5–4.5 | G09, W2 | Dev A | `deploy-adk-on-google-cloud` | blocked |
+-| [G11 Pilot go-live at one salon](../tickets/salon-booking-assistant/G11-pilot-go-live.md) | 1 | implementation (cloud) | 4–6 | G05–G10 | Dev B | `adk-agent-evaluation` | blocked |
++| [G09 Staging and production on Cloud Run](../tickets/salon-booking-assistant/G09-cloud-run-platform.md) | 1 | implementation (cloud) | 5.5–8.5 | W1 | Dev C | `deploy-adk-on-google-cloud` | blocked on W1 |
++| [G10 Launch readiness: runbook, drills, staff briefing](../tickets/salon-booking-assistant/G10-launch-readiness.md) | 1 | implementation (cloud) | 3–4 | G09, W2 | Dev C | `deploy-adk-on-google-cloud` | blocked |
++| [G11 Pilot go-live at one salon](../tickets/salon-booking-assistant/G11-pilot-go-live.md) | 1 | implementation (cloud) | 4–5.5 | G03, G04, G07–G10 | Dev B | `adk-agent-evaluation` | blocked |
++| [G22 CI and session deletion job](../tickets/salon-booking-assistant/G22-ci-and-session-retention.md) | 1 | implementation (cloud) | 2.5–3.5 | G08, G09 | Dev A | `adk-release-engineering` | blocked |
++| [G05 Customer cancels their own appointment](../tickets/salon-booking-assistant/G05-cancel-appointment.md) | 2 | implementation | 4–6 | G03, G04; released after G11 | Dev B | `safe-api-tool-calls` | phase 2 |
++| [G06 Customer moves their own appointment](../tickets/salon-booking-assistant/G06-move-appointment.md) | 2 | implementation + bounded live check | 4–7 | G03, G04, G05, W1 | Dev A | `safe-api-tool-calls` | phase 2 |
+ 
+ ### Phase 2, graduate and harden (re-estimate after G11)
+ 
+-- **G12 Extend to all five salons.** Primary `deploy-adk-on-google-cloud`.
+-  2–4 h. Acceptance: graduation conditions (design §2) recorded as met; a
+-  booking at each salon succeeds on production with the staging test account.
++G05 and G06 keep their full tickets because they were ready before the
++launch moved; the rest stay as short entries. Each of G05 and G06 is its own
++release (D11): the new `propose_*` tool, its G08 cases and the W2 policy text
++ship together.
++
++- **G12 Watch the pilot, then extend to all five salons.** Primary
++  `deploy-adk-on-google-cloud`. 3–5 h (1 h added for the first days'
++  monitoring and baseline moved out of G11). Acceptance: baseline numbers
++  (completion, latency, cost per completed booking) recorded in
++  `eval/README.md` and design §6; graduation conditions (design §2) recorded
++  as met; a booking at each salon succeeds on production with the staging
++  test account.
+ - **G13 Slot cards in the widget.** Primary `adk-frontend-integration`.
+   2–4 h. Acceptance: tapping a slot card produces the same proposal as typing
+   the time.
+@@ -310,6 +361,7 @@ Each ticket is the home of its goal's scope, route and acceptance.
+ | Languages beyond English (A9) | A salon reports non-English demand | Those customers keep phoning | `adk-agent-instructions` |
+ | Canary releases | Traffic large enough for comparable samples within a day | Releases go all at once, with a one-command rollback (G10) | `adk-release-engineering` |
+ | Model migration | Deprecation notice for `gemini-3.8-flash` | None announced at 2026-10-08 | `adk-model-and-output-contracts` |
++| Anonymous availability browsing (cut by A12) | Salon owners want visitors without an account to see free slots | Visitors without an account sign up or phone | `adk-operational-guardrails` (per-IP caps), `adk-tool-auth-and-secrets` |
+ | Latency and cost tuning | Measured cost per completed operation or p95 latency above target | Spend above the minimum | `optimise-adk-on-google-cloud` |
+ 
+ ## What the reviewer reads
+@@ -322,15 +374,19 @@ Each ticket is the home of its goal's scope, route and acceptance.
+ 
+ ## Open decisions for further planning
+ 
+-These are kept in design §9. A4 blocks G03 and, through it, G05–G07. A6
+-shapes G04 and G06, and A7 shapes G05 and G06.
++These are kept in design §9. A4 blocks G03 and, through it, G07 and G11. A6
++shapes G04 (and G06 in phase 2). A7 no longer blocks phase 1; it shapes G05
++and G06.
+ 
+ ## Resume here
+ 
+ - **Next goal:** G01, the booking API contract and fake. It is ready, and its
+-  answers settle A6 and A7. G03 is ready as well and can start in parallel.
++  answers settle A6 and A7. G03 is ready as well and starts in parallel on
++  day 1; with no slack at the high end, both start on day 1.
+ - **Read first:** the design, then the G01 ticket.
+-- **Next action:** send W1 and W2. Then list the booking API's endpoints for
++- **Next action:** send W1 and W2 on day 1 (W2 now asks for the "call the
++  salon to move or cancel" wording instead of the cancellation policy text).
++  Then list the booking API's endpoints for
+   availability, create, reschedule, cancel and list-by-customer, and record
+   whether it accepts an idempotency key.
+ - **Continuation prompt:**
+diff --git a/docs/tickets/salon-booking-assistant/G01-booking-api-contract-and-fake.md b/docs/tickets/salon-booking-assistant/G01-booking-api-contract-and-fake.md
+index ccdf218..94c370e 100644
+--- a/docs/tickets/salon-booking-assistant/G01-booking-api-contract-and-fake.md
++++ b/docs/tickets/salon-booking-assistant/G01-booking-api-contract-and-fake.md
+@@ -26,9 +26,9 @@ The team knows exactly how the assistant reads and writes bookings, and every la
+ ## Scope
+ 
+ - In: `docs/architecture/booking-api-contract.md` (endpoints for salons, services, stylists, availability, create, reschedule, cancel and list-by-customer; auth; error codes; idempotency-key support; cancellation-window behaviour; lookup able to find a booking by customer and slot); `app/booking_client.py` with typed methods, per-call timeouts and error classes (`SlotTaken`, `OutsidePolicyWindow`, `NotFound`, `Transient`, `Uncertain`); `tests/fakes/booking_api.py`, an in-process fake with fixtures for 5 salons, 3 stylists each and two customers.
+-- Out: Model-facing tools (G02), operations and confirmation (G04), staging calls (G06).
++- Out: Model-facing tools (G02), operations and confirmation (G04), staging calls (G10 drill, G11). The contract still records reschedule, cancel and the policy window, because G05 and G06 follow right after launch.
+ - Depth: Build. Floor: the booking-API key comes from the environment and appears in no file or log. Retries in the client only for reads; writes never retried here (D5 owns that).
+-- Notes: Read the booking API's own code, docs or OpenAPI file (the team owns it). Where it lacks an idempotency key, record the lookup used for reconciliation. Send the W2 request (salon owner sign-off) on day 1.
++- Notes: Read the booking API's own code, docs or OpenAPI file (the team owns it). Where it lacks an idempotency key, record the lookup used for reconciliation. Send the W2 request (salon owner sign-off on wording, the "call the salon to move or cancel" text and the pilot salon) on day 1.
+ - Execution scope: Local only; reading the booking API's source or docs is within the team's own repositories.
+ 
+ ## Acceptance
+diff --git a/docs/tickets/salon-booking-assistant/G02-read-only-agent.md b/docs/tickets/salon-booking-assistant/G02-read-only-agent.md
+index 43d0775..9a5ee28 100644
+--- a/docs/tickets/salon-booking-assistant/G02-read-only-agent.md
++++ b/docs/tickets/salon-booking-assistant/G02-read-only-agent.md
+@@ -25,7 +25,7 @@ A customer chatting locally can ask what services a salon offers, find free slot
+ 
+ ## Scope
+ 
+-- In: `app/agent.py` (one `LlmAgent`), `app/tools/read.py` with `list_salons_and_services`, `find_free_slots`, `list_my_appointments` (reads `customer_id` from `ToolContext.state`, never from arguments; projected results per D10, at most 10 slots per call), `app/context.py` (today, salon time zone and hours into state), `prompts/booking_agent/instruction.md` v1, `app/config.py` with the model pin and `RunConfig(max_llm_calls=8)`, `release.json` skeleton. Confirm `google-adk==2.8.0` against the chosen pin and refresh the model lifecycle snapshot.
++- In: `app/agent.py` (one `LlmAgent`), `app/tools/read.py` with `list_salons_and_services`, `find_free_slots`, `list_my_appointments` (reads `customer_id` from `ToolContext.state`, never from arguments; projected results per D10, at most 10 slots per call), `app/context.py` (today, salon time zone and hours into state), `prompts/booking_agent/instruction.md` v1 (a request to move or cancel gets the salon's phone number from the injected context, without a proposal; design §4), `app/config.py` with the model pin and `RunConfig(max_llm_calls=8)`, `release.json` skeleton. Confirm `google-adk==2.8.0` against the chosen pin and refresh the model lifecycle snapshot.
+ - Out: Proposal tools (G04–G06), chat API (G07), evaluation set (G08).
+ - Depth: Build. Floor: pinned model and ADK; call cap. Output schema deliberately not used (design §4 model-facing contracts).
+ - Execution scope: Local; one live smoke needs a Vertex AI credential from W1 and is optional for this ticket.
+diff --git a/docs/tickets/salon-booking-assistant/G03-customer-identity.md b/docs/tickets/salon-booking-assistant/G03-customer-identity.md
+index ed44d98..beb293e 100644
+--- a/docs/tickets/salon-booking-assistant/G03-customer-identity.md
++++ b/docs/tickets/salon-booking-assistant/G03-customer-identity.md
+@@ -9,9 +9,9 @@ blocked_by: []
+ phase: 1
+ profile: MVP or pilot
+ estimate:                # human hours, agent-assisted
+-  hands_on: 5-8
++  hands_on: 4.5-7
+   review_and_verify: 2-3
+-  total: 7-11
++  total: 6.5-10
+   calendar_waits: none
+ owner: Dev C
+ status: ready
+@@ -21,19 +21,19 @@ status: ready
+ 
+ ## Outcome
+ 
+-The backend knows which booking-system customer is chatting, from the salon site's existing login, and nothing the browser or the model sends can change that. Settles A4; implements D3 and the enforcement half of I1.
++The backend knows which booking-system customer is chatting, from the salon site's existing login, and nothing the browser or the model sends can change that. Settles A4; implements D3 and the enforcement half of I1. Since the 8-day revision, chat requires sign-in (A12), so there is no anonymous path.
+ 
+ ## Scope
+ 
+-- In: Day 1: find out how the salon site's login issues tokens (issuer, signing keys, audience, subject = booking customer ID?) and record it in the design's A4 row. `app/auth.py`: a FastAPI dependency `verified_customer()` that checks signature, issuer, audience and expiry and returns `customer_id` or anonymous; session ownership helpers (`create_session_for(customer)`, `load_session(session_id, customer)` refusing a mismatch).
++- In: Day 1: find out how the salon site's login issues tokens (issuer, signing keys, audience, subject = booking customer ID?) and record it in the design's A4 row. `app/auth.py`: a FastAPI dependency `verified_customer()` that checks signature, issuer, audience and expiry and returns `customer_id`, or refuses with 401 before any session is created; session ownership helpers (`create_session_for(customer)`, `load_session(session_id, customer)` refusing a mismatch).
+ - Out: Wiring into the chat endpoint (G07); proposal ownership checks (G04–G06 use the same `customer_id`).
+-- Depth: Build. Floor: no signing secret in code; tokens never logged. If A4 fails (no verifiable token), stop and record the email one-time-code fallback as a decision for the team: +6–10 h, crosses the cut line.
++- Depth: Build. Floor: no signing secret in code; tokens never logged. If A4 fails (no verifiable token), stop and record the email one-time-code fallback as a decision for the team: +6–10 h, which does not fit the 8-day launch.
+ - Notes: Send the W1 request on day 1 (GCP project with billing and Vertex AI, staging booking-API key, test customer and salon).
+ - Execution scope: Local; reading the login system's configuration is within the team's own systems.
+ 
+ ## Acceptance
+ 
+-- [ ] Valid token → `customer_id` equal to the booking customer ID; anonymous request → anonymous with read-only rights.
++- [ ] Valid token → `customer_id` equal to the booking customer ID; a request with no token → 401, no session created and no model call.
+ - [ ] Expired, wrong-issuer, wrong-audience and tampered tokens are refused with 401 and no session is created.
+ - [ ] Loading customer A's session ID with customer B's token is refused, and no event from A's session is returned.
+ 
+diff --git a/docs/tickets/salon-booking-assistant/G04-book-with-confirmation.md b/docs/tickets/salon-booking-assistant/G04-book-with-confirmation.md
+index 7b268ea..9825f1e 100644
+--- a/docs/tickets/salon-booking-assistant/G04-book-with-confirmation.md
++++ b/docs/tickets/salon-booking-assistant/G04-book-with-confirmation.md
+@@ -21,12 +21,12 @@ status: blocked
+ 
+ ## Outcome
+ 
+-A customer can ask for a booking, see an exact proposal and make it real only by confirming it, and a retry or double click never makes two bookings. Implements D4, D5, I2, I3 for the create operation; the machinery G05 and G06 reuse.
++A customer can ask for a booking, see an exact proposal and make it real only by confirming it, and a retry or double click never makes two bookings. Implements D4, D5, I2, I3 for the create operation, the only write at launch; the machinery G05 and G06 reuse in phase 2.
+ 
+ ## Scope
+ 
+ - In: `app/operations.py`: operations table (SQLite locally, Postgres-compatible SQL) with `operation_id`, `customer_id`, kind, canonical payload and hash, status, expiry, receipt; atomic claim on confirm; lease of 60 s for `dispatching`; reconciliation by lookup for `uncertain`. `app/tools/propose.py`: `propose_booking` (validates salon, service, stylist, ISO start; rechecks the slot; stores a pending proposal; returns the summary and `operation_id`). `app/api/operations.py`: `POST /operations/{id}/confirm` and `GET /operations/{id}`, both requiring `verified_customer()` from G03 (tests use a fixture dependency until G03 lands).
+-- Out: Cancel (G05), move (G06), widget button (G07), staging live check (G06).
++- Out: Cancel (G05) and move (G06), both phase 2; widget button (G07); staging writes (G10 drill, G11).
+ - Depth: Build (MVP: idempotent writes). Floor: the model holds no tool that writes to the booking API. Automated background reconciliation is G18; here reconciliation runs on the next status read.
+ - Execution scope: Local only.
+ 
+@@ -35,6 +35,7 @@ A customer can ask for a booking, see an exact proposal and make it real only by
+ - [ ] Scripted model proposes a booking; the fake booking API records zero writes until confirm; after confirm exactly one booking exists and `GET` shows the receipt.
+ - [ ] Double confirm, two concurrent confirms, and a fake that commits then drops the response each end with one booking; the dropped-response case shows `uncertain` then `succeeded` after lookup, with no second create call.
+ - [ ] Confirm by another customer → 404 and no write; confirm after expiry or with a changed payload → refused and no write; slot taken at confirm → `failed: slot_taken`, no write.
++- [ ] An operation row of a kind this revision does not dispatch (e.g. `cancel`, written by a later release before a rollback) is refused at confirm with no booking-API call.
+ 
+ Verification: Offline: `pytest tests/test_operations.py tests/test_propose_booking.py` with the G01 fake and a scripted model.
+ 
+diff --git a/docs/tickets/salon-booking-assistant/G05-cancel-appointment.md b/docs/tickets/salon-booking-assistant/G05-cancel-appointment.md
+index b2fa2dc..f839435 100644
+--- a/docs/tickets/salon-booking-assistant/G05-cancel-appointment.md
++++ b/docs/tickets/salon-booking-assistant/G05-cancel-appointment.md
+@@ -6,19 +6,24 @@ plan: ../../plans/salon-booking-assistant.md
+ primary_skill: safe-api-tool-calls
+ supporting_skills: [adk-tool-interface-design]
+ blocked_by: [G03, G04]
+-phase: 1
++phase: 2
+ profile: MVP or pilot
+ estimate:                # human hours, agent-assisted
+   hands_on: 3-4
+   review_and_verify: 1-2
+   total: 4-6
+   calendar_waits: none
+-owner: Dev C
++owner: Dev B
+ status: blocked
+ ---
+ 
+ # G05 Customer cancels their own appointment
+ 
++> **Phase 2 since the 8-day revision (2026-10-14).** Cancel is the first goal
++> after launch. Work may start on spare phase 1 hours once G03 and G04 are
++> done, but it ships in its own release after G11, never in G11's release
++> candidate. See the plan's cut line.
++
+ ## Outcome
+ 
+ A signed-in customer can cancel one of their own appointments after confirming it, and is told the policy when it is too late. Implements D4/D5 for cancel, I1 for the cancel path, A7.
+@@ -26,10 +31,10 @@ A signed-in customer can cancel one of their own appointments after confirming i
+ ## Scope
+ 
+ - In: `propose_cancellation(appointment_id)` reusing G04's operations; ownership check against `customer_id` from state; cancellation-window check at propose and at confirm using the A7 result from G01; projected policy text from W2 (placeholder until W2 returns).
+-- Out: Move (G06); policy wording sign-off (W2, applied in G11).
++- Out: Move (G06); policy wording sign-off (salon owner, requested again for this release).
+ - Depth: Build. Floor: ownership checked in code at both propose and confirm.
+-- Notes: Pick up G04's operation module and G03's `verified_customer()`; handoff 1 h included.
+-- Execution scope: Local only.
++- Notes: Pick up G04's operation module and G03's `verified_customer()`; handoff 1 h included. This release registers `propose_cancellation`, replaces the instruction's "call the salon to cancel" line with the flow, adds cancel and policy-window cases to G08, and runs the live evaluation before deploying (D11).
++- Execution scope: Local; deployment is a separate release with the team's approval.
+ 
+ ## Acceptance
+ 
+diff --git a/docs/tickets/salon-booking-assistant/G06-move-appointment.md b/docs/tickets/salon-booking-assistant/G06-move-appointment.md
+index c88d6a5..1d0a1ab 100644
+--- a/docs/tickets/salon-booking-assistant/G06-move-appointment.md
++++ b/docs/tickets/salon-booking-assistant/G06-move-appointment.md
+@@ -5,8 +5,8 @@ design: ../../architecture/salon-booking-assistant.md
+ plan: ../../plans/salon-booking-assistant.md
+ primary_skill: safe-api-tool-calls
+ supporting_skills: [adk-tool-interface-design]
+-blocked_by: [G03, G04, W1]
+-phase: 1
++blocked_by: [G03, G04, G05, W1]
++phase: 2
+ profile: MVP or pilot
+ estimate:                # human hours, agent-assisted
+   hands_on: 3-5
+@@ -19,6 +19,10 @@ status: blocked
+ 
+ # G06 Customer moves their own appointment
+ 
++> **Phase 2 since the 8-day revision (2026-10-14).** Move follows G05 and
++> reuses its ownership and policy-window checks. It ships in its own release
++> after G11. See the plan's cut line.
++
+ ## Outcome
+ 
+ Maya's journey: a signed-in customer moves their appointment to a new free slot with one confirmed click, and the staging booking API shows the result. Implements D4/D5 for reschedule and the bounded live check for book, move and cancel.
+@@ -28,8 +32,8 @@ Maya's journey: a signed-in customer moves their appointment to a new free slot
+ - In: `propose_move(appointment_id, new_start, stylist?)` reusing G04's operations; ownership and policy-window checks as G05; uses the reschedule endpoint or, if G01 found none, the documented cancel-plus-rebook fallback (two operations, both shown). Then a bounded live check against the staging booking API (W1): book, move, cancel for one test customer, plus one forced timeout to observe reconciliation.
+ - Out: Widget (G07); production (G11).
+ - Depth: Build. Floor: staging only; the test customer and salon from W1; at most 20 staging writes.
+-- Notes: Pick up G03's `verified_customer()`; handoff 0.5 h included.
+-- Execution scope: Local work is ready. The staging check needs W1 (staging key, test customer and salon) and the team's approval for the staging writes.
++- Notes: Pick up G03's `verified_customer()` and G05's policy-window check; handoff 0.5 h included. This release registers `propose_move`, adds move cases to G08 and runs the live evaluation before deploying (D11).
++- Execution scope: Local work is ready after G05. The staging check needs W1 (staging key, test customer and salon) and the team's approval for the staging writes; deployment is a separate release.
+ 
+ ## Acceptance
+ 
+diff --git a/docs/tickets/salon-booking-assistant/G07-chat-api-and-widget.md b/docs/tickets/salon-booking-assistant/G07-chat-api-and-widget.md
+index 8b04770..5d5db61 100644
+--- a/docs/tickets/salon-booking-assistant/G07-chat-api-and-widget.md
++++ b/docs/tickets/salon-booking-assistant/G07-chat-api-and-widget.md
+@@ -9,11 +9,11 @@ blocked_by: [G02, G03]
+ phase: 1
+ profile: MVP or pilot
+ estimate:                # human hours, agent-assisted
+-  hands_on: 3-5
++  hands_on: 3-4.5
+   review_and_verify: 1-2
+-  total: 4-7
++  total: 4-6.5
+   calendar_waits: none
+-owner: Dev B
++owner: Dev A
+ status: blocked
+ ---
+ 
+@@ -21,21 +21,21 @@ status: blocked
+ 
+ ## Outcome
+ 
+-A customer on the salon website opens a chat, signs in through the existing login, talks to the assistant and presses Confirm on a proposal; the status shown comes from the operation record. Implements D7's API, D8 (plain form), the per-customer and per-IP caps of D9, I4.
++A customer on the salon website opens a chat, signs in through the existing login, talks to the assistant and presses Confirm on a proposal; the status shown comes from the operation record. Implements D7's API, D8 (plain form), the per-customer cap of D9, I4. At launch the only proposal is a booking.
+ 
+ ## Scope
+ 
+-- In: `app/api/chat.py`: `POST /chat` taking `{session_id?, message}` with `verified_customer()`; creates or loads an owned session, writes `customer_id` and context to state, runs the `Runner`, returns the D8 JSON (`messages`, `proposals`, `operations`). Turn counters (40 per customer per day, 20 per anonymous IP per hour). Turns on one session are serialised (Postgres advisory lock locally replaced by a process lock with SQLite); a second concurrent message waits up to 10 s, then gets 409 "please resend". `web/widget.js`: text bubbles, proposal card with salon, service, stylist, absolute date and a Confirm button calling `POST /operations/{id}/confirm`, status card polling `GET /operations/{id}`.
+-- Out: Slot cards (G13), streaming (G19).
++- In: `app/api/chat.py`: `POST /chat` taking `{session_id?, message}` with `verified_customer()`; creates or loads an owned session, writes `customer_id` and context to state, runs the `Runner`, returns the D8 JSON (`messages`, `proposals`, `operations`). Turn counter (40 per customer per day); no anonymous turns (A12): without a valid token the widget shows "Sign in to chat" and `/chat` returns 401 before any session or model call. Turns on one session are serialised (Postgres advisory lock locally replaced by a process lock with SQLite); a second concurrent message waits up to 10 s, then gets 409 "please resend". `web/widget.js`: text bubbles, proposal card with salon, service, stylist, absolute date and a Confirm button calling `POST /operations/{id}/confirm`, status card polling `GET /operations/{id}`.
++- Out: Slot cards (G13), streaming (G19), cancel and move cards (G05, G06), anonymous browsing (Later list).
+ - Depth: Build (plain widget per cut line). Floor: caps enforced in the API; no model text rendered as a status.
+-- Notes: Pick up G03's auth dependency; handoff 0.5 h included.
++- Notes: Moved from Dev B to Dev A in the 8-day revision; Dev A owns the confirm endpoint the widget calls. Pick up G02's agent from Dev B and G03's auth dependency from Dev C; handoff 1 h included.
+ - Execution scope: Local only.
+ 
+ ## Acceptance
+ 
+-- [ ] Browser run against the local app and fake: Maya's move completes through the widget and the status card shows the receipt time.
++- [ ] Browser run against the local app and fake: Maya books Thu 23 Oct 14:30 with Sam through the widget and the status card shows the receipt time.
+ - [ ] Model text says "booked" while the fake fails the write: the status card shows the failure, not success.
+-- [ ] The 41st turn for one customer in a day and the 21st anonymous turn from one IP in an hour are refused with the salon phone number and no model call; a request with another customer's `session_id` is refused.
++- [ ] The 41st turn for one customer in a day is refused with the salon phone number and no model call; a request without a token gets 401 and no model call; a request with another customer's `session_id` is refused.
+ 
+ Verification: Offline: `pytest tests/test_chat_api.py`; local integration: manual browser run recorded with screenshots.
+ 
+diff --git a/docs/tickets/salon-booking-assistant/G08-evaluation-set.md b/docs/tickets/salon-booking-assistant/G08-evaluation-set.md
+index ebbc290..cb1eca5 100644
+--- a/docs/tickets/salon-booking-assistant/G08-evaluation-set.md
++++ b/docs/tickets/salon-booking-assistant/G08-evaluation-set.md
+@@ -25,10 +25,10 @@ The team can measure whether the assistant chooses the right action and states t
+ 
+ ## Scope
+ 
+-- In: `eval/cases/` with 30 labelled multi-turn cases against the G01 fake: 8 book, 6 move, 5 cancel, 4 ambiguous dates (including a daylight-saving boundary), 3 inside the policy window, 2 another-customer attempts, 2 out-of-scope requests. Each case records the expected tool calls, expected proposal fields and forbidden calls. `eval/run.py` runs the cases with a scripted model (in CI) and with the pinned live model (bounded: ≤ 300 model calls per run). `eval/README.md` holds the latest result per case. Instruction fixes go into `prompts/booking_agent/` with a version bump.
+-- Out: CI gate on the live run (G14).
++- In: `eval/cases/` with 30 labelled multi-turn cases against the G01 fake, rebalanced for the booking-only launch: 12 book, 5 availability and own-appointment questions, 4 ambiguous dates (including a daylight-saving boundary), 4 move or cancel requests that must get the salon phone number and no proposal, 2 another-customer attempts, 3 out-of-scope requests. Each case records the expected tool calls, expected proposal fields and forbidden calls. `eval/run.py` runs the cases with a scripted model (in CI) and with the pinned live model (bounded: ≤ 300 model calls per run). `eval/README.md` holds the latest result per case. Instruction fixes go into `prompts/booking_agent/` with a version bump.
++- Out: CI gate on the live run (G14); move, cancel and policy-window cases (added with G05 and G06); running the scripted cases in CI (G22).
+ - Depth: Build. Floor: live runs capped at 300 calls; no real customer data in cases.
+-- Notes: Can start as soon as G02 exists; write cases for G04–G06 against the proposal tool contract in the design, and they pass once those goals land.
++- Notes: Can start as soon as G02 exists; write the booking cases against the `propose_booking` contract in the design, and they pass once G04 lands.
+ - Execution scope: Local; the live run needs W1 and spends from the A3 budget (≤ 300 calls).
+ 
+ ## Acceptance
+diff --git a/docs/tickets/salon-booking-assistant/G09-cloud-run-platform.md b/docs/tickets/salon-booking-assistant/G09-cloud-run-platform.md
+index b1f5ffa..0419df0 100644
+--- a/docs/tickets/salon-booking-assistant/G09-cloud-run-platform.md
++++ b/docs/tickets/salon-booking-assistant/G09-cloud-run-platform.md
+@@ -9,9 +9,9 @@ blocked_by: [W1]
+ phase: 1
+ profile: MVP or pilot
+ estimate:                # human hours, agent-assisted
+-  hands_on: 5-8
+-  review_and_verify: 2-3
+-  total: 7-11
++  hands_on: 4-6
++  review_and_verify: 1.5-2.5
++  total: 5.5-8.5
+   calendar_waits: none
+ owner: Dev C
+ status: blocked
+@@ -25,8 +25,8 @@ The team has a staging and a production Cloud Run service with their database, s
+ 
+ ## Scope
+ 
+-- In: GCP project setup from W1; one service account per environment with only Vertex AI user, Cloud SQL client and its own secret accessor; Secret Manager for the booking-API key; Cloud SQL Postgres (smallest tier) with `DatabaseSessionService` and the operations tables; Cloud Run service deploying a skeleton of the FastAPI app (the agent deploy itself happens in G11); env-flag kill switch; billing budget alert at 50/90/100 % of A3; Cloud Trace export with content capture off; 30-day session deletion job; CI running the unit tests and `eval/run.py --scripted`; `release.json` read back from the running revision. Look up current prices and region availability for the pinned model and Cloud SQL and update design §6.
+-- Out: Agent deploy (G11), SLOs and alerts (G16).
++- In: GCP project setup from W1; one service account per environment with only Vertex AI user, Cloud SQL client and its own secret accessor; Secret Manager for the booking-API key; Cloud SQL Postgres (smallest tier) with `DatabaseSessionService` and the operations tables; Cloud Run service deploying a skeleton of the FastAPI app (the agent deploy itself happens in G11); env-flag kill switch; billing budget alert at 50/90/100 % of A3; Cloud Trace export with content capture off; `release.json` read back from the running revision. Look up current prices and region availability for the pinned model and Cloud SQL and update design §6.
++- Out: Agent deploy (G11), CI and the 30-day session deletion job (G22, split out in the 8-day revision), SLOs and alerts (G16).
+ - Depth: Build. Floor: no secret in the image or env file in the repo; the kill switch works without a redeploy.
+ - Notes: Check the ADK span-retention fix (observability compatibility notes: 2.10.0 or later) before enabling trace export; if the pin is 2.8.0, record the gap.
+ - Execution scope: Needs W1 and the team's approval for each deployment and IAM grant.
+@@ -37,7 +37,7 @@ The team has a staging and a production Cloud Run service with their database, s
+ - [ ] With the kill switch on, `/chat` answers with the salon phone number and the trace shows no model call.
+ - [ ] An exported span and log line from a test turn contain no fixture name, phone number or message text.
+ 
+-Verification: Authorised cloud: deployment to the W1 project (staging, then production with the skeleton only). CI on every push.
++Verification: Authorised cloud: deployment to the W1 project (staging, then production with the skeleton only).
+ 
+ ## Evidence
+ 
+diff --git a/docs/tickets/salon-booking-assistant/G10-launch-readiness.md b/docs/tickets/salon-booking-assistant/G10-launch-readiness.md
+index 1ddaeac..da1c650 100644
+--- a/docs/tickets/salon-booking-assistant/G10-launch-readiness.md
++++ b/docs/tickets/salon-booking-assistant/G10-launch-readiness.md
+@@ -9,11 +9,11 @@ blocked_by: [G09, W2]
+ phase: 1
+ profile: MVP or pilot
+ estimate:                # human hours, agent-assisted
+-  hands_on: 2.5-3.5
++  hands_on: 2-3
+   review_and_verify: 1-1
+-  total: 3.5-4.5
++  total: 3-4
+   calendar_waits: none
+-owner: Dev A
++owner: Dev C
+ status: blocked
+ ---
+ 
+@@ -25,16 +25,16 @@ Whoever is on call can stop the assistant, roll it back and resolve an uncertain
+ 
+ ## Scope
+ 
+-- In: `docs/runbook/salon-booking-assistant.md`: kill switch on and off, rollback, listing and reconciling `uncertain` operations by hand, the salon phone escalation. A drill in staging of the kill switch, rollback and a forced uncertain booking. A 30-minute staff briefing at the pilot salon, using the W2 wording and policy text.
++- In: `docs/runbook/salon-booking-assistant.md`: kill switch on and off, rollback, listing and reconciling `uncertain` operations by hand, the salon phone escalation, and the pre-deploy step that runs the unit tests and `eval/run.py --scripted` by hand until G22's CI exists. A drill in staging of the kill switch, rollback and a forced uncertain booking. A 30-minute staff briefing at the pilot salon, using the W2 wording: the assistant books; moves and cancellations still come by phone until G05 and G06. The forced uncertain booking is also the staging write check that G06 used to carry.
+ - Out: Automated reconciliation (G18).
+ - Depth: Minimal (MVP): manual runbook; automation is phase 2.
+-- Notes: Pick up G09's platform from Dev C; handoff 0.5 h included.
++- Notes: Moved from Dev A to Dev C in the 8-day revision, so the platform's builder runs the drill; no handoff. The uncertain-booking drill uses G04's operations module (Dev A reviews the drill log).
+ - Execution scope: Needs G09's staging environment and W2.
+ 
+ ## Acceptance
+ 
+ - [ ] The drill log shows the kill switch stopping model calls within 1 minute, a rollback, and a forced uncertain booking resolved to exactly one booking.
+-- [ ] The W2 sign-off (wording, policy text, pilot salon) is recorded with its date.
++- [ ] The W2 sign-off (wording, the "call the salon to move or cancel" text, pilot salon) is recorded with its date.
+ - [ ] The runbook names the on-call person for each pilot day.
+ 
+ Verification: Authorised cloud: staging only.
+diff --git a/docs/tickets/salon-booking-assistant/G11-pilot-go-live.md b/docs/tickets/salon-booking-assistant/G11-pilot-go-live.md
+index 3a1c98e..5fd43f9 100644
+--- a/docs/tickets/salon-booking-assistant/G11-pilot-go-live.md
++++ b/docs/tickets/salon-booking-assistant/G11-pilot-go-live.md
+@@ -5,13 +5,13 @@ design: ../../architecture/salon-booking-assistant.md
+ plan: ../../plans/salon-booking-assistant.md
+ primary_skill: adk-agent-evaluation
+ supporting_skills: [deploy-adk-on-google-cloud, adk-agent-observability]
+-blocked_by: [G05, G06, G07, G08, G09, G10]
++blocked_by: [G03, G04, G07, G08, G09, G10]
+ phase: 1
+ profile: MVP or pilot
+ estimate:                # human hours, agent-assisted
+   hands_on: 3-4
+-  review_and_verify: 1-2
+-  total: 4-6
++  review_and_verify: 1-1.5
++  total: 4-5.5
+   calendar_waits: none
+ owner: Dev B
+ status: blocked
+@@ -21,21 +21,21 @@ status: blocked
+ 
+ ## Outcome
+ 
+-Real customers of the pilot salon book, move and cancel their own appointments through the assistant, and the team can see completion, failures and cost. Delivers the MVP's 'done' for phase 1.
++Signed-in customers of the pilot salon see availability and book through the assistant, and the team can see failures and cost from the first booking. Delivers the MVP's 'done' for phase 1 (8-day revision: booking only).
+ 
+ ## Scope
+ 
+-- In: Final live evaluation run (G08) on the release candidate; deploy the agent to staging and run Maya's journey plus book and cancel end to end; deploy to production enabled for the pilot salon only (salon allow-list in config); first-day monitoring of traces, token cost per completed operation and any `uncertain` operation; record baseline numbers (completion, latency, cost) in `eval/README.md` and design §6.
+-- Out: Other four salons (G12), slot cards (G13).
++- In: Final live evaluation run (G08) on the release candidate; run the unit tests and `eval/run.py --scripted` by hand if G22's CI is not yet in place; deploy the agent to staging and run a booking end to end with the W1 test customer; deploy to production enabled for the pilot salon only (salon allow-list in config); check the first production booking's trace for token count and operation status.
++- Out: Cancel (G05) and move (G06); the first days' monitoring and baseline numbers (G12); other four salons (G12); slot cards (G13).
+ - Depth: Build. Floor: launch only if G08 meets its threshold with 0 forbidden calls; kill switch tested in G10.
+-- Notes: Pick up G05, G06, G09 and G10 from other owners; handoff 1 h included.
++- Notes: Pick up G04 and G07 from Dev A and G09 and G10 from Dev C; handoff 1 h included.
+ - Execution scope: Needs the team's go-live approval and W2.
+ 
+ ## Acceptance
+ 
+ - [ ] The live evaluation on the release candidate meets the G08 threshold with 0 forbidden calls; the result is linked.
+-- [ ] Staging: the agent served by Cloud Run completes Maya's move, a booking and a cancellation; production: one staff-assisted real booking at the pilot salon succeeds and appears in the salon's calendar.
+-- [ ] A customer of another salon is told the assistant is not yet available there, and no proposal is created.
++- [ ] Staging: the agent served by Cloud Run completes a booking for the test customer; production: one staff-assisted real booking at the pilot salon succeeds, appears in the salon's calendar, and its trace shows the token count and `succeeded` status without message text.
++- [ ] A customer of another salon is told the assistant is not yet available there, and a request to move or cancel gets the salon's phone number; in both cases no proposal is created.
+ 
+ Verification: Authorised live and hosted: staging, then production for the pilot salon.
+ 

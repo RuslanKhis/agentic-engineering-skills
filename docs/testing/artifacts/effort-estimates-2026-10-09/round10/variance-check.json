@@ -1,0 +1,776 @@
+{
+  "method": "Read every docs/ file (architecture, plan, tickets) in each run. Built a union vocabulary of canonical failure situations; a situation counts as present only with a stated handling in a failure table/grid cell, guarantee row, or ticket acceptance test. Phase-2 goals with acceptance lines count (affects v1b). Known-gap scoring: 1 present, 0.5 partial, 0 absent.",
+  "vocabulary_size": 41,
+  "vocabulary": {
+    "booking API read fails / times out / errors": [
+      "v0a",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "rate limited by booking API (429)": [
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "booking API returns malformed/unexpected payload": [
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "booking API service credential expired/revoked": [
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "cancel/book/move write times out with unknown outcome (reconcile, no blind retry)": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "reconcile lookup inconclusive -> uncertain + staff escalation": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "move partially applied: new slot booked, old not cancelled": [
+      "v0b",
+      "v1a",
+      "v1c"
+    ],
+    "process restart/crash between claim and write": [
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "double-click / concurrent confirm of same proposal": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "overlapping turns in one session (second message while one runs)": [
+      "v1b",
+      "v1c"
+    ],
+    "confirmed payload changed/tampered vs card (hash/same-key mismatch)": [
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "proposal expired before confirm": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1b",
+      "v1c"
+    ],
+    "slot taken between proposal and confirm": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "booking API rejects on business rule (cancellation window)": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "appointment changed by staff after proposal": [
+      "v0a",
+      "v1b"
+    ],
+    "model attempts write / claims confirmation without customer click": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "model/assistant claims success without API receipt": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "cross-customer access (other customer's appointment/session/ID spoofing)": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "customer session token expired/forged/missing": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "identity key service (JWKS) unavailable": [
+      "v1a",
+      "v1c"
+    ],
+    "ownership-proof brute force (reference+phone lockout)": [
+      "v1b"
+    ],
+    "session/ledger DB unavailable": [
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "conversation survives instance restart": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "model unavailable / slow": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "model rate limited / quota exhausted": [
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "model rejects request / safety block": [
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "model returns invalid tool args / invented slot or appointment IDs": [
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "model proposes wrong appointment (customer rejects card)": [
+      "v1a"
+    ],
+    "relative-date / DST misinterpretation": [
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "prompt injection via customer text": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b"
+    ],
+    "prompt injection via booking-API free text (bios/service descriptions)": [
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "cancel-all request": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "oversized / malformed user input": [
+      "v0b",
+      "v1b"
+    ],
+    "per-call loop: max_llm_calls cap hit": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "per-customer/IP abuse limit exceeded": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "spend runaway (budget alert)": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "kill switch / operator stop": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "bad release -> rollback": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "PII in logs/traces": [
+      "v0a",
+      "v0b",
+      "v0c",
+      "v1a",
+      "v1b",
+      "v1c"
+    ],
+    "PII / free-text notes reaching model context (tested)": [
+      "v0b",
+      "v1c"
+    ],
+    "pinned model retirement": [
+      "v0a",
+      "v0c",
+      "v1b"
+    ]
+  },
+  "per_run_situations": {
+    "v0a": [
+      "PII in logs/traces",
+      "appointment changed by staff after proposal",
+      "bad release -> rollback",
+      "booking API read fails / times out / errors",
+      "booking API rejects on business rule (cancellation window)",
+      "cancel-all request",
+      "cancel/book/move write times out with unknown outcome (reconcile, no blind retry)",
+      "conversation survives instance restart",
+      "cross-customer access (other customer's appointment/session/ID spoofing)",
+      "customer session token expired/forged/missing",
+      "double-click / concurrent confirm of same proposal",
+      "kill switch / operator stop",
+      "model attempts write / claims confirmation without customer click",
+      "model unavailable / slow",
+      "model/assistant claims success without API receipt",
+      "per-call loop: max_llm_calls cap hit",
+      "per-customer/IP abuse limit exceeded",
+      "pinned model retirement",
+      "prompt injection via customer text",
+      "proposal expired before confirm",
+      "reconcile lookup inconclusive -> uncertain + staff escalation",
+      "slot taken between proposal and confirm",
+      "spend runaway (budget alert)"
+    ],
+    "v0b": [
+      "PII / free-text notes reaching model context (tested)",
+      "PII in logs/traces",
+      "bad release -> rollback",
+      "booking API rejects on business rule (cancellation window)",
+      "cancel-all request",
+      "cancel/book/move write times out with unknown outcome (reconcile, no blind retry)",
+      "confirmed payload changed/tampered vs card (hash/same-key mismatch)",
+      "conversation survives instance restart",
+      "cross-customer access (other customer's appointment/session/ID spoofing)",
+      "customer session token expired/forged/missing",
+      "double-click / concurrent confirm of same proposal",
+      "kill switch / operator stop",
+      "model attempts write / claims confirmation without customer click",
+      "model returns invalid tool args / invented slot or appointment IDs",
+      "model unavailable / slow",
+      "model/assistant claims success without API receipt",
+      "move partially applied: new slot booked, old not cancelled",
+      "oversized / malformed user input",
+      "per-call loop: max_llm_calls cap hit",
+      "per-customer/IP abuse limit exceeded",
+      "process restart/crash between claim and write",
+      "prompt injection via customer text",
+      "proposal expired before confirm",
+      "reconcile lookup inconclusive -> uncertain + staff escalation",
+      "relative-date / DST misinterpretation",
+      "slot taken between proposal and confirm",
+      "spend runaway (budget alert)"
+    ],
+    "v0c": [
+      "PII in logs/traces",
+      "bad release -> rollback",
+      "booking API read fails / times out / errors",
+      "booking API rejects on business rule (cancellation window)",
+      "cancel-all request",
+      "cancel/book/move write times out with unknown outcome (reconcile, no blind retry)",
+      "confirmed payload changed/tampered vs card (hash/same-key mismatch)",
+      "conversation survives instance restart",
+      "cross-customer access (other customer's appointment/session/ID spoofing)",
+      "customer session token expired/forged/missing",
+      "double-click / concurrent confirm of same proposal",
+      "kill switch / operator stop",
+      "model attempts write / claims confirmation without customer click",
+      "model returns invalid tool args / invented slot or appointment IDs",
+      "model unavailable / slow",
+      "model/assistant claims success without API receipt",
+      "per-call loop: max_llm_calls cap hit",
+      "per-customer/IP abuse limit exceeded",
+      "pinned model retirement",
+      "process restart/crash between claim and write",
+      "prompt injection via customer text",
+      "proposal expired before confirm",
+      "reconcile lookup inconclusive -> uncertain + staff escalation",
+      "relative-date / DST misinterpretation",
+      "slot taken between proposal and confirm",
+      "spend runaway (budget alert)"
+    ],
+    "v1a": [
+      "PII in logs/traces",
+      "bad release -> rollback",
+      "booking API read fails / times out / errors",
+      "booking API rejects on business rule (cancellation window)",
+      "booking API returns malformed/unexpected payload",
+      "booking API service credential expired/revoked",
+      "cancel-all request",
+      "cancel/book/move write times out with unknown outcome (reconcile, no blind retry)",
+      "confirmed payload changed/tampered vs card (hash/same-key mismatch)",
+      "conversation survives instance restart",
+      "cross-customer access (other customer's appointment/session/ID spoofing)",
+      "customer session token expired/forged/missing",
+      "double-click / concurrent confirm of same proposal",
+      "identity key service (JWKS) unavailable",
+      "kill switch / operator stop",
+      "model attempts write / claims confirmation without customer click",
+      "model proposes wrong appointment (customer rejects card)",
+      "model rate limited / quota exhausted",
+      "model rejects request / safety block",
+      "model returns invalid tool args / invented slot or appointment IDs",
+      "model unavailable / slow",
+      "model/assistant claims success without API receipt",
+      "move partially applied: new slot booked, old not cancelled",
+      "per-call loop: max_llm_calls cap hit",
+      "per-customer/IP abuse limit exceeded",
+      "process restart/crash between claim and write",
+      "prompt injection via booking-API free text (bios/service descriptions)",
+      "prompt injection via customer text",
+      "rate limited by booking API (429)",
+      "reconcile lookup inconclusive -> uncertain + staff escalation",
+      "relative-date / DST misinterpretation",
+      "session/ledger DB unavailable",
+      "slot taken between proposal and confirm",
+      "spend runaway (budget alert)"
+    ],
+    "v1b": [
+      "PII in logs/traces",
+      "appointment changed by staff after proposal",
+      "bad release -> rollback",
+      "booking API read fails / times out / errors",
+      "booking API rejects on business rule (cancellation window)",
+      "booking API returns malformed/unexpected payload",
+      "booking API service credential expired/revoked",
+      "cancel-all request",
+      "cancel/book/move write times out with unknown outcome (reconcile, no blind retry)",
+      "confirmed payload changed/tampered vs card (hash/same-key mismatch)",
+      "conversation survives instance restart",
+      "cross-customer access (other customer's appointment/session/ID spoofing)",
+      "customer session token expired/forged/missing",
+      "double-click / concurrent confirm of same proposal",
+      "kill switch / operator stop",
+      "model attempts write / claims confirmation without customer click",
+      "model rate limited / quota exhausted",
+      "model rejects request / safety block",
+      "model returns invalid tool args / invented slot or appointment IDs",
+      "model unavailable / slow",
+      "model/assistant claims success without API receipt",
+      "overlapping turns in one session (second message while one runs)",
+      "oversized / malformed user input",
+      "ownership-proof brute force (reference+phone lockout)",
+      "per-call loop: max_llm_calls cap hit",
+      "per-customer/IP abuse limit exceeded",
+      "pinned model retirement",
+      "process restart/crash between claim and write",
+      "prompt injection via booking-API free text (bios/service descriptions)",
+      "prompt injection via customer text",
+      "proposal expired before confirm",
+      "rate limited by booking API (429)",
+      "reconcile lookup inconclusive -> uncertain + staff escalation",
+      "relative-date / DST misinterpretation",
+      "session/ledger DB unavailable",
+      "slot taken between proposal and confirm",
+      "spend runaway (budget alert)"
+    ],
+    "v1c": [
+      "PII / free-text notes reaching model context (tested)",
+      "PII in logs/traces",
+      "bad release -> rollback",
+      "booking API read fails / times out / errors",
+      "booking API rejects on business rule (cancellation window)",
+      "booking API returns malformed/unexpected payload",
+      "booking API service credential expired/revoked",
+      "cancel-all request",
+      "cancel/book/move write times out with unknown outcome (reconcile, no blind retry)",
+      "confirmed payload changed/tampered vs card (hash/same-key mismatch)",
+      "conversation survives instance restart",
+      "cross-customer access (other customer's appointment/session/ID spoofing)",
+      "customer session token expired/forged/missing",
+      "double-click / concurrent confirm of same proposal",
+      "identity key service (JWKS) unavailable",
+      "kill switch / operator stop",
+      "model attempts write / claims confirmation without customer click",
+      "model rate limited / quota exhausted",
+      "model rejects request / safety block",
+      "model returns invalid tool args / invented slot or appointment IDs",
+      "model unavailable / slow",
+      "model/assistant claims success without API receipt",
+      "move partially applied: new slot booked, old not cancelled",
+      "overlapping turns in one session (second message while one runs)",
+      "per-call loop: max_llm_calls cap hit",
+      "per-customer/IP abuse limit exceeded",
+      "process restart/crash between claim and write",
+      "prompt injection via booking-API free text (bios/service descriptions)",
+      "proposal expired before confirm",
+      "rate limited by booking API (429)",
+      "reconcile lookup inconclusive -> uncertain + staff escalation",
+      "relative-date / DST misinterpretation",
+      "session/ledger DB unavailable",
+      "slot taken between proposal and confirm",
+      "spend runaway (budget alert)"
+    ]
+  },
+  "OLD": {
+    "per_run_count": {
+      "v0a": 23,
+      "v0b": 27,
+      "v0c": 26
+    },
+    "mean_count": 25.33,
+    "union": 30,
+    "present_in_all_three": 20,
+    "present_in_one_or_two": 10,
+    "in_only_one": [
+      "PII / free-text notes reaching model context (tested)",
+      "appointment changed by staff after proposal",
+      "move partially applied: new slot booked, old not cancelled",
+      "oversized / malformed user input"
+    ],
+    "in_exactly_two": [
+      "booking API read fails / times out / errors",
+      "confirmed payload changed/tampered vs card (hash/same-key mismatch)",
+      "model returns invalid tool args / invented slot or appointment IDs",
+      "pinned model retirement",
+      "process restart/crash between claim and write",
+      "relative-date / DST misinterpretation"
+    ],
+    "pairwise_jaccard": {
+      "v0a-v0b": 0.667,
+      "v0a-v0c": 0.815,
+      "v0b-v0c": 0.828
+    },
+    "mean_pairwise_jaccard": 0.77
+  },
+  "NEW": {
+    "per_run_count": {
+      "v1a": 34,
+      "v1b": 37,
+      "v1c": 35
+    },
+    "mean_count": 35.33,
+    "union": 41,
+    "present_in_all_three": 30,
+    "present_in_one_or_two": 11,
+    "in_only_one": [
+      "PII / free-text notes reaching model context (tested)",
+      "appointment changed by staff after proposal",
+      "model proposes wrong appointment (customer rejects card)",
+      "oversized / malformed user input",
+      "ownership-proof brute force (reference+phone lockout)",
+      "pinned model retirement"
+    ],
+    "in_exactly_two": [
+      "identity key service (JWKS) unavailable",
+      "move partially applied: new slot booked, old not cancelled",
+      "overlapping turns in one session (second message while one runs)",
+      "prompt injection via customer text",
+      "proposal expired before confirm"
+    ],
+    "pairwise_jaccard": {
+      "v1a-v1b": 0.775,
+      "v1a-v1c": 0.865,
+      "v1b-v1c": 0.8
+    },
+    "mean_pairwise_jaccard": 0.813
+  },
+  "known_gaps": {
+    "items": [
+      "cancel-all row",
+      "partial-move row",
+      "read-fails row",
+      "token-expiry row",
+      "call-cap test",
+      "pass bar",
+      "kill switch",
+      "reconciliation drill",
+      "staging test against real booking API"
+    ],
+    "per_run": {
+      "v0a": {
+        "present": {
+          "cancel-all row": 1,
+          "partial-move row": 0,
+          "read-fails row": 1,
+          "token-expiry row": 1,
+          "call-cap test": 1,
+          "pass bar": 1,
+          "kill switch": 1,
+          "reconciliation drill": 0,
+          "staging test against real booking API": 1
+        },
+        "score_of_9": 7,
+        "notes": {
+          "partial-move row": "open decision O4 only; native reschedule assumed",
+          "read-fails row": "G01 acceptance only, no failure-table row",
+          "token-expiry row": "customer token 401 test (G02); booking-API credential not covered",
+          "reconciliation drill": "reconcile unit test only; runbook mention, no drill",
+          "pass bar": ">=90% overall, 100% adversarial (G05/G07)",
+          "kill switch": "widget flag off tested in G07"
+        }
+      },
+      "v0b": {
+        "present": {
+          "cancel-all row": 1,
+          "partial-move row": 1,
+          "read-fails row": 0,
+          "token-expiry row": 1,
+          "call-cap test": 1,
+          "pass bar": 0.5,
+          "kill switch": 1,
+          "reconciliation drill": 1,
+          "staging test against real booking API": 1
+        },
+        "score_of_9": 7.5,
+        "notes": {
+          "read-fails row": "no booking-API read failure row or test",
+          "pass bar": "only 'no I2/I4 failures'; quality target 'proposed from baseline'",
+          "reconciliation drill": "G10 staging on sandbox includes timeout-after-commit",
+          "cancel-all row": "'cancel all appointments for Anna Smith' adversarial"
+        }
+      },
+      "v0c": {
+        "present": {
+          "cancel-all row": 1,
+          "partial-move row": 0,
+          "read-fails row": 1,
+          "token-expiry row": 1,
+          "call-cap test": 0.5,
+          "pass bar": 1,
+          "kill switch": 1,
+          "reconciliation drill": 0,
+          "staging test against real booking API": 1
+        },
+        "score_of_9": 6.5,
+        "notes": {
+          "partial-move row": "atomic reschedule assumed (D3); no row",
+          "call-cap test": "design I6 says unit tests per limit; G05 acceptance tests only daily allowance and kill switch",
+          "reconciliation drill": "runbook only",
+          "pass bar": ">=90% provisional + zero forbidden effects (G08)"
+        }
+      },
+      "v1a": {
+        "present": {
+          "cancel-all row": 1,
+          "partial-move row": 1,
+          "read-fails row": 1,
+          "token-expiry row": 1,
+          "call-cap test": 0,
+          "pass bar": 0.5,
+          "kill switch": 1,
+          "reconciliation drill": 0,
+          "staging test against real booking API": 1
+        },
+        "score_of_9": 6.5,
+        "notes": {
+          "call-cap test": "max_llm_calls set in G02 but never tested; grid has no row for it",
+          "pass bar": "'at or above baseline' + all adversarial; no absolute bar",
+          "reconciliation drill": "rollback drill only (G09); manual daily reconciliation query, never drilled",
+          "cancel-all row": "only via injected stylist bio, not a customer's own cancel-all request"
+        }
+      },
+      "v1b": {
+        "present": {
+          "cancel-all row": 1,
+          "partial-move row": 0,
+          "read-fails row": 1,
+          "token-expiry row": 1,
+          "call-cap test": 1,
+          "pass bar": 0.5,
+          "kill switch": 1,
+          "reconciliation drill": 1,
+          "staging test against real booking API": 1
+        },
+        "score_of_9": 7.5,
+        "notes": {
+          "partial-move row": "grid cell defers to open decision O3; move/cancel cut to phase 2 (G11)",
+          "pass bar": "explicitly 'no threshold invented before first measurement'; adversarial must pass",
+          "reconciliation drill": "G09 staging checklist: uncertain (fault-injected); G06 synthetic alert",
+          "cancel-all row": "only via injected service description"
+        }
+      },
+      "v1c": {
+        "present": {
+          "cancel-all row": 1,
+          "partial-move row": 1,
+          "read-fails row": 1,
+          "token-expiry row": 1,
+          "call-cap test": 1,
+          "pass bar": 1,
+          "kill switch": 1,
+          "reconciliation drill": 1,
+          "staging test against real booking API": 1
+        },
+        "score_of_9": 9,
+        "notes": {
+          "kill switch": "operator stop = allowance 0, tested in production (G09)",
+          "reconciliation drill": "G09 fault drill on staging: lost response + partial move",
+          "pass bar": "90% overall + no wrong-date/wrong-customer proposal (G07)",
+          "cancel-all row": "only via injected stylist bio (F6)"
+        }
+      }
+    },
+    "mean_score_OLD": 7.0,
+    "mean_score_NEW": 7.67,
+    "gaps_closed_in_all_three": {
+      "OLD": [
+        "cancel-all row",
+        "token-expiry row",
+        "kill switch",
+        "staging test against real booking API"
+      ],
+      "NEW": [
+        "cancel-all row",
+        "read-fails row",
+        "token-expiry row",
+        "kill switch",
+        "staging test against real booking API"
+      ]
+    }
+  },
+  "grid_audit_NEW": {
+    "v1a": {
+      "rows": [
+        "Booking API reads",
+        "Booking API writes",
+        "Site identity (JWT/JWKS)",
+        "Postgres",
+        "Vertex AI Gemini",
+        "Booking API email/SMS"
+      ],
+      "complete": false,
+      "bare_na_without_reason": 9,
+      "na_with_reason": 9,
+      "empty_cells": 7,
+      "completeness_notes": "Email/SMS row has one n/a with a reason and 7 empty cells; identity row has 4 bare 'n/a', Postgres 3, Vertex 2.",
+      "unsound_or_questionable_na": [
+        "Booking API writes x untrusted/malformed: 'n/a: we send it' ignores malformed/unexpected write responses (v1b and v1c handle them)",
+        "Vertex x duplicate/concurrent: bare n/a; overlapping turns in one session left unhandled (v1b and v1c handle them)",
+        "Postgres x rate limited: bare n/a; connection-pool exhaustion unhandled"
+      ],
+      "cells_citing_a_ticket": 23,
+      "cited_cells_backed_by_acceptance_test": 15,
+      "unbacked_examples": [
+        "reads rate-limited -> G02 (only a timeout test)",
+        "writes credential expired -> G04 (no test)",
+        "JWKS unavailable -> G05 (no test)",
+        "Vertex unavailable -> G02 (no model-outage test)"
+      ],
+      "grid_words": 394,
+      "failure_section_words": 859
+    },
+    "v1b": {
+      "rows": [
+        "Booking API reads",
+        "Booking API writes",
+        "Vertex AI Gemini",
+        "Cloud SQL",
+        "Browser/widget"
+      ],
+      "complete": false,
+      "bare_na_without_reason": 5,
+      "na_with_reason": 5,
+      "empty_cells": 0,
+      "completeness_notes": "Writes x partial multi-step points to open decision O3 (neither handled nor n/a). No identity row because the design has no customer login (cookie handled in the browser row).",
+      "unsound_or_questionable_na": [],
+      "cells_citing_a_ticket": 29,
+      "cited_cells_backed_by_acceptance_test": 14,
+      "unbacked_examples": [
+        "credential expired/revoked (reads, writes, Vertex, SQL) -> G01/G06 alert; no alert or test for it",
+        "Cloud SQL unavailable -> 503 (G05/G06), no test",
+        "browser lost confirm response -> poll (G05), scope only",
+        "write rate-limited -> stays pending (G03), no test"
+      ],
+      "grid_words": 497,
+      "failure_section_words": 778
+    },
+    "v1c": {
+      "rows": [
+        "Booking API read",
+        "Booking API write",
+        "Website login/token keys",
+        "Vertex AI model",
+        "Cloud SQL"
+      ],
+      "complete": false,
+      "bare_na_without_reason": 4,
+      "na_with_reason": 7,
+      "empty_cells": 0,
+      "completeness_notes": "Every cell is filled; 4 bare 'n/a' (login partial and duplicate, Vertex partial, Cloud SQL rejects). Closest to the rule.",
+      "unsound_or_questionable_na": [
+        "Vertex x credential expired: 'fails at deploy smoke test' covers a misconfigured deploy only, not runtime revocation (it is a handling claim, not an n/a)"
+      ],
+      "cells_citing_a_ticket": 29,
+      "cited_cells_backed_by_acceptance_test": 14,
+      "unbacked_examples": [
+        "booking API credential expired -> 'fail closed; alert (G08)', but G08 has no alert (SLO alerts are phase 2)",
+        "write malformed receipt -> uncertain (G04), no test",
+        "Cloud SQL unavailable -> 503 (G04), no test",
+        "Vertex 429/unavailable -> G06 scope only"
+      ],
+      "grid_words": 408,
+      "failure_section_words": 746
+    },
+    "summary": "None of the three grids is complete under the rule: 4-9 bare n/a cells each, and v1a has 7 empty cells. Most n/a reasons that are given are sound (read only, single call, model has no effects). The clearly wrong one is v1a 'writes x malformed: we send it'. About half of cited cells (43/81, 53%) have a matching acceptance test; credential-expiry, rate-limit and dependency-outage cells are the ones most often cited but untested. The grid adds about 400-500 words, and the failure section is about 2.6x the OLD size (mean 794 vs 311 words). Total docs grew about 8% (mean 10,278 vs 9,479 words)."
+  },
+  "grid_made_worse": [
+    "Length: the failure section is about 2.6x longer (311 to 794 words); total docs +8%. The cross-cutting scenario table survives alongside the grid, so outcomes like 'uncertain' and 'partial move' are stated twice.",
+    "Untested citations: about half the grid cells cite a ticket that has no matching acceptance item. They look like tested coverage but are only claims (credential expiry, rate limits, DB or JWKS outage).",
+    "Wrong or bare n/a: v1a 'writes x malformed: n/a we send it'; v1a 'Vertex x duplicate' and 'Postgres x rate limited' as bare n/a; 18 bare n/a across the three runs, against the rule.",
+    "Displacement: OLD-style items dropped in NEW runs. v1a lost proposal expiry and the call-cap test, and v1c named no customer-text injection case. In all three NEW runs cancel-all appears only as injected staff text, not as a customer's own 'cancel all my appointments' request (all three OLD runs tested it directly). Model retirement appears as a row in only one NEW run.",
+    "No effect on scope variance: v1b still cut move/cancel to phase 2 and swapped login for reference+phone, so its partial-move cell became an open decision. The grid stabilises the infrastructure-failure rows but not the product-level choices that drive the rest of the variance."
+  ],
+  "verdict": "The grid raised coverage by about 10 situations per run (25.3 to 35.3) and moved the shared core from 20 to 30. All of the gain is integration-level failures (rate limits, credential expiry, DB, JWKS, model quota, malformed payloads) that no OLD run had. Run-to-run similarity rose slightly (mean Jaccard 0.77 to 0.81), but 11 of 41 situations are still in only one or two NEW runs. Known-gap coverage rose modestly (7.0 to 7.7 of 9) and is not consistent: partial-move, call-cap test, pass bar and reconciliation drill are each still missing or partial in at least one NEW run. Only v1c closed all nine. Recommend keeping the grid, but require each cited cell to point to an acceptance line, forbid bare n/a, and add product-level rows (customer cancel-all, proposal expiry, call cap, pass bar, reconciliation drill) as a fixed checklist rather than leaving them to the per-integration grid."
+}

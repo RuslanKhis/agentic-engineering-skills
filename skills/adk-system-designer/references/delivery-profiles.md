@@ -172,6 +172,7 @@ available:
 ```bash
 python3 "$SKILL_DIR/scripts/check_schedule.py" --plan docs/plans/<topic>.md \
   --tickets docs/tickets/<topic>/ --days <working days> \
+  --design docs/architecture/<topic>.md \
   --reserve 0.25 --person "Dev A=3.6" --person "Dev B=3.6"
 ```
 
@@ -209,7 +210,17 @@ entry; the helper lists every cross-person dependency that has none.
 The schedule block is the plan as it will run. Anything the text says about
 who does or reviews a goal, what a goal needs first, or which approval it
 waits for appears there as an owner, a dependency or a wait entry, so the
-helper's figures describe the plan the reader is told about. If Python 3.11 or later is not
+helper's figures describe the plan the reader is told about. The helper reads
+each goal's prose (its plan section and ticket) and lists for review every
+other goal it names that is neither before nor after it, and every outside
+approval it names (sign-off, DPIA, pen test, legal or security review, quota,
+budget or change approval, access request) with no wait for it scheduled
+before. The list does not fail the run, so there is nothing to gain by
+avoiding it: name goals by their ID in prose. Settle each item by asking both
+directions (does this goal need the other, or does the other need this one?),
+then add the dependency or wait entry, or list it under `mentions_only` (goal
+IDs, or `wait`) when the text only refers to it. The helper prints every
+settled mention for a reviewer. If Python 3.11 or later is not
 available, say the schedule was not checked.
 
 ### Compare with capacity

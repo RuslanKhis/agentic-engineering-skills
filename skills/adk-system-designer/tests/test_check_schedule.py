@@ -132,6 +132,91 @@ class ScheduleTests(unittest.TestCase):
             code, out, _ = self.run_check("--plan", str(plan), "--json")
             self.assertEqual(len(json.loads(out)["handoffs_without_hours"]), 2)
 
+    def test_prose_mentions_outside_the_schedule_are_listed_for_review(self):
+        with tempfile.TemporaryDirectory() as root:
+            plan = self.write_plan(root)
+            plan.write_text(plan.read_text() + """
+### G02 Booking tool
+Its acceptance runs once G03 lands. Later G04 builds on it.
+
+### G04 Release
+Needs the legal review before go-live.
+""")
+            code, out, _ = self.run_check("--plan", str(plan), "--json")
+            result = json.loads(out)
+            self.assertEqual(code, 0, "mentions are for review and must not fail the run")
+            self.assertEqual(len(result["mentions_to_review"]), 2, result["mentions_to_review"])
+            self.assertIn("G02 mentions G03, which is neither before nor after it", result["mentions_to_review"][0])
+            self.assertIn("G04 mentions 'legal review' but no wait for it", result["mentions_to_review"][1])
+            plan.write_text(plan.read_text().replace("  owner: Ben\n  blocked_by: [G01]",
+                                                     "  owner: Ben\n  mentions_only: [G03]\n  blocked_by: [G01]")
+                            .replace("calendar_waits: security review", "calendar_waits: security review; legal review"))
+            result = json.loads(self.run_check("--plan", str(plan), "--json")[1])
+            self.assertEqual(result["mentions_to_review"], [])
+            self.assertEqual(result["settled_as_mention_only"], ["G02: G03"])
+
+    def test_approval_needs_its_own_wait_not_any_wait(self):
+        with tempfile.TemporaryDirectory() as root:
+            path = Path(root) / "plan.md"
+            path.write_text("```yaml\n- goal: W1\n  phase: 1\n  total: 0\n  wait_days: 5\n"
+                            "  calendar_waits: Vertex quota increase\n  blocked_by: []\n"
+                            "- goal: G01\n  phase: 1\n  total: 6\n  owner: Ana\n  blocked_by: [W1]\n```\n"
+                            "### G01 Launch\nNeeds the pen test report and sign-off from the owner.\n")
+            result = json.loads(self.run_check("--plan", str(path), "--json")[1])
+            self.assertEqual(len(result["mentions_to_review"]), 1, result["mentions_to_review"])
+            self.assertIn("'pen test'", result["mentions_to_review"][0])
+            path.write_text(path.read_text().replace("Vertex quota increase", "Vertex quota increase; pentest slot"))
+            result = json.loads(self.run_check("--plan", str(path), "--json")[1])
+            self.assertEqual(result["mentions_to_review"], [])
+
+    def test_grid_cells_cite_acceptance_or_give_a_reason(self):
+        with tempfile.TemporaryDirectory() as root:
+            plan = self.write_plan(root)
+            plan.write_text(plan.read_text() + "\n### G02 Booking tool\n- [ ] A1 booking API down shows retry\n"
+                            "- [ ] A2 timeout is reconciled\n")
+            design = Path(root) / "design.md"
+            design.write_text("| Integration | Unavailable or slow | Write outcome unknown | Rate limited |\n"
+                              "| --- | --- | --- | --- |\n"
+                              "| Booking API | retry shown (G02/A1) | reconcile (G02/A2) | n/a: one call per turn |\n"
+                              "| Model | G02/A7 | n/a | |\n")
+            code, out, _ = self.run_check("--plan", str(plan), "--design", str(design), "--json")
+            problems = json.loads(out)["problems"]
+            self.assertEqual(code, 1)
+            self.assertEqual(len(problems), 3, problems)
+            self.assertIn("G02/A7 is not an acceptance item of G02", problems[0])
+            self.assertIn("Model / Write outcome unknown", problems[1])
+            self.assertIn("Model / Rate limited", problems[2])
+
+    def test_outside_approval_needs_a_wait_before_it(self):
+        with tempfile.TemporaryDirectory() as root:
+            tickets = Path(root)
+            (tickets / "a.md").write_text(TICKET.format(goal="G01", hands_on="1", review="1", total="2",
+                                                        owner="Ana", blocked="[]")
+                                          + "Go live needs sign-off from the salon owner.\n")
+            code, out, _ = self.run_check("--tickets", str(tickets), "--json")
+            self.assertIn("G01 mentions 'sign-off' but no wait for it",
+                          json.loads(out)["mentions_to_review"][0])
+            (tickets / "w.md").write_text(TICKET.format(goal="W1", hands_on="0", review="0", total="0",
+                                                        owner="", blocked="[G01]")
+                                          .replace("calendar_waits: none", "calendar_waits: owner sign-off")
+                                          .replace("status: ready", "wait_days: 1-2\nstatus: ready"))
+            text = (tickets / "a.md").read_text().replace("blocked_by: []", "blocked_by: []\nmentions_only: wait")
+            (tickets / "a.md").write_text(text)
+            code, out, _ = self.run_check("--tickets", str(tickets), "--json")
+            self.assertEqual(json.loads(out)["mentions_to_review"], [])
+
+    def test_a_wait_can_depend_on_a_goal(self):
+        with tempfile.TemporaryDirectory() as root:
+            path = Path(root) / "plan.md"
+            path.write_text("```yaml\n- goal: G01\n  phase: 1\n  total: 6\n  owner: Ana\n  blocked_by: []\n"
+                            "- goal: W1\n  phase: 1\n  total: 0\n  wait_days: 5\n"
+                            "  calendar_waits: DPIA sign-off needs G01 evidence\n  blocked_by: [G01]\n"
+                            "- goal: G02\n  phase: 1\n  total: 6\n  owner: Ana\n  blocked_by: [W1]\n```\n")
+            code, out, _ = self.run_check("--plan", str(path), "--person", "Ana=6", "--json")
+            result = json.loads(out)
+            self.assertEqual(result["problems"], [])
+            self.assertEqual(result["finish_days_high"], 7.0)
+
     def test_capacity_low_end_only_is_reported(self):
         with tempfile.TemporaryDirectory() as root:
             code, out, _ = self.run_check("--plan", str(self.write_plan(root)), "--capacity", "16")

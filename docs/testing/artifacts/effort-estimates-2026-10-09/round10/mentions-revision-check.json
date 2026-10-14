@@ -1,0 +1,130 @@
+{
+  "root": "scratchpad/est (v1/H5, v1/R1, v0r/R1); copies in scratchpad/est/mrcheck; originals untouched",
+  "helper": "NEW helper copied from v1/H5/.claude/skills/adk-system-designer/scripts/check_schedule.py (md5 6060765b...; same file in v1/R1). v0r/R1 ships the old helper (md5 0a76e5bd..., no mention check). What-ifs: r8tools/wi.py edits yaml copies in mrcheck/wi/ and runs the new helper on the plan only (no tickets).",
+  "part_A_H5": {
+    "A1_rerun": {
+      "command": "check_schedule.py --plan docs/plans/home-claim-intake.md --tickets docs/tickets/home-claim-intake/ --days 95 --reserve 0.25 --person 'Eng A..E=5' --person ML=5 --person Sec=2",
+      "result": "702-1070 h of 2280 h (fits); chain low G02>G06>G09>G10>G18>G22>W8 65.27 d, high G02>G07>G08>G17>G24>G22>W8 101.73 d; finish 70.6-106.67 vs 95: low end only; exit 1",
+      "unsettled_mentions": 0,
+      "ticket_mismatches": 0,
+      "settled_line": "G04: G12; G06: G08; G09: G12; G13: wait; G15: W4, wait (matches the plan's 'Settled as mention only' sentence)",
+      "summary_figures_match": true,
+      "per_person_loads_match": true,
+      "errors_in_prose": [
+        "'Spare hours are real: every person is under half loaded' is false at the high end: Eng B 184/356 = 52 %, Eng D 204/356 = 57 %"
+      ]
+    },
+    "A2_mentions_only": {
+      "entries": [
+        {"goal": "G04", "item": "G12", "text": "Out: browser login UX (G12)", "verdict": "honest", "note": "out-of-scope pointer"},
+        {"goal": "G09", "item": "G12", "text": "Out: UI (G12)", "verdict": "suspicious", "note": "Text is a pointer, but the reverse edge is real: G12's Submit button, status polling and acceptance 'journey completes against the local stack with the fake provider' need G09's confirm/status endpoints and fake. G12 is blocked_by [G05, W4] only. What-if G12 after G09: 74.87-112.8 (+4.3/+6.1 days)."},
+        {"goal": "G06", "item": "G08", "text": "Out: photos in the draft (G08)", "verdict": "borderline", "note": "G08 merges observations into the claim_drafts record G06 creates; G08 does not depend on G06. What-if: 70.6-107.07 (+0/+0.4)."},
+        {"goal": "G15", "item": "W4", "text": "Out: legal approval of customer wording (W4)", "verdict": "honest"},
+        {"goal": "G15", "item": "wait", "text": "DPIA / DPO review (W6) runs while the build continues", "verdict": "honest", "note": "The DPIA is G15's product and W6 follows it. But the same scope line 'updated evidence links once the data-boundary and adversarial work lands' is a real G13/G14 -> W6 input, written without IDs."},
+        {"goal": "G13", "item": "wait", "text": "evidence for the DPIA pack", "verdict": "suspicious", "note": "Redundant for the helper (W3 is upstream via G03, so the approval check would pass anyway). The phrase signals a missing G13 -> W6 edge; round 9 wrote the same thing with an ID ('supplies the DPIA (W1) with its data-flow evidence')."}
+      ],
+      "honest": 3,
+      "borderline": 1,
+      "suspicious": 2,
+      "pattern": "Each mention is a fair pointer from the mentioning goal's point of view. What goes wrong is that settling a mention from one side never prompts a check of the reverse dependency. Two of six hide real reverse edges (G12 needs G09; W6 needs G13/G14 evidence)."
+    },
+    "A3_round9_escapes": {
+      "dpia_wait_after_evidence": {"status": "partly fixed", "detail": "W6 now blocked_by [G15] (round 9: W1 started on day 1). The goals that produce the evidence (G13 residency/data map, G14 adversarial results) are not upstream of W6. What-if W6 after G13+G14: 74.4-114.6 (+3.8/+7.9 days); after G13 alone: no change."},
+      "rollout_days": {"status": "partly fixed", "detail": "Pilot days are modelled (G22 wait 10-15). The GA canary 5%>25%>100% (D13, G17) after the W8 go-live approval has 0 days. What-if 3-5 day ramp: 73.6-111.67."},
+      "guidewire_production_client": {"status": "not fixed", "detail": "No wait for a production ClaimCenter API client or credentials, although G22 deploys the pilot to production writing real claims. Requested on day 1, it does not change the finish. If it can only be requested after G18: 80.6-126.67."},
+      "portal_release": {"status": "not fixed", "detail": "G12 builds a panel 'inside the existing portal'. There is no wait for the portal team's review or release slot."},
+      "claims_team_inputs": {"status": "partly fixed", "detail": "Handler label review is modelled (G24 wait 5-10). The O6 web-form baseline from claims analytics (needed for G22's conclusion), O5 handler-side Guidewire UI and handler staffing for pilot review have no wait or request step."}
+    },
+    "A4_id_density": {
+      "method": "Foreign goal/wait IDs ([GW]\\d\\d|W\\d, excluding the ticket's own ID) in ticket bodies (front matter and Evidence onward excluded), and in plan/design prose with the yaml block removed",
+      "round9": {"tickets_words": 5123, "tickets_foreign_id_refs": 96, "per_1000_words": 18.7, "distinct_foreign_ids_per_ticket": 3.0, "plan_per_1000": 77.7, "design_per_1000": 26.9},
+      "v1": {"tickets_words": 4965, "tickets_foreign_id_refs": 35, "per_1000_words": 7.0, "distinct_foreign_ids_per_ticket": 1.28, "plan_per_1000": 73.7, "design_per_1000": 31.4},
+      "verdict": "Ticket prose names 63 % fewer goal IDs at about the same length. Plan and design are flat. Four paraphrases replace IDs the helper would have flagged as neither before nor after: G13 'evidence for the DPIA pack' (G15/W6; round 9 named the ID), G15 'data-boundary and adversarial work' (G13/G14), G25 'before the adapter connects them to Guidewire' (G10), G01 'the identity work' (G04). Three harmless paraphrases point at goals already before or after (G17 'conversation-set goal', G19 'identity and write review', G25 'later review'). Intent cannot be shown, and the ticket layouts differ between rounds, but the effect is that the check is avoided."
+    },
+    "A5_unseen_escapes": [
+      "W6 DPIA sign-off does not wait for G13 (residency trace, data map) or G14 (adversarial results) evidence (+3.8/+7.9 d with both)",
+      "G12 needs G09 confirm/status endpoints and the fake provider, G06 drafts/summary, and G04 login/session; it depends only on G05 and W4 (+4.3/+6.1 d)",
+      "G08 (and G05) write to G06's claim_drafts record without depending on G06",
+      "G25 says the review comes 'before the adapter connects them to Guidewire', but G10 does not depend on G25",
+      "GA canary ramp after W8 has 0 days (+3/+5 d at 3-5 days)",
+      "No wait for a Guidewire production API client or credentials for the production pilot or GA",
+      "No wait for the portal team's review or release of the panel",
+      "O6 form baseline from claims analytics and O5 handler-side Guidewire UI: no request step or wait",
+      "G20 'Vertex quota check and request' (quota increase) and the 'production budget proposal for finance (A6)': no waits; the regex does not match 'quota request' or 'finance'",
+      "G21 'vendor retest of highs': a vendor calendar slot after fixes, not covered by W7",
+      "G22 production deployment of the pilot to real customers: no change or pilot approval wait (W8 covers GA only)",
+      "G07 150 staged and consented photos (A9): staging and consent collection time not modelled",
+      "G15 'answers needed from product on A9 and A15': no request step",
+      "G02 live call in an EU region needs a GCP project and Vertex access, but G02 has no dependency and W3 comes after it"
+    ],
+    "helper_limitations_seen": [
+      "The approval check passes if ANY wait is upstream, not the one the phrase names (e.g. G14's 'pen test after staging' passes because of W2)",
+      "It checks only the mentioning goal, so mentions_only on A hides a real B->A dependency",
+      "The APPROVAL regex misses change board (except 'go-live approval'), quota request, finance, vendor retest and consent"
+    ]
+  },
+  "part_B_R1": {
+    "baseline": "git HEAD in v1/R1 and v0r/R1 is identical to r1-docs (verified with diff -r)",
+    "v1": {
+      "approach": "Keeps book, cancel and move (as two confirmed steps: book new, then cancel old; A11). Single-step move G06 goes to phase 2; G04 split into G04a core + G04 tool; depth cuts A12-A15",
+      "removed_or_weakened": [
+        {"item": "G06 single-step move + 'exactly one reschedule' acceptance (to phase 2)", "kind": "scope/test", "disclosed": true},
+        {"item": "G06 'taken slot -> fresh slots; another customer's appointment refused' (now from G04/G05 checks)", "kind": "acceptance", "disclosed": true},
+        {"item": "G06 staging check of book/move/cancel + forced timeout (split to G10 drill and G11)", "kind": "test", "disclosed": true},
+        {"item": "Anonymous browsing; G03 'anonymous -> read-only'; G07 '21st anonymous turn per IP' cap; D9 per-IP cap", "kind": "scope/cap", "disclosed": true},
+        {"item": "G08 30 -> 20 cases (move 6->4, cancel 5->3, dates 4->3, policy window 3->2, another-customer 2->1); live cap 300 -> 200", "kind": "acceptance/evidence", "disclosed": true},
+        {"item": "G09 Cloud Trace export and the span-content check (I6) -> structured logs; kill-switch check 'trace shows no model call' -> logs", "kind": "test/observability", "disclosed": true},
+        {"item": "G09 30-day session deletion job -> G21 after launch (hard date launch+30)", "kind": "control", "disclosed": true},
+        {"item": "G11 launch-day baselines (completion, latency, cost) -> G20", "kind": "acceptance", "disclosed": true},
+        {"item": "G01 fake fixtures 5 salons -> 2", "kind": "test data", "disclosed": true},
+        {"item": "Billing budget alert G09 -> G10 (kept)", "kind": "floor moved", "disclosed": true},
+        {"item": "G07 browser acceptance 'Maya's move completes through the widget' -> scripted model via create_pending; real tools only end to end in G11", "kind": "acceptance weakened", "disclosed": false, "note": "explained inside the ticket only; not in the change table"},
+        {"item": "G11 'first-day monitoring of traces, token cost per completed operation' -> 'watch logs for errors and uncertain operations'", "kind": "monitoring weakened", "disclosed": "partial (baselines row only)"},
+        {"item": "G06 (phase 2) staging check narrowed from book/move/cancel to one move; staging-write cap 20 -> 10", "kind": "test", "disclosed": "partial"}
+      ],
+      "silent_count": 1,
+      "partial_count": 2,
+      "failure_rows_removed": 0,
+      "waits_changed": "W1/W2 unchanged; G08 gains blocked_by W1 (a fix)",
+      "floor": "intact: identity, confirm click, idempotent dispatch, max_llm_calls, per-customer cap, kill switch, budget alert, pilot-salon allow-list",
+      "added": "coverage grid (6 integrations x 8 failure types), two-step-move failure row with residual risk, 'no valid token' row, DB-down fail-closed test, 429-on-write test, cached-JWKS test, G07's hidden G04a dependency fixed",
+      "overclaim": "'Nothing else in the failure rows, tests, acceptance cases, waits or floor was removed' is not quite true (the G07 browser acceptance and G11 cost monitoring were weakened)",
+      "estimate_note": "G05 gains the changeable flag and move-instruction work with unchanged hours (4-6)"
+    },
+    "v0r": {
+      "approach": "Booking only at launch: cancel (G05) and move (G06) go wholly to phase 2; sign-in required; CI and deletion job split to G22 (phase 1, off the G11 path); G08 keeps 30 cases, rebalanced",
+      "removed_or_weakened": [
+        {"item": "Cancel and move capabilities at launch (G05, G06 to phase 2, tickets kept intact)", "kind": "scope", "disclosed": true},
+        {"item": "G06 staging check (book/move/cancel) -> G10 drill (forced uncertain booking) + G11 booking only", "kind": "test", "disclosed": true},
+        {"item": "G11 staging journey: Maya's move + booking + cancellation -> one booking", "kind": "acceptance", "disclosed": true},
+        {"item": "G11 first-day monitoring and baselines -> G12 (keeps a first-booking trace check)", "kind": "acceptance", "disclosed": true},
+        {"item": "CI on every push and the 30-day deletion job out of G09 into G22, which does not gate G11 (manual pre-deploy test run in G10 runbook)", "kind": "control", "disclosed": true},
+        {"item": "Anonymous browsing and the per-IP cap", "kind": "scope/cap", "disclosed": true},
+        {"item": "G08 move/cancel/policy-window cases replaced by booking and 'call the salon' cases (still 30)", "kind": "acceptance", "disclosed": true},
+        {"item": "G07 browser acceptance 'Maya's move' -> 'Maya books'", "kind": "acceptance", "disclosed": "implied by the scope cut, not listed"},
+        {"item": "I1 'B's appointment ID refused at tool and confirm' deferred to phase 2 (design I1 rewritten with phase-1 checks)", "kind": "test", "disclosed": "implied by the scope cut, not listed in the plan"}
+      ],
+      "silent_count": 0,
+      "implied_only_count": 2,
+      "failure_rows_removed": 0,
+      "waits_changed": "W1/W2 unchanged (W2 text changed to 'call the salon' wording); G08 live run still needs W1 but is not blocked by it (unchanged from the original; no finish change)",
+      "floor": "intact; adds a test that confirm refuses an operation kind this revision does not dispatch (rollback safety)",
+      "defects": ["Plan implementation map still says 'three propose_* tools' (design: one at launch)", "26 unsettled mentions under the new helper (old helper has no check); most are pointers"]
+    },
+    "B2_disclosure": {"v1": "1 silent, 2 partial, out of 13 items; dedicated 'removed or weakened' table with reasons", "v0r": "0 silent, 2 implied-only, out of 9 items; per-change table with finish after each change, plus a G08 note"},
+    "B3_fit": {
+      "v1": {"helper": "48.5-74.5 h of 90; finish 5.47-8 vs 8: fits; exit 0; no unsettled mentions (6 settled, all checked as fair pointers)", "matches_claims": true, "what_if_spot_checks": "A13 (30 cases) 5.47-8.67 reproduced exactly; G04 split = original total + 0.5 h true; A11 (keep G06) about 6.4-9.73, vs claimed 6.53-9.87 (same conclusion)", "scope_not_floor": true},
+      "v0r": {"helper": "48-74 h of 90; finish 5.2-8 vs 8: fits; old helper exit 0; new helper exit 1 only for the mention check", "matches_claims": true, "what_if_spot_checks": "'booking+cancel needs 10 days, 9 not enough': reproduced approximately (Dev B 6.0-9.47; Dev C 6.13-9.07 at 9 days, a miss by 0.07 d); claimed 6.13-9.6 / 6.27-9.2", "scope_not_floor": true},
+      "note": "Both fit with zero slack at the high end; neither has margin for the A4 login fallback"
+    },
+    "B4_trust": "v1, narrowly. Each cut is an item with its reason and what-if cost, a 9-day option restores three depth cuts, and the new two-step-move risk is written down. This lets a manager negotiate. Caveats: v1 weakens more evidence (20 eval cases, no traces, deletion job after launch, a non-atomic move enforced by instruction), and its 'nothing else removed' claim is slightly overstated. v0r is the more conservative product (booking only, 30 cases, traces, CI and deletion in phase 1), with equally honest disclosure but less option analysis. A risk-averse manager might prefer v0r's product while trusting v1's paperwork more."
+  },
+  "top_issues": [
+    "H5: 2 of 6 mentions_only entries hide real reverse dependencies (G12 needs G09: +4.3/+6.1 d; W6 needs G13/G14 evidence: +3.8/+7.9 d)",
+    "H5: ticket goal-ID density fell 63 % vs round 9; 4 paraphrases (G13, G15, G25, G01) avoid IDs the helper would flag",
+    "H5: round-9 escapes partly open: GA canary ramp 0 days, no Guidewire production client wait, no portal release wait, O6 baseline not requested",
+    "H5: approval check is satisfied by any upstream wait; regex misses quota, finance, vendor retest, change board for the pilot",
+    "R1 v1: G07 browser acceptance weakened silently; 'nothing else removed' slightly overclaimed",
+    "R1 v0r: stale implementation map; no structured removal list, but per-change table covers all substantive cuts"
+  ]
+}

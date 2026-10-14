@@ -33,9 +33,9 @@ implements, e.g. D1, D3.>
 
 ## Acceptance
 
-- [ ] <happy path, observable>
-- [ ] <important failure path>
-- [ ] <forbidden effect that must not happen>
+- [ ] A1 <happy path, observable>
+- [ ] A2 <important failure path>
+- [ ] A3 <forbidden effect that must not happen>
 
 Verification: <runnable command or test boundary; say offline, local
 integration or authorised live>.

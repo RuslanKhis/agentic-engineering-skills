@@ -105,6 +105,21 @@ State restart behavior, exhaustion outcomes and dated/symbolic cost assumptions.
 
 ## Failure and recovery
 
+Coverage grid, one row per external system including the model (see
+[failure review](../references/failure-review.md#build-the-coverage-grid-first)):
+
+| Integration | Unavailable or slow | Rejects the request | Write outcome unknown | Partial multi-step change | Credential expired or revoked | Rate limited or out of quota | Duplicate or concurrent request | Untrusted or malformed content |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+
+Action grid, one row per action that changes something:
+
+| Action | Over-broad or wrong target | Partially applied | Confirmation stale or changed | Outcome unknown | Repeated or concurrent |
+| --- | --- | --- | --- | --- | --- |
+
+Each cell cites `G04/A2` or says `n/a: <reason>`.
+
+Cross-cutting scenarios:
+
 | Failure window | User-visible outcome | Retained state / possible effects | Safe next action and recovery owner |
 | --- | --- | --- | --- |
 
