@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="#two-ways-to-use-it">Two ways to use it</a> ·
+  <a href="#where-to-start">Where to start</a> ·
   <a href="#getting-started">Getting started</a> ·
   <a href="#the-skills">The skills</a> ·
   <a href="#using-skills-together">Using skills together</a> ·
@@ -37,18 +37,22 @@ skills help it apply the book's engineering practices to your own application:
 handle failed tool calls, add memory, connect a browser interface, test agent
 behaviour, or prepare a deployment.
 
-## Two ways to use it
+## Where to start
 
 | You are… | Start with | What you get back |
 | --- | --- | --- |
+| **Not sure where AI fits, or which use case comes first** | `/adk-discovery` | A short discovery conversation, a ranked list of opportunities with the technology each needs (agent, LLM, classical ML, rules or a process change), the first use case with its outcome measure and baseline, and the exact prompt for the designer |
 | **Starting a new ADK application** | `/adk-system-designer` | A short design conversation, then an architecture document, a goal plan, and the exact prompt for the first goal |
 | **Changing an application you already have** | `/adk-engineer` | It names the specialist it is using, makes the change with local tests, and says what is still unverified |
+| **Presenting the work to decide the next step** | `/adk-presenter` | A slide outline with evidence under every claim, what to say, the questions to expect and a one-page decision memo, for a business or a technical audience, at proof-of-concept approval, production approval, results review, or as a public case study |
 
-Both lead to the same twenty specialists. You never need to remember which one
-fits: the designer writes the specialist into every goal, and `adk-engineer`
-picks one for any ticket or request. You can also call a specialist directly
-when you already know the topic. [Journey A](#journey-a-build-a-new-application)
-and [Journey B](#journey-b-maintain-an-application) below show the prompts.
+All four lead to the same eighteen specialists. You never need to remember which
+one fits: the designer writes the specialist into every goal, and
+`adk-engineer` picks one for any ticket or request. You can also call a
+specialist directly when you already know the topic.
+[Journey A](#journey-a-build-a-new-application),
+[Journey B](#journey-b-maintain-an-application) and
+[Journey C](#journey-c-win-the-decision) below show the prompts.
 
 You do not need the book or its example repository to use the skills. Install
 them in the project you want to work on. They guide your **coding agent**;
@@ -97,9 +101,10 @@ From your application's project directory, run:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*'
 ```
 
-Choose your coding agent when prompted. This installs **all twenty skills**
-for the current project: `adk-engineer`, `adk-system-designer`, the eleven
-chapter specialists and the seven cross-framework specialists.
+Choose your coding agent when prompted. This installs **all twenty-two skills**
+for the current project: `adk-discovery`, `adk-system-designer`,
+`adk-engineer`, `adk-presenter`, the eleven chapter specialists and the seven
+cross-framework specialists.
 Keep the quotes around `'*'` so your shell passes it unchanged.
 
 <details>
@@ -206,6 +211,21 @@ an explicit command makes your intended skill clear.
 
 ### Journey A: build a new application
 
+**0. Find the use case first, if nobody has chosen one.** Skip this when you
+already know what to build. Otherwise the discovery skill asks what the
+business does and where its journey breaks, ranks the opportunities, says
+which need an agent and which need classical ML, rules or a process change,
+and ends with the designer's prompt:
+
+```text
+/adk-discovery Leadership wants AI in <area> but has not said where. Help me
+find where it would pay off, which workflow to improve first, what outcome we
+would measure, and whether an agent is even the right tool. Save the brief.
+```
+
+It saves `docs/discovery/<topic>.md`. The designer reads that brief as
+answered scope and does not reopen the choice.
+
 **1. Design it in conversation.** The designer asks only what changes the
 design, offers defaults you can accept in one word, turns each requirement
 into contracts the system must keep, and explains each choice as the contract
@@ -254,6 +274,36 @@ Each run names the specialist it applies, verifies the goal's acceptance cases
 locally, records the evidence in the plan or ticket, and ends with the prompt
 for the next one. Nothing is deployed or paid for without your approval.
 
+### Journey C: win the decision
+
+Every phase boundary that needs someone's approval gets a presentation goal
+in the plan. The presenter builds it from the evidence the goals recorded,
+never from a number it made up:
+
+```text
+/adk-presenter Prepare the proof-of-concept approval presentation for a
+business audience from docs/discovery/<topic>.md, docs/architecture/<topic>.md
+and docs/plans/<topic>.md. Fifteen minutes. Then a technical version for the
+platform team.
+```
+
+```text
+/adk-presenter The proof of concept is done and its evidence is in
+docs/plans/<topic>.md. Prepare the production-approval presentation for
+leadership and the questions they will ask; label anything unmeasured as a
+hypothesis.
+```
+
+```text
+/adk-presenter Draft a public case study from the production results in
+docs/plans/<topic>.md, with the approvals and numbers we must gather before
+sharing it with our Google Cloud account team.
+```
+
+Expect one outline per audience under `docs/presentations/<topic>/`, with
+speaker notes in the same file, a one-page decision memo, and a deck check
+that fails when a slide carries a number without a source.
+
 ### Journey B: maintain an application
 
 Hand `adk-engineer` a ticket, a symptom or a change. It reads the project,
@@ -289,7 +339,7 @@ skill** in the catalogue below, and installation fixes under
 
 ## The Skills
 
-*The contents · One entry point, a system designer, eleven chapter specialists and seven cross-framework specialists.*
+*The contents · A discovery skill, a system designer, one entry point, a presenter, eleven chapter specialists and seven cross-framework specialists.*
 
 Choose a skill by the problem you need to solve. Each entry below explains
 when it helps, what to ask for, and the command that selects it. The numbered
@@ -297,8 +347,10 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 
 | What you need | Skill |
 | --- | --- |
-| Help choosing an approach or combining concerns | [adk-engineer](#adk-engineer) |
+| Where AI fits, which use case first, what to measure, and whether an agent, classical ML, rules or a process change is the right tool | [adk-discovery](#adk-discovery) |
 | A system-design conversation and architecture before implementation | [adk-system-designer](#adk-system-designer) |
+| Help choosing an approach or combining concerns | [adk-engineer](#adk-engineer) |
+| A presentation for a proof-of-concept approval, a production decision, a results review or a public case study | [adk-presenter](#adk-presenter) |
 | Sequential steps, parallel work or bounded loops | [adk-workflow-design](#adk-workflow-design) |
 | Reliable API calls and protection against duplicate actions | [safe-api-tool-calls](#safe-api-tool-calls) |
 | Usage limits, repeated-tool protection or human approval | [adk-operational-guardrails](#adk-operational-guardrails) |
@@ -323,6 +375,56 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 and request the same. In Gemini CLI or an Antigravity IDE integration, replace
 `/skill-name` with “Use the skill-name skill to” and keep the request.
 Antigravity 2.0 and its CLI also support the slash form. Adapt the scenario to your project.
+
+### [adk-discovery](skills/adk-discovery/SKILL.md)
+
+*Before design · Find where AI pays off and pick the first use case.*
+
+Use this when a company wants "AI" but has not said where, or has only a rough
+area in mind. It works in two entry modes. With a rough area, it finds where
+the current journey breaks (which step people abandon, re-key or wait on),
+picks the first workflow to improve and the business outcome to measure, with
+its baseline. With no use case at all, it asks what the business does, which
+KPIs matter and which processes drive them, then proposes where AI, ordinary
+automation or a process change would make a difference. Every opportunity gets
+a technology fit: an agent, a single LLM call, classical machine learning,
+rules or scripting, or no software at all, with the reason in a sentence a
+stakeholder can repeat. It records the hypothesis chain and a counter-metric,
+ranks the portfolio with a small helper so the arithmetic is not done in the
+model's head, saves `docs/discovery/<topic>.md`, and ends with the exact
+`adk-system-designer` prompt. It does not write contracts, architecture or
+goals; that is the designer's job, and the designer does not reopen the
+choice.
+
+**Invoke:** Claude Code `/adk-discovery` · Codex `$adk-discovery`
+
+Gemini CLI / Antigravity: "Use the adk-discovery skill to…"
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-discovery We sell advertising to small businesses and leadership wants
+to use AI to sell more easily, but nobody has said where. Ask me about the
+buying journey, find where advertisers drop out, and tell me which workflow
+to improve first and what we would measure.
+```
+
+```text
+/adk-discovery I run a regional logistics firm and do not know how AI agents
+work or where they would help. Ask me about the business, its numbers and
+its processes, then tell me where AI, plain automation or a process change
+would pay off, and what to try first.
+```
+
+```text
+/adk-discovery Here are five ideas our teams proposed for AI. Score them on
+value, feasibility, data readiness and risk, say which need an agent and
+which are really classical ML or a script, and write the brief for the one
+we should start with.
+```
+
+</details>
 
 ### [adk-engineer](skills/adk-engineer/SKILL.md)
 
@@ -428,6 +530,56 @@ Keep our existing stack and capture the decisions in docs/architecture/.
 Trace a successful request, a denied user, a lost tool response and a worker
 restart. Identify unnecessary components and gaps in our guarantees.
 Give us a revised design and acceptance plan; do not implement it yet.
+```
+
+</details>
+
+### [adk-presenter](skills/adk-presenter/SKILL.md)
+
+*At every decision · Show the value, with evidence under every claim.*
+
+Use this when the work must be presented to the people who decide what
+happens next: approval to build a proof of concept, a review of that proof of
+concept with a production decision, a final results review, or a public case
+study to share with Google or the wider world. For each stage it prepares two
+versions, one for business decision-makers (the decision requested, results
+against the criteria agreed in advance, cost, risk, options) and one for the
+technical teams who will inherit the system (architecture, contracts,
+evidence, operations, handover). It reads the discovery brief, the design and
+the plan, takes every number from recorded evidence, labels anything
+unmeasured as a hypothesis, and writes a slide outline with an action title
+and an evidence citation per slide, the spoken narrative, the questions to
+expect and a one-page decision memo. A helper checks the outline: a number
+without a source, a slide without evidence, or a missing stage topic fails
+the check. The designer plans these presentations as goals at each phase
+boundary.
+
+**Invoke:** Claude Code `/adk-presenter` · Codex `$adk-presenter`
+
+Gemini CLI / Antigravity: "Use the adk-presenter skill to…"
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-presenter We need leadership's approval for a four-week proof of
+concept. Build the business presentation from docs/discovery/ads.md and
+docs/plans/ads.md: the problem, the hypothesis, the success criteria we
+will be judged on, cost, risks and the decision we are asking for.
+```
+
+```text
+/adk-presenter The proof of concept is finished and its evidence is in
+docs/plans/ads.md. Prepare the production-approval presentation for
+leadership and a separate technical one for the platform team, with the
+questions each will ask. Two acceptance cases were never run; say so.
+```
+
+```text
+/adk-presenter The agent has run in production for a quarter with measured
+results in docs/plans/ads.md. Draft the final results presentation and a
+public case study, and list the approvals and numbers we need before
+sharing it with our Google Cloud account team.
 ```
 
 </details>
@@ -1594,6 +1746,32 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Discovery and presenter · 15 October 2026
+
+Two skills now bracket the design-and-build journey. `adk-discovery` runs
+before the designer when a company has only an area in mind, or no use case
+at all: it finds where the journey breaks or maps KPIs to the processes that
+drive them, gives every opportunity a technology fit (agent, single LLM call,
+classical machine learning, rules, or a process change), ranks the portfolio
+with a helper, and hands the designer a brief with the first use case, its
+measure, baseline and counter-metric. `adk-presenter` runs at every phase
+boundary that needs a decision: proof-of-concept approval, the
+proof-of-concept review with a production decision, the final results
+review, and a public case study, each for a business and a technical
+audience, built from the plan's recorded evidence with a citation under
+every claim. The designer plans those presentations as goals and reads a
+discovery brief as answered scope; the router sends both kinds of request to
+the right skill. Four dated research notes record the sources behind the
+discovery method, the technology triage, the presentation practice and
+Google's co-marketing rules. All **22 packages** pass validation; the
+offline suites run **688 tests** with **59 optional SDK checks skipped**,
+including 26 tests for the two new helpers. Two fresh-agent trials, one
+simulating a product owner for the discovery conversation and one
+preparing both production-approval decks from a synthetic plan, rated the
+skills 3 and 4 of 5 for ease and produced 36 friction items; the
+contradictions and gaps they found were fixed the same day. See the
+[trial record](docs/testing/discovery-and-presenter-2026-10-15.md).
 
 ### Human-effort estimates · 9 October 2026
 

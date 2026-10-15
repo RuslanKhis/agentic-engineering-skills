@@ -35,6 +35,18 @@ Preserve agreed requirements, the product's domain, working infrastructure and
 dependency pins. A service already present is a constraint to evaluate, not an
 automatic choice for every new responsibility.
 
+If a discovery brief exists (by default `docs/discovery/<topic>.md`, written
+by `adk-discovery`), read it first. It supplies the chosen first use case, the
+outcome measure and its baseline, the hypothesis chain, the stakeholders and
+their decision dates, the technology-fit decision and the constraints known so
+far. Treat its confirmed answers as answered and ask only what it leaves open.
+Do not reopen the opportunity ranking or the use-case choice; if the design
+finds the chosen use case infeasible or its measure unobservable, say exactly
+what was found and offer the prompt to return to `adk-discovery` with it. When
+the request is itself a discovery question (where AI should go, which workflow
+first, whether an agent is even the right tool), it belongs to `adk-discovery`;
+say so and give that prompt instead of designing around an unchosen use case.
+
 Summarize one concrete user journey, its current friction, intended outcome and
 fixed constraints in a few sentences. Keep that journey as the running example
 when explaining components and failures. Distinguish observed facts, user
@@ -66,6 +78,10 @@ answered, in one turn, and offer the default so a user can accept it in one word
   reading the design.)
 - What data does it touch and what can it change? (Default: synthetic data,
   read only.)
+- Who must approve the next step, and when: a go-ahead for the proof of
+  concept, a production decision after it, a results review? (Default: the
+  user alone, no date.) Each such review becomes a presentation goal at that
+  phase boundary, owned by `adk-presenter`.
 
 Read [delivery profiles](references/delivery-profiles.md) to turn the answers
 into a profile (proof of concept, quality-judged assignment, internal tool, MVP
@@ -315,7 +331,16 @@ contract IDs they prove.
 
 Finish with dependency-ordered goals for useful end-to-end behavior, grouped
 into phases: phase 1 fits the stated capacity, phase 2 graduates or hardens
-the result, and a later list holds deferred items with their triggers. Each
+the result, and a later list holds deferred items with their triggers. Where
+someone's decision stands between phases (approval to build, approval to
+productionise, a results review), add a **presentation goal** at that
+boundary: type presentation, `Primary skill: adk-presenter`, one goal per
+audience the review needs (business, technical), estimated in human hours
+because preparing and giving it is hands-on work, with the review date as a
+calendar wait on the goals that depend on the decision. Its acceptance is that
+the outline passes the presenter's deck check and every claim cites evidence
+recorded in this plan; the goal cannot complete before the goals whose
+evidence it presents. Each
 goal needs a stable ID, phase, estimate, the contracts it proves and decisions
 it implements (by ID), bounded changes and integration points, a `Primary
 skill` and `Supporting skills` line, prerequisites, acceptance cases that cite
@@ -334,7 +359,9 @@ prompt for the next ready goal in a copyable block, for example:
 /adk-engineer Carry out G01 from docs/plans/<topic>.md.
 ```
 
-The user should never have to work out what to type next.
+The user should never have to work out what to type next. When the next
+ready goal is a presentation, the prompt names `adk-presenter` and the plan
+path instead.
 
 `adk-engineer` carries out a goal or ticket with its named specialist without
 restarting architecture discovery. If the user has chosen another planning

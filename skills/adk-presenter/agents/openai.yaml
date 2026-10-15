@@ -1,0 +1,4 @@
+interface:
+  display_name: "ADK Presenter"
+  short_description: "Present an agent project to business or technical stakeholders"
+  default_prompt: "Use $adk-presenter to prepare the <proof-of-concept approval / production approval / final results / case study> presentation for a <business / technical> audience from docs/plans/<topic>.md and its evidence. Build the slide outline, the spoken narrative and the questions to expect; cite evidence under every claim."

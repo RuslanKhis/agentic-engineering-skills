@@ -57,6 +57,7 @@ change crosses its boundary. Before any edit, tell the user in one line:
 
 | Request concerns | Specialist skill |
 | --- | --- |
+| Where AI should be introduced at all, which workflow or use case to improve first, what business outcome to measure, or whether an agent, classical ML, rules or a process change is the right tool | `adk-discovery` |
 | Whole-application architecture, requirements and trade-offs before coding, or a cross-cutting system review | `adk-system-designer` |
 | Workflow structure, handoffs, parallel work, loops, events or callbacks | `adk-workflow-design` |
 | External API retries, deadlines, duplicate writes or uncertain outcomes | `safe-api-tool-calls` |
@@ -77,8 +78,14 @@ change crosses its boundary. Before any edit, tell the user in one line:
 | Personal data in prompts, tools, storage, logs or streamed answers | `protect-adk-sensitive-data` |
 | Tool identity, credentials, Secret Manager or delegated OAuth | `adk-tool-auth-and-secrets` |
 | Natural-language SQL agents, schema retrieval or controlled query execution | `adk-sql-agent-engineering` |
+| A presentation, deck, narrative, questions to expect or decision memo for a proof-of-concept approval, a production decision, a results review, or a public case study | `adk-presenter` |
 
-Use `adk-system-designer` for the system-design conversation. A focused feature
+Use `adk-system-designer` for the system-design conversation. `adk-discovery`
+comes before it when the use case is not yet chosen or the business outcome is
+unnamed; it ends with the designer's prompt. `adk-presenter` turns a plan's
+recorded evidence into stakeholder material and never implements; a goal whose
+primary skill is `adk-presenter` produces documents under `docs/presentations/`,
+not code, and completes when its outline passes the deck check. A focused feature
 design or code fix stays with its topic specialist; it does not need a new
 architecture interview. Preserve the user's requested design-only scope and
 already agreed architecture when handing work between skills.

@@ -740,6 +740,34 @@
         "States the human review and verification still owed for the change in hours, what to check, and the steps only a person can do.",
         "Records this in the ticket's evidence."
       ]
+    },
+    {
+      "id": "discovery-to-design-handoff",
+      "prompt": "Leadership wants AI in how we sell advertising to small businesses but has not said where. Work out where it would pay off, what to try first and what we would measure, then get us to a design.",
+      "available_skills": ["adk-discovery", "adk-system-designer", "adk-engineer", "adk-agent-evaluation"],
+      "context": "No code exists. The user can answer questions about the buying journey (product choice, creative upload, pricing, booking), has last quarter's funnel counts by step, and knows that pricing and inventory live in existing services. Leadership expects a proof-of-concept decision in two weeks.",
+      "expected_primary": "adk-discovery",
+      "assertions": [
+        "Asks where advertisers abandon the current journey and which systems own the facts before proposing any technology, and records the user's funnel numbers as the baseline rather than inventing one.",
+        "Produces a ranked opportunity portfolio with an explicit technology fit per opportunity (agent, LLM, classical ML, rules or process change) and explains why the first use case is narrow and measurable.",
+        "States the hypothesis chain from reduced effort to the business outcome with a counter-metric (for example refunds or support load), and labels every unmeasured benefit as a hypothesis.",
+        "Saves a discovery brief and ends with the exact adk-system-designer prompt that carries the chosen use case, measure, baseline, stakeholders and decision date, without writing contracts, architecture or goals itself.",
+        "Notes the proof-of-concept decision in two weeks as a presentation milestone the designer should plan for with adk-presenter."
+      ]
+    },
+    {
+      "id": "presenter-poc-review-evidence-only",
+      "prompt": "Prepare the leadership presentation that decides whether our proof of concept goes to production. Use docs/plans/campaign-assistant.md and its recorded evidence. Business audience, fifteen minutes.",
+      "available_skills": ["adk-presenter", "adk-system-designer", "adk-agent-evaluation", "adk-engineer"],
+      "context": "The plan records: G01 to G04 complete with acceptance evidence; checkout completion measured on 312 proof-of-concept sessions against last quarter's baseline; refunds unchanged; two acceptance cases still marked not run; model and cloud spend recorded per goal; an open decision about agency delegation. The success criteria were agreed before the build and are written in the design.",
+      "expected_primary": "adk-presenter",
+      "assertions": [
+        "Opens with the decision requested and the result against the pre-agreed success criteria, taking every number from the plan's recorded evidence and citing the goal or acceptance ID under each claim.",
+        "States the two not-run acceptance cases and the open delegation decision as limits on the slides themselves rather than omitting them, and labels any projected production benefit as a hypothesis.",
+        "Writes a stage-appropriate outline (criteria results, what was learned, production scope, cost, risks, the ask), the spoken narrative and a question list for a business audience, and keeps architecture detail for the technical version.",
+        "Runs or describes the deck check so that every slide carries an evidence citation, and produces a one-page decision memo with the decision, owners and the date.",
+        "Does not modify application code, rerun evaluations or invent a demo result to fill a gap in evidence."
+      ]
     }
   ]
 }

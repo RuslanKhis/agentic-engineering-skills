@@ -1,0 +1,8 @@
+Rank | ID | Score | Value | Feas. | Data | Risk | Fit | Measure | Opportunity
+1 | O1 | 11 | 5 | 4 | 4 | 2 | llm | Product-choice step completion rate (advertisers who select a product and reach creative upload / eligible starters), weekly | Product choice: recommend one catalogue product from the advertiser's own description of business and goal, with price and availability looked up by code
+2 | O3 | 10 | 2 | 5 | 4 | 1 | rules | Pricing-step completion rate, weekly | Pricing clarity: show the exact price for the chosen product, dates and locations at product choice, computed by the pricing service
+3 | O4 | 6 | 1 | 4 | 4 | 3 | process | Booking-step completion rate and sales escalations per week | Booking and escalations: add reason codes to sales escalations and fix the booking form
+4 | O2 | 4 | 3 | 3 | 2 | 4 | llm | Time to first usable creative (minutes from entering the creative step to a creative accepted by the platform), weekly median | Creative upload: produce a first usable creative in the right format from the advertiser's photo or text
+
+First use case: O1 (Product choice: recommend one catalogue product from the advertiser's own description of business and goal, with price and availability looked up by code)
+Ready for adk-system-designer: the first use case has a measure and a technology fit.

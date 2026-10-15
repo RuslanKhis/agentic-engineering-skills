@@ -399,6 +399,62 @@
       "prompt": "Split our pipeline into a writer and a reviewer sub-agent with a bounded revision loop and pass the draft through session state.",
       "should_trigger": false,
       "rationale": "In-process sub-agent orchestration with no process, team or protocol boundary belongs to adk-workflow-design."
+    },
+    {
+      "id": "discovery-positive",
+      "skill": "adk-discovery",
+      "prompt": "Our company sells advertising to small businesses and leadership wants to 'use AI' to sell more easily, but nobody has said where. Help me work out where in the buying journey AI would pay off, which workflow to improve first, and what business outcome we would measure, before anyone designs anything.",
+      "should_trigger": true,
+      "rationale": "The use case is not chosen yet; finding the friction, ranking opportunities and naming the outcome measure is discovery, which precedes system design."
+    },
+    {
+      "id": "discovery-no-idea-positive",
+      "skill": "adk-discovery",
+      "prompt": "I run operations for a regional logistics firm. I keep hearing about AI agents but do not know how the technology works or which of our processes it could help. Ask me about the business and its numbers, then tell me where AI, ordinary automation or something else would make a difference and what to try first.",
+      "should_trigger": true,
+      "rationale": "A KPI-to-process discovery with a technology-fit judgement (agent, classical ML, rules or process change) is the skill's second entry mode."
+    },
+    {
+      "id": "discovery-near-miss",
+      "skill": "adk-discovery",
+      "prompt": "We have already decided to build an ADK assistant that recommends display campaigns and takes advertisers through checkout; the outcome metric is checkout completion. Design the architecture and the implementation plan for it.",
+      "should_trigger": false,
+      "rationale": "The use case and its measure are chosen; what remains is system design, so the designer leads and discovery should not reopen the choice."
+    },
+    {
+      "id": "discovery-market-research-near-miss",
+      "skill": "adk-discovery",
+      "prompt": "Write a market-sizing report on the advertising technology industry in Australia with competitor profiles and growth forecasts for our investor update.",
+      "should_trigger": false,
+      "rationale": "General market research for investors is not a search for where AI fits in the company's own processes."
+    },
+    {
+      "id": "presenter-positive",
+      "skill": "adk-presenter",
+      "prompt": "Our four-week ADK proof of concept is finished and the evidence is recorded in docs/plans/campaign-assistant.md. Prepare the presentation for the leadership review that decides whether we fund the production build: slide outline, what I say, and the questions they will ask. Then a separate technical version for the platform team.",
+      "should_trigger": true,
+      "rationale": "Turning recorded plan evidence into a stage-specific deck, narrative and question preparation for business and technical audiences is the presenter's job."
+    },
+    {
+      "id": "presenter-case-study-positive",
+      "skill": "adk-presenter",
+      "prompt": "The agent has been in production for three months with measured results in our plan. Draft a public case study we could share with our Google Cloud account team, with the approvals and numbers we need to gather first.",
+      "should_trigger": true,
+      "rationale": "A public case study built from recorded results, with its approval checklist, is the presenter's case-study mode."
+    },
+    {
+      "id": "presenter-near-miss",
+      "skill": "adk-presenter",
+      "prompt": "Add a demo mode to our ADK agent's React frontend so the sales team can show streamed replies on stage without a login.",
+      "should_trigger": false,
+      "rationale": "Changing the application for a demo is frontend implementation, not preparing a stakeholder presentation from evidence."
+    },
+    {
+      "id": "presenter-eval-report-near-miss",
+      "skill": "adk-presenter",
+      "prompt": "Our evaluation report says every case passed but I suspect some tool failures were ignored. Audit the result files and tell me what the real pass rate is.",
+      "should_trigger": false,
+      "rationale": "Auditing evaluation results produces the evidence; presenting it to stakeholders is a later step and a different skill."
     }
   ]
 }

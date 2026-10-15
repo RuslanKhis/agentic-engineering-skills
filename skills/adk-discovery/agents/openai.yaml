@@ -1,0 +1,4 @@
+interface:
+  display_name: "ADK Discovery"
+  short_description: "Find where AI pays off and pick the first use case"
+  default_prompt: "Use $adk-discovery to work out where AI could improve <my business or journey>. Ask what changes the answer, rank the opportunities, say which need an agent, classical ML, rules or a process change, and write the discovery brief with the prompt for adk-system-designer."

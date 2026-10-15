@@ -76,13 +76,17 @@ Explain ordinary application enforcement alongside framework/service choices.
 
 ## Goals and dependencies
 
-| ID and goal | Phase | Type: discovery / implementation | Human hours | Depends on | Primary skill | State / blocker |
+| ID and goal | Phase | Type: discovery / implementation / presentation | Human hours | Depends on | Primary skill | State / blocker |
 | --- | --- | --- | --- | --- | --- | --- |
 
 Use stable IDs and readable names. State may be proposed, ready, blocked,
 in progress or complete. Ready describes resolved prerequisites, not new authority.
 Each implementation goal is a useful end-to-end slice. Leave dependent future
-goals coarse when an unresolved decision could change their scope.
+goals coarse when an unresolved decision could change their scope. A
+presentation goal sits at each phase boundary that needs someone's decision
+(`Primary skill: adk-presenter`, one per audience); it depends on the goals
+whose evidence it presents, and the decision date is a calendar wait that the
+next phase's goals depend on.
 
 ### G01 — <first useful behavior or precise decision>
 

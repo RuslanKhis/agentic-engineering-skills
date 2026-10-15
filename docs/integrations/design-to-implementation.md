@@ -10,6 +10,46 @@ For the complete sequence of copyable prompts, follow the README's
 This guide explains which document owns what, how a ticket carries the ADK
 guidance, and how to resume the work.
 
+## Start before the design when the use case is not chosen
+
+`adk-discovery` runs before the designer when the company has only an area
+("use AI to sell advertising more easily") or no idea at all where AI fits.
+It finds the friction in the current journey or maps KPIs to the processes
+that drive them, ranks the opportunities, says which need an agent, a single
+LLM call, classical ML, rules or a process change, and names the first use
+case with its outcome measure and baseline. It saves
+`docs/discovery/<topic>.md` and ends with the designer's prompt:
+
+```text
+/adk-system-designer Read docs/discovery/<topic>.md and design the first use
+case it selects. Treat its confirmed answers as settled; ask only what it
+leaves open. Design only.
+```
+
+The designer reads the brief as answered scope and does not reopen the
+ranking. If the design finds the chosen use case infeasible, it says what it
+found and hands back to discovery with that finding, rather than designing
+around it.
+
+## Present at phase boundaries
+
+Where someone's decision stands between phases (approval to build the proof of
+concept, approval to productionise it, a results review), the plan carries a
+presentation goal at that boundary with `Primary skill: adk-presenter`, one
+per audience. `adk-presenter` builds the outline, the spoken narrative, the
+questions to expect and a one-page decision memo from the plan's recorded
+evidence, cites a goal, contract or decision under every claim, and runs its
+deck check before the outline is called ready:
+
+```text
+/adk-presenter Prepare the production-approval presentation for a business
+audience from docs/plans/<topic>.md and docs/architecture/<topic>.md.
+Fifteen minutes. Cite evidence under every claim; label hypotheses.
+```
+
+The decision and its date are recorded in the plan as a calendar wait that the
+next phase's goals depend on.
+
 ## Ask for the handoff
 
 In Claude Code:

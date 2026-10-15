@@ -153,6 +153,7 @@ plus review. Label them as assumptions and adjust to the project:
 | Evaluation set of 20 to 50 labelled cases with a runner (mostly labelling) | 4–8 |
 | First Cloud Run deployment with a service account and secrets | 3–6 |
 | Evaluation gate in CI | 3–6 |
+| Stakeholder presentation for one audience: outline from plan evidence, narrative, questions, one rehearsal (`adk-presenter`) | 3–6, plus the review date as a wait |
 
 For a team new to ADK, multiply by about 1.5. State the multiplier once in
 the plan and apply it to every goal, hands-on and review alike, rather than
@@ -273,6 +274,10 @@ quieter" without a new design conversation.
 3. **Later:** the remaining deferred items, one line each with the trigger that
    brings it forward (more users, real data, a measured latency, an incident,
    a model retirement date) and the risk accepted while it waits.
+
+A phase boundary that needs someone's decision gets a presentation goal
+(`adk-presenter`) before it and the decision date as a calendar wait after
+it; the goals that need the decision depend on that wait, not on the deck.
 
 Say whether phase 1 code is meant to be kept. A throwaway demo can hard-code
 what a kept slice would configure; a kept slice puts the same choice where

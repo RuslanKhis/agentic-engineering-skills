@@ -1,0 +1,53 @@
+# check_deck.py output (skill scripts/check_deck.py, run from the trial project root)
+
+## Run 1: production-approval-business.md (first draft; no iteration needed)
+$ python3 "$SKILL_DIR/scripts/check_deck.py" --deck docs/presentations/campaign-assistant/production-approval-business.md
+production-approval deck for a business audience, 15 minutes, 15 slides
+   1. [none    ] Campaign assistant: what the proof of concept measured, and the decision we ask for on 30 October  covers: title
+   2. [cited   ] The proof of concept met its two measured criteria; we recommend funding production for single-business advertisers once two unrun checks pass  covers: summary
+   3. [cited   ] Two of the two outcome criteria agreed on 12 September were met, measured by portal analytics and finance on live advertisers  covers: criteria-results
+   4. [cited   ] Checkout completion moved from 31% to 36% on 312 assisted sessions; unassisted sessions in the same fortnight sat at 30%  covers: criteria-results
+   5. [cited   ] Two acceptance cases were never run, and one of them guards against a duplicate order  covers: learned
+   6. [cited   ] What we learned changes the production plan in three places: agencies, retries and measurement  covers: learned
+   7. [cited   ] Production scope: single-business advertisers in the existing checkout, offered to all sign-ins, sponsored by the Director of SMB Sales  covers: production-scope
+   8. [cited   ] The proof of concept cost 58 hours and $142; production hours and monthly cost are not yet estimated  covers: cost
+   9. [cited   ] Three risks, each with a control and an owner, and one of them is already a condition of the ask  covers: risks
+  10. [cited   ] A person confirms every purchase and the sales desk reviews every refund; the model never sets a price or decides eligibility  covers: risks
+  11. [cited   ] Timeline: conditions closed by 13 November, production scope and estimate approved, first quarter-long measurement from launch  covers: production-scope, timeline
+  12. [cited   ] Decision: stop, extend the proof of concept, or fund production at reduced scope; we recommend funding with two conditions, Director of SMB Sales, 30 October 2026  covers: ask
+  13. [cited   ] Appendix: the baseline, who measured it and when  covers: questions
+  14. [cited   ] Appendix: what the result rests on, and what was not measured  covers: questions
+  15. [cited   ] Appendix: what happens if the model's price or behaviour changes, and who signed off  covers: questions
+Every slide cites evidence or says why not, and the stage's coverage is complete.
+exit=0
+
+## Run 1: production-approval-technical.md (first draft; no iteration needed)
+$ python3 "$SKILL_DIR/scripts/check_deck.py" --deck docs/presentations/campaign-assistant/production-approval-technical.md
+production-approval deck for a technical audience, 30 minutes, 15 slides
+   1. [none    ] Campaign assistant: the proof of concept against its design, the evidence, and the work production needs  covers: title
+   2. [cited   ] Eight of ten acceptance cases passed once; two were not run; production needs observability, budgets and a CI evaluation set that do not exist yet  covers: summary
+   3. [cited   ] What was built matches the design: one agent, three tools, Cloud Run behind the portal identity; no deviations are recorded  covers: architecture
+   4. [cited   ] Evaluation results: 8 of 10 acceptance cases passed, each run once by hand; there is no evaluation report beyond the plan's evidence sections  covers: evidence, criteria-results
+   5. [cited   ] Two cases not run: the C4 idempotency path has never been exercised, and the quote-expiry requote (D5) has never been triggered  covers: learned
+   6. [cited   ] The demo is build poc-0.3 and the numbers cover build poc-0.3; the demo runs on the same inputs only where it uses the test advertisers  covers: evidence
+   7. [cited   ] Measured cost: $142 model and cloud for the whole project; per-session, latency and token figures were not measured  covers: cost
+   8. [cited   ] Production architecture changes: everything in the deferred-controls table, plus agency exclusion at the identity boundary  covers: architecture, production-scope
+   9. [cited   ] Contracts your services depend on: four contracts, three with a passed case behind them, one (C4) untested  covers: contracts
+  10. [cited   ] Security and sensitive data: identity is the portal's header, the agent writes only orders, and none of this has an adversarial test  covers: risks
+  11. [cited   ] Operations today: no alerts, no runbook, no on-call; the SLIs and who is paged are G05 decisions this room owns  covers: operations
+  12. [cited   ] Release and rollback: the model is pinned in the plan, but there is no evaluation gate, no staged promotion and no joint rollback of prompt, model and schema  covers: operations
+  13. [cited   ] What your team inherits: one agent, three tools, ten acceptance cases, a design and a plan; the hours to make it operable are not estimated  covers: production-scope
+  14. [cited   ] Decision: name the on-call owner, estimate G05, and run G03/A3 and G04/A2 by 13 November 2026, or say this cannot be hosted at that scope  covers: ask
+  15. [cited   ] Appendix: answers from the record to the questions this room will ask  covers: questions
+Every slide cites evidence or says why not, and the stage's coverage is complete.
+exit=0
+
+## Probe (not a deliverable): deliberately flawed deck to confirm the checker catches numbers without evidence and hypothesis-only slides
+production-approval deck for a business audience, 15 minutes, 3 slides
+   1. [none    ] Title  covers: title
+   2. [labelled] Completion rose to 36% and will reach 45% next quarter  covers: criteria-results, learned, production-scope, cost, risks, ask
+   3. [n/a     ] Costs 42 hours and $500 a month  covers: cost
+ERROR slide 3 (line 15, Costs 42 hours and $500 a month): numbers without evidence: 42 hours, $5
+WARNING slide 2 (line 6, Completion rose to 36% and will reach 45% next quarter): numbers on a hypothesis or assumption slide; the title must read as expected, not measured
+WARNING timing: 2 content slides for 15 minutes leaves over three minutes a slide; check the talk is not carried by unrecorded material
+exit=1
