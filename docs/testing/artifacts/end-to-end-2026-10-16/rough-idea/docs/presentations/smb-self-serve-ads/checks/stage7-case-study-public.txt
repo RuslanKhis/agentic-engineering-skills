@@ -1,0 +1,18 @@
+case-study deck for a public audience, 10 minutes, 7 slides (6 timed), notes about 3.5 spoken minutes
+   1. [none    ] Northlight Media: guided product choice for small advertisers, Built on Google Cloud  covers: title
+   2. [cited   ] The challenge: 38% of 2,140 small-business advertisers left the self-serve purchase at product choice in Q3 2026  covers: challenge
+   3. [cited   ] The solution: one sentence in, one to three fitting products with reasons out; code filters, a Gemini model ranks, a person still confirms  covers: solution
+   4. [cited   ] Results: completion 69.4% on 2,310 starts over Q1 2027 against 62%; in the pilot 70.8% against a 63.1% control; refunds 2.9%  covers: results
+   5. [cited   ] What did not improve and what is still being measured: escalations are reported, not logged; two incidents; no control arm in production  covers: results
+   6. [cited   ] What's next: a discovery for the next funnel step and a one-month control arm with an escalation log; nothing promised beyond the plan  covers: next
+   7. [cited   ] The ask: route the submission pack to customer reference marketing; legal, communications and the security review are pending on our side  covers: next, ask
+WARNING slide 3 (line 18, The solution: one sentence in, one to three fitting products with reasons out; code filters, a Gemini model ranks, a person still confirms): title runs over 20 words; a headline is at most two lines
+WARNING slide 3 (line 18, The solution: one sentence in, one to three fitting products with reasons out; code filters, a Gemini model ranks, a person still confirms): body holds 63 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 4 (line 30, Results: completion 69.4% on 2,310 starts over Q1 2027 against 62%; in the pilot 70.8% against a 63.1% control; refunds 2.9%): title runs over 20 words; a headline is at most two lines
+WARNING slide 4 (line 30, Results: completion 69.4% on 2,310 starts over Q1 2027 against 62%; in the pilot 70.8% against a 63.1% control; refunds 2.9%): body holds 49 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 5 (line 41, What did not improve and what is still being measured: escalations are reported, not logged; two incidents; no control arm in production): title runs over 20 words; a headline is at most two lines
+WARNING slide 5 (line 41, What did not improve and what is still being measured: escalations are reported, not logged; two incidents; no control arm in production): body holds 55 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 6 (line 53, What's next: a discovery for the next funnel step and a one-month control arm with an escalation log; nothing promised beyond the plan): title runs over 20 words; a headline is at most two lines
+WARNING slide 7 (line 65, The ask: route the submission pack to customer reference marketing; legal, communications and the security review are pending on our side): title runs over 20 words; a headline is at most two lines
+WARNING timing: the notes hold 528 words, about 3.5 minutes at 150 a minute, for a 10-minute slot; the rest is unscripted
+Every slide cites evidence or says why not, and the stage's coverage is complete.

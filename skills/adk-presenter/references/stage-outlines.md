@@ -13,33 +13,37 @@ report and runbooks by path. The required `Covers:` tags per stage are in
 
 **Business, about 10 slides, 10 to 15 minutes**
 
-1. Executive summary: "<Process> costs <baseline> today; a <timebox> proof of concept tests whether an agent cuts it by <hypothesis>" (`summary`; SCQA in four lines, from the discovery brief)
+1. Executive summary: "<Step> loses <baseline measure> today; a <timebox> proof of concept tests whether <use case> changes it by <hypothesis>" (`summary`; SCQA in four lines, from the discovery brief)
 2. "Today <step> loses <baseline measure> per <unit>" (`problem`; funnel or process data with source and date)
 3. "The complication is <what changed or hurts>" (`problem`; the brief's friction)
 4. "We will test one hypothesis: <hypothesis chain>" (`hypothesis`; labelled as such)
-5. "Success means <criteria and thresholds>, measured by <method> on <sample>" (`success-criteria`; the design's outcome contract and measurement plan)
+5. "Success means <criteria and thresholds>, measured by <method> on <sample>" (`success-criteria`; the design's outcome contract and measurement plan, or the brief's threshold sentences when drafted before the design)
 6. "We stop early if <kill criteria>, reviewed on <date>" (`success-criteria`; plan milestones)
 7. "Scope: <first use case>; not <exclusions>; a person before every <effect>" (`scope`; design profile and floor)
-8. "The proof of concept costs <human hours> and about <model and cloud> over <timebox>" (`cost`; the plan's schedule check and spend assumptions, estimates labelled)
+8. "The proof of concept costs <human hours> and about <model and cloud> over <timebox>" (`cost`; the plan's hours and spend ceiling, estimates labelled; "pending design" from the brief alone. Per-conversation cost is measured in the pilot, not promised here)
 9. "Three risks, each with a control and an owner" (`risks`; design contracts and deferred-control table)
 10. "Decision: do nothing, run the proof of concept, run a wider pilot; we recommend <option>; <decider> by <date>" (`ask`; what you will see at the end: a measured report, not only a demo)
 
 **Technical, about 12 slides, 20 to 30 minutes**
 
 1. Executive summary: "<Agent> is <architecture> on <runtime>; the proof of concept tests <hypothesis> in <timebox>" (`summary`)
-2. "The user and task boundary is <scope>" (`scope`; in and out of scope, profile)
-3. "Architecture: <components and trust boundaries>" (`architecture`; design diagram)
-4. "Contracts the proof of concept must keep" (`contracts`; C IDs with enforcement points)
-5. "Data and access: <sources> through <identity>" (`dependencies`; data owners, permissions requested, waits)
-6. "Evaluation plan: <n> cases, trajectory and response checks, thresholds" (`evidence-plan`; acceptance cases by goal)
-7. "How the baseline is or will be measured" (`success-criteria`; method, sample, owner)
+2. "Today <step> loses <baseline measure>; the proof of concept measures <metric> against it" (`problem`, `success-criteria`; the brief's baseline and the design's outcome contract)
+3. "The user and task boundary is <scope>" (`scope`; in and out of scope, profile)
+4. "Architecture: <components and trust boundaries>" (`architecture`; design diagram)
+5. "Contracts the proof of concept must keep" (`contracts`; C IDs with enforcement points)
+6. "Data and access: <sources> through <identity>" (`dependencies`; data owners, permissions requested, waits)
+7. "Evaluation plan: <n> cases, trajectory and response checks, thresholds" (`evidence-plan`; acceptance cases by goal)
 8. "Security and sensitive-data boundaries" (`risks`; exposure table, floor controls)
-9. "Cost model per conversation and per month" (`cost`; token and hosting assumptions, estimates labelled)
+9. "What the proof of concept costs: <hours>, <spend ceiling>, and the goal that measures cost per conversation" (`cost`; the plan's hours and the design's ceiling or symbolic estimate, labelled)
 10. "What we ask of your team: <hours, reviews, environments>" (`dependencies`)
-11. "What you get back if it stops: code, evaluation set, findings" (`problem` or `hypothesis` context; plan's phase 1 deliverables)
-12. "Decision: we need <access, environment, reviewer> by <date>; owner <name>" (`ask`)
+11. "What you get back if it stops: code, evaluation set, findings" (`hypothesis`; plan's phase 1 deliverables)
+12. "Decision: we need <access, environment, reviewer> by <date>; owner <name>" (`ask`; the front matter's decider is the person who grants these)
 
 ## Production approval (proof-of-concept review)
+
+The business summary counts the agreed success criteria met; the technical
+summary counts acceptance cases passed. Each deck states both numbers once
+so the two audiences cannot be quoted against each other.
 
 **Business, about 11 slides, 15 minutes**
 
@@ -66,8 +70,8 @@ room inherits, and a slide that names it beats one that implies it exists.
 2. "What was built against the design: deviations" (`architecture`)
 3. "Evaluation results: <pass rate> on <n> cases, trajectory and response, <repeats>" (`evidence`; report path, variance)
 4. "Failure analysis: <top failure modes>, counts, root causes" (`learned`)
-5. "The demo is build <x>; the numbers cover build <y>" (`evidence`)
-6. "Measured latency, tokens and cost per conversation" (`cost`; traces, sample)
+5. "The demo is build <x>; the numbers cover build <y>" (`evidence`; with no demo, one line on the evaluation slide instead)
+6. "Measured latency, tokens and cost per conversation" (`cost`; traces, sample; a proof-of-concept profile that deferred observability says "not measured; G<n>")
 7. "Production architecture changes: hosting, memory, identity, guardrails" (`architecture`; phase 2 decisions)
 8. "Contracts your services will depend on" (`contracts`; tool, API, schema, versioning)
 9. "Security, sensitive data and approval points, with the tests that prove them" (`risks`)
@@ -89,12 +93,16 @@ room inherits, and a slide that names it beats one that implies it exists.
 7. "What we would do differently" (`next`; recorded lessons)
 8. "The team and partners" (`team`)
 9. "What is next and what it needs" (`next`; options)
-10. "Decision or information: <ask> or none; owner <name>" (`ask`)
+10. "Decision: <ask>; owner <name>" (`ask`), or no ask slide when the review is information only and the front matter says so
 
 **Technical, about 12 slides, 20 to 30 minutes**
 
+Link the production-approval technical deck for the architecture, contracts
+and security that did not change; spend these slides on deviations, SLIs,
+incidents, cost actuals and the handover.
+
 1. Executive summary: "Production over <period>: <SLO attainment>, <cost>, <incidents>" (`summary`)
-2. "Architecture as shipped, with deviations from the plan" (`architecture`)
+2. "Architecture as shipped: <deviations from the plan>, the rest unchanged (see the production-approval deck)" (`architecture`)
 3. "Evaluation and release gates in force, with the last results" (`evidence`)
 4. "Production quality: <SLIs> over <period>" (`outcome`; monitoring data)
 5. "Incidents, root causes, fixes" (`incidents`; postmortem links)

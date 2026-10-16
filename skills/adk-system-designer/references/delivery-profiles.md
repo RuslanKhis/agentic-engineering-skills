@@ -20,6 +20,7 @@ in one word. Group the questions in one turn; they are the scope gate.
 | What spend is available for models and cloud? | Small personal allowance | Model tier, hosted services, evaluation repeats |
 | Who uses or judges it: the builder, a demo audience, employees, external customers? What will the judge read? | The user, reading the design | Identity, frontend, availability, documents |
 | What data does it touch (synthetic, internal, personal, regulated) and what can it change (nothing, drafts, reversible writes, money, messages to real people)? | Synthetic data, read only | Sets the floor and the security depth |
+| Which reviews need a presentation, for whom and when: before the proof of concept is built, after it to decide on production, after the production build? | All three, business audience, dates to confirm | Presentation goals at the phase boundaries and the decision waits the next phase depends on |
 
 The last row decides the risk, whatever label the user gives. A "POC" that
 sends email to real customers from a real inbox carries production risk;
@@ -156,8 +157,9 @@ plus review. Label them as assumptions and adjust to the project:
 | Stakeholder presentation for one audience: outline from plan evidence, narrative, questions, one rehearsal (`adk-presenter`) | 3–6, plus the review date as a wait |
 
 For a team new to ADK, multiply by about 1.5. State the multiplier once in
-the plan and apply it to every goal, hands-on and review alike, rather than
-to some. For a team new to GCP, add a day for the first project, billing, IAM
+the plan and apply it to every implementation goal, hands-on and review
+alike, rather than to some; presentation, labelling and stakeholder goals
+are not ADK work and keep their own estimates. For a team new to GCP, add a day for the first project, billing, IAM
 and deployment, on the first goal that needs them. A range whose high end is more than twice its low end hides an
 unresolved question: make that question a short discovery goal.
 
@@ -287,7 +289,8 @@ form when it costs little more.
 ## Compact form for short work
 
 A proof of concept or a time-boxed assignment gets one file of about 1,200
-words: the design and plan together. Its reader has minutes and the builder
+words: the design and plan together (about 1,600 when the journey writes to
+an external system, because the failure grid is kept). Its reader has minutes and the builder
 has hours; a document longer than the work it plans has failed its profile.
 Use these sections and leave the rest of the design template out, rather than
 marking each section not applicable:
@@ -303,16 +306,27 @@ marking each section not applicable:
 4. **Floor, depth and deferred:** one table of concern, depth now, trigger.
    Graduation conditions as a short list.
 5. **Plan:** phase 1 goals of four to six lines each (outcome, contracts,
-   estimate, primary skill, acceptance, run prompt), the capacity sum and cut line,
-   phase 2 goals of one to three lines each, and the later list.
+   estimate, primary skill, acceptance, run prompt, and an empty **Status
+   and evidence** line that `adk-engineer` fills with one line per contract
+   proved, and numbered measurement records `M1`, `M2` and incident records
+   `I1`, `I2` for a pilot or production run, each with value, baseline,
+   window, sample, method, owner and build), the capacity sum and cut line, phase 2
+   goals of one to three lines each, and the later list. The estimates a
+   review decides on (hours, spend, cost per unit) stay in the plan so the
+   next review measures against them.
 6. **Open decisions and next prompt.**
 
-If the user asks for tickets, each stays under about 120 words: front matter,
-outcome, acceptance and run prompt, linking to the plan for everything else.
+If the user asks for tickets, each stays under about 120 words of body (front
+matter not counted): outcome, acceptance, an empty Evidence section and the
+run prompt, linking to the design for everything else.
 Estimates are in quarter hours, added by hand; no schedule block or helper run.
 
 Failure tables, data-authority tables and observability sections appear only
-when the journey actually holds that risk, and then as two or three rows.
+when the journey actually holds that risk, and then as two or three rows. A
+proof of concept that writes to an external system keeps a three-column
+failure grid (unavailable or slow, rejects the request, write outcome
+unknown), one row per external system touched, each cell a few words citing
+an acceptance item.
 
 ## Write each fact once, at the depth it is known
 

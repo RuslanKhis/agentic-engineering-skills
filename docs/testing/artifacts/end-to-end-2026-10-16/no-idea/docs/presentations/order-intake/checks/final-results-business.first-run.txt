@@ -1,0 +1,26 @@
+final-results deck for a business audience, 15 minutes, 11 slides (9 timed), notes about 3.4 spoken minutes
+   1. [n/a     ] Order intake after a quarter: 1.6 minutes an order on four queues  covers: title
+   2. [cited   ] Live for all four dispatchers: 1.6 minutes an order against 4.4, USD 221 a month against 230, two incidents, nothing lost  covers: summary, outcome
+   3. [cited   ] Minutes per emailed order stayed between 1.3 and 2.4 every week of the quarter, against a 4.4 baseline  covers: outcome
+   4. [cited   ] All four dispatchers used it every week; 94% of emailed orders went through the approval screen  covers: adoption
+   5. [cited   ] Cost: USD 221 a month and USD 0.077 an order, against the USD 230 estimate; six contractor hours in the quarter  covers: cost
+   6. [cited   ] Two medium incidents, each caught by the alert or the pending state, with 41 orders typed by hand and none lost  covers: incidents
+   7. [cited   ] The workflow changed as promised: dispatchers check a draft instead of typing; the planner's review stayed  covers: outcome
+   8. [cited   ] What we would do differently: measure every queue's baseline, test the lost-reply case before going live, train twice  covers: next
+   9. [cited   ] The team: one contractor, four dispatchers, the IT firm, and the operations director  covers: team
+  10. [cited   ] Next: keep running as is; approve a public case study and a four-week discovery on phone orders; owner-CEO today  covers: next, ask
+  11. [cited   ] Appendix: the questions we expect, answered from the record  covers: questions, appendix
+ERROR slide 1 (line 1, Order intake after a quarter: 1.6 minutes an order on four queues): numbers without evidence: 1.6 minutes
+WARNING slide 2 (line 8, Live for all four dispatchers: 1.6 minutes an order against 4.4, USD 221 a month against 230, two incidents, nothing lost): title runs over 20 words; a headline is at most two lines
+WARNING slide 2 (line 8, Live for all four dispatchers: 1.6 minutes an order against 4.4, USD 221 a month against 230, two incidents, nothing lost): body holds 57 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 3 (line 21, Minutes per emailed order stayed between 1.3 and 2.4 every week of the quarter, against a 4.4 baseline): title runs over 20 words; a headline is at most two lines
+WARNING slide 3 (line 21, Minutes per emailed order stayed between 1.3 and 2.4 every week of the quarter, against a 4.4 baseline): body holds 55 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 4 (line 33, All four dispatchers used it every week; 94% of emailed orders went through the approval screen): body holds 51 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 5 (line 45, Cost: USD 221 a month and USD 0.077 an order, against the USD 230 estimate; six contractor hours in the quarter): title runs over 20 words; a headline is at most two lines
+WARNING slide 5 (line 45, Cost: USD 221 a month and USD 0.077 an order, against the USD 230 estimate; six contractor hours in the quarter): body holds 46 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 6 (line 57, Two medium incidents, each caught by the alert or the pending state, with 41 orders typed by hand and none lost): title runs over 20 words; a headline is at most two lines
+WARNING slide 6 (line 57, Two medium incidents, each caught by the alert or the pending state, with 41 orders typed by hand and none lost): body holds 51 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 7 (line 68, The workflow changed as promised: dispatchers check a draft instead of typing; the planner's review stayed): body holds 51 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 8 (line 80, What we would do differently: measure every queue's baseline, test the lost-reply case before going live, train twice): body holds 46 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 9 (line 92, The team: one contractor, four dispatchers, the IT firm, and the operations director): body holds 46 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING timing: the notes hold 508 words, about 3.4 minutes at 150 a minute, for a 15-minute slot; the rest is unscripted

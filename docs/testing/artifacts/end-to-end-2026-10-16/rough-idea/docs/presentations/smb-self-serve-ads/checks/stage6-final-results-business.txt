@@ -1,0 +1,28 @@
+final-results deck for a business audience, 15 minutes, 11 slides (9 timed), notes about 6.2 spoken minutes
+   1. [none    ] Guided product choice: the first production quarter, January to March 2027  covers: title
+   2. [cited   ] Live on every self-serve start for a quarter: completion 69.4% against 62%, cost $211 a month against $330 estimated, two incidents, no customer harm  covers: summary
+   3. [cited   ] Completion held at 68% to 70% in each of the three months, 7.4 points above the baseline on 2,310 starts  covers: outcome
+   4. [cited   ] Adoption: 78% of starts typed a sentence and saw a recommendation; 44% of all starts picked a recommended product  covers: adoption
+   5. [cited   ] Cost: $211 a month on average against the $330 estimate, about $0.27 a start; 47 build hours against 30 to 60  covers: cost
+   6. [cited   ] Two incidents: a pricing outage and a quota hit; both showed the fallback page, one cost us a day at 58% completion  covers: incidents
+   7. [cited   ] What changed in the workflow: one sentence replaces browsing forty products, and sales reports escalations down from about 35 to about 22 a week  covers: outcome
+   8. [cited   ] What we would do differently: set the quota from a forecast, log escalations from day one, keep a control arm for the first month  covers: next
+   9. [cited   ] The team: one developer, the product owner, the platform team and six sales staff  covers: team
+  10. [cited   ] Next: keep it as it is, or fund a two-week discovery for the next funnel step; we recommend the discovery; Director of SMB Sales, 14 April  covers: next, ask
+  11. [cited   ] Questions we expect, with the record's answer  covers: questions, appendix
+WARNING slide 2 (line 7, Live on every self-serve start for a quarter: completion 69.4% against 62%, cost $211 a month against $330 estimated, two incidents, no customer harm): title runs over 20 words; a headline is at most two lines
+WARNING slide 2 (line 7, Live on every self-serve start for a quarter: completion 69.4% against 62%, cost $211 a month against $330 estimated, two incidents, no customer harm): body holds 42 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 3 (line 19, Completion held at 68% to 70% in each of the three months, 7.4 points above the baseline on 2,310 starts): body holds 49 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 4 (line 30, Adoption: 78% of starts typed a sentence and saw a recommendation; 44% of all starts picked a recommended product): body holds 45 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 5 (line 42, Cost: $211 a month on average against the $330 estimate, about $0.27 a start; 47 build hours against 30 to 60): title runs over 20 words; a headline is at most two lines
+WARNING slide 5 (line 42, Cost: $211 a month on average against the $330 estimate, about $0.27 a start; 47 build hours against 30 to 60): body holds 62 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 6 (line 54, Two incidents: a pricing outage and a quota hit; both showed the fallback page, one cost us a day at 58% completion): title runs over 20 words; a headline is at most two lines
+WARNING slide 6 (line 54, Two incidents: a pricing outage and a quota hit; both showed the fallback page, one cost us a day at 58% completion): body holds 59 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 7 (line 65, What changed in the workflow: one sentence replaces browsing forty products, and sales reports escalations down from about 35 to about 22 a week): title runs over 20 words; a headline is at most two lines
+WARNING slide 7 (line 65, What changed in the workflow: one sentence replaces browsing forty products, and sales reports escalations down from about 35 to about 22 a week): body holds 51 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 8 (line 77, What we would do differently: set the quota from a forecast, log escalations from day one, keep a control arm for the first month): title runs over 20 words; a headline is at most two lines
+WARNING slide 8 (line 77, What we would do differently: set the quota from a forecast, log escalations from day one, keep a control arm for the first month): body holds 43 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 9 (line 89, The team: one developer, the product owner, the platform team and six sales staff): body holds 43 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 10 (line 99, Next: keep it as it is, or fund a two-week discovery for the next funnel step; we recommend the discovery; Director of SMB Sales, 14 April): title runs over 20 words; a headline is at most two lines
+WARNING slide 10 (line 99, Next: keep it as it is, or fund a two-week discovery for the next funnel step; we recommend the discovery; Director of SMB Sales, 14 April): body holds 81 words, over the 70-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+Every slide cites evidence or says why not, and the stage's coverage is complete.

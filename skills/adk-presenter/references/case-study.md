@@ -33,13 +33,22 @@ Never: "Powered by" (reserved for co-engineering and needs brand approval),
 "with Google Cloud AI", "GCP" or "GC", "a partner of Google Cloud",
 "preferred by Google Cloud", "the <Company> Google Cloud solution", or the
 Google Cloud name or logo combined with the company's own. Write "Google
-Cloud Agent Development Kit (ADK)" on first mention. Use marks as adjectives
+Cloud Agent Development Kit (ADK)" on first mention. A headline that names
+the customer and carries the attribution phrase as a separate clause
+("Acme cuts order entry by half, built with Google Gemini") is plain text;
+fusing the names into one brand ("the Acme Google Cloud assistant") is the
+combination the guidelines forbid. Use marks as adjectives
 with the exact spelling from Google's trademark list (Google Cloud, Gemini,
 Vertex AI); ADK is not on that list. Logos go through the company's Google
 Cloud contact to the Cloud Brand team; a Partner Advantage member follows the
 partner brand guidelines in Partner Marketing Studio instead. The deck check
 flags the banned phrases on a `case-study` deck; the rule for the prose
 draft is the same.
+
+When a partner or an IT firm holds the Google Cloud account on the
+customer's behalf, the contact is that firm's partner manager, both the
+customer and the account holder consent to publicity, and the account
+holder is named as a partner only in the wording its own agreement allows.
 
 ## There is no form; there is a contact
 
@@ -81,7 +90,10 @@ say so and offer the production-approval or final-results deck instead.
 
 ## Draft, then the pack
 
-Use the [case-study template](../assets/case-study-template.md). Each number
+The prose draft is the deliverable; a companion `case-study` deck is made
+only when the user wants a meeting version, and it is the final-results deck
+in public wording. Run the wording lint on the prose with
+`check_deck.py --prose <file>`. Use the [case-study template](../assets/case-study-template.md). Each number
 cites the plan's evidence line (G ID and acceptance). Each quote is marked
 "approved in writing by <name>, <date>" or "draft, not approved". Each
 sentence that names a Google product carries the chosen attribution phrase or
@@ -104,10 +116,10 @@ The submission pack lists, with an owner and a date each:
 8. Open asks for Google, each marked "requires Google consent": logo use,
    joint announcement, story production, a Next session, Marketplace
    interest.
-9. Derived assets with the sentences they reuse: internal write-up, talk
-   proposal (title, 150-word abstract, audience, three takeaways, demo plan,
-   speaker bio), blog draft, one-page leave-behind, optional sanitised sample
-   with CLA status.
+9. Derived assets the user asks for, with the sentences they reuse: the
+   one-page leave-behind by default; a talk proposal (title, 150-word
+   abstract, audience, three takeaways, demo plan, speaker bio), a blog
+   draft or a sanitised sample with CLA status only when wanted.
 10. Contacts: spokesperson, technical lead, marketing owner, Google contact,
     and where the pack was sent.
 

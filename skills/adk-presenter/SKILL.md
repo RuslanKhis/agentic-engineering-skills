@@ -31,7 +31,10 @@ slide says "not yet measured" and names the goal that would measure it, or
 the agent asks the user for the source. Arithmetic on recorded numbers is
 allowed when both inputs and the operation are on the slide and the voice is
 *we estimate* ("$142 over 312 sessions, about $0.46 a session, build-time
-spend included"); stacking an assumption on a recorded number is not.
+spend included"). A projection that multiplies a recorded per-unit figure by
+a stated volume assumption (a pilot queue scaled to four queues) is allowed
+when the assumption is on the slide in the same voice; stacking two
+assumptions is not.
 
 ## Read the record, then settle the stage and the audience
 
@@ -41,9 +44,16 @@ hypothesis chain, counter-metric, stakeholders and decision dates), the
 design (`docs/architecture/<topic>.md`: profile, contracts, decisions,
 deferred controls, open decisions), the plan (`docs/plans/<topic>.md`: goals,
 the schedule check's hours, evidence lines per contract, cut line, risks,
-acceptance cases marked not run, the build each result came from), tickets
-and their Evidence sections, and any evaluation report, cost record or
-incident log the plan links. Where the project keeps these under other
+acceptance cases marked not run, the build each result came from, and the
+measurement records `M1`, `M2` and incident records `I1`, `I2` that a pilot
+or production run adds, each with value, baseline, window, sample, method,
+owner and build), tickets and their Evidence sections, and any evaluation
+report, cost record or incident log the plan links. When a later report
+contradicts the plan's calendar or a recorded figure, ask which is right and
+record the change in the plan's change table before drafting; when the
+record lacks a measurement record for a figure the user reports, write it
+into the plan as `M<n>` first, labelled with its source, so the slide cites
+a record. Where the project keeps these under other
 names, use those. Write down what the record does not contain (no baseline,
 cases not run, cost not measured, no build tag on a result, no demo) before
 drafting; those gaps become slides, not omissions.
@@ -59,7 +69,9 @@ and the record do not say:
 - **Audience:** `business` (funds, extends, builds, stops; reads the summary,
   the result against criteria, cost, risk, the ask), `technical` (hosts,
   depends on, is paged for; reads the design, contracts, evaluation report
-  and runbook), or `public` for a case study. When both are needed, write
+  and runbook; an external IT firm that will host it counts, and gets a
+  shorter outline centred on what it inherits), or `public` for a case
+  study. When both are needed, write
   two outlines from the same evidence; never one deck for both.
 - **Minutes, decider and date:** the speaking time, the one person who
   decides, and when; the brief's decision calendar and the plan's waits
@@ -76,18 +88,22 @@ following the outline for the stage and audience in
 paragraph; when they do not carry the argument from situation to answer to
 ask on their own, fix the titles before writing a body. Every ask is two or
 three real options with the recommended one marked, the decider and the
-date. Every deck has a value slide against the baseline, a cost slide
-(per conversation and per month, actuals apart from estimates) and a risk
-slide with a control and an owner per risk, because those are the three
-reasons agent projects get cancelled.
+date. Every deck has a value slide against the baseline, a cost slide (before a
+pilot: the hours and the spend ceiling; after one: per conversation and per
+month, actuals apart from estimates) and a risk slide with a control and an
+owner per risk, because those are the three reasons agent projects get
+cancelled.
 
 ## Draft in the deck format
 
 Write the outline in the [deck format](assets/deck-format.md): front matter
 with stage, audience, minutes, sources and the decision sentence; slides
 separated by `---`; each with `## <action title>`, `Covers:`, `Evidence:`
-and `Notes:` written as speech. The three voices stay apart in titles and
-notes: *we measured*, *we estimate*, *we hypothesise*; on a slide that
+and `Notes:` written as speech from [the speech reference](references/speech.md):
+bottom line first, today and after in alternation, one real case on the
+story spine, three reasons, what did not work and the answer, options and
+the decider, and the stage skeleton's timings. The three voices stay apart
+in titles and notes: *we measured*, *we estimate*, *we hypothesise*; on a slide that
 mixes them, each bullet opens with its voice word and the `Evidence:` line
 lists each source. State the build the demo shows and the build the numbers
 cover, or that there is no demo. Put vanity counts (conversations, messages)
@@ -101,8 +117,9 @@ an appendix slide or with "not measured" and the goal that would measure it.
 
 For a case study, read [case study](references/case-study.md) first: it adds
 the approval trail per sentence, Google's approved attribution phrases and
-the submission pack, and uses the [case-study template](assets/case-study-template.md)
-instead of a deck.
+the submission pack, and uses the [case-study template](assets/case-study-template.md);
+the prose is the deliverable, linted with `check_deck.py --prose`, and a
+companion deck is written only when the user wants a meeting version.
 
 ## Check, then pre-wire and rehearse
 
@@ -118,17 +135,30 @@ coverage is complete; fix every error and read every warning, including the
 spoken-time estimate it makes from the notes. The outline is not ready until
 the check passes. Then run the premortem ("this presentation failed to get
 the decision; why?") and put each answer's evidence in an appendix slide;
-write the pre-wiring table and the premortem answers to `pre-wiring.md` in
-the same folder; and tell the user to rehearse once against the minutes
-with someone who did not build the system.
+write the pre-wiring table and the premortem answers to
+`pre-wiring-<stage>.md` in the same folder; and give the user the rehearsal checklist and the question
+protocol from the speech reference, with two runs out loud, one before a
+colleague who plays the decider and interrupts (once per project; later
+stages point back to it).
 
 Write the [decision memo](assets/decision-memo-template.md) to
-`decision-memo.md` in the same folder as the one-page pre-read, and after
-the meeting record the decision, owners and next checkpoint in it and in the
-plan (the decision date is the calendar wait the next phase depends on). When the host offers a slide-building tool or skill,
-build the slides from the outline, one slide per section, with `Notes:` as
-speaker notes and `Evidence:` kept out of the audience's view; otherwise the
-outline is what the user hands to whoever owns the company template.
+`decision-memo-<stage>.md` in the same folder as the one-page pre-read, and
+after the meeting record the decision, owners and next checkpoint in it and
+in the plan (the decision date is the calendar wait the next phase depends
+on), together with the estimate the decision rested on (hours, spend, cost
+per unit), so the next review measures against a number that lives in the
+plan, not in an old deck. When the presentation is a plan goal or a ticket,
+fill its Evidence section: the outline paths, the check result, the
+briefings held, and after the meeting the decision.
+
+The outline is the stage's deliverable; render slides only when the user
+asks for them. Then, when the host offers a slide-building tool or skill,
+build the slides from the outline by [slide craft](references/slide-craft.md):
+the action title as the headline, one visual with its caption, at most two
+call-outs, charts from recorded data with the baseline drawn, `Notes:` as
+speaker notes, `Evidence:` kept out of the audience's view, and two
+renderings (projected and leave-behind); otherwise hand the outline and that
+reference's checklist to whoever owns the company template.
 
 ## Finish
 

@@ -1,9 +1,11 @@
-# Case study draft: <Customer> <verb> <outcome> with AI agents built with Google Cloud
+# Case study draft: <Customer> <verb> <outcome> with <what was built> <attribution phrase>
 
 Status: internal draft / sent to <Google contact> on <date> / approved for
 publication on <date>
-Attribution phrase: Built with Google Cloud / Built with Google Gemini (choose
-from the approved list in the case-study reference)
+Attribution phrase: chosen from the approved list in the case-study reference
+("Built with Google Gemini" for a Gemini-only build; "Built with Google Cloud"
+for several products with Google's guidance); say "agent" only when the design
+calls the system one
 Sources: docs/plans/<topic>.md, docs/architecture/<topic>.md, docs/discovery/<topic>.md
 
 Every number cites its evidence line; every quote carries its approval
@@ -70,4 +72,6 @@ Cloud Run>
 | Quotes: written approval | | | |
 | Attribution language chosen; wording lint passed | | | |
 | Open asks for Google (logo, announcement, story, Next session, Marketplace) | requires Google consent | | |
-| Derived assets: internal write-up, talk proposal, blog draft, one-pager, sanitised sample (CLA) | | | |
+| Timeline: start, launch, measurement window, publication target | | | |
+| Derived assets wanted: one-pager by default; talk proposal, blog draft, sanitised sample (CLA) on request | | | |
+| Contacts: spokesperson, technical lead, marketing owner, Google contact, where the pack was sent | | | |

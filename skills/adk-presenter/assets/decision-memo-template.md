@@ -3,7 +3,10 @@
 One page, sent before the meeting as the pre-read and after it as the record.
 Everything here is in the deck's evidence; nothing new appears in a memo.
 
-**Decision requested:** <one sentence: approve X by Y with Z>
+**Decision requested:** <one sentence: approve X by Y with Z>, or
+"information only: <what is reported and what would change the plan>"
+when a results review asks for nothing; then the options table shows
+"keep running" against "change" and "stop".
 **Deadline for the decision:** <date, and what waits on it>
 **Owner:** <who asked>
 
@@ -27,11 +30,11 @@ advance, each number with its source: "Checkout completion rose from 31% to
 - **Scope:** <what is built next, by whom, in how many hours; the plan's cut line>
 - **Success criteria for the next review:** <metric, target, window>
 - **Kill criteria:** <what result ends it>
+- **Next review:** <date, audience>
 
 When the record holds no criteria for the next phase, propose them from the
 last measured thresholds and mark them "proposed, not yet agreed"; the
 meeting agrees them, and the plan records the agreed version.
-- **Next review:** <date, audience>
 
 ## Decision record (filled after the meeting)
 

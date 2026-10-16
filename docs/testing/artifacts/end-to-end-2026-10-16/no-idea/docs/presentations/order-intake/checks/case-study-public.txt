@@ -1,0 +1,17 @@
+case-study deck for a public audience, 10 minutes, 8 slides (6 timed), notes about 1.7 spoken minutes
+   1. [cited   ] Emailed orders in 1.6 minutes instead of 4.4: an order-reading assistant built with Google Gemini  covers: title
+   2. [cited   ] Four dispatchers re-typed about 900 free-text emailed orders a week, and nobody had measured it  covers: challenge
+   3. [cited   ] One model call drafts the order; a dispatcher approves every one; ordinary code writes it  covers: solution
+   4. [cited   ] Over a quarter, 1.6 minutes an order on 8,640 orders, with corrected orders flat at 2.9%  covers: results
+   5. [cited   ] Cost came in at about USD 200 to 250 a month, under USD 0.10 an order, against the estimate  covers: results
+   6. [cited   ] What did not improve: freed hours not yet reassigned, complaints unchanged, one queue trained twice  covers: results
+   7. [cited   ] Next: discovery on phone orders, a customer order form, and a story if Google wants one  covers: next
+   8. [cited   ] Appendix: publishable status per number and the approvals still open  covers: appendix
+WARNING slide 2 (line 8, Four dispatchers re-typed about 900 free-text emailed orders a week, and nobody had measured it): body holds 41 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 3 (line 20, One model call drafts the order; a dispatcher approves every one; ordinary code writes it): body holds 55 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 4 (line 32, Over a quarter, 1.6 minutes an order on 8,640 orders, with corrected orders flat at 2.9%): body holds 44 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 6 (line 55, What did not improve: freed hours not yet reassigned, complaints unchanged, one queue trained twice): body holds 41 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 7 (line 67, Next: discovery on phone orders, a customer order form, and a story if Google wants one): body holds 44 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING timing: the notes hold 250 words, about 1.7 minutes at 150 a minute, for a 10-minute slot; the rest is unscripted
+Every slide cites evidence or says why not, and the stage's coverage is complete.
+exit 0

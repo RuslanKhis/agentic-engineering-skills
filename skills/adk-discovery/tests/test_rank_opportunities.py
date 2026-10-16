@@ -105,6 +105,12 @@ class RankingTests(unittest.TestCase):
         report = json.loads(run("--json", text=text).stdout)
         self.assertEqual(report["ranked"][0]["measure"], "time_to_first_creative")
 
+    def test_estimated_baseline_warns(self):
+        text = BRIEF.replace("| 31% last quarter |", "| ~4 min (reported estimate, unmeasured) |")
+        report = json.loads(run("--json", text=text).stdout)
+        self.assertTrue(any("baseline is a reported estimate" in message for message in report["warnings"]))
+        self.assertFalse(any("reported estimate" in message for message in json.loads(run("--json").stdout)["warnings"]))
+
     def test_text_output_lists_ranked_rows(self):
         result = run()
         self.assertEqual(result.returncode, 0)

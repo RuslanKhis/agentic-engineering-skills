@@ -5,7 +5,7 @@ decks; the same evidence, different claims.
 
 ## What each audience must decide, and reads
 
-| | Business decision-makers | Internal technical teams |
+| | Business decision-makers | Technical teams, internal or the external firm that hosts it |
 | --- | --- | --- |
 | Decides | Whether to fund, extend, build, stop; who sponsors | Whether to depend on it, host it, be paged for it; what to change first |
 | Reads | The executive summary, the result against criteria, cost, risk, the ask | The design, the contracts table, the evaluation report, the runbook, the diff from the design |
@@ -18,24 +18,23 @@ Keep the business deck free of component names unless a decision depends on
 one; keep the technical deck free of persuasion. Both state what was not
 measured and what was not run.
 
-## Speaker narrative pattern
+## Speaker notes
 
-Open with the Question and the Answer in two sentences, then say how the
-time runs: summary first, discussion after. For each slide, speak the action
-title, point to the evidence, give its method and sample size in one clause,
-and end with the implication for the decision. Keep the three voices apart:
-*we measured*, *we estimate*, *we hypothesise*. Close by restating the
-options, the recommendation, the decider and the date, and name what the
-audience receives afterwards: the one-page memo and the decision record.
-
-Write the notes as speech, in full sentences, with the pause and the handover
-to the next slide. A note that reads "talk about costs" is not a note.
+The shape, timings, rehearsal checklist and question protocol are in
+[the speech reference](speech.md). Per slide: speak the action title, point
+to the evidence, give its method and sample in one clause, end with the
+implication for the decision, and hand over to the next slide. Write the
+notes as speech, in full sentences, with the pauses. A note that reads "talk
+about costs" is not a note.
 
 ## Question bank
 
 Prepare an answer with evidence for each, and put the evidence in the
 appendix. A question with no evidence behind it gets the honest answer "not
 measured" and the goal that would measure it.
+
+Answer each with the protocol in the speech reference: restate, one
+sentence, evidence, bridge to the recommendation.
 
 **Business**
 
@@ -65,6 +64,20 @@ measured" and the goal that would measure it.
 - Which model version is pinned, and when is it retired?
 - Where are the sensitive-data boundaries, and which tests prove them?
 - What deviated from the design, and why?
+
+**At a results review, add**
+
+- Why is there no control group, and what is the counterfactual?
+- What drove the cost above or below the estimate?
+- Which incident touched a customer, and what changed afterwards?
+- Who uses it daily now, by the definition of active on the slide?
+- What would you stop doing if the measure fell next quarter?
+
+**For a case study, add**
+
+- Which numbers may be published, as is or as a range, and who approved?
+- Who at Google is the contact, and what have they been sent?
+- What does the customer quote say, and is it approved in writing?
 
 ## Premortem prompts
 

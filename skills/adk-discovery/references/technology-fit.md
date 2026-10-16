@@ -9,7 +9,10 @@ parts only where deterministic ones cannot do the job. Treat the table as a
 checklist that makes the choice defensible, not as a predictor of success.
 A hybrid takes the fit of its model-driven step: `llm` when the model makes
 one bounded judgement and code does the rest, `agent` when the model chooses
-the steps or the tools.
+the steps or the tools. An optimisation or scheduling problem (routing,
+rostering, allocation) is `rules`: a solver is deterministic code, however
+clever; it becomes `ml` only when the inputs it needs are themselves
+predictions.
 
 ## Ask in order
 
@@ -116,7 +119,8 @@ and the triage are the same artefact:
 > reason]. The error cost is [low / high], so [a person reviews every output /
 > the system decides only within these limits]. [Role] keeps it current,
 > including [rule changes / retraining / model upgrades the vendor requires];
-> the design will state what it costs to run.
+> the design will estimate what it costs to run, or name the goal that
+> measures it.
 
 Sources were read on 15 October 2026 and are listed with URLs in the
 repository's research note; re-read a vendor page before quoting a price,

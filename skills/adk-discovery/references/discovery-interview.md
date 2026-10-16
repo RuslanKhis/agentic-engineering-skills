@@ -59,6 +59,10 @@ recorded as assumed or "unknown: ask" in the brief.
 | 13 | Who else has to change how they work for this to count? | Most of the effort is people and process; names the sponsor and the training | before handoff |
 | 14 | Who approves the next step, and when? | The decision calendar: the presentation goals the plan must carry | always |
 | 15 | What does success look like in 90 days, in a sentence a customer would recognise? | The press-release paragraph and a time-boxed test | before handoff |
+| 16 | Who owns this, with what budget, and would they fund one team on it for a year? | A named senior owner is the practice most associated with value; a year is what the engineers say a real problem takes | before handoff |
+| 17 | Which steps disappear, and who checks the output, how often? | Redesigned workflows outperform overlays; the validation point is where accuracy risk is caught | before handoff |
+| 18 | When the system gets it wrong, where does the correction go, and what changes because of it? | Systems that do not learn from feedback are the users' first complaint | if an agent or LLM is a candidate |
+| 19 | Who already uses AI tools for this unofficially? | Employees use AI about three times more than leaders think; they know the friction and will champion the change | if not inferable |
 
 ## Rewrites to apply as you go
 

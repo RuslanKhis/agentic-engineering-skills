@@ -1,0 +1,16 @@
+production-approval deck for a technical audience, 30 minutes, 12 slides (10 timed), notes about 7.2 spoken minutes
+   1. [none    ] Guided product recommendation service: what the pilot measured and what production needs from your team  covers: title
+   2. [cited   ] The proof of concept passed 10 of 11 acceptance cases; production needs observability, a release gate, the retention decision and your hosting sign-off  covers: summary
+   3. [cited   ] Built against the design with two deviations: the repair attempt is a second full call, and the log table has one extra column  covers: architecture
+   4. [cited   ] Evaluation results: 30 of 30 cases pass C1 and C3, actual product in 23 of 30, one run, on the same build the live numbers cover; no demo  covers: evidence, criteria-results
+   5. [cited   ] Failure analysis: 7 of 30 cases missed the actual product, 4 of them because the catalogue gave two near-identical products  covers: learned
+   6. [cited   ] Measured cost: $142 for the phase on the billing export; latency, tokens and the live-only share are not measured until G09 adds traces  covers: cost
+   7. [cited   ] Production changes: all starts, traces and cost per start, a release gate, retention for the sentence; you inherit one service, one table, one quota  covers: architecture, production-scope
+   8. [cited   ] Contracts your services will depend on: five, unchanged from the design, each with a test that proved it on the pilot build  covers: contracts
+   9. [cited   ] Security and data boundary: no writes, no tools, no end-user identity, proven by tests; the sentence's retention is the open item  covers: risks
+  10. [cited   ] Operations: no traces, alerts or runbook exist today; G09 adds them, pins the model, and makes rollback of image, prompt and schema one step  covers: operations
+  11. [cited   ] Decision: we need your hosting sign-off, the retention rule and an on-call owner by 6 November; owner: platform team lead  covers: ask
+  12. [cited   ] Questions we expect, with the record's answer  covers: questions, appendix
+WARNING slide 11 (line 115, Decision: we need your hosting sign-off, the retention rule and an on-call owner by 6 November; owner: platform team lead): body holds 82 words, over the 80-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING timing: the notes hold 1081 words, about 7.2 minutes at 150 a minute, for a 30-minute slot; the rest is unscripted
+Every slide cites evidence or says why not, and the stage's coverage is complete.

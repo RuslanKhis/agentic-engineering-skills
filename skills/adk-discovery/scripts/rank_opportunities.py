@@ -33,6 +33,7 @@ OPTIONAL = ("baseline",)
 FITS = ("agent", "llm", "ml", "rules", "process", "unclear")
 SCORED = ("value", "feasibility", "data", "risk")
 NO_VALUE = {"", "-", "n/a", "none", "tbd", "unknown", "?"}
+ESTIMATED = re.compile(r"\b(?:estimate[ds]?|reported|unmeasured|not measured|guess|anecdot|roughly|about|approx)\b|~", re.IGNORECASE)
 ROW = re.compile(r"^\s*\|.*\|\s*$")
 SEPARATOR = re.compile(r"^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)*\|?\s*$")
 
@@ -154,6 +155,8 @@ def review_first(first, opportunities):
         warnings.append(f"{first['id']}: fit is a process change, not software; adk-system-designer is not the next step")
     if not first["baseline"]:
         warnings.append(f"{first['id']}: baseline unknown; the first goal is to measure the current journey")
+    elif ESTIMATED.search(first["baseline"]):
+        warnings.append(f"{first['id']}: baseline is a reported estimate ({first['baseline']}); the first goal is to measure it")
     if first["risk"] >= 4:
         warnings.append(f"{first['id']}: risk {first['risk']} of 5 for a first use case; prefer a lower-risk start or a human before every effect")
     if first["data"] <= 2:

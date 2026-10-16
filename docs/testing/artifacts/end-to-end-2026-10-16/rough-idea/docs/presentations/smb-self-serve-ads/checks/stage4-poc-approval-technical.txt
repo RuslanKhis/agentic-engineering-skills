@@ -1,0 +1,36 @@
+poc-approval deck for a technical audience, 30 minutes, 14 slides (12 timed), notes about 6.9 spoken minutes
+   1. [none    ] Guided product recommendation service: what the platform team hosts and what we need from you  covers: title
+   2. [cited   ] One stateless Cloud Run service in your project: code filters, one model call ranks, your services price; the pilot tests a lift from 62%  covers: summary
+   3. [cited   ] The service reads the catalogue, pricing and inventory, writes nothing, and holds no end-user identity  covers: scope
+   4. [cited   ] Architecture: platform to Cloud Run service to catalogue, model, pricing and inventory, with a log row per start  covers: architecture
+   5. [cited   ] Five contracts the proof of concept must keep, each with an enforcement point in code  covers: contracts
+   6. [cited   ] Data and access: three read-only APIs through your service identity, a BigQuery table, a Gemini quota; access requested on 2 November  covers: dependencies
+   7. [cited   ] Evaluation plan: 30 labelled cases offline before go-live, then the live arm measure; thresholds proposed, not agreed  covers: evidence-plan
+   8. [cited   ] The baseline is 62% from the Q3 funnel export; the pilot reads the same export per arm on about 250 treated starts  covers: success-criteria
+   9. [cited   ] Security and data boundaries: no writes, no tools, no end-user identity; the free-text sentence is the only personal data and its retention is open  covers: risks
+  10. [cited   ] Cost model: about 700 starts a month, at most two model calls each, under a 500 EUR quota; per-start cost measured in G04, not yet estimated  covers: cost
+  11. [cited   ] What we ask of your team: project access in three days, one integration slot, about four review hours over four weeks  covers: dependencies
+  12. [cited   ] If it stops in December you keep the service code, the 30-case evaluation set, the log table and the findings  covers: hypothesis
+  13. [cited   ] Decision: we need project access by 5 November and the integration slot in the week of 9 November; owner: platform team lead  covers: ask
+  14. [cited   ] Questions we expect, with the record's answer  covers: questions
+ERROR coverage: no slide Covers problem (required for poc-approval, technical)
+WARNING slide 2 (line 7, One stateless Cloud Run service in your project: code filters, one model call ranks, your services price; the pilot tests a lift from 62%): title runs over 20 words; a headline is at most two lines
+WARNING slide 2 (line 7, One stateless Cloud Run service in your project: code filters, one model call ranks, your services price; the pilot tests a lift from 62%): body holds 59 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 3 (line 19, The service reads the catalogue, pricing and inventory, writes nothing, and holds no end-user identity): body holds 55 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 4 (line 31, Architecture: platform to Cloud Run service to catalogue, model, pricing and inventory, with a log row per start): body holds 61 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 5 (line 43, Five contracts the proof of concept must keep, each with an enforcement point in code): body holds 82 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 6 (line 57, Data and access: three read-only APIs through your service identity, a BigQuery table, a Gemini quota; access requested on 2 November): title runs over 20 words; a headline is at most two lines
+WARNING slide 6 (line 57, Data and access: three read-only APIs through your service identity, a BigQuery table, a Gemini quota; access requested on 2 November): body holds 48 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 7 (line 69, Evaluation plan: 30 labelled cases offline before go-live, then the live arm measure; thresholds proposed, not agreed): body holds 69 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 8 (line 81, The baseline is 62% from the Q3 funnel export; the pilot reads the same export per arm on about 250 treated starts): title runs over 20 words; a headline is at most two lines
+WARNING slide 8 (line 81, The baseline is 62% from the Q3 funnel export; the pilot reads the same export per arm on about 250 treated starts): body holds 46 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 9 (line 93, Security and data boundaries: no writes, no tools, no end-user identity; the free-text sentence is the only personal data and its retention is open): title runs over 20 words; a headline is at most two lines
+WARNING slide 9 (line 93, Security and data boundaries: no writes, no tools, no end-user identity; the free-text sentence is the only personal data and its retention is open): body holds 56 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 10 (line 105, Cost model: about 700 starts a month, at most two model calls each, under a 500 EUR quota; per-start cost measured in G04, not yet estimated): title runs over 20 words; a headline is at most two lines
+WARNING slide 10 (line 105, Cost model: about 700 starts a month, at most two model calls each, under a 500 EUR quota; per-start cost measured in G04, not yet estimated): body holds 54 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 11 (line 117, What we ask of your team: project access in three days, one integration slot, about four review hours over four weeks): title runs over 20 words; a headline is at most two lines
+WARNING slide 11 (line 117, What we ask of your team: project access in three days, one integration slot, about four review hours over four weeks): body holds 53 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 12 (line 129, If it stops in December you keep the service code, the 30-case evaluation set, the log table and the findings): body holds 53 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 13 (line 141, Decision: we need project access by 5 November and the integration slot in the week of 9 November; owner: platform team lead): title runs over 20 words; a headline is at most two lines
+WARNING timing: the notes hold 1029 words, about 6.9 minutes at 150 a minute, for a 30-minute slot; the rest is unscripted
+exit 1

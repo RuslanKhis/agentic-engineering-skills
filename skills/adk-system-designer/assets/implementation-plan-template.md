@@ -111,7 +111,10 @@ next phase's goals depend on.
 - **Execution scope:** <what is already authorized; exact external prerequisites
   still needed for this goal>
 - **Status and evidence:** <planned initially; later record files, actual commands,
-  results and limitations, with one line per contract: C3 evidenced, local, A2>
+  results and limitations, with one line per contract: C3 evidenced, local, A2.
+  A pilot or production run adds numbered measurement records (M1: value,
+  baseline, window, sample, method, owner, build) and incident records (I1:
+  date, severity, effect, response, fix), which presentations cite by ID>
 - **Run this goal:** `/adk-engineer Carry out <goal ID> from <plan path>. Read <design
   path>, use the goal's primary and supporting skills, verify its acceptance cases
   locally and record evidence here.`

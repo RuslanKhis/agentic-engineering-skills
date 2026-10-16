@@ -28,20 +28,22 @@ Covers: title
 ## Small advertisers abandon the purchase at product choice more than at any other step
 Covers: problem
 Evidence: docs/discovery/ads.md funnel table; measured
-Notes: Open with the funnel. Product choice loses 38% of eligible advertisers; creative upload loses 12%.
 
 - 38% leave at product choice (last quarter, 2,140 advertisers)
 - 12% leave at creative upload
+
+Notes: Open with the funnel. Product choice loses 38% of eligible advertisers; creative upload loses 12%.
 
 ---
 
 ## A guided brief should recover a share of those advertisers without raising refunds
 Covers: hypothesis
 Evidence: hypothesis; docs/discovery/ads.md §4
-Notes: This is the hypothesis chain, not a result.
 
 Less effort to choose → more completed purchases → more repeat campaigns.
 We expect a 5 to 8 percent lift; the proof of concept measures it.
+
+Notes: This is the hypothesis chain, not a result.
 
 ---
 
@@ -173,6 +175,51 @@ class DeckTests(unittest.TestCase):
         self.assertTrue(any("for a 15-minute slot" in message and "unscripted" not in message
                             for message in report["warnings"]))
 
+    def test_tables_are_visuals_and_decimals_are_one_word(self):
+        table = GOOD.replace("Less effort to choose → more completed purchases → more repeat campaigns.",
+                             "\n".join("| criterion %d | threshold | measured | method | sample |" % i for i in range(12)))
+        self.assertFalse(any("word budget" in m for m in json.loads(run(table, "--json").stdout)["warnings"]))
+        title = GOOD.replace("## Small advertisers abandon the purchase at product choice more than at any other step",
+                             "## Median handling time fell from 4.4 minutes to 1.7 minutes on 331 orders, 9 to 22 November 2026, measured")
+        report = json.loads(run(title, "--json").stdout)
+        self.assertFalse(any("title runs over" in m and "slide 2" in m for m in report["warnings"]))
+
+    def test_technical_budgets_are_wider(self):
+        long_title = ("## Scope: one display product family, existing assets, a human before every purchase, "
+                      "no agencies, no video, no bespoke sponsorships, no autonomous spend changes at all")
+        business = GOOD.replace("## Scope: one display product family, existing assets, a human before every purchase", long_title)
+        self.assertTrue(any("title runs over 20 words" in m for m in json.loads(run(business, "--json").stdout)["warnings"]))
+        technical = business.replace("audience: business", "audience: technical")
+        self.assertFalse(any("title runs over" in m for m in json.loads(run(technical, "--json").stdout)["warnings"]))
+        body = GOOD.replace("Less effort to choose → more completed purchases → more repeat campaigns.", "word " * 60)
+        self.assertTrue(any("40-word budget" in m for m in json.loads(run(body, "--json").stdout)["warnings"]))
+        self.assertFalse(any("word budget" in m for m in json.loads(run(body.replace("audience: business", "audience: technical"), "--json").stdout)["warnings"]))
+
+    def test_word_budgets_warn(self):
+        long_title = GOOD.replace("## Scope: one display product family, existing assets, a human before every purchase",
+                                  "## Scope: one display product family, existing assets, a human before every purchase, "
+                                  "no agencies, no video, no bespoke sponsorships, no autonomous spend changes at all")
+        report = json.loads(run(long_title, "--json").stdout)
+        self.assertTrue(any("title runs over 20 words" in message for message in report["warnings"]))
+        long_body = GOOD.replace("Less effort to choose → more completed purchases → more repeat campaigns.",
+                                 "word " * 45).replace("Notes: This is the hypothesis chain, not a result.",
+                                                       "Notes: the notes do not count " + "word " * 100)
+        report = json.loads(run(long_body, "--json").stdout)
+        self.assertTrue(any("over the 40-word budget" in message for message in report["warnings"]))
+        self.assertFalse(any("over the 40-word budget" in message for message in json.loads(run(GOOD, "--json").stdout)["warnings"]))
+        ask_body = GOOD.replace("Notes: Ask for the decision in one sentence and stop talking.",
+                                "word " * 60 + "\n\nNotes: Ask for the decision in one sentence and stop talking.")
+        self.assertFalse(any("word budget" in message for message in json.loads(run(ask_body, "--json").stdout)["warnings"]))
+        appendix = GOOD + "\n---\n\n## Appendix: answers to the questions this room will ask\nCovers: questions\nEvidence: docs/plans/ads.md\n\n" + "word " * 80 + "\nNotes: Only if asked.\n"
+        self.assertFalse(any("word budget" in message for message in json.loads(run(appendix, "--json").stdout)["warnings"]))
+
+    def test_hype_words_warn(self):
+        text = GOOD.replace("Notes: Everything else waits.", "Notes: This revolutionary agent understands every brief and eliminates rework.")
+        report = json.loads(run(text, "--json").stdout)
+        self.assertTrue(any("hype words" in message and "revolutionary" in message and "eliminates" in message
+                            for message in report["warnings"]))
+        self.assertEqual(run(GOOD).returncode, 0)
+
     def test_missing_decider_and_date_warn(self):
         text = GOOD.replace("decider: Director of SMB Sales\n", "").replace("date: 2026-10-30\n", "")
         report = json.loads(run(text, "--json").stdout)
@@ -219,6 +266,26 @@ class DeckTests(unittest.TestCase):
         # The same wording on an internal deck is not the public story's concern.
         internal = GOOD.replace("Everything else waits.", "Everything else waits. Our GCP stack.")
         self.assertEqual(run(internal).returncode, 0)
+
+    def test_measurement_ids_cite_and_code_spans_are_not_hype(self):
+        text = GOOD.replace("Evidence: D2, D5", "Evidence: M3, I1").replace(
+            "Notes: Everything else waits.", "Notes: the `arm` field holds `always treatment`; everything else waits.")
+        report = json.loads(run(text, "--json").stdout)
+        self.assertEqual(report["slides"][4]["evidence"], "cited")
+        self.assertFalse(any("hype" in m for m in report["warnings"]))
+
+    def test_prose_mode_lints_wording_only(self):
+        with tempfile.TemporaryDirectory() as directory:
+            prose = Path(directory) / "case-study.md"
+            prose.write_text("# Acme cuts handling time\n\nBuilt with Google Gemini on Google Cloud.\n", encoding="utf-8")
+            clean = subprocess.run([sys.executable, "-I", "-B", str(SCRIPT), "--prose", str(prose)], capture_output=True, text=True)
+            self.assertEqual(clean.returncode, 0, clean.stdout)
+            prose.write_text("Our GCP stack, powered by Google.\n", encoding="utf-8")
+            bad = subprocess.run([sys.executable, "-I", "-B", str(SCRIPT), "--prose", str(prose)], capture_output=True, text=True)
+            self.assertEqual(bad.returncode, 1)
+            self.assertIn("GCP", bad.stdout)
+            both = subprocess.run([sys.executable, "-I", "-B", str(SCRIPT), "--prose", str(prose), "--deck", str(prose)], capture_output=True, text=True)
+            self.assertEqual(both.returncode, 2)
 
     def test_identifiers_are_not_numeric_claims(self):
         text = GOOD.replace("Evidence: D2, D5\nNotes: Everything else waits.",

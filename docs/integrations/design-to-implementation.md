@@ -33,10 +33,12 @@ around it.
 
 ## Present at phase boundaries
 
-Where someone's decision stands between phases (approval to build the proof of
-concept, approval to productionise it, a results review), the plan carries a
+The designer asks which reviews the project needs: a go-ahead before the
+proof of concept is built, a review of what it did that decides on
+production, and a results review after the production build. Each becomes a
 presentation goal at that boundary with `Primary skill: adk-presenter`, one
-per audience. `adk-presenter` builds the outline, the spoken narrative, the
+per audience, and a ticket when tickets are written; a case-study goal can
+follow the results review. `adk-presenter` builds the outline, the spoken narrative, the
 questions to expect and a one-page decision memo from the plan's recorded
 evidence, cites a goal, contract or decision under every claim, and runs its
 deck check before the outline is called ready:

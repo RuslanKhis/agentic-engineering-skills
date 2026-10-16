@@ -1,6 +1,6 @@
 # Handoff to design: what discovery decides, what the designer decides
 
-Read before writing section 8 of the brief. The two skills meet at one
+Read before writing section 9 of the brief. The two skills meet at one
 document and must not do each other's work.
 
 ## The line between them

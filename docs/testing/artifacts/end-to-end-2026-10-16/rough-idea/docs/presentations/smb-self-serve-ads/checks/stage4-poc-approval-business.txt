@@ -1,0 +1,26 @@
+poc-approval deck for a business audience, 15 minutes, 13 slides (10 timed), notes about 4.8 spoken minutes
+   1. [none    ] Guided product choice for small advertisers: a four-week proof of concept  covers: title
+   2. [cited   ] We ask for one developer for four weeks to test whether a guided product choice lifts completion above 62%  covers: summary
+   3. [cited   ] Today product choice loses 38% of 2,140 purchase starts, more than every other step combined  covers: problem
+   4. [cited   ] The complication: about 40 products across formats and regions, and no way to tell which one fits  covers: problem
+   5. [cited   ] We will test one hypothesis: less effort to choose lifts completion, and refunds stay flat  covers: hypothesis
+   6. [cited   ] Success means completion above 62% on about 250 treated starts, with refunds no higher than 4%  covers: success-criteria
+   7. [cited   ] We stop early if completion does not move or refunds pass 4%; the production decision is 11 December  covers: success-criteria, timeline
+   8. [cited   ] Scope: a recommendation only; no creative, no pricing change, no booking; a person confirms every purchase  covers: scope
+   9. [cited   ] The proof of concept costs 31.5 to 57 developer hours of 72; model and cloud under 500 EUR, per start not yet estimated  covers: cost
+  10. [cited   ] Three risks, each with a control and an owner  covers: risks
+  11. [cited   ] Decision: do nothing, run the four-week proof of concept, or run a wider pilot; we recommend the proof of concept  covers: ask
+  12. [cited   ] Questions we expect, with the record's answer  covers: questions
+  13. [cited   ] Why this use case and not the others in the portfolio  covers: appendix
+WARNING slide 2 (line 7, We ask for one developer for four weeks to test whether a guided product choice lifts completion above 62%): body holds 48 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 4 (line 31, The complication: about 40 products across formats and regions, and no way to tell which one fits): body holds 48 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 5 (line 43, We will test one hypothesis: less effort to choose lifts completion, and refunds stay flat): body holds 45 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 6 (line 55, Success means completion above 62% on about 250 treated starts, with refunds no higher than 4%): body holds 46 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 7 (line 67, We stop early if completion does not move or refunds pass 4%; the production decision is 11 December): body holds 50 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 9 (line 91, The proof of concept costs 31.5 to 57 developer hours of 72; model and cloud under 500 EUR, per start not yet estimated): title runs over 20 words; a headline is at most two lines
+WARNING slide 9 (line 91, The proof of concept costs 31.5 to 57 developer hours of 72; model and cloud under 500 EUR, per start not yet estimated): body holds 63 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 10 (line 103, Three risks, each with a control and an owner): body holds 50 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 11 (line 115, Decision: do nothing, run the four-week proof of concept, or run a wider pilot; we recommend the proof of concept): body holds 74 words, over the 70-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING timing: the notes hold 722 words, about 4.8 minutes at 150 a minute, for a 15-minute slot; the rest is unscripted
+Every slide cites evidence or says why not, and the stage's coverage is complete.
+exit 0

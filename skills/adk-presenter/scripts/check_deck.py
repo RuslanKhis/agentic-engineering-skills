@@ -9,17 +9,24 @@ speaker. The checker never judges whether the story is good. It reports what a
 reviewer would otherwise find by hand:
 
 - a slide with no ``Evidence:`` line, or one that cites nothing (no goal or
-  acceptance ID such as ``G03/A2``, contract or decision ID, file path, URL,
+  acceptance ID such as ``G03/A2``, contract, decision, measurement (``M2``)
+  or incident (``I1``) ID, file path, URL,
   or the labels ``hypothesis``, ``assumption``, ``measured`` or ``n/a: <why>``);
 - a number (a percentage, money, hours, counts) on a slide whose evidence is
   ``n/a`` or missing;
 - stage and audience coverage: every tag the stage needs appears on some slide;
 - titles that are labels rather than claims, slides without speaker notes,
   a timed slide count (title and appendix slides excluded) that does not fit
-  the minutes, notes whose spoken length (about 130 words a minute) does not
+  the minutes, notes whose spoken length (about 150 words a minute) does not
   fit the minutes, and front matter without a decider and a date;
-- on a ``case-study`` deck, wording Google's co-branding guidelines do not
-  allow (``GCP``, ``powered by Google``, ``with Google Cloud AI``, partner or
+- hype words (revolutionary, understands, intelligent, eliminates, always,
+  guarantees) that need a recorded measurement behind them;
+- a title or body over its budget (20 and 40 words for business and public
+  decks, 30 and 80 for technical, 70 for the ask slide's body; notes, title
+  and appendix slides do not count), the assertion-evidence budget a reader
+  can take in at a glance;
+- on a ``case-study`` deck, or on any text file given with ``--prose``,
+  wording Google's co-branding guidelines do not allow (``GCP``, ``powered by Google``, ``with Google Cloud AI``, partner or
   preference claims).
 
 Exit status: 0 clean (warnings allowed), 1 when any error is found, 2 when the
@@ -37,7 +44,7 @@ import sys
 STAGES = {
     "poc-approval": ("problem", "hypothesis", "success-criteria", "scope", "cost", "risks", "ask"),
     "production-approval": ("criteria-results", "learned", "production-scope", "cost", "risks", "ask"),
-    "final-results": ("outcome", "adoption", "cost", "incidents", "next", "ask"),
+    "final-results": ("outcome", "adoption", "cost", "incidents", "next"),   # the ask is optional at a results review
     "case-study": ("challenge", "solution", "results", "next"),
 }
 TECHNICAL = {
@@ -50,11 +57,16 @@ AUDIENCES = ("business", "technical", "public")
 ALL_TAGS = sorted({tag for tags in list(STAGES.values()) + list(TECHNICAL.values()) for tag in tags}
                   | {"title", "agenda", "summary", "method", "demo", "team", "timeline", "questions", "appendix"})
 UNTIMED = {"title", "questions", "appendix"}
-WORDS_PER_MINUTE = 130
+WORDS_PER_MINUTE = 150
+TITLE_WORDS = {"business": 20, "public": 20, "technical": 30}   # a technical title carries its qualifier
+BODY_WORDS = {"business": 40, "public": 40, "technical": 80}    # a technical body quotes contracts and figures
+BODY_WORDS_ASK = 70          # options, recommendation, decider and date need room
+NOTES_SHARE = (0.4, 0.8)     # the speech is about two thirds of the slot; questions take the rest
+UNBUDGETED = {"questions", "appendix", "title"}
 GENERIC_TITLES = {"overview", "agenda", "introduction", "background", "results", "architecture",
                   "summary", "conclusion", "next steps", "questions", "thank you", "demo", "appendix",
                   "risks", "costs", "cost", "timeline", "team", "recommendation", "the ask"}
-CITATION = re.compile(r"(?<![\w/-])(?:G\d+(?:/A\d+)?|[CDR]\d+|W\d+)(?![\w/-])")
+CITATION = re.compile(r"(?<![\w/-])(?:G\d+(?:/A\d+)?|[CDRMIW]\d+)(?![\w/-])")  # goals, contracts, decisions, requirements, measurements, incidents, waits
 PATH_OR_URL = re.compile(r"https?://\S+|\S+\.(?:md|json|csv|txt|png|svg|pdf|yaml|yml|ipynb)\b")
 LABEL = re.compile(r"\b(?:hypothesis|assumption|measured|estimate[ds]?)\b", re.IGNORECASE)
 NOT_APPLICABLE = re.compile(r"^\s*n/a\s*:\s*\S", re.IGNORECASE)
@@ -67,6 +79,9 @@ NUMERIC_CLAIM = re.compile(
     r"|conversations?|sessions?|users?|customers?|tickets?|orders?|calls?|requests?|cases?|advertisers?|bookings?))",
     re.IGNORECASE)
 RULE = re.compile(r"^\s*(?:-{3,}|\*{3,}|_{3,})\s*$")
+# Claims that need a recorded measurement behind them before they are spoken.
+HYPE = re.compile(r"\b(?:revolutionary|understands|intelligent(?:ly)?|eliminates?|always|guarantees?|game-?changing|seamless(?:ly)?)\b",
+                  re.IGNORECASE)
 # Wording Google's customer co-branding guidelines (April 2026) and trademark rules do not allow.
 BANNED_WORDING = (
     (re.compile(r"\bGCP\b"), "GCP (write Google Cloud in full)"),
@@ -125,6 +140,23 @@ def tagged_line(lines: list[str], tag: str) -> str | None:
         if match:
             return match.group(1).strip()
     return None
+
+
+def body_lines(lines: list[str]) -> list[str]:
+    """Slide body: everything except the title, the tag lines and the notes (from the Notes: marker on)."""
+    tag = re.compile(r"^\s*(?:\*\*)?(?:evidence|covers)(?:\*\*)?\s*:", re.IGNORECASE)
+    notes = re.compile(r"^\s*(?:\*\*)?notes(?:\*\*)?\s*:", re.IGNORECASE)
+    body, in_fence = [], False
+    for line in lines:
+        if notes.match(line):
+            break
+        if line.strip().startswith("```"):
+            in_fence = not in_fence
+            continue
+        if TITLE.match(line) or tag.match(line) or not line.strip() or line.lstrip().startswith("|"):
+            continue  # a table is a visual, not prose
+        body.append(line)
+    return body
 
 
 def notes_text(lines: list[str]) -> str | None:
@@ -222,6 +254,19 @@ def check_deck(text: str) -> dict:
             errors.append(f"{where}: numbers without evidence: {', '.join(numbers[:4])}")
         elif numbers and kind == "labelled":
             warnings.append(f"{where}: numbers on a hypothesis or assumption slide; the title must read as expected, not measured")
+        title_budget = TITLE_WORDS.get(audience, 20)
+        if title and len(re.findall(r"[\w][\w'.,%-]*", title)) > title_budget:
+            warnings.append(f"{where}: title runs over {title_budget} words; a headline is at most two lines")
+        body_words = sum(len(line.split()) for line in body_lines(lines))
+        budget = max(BODY_WORDS_ASK, BODY_WORDS.get(audience, 40)) if "ask" in tags else BODY_WORDS.get(audience, 40)
+        if body_words > budget and not (set(tags) & UNBUDGETED):
+            warnings.append(f"{where}: body holds {body_words} words, over the {budget}-word budget; move prose to Notes "
+                            f"or the linked document and keep one visual with at most two call-outs")
+        hype = sorted({match.group(0).lower() for line in lines
+                       if not re.match(r"^\s*(?:\*\*)?(?:evidence|covers)(?:\*\*)?\s*:", line, re.IGNORECASE)
+                       for match in HYPE.finditer(re.sub(r"`[^`]*`", "", line))})
+        if hype:
+            warnings.append(f"{where}: hype words need a recorded measurement behind them: {', '.join(hype)}")
         notes = notes_text(lines)
         if notes is None and not (position == 1 and "title" in tags):
             warnings.append(f"{where}: no speaker Notes")
@@ -249,10 +294,10 @@ def check_deck(text: str) -> dict:
         elif timed_slides * 3 < minutes:
             warnings.append(f"timing: {timed_slides} timed slides for {minutes} minutes leaves over three minutes a slide; "
                             f"check the talk is not carried by unrecorded material")
-        if spoken_words and spoken_minutes > minutes * 1.1:
+        if spoken_words and spoken_minutes > minutes * NOTES_SHARE[1]:
             warnings.append(f"timing: the notes hold {spoken_words} words, about {spoken_minutes} minutes at "
-                            f"{WORDS_PER_MINUTE} a minute, for a {minutes}-minute slot")
-        elif spoken_words and spoken_minutes < minutes * 0.5:
+                            f"{WORDS_PER_MINUTE} a minute, for a {minutes}-minute slot that must also hold questions")
+        elif spoken_words and spoken_minutes < minutes * NOTES_SHARE[0]:
             warnings.append(f"timing: the notes hold {spoken_words} words, about {spoken_minutes} minutes at "
                             f"{WORDS_PER_MINUTE} a minute, for a {minutes}-minute slot; the rest is unscripted")
     return {"stage": stage, "audience": audience, "minutes": minutes, "slides": report_slides,
@@ -262,9 +307,29 @@ def check_deck(text: str) -> dict:
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--deck", type=Path, required=True, help="deck outline Markdown file")
+    parser.add_argument("--deck", type=Path, help="deck outline Markdown file")
+    parser.add_argument("--prose", type=Path, help="any text file: run only the public-wording lint (case-study prose)")
     parser.add_argument("--json", action="store_true", help="print a JSON report instead of text")
     args = parser.parse_args(argv)
+    if (args.deck is None) == (args.prose is None):
+        parser.error("give exactly one of --deck or --prose")
+    if args.prose is not None:
+        try:
+            text = args.prose.read_text(encoding="utf-8")
+        except (OSError, UnicodeError) as exc:
+            print(f"ERROR cannot read file: {exc}", file=sys.stderr)
+            return 2
+        findings = [f"line {number}: wording not allowed in a public story: {why}"
+                    for number, line in enumerate(text.splitlines(), start=1)
+                    for pattern, why in BANNED_WORDING if pattern.search(line)]
+        if args.json:
+            print(json.dumps({"errors": findings}, indent=2))
+        else:
+            for message in findings:
+                print(f"ERROR {message}")
+            if not findings:
+                print("No wording Google's co-branding guidelines disallow was found.")
+        return 1 if findings else 0
     try:
         report = check_deck(args.deck.read_text(encoding="utf-8"))
     except (OSError, UnicodeError) as exc:

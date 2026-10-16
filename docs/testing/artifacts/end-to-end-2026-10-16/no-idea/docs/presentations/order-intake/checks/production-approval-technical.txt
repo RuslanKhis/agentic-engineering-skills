@@ -1,0 +1,25 @@
+production-approval deck for a technical audience, 30 minutes, 12 slides (10 timed), notes about 3.5 spoken minutes
+   1. [n/a     ] Order intake: what the pilot built, what it measured, and what hosting it needs  covers: title
+   2. [cited   ] 11 of 12 acceptance cases passed; production needs a TMS test environment, an alert and a pinned release  covers: summary, criteria-results
+   3. [cited   ] Built as designed: five components, no deviations in shape; two deviations in the record  covers: architecture
+   4. [cited   ] Evaluation: 50 paired cases, one run, no repeats; per-field accuracy from 41 to 50 of 50  covers: evidence, demo
+   5. [cited   ] Failure analysis: 47 live edits, 12 "enter manually", 3 "cannot extract" in the test set, one safety case untested  covers: learned
+   6. [cited   ] Cost per emailed order: USD 0.07 model, USD 0.10 all-in; latency and tokens per call not measured  covers: cost
+   7. [cited   ] Production changes: traces, a missed-mail alert, a release manifest with pinned model and prompt, all four queues  covers: architecture, production-scope
+   8. [cited   ] Contracts your services will depend on: five invariants, each enforced in code you can read  covers: contracts
+   9. [cited   ] Security and data boundaries: four tests passed, one contract question open; email text never reaches logs  covers: risks
+  10. [cited   ] Operations: one alert within the hour, your on-call paged for mail and TMS, rollback by revision  covers: operations
+  11. [cited   ] Decision: we need a TMS test environment, Graph consent renewal, a paging owner and the hosting agreement by 15 January  covers: ask, production-scope
+  12. [cited   ] Appendix: the technical questions we expect, answered from the record  covers: questions, appendix
+WARNING slide 2 (line 8, 11 of 12 acceptance cases passed; production needs a TMS test environment, an alert and a pinned release): body holds 45 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 3 (line 20, Built as designed: five components, no deviations in shape; two deviations in the record): body holds 46 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 4 (line 32, Evaluation: 50 paired cases, one run, no repeats; per-field accuracy from 41 to 50 of 50): body holds 66 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 5 (line 51, Failure analysis: 47 live edits, 12 "enter manually", 3 "cannot extract" in the test set, one safety case untested): body holds 60 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 6 (line 64, Cost per emailed order: USD 0.07 model, USD 0.10 all-in; latency and tokens per call not measured): body holds 57 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 7 (line 76, Production changes: traces, a missed-mail alert, a release manifest with pinned model and prompt, all four queues): body holds 62 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 8 (line 89, Contracts your services will depend on: five invariants, each enforced in code you can read): body holds 103 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 9 (line 105, Security and data boundaries: four tests passed, one contract question open; email text never reaches logs): body holds 79 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 10 (line 118, Operations: one alert within the hour, your on-call paged for mail and TMS, rollback by revision): body holds 69 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING timing: the notes hold 530 words, about 3.5 minutes at 150 a minute, for a 30-minute slot; the rest is unscripted
+Every slide cites evidence or says why not, and the stage's coverage is complete.
+exit 0

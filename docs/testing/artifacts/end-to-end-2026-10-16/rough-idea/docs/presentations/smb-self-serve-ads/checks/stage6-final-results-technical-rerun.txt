@@ -1,0 +1,15 @@
+final-results deck for a technical audience, 30 minutes, 11 slides (9 timed), notes about 6.6 spoken minutes
+   1. [none    ] Guided product recommendation service: production over Q1 2027, operations and handover  covers: title
+   2. [cited   ] Production over Q1 2027: p95 2.4 s, fallback on 1.1% of starts, $211 a month, two incidents, one release blocked by the gate  covers: summary
+   3. [cited   ] Architecture as shipped matches the production-approval plan, with one deviation: the arm field stayed mandatory  covers: architecture
+   4. [cited   ] Evaluation and release gates in force: 60 cases refreshed from production logs, 52 pass at a 70% gate, run on every release; model pinned, no retirement date  covers: evidence, operations
+   5. [cited   ] Production quality over the quarter: p95 2.4 s, fallback 1.1%, log-write failures 0.02%, completion 69.4% with no control arm  covers: outcome, adoption
+   6. [cited   ] Incidents: a pricing outage the fallback absorbed, and a quota set from pilot traffic that a marketing day exhausted  covers: incidents
+   7. [cited   ] Cost breakdown: $211 a month, of which model about $173 and Cloud Run about $38; about $0.27 a live start; 47 build hours  covers: cost
+   8. [cited   ] Security and data boundary: no writes, no tools, platform identity only, all verified in CI; retention enforced at 90 days; SDP screening still deferred  covers: evidence
+   9. [cited   ] Handover: runbook, two alerts and the on-call rota are yours; known limitations: one eval run per release, no control arm, escalations unlogged  covers: handover
+  10. [cited   ] Decision: keep 10% of starts in a control arm for one month on the next release and add an escalation log; owners: platform team lead and product owner, 14 April  covers: next, ask
+  11. [cited   ] Questions we expect, with the record's answer  covers: questions, appendix
+WARNING timing: 9 timed slides for 30 minutes leaves over three minutes a slide; check the talk is not carried by unrecorded material
+WARNING timing: the notes hold 983 words, about 6.6 minutes at 150 a minute, for a 30-minute slot; the rest is unscripted
+Every slide cites evidence or says why not, and the stage's coverage is complete.

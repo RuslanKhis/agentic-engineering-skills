@@ -1,0 +1,26 @@
+production-approval deck for a business audience, 15 minutes, 12 slides (10 timed), notes about 4.1 spoken minutes
+   1. [n/a     ] Order intake: the pilot result and the production decision  covers: title
+   2. [cited   ] The pilot met three of three criteria: 1.7 minutes against 4.4, corrected orders flat; we recommend production at about USD 230 a month  covers: summary
+   3. [cited   ] Criteria agreed on 5 November, and what we measured against each  covers: criteria-results
+   4. [cited   ] Minutes per emailed order fell from 4.4 to 1.7 on Maria's queue, week by week, with corrections flat  covers: criteria-results
+   5. [cited   ] What did not work: 14% of drafts needed an edit, 3.6% could not be read, and one safety case was never run  covers: learned
+   6. [cited   ] Four lessons change the production plan: the clock, the weak fields, the IT firm's lead time and the hours  covers: learned
+   7. [cited   ] Production scope: all four dispatchers' emailed orders, a dispatcher approving every order, and a missed-mail alert  covers: production-scope
+   8. [cited   ] Production costs about USD 230 a month and 16 to 24 contractor hours; the pilot cost USD 34.50 and 71 hours  covers: cost
+   9. [cited   ] Three risks, each with a control and an owner  covers: risks
+  10. [cited   ] Build in January: three weeks of work, four queues live by 25 January, results review after 90 days  covers: production-scope, timeline
+  11. [cited   ] Decision: stop, extend the pilot to a second queue, or build for all four; we recommend build; owner-CEO, 10 December  covers: ask
+  12. [cited   ] Appendix: the questions we expect, answered from the record  covers: questions, appendix
+WARNING slide 2 (line 8, The pilot met three of three criteria: 1.7 minutes against 4.4, corrected orders flat; we recommend production at about USD 230 a month): title runs over 20 words; a headline is at most two lines
+WARNING slide 2 (line 8, The pilot met three of three criteria: 1.7 minutes against 4.4, corrected orders flat; we recommend production at about USD 230 a month): body holds 57 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 3 (line 21, Criteria agreed on 5 November, and what we measured against each): body holds 77 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 5 (line 46, What did not work: 14% of drafts needed an edit, 3.6% could not be read, and one safety case was never run): title runs over 20 words; a headline is at most two lines
+WARNING slide 5 (line 46, What did not work: 14% of drafts needed an edit, 3.6% could not be read, and one safety case was never run): body holds 48 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 6 (line 58, Four lessons change the production plan: the clock, the weak fields, the IT firm's lead time and the hours): body holds 63 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 7 (line 71, Production scope: all four dispatchers' emailed orders, a dispatcher approving every order, and a missed-mail alert): body holds 57 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 8 (line 84, Production costs about USD 230 a month and 16 to 24 contractor hours; the pilot cost USD 34.50 and 71 hours): title runs over 20 words; a headline is at most two lines
+WARNING slide 8 (line 84, Production costs about USD 230 a month and 16 to 24 contractor hours; the pilot cost USD 34.50 and 71 hours): body holds 62 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 9 (line 96, Three risks, each with a control and an owner): body holds 64 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 10 (line 108, Build in January: three weeks of work, four queues live by 25 January, results review after 90 days): body holds 45 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING timing: the notes hold 622 words, about 4.1 minutes at 150 a minute, for a 15-minute slot; the rest is unscripted
+Every slide cites evidence or says why not, and the stage's coverage is complete.

@@ -1,0 +1,27 @@
+production-approval deck for a business audience, 15 minutes, 11 slides (9 timed), notes about 6.9 spoken minutes
+   1. [none    ] Guided product choice: what the proof of concept measured, and the production decision  covers: title
+   2. [cited   ] The proof of concept met three of three criteria; we recommend building for production at about $330 a month  covers: summary
+   3. [cited   ] Criteria agreed on 2 October and what we measured: three thresholds, three passes  covers: criteria-results
+   4. [cited   ] Completion moved from 62% to 70.8% on 312 treated sessions; the control arm measured 63.1% in the same weeks  covers: criteria-results
+   5. [cited   ] What did not work: one acceptance case was never run, and the build took 58 hours against 57 estimated  covers: learned
+   6. [cited   ] What we learned that changes the plan: the offline threshold holds, the live spend is not separated from the build spend  covers: learned
+   7. [cited   ] Production scope: every self-serve start, all regions, with the person still confirming every purchase; built in 30 to 60 hours by December  covers: production-scope, timeline
+   8. [cited   ] Production cost: we estimate about $0.46 a session and about $330 a month; the pilot cost $142 and 58 hours  covers: cost
+   9. [cited   ] Three risks, each contained by a control with an owner; a person validates every purchase before money moves  covers: risks
+  10. [cited   ] Decision: stop, extend the pilot, or build for production on all starts; we recommend building; Director of SMB Sales, 6 November  covers: ask
+  11. [cited   ] Questions we expect, with the record's answer  covers: questions, appendix
+WARNING slide 2 (line 7, The proof of concept met three of three criteria; we recommend building for production at about $330 a month): body holds 43 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 3 (line 19, Criteria agreed on 2 October and what we measured: three thresholds, three passes): body holds 70 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 4 (line 33, Completion moved from 62% to 70.8% on 312 treated sessions; the control arm measured 63.1% in the same weeks): title runs over 20 words; a headline is at most two lines
+WARNING slide 4 (line 33, Completion moved from 62% to 70.8% on 312 treated sessions; the control arm measured 63.1% in the same weeks): body holds 53 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 5 (line 44, What did not work: one acceptance case was never run, and the build took 58 hours against 57 estimated): body holds 51 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 6 (line 56, What we learned that changes the plan: the offline threshold holds, the live spend is not separated from the build spend): title runs over 20 words; a headline is at most two lines
+WARNING slide 6 (line 56, What we learned that changes the plan: the offline threshold holds, the live spend is not separated from the build spend): body holds 55 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 7 (line 68, Production scope: every self-serve start, all regions, with the person still confirming every purchase; built in 30 to 60 hours by December): title runs over 20 words; a headline is at most two lines
+WARNING slide 7 (line 68, Production scope: every self-serve start, all regions, with the person still confirming every purchase; built in 30 to 60 hours by December): body holds 49 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 8 (line 80, Production cost: we estimate about $0.46 a session and about $330 a month; the pilot cost $142 and 58 hours): title runs over 20 words; a headline is at most two lines
+WARNING slide 8 (line 80, Production cost: we estimate about $0.46 a session and about $330 a month; the pilot cost $142 and 58 hours): body holds 60 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 9 (line 92, Three risks, each contained by a control with an owner; a person validates every purchase before money moves): body holds 71 words, over the 40-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+WARNING slide 10 (line 105, Decision: stop, extend the pilot, or build for production on all starts; we recommend building; Director of SMB Sales, 6 November): title runs over 20 words; a headline is at most two lines
+WARNING slide 10 (line 105, Decision: stop, extend the pilot, or build for production on all starts; we recommend building; Director of SMB Sales, 6 November): body holds 82 words, over the 70-word budget; move prose to Notes or the linked document and keep one visual with at most two call-outs
+Every slide cites evidence or says why not, and the stage's coverage is complete.

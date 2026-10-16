@@ -98,7 +98,9 @@ resolving `SKILL_DIR` to this skill's directory:
 python3 "$SKILL_DIR/scripts/rank_opportunities.py" --brief docs/discovery/<topic>.md
 ```
 
-Paste its ranking and findings under the table. A first candidate with no
+Paste its ranking and findings under the table, verbatim; never paraphrase
+a finding it did not print, and never write the closing summary before the
+brief and the helper run exist. A first candidate with no
 measure or an unclear fit blocks the handoff; an unknown baseline makes
 measurement the first goal; a risk of 4 or 5 or data readiness of 1 or 2 is
 a reason to choose a lower-risk candidate or to put a person before every
@@ -112,9 +114,17 @@ months; the bigger idea stays in the portfolio with its trigger.
 Fill section 4 of the brief completely for the chosen use case; the template
 lists every field, from the outcome measure (observable in an existing
 system; usage counts are not outcomes) and its baseline or "unknown" to the
-counter-metric, the hypothesis chain with every arrow a hypothesis, and the
-90-day sentence. Fill the scope-gate table with what the conversation already
-established (deadline, people, money, judge, data, who approves the next
+counter-metric, the hypothesis chain with every arrow a hypothesis, the
+workflow before and after with its validation points, the data register,
+the correction loop, the embedding rule and the 90-day sentence. Then fill
+the stall checks (section 7) from
+[why projects stall](references/why-projects-stall.md): one row per known
+cause, each citing the section that answers it or recording a gap with who
+settles it. A candidate with no named owner, no data access and no path
+into the real workflow is tinkering, not a first use case; say so and pick
+the next one or make those three the first goals.
+
+Fill the scope-gate table with what the conversation already established (deadline, people, money, judge, data, who approves the next
 step and when) and mark the rest "unknown: ask", so the designer skips what
 is answered; expect the ADK-familiarity row to be an ask. Put the decision
 calendar in the brief: each approval or review is a presentation goal the
@@ -125,14 +135,28 @@ with how each is settled.
 
 Read [handoff](references/handoff-to-design.md) for the line between this
 skill and the designer and for the one prompt that ends the work. Fill that
-prompt in, put it in section 8 of the brief, and end the conversation in chat
+prompt in, put it in section 9 of the brief, and end the conversation in chat
 with: where the brief is saved, the first use case in one sentence with its
 measure and baseline, the technology fit in the stakeholder sentence, the
 next decision and its date, and the same prompt in a copyable block. When
 the fit is `process`, name the role that owns the change and what will be
-measured instead. When the user wants the approval presentation before
-any design exists, `adk-presenter` can draft it from the brief with cost and
-scope marked pending. Local discovery work authorises no cloud operations,
+measured instead.
+
+Then ask one closing question: whether the user wants the proof-of-concept
+approval presentation drafted now, before the design exists. If the decision
+calendar names an approval, offer the prompt; `adk-presenter` drafts it from
+the brief alone, with every number labelled as the brief labels it and the
+cost and scope slides marked "pending design":
+
+```text
+/adk-presenter Prepare the proof-of-concept approval presentation for a
+business audience from docs/discovery/<topic>.md. The design does not exist
+yet: mark cost and scope as pending and label every hypothesis. Fifteen
+minutes; the decider is <name> on <date>.
+```
+
+Say that the deck is redrafted from the design and plan once they exist, so
+the user can choose to design first. Local discovery work authorises no cloud operations,
 no purchases of data and no contact with the user's customers; it reads what
 the user supplies and public pages, and cites them with dates.
 

@@ -61,7 +61,20 @@ pricing date. Separate fixed/minimum capacity and recurring storage from request
 cost. Include failures and background memory/evaluation/cleanup work.
 
 If prices or traffic are unknown, provide a symbolic estimate and a sensitivity
-range; label illustrative inputs. Never present that as a validated bill or a
+range; label illustrative inputs. The symbolic form, filled with what is
+known, is a result the presenter can put on a cost slide:
+
+```text
+cost per request ≈ (input tokens × p_in + output tokens × p_out) × model calls
+                   + tool and storage work per request
+monthly ≈ cost per request × requests per month
+```
+
+Fill the token counts (measure one representative request offline), the
+calls per request (from the workflow) and the volume (from the brief); leave
+`p_in` and `p_out` symbolic with the pricing date to check, give the spend
+ceiling the sponsor accepted, and name the goal that reads the actual bill
+in the first live week. Never present that as a validated bill or a
 hard spending cap. Alerts-only Cloud Billing budgets notify about spend and do
 not automatically cap usage. Verify current coverage and limitations before
 relying on a provider spend-cap feature. Admission checks, durable accounting when required,

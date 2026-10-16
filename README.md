@@ -276,9 +276,13 @@ for the next one. Nothing is deployed or paid for without your approval.
 
 ### Journey C: win the decision
 
-Every phase boundary that needs someone's approval gets a presentation goal
-in the plan. The presenter builds it from the evidence the goals recorded,
-never from a number it made up:
+A project is presented four times: to get the go-ahead for the proof of
+concept, to show what the proof of concept did and win the production
+decision, to show what the production build delivered, and, when the result
+is shareable, as a public case study. The designer asks which of these
+reviews the project needs and writes each as a goal in the plan (and a
+ticket, if you ask for tickets), one per audience. The presenter builds each
+from the evidence the goals recorded, never from a number it made up:
 
 ```text
 /adk-presenter Prepare the proof-of-concept approval presentation for a
@@ -295,14 +299,25 @@ hypothesis.
 ```
 
 ```text
+/adk-presenter All production goals in docs/plans/<topic>.md are complete
+with evidence. Prepare the final results presentation for the sponsor and
+the leadership team: outcome against the baseline, adoption, cost, incidents
+and what comes next. Then the technical handover version for the platform
+team that runs it.
+```
+
+```text
 /adk-presenter Draft a public case study from the production results in
 docs/plans/<topic>.md, with the approvals and numbers we must gather before
 sharing it with our Google Cloud account team.
 ```
 
 Expect one outline per audience under `docs/presentations/<topic>/`, with
-speaker notes in the same file, a one-page decision memo, and a deck check
-that fails when a slide carries a number without a source.
+the speech written out as speaker notes in the same file, a one-page
+decision memo, and a deck check that fails when a slide carries a number
+without a source. The discovery skill offers the first of these prompts
+when it finishes, so the approval deck can be drafted from the brief before
+the design exists.
 
 ### Journey B: maintain an application
 
@@ -347,7 +362,7 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 
 | What you need | Skill |
 | --- | --- |
-| Where AI fits, which use case first, what to measure, and whether an agent, classical ML, rules or a process change is the right tool | [adk-discovery](#adk-discovery) |
+| Where AI fits, which use case first, what to measure, whether an agent, classical ML, rules or a process change is the right tool, and the countermeasures for the reasons AI projects stall | [adk-discovery](#adk-discovery) |
 | A system-design conversation and architecture before implementation | [adk-system-designer](#adk-system-designer) |
 | Help choosing an approach or combining concerns | [adk-engineer](#adk-engineer) |
 | A presentation for a proof-of-concept approval, a production decision, a results review or a public case study | [adk-presenter](#adk-presenter) |
@@ -391,8 +406,14 @@ a technology fit: an agent, a single LLM call, classical machine learning,
 rules or scripting, or no software at all, with the reason in a sentence a
 stakeholder can repeat. It records the hypothesis chain and a counter-metric,
 ranks the portfolio with a small helper so the arithmetic is not done in the
-model's head, saves `docs/discovery/<topic>.md`, and ends with the exact
-`adk-system-designer` prompt. It does not write contracts, architecture or
+model's head, and checks the brief against the thirteen reasons AI projects
+stall for reasons other than the model (a misframed problem, no baseline, an
+unchanged workflow, no senior owner, no human-validation point, inaccessible
+data, unmodelled cost, missing risk controls, ignored training, no feedback
+loop, a pilot never embedded, build-or-buy on pride, model churn), each with
+the field that answers it. It saves `docs/discovery/<topic>.md`, ends with
+the exact `adk-system-designer` prompt, and offers to draft the
+proof-of-concept approval presentation from the brief. It does not write contracts, architecture or
 goals; that is the designer's job, and the designer does not reopen the
 choice.
 
@@ -548,11 +569,16 @@ technical teams who will inherit the system (architecture, contracts,
 evidence, operations, handover). It reads the discovery brief, the design and
 the plan, takes every number from recorded evidence, labels anything
 unmeasured as a hypothesis, and writes a slide outline with an action title
-and an evidence citation per slide, the spoken narrative, the questions to
-expect and a one-page decision memo. A helper checks the outline: a number
-without a source, a slide without evidence, or a missing stage topic fails
-the check. The designer plans these presentations as goals at each phase
-boundary.
+and an evidence citation per slide, the speech itself as speaker notes
+(bottom line first, one real case, three reasons, what did not work and the
+answer, options and the decider, with timings per stage), the questions to
+expect with a protocol for answering them, and a one-page decision memo.
+Its slide-craft reference turns the outline into assertion-evidence slides:
+one claim, one visual, the baseline drawn, a caption with sample and method.
+A helper checks the outline: a number without a source, a slide without
+evidence, or a missing stage topic fails the check; hype words, over-long
+titles or bodies, and notes that overrun the minutes are warned. The
+designer plans these presentations as goals at each phase boundary.
 
 **Invoke:** Claude Code `/adk-presenter` · Codex `$adk-presenter`
 
@@ -1770,7 +1796,14 @@ including 26 tests for the two new helpers. Two fresh-agent trials, one
 simulating a product owner for the discovery conversation and one
 preparing both production-approval decks from a synthetic plan, rated the
 skills 3 and 4 of 5 for ease and produced 36 friction items; the
-contradictions and gaps they found were fixed the same day. See the
+contradictions and gaps they found were fixed the same day. A second round
+added speech and slide-craft references to the presenter and a stall-causes
+check to discovery from three further research notes. Two end-to-end trials
+then took a rough idea and a no-use-case business through every stage, from
+discovery to the case study; every handoff carried what the next stage
+needed, no slide carried an unsourced number, and the friction they found
+was fixed. All **22 packages** pass validation and **695 tests** pass with
+**59 optional SDK checks skipped**. See the
 [trial record](docs/testing/discovery-and-presenter-2026-10-15.md).
 
 ### Human-effort estimates · 9 October 2026

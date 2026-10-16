@@ -75,6 +75,80 @@ instruction before the first question. The trial judged the structure sound
 and the length the cost; a later pass may move the question table into the
 skill and shorten the references.
 
+## Second round, same day
+
+Three more research notes were added ([slide craft](../research/slide-craft.md),
+[speech craft](../research/speech-craft.md) and
+[why AI projects fail](../research/why-ai-projects-fail.md)) and folded in:
+the presenter gained a speech reference (bottom line first, one case on the
+story spine, three reasons, refuted failures, timings per stage, rehearsal
+checklist, question protocol) and a slide-craft reference (assertion-evidence
+slides, chart and diagram rules, a per-slide checklist), with checker
+warnings for hype words, over-long titles and bodies, and notes that overrun
+the minutes at 150 words a minute; the discovery skill gained a stall-causes
+reference, a stall-checks table and new brief fields (two-voice problem
+statement, data register, workflow before and after with validation points,
+correction loop, embedding rule, senior owner and people plan), and offers
+the proof-of-concept approval deck when it finishes; the designer now asks
+which of the three reviews (before the build, after the proof of concept,
+after production) need a presentation and writes each as a goal and ticket;
+Journey C in the README carries the final-results stage.
+
+## End-to-end trials · 16 October 2026
+
+Two simulated projects ran through every stage: discovery, the
+proof-of-concept approval deck from the brief alone, the design with
+presentation goals and tickets, the approval deck again from the full
+record, then production approval, final results and a public case study
+after the simulated user reported the tickets complete. One started from a
+rough idea (selling advertising to small businesses), the other from no use
+case at all (a logistics firm whose director did not know how AI works).
+Interruptions from a sleeping laptop split each run across several fresh
+agents that continued from the files on disk. Reports, transcripts and every
+document produced are under [the trial artifacts](artifacts/end-to-end-2026-10-16/).
+
+| Stage | Rough idea | No use case |
+| --- | --- | --- |
+| Discovery | done earlier, 3 of 5 | 3 of 5 |
+| Approval deck from the brief | 4 of 5 | 4 of 5 |
+| Design, plan, tickets | 3 of 5 | 2 of 5 |
+| Approval deck from the full record | 3 of 5 | 4 of 5 |
+| Production approval | 4 of 5 | 3 of 5 |
+| Final results | 3 of 5 | 4 of 5 |
+| Case study | 4 of 5 | 3 of 5 |
+
+What worked: every handoff carried what the next stage needed; the
+designer turned the brief's decision calendar into presentation goals and
+waits; no slide in either project carried a number without a source; the
+not-run acceptance cases and open decisions reached the slides and the asks;
+the no-use-case run picked order intake for the right reason (the largest
+reported hours, inputs that exist, a person before every effect), explained
+the choice in plain words and named a customer order form and the TMS
+vendor's own intake as non-AI alternatives; the case-study reference was
+rated the most useful single document.
+
+What changed as a result: the checker's word budgets were widened for
+technical decks and the ask slide, tables and appendix slides are no longer
+budgeted, decimals count as one word, and code spans are not read as hype;
+the notes timing now expects about two thirds of the slot; the
+final-results ask became optional; memos and pre-wiring are named per stage;
+a `--prose` mode lints case-study text; the plan gained numbered measurement
+and incident records (`M1`, `I1`) that `adk-engineer` writes and the checker
+accepts as citations, so results after a pilot are citable by ID; the
+designer's compact form now agrees with its skill on the schedule helper,
+one file, the failure grid and ticket length, and its cost reference gives a
+symbolic formula usable without live prices; discovery's ranker warns on an
+estimated baseline, the brief names the single decider, the publicity
+approver and the Google Cloud relationship, and the baseline is measured on
+the scope production will reach; the presenter outlines handle no demo,
+proof-of-concept profiles with deferred observability, information-only
+reviews and an external IT firm as the technical audience, and the question
+bank has results-review and case-study questions.
+
+Not changed: the designer's skill is still long for a four-week proof of
+concept, and later presentation stages still repeat the same mechanics
+(memo, pre-wiring, premortem) by design. The fixes were not re-trialled.
+
 ## Limits
 
 One run per trial, one synthetic scenario each, the agents' own friction
