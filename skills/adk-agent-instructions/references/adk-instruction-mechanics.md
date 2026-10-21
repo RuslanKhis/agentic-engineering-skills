@@ -118,7 +118,7 @@ vendor guidance). The long-horizon harness sample goes further: the constant
 tier is "a pure function of (tool_names, model_name, has_code_executor), built
 once at App-build time", per-session context is appended in
 `before_model_callback`, and volatile data (date, iteration, errors) rides in
-trailing content (adk-samples long-horizon-harness, read 2026-10-06, vendor
+trailing content (adk-recipes long-horizon-harness, read 2026-10-06, vendor
 sample).
 
 Observable check: record two consecutive requests and diff

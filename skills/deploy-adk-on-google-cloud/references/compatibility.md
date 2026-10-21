@@ -19,6 +19,8 @@ Product naming moved after the chapter was written: Google's documentation now f
 
 Reviewed external source, 21 October 2026: Google's `google/skills` collection (Apache-2.0) for named Cloud Run roles, ingress and egress rules, Agent Identity and runtime troubleshooting facts; each imported fact carries its own citation and the live baseline above is unchanged.
 
+Reviewed external source, 22 October 2026: Google's Agents CLI 1.11.0 (released 2026-10-20; `google-agents-cli-deploy` skill and `src/google/agents/cli/deploy/`) for the `agents-cli deploy` flags, defaults and Agent Identity, Agent Gateway and Terraform-ownership behaviour cited in the mode references. Its scaffold now targets `google-adk>=2.12.0` and `google-cloud-aiplatform>=2.2,<3`, which is outside this skill's 2.8.0 baseline; those facts describe the CLI, not a re-run of the live campaign. Where the CLI and the Agent Identity documentation disagree (`roles/aiplatform.user` versus `roles/aiplatform.expressUser`), both are stated.
+
 ## Inspect the target, then apply the appropriate contract
 
 Select the target's existing interpreter from its documented environment. Read `.python-version`, `pyproject.toml`, requirements/constraints/includes, lockfiles and Docker base together; check the installed environment separately. A project version declaration and the interpreter running the inspector can differ. For example, run this using the selected interpreter, without importing the agent:

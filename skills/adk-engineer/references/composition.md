@@ -16,7 +16,7 @@ is evidence of project conventions, not permission to execute platform commands.
 
 | Situation | How to proceed |
 | --- | --- |
-| User chose the Agents CLI lifecycle for a new project | Use the installed `google-agents-cli-workflow` for the requested lifecycle phases and this toolkit's specialist for the feature. Reuse the agreed design. |
+| User chose the Agents CLI lifecycle for a new project | Use the installed `google-agents-cli-workflow` for the requested lifecycle phases (understand with its spec gate, study recipes, scaffold, build, evaluate, deploy, publish, observe) and this toolkit's specialist for the feature. Reuse the agreed design; a design from `adk-system-designer` answers its spec phase. |
 | Focused change in an existing Agents CLI project | Select the primary ADK specialist. Preserve the manifest, generated server/transport, dependency pins, model and infrastructure ownership. Consult the relevant installed Google skill for the specific interface or command needed. |
 | Existing ADK application without Agents CLI | Work in its current layout and environment. Adopting a scaffold is a separate requested change; a downloaded recipe can be studied without converting the application. |
 | User chose Matt Pocock's `tdd`, `diagnosing-bugs` or another process skill | Follow that installed process and use the ADK specialist's domain guidance. Keep the existing task and design instead of starting another interview or ticketing workflow. |
@@ -29,12 +29,21 @@ integration.” Load only the optional skills relevant to that division.
 
 ## Select optional guidance
 
-- `google-agents-cli-adk-code`: installed ADK interfaces and reference recipes.
-- `google-agents-cli-scaffold`: a requested project creation or scaffold change.
-- `google-agents-cli-eval`: Agents CLI dataset, trace, metric and result formats.
-- `google-agents-cli-deploy`: the adopted delivery mechanism and generated infrastructure.
-- `google-agents-cli-observability`: telemetry setup and export destinations.
-- `google-agents-cli-publish`: requested Gemini Enterprise registration.
+- `google-agents-cli-adk-code`: ADK API cheatsheets (agents, tools, callbacks,
+  state, the graph Workflow API, Live, managed agents) and the recipe
+  catalogue in `google/adk-recipes` (memory, approval, RAG, safety plugins,
+  ambient triggers, a scheduled production-trace evaluator).
+- `google-agents-cli-scaffold`: a requested project creation, enhancement or
+  upgrade; its own text says to run the workflow's spec phase first.
+- `google-agents-cli-eval`: Agents CLI dataset, trace, metric and result
+  formats, user simulation, Live mode, `compare`, `analyze`, `submit`.
+- `google-agents-cli-deploy`: the adopted delivery mechanism, `deploy` flags
+  and the generated Terraform's ownership.
+- `google-agents-cli-observability`: telemetry environment, completion
+  uploads and BigQuery analytics infrastructure.
+- `google-agents-cli-publish`: requested registration in Gemini (formerly
+  Gemini Enterprise) with `agents-cli publish gemini`, and Agent Registry
+  commands.
 
 Discover these through the coding agent's available-skills catalogue. Read the
 selected skill's instructions before relying on it. Google's
@@ -59,6 +68,12 @@ neither replaces the other.
 
 Google's code skill points to its full workflow, including scaffolding and live
 evaluation. Honour the user's actual task when combining those instructions.
+Studying a recipe means reading its files; cloning it is a network action
+under the same authorisation as any fetch, and the installed skill's copy of
+the catalogue often answers the question without a clone. Google's rule to run
+everything through `uv` governs its generated project's commands; running the
+project's own test command with the interpreter at hand, and saying which one
+ran, is not a conflict.
 For a local feature request, complete the local change and report any separate
 platform prerequisite. A skill's command example is not authorisation to install
 tools, change cloud resources or run paid evaluations.
@@ -98,12 +113,20 @@ need the user's approval for that scope.
 | `deploy-adk-on-google-cloud` | `cloud-run-basics`, `gke-basics`, `gke-app-onboarding`, `google-cloud-global-frontend-configuration`, `google-cloud-solution-n-tier-serverless-web-app`, `cloud-build-basics`, `agent-platform-troubleshooting` | The chosen host; a public load balancer or Cloud Armor in front; private tiers; CI on Cloud Build; a 403 or startup failure behind an Agent Gateway |
 | `adk-agent-observability` | `agent-platform-alert-configuration`, `cloud-run-alert-configuration`, `google-cloud-slo-alert-configuration`, `cloud-monitoring-*`, `cloud-trace-querying`, `cloud-logging-*` | SLIs decided and the alert policy, dashboard, query, sink or notification channel must now be built |
 | `adk-tool-auth-and-secrets`, `adk-agent-security` | `iam-helper-for-policy-management`, `-policy-simulator`, `-troubleshooting`, `-privileged-access-management`; `google-cloud-solution-multi-agent-security`, `apigee-agent-gateway-governance`; `google-cloud-scc-query`, `google-cloud-scc-remediation` | An IAM binding or deny policy to write or replay; a 403 on the runtime identity; break-glass access; Agent Gateway or Model Armor at the perimeter; Security Command Center findings |
-| `adk-agent-interoperability` | `api-gateway-mcp-server`, `api-gateway-backend-security-and-rate-limiting`, `gemini-agents-api`, `agent-platform-skill-registry` | Hosting a REST API as a remote MCP server; registering agents or skills on Agent Platform |
+| `adk-agent-interoperability` | `api-gateway-mcp-server`, `api-gateway-backend-security-and-rate-limiting`, `gemini-agents-api`, `agent-platform-skill-registry`; `google-agents-cli-publish` from Agents CLI | Hosting a REST API as a remote MCP server; registering agents or skills on Agent Platform; `agents-cli publish gemini` and Agent Registry commands in an Agents CLI project |
 | `adk-memory-architecture`, `adk-sql-agent-engineering` | `cloud-sql-basics`, `alloydb-basics`, `bigquery-basics`, `bigquery-optimization`, `bigquery-troubleshooting`, `bigquery-ai-ml`, `agent-platform-rag-engine-management`, `google-cloud-storage-basics` | The chosen store needs provisioning, IAM database users, partitioning, cost diagnosis, a corpus smoke test or a bucket |
 | `adk-agent-evaluation`, `adk-release-engineering` | `agent-platform-eval-flywheel`, `cloud-build-basics` | The managed scorer or Cloud Build is the adopted mechanism |
 | `adk-model-and-output-contracts` | `gemini-api`, `agent-platform-tuning`, `agent-platform-inference` | A tool calls Gemini directly; fine-tuning; a self-hosted open model endpoint |
 | `adk-frontend-integration` | `google-cloud-solution-agentic-ai-bidirectional-streaming`, `gemini-live-api` | Audio or video streaming in the journey |
 | `optimise-adk-on-google-cloud` | `gke-cost-optimization`, `gke-workload-scaling`, `google-cloud-networking-observability` | A GKE host; packet loss or Private Service Connect latency |
+
+When Google's sources disagree with each other, settle it in this order: the
+official product documentation decides a platform fact; the CLI's release
+notes and source decide what a command does, over the skill text that
+describes it; and this toolkit records the divergence beside the fact, so the
+next reader does not repeat the tie-break. The deploy and interoperability
+references carry three such records at 1.11.0 (the Agent Identity baseline
+role, the invoker role for Gemini registration, the dry-run semantics).
 
 Google's skills were written for an operator at a terminal. Keep this
 toolkit's rules where they differ: pass `--project` and `--region` on each
@@ -116,8 +139,13 @@ optional telemetry attribution, not a requirement.
 ## Check the combined result
 
 Keep deterministic application checks and real-model evaluations distinct.
+Google's workflow says not to write behavioural unit tests; this toolkit's
+scripted-model Runner tests assert application effects (a forbidden action
+never runs, a record stays owner-scoped), not response wording, and remain
+part of the change.
 Scripted-model Runner tests can verify identity, consent and stored effects;
-live evaluations measure model-dependent choices. Agents CLI JSON results and
+live evaluations measure model-dependent choices. Agents CLI results
+(`artifacts/grade_results/results_<timestamp>.json`) and
 native ADK evaluation artifacts have different contracts, so verify the producer
 and schema before choosing a checker.
 

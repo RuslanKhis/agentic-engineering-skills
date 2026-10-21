@@ -67,6 +67,13 @@ Neither semantic memory nor retrieved prose authorises an action. Add a
 store when a required fact needs its authority and lifetime; one store is
 the usual answer.
 
+When the project has `agents-cli-manifest.yaml`, consult the installed
+`google-agents-cli-adk-code` skill (`references/adk-python.md`, "Context,
+State, and Memory", or the `cross-session-memory` recipe for Memory Bank
+wiring); if it is not installed, adk-engineer explains how to get it. The
+recipe supplies the ADK wiring; this skill decides what is stored, under
+whose consent, and how it is corrected and erased.
+
 For local PDFs, supplementary authorities or image-only evidence, read
 [local-document-coverage.md](references/local-document-coverage.md) for the
 coverage fixture and the visual-review or unresolved-evidence boundary.

@@ -1,6 +1,6 @@
 # Feedback capture
 
-Read when user or operator feedback should join telemetry and feed evaluation. The pattern below is vendor guidance from Google's agents-cli observability material (`feedback-mechanism.md`, skill version 1.8.0, 2026-09-30) adapted to this toolkit's boundaries; nothing here is an ADK API.
+Read when user or operator feedback should join telemetry and feed evaluation. The pattern below is vendor guidance from Google's agents-cli observability material (`feedback-mechanism.md`, skill version 1.11.0 released 2026-10-20, re-read 22 October 2026; unchanged since 1.8.0) adapted to this toolkit's boundaries; nothing here is an ADK API.
 
 ## Record shape
 
@@ -27,7 +27,7 @@ Emit it with the host logger as structured JSON (`logger.log_struct` on Cloud Lo
 3. Join on `session_id` and `invocation_id` to `v_agent_response`, `v_llm_response` and `v_tool_error` for cohorts (negative feedback by tool, by model version, by latency bucket).
 4. Negative feedback selects candidates for [trace to evaluation](trace-to-evaluation.md); the export runs the redaction step regardless of what the feedback record contained.
 
-agents-cli provisions this chain (`agents-cli infra single-project --apply` creates the bucket, the `<project>_telemetry` dataset and sinks) when that collection is installed; the record contract above stays the same whether the infrastructure is generated or hand-built. Creating sinks, datasets and tables are approvals.
+agents-cli provisions this chain (`agents-cli infra single-project --apply` creates the bucket, the `<project>_telemetry` dataset and sinks) when that collection is installed; the record contract above stays the same whether the infrastructure is generated or hand-built. For the generated `telemetry.tf` and its `cicd/` variant, consult the installed `google-agents-cli-observability` skill; if it is not installed, adk-engineer explains how to get it. Creating sinks, datasets and tables are approvals.
 
 ## What to watch
 

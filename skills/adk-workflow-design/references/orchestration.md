@@ -154,6 +154,72 @@ supported workflow mechanism. Data IDs need not be unique execution IDs. Verify
 the SDK's child-ID constraints before supplying custom IDs, particularly when
 duplicate inputs or replay are possible.
 
+## Graph interrupts, state and retries
+
+The facts below describe the graph API that Agents CLI scaffolds target
+(`google-adk>=2.12.0` for new projects as of Agents CLI 1.11.0); this skill's
+recorded baseline is 2.8.0, so confirm each one against the installed version
+before relying on it.
+
+- **Pausing a node for a person.** A node yields `RequestInput(message=...)`,
+  optionally with `payload` and `response_schema`; on resume the reply is read
+  from `ctx.resume_inputs`. With `rerun_on_resume=False` (the `FunctionNode`
+  default) the reply is routed to the node's successor as its input and the
+  interrupted node is bypassed; with `rerun_on_resume=True` (the `LlmAgent`
+  node default) the node runs again from the top with `resume_inputs`
+  populated (https://adk.dev/graphs/human-input/, read 22 October 2026;
+  supported from ADK Python 2.0.0). adk.dev documents an implicit interrupt
+  identifier for Python; the Agents CLI cheatsheet shows an explicit
+  `RequestInput(interrupt_id=..., message=...)` keyword, keys `resume_inputs`
+  by it and advises a unique identifier per loop iteration (for example
+  `f"review_{count}"`) so a loop does not restart indefinitely (Agents CLI
+  1.11.0, `google-agents-cli-adk-code` skill,
+  `references/adk-python-workflows.md`, read 22 October 2026; vendor guidance,
+  confirm the keyword exists on the installed version). Acceptance: a test
+  resumes the paused run with a scripted reply and asserts which node ran
+  again and what the successor received.
+- **State written by a node.** An `Event` carries `output` (to the successor),
+  `route` (edge selection) and `state` (a delta committed with the node's
+  events). adk.dev says to write state through `ctx.state` rather than
+  returning it, and that writes are committed with the node's events and
+  visible to downstream nodes in the same run
+  (https://adk.dev/graphs/data-handling/, read 22 October 2026). The Agents
+  CLI cheatsheet prefers `return Event(output=..., state={...})` because the
+  delta is persisted in event history and replayable, and calls a
+  `ctx.state[...]` assignment a side effect that may be lost on replay (same
+  skill, `references/adk-python-workflows.md`; vendor guidance). Choose one
+  convention per project and test it under resume and rewind rather than
+  trusting either description. Only the last `output` a node yields reaches
+  its successor, and state is not for large payloads: use artifacts or a
+  store (adk.dev, same page).
+- **Typed outputs inside a graph.** Set `output_schema` on every `LlmAgent`
+  node; without it the output is `types.Content`, which breaks typed function
+  nodes and serialisation through `JoinNode` or a database session (the adk.dev
+  data-handling page and the Agents CLI cheatsheet agree). `JoinNode` emits a
+  dict keyed by predecessor names; `ctx.state.get(key)` returns a dict, so
+  rebuild typed access with `MyModel(**data)`.
+- **Runtime-sized fan-out and retries.** `ParallelWorker` processes a list
+  concurrently, one worker per item; `state_schema` on `Workflow` or
+  `FunctionNode` validates state with a Pydantic model;
+  `FunctionNode(..., retry_config=RetryConfig(...))` retries a failing
+  function node; an unconditional cycle is rejected, so a loop needs at least
+  one routed edge (Agents CLI cheatsheet, `references/adk-python-workflows.md`;
+  vendor guidance, not found on adk.dev for Python on 22 October 2026, so
+  verify the symbols in the installed package before use).
+- **Delegation modes inside a graph.** Task-mode sub-agents are disabled
+  inside graph workflows in ADK Python 2.0.0, and task-mode agents must be
+  leaf agents (https://adk.dev/workflows/collaboration/, read 22 October
+  2026). Model a specialist as a node instead; `adk-tool-interface-design`
+  owns the delegation interface outside graphs.
+
+When the project has `agents-cli-manifest.yaml`, consult the installed
+`google-agents-cli-adk-code` skill (`references/adk-python-workflows.md`, or
+the `ambient-expense-agent` recipe for an event-driven `Workflow` with an
+approval pause and the `deep-search` recipe for a plan-approval loop, both in
+`google/adk-recipes`); if it is not installed, adk-engineer explains how to
+get it. The recipe shows the wiring; this reference owns the acceptance
+contract.
+
 ## Prepare a production handoff only when requested
 
 Separate hosting from inference and state. Record the application host and

@@ -7,7 +7,12 @@ other author's skill is bundled. The source repository has no published book
 URL, so no publication link is invented. This package is fully usable alone.
 On 21 October 2026 the Apache-2.0 `google/skills` collection (`skills/cloud/`)
 was reviewed as a source for the vendor facts cited inline in the references;
-nothing from it is bundled.
+nothing from it is bundled. On 22 October 2026 Google's Agents CLI 1.11.0
+skills (Apache-2.0), `google-agents-cli-adk-code` `references/adk-python.md`
+and `references/samples.md`, were reviewed the same way for the native memory
+surfaces and the `cross-session-memory` recipe cited in
+[memory-bank.md](memory-bank.md) and [sessions-state.md](sessions-state.md);
+nothing is bundled or was executed.
 
 Paths below identify historical evidence relative to the optional source
 repository's `chapter-06-memory-and-rag/` directory. They are provenance labels,

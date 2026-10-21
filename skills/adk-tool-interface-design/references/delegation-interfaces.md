@@ -18,6 +18,20 @@ verify it.
 | `sub_agents=[a]` with `a.mode='single_turn'` | A tool named after the sub-agent (`_SingleTurnAgentTool`); parameters from `a.input_schema` or `request: str`; description = `a.description` | None; runs inline in the parent's session | Automatic, with the result as the tool response; excluded from transfer targets |
 | `tools=[AgentTool(a, skip_summarization=False)]` | A tool named `a.name`, description `a.description`, parameters from `a.input_schema` or `request: str` | None; runs in a separate in-memory session under a nested `Runner` | Final text (or validated `output_schema` object) as the tool result |
 
+Later versions and the Agents CLI cheatsheet describe the `task` row with
+different names: the coordinator receives a `request_task_{name}` tool, the
+sub-agent returns through the auto-injected `finish_task` tool, and when no
+schemas are set the defaults are `goal` and `background` in and `result` out
+(Agents CLI 1.11.0, `google-agents-cli-adk-code` skill,
+`references/adk-python.md`, read 22 October 2026; vendor guidance written for
+`google-adk>=2.12.0`). On the 2.8.0 source the tool is named after the
+sub-agent with a `request: str` parameter. Dump the declaration on the pinned
+version rather than trusting either text. Two constraints are documented on
+adk.dev (https://adk.dev/workflows/collaboration/, read 22 October 2026):
+task-mode agents must be leaf agents and cannot have sub-agents, and task
+mode is disabled inside graph workflows in ADK Python 2.0.0, so a specialist
+inside a `Workflow` is a node, not a `task` sub-agent.
+
 The `AgentTool` docstring in 2.8.0 says "Direct usage of `AgentTool` is
 discouraged" and recommends `mode='single_turn'` with `sub_agents`. Prefer that
 unless you need the isolation `AgentTool` provides (separate session, state

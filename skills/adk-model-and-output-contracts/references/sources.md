@@ -34,6 +34,13 @@ Every claim in this skill is one of: **source** (read in a local checkout of goo
 | https://ai.google.dev/gemini-api/docs/model-tuning | vendor, page dated 2026-04-28 | No tunable model on the Gemini API |
 | https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/tuning/supervised-tuning/use | vendor, page dated 2026-10-20 | Gemini models tunable on Vertex |
 
+## Agents CLI review (22 October 2026)
+
+| Source | Type | Used for |
+| --- | --- | --- |
+| Google `agents-cli` 1.11.0 (Apache-2.0): `google-agents-cli-adk-code` skill, `references/adk-python.md`; `RELEASE_NOTES.md` entries 1.6.1, 1.9.0 and 1.11.0, read 22 October 2026 from a local snapshot | vendor | The "disables tool calling" sentence contrasted in [output schema and tools](output-schema-and-tools.md); scaffold defaults `gemini-3.8-flash`, `GOOGLE_GENAI_USE_ENTERPRISE=true` and `google-adk>=2.12.0` in [model selection](model-selection.md); nothing executed or bundled |
+| https://adk.dev/agents/llm-agents/ | vendor, re-read 2026-10-22 | Schema-with-tools wording unchanged since 2026-10-06 |
+
 ## Other vendor documentation
 
 | URL | Fetched | Used for |

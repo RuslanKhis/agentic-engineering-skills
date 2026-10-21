@@ -34,6 +34,20 @@ Exit codes: `0` strict pass (or a valid, explicitly identified dry-run), `1` fai
 
 Counts alone cannot distinguish duplicated rows from independent repetitions, prove an actual business effect, or establish who generated the CSV. This checker intentionally does not calculate `pass@k`, claim trial independence or replace trace provenance. For strong release evidence, store explicit invocation/trial IDs in an additional structured result format and reject duplicates there.
 
+## Agents CLI results are JSON, not CSV
+
+`agents-cli eval grade` and `eval run` write `artifacts/grade_results/results_<YYYYMMDD_HHMMSS>.json` (an `agentplatform.types.EvaluationResult` dump with a `metadata.dataset` row list added) and an `.html` report; `eval results` writes the same for a cloud run. There is no `eval_set_id`, `eval_id`, `threshold` or `eval_status` column, so the checker above cannot read or gate this output, and `eval compare` is a recursive dictionary diff that reports a per-case list as one changed value (Agents CLI 1.11.0, `src/google/agents/cli/eval/{eval_utils,cmd_compare,cmd_generate}.py`, read 22 October 2026). The producer exits 0 whatever the scores are, and `eval generate` writes only the cases that succeeded.
+
+A gate over `results_<ts>.json` therefore checks, with the project's own small reader:
+
+1. the number of rows in `metadata.dataset` and of per-case results equals the number of cases in the input dataset, not the trace file, because a failed inference is dropped before grading;
+2. every expected `eval_case_id` is present, and every expected metric name appears in `summary_metrics`;
+3. `num_cases_error` is 0 for every metric, since the mean averages only the cases that graded;
+4. each per-case score meets the agreed threshold and comparison, with `rubric_verdicts` retained where rubric groups were used;
+5. a missing file, zero cases or an exception is NOT RUN.
+
+Write the expectations beside the dataset as this skill does for CSV, and keep the reader in the target project's test suite. Consult the installed `google-agents-cli-eval` skill for the result and command details; if it is not installed, adk-engineer explains how to get it. This skill decides what complete evidence is; Google's skill operates the commands that produce it.
+
 ## Production extensions
 
 Compare candidates on the same cases, initial state, fixtures, criteria and trial counts; report important risk/language/intent slices rather than only averages. For concrete dataset review, holdout replenishment, fixed-trace judge calibration and release gates, read [evaluation-design.md](evaluation-design.md). Report missing or unavailable scores as incomplete evaluation.

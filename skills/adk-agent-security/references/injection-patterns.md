@@ -154,7 +154,7 @@ ASI06, LLM08). Structural rules:
   reader path.
 - Retrieval results carry provenance (`source_id`, author class) so the gate
   can taint them; `adk-memory-architecture` owns the store design.
-- The adk-samples safety plugins overwrite unsafe user text before storage so
+- The adk-recipes safety plugins overwrite unsafe user text before storage so
   harmful text "is never persisted to session state" (vendor sample); the
   structural equivalent is to persist only the validated fields.
 

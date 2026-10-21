@@ -95,7 +95,7 @@ stateless, and reusable capabilities" and "sub-agents to manage complex,
 stateful, and context-dependent processes" (Google Cloud blog, 2025-11-08,
 [link](https://cloud.google.com/blog/topics/developers-practitioners/where-to-use-sub-agents-versus-agents-as-tools),
 vendor guidance). Google's samples phrase the input contract of a tool-reached
-sub-agent as "Given inputs ... do not solicit further input" (adk-samples,
+sub-agent as "Given inputs ... do not solicit further input" (adk-recipes,
 read 2026-10-06, vendor sample).
 
 ## When the parent must speak last

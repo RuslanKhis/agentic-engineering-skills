@@ -43,7 +43,7 @@ vendor-measured figures; **D** documented product behaviour or specification;
   (tools for discrete stateless capabilities, sub-agents for stateful
   processes; `AgentTool` isolation). "Tools make an agent", 2025-06-27
   (`tool_filter` "protects the agent's model from getting overwhelmed").
-- Google `adk-samples` (V, example code, read 2026-10-06 by the coordinator;
+- Google `adk-recipes` (V, example code, read 2026-10-06 by the coordinator;
   several samples were taken from the last commit before their removal from
   main): customer-service (twelve flat tools, `status`/`message` returns,
   `before_tool` argument validation), financial-advisor (coordinator with four
@@ -53,11 +53,20 @@ vendor-measured figures; **D** documented product behaviour or specification;
   `request_credential`), long-horizon-harness (guard chain, result pruning,
   description budgets, pydantic-path schema overhead measurement),
   contrib/python/retail-product-search (counter-example returning plain `str`).
-  https://github.com/google/adk-samples
+  https://github.com/google/adk-recipes
 - Issue references in [compatibility](compatibility.md) (adk-python #293,
   #514, #745, #2213, #3036, #3275, #3543, #3881, #4777, #6230, #6373, #3150;
   adk-docs #880) were gathered by the coordinator on 2026-10-06 and are
   pointers to verify, not source-verified behaviour.
+
+## Agents CLI skills (V)
+
+- Google `agents-cli` 1.11.0 (Apache-2.0), `google-agents-cli-adk-code` skill,
+  `references/adk-python.md` (tool rules, `google_search` AFC caveat,
+  task-mode delegation names and default schemas) and `references/samples.md`
+  (recipe catalogue; recipes now live in `google/adk-recipes`), read
+  22 October 2026 from a local snapshot. Vendor guidance written for
+  `google-adk>=2.12.0`; nothing executed or bundled.
 
 ## Vendor guidance (V)
 

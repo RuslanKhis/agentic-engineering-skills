@@ -32,6 +32,14 @@ Useful primary references, consulted only when the selected version needs them:
 [ADK documentation](https://google.github.io/adk-docs/), and
 [GenAI SDK source](https://github.com/googleapis/python-genai).
 
+Reviewed on 22 October 2026 as vendor guidance: Google's Agents CLI 1.11.0
+skills (Apache-2.0), `google-agents-cli-adk-code` `references/adk-python.md`
+and `references/adk-python-workflows.md`, for the graph-API facts in
+[orchestration.md](orchestration.md). New Agents CLI projects pin
+`google-adk>=2.12.0`, four minor versions past this skill's 2.8.0 baseline;
+the graph API itself is documented on adk.dev from 2.0.0. Nothing from those
+skills is bundled, and none of it was executed here.
+
 ## Read-only helper
 
 Run `scripts/inspect_project.py` with the target project's Python interpreter.

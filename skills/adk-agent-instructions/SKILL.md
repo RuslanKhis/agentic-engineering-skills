@@ -40,6 +40,8 @@ The linter parses source with `ast`, never imports or executes the project, and 
 
 Read [compatibility](references/compatibility.md) before citing version-dependent behaviour and [validation](references/validation.md) before reporting. A request often needs two modes (a routing fix usually needs a description rewrite and a tool-use check); keep them in one change set with one measurement.
 
+When the project has `agents-cli-manifest.yaml`, consult the installed `google-agents-cli-adk-code` skill (`references/adk-python.md`, "Instruction Best Practices", and the scaffold's `app/agent.py` layout); if it is not installed, adk-engineer explains how to get it. It shows `{state_key}` injection and the scaffold's file layout; altitude, optional placeholders and the rendered-request evidence stay with this skill.
+
 ## Write the smallest instruction that carries the judgment
 
 State a short plan naming the agent, the sections that change and the test or evaluation that will show the effect. Start from the smallest prompt that states the role, the judgment the agent owns, the inputs by label and how to answer, and add a sentence only for an observed failure (Anthropic, context engineering, 2025-09-29, vendor guidance; the Gemini 3 guide says the model "may over-analyze verbose or overly complex prompt engineering techniques used for older models", vendor guidance). A prompt past a thousand words of constraints is the restart signal: move each constraint into code, a schema, a tool or an exemplar and keep the judgment.

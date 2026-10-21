@@ -835,6 +835,33 @@
         "Puts a recurring cost review with a date trigger and a decommission item (dependants and retention included) in the Later table, and lists each while-provisioned resource with its idle cost and owner on the goal that creates it.",
         "Keeps design-only scope: no provisioning, no budget creation, no live price lookups presented as retrieved."
       ]
+    },
+    {
+      "id": "engineer-agents-cli-deploy-ticket",
+      "prompt": "Carry out docs/tickets/G06.md: take this Agents CLI project to Agent Runtime for the pilot, keeping the generated Terraform as the owner of the engine. Verify locally, fill in Evidence, deploy nothing until I approve the exact command.",
+      "available_skills": ["adk-engineer", "deploy-adk-on-google-cloud", "adk-tool-auth-and-secrets", "adk-agent-observability", "google-agents-cli-deploy", "google-agents-cli-workflow"],
+      "context": "An Agents CLI 1.11.0 project: agents-cli-manifest.yaml with agent_runtime_identity_default: agent_identity, deployment/terraform/single-project, a deployment_metadata.json from an earlier imperative agents-cli deploy to a dev engine, and tests. The ticket names deploy-adk-on-google-cloud as primary and google-agents-cli-deploy as supporting. No cloud mutation is authorised.",
+      "expected_primary": "deploy-adk-on-google-cloud",
+      "assertions": [
+        "Names deploy-adk-on-google-cloud as the specialist and google-agents-cli-deploy as the skill that operates the adopted mechanism, and reads the manifest, deployment_metadata.json and the Terraform before proposing anything.",
+        "States that the generated Terraform and the imperative deploy must not own the same engine, so the dev engine recorded in deployment_metadata.json is either imported into Terraform or left out of the pilot, and does not propose applying Terraform over it.",
+        "Treats Agent Identity as the project's default identity, names the baseline roles with the documented versus CLI-granted difference, and keeps the identity decision with adk-tool-auth-and-secrets.",
+        "Says that deploy --dry-run makes read-only cloud calls and exits non-zero on a definite problem, so it is a check to run once credentials are approved, not a local preview, and records it as not run.",
+        "Leaves telemetry content capture off as the CLI sets it and records the deployment readback, rollback (redeploy, since Agent Runtime has no revision rollback) and the cost ledger rows for the engine."
+      ]
+    },
+    {
+      "id": "engineer-agents-cli-focused-memory-1-11",
+      "prompt": "In this Agents CLI project, remember each user's preferred response language between conversations. Keep the scaffold, the Cloud SQL session backend and the dependency pins. Offline tests only.",
+      "available_skills": ["adk-engineer", "adk-memory-architecture", "adk-agent-evaluation", "google-agents-cli-adk-code", "google-agents-cli-workflow", "google-agents-cli-eval"],
+      "context": "An Agents CLI 1.11.0 project scaffolded on google-adk>=2.12.0 with session_type cloud_sql, an accepted .agents-cli-spec.md, uv.lock and tests/eval/eval_config.yaml. The workflow skill's build phase says not to write behavioural unit tests. No live calls are authorised.",
+      "expected_primary": "adk-memory-architecture",
+      "assertions": [
+        "Chooses memory guidance for the feature, consults google-agents-cli-adk-code for the installed APIs and the cross-session-memory recipe, and preserves the manifest, session backend and pins.",
+        "Treats the exact language setting as an application-owned profile record scoped by trusted identity rather than reaching for semantic memory because the recipe demonstrates Memory Bank.",
+        "Writes scripted-model Runner tests of effects (saved, restart persistence, cross-user denial, forgetting) and states that these are application checks, not the behavioural unit tests the workflow skill discourages.",
+        "Does not start the workflow's spec phase, scaffold enhance, or a live evaluation because those skills are installed; names the live evaluation as separate work with its Agents CLI dataset format."
+      ]
     }
 
   ]

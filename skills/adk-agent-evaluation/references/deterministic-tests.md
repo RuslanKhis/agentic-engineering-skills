@@ -14,7 +14,7 @@ Use this mode to implement or review business rules, tool boundaries, callback b
 
 5. **Collect the complete invocation.** Consume `run_async` to exhaustion, retaining calls, results, errors and final events, and close the Runner in `finally`. Distinguish partial text from completed output. Correlate calls and results by their IDs when repeated names or batches make position ambiguous. A displayable answer or HTTP 200 does not establish successful completion. Mark interrupted collection incomplete; preserve observed effects rather than resubmitting a mutation.
 
-6. **Assert across boundaries.** Compare required names, stable arguments, allowed ordering, duplicate attempts, actual backend effects and final claims. Choose exact sequence, ordered subsequence or unordered requirements deliberately. If a field is volatile, assert its relationship to the observed result instead of ignoring the whole argument object.
+6. **Assert across boundaries.** Compare required names, stable arguments, allowed ordering, duplicate attempts, actual backend effects and final claims. Choose exact sequence, ordered subsequence or unordered requirements deliberately. If a field is volatile, assert its relationship to the observed result instead of ignoring the whole argument object. Model-internal tools (`google_search`, `VertexAiSearchTool`, `url_context`, `BuiltInCodeExecutor`) produce no function-call events; assert their use through `grounding_metadata`, executed output or the model request's `config.tools`, not through the trajectory (Agents CLI 1.11.0, `google-agents-cli-eval` skill `references/builtin-tools-eval.md`, read 22 October 2026; confirm on the installed ADK).
 
 ## Regressions that matter
 

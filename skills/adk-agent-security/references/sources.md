@@ -31,7 +31,7 @@ Entries marked "not re-fetched" were supplied by the coordinator's research on
   https://adk.dev/integrations/gke-code-executor/ ; Web interface:
   https://adk.dev/runtime/web-interface/ ("not meant for use in production
   deployments"); Evaluate: https://adk.dev/evaluate/ (read 2026-10-07).
-- adk-samples `core/python/safety-plugins/AGENTS.md` (LlmAsAJudge and Model
+- adk-recipes `core/python/safety-plugins/AGENTS.md` (LlmAsAJudge and Model
   Armor plugins, planted poisoned tool result demonstration) and
   `long-horizon-harness/docs/security-model.md` (hard-deny guards before
   soft-ask approval, headless "ask as deny", hermetic network). Vendor

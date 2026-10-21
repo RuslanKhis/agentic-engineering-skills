@@ -10,7 +10,7 @@ checks observable properties.
 
 **ADK-conventional:** one `prompt.py` per agent holding the text as a
 constant, imported into `agent.py`. Google's samples use this layout, with
-headed sections and numbered steps (adk-samples `contrib/python/*/prompt.py`,
+headed sections and numbered steps (adk-recipes `contrib/python/*/prompt.py`,
 read 2026-10-06, vendor sample). It keeps the prompt in Python, so a
 `FunctionTool` rename shows up in `grep`, and the linter reads constants
 assigned at module level.

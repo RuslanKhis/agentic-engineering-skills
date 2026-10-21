@@ -31,7 +31,7 @@ Choose transport and execution location independently.
 | --- | --- |
 | A complete answer for web, mobile or service clients | Custom JSON API: [json-api.md](references/json-api.md) |
 | Streaming text, incremental tool lifecycle displays or an existing CopilotKit interface | AG-UI: [ag-ui.md](references/ag-ui.md); use [copilotkit-recipe.md](references/copilotkit-recipe.md) for concrete Next.js wiring |
-| Continuous audio or video between browser and agent, a Live API session | Live streaming: [live-streaming.md](references/live-streaming.md); session limits, host timeouts and the media buffer become contracts |
+| Continuous audio or video between browser and agent, a Live API session | Live streaming: [live-streaming.md](references/live-streaming.md); session limits, host timeouts and the media buffer become contracts. For an agent scaffolded with Agents CLI (`agents-cli-manifest.yaml` present), consult the installed `google-agents-cli-adk-code` skill (`references/adk-python-live.md`: the conversion checklist, Live models and `/run_live` serving); if it is not installed, adk-engineer explains how to get it |
 | Either interface calls a remote managed ADK agent | Add [managed-runtime.md](references/managed-runtime.md) to the chosen transport |
 | Connect, provision, recover or clean up a managed test deployment | Add [deployment-runbook.md](references/deployment-runbook.md) |
 | Production identity, several replicas, mutating tools, replay or approval continuation | Add the relevant section of [production.md](references/production.md) |

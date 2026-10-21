@@ -141,7 +141,14 @@ marked):
   sessions are never cached.
 - Defaults are `cache_intervals=10` (1 to 100), `ttl_seconds=1800` and
   `min_tokens=0`. `create_http_options=types.HttpOptions(timeout=10000)` bounds
-  creation in milliseconds; a timed-out creation proceeds uncached.
+  creation in milliseconds; a timed-out creation proceeds uncached. adk.dev
+  lists the same defaults, requires Gemini 2.0 or later and sets the config on
+  `App(context_cache_config=ContextCacheConfig(...))`
+  (https://adk.dev/context/caching/, read 22 October 2026, D); the Agents CLI
+  cheatsheet's example uses `min_tokens=2048, ttl_seconds=1800,
+  cache_intervals=10` (Agents CLI 1.11.0, `google-agents-cli-adk-code` skill,
+  `references/adk-python.md`, read 22 October 2026; V, an example, not a
+  tuned value).
 - `CacheMetadata` carries name, expiry, fingerprint, invocations used and
   contents count, not token counts. Read `usage_metadata.cached_content_token_count`.
 - A dynamic instruction that moves inside the fingerprinted prefix defeats the
@@ -187,7 +194,7 @@ Two lighter alternatives exist. `ContextFilterPlugin(num_invocations_to_keep=,
 custom_filter=, remove_amount=)` in `plugins/context_filter_plugin.py` (2.8.0
 D; absent from the docs site) trims request contents without a summariser; it
 changes what the model sees, not what storage holds, so test open tool pairs
-across the cut. The adk-samples long-horizon harness (ADK 2.8.x) prunes old
+across the cut. The adk-recipes long-horizon harness (ADK 2.8.x) prunes old
 large tool-result bodies behind `LHA_PRUNE_TOOL_OUTPUTS`, saves large outputs to
 GCS artifacts and caps memory prefetch so a changing prefetch does not
 invalidate the cached prefix each turn (V, sample repository, not inspected
@@ -307,13 +314,25 @@ Facts read from 2.8.0 `apps/compaction.py` and `apps/_configs.py` (D):
 - Measured example: Bo Yang, "2-Minute ADK: Context Compaction", 2025-10-11,
   interval 3 and overlap 1 cut one prompt from 1,427 to 868 tokens, about 39%
   (E, one published run). A "60-80%" figure circulating on dev.to is
-  unverified. The adk-samples long-horizon harness (ADK 2.8.x) ships
+  unverified. The adk-recipes long-horizon harness (ADK 2.8.x) ships
   `EventsCompactionConfig(summarizer=HorizonSummarizer, token_threshold=750_000,
   event_retention_size=20, compaction_interval=8, overlap_size=2)` with a
   `static_instruction` built once as a pure function of tool names, model and
   code-executor presence, and volatile data appended as trailing content (V,
   sample repository, not inspected here). Treat these as starting points to
   measure, not defaults.
+- Agents CLI's cheatsheet recommends token-based compaction over a turn count
+  because it "triggers on actual prompt-token volume", and shows
+  `EventsCompactionConfig(token_threshold=32000, event_retention_size=5,
+  summarizer=LlmEventSummarizer(llm=Gemini(model="gemini-3.8-flash")))` on
+  the `App` (Agents CLI 1.11.0, `google-agents-cli-adk-code` skill,
+  `references/adk-python.md`, read 22 October 2026; V, written for
+  `google-adk>=2.12.0`, confirm against the installed version). adk.dev
+  confirms the priority rule: when both strategies are configured, token-based
+  compaction runs and the sliding window is skipped for that turn; a custom
+  `LlmEventSummarizer` prompt must keep the `{conversation_history}`
+  placeholder (https://adk.dev/context/compaction/, read 22 October 2026, D).
+  The 32k threshold is an example, not a measurement.
 
 Check: with a small `token_threshold`, observe the summariser input, the stored
 compaction event and the next captured request separately; original events
@@ -362,5 +381,6 @@ Issue links follow `https://github.com/google/adk-python/issues/<number>`.
 | ADK CHANGELOG, tags 2.6.0 to 2.11.0 | D | Version-specific behaviour named above; check the pinned version against the changelog |
 | Bo Yang, "2-Minute ADK: Context Compaction", 2025-10-11, https://medium.com/google-cloud/2-minute-adk-context-compaction-in-a-snap-470da15c30f4 | E, one run | 1,427 to 868 prompt tokens with interval 3, overlap 1 |
 | Balaji Subramaniam, "How to Slash Token Costs with Context Caching in Agent Harnesses", 2026-09-01, https://medium.com/google-cloud/how-to-slash-token-costs-with-context-caching-in-agent-harnesses-6431ba16d931 | E, one run | 74-79% fewer transmitted input tokens; rules of thumb |
-| adk-samples, `core/python/long-horizon-harness/AGENTS.md`, https://github.com/google/adk-samples | V, sample | Production-style compaction and static-prefix values; not inspected here |
+| adk-recipes, `core/python/long-horizon-harness/AGENTS.md`, https://github.com/google/adk-recipes | V, sample | Production-style compaction and static-prefix values; not inspected here |
 | adk-python discussions #3374 and #4215, https://github.com/google/adk-python/discussions | V | Explicit summariser for workflow roots; experimental status |
+| Google `agents-cli` 1.11.0 (Apache-2.0), `google-agents-cli-adk-code` skill, `references/adk-python.md`, read 22 October 2026 from a local snapshot | V | Token-based compaction recommendation and example values; `ContextCacheConfig` example; written for `google-adk>=2.12.0`; not executed or bundled |

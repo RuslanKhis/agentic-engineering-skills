@@ -6,15 +6,18 @@ here is vendor guidance from Google documentation supplied by research on
 change, so confirm each row on the live page before quoting it to an owner.
 Deployment mechanics (build, IAM bindings, service accounts, cleanup) belong
 to `deploy-adk-on-google-cloud`; this page lists what the A2A boundary needs
-from the platform.
+from the platform. When the registration itself, or an Agent Registry entry,
+is to be performed with Google's CLI (`agents-cli publish gemini`, `gcloud
+agent-registry`), consult the installed `google-agents-cli-publish` skill;
+if it is not installed, adk-engineer explains how to get it.
 
 ## Where the agent runs and what serves the card
 
 | Host | How A2A is served | Card discovery | Auth to reach it |
 | --- | --- | --- | --- |
-| Your container (Cloud Run, GKE) with `to_a2a` or `adk api_server --a2a` | Starlette routes from `_compat.attach_a2a_routes_to_app` (source-verified) | `/.well-known/agent-card.json` (or `/a2a/<folder>/.well-known/agent-card.json`) served publicly by the app | Whatever the edge enforces: Cloud Run IAM (`--no-allow-unauthenticated`), IAP, or in-app validation of the header the card declares |
+| Your container (Cloud Run, GKE) with `to_a2a` or `adk api_server --a2a` | Starlette routes from `_compat.attach_a2a_routes_to_app` (source-verified) | `/.well-known/agent-card.json` (or `/a2a/<folder>/.well-known/agent-card.json`) served publicly by the app; an Agents CLI Python scaffold mounts the card and JSON-RPC under `/a2a/{app_name}` and advertises `APP_URL` as the card's `url` (Agents CLI 1.11.0, `google-agents-cli-publish` skill, read 22 October 2026) | Whatever the edge enforces: Cloud Run IAM (`--no-allow-unauthenticated`), IAP, or in-app validation of the header the card declares |
 | Agent Platform Runtime (formerly Agent Engine), A2A template, Preview | `A2aAgent(agent_card=..., agent_executor_builder=...)` template; operations `on_message_send`, `on_get_task`, `on_cancel_task`, `handle_authenticated_agent_card`; endpoint `.../reasoningEngines/{id}/a2a`. The current page (read 2026-10-21) drives it with `import agentplatform`, `agentplatform.Client(project=, location=, http_options={"api_version": "v1beta1"})` and `client.runtimes.get(name=...)`; the earlier `vertexai.agent_engines` and `client.agent_engines` names (community post 2025-09-10) are the deprecated spelling, so match the installed `google-cloud-aiplatform` before copying either | The public well-known card is **not** served; clients GET `{a2a_url}/v1/card` with a bearer ADC token. `agent_card_check.py --url <a2a_url> --card-path /v1/card --header "Authorization=Bearer $(gcloud auth print-access-token)" --allow-remote` after approval | Google IAM on the Reasoning Engine; `cloud-platform` scope for the caller |
-| Gemini Enterprise (registered external A2A agent) | Gemini Enterprise calls your endpoint; traffic does not pass Agent Gateway, so its policies do not apply | Card JSON supplied at registration (`a2aAgentDefinition.jsonAgentCard`) | Cloud Run: Google-signed OIDC token for the Discovery Engine service agent in `X-Serverless-Authorization`; grant that service agent `roles/run.invoker`. End-user OAuth (when configured) arrives in `Authorization` |
+| Gemini Enterprise (registered external A2A agent) | Gemini Enterprise calls your endpoint; traffic does not pass Agent Gateway, so its policies do not apply | Card JSON supplied at registration (`a2aAgentDefinition.jsonAgentCard`) | Cloud Run: Google-signed OIDC token for the Discovery Engine service agent (`service-PROJECT_NUMBER@gcp-sa-discoveryengine.iam.gserviceaccount.com`) in `X-Serverless-Authorization`; grant that service agent `roles/run.invoker` ([register and manage an A2A agent](https://docs.cloud.google.com/gemini/enterprise/docs/register-and-manage-an-a2a-agent), page updated 2026-10-14, read 2026-10-22). Google's `google-agents-cli-publish` skill at 1.11.0 names `roles/run.servicesInvoker` for the same grant; grant the documented role and verify effective access rather than both. End-user OAuth (when configured) arrives in `Authorization` |
 
 Agent Runtime consequence: `RemoteA2aAgent(agent_card="https://.../a2a/.well-known/agent-card.json")`
 cannot resolve a Runtime-hosted peer; pass the card as a file or object and
@@ -22,7 +25,18 @@ install an auth interceptor (or `auth_scheme`) that adds the bearer to both
 the card request and message sends. Remember that a file card skips the
 https and same-origin validation, so you own the target check.
 
-## Gemini Enterprise registration (docs page last updated 2026-10-05, read 2026-10-08)
+A container deployed to Agent Runtime by Agents CLI is a different case from
+the A2A template: the runtime exposes the container's own routes under an
+`/api` passthrough,
+`https://{location}-aiplatform.googleapis.com/reasoningEngines/v1/{resource}/api/{container_path}`,
+so the scaffold's card is at
+`.../api/a2a/{app_name}/.well-known/agent-card.json`, the deploy sets
+`APP_URL` to that passthrough so the card advertises a reachable `url`, and
+the caller sends a Google access token (`agents-cli run --url ... --mode a2a`
+does this) (Agents CLI 1.11.0, `google-agents-cli-publish` skill, read 22 October 2026). `agent_card_check.py --allow-remote` with an
+`Authorization=Bearer` header reads it the same way.
+
+## Gemini Enterprise registration (docs page updated 2026-10-14, re-read 2026-10-22; Google's console and CLI now say "Gemini")
 
 Required card fields: `protocolVersion`, `name`, `description`, `url`,
 `version`, `defaultInputModes`, `defaultOutputModes`, `capabilities`,
@@ -32,7 +46,23 @@ flags a missing top-level `url` on a 1.0-shaped card. Gemini Enterprise
 offer the compatibility layer (`a2a.compat.v0_3` in the Python SDK; ADK's
 `attach_a2a_routes_to_app(enable_v0_3_compat=True)` is the default on the
 1.x path, source-verified). Registration uses the REST methods
-`agents.create`, `agents.patch` and `agents.delete`. Model Armor and other
+`agents.create`, `agents.patch` and `agents.delete` (Agents CLI calls
+`v1alpha/.../engines/{engine}/assistants/default_assistant/agents` with
+`a2aAgentDefinition.jsonAgentCard`, or `adkAgentDefinition` for a native
+Agent Runtime registration, and `authorizationConfig` for an OAuth
+authorization; it looks up an existing registration for the same card URL
+and patches it, so a re-run updates in place). With `agents-cli publish
+gemini`, A2A is the only registration mode on Cloud Run and GKE, and on
+Agent Runtime the default is ADK native registration (`:streamQuery` on the
+reasoning-engine resource), with A2A available through `--registration-type
+a2a` and a warning; `--authorization-id` attaches an OAuth authorization,
+`--deployment-target` sets the default mode and the card-fetch
+authentication, and a Live or voice (bidi) agent cannot be registered
+because the Gemini app has no `/run_live` transport. The `publish
+gemini-enterprise` spelling and `--gemini-enterprise-app-id` remain hidden
+aliases (Agents CLI 1.11.0, `google-agents-cli-publish` skill, read 22 October 2026). "Session not found" after an ADK registration on
+`google-cloud-aiplatform <= 1.128.0` is a known SDK bug per the same skill;
+upgrade, redeploy and re-register (vendor guidance). Model Armor and other
 gateway policies must be applied inside the agent because this traffic
 bypasses Agent Gateway (`protect-adk-sensitive-data` configures them). A
 community thread (discuss.google.dev 325331, January 2026) reports a
@@ -44,7 +74,17 @@ people describe. Treat as community report.
 
 - Agent Registry stores cards and MCP server specs:
   `gcloud agent-registry services create --agent-spec-type=a2a-agent-card
-  --agent-spec-content=agent-card.json` (10 KB card cap reported). ADK's
+  --agent-spec-content=agent-card.json` (10 KB card cap reported). Agents
+  deployed to Agent Runtime are auto-registered, so no create call follows
+  `agents-cli deploy`; the metadata and endpoint are edited on the Service
+  resource (`gcloud agent-registry services update NAME --interfaces
+  "url=ENDPOINT_URL,protocolBinding=http-json"`), an external MCP server is
+  registered from its `tools/list` response (`gcloud agent-registry services
+  create SERVER --location=L --mcp-server-spec-type=tool-spec
+  --mcp-server-spec-content=toolspec.json
+  --interfaces="url=SERVER_URL,protocolBinding=jsonrpc"`, no `us`/`eu`
+  multi-region), writes need `roles/agentregistry.editor`, and Terraform has
+  `google_agent_registry_service` with an `mcp_server_spec` block (Agents CLI 1.11.0, `google-agents-cli-publish` skill, read 22 October 2026). ADK's
   `AgentRegistry.get_remote_a2a_agent()` and `get_mcp_toolset()` exist in
   2.8.0 (`integrations/agent_registry/agent_registry.py`, source-verified
   method names) and need `google-adk[a2a,agent-identity]`; 2.11.0 resolves
@@ -54,8 +94,16 @@ people describe. Treat as community report.
   runtime routing page, both read 2026-10-21): create the runtime with
   `client.runtimes.create(...)`, `identity_type="AGENT_IDENTITY"` and
   `agent_gateway_config={"agent_to_anywhere_config": {"agent_gateway":
-  "projects/P/locations/R/agentGateways/G"}}`; the gateway binding is set
-  at creation and is SDK-only. Register MCP servers with
+  "projects/P/locations/R/agentGateways/G"}}`. The binding can also be set
+  on an existing agent (`PATCH` with
+  `updateMask=spec.deploymentSpec.agentGatewayConfig`), but patching does
+  not change `identity_type`, so an agent created without Agent Identity
+  must be recreated, and any binding change archives every earlier
+  revision (runtime routing page, re-read 2026-10-22). Agents CLI 1.11.0
+  performs the same update with `agents-cli deploy --agent-gateway-egress`
+  and `--agent-gateway-ingress` (`google-agents-cli-deploy` skill, read 22
+  October 2026); `deploy-adk-on-google-cloud` carries the certificate and
+  approval consequences. Register MCP servers with
   `--mcp-server-spec-content` and `--interfaces=url=...,protocolBinding=JSONRPC`,
   grant `roles/iap.egressor` with the condition
   `api.getAttribute('iap.googleapis.com/mcp.toolName', '') in ['<tool>', '']`
@@ -117,5 +165,7 @@ people describe. Treat as community report.
   compatibility is on when Gemini Enterprise is the caller.
 - A live `message/send` from the platform (or `curl` with the same token)
   reaches a `completed` task and is recorded as live evidence with the date.
+- Registration mode matches the host: A2A on Cloud Run and GKE, ADK native
+  preferred on Agent Runtime; a Live agent is not offered for registration.
 - Deregistration and cleanup steps are written down with the owner
   (`deploy-adk-on-google-cloud`).

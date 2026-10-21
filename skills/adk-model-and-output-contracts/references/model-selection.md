@@ -27,6 +27,8 @@ Tunable models lag the text table: on 2026-10-20 Vertex supervised tuning listed
 
 Use explicit version strings. An alias ending in `-latest` moves without a code change; the audit flags it. Models reached through `projects/.../publishers/google/models/...` paths force enterprise mode in `Gemini` (verified in `models/google_llm.py`).
 
+Agents CLI scaffolds record a model and a backend for you: new projects default to `gemini-3.8-flash` (since 1.6.1) and set `GOOGLE_GENAI_USE_ENTERPRISE=true` in `.env` instead of the deprecated `GOOGLE_GENAI_USE_VERTEXAI` (since 1.9.0), with `google-adk>=2.12.0` (1.11.0) (Agents CLI 1.11.0 release notes and `google-agents-cli-adk-code` skill, `references/adk-python.md`, read 22 October 2026; vendor defaults). The scaffolded model is a pin to review against the lifecycle table, not a recommendation, and Google's workflow skill forbids changing it unless asked, which matches this skill's rule that a model change is a requested decision. When the project has `agents-cli-manifest.yaml`, consult the installed `google-agents-cli-adk-code` skill (`references/adk-python.md`, "Models Configuration") for the scaffold's model-listing command and backend variables; if it is not installed, adk-engineer explains how to get it.
+
 ## Decide with measurements, in this order
 
 1. **Quality on the development set.** Run adk-agent-evaluation's two-stage escalation ("Escalate the model on the plainest contract"): stage 1 compares candidates on the plainest contract, stage 2 runs the winner through the full workflow. Record model, `thinking_level`, temperature, `max_output_tokens`, prompt version and backend with every run; the provider's defaults are part of the experiment.

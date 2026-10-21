@@ -23,6 +23,43 @@ First locate the target project's memory tools, gateway, ledger, provider adapte
 If the task needs consent, make refusal observable as zero write attempts at the actual gateway boundary.
 After-tool or final-output screening can fail after a side effect; a blocked response cannot establish that no write happened.
 
+### Native write and recall surfaces
+
+The ADK surfaces the write and recall boundaries above sit on, read on
+https://adk.dev/sessions/memory/ on 22 October 2026 (confirm against the
+installed version; the adapter inspected for this reference is 2.8.0 and
+Agents CLI scaffolds `google-adk>=2.12.0`):
+
+- Writes: `await callback_context.add_session_to_memory()` sends the whole
+  session; `await memory_service.add_events_to_memory(app_name=, user_id=,
+  events=, session_id=, custom_metadata=)` appends a delta without
+  re-ingesting the session. The delta form is the one this reference's
+  "smallest useful protected fact or eligible event range" rule needs; the
+  whole-session form submits everything the consent gate did not screen.
+- Recall: `PreloadMemoryTool()` retrieves memories at the start of every turn
+  and injects them into the instruction, so every request pays for recall and
+  the scope check must run before the model sees anything; `LoadMemoryTool()`
+  retrieves only when the model decides to call it, so a missed call is a
+  missed fact and the query is model-chosen. The validation steps below apply
+  to both; a built-in tool is acceptable only when its actual metadata and
+  logging behaviour passes the "Validate recall and retention" checks.
+- `InMemoryMemoryService` performs keyword matching and does not survive a
+  restart; `VertexAiMemoryBankService` extracts facts with a model and needs
+  the Agent Platform resource and identity described in
+  [managed-deployment.md](managed-deployment.md).
+
+The `cross-session-memory` recipe in `google/adk-recipes`
+(`app/app_utils/memory_config.py`, `app/agent.py`, `app/fast_api_app.py`)
+wires `PreloadMemoryTool` plus an `after_agent_callback` that calls
+`add_session_to_memory`, and tests it with a Runner and a mock model (Agents
+CLI 1.11.0, `google-agents-cli-adk-code` skill, `references/samples.md`, read
+22 October 2026; vendor guidance). It demonstrates the wiring, not consent,
+topic allowlists, erasure or the reconciliation table below; add those before
+calling it a memory feature. When the project has `agents-cli-manifest.yaml`,
+consult the installed `google-agents-cli-adk-code` skill
+(`references/adk-python.md`, "Memory", or the `cross-session-memory` recipe);
+if it is not installed, adk-engineer explains how to get it.
+
 ### Actual ADK handoff and cardinality
 
 Use the trusted context paths and Runner assembly in

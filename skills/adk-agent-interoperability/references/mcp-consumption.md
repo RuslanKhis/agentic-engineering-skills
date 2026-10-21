@@ -86,6 +86,18 @@ The documented pattern selects the transport with `os.getenv("K_SERVICE")`:
 Streamable HTTP with headers on Cloud Run, stdio locally. Keep both branches
 behind the same `tool_filter`.
 
+Three gotchas from Google's own ADK recipe notes (Agents CLI 1.11.0,
+`google-agents-cli-adk-code` skill, `references/adk-python.md`, read 22
+October 2026): the ID token for a private Cloud Run MCP server is minted for
+the service root (`fetch_id_token(Request(), MCP_SERVER_URL)`), not for the
+`/mcp` path, and through `header_provider` so it is refreshed per call rather
+than frozen in `headers`; "agent definition must be synchronous (not async)
+for deployment", the same rule as above; and the Agents CLI scaffold's
+`google-adk[gcp,otel-gcp]` extras do not include `mcp`, so add the `mcp`
+extra and re-lock before the first `McpToolset` import (the 1.11.0 template
+pins `google-adk[gcp,otel-gcp,bigquery-analytics]>=2.12.0`, still without
+`mcp`).
+
 ## Filters, prefixes and reserved names
 
 - `tool_filter` is applied in `get_tools` through `_is_tool_selected`; a list

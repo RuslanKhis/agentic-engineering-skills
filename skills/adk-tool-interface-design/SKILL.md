@@ -71,6 +71,13 @@ whether a sub-agent needs user interaction.
 
 A request may need several rows; keep them in one change set and one report.
 
+When the project has `agents-cli-manifest.yaml`, consult the installed
+`google-agents-cli-adk-code` skill (`references/adk-python.md`, "Tools", or
+the `long-horizon-harness` recipe for a guard chain and result pruning); if it
+is not installed, adk-engineer explains how to get it. Its tool rules are the
+scaffold's conventions; the declaration dump on the pinned version decides
+what the model sees.
+
 ## Implement the smallest coherent change
 
 State the affected tools, agents and tests before editing. Then:

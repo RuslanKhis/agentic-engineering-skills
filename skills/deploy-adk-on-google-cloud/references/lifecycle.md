@@ -1,6 +1,6 @@
 # Ownership, approval and recovery
 
-Use this procedure when preparing or operating a deployment lifecycle. It generalises the tested lab guards; it is a design contract for your project's implementation, not a bundled cloud deployer. Reuse a suitable existing IaC state system instead of creating a competing one.
+Use this procedure when preparing or operating a deployment lifecycle. It generalises the tested lab guards; it is a design contract for your project's implementation, not a bundled cloud deployer. Reuse a suitable existing IaC state system instead of creating a competing one. When Terraform and a deploy command share one resource, record which fields each owns: an Agents CLI Agent Runtime engine is created by Terraform with `lifecycle.ignore_changes` on its container, source and deployment specs and then updated by `agents-cli deploy`, and an engine first created imperatively cannot be reconciled by a later `terraform apply` without taking over the resource (Agents CLI 1.11.0, `google-agents-cli-observability` and `google-agents-cli-deploy` skills, read 22 October 2026). A journal entry for such a resource names the owning tool per field, not only the resource.
 
 ## Resolve a concrete plan
 

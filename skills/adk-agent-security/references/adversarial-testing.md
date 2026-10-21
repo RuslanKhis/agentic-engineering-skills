@@ -101,7 +101,7 @@ loudly. Each case in the asset lists the fakes it needs.
 
 ## The poisoned-tool template
 
-Google's adk-samples safety plugins demonstrate a planted tool whose result
+Google's adk-recipes safety plugins demonstrate a planted tool whose result
 contains an injection, caught by an `after_tool_callback` judge (vendor
 sample). Reuse the shape without the judge: the fixture tool returns the
 hostile text, and the assertion is on what happened next, not on whether a

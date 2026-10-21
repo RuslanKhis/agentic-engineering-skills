@@ -1389,7 +1389,11 @@ pins. It can be used without adopting the Agents CLI lifecycle:
   distinguish offline evidence from live-model evaluation.
 
 This adds focused implementation and verification guidance on topics that
-overlap with Google's recipes. See the [source comparison](docs/research/agents-cli-comparison-2026-09-23.md).
+overlap with Google's recipes. See the
+[source comparison](docs/research/agents-cli-comparison-2026-09-23.md) and the
+[22 October 2026 note against Agents CLI 1.11.0](docs/research/agents-cli-comparison-2026-10-22.md),
+which records what the specialists imported from its skills and where they
+route to them.
 
 Use Google's workflow when you want an Agents CLI project. Bring in an Agentic
 Engineering specialist for the particular feature or engineering decision:
@@ -1399,7 +1403,7 @@ Engineering specialist for the particular feature or engineering decision:
 | Add memory to a generated agent | Project conventions, ADK APIs and reference recipes | Choosing what to store, user isolation, consent and forgetting |
 | Evaluate a tool that changes data | Dataset and metric formats, trace generation and grading commands | Deterministic checks of actual effects, coverage and result auditing |
 | Prepare and operate a deployment | Generated infrastructure, deployment commands and telemetry integrations | Hosting and identity decisions, recovery, performance analysis and sensitive-data controls |
-| Publish to Gemini Enterprise | Registration commands and platform-specific guidance | Relevant application authentication and data-boundary review |
+| Publish to Gemini (formerly Gemini Enterprise) or the Agent Registry | Registration commands and platform-specific guidance | The agent card, the registration mode and the authentication and data-boundary review |
 
 To install Google's skills alongside these in a Claude Code project:
 
@@ -1820,6 +1824,29 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Agents CLI 1.11.0 alignment · 22 October 2026
+
+The September integration with Google's Agents CLI was re-checked against
+version 1.11.0, with the same fact import the Google cloud skills received
+the day before. No command in this toolkit's text was wrong, but citations
+named versions 1.5 to 1.8, the publish command and product name had moved,
+and the recipe repository was renamed to `adk-recipes`. Three contradictions
+between our text and the CLI's behaviour were settled against the
+documentation first: the Agent Gateway binding can change after creation
+(our claim was wrong and is replaced), the invoker role for Gemini
+registration stays as documented, and the Agent Identity baseline role is
+recorded both ways. Fourteen specialists gained facts from the code
+cheatsheet, the evaluation skill and the deployment skills, each verified on
+adk.dev or the Agent Platform pages where it changes a statement; each names
+the Agents CLI skill that operates its mechanism at the decision it serves;
+and the composition reference now says how to settle Google's own
+disagreements. Two fresh-agent trials on one synthetic 1.11.0 project, a
+deployment ticket under Terraform ownership and a focused memory change,
+behaved as intended and rated the cross-collection work 3 and 4 of 5; their
+five frictions were fixed the same day. All **22 packages** pass validation
+and **695 tests** pass with **59 optional SDK checks skipped**. See the
+[trial record](docs/testing/agents-cli-1-11-alignment-2026-10-22.md).
 
 ### Production cost contract and BigQuery cost facts · 21 October 2026
 

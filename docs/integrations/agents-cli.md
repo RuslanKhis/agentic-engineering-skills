@@ -34,9 +34,10 @@ npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*' -a claud
 
 For Codex, replace `-a claude-code` with `-a codex` on both commands. Keep the
 quotes around `'*'`. The normal project installation makes seven Google skills
-and thirteen Agentic Engineering skills available. Restart the coding-agent
-session if they do not appear. Google's README explicitly offers the
-Skills CLI installation route and names both Claude Code and Codex.
+and the twenty-two skills of this toolkit available. Restart the coding-agent
+session if they do not appear. Google's README offers the Skills CLI route as
+`npx skills add google/agents-cli` (the same seven skills) and names both
+Claude Code and Codex.
 [Google's installation instructions](https://github.com/google/agents-cli#readme)
 
 For Gemini CLI, use `-a gemini-cli` on both commands; for Antigravity, use
@@ -99,8 +100,16 @@ another copy.
   it is. Decide separately whether to adopt Agents CLI. Review a disposable
   scaffold or work on a separate copy before migrating the application's layout.
 
-Google's workflow describes itself as always active and asks for scaffolding
-before code changes, a design/spec process and evaluation after implementation.
+Google's workflow describes itself as always active and runs eight phases:
+understand (a one-question-at-a-time dialogue that ends in
+`.agents-cli-spec.md`, with a hard gate before any scaffold), study recipes,
+scaffold, build, evaluate, deploy, publish and observe. It asks for
+scaffolding before code changes and evaluation after implementation. Its
+build phase also says not to write behavioural unit tests and to leave
+behaviour to evaluation; this toolkit's scripted-model Runner tests of
+forbidden effects (a refund issued twice, another user's record returned)
+are deterministic application checks, not behaviour judgements, and stay.
+Name that division in the request when both collections are installed.
 The ADK code skill also points back to that workflow. Loading it is therefore
 more than consulting an API cheatsheet. For a small change, explicitly tell the
 coding agent which work is authorised and which existing conventions to keep.
@@ -120,7 +129,8 @@ local change; report any platform work that would be needed separately.
 
 Do not assume `scaffold enhance --dry-run` previews every migration: in the
 reviewed source, that mode requires an existing Agents CLI manifest and a
-requested enhancement. Consult the installed command's help for your project.
+requested enhancement; `scaffold upgrade` has `--dry-run` and `--force` since
+1.8.0. Consult the installed command's help for your project.
 [Enhancement implementation](https://github.com/google/agents-cli/blob/main/src/google/agents/cli/scaffold/commands/enhance.py)
 
 ## Three practical workflows
@@ -196,23 +206,45 @@ change cloud resources in this task.
 
 **Expected result:** a reviewable deployment change with a clear owner for
 each resource and an inventory of exported data. Inspect traces, logs,
-completion uploads and analytics independently. In the downloaded 1.5.0
-observability skill, disabling message content in traces does **not** disable
-the separate full-content GCS/BigQuery upload path. Check the actual generated
-files and installed version before applying that configuration to your project.
+completion uploads and analytics independently. In the 1.11.0 observability
+skill, as in 1.5.0, disabling message content in traces does **not** disable
+the separate full-content GCS/BigQuery upload path. Since 1.10.0 a new project
+deploys to Agent Runtime under Agent Identity by default, `deploy --dry-run`
+makes read-only cloud calls and exits non-zero on a definite problem, and a
+customer-managed key can only be set when the agent is created. Terraform and
+the imperative `agents-cli deploy` must not own the same engine. Check the
+actual generated files and installed version before applying any of this to
+your project.
 [Google observability skill](https://github.com/google/agents-cli/blob/main/skills/google-agents-cli-observability/SKILL.md)
 
 For a latency investigation, use Google's tracing guidance to obtain evidence
-and `optimise-adk-on-google-cloud` to choose and measure a change. For Gemini
-Enterprise registration, use `google-agents-cli-publish`; this toolkit has no
-equivalent registration specialist.
+and `optimise-adk-on-google-cloud` to choose and measure a change. For
+registration in Gemini (formerly Gemini Enterprise) or the Agent Registry,
+`adk-agent-interoperability` owns the agent card, the registration mode and
+the contracts, and `google-agents-cli-publish` runs `agents-cli publish gemini`
+and the registry commands.
 
 ## Keep versions and evidence visible
 
-The comparison was made on 15 September 2026 using the supplied repository
-snapshot, whose seven skill files declare version 1.5.0, and public upstream
-documentation. Online copies can differ. Confirm the installed CLI, scaffold
-and SDK versions before applying a recipe or interpreting an evaluation file.
+The comparison was first made on 15 September 2026 against version 1.5.0 and
+re-checked on 22 October 2026 against a 1.11.0 snapshot (release notes dated
+20 October 2026), whose seven skill files all declare 1.11.0. Online copies
+can differ. Confirm the installed CLI, scaffold and SDK versions before
+applying a recipe or interpreting an evaluation file.
+
+Changes between those versions that affect how the collections combine:
+new projects scaffold on `google-adk>=2.12.0` and set
+`GOOGLE_GENAI_USE_ENTERPRISE=true` (this toolkit's recipes were checked
+against 2.8.0, so a feature named in a recipe may need the newer pin); the
+`adk@<name>` recipe shortcut is gone and recipes are addressed by URL in the
+renamed `google/adk-recipes` repository; Agent Identity is the default for
+new Agent Runtime projects; `deploy --dry-run` makes read-only cloud calls;
+`--ingress`, `--key` and label flags were added; Live (voice) agents run and
+evaluate through `--mode adk_live`; extensions can ship skills into
+`.agents/skills/`; and usage telemetry is on by default since 1.9.0 (opt out
+with `AGENTS_CLI_TELEMETRY=0` or `DO_NOT_TRACK=1`). The dated
+[comparison note](../research/agents-cli-comparison-2026-10-22.md) lists what
+this toolkit imported, routed and left out at 1.11.0.
 
 In the reviewed implementation, `agents-cli update` upgrades the CLI and calls
 the Skills CLI update command without filtering to Google's collection. It
@@ -227,4 +259,6 @@ run for this comparison. Earlier tests of this toolkit alone are recorded
 separately in [the CLI test report](../testing/codex-cli-smoke.md).
 
 For the detailed overlap and proposed changes to this toolkit, read
-[the comparison and enhancement recommendations](../research/agents-cli-comparison.md).
+[the comparison and enhancement recommendations](../research/agents-cli-comparison.md),
+its [23 September refresh](../research/agents-cli-comparison-2026-09-23.md)
+and the [22 October note against 1.11.0](../research/agents-cli-comparison-2026-10-22.md).

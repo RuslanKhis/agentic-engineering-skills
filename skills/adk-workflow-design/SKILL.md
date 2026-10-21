@@ -61,6 +61,16 @@ Modes can combine within one task. Read only relevant references. Cloud hosting,
 retrieval, long-term memory and tenant authentication may be architectural
 recommendations; implementing them is a separate scope decision.
 
+When the project has `agents-cli-manifest.yaml`, consult the installed
+`google-agents-cli-adk-code` skill (`references/adk-python-workflows.md` for
+the graph API, `references/adk-python.md` for `SequentialAgent`,
+`ParallelAgent` and `LoopAgent`, or the `ambient-expense-agent` and
+`deep-search` recipes in `google/adk-recipes`); if it is not installed,
+adk-engineer explains how to get it. Keep this skill's acceptance contracts;
+the scaffold's conventions (agent code in `app/`, `App(name=)` equal to that
+directory name for `agents-cli eval`) are project facts to preserve, not
+design decisions.
+
 ## Implement or advise
 
 1. Present a short plan before broad edits. For a planning/review request, give

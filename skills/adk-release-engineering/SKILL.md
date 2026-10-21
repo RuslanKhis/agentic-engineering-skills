@@ -13,7 +13,7 @@ metadata:
 
 Make every change to an ADK agent a traceable release: a prompt version, a pinned model ID, a pinned judge ID, a tool schema hash, an eval-set hash and a deploy reference that move together and roll back together. Deliver the smallest change to an existing project or a review with observable findings. Keep pins unchanged unless a version decision is requested; keep every ADK claim tied to the pinned version.
 
-This skill complements Google's `agents-cli` deploy skill (three-stage pipeline, Cloud Run traffic rollback, eval run/grade/compare; fetched 2026-10-07), which has no prompt versioning, model-migration or eval-gate-in-CI guidance. Hand first deployment, packaging and ownership journals to deploy-adk-on-google-cloud; eval case design and the measured iteration loop to adk-agent-evaluation; model settings and the lifecycle table to adk-model-and-output-contracts; prompt text to adk-agent-instructions; sampling and alerting mechanics to adk-agent-observability.
+This skill complements Google's `agents-cli` deploy skill (three-stage pipeline, Cloud Run traffic rollback, eval run/grade/compare; v1.11.0, re-read 22 October 2026), which has no prompt versioning, model-migration or eval-gate-in-CI guidance. Hand first deployment, packaging and ownership journals to deploy-adk-on-google-cloud; eval case design and the measured iteration loop to adk-agent-evaluation; model settings and the lifecycle table to adk-model-and-output-contracts; prompt text to adk-agent-instructions; sampling and alerting mechanics to adk-agent-observability.
 
 ## Inspect before choosing a mode
 

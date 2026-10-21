@@ -42,6 +42,8 @@ Modes compose within this one skill. Read only the references needed for the req
 
 For a greenfield project, confirm Python/ADK selection before installing dependencies; prepare a dependency-free design and tests meanwhile. For an existing project, adapt its interfaces and persistence rather than installing the demonstration architecture. Preserve custom statuses, policy thresholds, public APIs and test tools unless the requested fix requires a change.
 
+When the project has `agents-cli-manifest.yaml`, consult the installed `google-agents-cli-adk-code` skill (`references/adk-python.md`, or the `long-horizon-harness`, `ambient-expense-agent` and `deep-search` recipes) for the native confirmation and resume wiring the scaffold expects; if it is not installed, adk-engineer explains how to get it. The enforcement boundary and the evidence rules in this skill still govern.
+
 ## Implement and validate
 
 1. State a short plan naming the boundary to change, affected files and observable acceptance test before broad edits. Separate local implementation from external operations.

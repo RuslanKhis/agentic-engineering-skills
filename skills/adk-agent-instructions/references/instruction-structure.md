@@ -32,8 +32,8 @@ EXEMPLARS (two to five, structurally identical, from other cases)
 Google's own samples use the same order under the headings Role, Objective,
 Instructions or Workflow Steps and Output format, with numbered steps that
 name tools and sub-agents in backticks, and an explicit "Given inputs" block for
-sub-agents reached as tools ([adk-samples financial-advisor
-prompt.py](https://github.com/google/adk-samples/blob/main/contrib/python/financial-advisor/app/prompt.py),
+sub-agents reached as tools ([adk-recipes financial-advisor
+prompt.py](https://github.com/google/adk-recipes/blob/main/contrib/python/financial-advisor/app/prompt.py),
 read 2026-10-06, vendor sample). The ADK LLM-agent page lists the same
 ingredients: core task, persona, constraints, how and when to use each tool,
 output format ([llm-agents](https://adk.dev/agents/llm-agents/), read
@@ -129,7 +129,7 @@ loaded into the prompt follow the same rule: Google's long-horizon harness
 loads one project-context file rather than several because several "inflates
 the prefix by ~3x and gives conflicting directives", and writes memories as
 declarative facts because "imperative phrasing gets re-read as a directive
-later" (adk-samples long-horizon-harness AGENTS.md, read 2026-10-06, vendor
+later" (adk-recipes long-horizon-harness AGENTS.md, read 2026-10-06, vendor
 sample).
 
 Completion for a structure change: the rendered prompt has the sections above

@@ -90,6 +90,16 @@ Give defaults to tuning knobs (`max_results: int = 20`,
 domain values. The linter's `domain_default_review` flags string defaults that
 look like domain values.
 
+Google's scaffold convention is stricter: "Type hints required, NO default
+values", return a JSON-serialisable dict, and "Don't mention `tool_context` in
+docstring" (Agents CLI 1.11.0, `google-agents-cli-adk-code` skill,
+`references/adk-python.md`, read 22 October 2026; vendor guidance). adk.dev
+allows defaults for truly optional values
+(https://adk.dev/tools-custom/function-tools/, read 22 October 2026), and this
+reference keeps that allowance for tuning knobs. In an Agents CLI project,
+follow the scaffold's no-default convention unless a knob's default is tested;
+the `ToolContext` and dict rules agree with the contract above.
+
 ## Per-parameter descriptions
 
 In 2.8.0 **no per-parameter description reaches the model** on either path:
@@ -209,6 +219,17 @@ that tool was constructed with `bypass_multi_tools_limit=True`; otherwise wrap
 the built-in tool in a dedicated agent and expose it with `AgentTool` or a
 `single_turn` sub-agent. The community-reported error text is "Multiple tools
 are supported only when they are all search tools".
+The current limitations page states it as "use of specific tools within an
+agent excludes the use of any other tools in that agent" and names
+`AgentTool` as the workaround and `bypass_multi_tools_limit=True` as the
+built-in one from 1.16.0 (https://adk.dev/tools/limitations/, read 22 October
+2026). The Agents CLI cheatsheet adds the symptom to look for: mixing
+`google_search` with function tools "disables Automatic Function Calling (AFC)
+for all tools", so the custom tools silently stop being called rather than
+failing loudly (Agents CLI 1.11.0, `google-agents-cli-adk-code` skill,
+`references/adk-python.md`, read 22 October 2026; vendor guidance, confirm on
+the installed version with the declaration dump and a scripted-model test
+that asserts the custom tool was invoked).
 
 ## Where tools may be configured
 

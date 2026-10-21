@@ -121,6 +121,25 @@ Entries marked "supplied by research" came from the coordinator's research on
   (Agent Runtime and Gemini Enterprise only); use-an-a2a-agent page
   (`agentplatform.Client`, `client.runtimes`); API Gateway MCP
   https://docs.cloud.google.com/api-gateway/docs/mcp-configure.
+- Re-read 2026-10-22: Gemini Enterprise "Register and manage an A2A agent"
+  (page updated 2026-10-14; `roles/run.invoker`, `X-Serverless-Authorization`,
+  the nine required card fields unchanged); Agent Identity page (baseline
+  `roles/aiplatform.expressUser`, `serviceusage.serviceUsageConsumer`,
+  `browser`, plus `logging.logWriter`, `monitoring.metricWriter`,
+  `cloudapiregistry.viewer`; `spec.effectiveIdentity`); routing Agent Runtime
+  through Agent Gateway (`PATCH` with
+  `updateMask=spec.deploymentSpec.agentGatewayConfig`, identity type not
+  changed by patch, binding change archives revisions).
+- Google Agents CLI 1.11.0 (Apache-2.0, released 2026-10-20), read 2026-10-22
+  from a local copy: `skills/google-agents-cli-publish/SKILL.md` (`publish
+  gemini` flags and defaults, idempotent upsert, `roles/run.servicesInvoker`
+  where the docs say `roles/run.invoker`, Live agents unsupported, Agent
+  Registry commands and auto-registration), `skills/google-agents-cli-deploy`
+  (`--agent-gateway-egress`/`-ingress`, `/api` passthrough, `APP_URL`),
+  `skills/google-agents-cli-adk-code/references/adk-python.md` (MCP audience
+  and extras gotchas), `src/google/agents/cli/publish/cmd_publish.py` and
+  `scaffold/agents/adk/app/app_utils/a2a.py`. Vendor guidance; commands not
+  executed here.
 - google/skills (Apache-2.0), `skills/cloud/` collection, read 2026-10-21:
   `google-cloud-solution-multi-agent-security`,
   `apigee-agent-gateway-governance`, `api-gateway-mcp-server`,

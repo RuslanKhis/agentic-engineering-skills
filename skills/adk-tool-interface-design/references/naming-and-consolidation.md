@@ -46,7 +46,7 @@ def lookup_order(order_id: str, include_items: bool = False, tool_context: ToolC
     """
 ```
 
-Google's own samples (adk-samples customer-service agent, read 2026-10-06 from
+Google's own samples (adk-recipes customer-service agent, read 2026-10-06 from
 the last commit before its removal) follow this shape with twelve flat tools,
 every return `{"status": ..., "message": ...}`, and business-rule rejections
 such as `{"status": "rejected", "message": "discount too large. Must be 10 or

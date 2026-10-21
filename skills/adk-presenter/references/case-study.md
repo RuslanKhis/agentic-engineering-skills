@@ -62,7 +62,7 @@ customer to supply, the timeline and selection are not documented; record
 them when the contact says.
 
 Other channels reuse the technical half of the story and have documented
-rules: a sanitised sample under `contrib/` in `google/adk-samples` by pull
+rules: a sanitised sample under `contrib/` in `google/adk-recipes` by pull
 request with a Google CLA; a post in Google Cloud's Medium publication (writers
 added on request); the ADK Agent Directory listed on the community page; a
 regional Google Cloud Next speaker call (Next Tokyo published one with a
