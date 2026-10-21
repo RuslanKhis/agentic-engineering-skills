@@ -5,6 +5,9 @@ manuscript of *Agentic Engineering*, under the repository's MIT licence. The
 included [licence](../LICENSE) preserves that notice. No external source code or
 other author's skill is bundled. The source repository has no published book
 URL, so no publication link is invented. This package is fully usable alone.
+On 21 October 2026 the Apache-2.0 `google/skills` collection (`skills/cloud/`)
+was reviewed as a source for the vendor facts cited inline in the references;
+nothing from it is bundled.
 
 Paths below identify historical evidence relative to the optional source
 repository's `chapter-06-memory-and-rag/` directory. They are provenance labels,

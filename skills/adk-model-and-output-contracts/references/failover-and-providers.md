@@ -38,6 +38,10 @@ Changing location, quota tier or provisioned throughput is a consequential cloud
 - Adapter fixes after 2.8.0 that affect contracts: 2.9.0 "guard malformed tool call argument JSON in LiteLlm response parsing", "report the real finish reason from a LiteLlm stream", "preserve anyOf and camelCase aliases in LiteLLM tool schemas", "forward GenerateContentConfig.seed to LiteLLM"; 2.10.0 "forward tool output schema on the LiteLLM path", "report malformed tool-call arguments instead of raising". A 2.8.0 project using LiteLLM with structured output or tool schemas should test those exact shapes rather than assume them.
 - 2.8.0 declares `output_schema_and_tools=True` for every `LiteLlm`; the main branch resolves it per provider ([output schema and tools](output-schema-and-tools.md)). An OpenAI-compatible transport does not establish provider schema enforcement; adk-agent-evaluation's provider-compatibility reference shows how to capture the request after adapter conversion.
 
+## Models you serve yourself
+
+A model behind a Vertex endpoint (custom weights or a Model Garden deployment) reaches ADK through `LiteLlm` or a custom `BaseLlm`; the registry, upload and endpoint work is not ADK configuration. When the request is to register, version or deploy such a model, consult the installed Google skill `agent-platform-model-registry` (from google/skills), and to evaluate it before adoption the endpoint path of `agent-platform-eval-flywheel`; if they are not installed, adk-engineer explains how to get them.
+
 ## Report what you observed
 
 For every error path, record the status code or finish reason, the model that answered, the layer that acted and the attempt count. "Fewer 429s" after a change is a claim only when the same request mix and time window are compared; quota is shared and time-varying, so a single afternoon proves little. Community reports of persistent 429s on preview models with global-only availability (Google developer forum, February 2026, not reproduced here) are a reason to measure under load before promising capacity.

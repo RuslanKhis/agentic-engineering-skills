@@ -2,7 +2,10 @@
 
 Use before finalizing a whole-system design or when reviewing an existing one.
 Select failures from the promised behavior. Give a reason for cases that do not
-apply; do not invent write machinery for a read-only product.
+apply; do not invent write machinery for a read-only product. At MVP, pilot or
+production profile, follow this review with the pillar checks in
+[WAF review](waf-review.md) before the design is called ready; they catch the
+recovery-target, cost-attribution and readiness gaps the grids cannot express.
 
 ## Build the coverage grid first
 

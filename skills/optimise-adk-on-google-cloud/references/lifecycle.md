@@ -17,6 +17,11 @@ does not imply permission to enable a service. Permission denied or a transport
 failure means unknown state, not resource absence. A trial still needs the billing
 configuration required by the selected service; verify actual access rather than
 inferring it from an account label. Do not silently link billing or raise quotas.
+Compose each `gcloud` read or mutation from `gcloud help <leaf command>` with
+explicit `--project` and location flags, `--quiet` on executed commands and
+`--limit`, `--filter` or `--format` on every `list`; when a command outside this
+skill's references is needed, consult the installed Google skill `gcloud` (from
+google/skills) first; if it is not installed, adk-engineer explains how to get it.
 
 The approval plan contains:
 

@@ -22,6 +22,8 @@ container and in-memory-object deployment are different paths.
 | Preflight passes but a hosted tool receives a permission error | Deployed workload identity and tool resource | Verify the identity and exact required access for that operation; operator access does not establish it. |
 | Repeating setup creates another build | Setup reconciliation | Count create/update mutations across two fresh invocations and compare the saved source/configuration identity. |
 | Deletion reports a parser error but the runtime disappears | Accepted operation identity | Reconcile the exact operation from provider evidence before considering another mutation. |
+| Container crashes at startup or dies without a traceback | The runtime's stderr stream: `logName` ending `reasoning_engine_stderr` under `resource.type="aiplatform.googleapis.com/ReasoningEngine"` filtered by `resource.labels.reasoning_engine_id` ([runtime logging](https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/logging), read 21 October 2026) | An import error names the package missing from the staged requirements; a silent exit with code 137 points at the deployment spec's memory limit (vendor guidance, confirm against the current docs). Repair the package or spec offline, then redeploy under approved scope. |
+| Hosted call returns 401 `Context-Aware Access requirements are not met` | Whether a runtime-bound Agent Identity token is being reused outside the runtime, and the identity mode in `spec.effectiveIdentity` | Token binding, not a missing role; do not add grants to silence it ([runtime setup troubleshooting](https://docs.cloud.google.com/gemini-enterprise-agent-platform/troubleshooting/runtime-setup)). |
 
 ## Follow configuration into the artefact and request
 

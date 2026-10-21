@@ -217,6 +217,7 @@ version alongside every evaluation run.
 | --- | --- | --- | --- |
 | `KeyError: Context variable not found` | literal braces or an identifier-shaped token inside a JSON example | `{key?}`, an `InstructionProvider`, or 2.10.0+ escapes | #628 (2025-05), #5706 (2026-05, fixed 2.10.0) |
 | `{{key}}` still injected | double braces are not an escape | same as above | #3527, #4606 |
+| a prompt pulled from a managed prompt resource raises `KeyError` or fills from state | Vertex managed prompts use `{var}` or `{{var}}` as their own template variables, and ADK re-templates both forms from session state | assemble the managed prompt with its own variables first, then pass the rendered string through an `InstructionProvider` | Google's `agent-platform-prompt-management` skill, read 2026-10-21 |
 | explicit cache never hits with `static_instruction` + `instruction` | dynamic tail shifts position each tool round; non-text static content fell behind history before 2.8.0 | keep the tail small and stable; verify `cached_content_token_count` | #6062, #6216, #6652 (patched 2.8.0) |
 | `GlobalInstructionPlugin` silently absent | `adk web` loaded `root_agent`, not `app`; earlier attribute bug | export `app` from `agent.py`; upgrade | #3739, #3163 / PR #3180 |
 | "transfer_to_agent not available", user stuck in a sub-agent | only agents with transfer targets get the tool; after transfer the sub-agent owns the turn; `LoopAgent` siblings are not transfer targets | `disallow_transfer_to_parent`, or expose the child as a tool when the parent must summarise | discussion #3330 |

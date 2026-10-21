@@ -38,4 +38,6 @@ The [operations runbook](operations-runbook.md) captures the observed setup/diag
 
 Managed-auth documentation was checked on 15 September 2026: current Google guidance documents Agent Identity `/authProviders/` migration for ADK 2.3.0+, while an ADK Preview page still shows legacy `/connectors/`. This is documented support, not a successful test of this skill's managed branch. Recheck the selected API and pinned SDK when implementing; see [continuations](adk-continuations.md).
 
+Reviewed on 21 October 2026: the google/skills `skills/cloud/` collection (Apache-2.0), in particular `api-gateway-backend-security-and-rate-limiting`, `apigee-agent-gateway-governance`, `iam-helper-for-policy-management`, `iam-helper-for-policy-simulator`, `iam-helper-for-privileged-access-management` and `iam-helper-for-troubleshooting`. Facts taken from it are cited inline; the `X-Apigateway-Api-Userinfo` behaviour and the Agent Gateway `env_vars` setting were confirmed on the Google pages named at the citation, the 2026-09-30 build-date condition was not.
+
 Independent community project; not affiliated with or endorsed by Google. The bundled adapter is adapted from the companion's response projection; the included MIT notice preserves its licence. No book purchase, local book checkout or proprietary service is required.

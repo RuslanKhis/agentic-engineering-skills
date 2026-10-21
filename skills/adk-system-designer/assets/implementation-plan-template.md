@@ -102,7 +102,9 @@ next phase's goals depend on.
   or proposed modules; required infrastructure and compatibility checks>
 - **Prerequisites:** <goal/decision IDs, dependencies, setup or provider guarantee>
 - **Primary skill:** <one specialist that leads this goal>
-- **Supporting skills:** <only those this goal's boundaries need, each with its purpose>
+- **Supporting skills:** <only those this goal's boundaries need, each with its
+  purpose; a Google product to provision or operate as `google/skills:<name>
+  (purpose)`>
 - **Acceptance:** <numbered A1, A2 ...: observable success, important failure and
   forbidden-effect cases, each naming the contract it proves (A2 → C3); grid
   cells cite them as G01/A2>

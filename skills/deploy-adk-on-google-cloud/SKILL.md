@@ -32,7 +32,7 @@ Inspection is complete when the current architecture, constraints, version statu
 | Existing Kubernetes platform or requirements needing Kubernetes controls | [GKE](references/gke.md). Prefer adapting the existing workload; a fresh cluster is an explicit infrastructure decision. |
 | Request asks which platform to choose | Compare only the relevant modes against HTTP integration, existing operations, state, identity, network and lifecycle needs. Deliver a recommendation without provisioning. |
 
-These choices are not a maturity ladder. Keep the user's selected platform unless evidence shows a blocking requirement. Load only the selected mode's reference; read another when comparing alternatives.
+These choices are not a maturity ladder. Keep the user's selected platform unless evidence shows a blocking requirement. Load only the selected mode's reference; read another when comparing alternatives. Self-hosting an open-weights model on an Agent Platform endpoint is model serving, not an ADK hosting mode: when the request includes it, consult the installed Google skills `agent-platform-deploy` and `agent-platform-inference` (from google/skills) for that part; if they are not installed, adk-engineer explains how to get them.
 
 ## Implement or adapt
 
@@ -46,7 +46,7 @@ When the request includes production users, durability, scaling or release opera
 
 ## Permission boundary
 
-Repository and cloud inspection are read-only by default. Code-generation permission does not authorise deployment. Before enabling APIs, changing IAM, creating secrets or resources, migrating data, deploying, deleting, or running paid tests, present the **exact project, region, resource names, identities, commands, limits and cleanup scope**, then obtain explicit approval. Existing approval applies only while that exact scope remains valid. Confirm cleanup separately. Never infer approval from elapsed time, a budget balance or a previous campaign.
+Repository and cloud inspection are read-only by default. Code-generation permission does not authorise deployment. Before enabling APIs, changing IAM, creating secrets or resources, migrating data, deploying, deleting, or running paid tests, present the **exact project, region, resource names, identities, commands, limits and cleanup scope**, then obtain explicit approval. End the turn after asking; a command run in the same turn as its approval request was not approved. Irreversible deletion needs a typed confirmation naming the resource. Existing approval applies only while that exact scope remains valid. Confirm cleanup separately. Never infer approval from elapsed time, a budget balance or a previous campaign.
 
 Use ADC or workload identity, with Secret Manager for application secrets where needed. Keep credentials and customer data out of source, logs, examples and reports. Configuration examples contain placeholders only. Derive the narrow required permissions; Owner, Editor, public unauthenticated access and wildcard grants are not troubleshooting shortcuts.
 

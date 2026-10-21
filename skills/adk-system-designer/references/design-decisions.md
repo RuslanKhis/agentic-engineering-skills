@@ -321,6 +321,36 @@ configuration/policy versions and deployment identity will be verified in the
 running process. Cleanup needs resource ownership and absence checks; deleting a
 service does not imply deleting its retained sessions, artifacts or provider data.
 
+Four checks from Google's Well-Architected Framework belong in this section
+whenever the profile is MVP or above (the reliability and cost pillar pages,
+fetched 21 October 2026; see [WAF review](waf-review.md) for the full list):
+
+- **Recovery targets per store.** State the recovery time and recovery point
+  objectives for sessions, business records, artifacts and memory separately;
+  a backup interval longer than the RPO is a contract gap. A restore into a
+  non-production environment is a goal with an acceptance case, because an
+  untested backup is a hypothesis.
+- **Rehearsed failure.** Name which failures are exercised before the first
+  shared deployment (a release rollback at least; a dependency or regional
+  failover at production profile) and which goal does it. A game day is the
+  production-profile form.
+- **High availability where it is paid for.** Multi-zone stores, a hot
+  standby and the full alerting set belong to production; development and
+  staging scale to zero and share infrastructure within the security boundary.
+  Record the difference in the delivery constraints table so the estimate and
+  the bill match.
+- **Commitments and model mix.** Steady capacity is a candidate for
+  committed-use discounts and burst work for Spot or scale-to-zero serverless;
+  the model mix is reviewed for the smallest model that passes the evaluation
+  set, with simple steps routed to it. Put the review in the plan's Later
+  table with a date trigger; it is not phase 1 work.
+
+When a concern's depth is "build now" at production profile, consult the
+installed Google skill for that pillar (`google-cloud-waf-reliability` or
+`google-cloud-waf-cost-optimization`, from google/skills) for the
+product-level recommendations; if it is not installed, `adk-engineer`
+explains how to get it.
+
 Model IDs, judge IDs and prompts are release artefacts with lifecycle dates.
 Requirement: behavior must stay comparable across releases. Choice: pin dated
 or stable IDs for the agent, the judge and any simulator, version the prompt as

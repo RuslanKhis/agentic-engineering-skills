@@ -25,7 +25,10 @@ Every claim in this skill is one of: **source-verified** (read in a local checko
 | https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/monitoring | 2026-10-01 | `ReasoningEngine` resource, built-in metrics, overview dashboard, ADK metrics as user-defined metrics |
 | https://docs.cloud.google.com/agent-builder/agent-engine/manage/logging | fetched 2026-10-07 | `reasoning_engine_stdout`, child resources not logged |
 | https://developers.googleblog.com/en/agent-and-model-evaluations-in-gemini-enterprise-agent-platform-are-now-ga/ | 2026-07-31 | Online Monitors GA |
-| https://docs.cloud.google.com/gemini-enterprise-agent-platform/optimize/evaluation/quality-alerts | 2026-10-01 | `online_evaluator/scores`, `evaluation_metric_name`, alert example, incidents linking to traces |
+| https://docs.cloud.google.com/gemini-enterprise-agent-platform/optimize/evaluation/quality-alerts | 2026-10-01; re-read 2026-10-20 version on 2026-10-21 | `online_evaluator/scores`, `evaluation_metric_name` values `task_success`, `final_response_quality_v1`, `tool_use_quality_v1`, `hallucination_v1`, alert example, incidents linking to traces |
+| https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.alertPolicies (Aligner enum) | fetched 2026-10-21 | `ALIGN_MEAN` numeric only; `ALIGN_PERCENTILE_50` for distribution values |
+| https://docs.cloud.google.com/trace/docs/analytics | 2026-10-20 | `PROJECT_ID.LOCATION._Trace.Spans._AllSpans`, `observability.googleapis.com`, linked dataset needed for alert policies on query results |
+| https://docs.cloud.google.com/stackdriver/docs/otlp/overview | 2026-10-20 | `prometheus.googleapis.com` naming of OTLP metrics through the Telemetry API |
 | https://cloud.google.com/bigquery/pricing#data-ingestion-pricing | fetched 2026-10-07 | Storage Write API billing |
 
 ## Other vendor documentation
@@ -33,6 +36,7 @@ Every claim in this skill is one of: **source-verified** (read in a local checko
 | URL | Date | Used for |
 | --- | --- | --- |
 | https://github.com/google/agents-cli/blob/main/skills/google-agents-cli-observability/SKILL.md (v1.8.0) and `feedback-mechanism.md` | 2026-09-30 | Completion upload path ignoring the content flag, infrastructure command, feedback record and sink pattern |
+| https://github.com/google/skills, `skills/cloud/` (`agent-platform-alert-configuration`, `cloud-run-alert-configuration`, `google-cloud-slo-alert-configuration`, `cloud-monitoring-*`, `cloud-trace-querying`, `cloud-logging-*`; Apache-2.0) | read 2026-10-21 from a local copy | Cloud Monitoring names of ADK metrics (vendor guidance), burn-rate PromQL, `_AllSpans` SQL conditions, Online Monitor metric ids and the aligner rule, Cloud Run host metrics, alert-condition gotchas, trace filter grammar, Model Armor span names, notification and sink facts; routed to for the artefacts themselves |
 | https://langfuse.com/docs/evaluation/evaluation-methods/llm-as-a-judge | fetched 2026-10-07 | Judges on sampled traces |
 | https://langfuse.com/docs/observability/features/masking | fetched 2026-10-07 | `mask_otel_spans` scope |
 | https://www.arize.com/docs/ax/evaluate/run-evals-on-traces.md | fetched 2026-10-07 | Evaluations over traces |

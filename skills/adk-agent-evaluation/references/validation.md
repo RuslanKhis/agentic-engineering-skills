@@ -124,6 +124,10 @@ The observer fixture explicitly guarantees complete, ordered synthetic capture. 
 
 No new ADK Runner execution, injected grading, conformance recording, cloud API request or deployed-service test occurred in this depth review. Detailed recipes retain their historical evidence labels; production budgets, judge calibration, holdouts, remote reconciliation and monitoring still require implementation and validation in the target project.
 
+## Google skills review — 21 October 2026
+
+Compared this skill with google/skills (Apache-2.0, `skills/cloud/agent-platform-eval-flywheel`, read 21 October 2026) and imported the managed scorer's export and judge-pinning contract, the `MetricPromptBuilder` rubric shape and custom-metric input gotchas, the ADK-session-to-`AgentData` mapping and routing to that skill for model, endpoint, scenario-generation and loss-clustering work. Verified live: `pip install google-cloud-aiplatform[adk,evaluation]` and `from vertexai import Client` on Google's agent-evaluation page (2026-10-20) and PyPI 2.6.0 (2026-10-20). Not verified and labelled vendor guidance: the full-resource-name requirement for `judge_model`, sampling-count limits and the `MetricPromptBuilder` validation message. Not imported: `temperature=0`, prompt-tightening fixes, summary-mean comparisons and a `gemini-2.5-flash` judge default. No test, helper or pin changed; no live call ran.
+
 ## Quality-iteration reference — 6 October 2026
 
 [Quality iteration](quality-iteration.md) was added after the

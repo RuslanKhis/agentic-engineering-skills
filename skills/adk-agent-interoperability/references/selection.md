@@ -54,7 +54,11 @@ vendor guidance, not measurements on your agent.
 
 - Wrapping an HTTP API in an MCP server you then consume from the same
   process: two hops, one owner, no gain. Use `OpenAPIToolset` or a
-  `FunctionTool`.
+  `FunctionTool`. When the API must be shared with other agents or teams as
+  a remote MCP server, host it once on API Gateway
+  ([mcp-consumption](mcp-consumption.md)) and consult the installed Google
+  skill `api-gateway-mcp-server` (from google/skills) to build it; if it is
+  not installed, adk-engineer explains how to get it.
 - Exposing a whole community server because the filter felt restrictive; the
   context cost and the write tools arrive together.
 - Calling another team's ADK agent through `AgentTool` by importing their

@@ -139,7 +139,14 @@ Record first event, first nonblank eligible partial text and completed answer
 separately. Correlate client/platform/application measurements; application spans
 miss delay before process execution. Compare equivalent workloads and retain
 errors. A small sample or a faster failed answer cannot establish a tail-latency
-improvement.
+improvement. The platform-side series are
+`aiplatform.googleapis.com/reasoning_engine/request_count` (labelled by
+`response_code_class`) and `reasoning_engine/request_latencies`, plus CPU and
+memory allocation time, on the monitored resource
+`aiplatform.googleapis.com/ReasoningEngine` keyed by `reasoning_engine_id`
+([runtime monitoring](https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/monitoring),
+read 21 October 2026); they measure the managed request boundary, not the
+model span inside it.
 
 Inspect effective minimum/maximum instances, `container_concurrency`, CPU, memory
 and serving process count. Measure cold/warm state, event-loop lag, throughput,
@@ -161,6 +168,14 @@ thinking controls; a mock accepting a model string proves none of those. Keep
 thought text out of the UI while preserving required thought signatures and tool
 protocol fields. A lower thinking level is not necessarily disabled thinking.
 Accept structured output only after both semantic checks and valid completion.
+The output cap includes thought tokens: `max_output_tokens` bounds
+`thoughtsTokenCount` plus `candidatesTokenCount` together, so a small cap on a
+thinking model returns `finishReason: MAX_TOKENS` with empty answer text and a
+non-zero thought count. Lower `thinking_level` to save cost; do not lower the cap
+below what the tool call and complete answer need
+([Gemini thinking](https://ai.google.dev/gemini-api/docs/thinking), read
+21 October 2026). Preview model generations are often served only from `global`
+(vendor guidance, confirm against the current docs).
 
 Own retries at one layer. Separate logical model calls from SDK attempts; if an
 application wrapper owns retries, configure the SDK accordingly and verify that
@@ -176,6 +191,17 @@ completion handling. Check current eligibility, endpoint and request-header
 rules, spillover, pricing and commitment terms before recommending a purchase.
 Reserved capacity is a commercial commitment requiring explicit approval; none
 of these options is a universal optimisation or was benchmarked by the lab.
+Standard PayGo runs on Dynamic Shared Quota: a 429 means the shared regional pool
+was exhausted at that moment, and a quota-increase request does not apply to it;
+bounded retry with backoff absorbs transient exhaustion, and Provisioned
+Throughput (sized in GSUs) is the reserved path when it recurs
+([Dynamic Shared Quota](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/dynamic-shared-quota),
+[error code 429](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/deploy/error-code-429),
+read 21 October 2026). When the work is a raw model call outside ADK, an
+OpenAI-compatible or OpenMaaS endpoint, or a self-deployed open model's
+`/chat/completions` surface, consult the installed Google skill
+`agent-platform-inference` (from google/skills); if it is not installed,
+adk-engineer explains how to get it.
 
 Use the official [optimisation guide](https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/optimize-and-scale),
 [deployment controls](https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/deploy-an-agent)

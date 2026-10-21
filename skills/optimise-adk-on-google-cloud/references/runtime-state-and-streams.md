@@ -10,6 +10,9 @@ For the optional finite-answer consumer, controlled persistence interleavings,
 processing-timeout failures and deferred-job acceptance tests, read
 [runtime-verification.md](runtime-verification.md). Load only the recipe relevant
 to the changed boundary; no general queue or job framework is required.
+Live API session limits, resumption and schema constraints are recorded in
+adk-model-and-output-contracts; this reference covers only the runtime side of
+buffering, persistence and deferred work.
 
 ## Separate preview delivery from accepted completion
 

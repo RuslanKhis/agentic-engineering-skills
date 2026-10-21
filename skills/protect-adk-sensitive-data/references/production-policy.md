@@ -138,6 +138,7 @@ locate derivatives without embedding their sensitive contents.
 | Existing sessions | Migrate, delete or restart incompatible history; protect summaries from approved source content; test restore, retry, rewind and replay |
 | Durable memory | Store the minimum useful fact through an approved write schema; authorise/project reads; protect source and derived facts independently |
 | RAG | Classify at ingestion, authorise document/chunk retrieval, minimise and protect passages before the assembled model request; locate the actual injection path |
+| Gateway semantic cache | A cache keyed on prompt similarity alone (the Apigee semantic cache behind Agent Gateway is one) serves one caller's answer to another and persists it for its TTL; scope it per tenant and model or keep private routes out of it, and record it as a retained store with its own deletion rule (Google's `apigee-agent-gateway-governance` skill, read 21 October 2026) |
 | Files/media | Choose supported screening/extraction routes; restrict or reject unsupported types; govern the original recording/file as well as extracted text |
 | Deletion | Follow source-to-derivative provenance through stores and retention policies; verify deletion or document specifically retained copies and access constraints |
 

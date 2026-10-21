@@ -25,6 +25,12 @@ public diagnostics; use an allowlist of stage/status/code and safe fingerprints.
 | Long cleanup begins returning 401 | Credential's actual expiry and selected identity | Acquisition time is token issue time, or IAM must be changed |
 | Network delete reports a serverless reservation | Owned service/operation termination and reservation release | Force-delete an unrelated or provider-managed address |
 
+For the operator-side read in the RAG row, the installed Google skill
+`agent-platform-rag-engine-management` (from google/skills) lists corpora and
+files and runs a `retrieval_query` as the operator; if it is not installed,
+adk-engineer explains how to get it. It has no import, filter or cleanup steps,
+so the serving and retirement rules in this package still apply.
+
 ## Durable setup retrieval recovery
 
 The source added recovery only for read-like setup `retrieveContexts` requests:
@@ -82,6 +88,17 @@ Twenty such strings imply roughly forty DLP calls before other input/output
 passes and retries. This is a worked count from the source's call graph, not a
 service quota or cost estimate. Inspect the actual target's paths; rejection,
 empty strings, caching and different policy implementations change the count.
+
+A Model Armor floor setting changes the count from outside the application:
+`gcloud model-armor floorsettings update --add-integrated-services=GOOGLE_MCP_SERVER`
+enables project-wide sanitisation of Google-hosted MCP server traffic, and the
+same floor-setting object constrains every template in the project and governs
+the Vertex AI integration, each service with its own enforcement type
+(https://docs.cloud.google.com/sdk/gcloud/reference/model-armor/floorsettings/update;
+the cross-service effect is vendor guidance from Google's
+`google-cloud-storage-basics` skill, read 21 October 2026, confirm against
+current docs). Read the effective floor setting before attributing extra
+screening calls or blocks to the application's own policy.
 
 Use a small worksheet for the proposed continuation:
 

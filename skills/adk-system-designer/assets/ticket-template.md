@@ -4,7 +4,7 @@ title: <first useful behavior, in the user's words>
 design: <relative path to the architecture document>
 plan: <relative path to the implementation plan>
 primary_skill: <one specialist, e.g. adk-tool-interface-design>
-supporting_skills: [<only those this goal's boundaries need>]
+supporting_skills: [<only those this goal's boundaries need; a Google product to provision or operate as google/skills:<name>>]
 blocked_by: [<goal IDs or open decisions, empty when ready>]
 contracts: [<design contract IDs this ticket proves, e.g. C1, C3>]
 phase: <1, 2 or later>

@@ -4,7 +4,7 @@ Read during an incident or when a single bad turn must be explained. The path is
 
 ## 1. From the alert to a trace
 
-- The alert names the metric, the dimension (`gen_ai.agent.name`, `gen_ai.tool.name`, `gen_ai.request.model`, `error.type`) and the window. Open Trace Explorer (or the third-party destination) filtered on the same span attribute and time window. On Agent Runtime the console's Traces tab offers a session view and a span view (vendor, 2026-10-01).
+- The alert names the metric, the dimension (`gen_ai.agent.name`, `gen_ai.tool.name`, `gen_ai.request.model`, `error.type`) and the window. Open Trace Explorer (or the third-party destination) filtered on the same span attribute and time window. On Agent Runtime the console's Traces tab offers a session view and a span view (vendor, 2026-10-01). Cloud Trace's filter grammar: `+gen_ai.tool.name:get_order` (exact value on any span), `^label:error.type` (key present on the root span), `error:true` (some span failed), `latency:2s` (trace duration at or above, no space before the unit). Predicates match at trace level, not on the same span, so a trace returned for `+gen_ai.tool.name:get_order error:true` may carry the error elsewhere; post-filter on the span you mean (Google's `cloud-trace-querying` skill, read 21 October 2026). For a cohort rather than one trace, the `_AllSpans` SQL in [SLO and alerting](slo-and-alerting.md) gives the error ratio by tool or model. When the deliverable is the live search, the span fetch or the correlated-log pull, consult the installed Google skill `cloud-trace-querying` (from google/skills; `cloud-logging-query-generation` for LQL beyond the `trace=` filter); if it is not installed, adk-engineer explains how to get it.
 - Pick a representative trace: a failed one (`error.type` set, span status `ERROR`) and a slow one (long `invoke_agent` or `execute_tool`). Record `trace_id`, `gen_ai.conversation.id` and `gcp.vertex.agent.invocation_id` from the spans.
 - If no spans match while the host reports requests, the export is broken: check the startup log for `Cannot determine GCP Project`, missing exporter packages, or a second provider owner ([export paths](export-paths.md)).
 
@@ -21,6 +21,7 @@ Read during an incident or when a single bad turn must be explained. The path is
 | two `invoke_agent` spans per invocation, or orphan spans | two tracer owners (OpenInference beside native, or an application provider) | [export paths](export-paths.md) duplicate-span check |
 | `invocation` span where dashboards expect `invoke_workflow` (or the reverse) | schema version differs by host | `ADK_TELEMETRY_SCHEMA_VERSION_OPT_IN`, `GOOGLE_CLOUD_AGENT_ENGINE_ID` |
 | content attributes hold `{}` | `ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS=false`; this is the intended production state | read the stored session, not the span |
+| spans named `Request Path` or `Response Path` with resource `service.name=modelarmor` in the same trace | Model Armor screened the prompt or the answer; `gcp.modelarmor.violations` lists the policy hits and `gen_ai.security.policy.id` names the template (Google's `agent-platform-alert-configuration` skill, read 21 October 2026) | the template and its policy are protect-adk-sensitive-data's; a rising violation share per agent, joined on `trace_id`, is a safety alert candidate in [SLO and alerting](slo-and-alerting.md) |
 
 Timings on the span are the measurement; `usage` on the `generate_content` span is the last chunk's cumulative figure for that call.
 
@@ -29,7 +30,7 @@ Timings on the span are the measurement; `usage` on the `generate_content` span 
 - `gen_ai.conversation.id` is the ADK session id. Fetch the session from the session service the deployment uses (`SESSION_SERVICE_URI`, Agent Runtime sessions API, the database). Agent Runtime does not log Sessions or Memory Bank operations (vendor), so the session service is the only record of the events.
 - Export the session to JSON (an object with `events`, or the events array) and run the helpers. `invocation_summary.py` shows, per invocation, how many logical model calls happened, which tools failed, where the wall time went (`longest_steps`) and whether usage was missing; its `invocation_id` matches the span attribute.
 - BigQuery rows for the same `invocation_id` add `ttft_ms`, `finish_reason`, `tool_origin` and the sanitised error text; correlate on `trace_id` when `enable_otel_correlation` or the ambient span was present.
-- Logs: query `trace="projects/{project}/traces/{trace_id}"` in Cloud Logging for application and ADK log records; `google_adk.*` logger names identify the module. On Agent Runtime, stdout is in `reasoning_engine_stdout`.
+- Logs: query `trace="projects/{project}/traces/{trace_id}"` in Cloud Logging for application and ADK log records; `google_adk.*` logger names identify the module. On Agent Runtime, stdout is in `reasoning_engine_stdout`; on Cloud Run the request record and the container output are separate log ids ([export paths](export-paths.md)).
 
 ## 4. Reproduce
 

@@ -60,6 +60,7 @@ blast radius. Record Model Armor or judge plugins as layers in column
 | Workflow structure | Which agent sees which inputs; whether a consequential step can be reached after untrusted input | Content semantics |
 | Code executor | Network, filesystem, credentials and lifetime of model-generated code | The intent of the code |
 | Perimeter (VPC-SC, Private Google Access, egress policy, hermetic sandbox network) | Where bytes can go | Which bytes are sensitive |
+| Agent Gateway (Agent Runtime ingress `CLIENT_TO_AGENT`, egress `AGENT_TO_ANYWHERE`) | On egress, which MCP tool names the agent's principal may call: `roles/iap.egressor` with a CEL condition such as `api.getAttribute('iap.googleapis.com/mcp.toolName', '') in ['search', '']` (the empty name lets `initialize` and `tools/list` pass); on ingress, Model Armor before the agent. Decided by IAM, not by the model (vendor guidance, codelab https://codelabs.developers.google.com/agw-cuj-arun-egress-emcp read 2026-10-21) | Arguments, results and anything outside Agent Runtime or Gemini Enterprise: it does not govern Cloud Run or GKE agents, and A2A calls from Gemini Enterprise bypass it (Agent Gateway overview, read 2026-10-21) |
 | UI rendering | Whether model text can become markup, a request or a click | The model's intent |
 
 Choose the earliest point that has the information to decide. Authorisation
@@ -102,6 +103,16 @@ and a service-account credential. Lessons that generalise:
 - Local `adk web` runs use the developer's ADC, so IAM conditions written for
   the deployed Agent Identity are not exercised until deployment (vendor
   codelab caveat). Test them deployed.
+- Security Command Center is the platform-side alert source: Agent Platform
+  Threat Detection watches Agent Runtime `stdout`/`stderr` and audit logs for
+  reverse shells, credential harvesting, metadata-service abuse and
+  exfiltration tooling (vendor docs, read 2026-10-21); `findingClass="SECRET"`
+  reports leaked plaintext credentials and `TOXIC_COMBINATION` reports a
+  reachable attack path (Google's `google-cloud-scc-query` skill, read
+  21 October 2026). When a finding on the agent's project needs triage,
+  consult the installed Google skill `google-cloud-scc-query` (from
+  google/skills); when it needs fixing, `google-cloud-scc-remediation`; if
+  either is not installed, adk-engineer explains how to get it.
 
 ## 6. Map findings to OWASP identifiers
 

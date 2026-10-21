@@ -185,7 +185,19 @@ For an approved lab, implement this sequence:
 1. Generate the owner and fixed reporting seed date once. Persist all table load
    IDs before creation; derive IDs from owner plus table, not each attempt's time.
 2. Create the absent dataset/tables with ownership metadata, explicit location and
-   reviewed schemas. Apply required partition filters to appropriate fact tables.
+   reviewed schemas. Require partition filters on partitioned fact tables with
+   `ALTER TABLE ds.t SET OPTIONS (require_partition_filter = true)` or
+   `bq update --require_partition_filter ds.t`
+   (https://docs.cloud.google.com/bigquery/docs/managing-partitioned-tables), and
+   verify the setting from `INFORMATION_SCHEMA.TABLE_OPTIONS`
+   (`option_name = 'require_partition_filter'`) alongside the partitioning column
+   from `INFORMATION_SCHEMA.COLUMNS.is_partitioning_column` (Google's
+   `bigquery-troubleshooting` skill, read 21 October 2026). When fixture or
+   serving tables need partitioning, clustering or materialized-view design
+   beyond this lab shape, consult the installed Google skill
+   `bigquery-optimization`; for dataset, table or Terraform scaffolding and the
+   IAM role catalogue, `bigquery-basics` (both from google/skills). If either is
+   not installed, adk-engineer explains how to get it.
 3. For each table, fetch its recorded job by project, location and ID. Reuse an
    existing job. If absent, submit the same ID with `WRITE_EMPTY` and `CREATE_NEVER`.
 4. If submission conflicts, fetch that same job. If submission times out or loses

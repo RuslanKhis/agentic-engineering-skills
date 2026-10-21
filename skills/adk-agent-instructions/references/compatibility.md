@@ -47,6 +47,11 @@ literal braces; no escape syntax documented), `tutorials/agent-team.md`
 a risk source; instructions alone insufficient), `optimize/index.md`
 (`GEPARootAgentPromptOptimizer`, root agent only, experimental).
 
+google/skills (Apache-2.0), `skills/cloud/agent-platform-prompt-management`,
+read 2026-10-21: managed prompt template variables and SDK, used for the
+placeholder-collision pitfall and the routing line in
+[prompt as code](prompt-as-code.md). Not executed.
+
 ## Not verified
 
 - Any live model behaviour, including every vendor prompting claim; these are

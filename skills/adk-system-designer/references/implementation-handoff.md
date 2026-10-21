@@ -54,6 +54,56 @@ skill and only the supporting skills the slice needs.
 Verify availability through the host catalogue or sibling packages; a missing
 skill is a setup prerequisite, not a claim that its guidance was applied.
 
+### Name the Google product skill a route needs
+
+Google's `google/skills` collection (Apache-2.0, installed with
+`npx skills@latest add google/skills --skill <name>` or fetched on demand by
+its `finding-google-skills` router) operates Google Cloud products: it
+provisions, queries, generates Terraform and PromQL, and administers. It does
+not design the application; this toolkit's specialist does. When a route's
+infrastructure responsibility must be carried out, add the product skill to
+the goal's supporting skills as `google/skills:<name> (purpose)`.
+`adk-engineer` checks whether it is installed, shows how to get it when not,
+and treats its commands as proposals that still need the user's approval for
+that scope. A goal with such a line stays ready in design; its product step
+is an execution-scope prerequisite until authorised.
+
+| Infrastructure responsibility in the route | `google/skills` name(s) |
+| --- | --- |
+| A project with billing, APIs and a landing zone, or an organisation-managed account | `google-cloud-recipe-onboarding`, `google-cloud-recipe-auth`, `google-cloud-recipe-foundation-builder` |
+| Any `gcloud` command the goal will run | `gcloud` |
+| Cloud Run service, ingress and egress, private tiers, a public load balancer | `cloud-run-basics`, `google-cloud-solution-n-tier-serverless-web-app`, `google-cloud-global-frontend-configuration` |
+| GKE cluster, onboarding, scaling, cost | `gke-basics`, `gke-app-onboarding`, `gke-workload-scaling`, `gke-cost-optimization` |
+| Agent Runtime behind an Agent Gateway, Agent Identity, egress policies, Agent Registry | `agent-platform-troubleshooting`, `google-cloud-solution-multi-agent-security`, `apigee-agent-gateway-governance` |
+| IAM bindings and deny policies to write | `iam-helper-for-policy-management` |
+| Replaying 90 days of access against a narrower policy before applying it | `iam-helper-for-policy-simulator` |
+| A 403 on the runtime identity | `iam-helper-for-troubleshooting` |
+| Time-bound operator or break-glass access | `iam-helper-for-privileged-access-management` |
+| Model Armor templates, Sensitive Data Protection, Vertex AI quotas, any product with no skill of its own | `gcloud` (the command skill; the specialist supplies the settings) |
+| A REST API exposed as a remote MCP server, with auth and quotas | `api-gateway-mcp-server`, `api-gateway-backend-security-and-rate-limiting` |
+| Cloud SQL or AlloyDB instance, IAM database users, backups | `cloud-sql-basics`, `alloydb-basics` |
+| BigQuery datasets, partitioning, cost diagnosis, `AI.*` syntax | `bigquery-basics`, `bigquery-optimization`, `bigquery-troubleshooting`, `bigquery-ai-ml` |
+| RAG Engine corpora, Cloud Storage buckets and signed URLs | `agent-platform-rag-engine-management`, `google-cloud-storage-basics` |
+| Alert policies on agent metrics (Terraform), on the Cloud Run host, or a formal SLO with burn-rate alerts | `agent-platform-alert-configuration`, `cloud-run-alert-configuration`, `google-cloud-slo-alert-configuration` |
+| A PromQL query, a metric descriptor lookup, a dashboard widget, a notification channel | `cloud-monitoring-promql-query`, `cloud-monitoring-metric-selection`, `cloud-monitoring-chart-generation`, `cloud-monitoring-notification-channels-configuration` |
+| A trace search; a log query; a log sink, bucket or view | `cloud-trace-querying`; `cloud-logging-query-generation`; `cloud-logging-configuration-basics` |
+| A Well-Architected pillar review at MVP or production profile | `google-cloud-waf-reliability`, `-security`, `-cost-optimization`, `-operational-excellence`, `-performance-optimization` (one per pillar whose depth is "build now") |
+| CI on Cloud Build; the managed evaluation scorer | `cloud-build-basics`, `agent-platform-eval-flywheel` |
+| Direct Gemini calls outside ADK, fine-tuning, self-hosted open models | `gemini-api`, `agent-platform-tuning`, `agent-platform-inference` |
+| Audio or video streaming | `google-cloud-solution-agentic-ai-bidirectional-streaming`, `gemini-live-api` |
+| Security Command Center findings on the agent's project | `google-cloud-scc-query`, `google-cloud-scc-remediation` |
+
+The names above were read from the published catalogue on 21 October 2026.
+When Google's router is installed, confirm a name against the current
+catalogue before writing it into a goal (skills are renamed and added); the
+router's own rule not to name a skill it has not seen in the catalogue applies
+to it, not to this table, which is a dated reference.
+
+Google's skills assume an operator at a terminal: several open with global
+`gcloud config set`, deploy public by default or download keys. The goal's
+depth and floor (scoped flags, platform identity, private by default,
+approval per scope) still govern; the product skill supplies the commands.
+
 Official lookup points for the named interfaces:
 [agents](https://adk.dev/agents/llm-agents/), [App](https://adk.dev/apps/),
 [sessions](https://adk.dev/sessions/session/),

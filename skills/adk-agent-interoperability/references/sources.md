@@ -108,6 +108,26 @@ Entries marked "supplied by research" came from the coordinator's research on
   (`integrations/agent-identity.md`), MCP Toolbox for Databases ADK page
   (mcp-toolbox.dev), Application Integration role notes. Supplied by
   research; commands and role names to confirm on the live pages.
+- Read 2026-10-21: Agent Gateway egress codelab
+  https://codelabs.developers.google.com/agw-cuj-arun-egress-emcp
+  (`roles/iap.egressor`, `api.getAttribute('iap.googleapis.com/mcp.toolName', '')`,
+  empty name for the handshake, `DRY_RUN` then enforced); routing Agent
+  Runtime through Agent Gateway
+  https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/agent-gateway-runtime-deploy
+  (`client.runtimes.create`, `agent_gateway_config`, `identity_type=AGENT_IDENTITY`,
+  `GOOGLE_API_PREVENT_AGENT_TOKEN_SHARING_FOR_GCP_SERVICES`,
+  `networkservices.agentGateways.get`); Agent Gateway overview
+  https://docs.cloud.google.com/gemini-enterprise-agent-platform/govern/gateways/agent-gateway-overview
+  (Agent Runtime and Gemini Enterprise only); use-an-a2a-agent page
+  (`agentplatform.Client`, `client.runtimes`); API Gateway MCP
+  https://docs.cloud.google.com/api-gateway/docs/mcp-configure.
+- google/skills (Apache-2.0), `skills/cloud/` collection, read 2026-10-21:
+  `google-cloud-solution-multi-agent-security`,
+  `apigee-agent-gateway-governance`, `api-gateway-mcp-server`,
+  `api-gateway-backend-security-and-rate-limiting`. Facts taken only from
+  there (principal format, `mcp.tool.isReadOnly`, four-policy limit,
+  `roles/networkservices.viewer`, HTTP 200 on an invalid API key) are
+  labelled vendor guidance.
 
 ## Independent evidence and practitioner analyses
 

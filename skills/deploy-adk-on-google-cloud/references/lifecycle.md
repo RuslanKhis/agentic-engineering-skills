@@ -20,6 +20,8 @@ Read-only preflight cannot certify effective runtime permissions, model availabi
 
 SDK subprocesses must inherit the selected project, account and quota-project settings. Sanitize inherited API keys and old deployment IDs when the approved path uses IAM. Never print credential variables or token-bearing commands. Avoid global CLI configuration changes; prefer scoped flags or a dedicated invocation environment.
 
+Compose each `gcloud` command from `gcloud help <leaf command>` rather than memory, with `--project` and the location flag explicit. Executed commands carry `--quiet` so a hidden prompt cannot hang a non-interactive run, every `list` carries `--limit`, `--filter` or `--format` so output stays reviewable, long operations use `--async` plus bounded polling of the returned operation, and `gcloud ai …` takes the alphanumeric project ID, not the project number (Google's `gcloud` and `agent-platform-deploy` skills, read 21 October 2026). These are hygiene rules for the plan's commands, not authorisation to run them.
+
 ## Durable state before side effects
 
 Store a versioned **data** record outside the deployment package, readable only by the operator. At minimum record:

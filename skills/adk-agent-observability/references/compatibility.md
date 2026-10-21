@@ -49,6 +49,7 @@ For a new production deployment prefer google-adk 2.10.0 or later (span-retentio
 | Agent Platform tracing, monitoring, logging, quality alerts pages | 2026-10-01 | vendor guidance |
 | Google Developers Blog, Agent and Model Evaluations GA | 2026-07-31 | vendor guidance |
 | agents-cli `google-agents-cli-observability` skill v1.8.0 and `feedback-mechanism.md` | 2026-09-30 | vendor guidance; optional composition |
+| google/skills `skills/cloud/` observability, monitoring, trace and logging skills (Apache-2.0) | read 2026-10-21 | vendor guidance; routed to for dashboards, alert policies, queries, channels and sinks |
 | Langfuse evaluation and masking pages; Arize run-evals-on-traces | fetched 2026-10-07 | vendor guidance |
 | Google SRE Workbook, Implementing SLOs | fetched 2026-10-07 | independent evidence |
 | google/adk-python issues #7311, #7162, #7112, #7024, #7017, #6915, #6692, #6465, #6361, #6328, #4829, #3845, #3181; openinference #3857, #3844, #3177; Arize community thread 2026-02-20 | status as of 2026-10-07 | community; symptoms to test for, not facts about the target |
@@ -57,6 +58,7 @@ For a new production deployment prefer google-adk 2.10.0 or later (span-retentio
 
 - Live export to any Google Cloud project, Online Monitors, BigQuery row landing, alert firing, or third-party ingestion. Nothing in this skill ran a cloud call.
 - The exact metric name the target's installed `opentelemetry-semantic-conventions` emits for client token usage, and whether its backend renames it.
+- The Cloud Monitoring names of ADK's metrics: Google's alert templates query `workload.googleapis.com/gen_ai.*` on `generic_node`, while the OTLP overview describes `prometheus.googleapis.com` naming for the Telemetry API path; neither was confirmed against a live descriptor listing.
 - Behaviour of `vertexai.agent_engines.AdkApp` per-request flushing beyond the source comment in `_agent_engine.py`.
 - Cloud Run CPU throttling effects on the periodic metric reader; stated as an inference to test.
 - Community issue reports cited by number; they identify symptoms, and the fix versions come from the issue trackers and CHANGELOG, not from reproducing them.

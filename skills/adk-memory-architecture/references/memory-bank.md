@@ -90,6 +90,7 @@ When crash recovery of eligible content is required, use a durable outbox contai
 An event-range design needs separate scan and completion cursors: record the job atomically with scan progress and advance completion only for settled ranges.
 A scanner must revisit completed invocations missed before handoff; callbacks can run before the entire invocation is persisted.
 Treat this as a production requirement to implement or report, not a property of any ledger or callback by name.
+On a Spanner target, Spanner Queues are a ready-made outbox: send and acknowledge run inside ordinary read-write transactions, delivery is at-least-once under short renewable leases, and the acknowledgement is a `DELETE ... ASSERT_ROWS_MODIFIED 1` so a lost race surfaces instead of vanishing; they require the Enterprise or Enterprise Plus edition (Google's `spanner-basics` skill, read 21 October 2026; vendor guidance, confirm against current docs). The scan and completion cursors above still govern what the queue carries.
 
 **Production addition — atomic late-handle bookkeeping.** A provider handle can
 arrive after a stale claim was marked indeterminate. Preserve a valid late
@@ -178,6 +179,7 @@ that an already-dispatched provider request was cancelled or that latest hosted
 erasure acceptance passed.
 
 Application deletion does not establish immediate physical removal from provider retention systems or backups.
+On a relational session store those copies are concrete: the point-in-time and continuous-backup windows in [sessions-state.md](sessions-state.md) still hold erased rows, and an AlloyDB discrete backup "exists independently from its original cluster" and survives the cluster's deletion (https://docs.cloud.google.com/alloydb/docs/backup/overview). Report them as retention still running, with their expiry dates.
 Whole-environment teardown is not evidence that the scoped user-erasure workflow preserves another user's data.
 
 ## Validate completion at the claimed boundary

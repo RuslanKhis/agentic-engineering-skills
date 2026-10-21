@@ -18,6 +18,8 @@ Both helpers reject symbolic links in their input path components. Use a canonic
 
 ## Provenance map
 
+On 21 October 2026 the Apache-2.0 `google/skills` collection (`skills/cloud/`) was reviewed as a source for the vendor facts cited inline in the references; nothing from it is bundled.
+
 The source is the MIT-licensed `RuslanKhis/agentic-engineering-adk-gcp` repository, Chapter 10. The implementation was re-opened on 15 September and reviewed again on 16 September 2026 with the updated manuscript and dated audit records. The 15 September check found all 44 source files matching the final 13 September follow-up fingerprints. Source path names below are provenance identifiers, not dependencies or links the installed skill must resolve.
 
 | Skill behaviour | Working source and prior finding | Evidence and limit |

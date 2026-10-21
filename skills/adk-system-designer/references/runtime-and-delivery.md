@@ -39,6 +39,25 @@ card can display a completed JSON result; streaming earns its extra state and
 failure handling when progressive delivery matters. A gateway can preserve this
 protocol while execution moves between local and remote runtimes.
 
+A live audio or video journey is a third protocol, not a faster stream: the
+browser holds a bidirectional socket to the gateway, the gateway holds a
+Live API session through `run_live()`, and every limit on that session is a
+contract. Record the session length the product needs against the provider's
+connection lifetime and the model's context limit, whether session resumption
+and context-window compression are enabled, what happens to the user when the
+session is cut, and that `max_llm_calls` does not bound the live path
+([ADK live configuration](https://adk.dev/live/configuration/) and
+[Live API sessions](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/live-api/start-manage-session),
+fetched 21 October 2026). The host's request timeout and instance affinity
+become contracts too: a WebSocket on Cloud Run is one long request billed as
+an active instance and cut at the configured timeout
+([Cloud Run WebSockets](https://docs.cloud.google.com/run/docs/triggering/websockets),
+fetched 21 October 2026). `adk-frontend-integration` carries the design in
+its live-streaming reference; when the journey needs it, consult the installed
+Google skill `google-cloud-solution-agentic-ai-bidirectional-streaming` (from
+google/skills) for the reference topology, and if it is not installed,
+`adk-engineer` explains how to get it.
+
 Define application-owned output schemas independently from tool inputs. Give
 messages and tool calls stable identities; correlate results to exact calls,
 including simultaneous calls to the same tool. Specify how deltas, aggregates,

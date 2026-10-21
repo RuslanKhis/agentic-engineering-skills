@@ -15,6 +15,10 @@
 
 The example guides allow Python 3.11–3.13; that range is not a claim that every Python/OS combination was tested. Direct version pins are not a transitive lock. Availability of a model, backend, region or SDK contract must be rechecked when adopting the pattern later. Never use the phrase “latest ADK” as a compatibility promise.
 
+Product naming moved after the chapter was written: Google's documentation now files Agent Runtime under "Gemini Enterprise Agent Platform" and uses "Agent Platform" where it previously said "Vertex AI" (endpoints, the legacy `vertexai` SDK), while API resources, CLI groups and SDK extras keep their old identifiers (`reasoningEngines`, `gcloud ai`, `agent_engines`). Read a document's resource names, not its product label, when matching it to the installed SDK.
+
+Reviewed external source, 21 October 2026: Google's `google/skills` collection (Apache-2.0) for named Cloud Run roles, ingress and egress rules, Agent Identity and runtime troubleshooting facts; each imported fact carries its own citation and the live baseline above is unchanged.
+
 ## Inspect the target, then apply the appropriate contract
 
 Select the target's existing interpreter from its documented environment. Read `.python-version`, `pyproject.toml`, requirements/constraints/includes, lockfiles and Docker base together; check the installed environment separately. A project version declaration and the interpreter running the inspector can differ. For example, run this using the selected interpreter, without importing the agent:

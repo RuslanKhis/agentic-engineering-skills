@@ -210,6 +210,17 @@ Check current official contracts for the target SDK/service only when selecting 
 integrating that branch. Names such as `BigQueryToolset` and `DataAgentToolset` identify
 different responsibilities; a product name alone establishes no policy guarantee.
 
+For Google's remote MCP servers the recorded contract facts are: callers need
+`roles/mcp.toolUser` in addition to the data roles; BigQuery jobs run through the
+server carry the label `goog-mcp-server:true` and are billed to the project the call
+names, so a model-chosen project argument is a cost and scope hole; and the read-only
+toolsets (`execute_sql_readonly`, and Cloud SQL's `/mcp/readonly` endpoint) refuse
+DML and DDL while a `SELECT` can still invoke remote functions
+(https://docs.cloud.google.com/bigquery/docs/use-bigquery-mcp; the Cloud SQL endpoint
+is from Google's `cloud-sql-basics` skill, read 21 October 2026, vendor guidance,
+confirm against current docs). Connection parameters, tool filters and header
+propagation belong to adk-agent-interoperability.
+
 Before connecting a branch, record whether it proposes SQL or executes work itself.
 Use a service-boundary double to count operations and inspect identity, scope and
 arguments. If SQL executes before the tool returns, a later local rejection cannot

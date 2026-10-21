@@ -1,6 +1,6 @@
 # Troubleshooting from observed failures
 
-Use this after locating the failing boundary. Preserve the original input, sanitised response, versions and verdict before changing a checker or repeating work. An uncertain provider outcome requires reconciliation; a new request is not a diagnostic default. For cloud operations use the [lifecycle runbook](lifecycle-runbook.md); for model plumbing use [ADK runtime](adk-runtime.md).
+Use this after locating the failing boundary. Preserve the original input, sanitised response, versions and verdict before changing a checker or repeating work. An uncertain provider outcome requires reconciliation; a new request is not a diagnostic default. For cloud operations use the [lifecycle runbook](lifecycle-runbook.md); for model plumbing use [ADK runtime](adk-runtime.md). When the failure is a slow or unexpectedly expensive BigQuery job rather than an application contract, consult the installed Google skill `bigquery-troubleshooting` (from google/skills); if it is not installed, adk-engineer explains how to get it.
 
 ## Find the first broken boundary
 
@@ -32,7 +32,7 @@ These signatures came from the September 2026 companion audits. The corrections 
 
 Build candidates through the public executor and instrument the provider boundary. For rejection cases assert both `dry_run_count == 0` and `execution_count == 0`; a returned error after a remote tool already executed is not prevention.
 
-1. Test `AI.GENERATE`, `AI.FORECAST` and `ML.PREDICT` in supported parser positions. SQLGlot 29 represented namespace information on a parent `Dot`; inspecting only an anonymous function's name missed it in the original implementation. Inspect the installed dialect AST and apply the complete permitted-function policy. These three regression names are examples, not an exhaustive policy.
+1. Test `AI.GENERATE`, `AI.FORECAST` and `ML.PREDICT` in supported parser positions. SQLGlot 29 represented namespace information on a parent `Dot`; inspecting only an anonymous function's name missed it in the original implementation. Inspect the installed dialect AST and apply the complete permitted-function policy. These three regression names are examples; the current function surface to cover is listed in [execution safety](execution-safety.md).
 2. Exercise nested CTE scope and shadowing. A globally collected CTE name must not hide an unrelated physical reference in another lexical scope. Validate physical project/dataset/table identities after name resolution; do not blanket-lowercase case-sensitive identities.
 3. Exercise disallowed views, external/remote functions, table functions, connections, wildcard/time-travel references and joins according to the supported grammar. Unknown or unresolved constructs stop before submission. A read-only result shape is insufficient.
 4. Normalise and validate values before binding. Cover empty-after-trimming strings, hostile quote text, `NaN`, positive/negative infinity, duplicate names, missing/extra SQL parameters, date boundaries and provider precision/range limits. Preserve exact decimals; converting through binary float can hide a mismatch.

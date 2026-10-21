@@ -24,6 +24,16 @@ Every claim in this skill is one of: **source** (read in a local checkout of goo
 | https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions | 2026-10-07 (re-read 2026-10-08) | 12-month availability, retirement dates |
 | https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/locations | 2026-10-05 | Global endpoint availability and residency caveat |
 
+## Google skills review (21 October 2026)
+
+| Source | Type | Used for |
+| --- | --- | --- |
+| google/skills (Apache-2.0): `skills/cloud/gemini-api`, `gemini-live-api`, `gemini-interactions-api`, `gemini-agents-api`, `agent-platform-tuning`, `agent-platform-model-registry`, `agent-platform-migrate-from-ai-studio`, read 21 October 2026 | vendor | Non-text model families on Vertex, routing lines for tuning, registry, migration, raw SDK, Live, Interactions and managed agents; nothing imported from their model lists or `temperature` advice |
+| https://ai.google.dev/api/live | vendor, page dated 2026-10-09 | Fields rejected in Live `setup.generationConfig`; `goAway`, `sessionResumptionUpdate`, `contextWindowCompression`, `toolCallCancellation` |
+| https://ai.google.dev/gemini-api/docs/models | vendor, page dated 2026-10-19 (re-read 2026-10-21) | Image, live, TTS, transcription and embedding model IDs |
+| https://ai.google.dev/gemini-api/docs/model-tuning | vendor, page dated 2026-04-28 | No tunable model on the Gemini API |
+| https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/tuning/supervised-tuning/use | vendor, page dated 2026-10-20 | Gemini models tunable on Vertex |
+
 ## Other vendor documentation
 
 | URL | Fetched | Used for |

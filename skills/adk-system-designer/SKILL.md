@@ -282,7 +282,11 @@ middleware and passed to the retrieval tool as trusted context" is a route; a
 service name or a list of skills is a pointer to one. Seven cross-framework
 specialists (instructions, tool interfaces, model and output contracts,
 security, observability, release engineering, interoperability) sit beside the
-topic specialists; the handoff mapping names which one owns each route.
+topic specialists; the handoff mapping names which one owns each route. When
+a route needs a Google Cloud product provisioned, queried or administered,
+the goal also names Google's product skill as `google/skills:<name>` in its
+supporting skills (the handoff lists them); the design records that need and
+never runs the recipe.
 
 Bring this detail into the conversation as choices become clear. Use a small
 interface sketch or pseudocode only when it resolves an integration question;
@@ -313,7 +317,8 @@ it reviewed by someone who did not write it. Send the
 fresh context where the host supports one; otherwise give the user the prompt
 to run in a new session, and say the plan is unreviewed until they do. Settle
 every finding in the plan or its change table, and rerun the schedule check.
-A single-person proof of concept skips this.
+A single-person proof of concept skips this; a one-pass draft hands over
+unreviewed, says so, and gives the prompt.
 
 When revising an existing design or plan, compare it with the previous
 version and list every failure row, grid cell, test, acceptance case, wait

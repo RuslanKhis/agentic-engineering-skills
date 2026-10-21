@@ -9,6 +9,7 @@ Use this reference when an agent needs scoped structured facts from BigQuery. Ke
 - Inspect the installed ADK/BigQuery interfaces, configuration validation, client lifecycle, domain schema, existing query layer and error contract. Preserve the target's supported SDK conventions and domain status names; example ticket fields are not a required schema.
 - Determine what every timestamp proves. `MAX(source_synced_at)` means the newest observed row sync; it does not prove all updates arrived, all rows are equally recent or missing records do not exist.
 - Use a completeness watermark only when ingestion guarantees that all relevant updates through that point have been incorporated. Otherwise expose a clearly named observation such as `latest_row_synced_at` and leave completeness unknown. Compare a valid watermark with the question's allowed delay.
+- BigQuery change history is one concrete watermark source: `APPENDS(TABLE t, start, end)` lists appended rows and `CHANGES(TABLE t, start, end)`, after `ALTER TABLE t SET OPTIONS (enable_change_history = TRUE)`, lists inserts, updates and deletes with `_CHANGE_TYPE` and `_CHANGE_TIMESTAMP`, within the table's time-travel window of seven days by default (https://docs.cloud.google.com/bigquery/docs/change-history). It proves what the warehouse committed, not that the source system sent everything.
 - Align the agent instruction and public result labels with that contract. A label such as `fresh` based only on row age must not become “complete current state”. Route stricter questions to the owning API or explain the uncertainty.
 
 Complete the decision with the supported questions, ownership mapping and explicit freshness/completeness contract.
@@ -51,7 +52,7 @@ These provider checks need approved live scope; a mocked DDL test proves less.
 3. Define distinct success, unavailable and unknown-freshness outcomes. A backend failure with an empty list is not evidence that the caller has no records. Keep provider exceptions, query values and client objects out of public results.
 4. Define a trusted row limit, deterministic ordering and tie-breaker. If results can be truncated, expose pagination or `may_have_more` as appropriate; do not present the limited rows as a complete count. Bind continuation tokens to the same authenticated scope.
 5. Bound transferred rows/bytes and the complete serialised result. A SQL `LIMIT` bounds selected rows, not scan cost or payload bytes.
-6. Apply the configured query-byte cap to the actual BigQuery job and choose explicit query project/location. Keep business identifiers out of diagnostic SQL, job labels and error text.
+6. Apply the configured query-byte cap to the actual BigQuery job (`QueryJobConfig.maximum_bytes_billed`; a job whose estimate exceeds it fails before execution without charge) and choose explicit query project/location. On-demand billing rounds up to 10 MB per table referenced, so repeated lookups of tiny tables cost real money, and `total_bytes_billed` is empty for queries over tables with row-level access policies, so record unknown rather than zero (https://cloud.google.com/bigquery/pricing; https://docs.cloud.google.com/bigquery/docs/information-schema-jobs). Keep business identifiers out of diagnostic SQL, job labels and error text.
 7. Screen the projected result wherever the target's content policy requires it. Publish a complete protected result or a safe failure; preserve typed validation and authorisation independently of screening.
 
 ## 4. Choose the required execution guarantee
@@ -110,7 +111,7 @@ all matching records.
 
 - If the serving table represents current rows, specify its business key, deduplication rule and source-version ordering. Prevent an older late-arriving event from replacing a newer state.
 - Define deletes, missing rows, schema changes and backfills explicitly. Advance a completeness watermark only after its coverage contract is satisfied, including the relevant partitions and scope.
-- Keep append-only analytical history separate from a current-row serving table where the domain needs both. Set purpose, partitioning, retention and access controls independently.
+- Keep append-only analytical history separate from a current-row serving table where the domain needs both. Set purpose, partitioning, retention and access controls independently. When the serving or history table needs partitioning, clustering or a materialized view designed, consult the installed Google skill `bigquery-optimization`; when a query in the serving path is slow or unexpectedly expensive, `bigquery-troubleshooting` (both from google/skills). If either is not installed, adk-engineer explains how to get it.
 - Treat synthetic fixture merges as fixture setup, not proof of a production replication engine. Test importer guarantees with duplicate, out-of-order and missing updates.
 - Treat agent analytics as a separate privacy route. Inventory the complete exporter schema and actual sinks, minimise fields and test synthetic sensitive-data canaries; disabling a content formatter alone does not prove whole-row minimisation.
 

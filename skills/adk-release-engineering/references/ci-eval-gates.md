@@ -57,7 +57,7 @@ Community reports (google/adk-python issues, not reproduced here; check the targ
 
 | Report | Effect on a gate | Status |
 | --- | --- | --- |
-| #7258 `safety_v1` resolved to a newer managed metric version with an inverted scale | Safety threshold silently meant the opposite | Fixed 2.10.0 ("pin the specific version for safety_v1", CHANGELOG 2026-09-24) |
+| #7258 `safety_v1` resolved to a newer managed metric version with an inverted scale | Safety threshold silently meant the opposite | Fixed 2.10.0 ("pin the specific version for safety_v1", CHANGELOG 2026-09-24). The mechanism is general: on the evaluation service an unversioned metric name resolves to the latest version, and the Gen AI client pins with `types.RubricMetric.GENERAL_QUALITY(version="v2")` (Google's `agent-platform-eval-flywheel` skill, read 21 October 2026; vendor guidance, confirm against current docs). Record the resolved metric version beside the judge ID in the changelog row |
 | #7414 lower-is-better custom metric fails although rows say `PASSED` | Custom metric direction disagrees with the gate | Open as of 2026-10-05; the sibling checker's `comparison: lte` handles direction at the gate |
 | #6725 `NOT_EVALUATED` results discarded | A metric that never ran looked like no failure | 2.9.0 maps a metric that never ran to `NOT_EVALUATED`; the exact-count rule in the checker treats a missing row as a failure |
 | #4155 MCP toolset race under parallel evaluation | Intermittent tool failures that look like flakiness | Serialise MCP-backed cases or isolate toolsets per run |

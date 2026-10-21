@@ -13,7 +13,7 @@ from the platform.
 | Host | How A2A is served | Card discovery | Auth to reach it |
 | --- | --- | --- | --- |
 | Your container (Cloud Run, GKE) with `to_a2a` or `adk api_server --a2a` | Starlette routes from `_compat.attach_a2a_routes_to_app` (source-verified) | `/.well-known/agent-card.json` (or `/a2a/<folder>/.well-known/agent-card.json`) served publicly by the app | Whatever the edge enforces: Cloud Run IAM (`--no-allow-unauthenticated`), IAP, or in-app validation of the header the card declares |
-| Agent Platform Runtime (formerly Agent Engine), A2A template, Preview | `vertexai.agent_engines.templates.a2a.A2aAgent(agent_card=..., agent_executor_builder=...)`; operations `on_message_send`, `on_get_task`, `on_cancel_task`, `handle_authenticated_agent_card`; endpoint `.../reasoningEngines/{id}/a2a` (community post 2025-09-10 and current docs under gemini-enterprise-agent-platform/scale/runtime/use-an-a2a-agent) | The public well-known card is **not** served; clients GET `{a2a_url}/v1/card` with a bearer ADC token. `agent_card_check.py --url <a2a_url> --card-path /v1/card --header "Authorization=Bearer $(gcloud auth print-access-token)" --allow-remote` after approval | Google IAM on the Reasoning Engine; `cloud-platform` scope for the caller |
+| Agent Platform Runtime (formerly Agent Engine), A2A template, Preview | `A2aAgent(agent_card=..., agent_executor_builder=...)` template; operations `on_message_send`, `on_get_task`, `on_cancel_task`, `handle_authenticated_agent_card`; endpoint `.../reasoningEngines/{id}/a2a`. The current page (read 2026-10-21) drives it with `import agentplatform`, `agentplatform.Client(project=, location=, http_options={"api_version": "v1beta1"})` and `client.runtimes.get(name=...)`; the earlier `vertexai.agent_engines` and `client.agent_engines` names (community post 2025-09-10) are the deprecated spelling, so match the installed `google-cloud-aiplatform` before copying either | The public well-known card is **not** served; clients GET `{a2a_url}/v1/card` with a bearer ADC token. `agent_card_check.py --url <a2a_url> --card-path /v1/card --header "Authorization=Bearer $(gcloud auth print-access-token)" --allow-remote` after approval | Google IAM on the Reasoning Engine; `cloud-platform` scope for the caller |
 | Gemini Enterprise (registered external A2A agent) | Gemini Enterprise calls your endpoint; traffic does not pass Agent Gateway, so its policies do not apply | Card JSON supplied at registration (`a2aAgentDefinition.jsonAgentCard`) | Cloud Run: Google-signed OIDC token for the Discovery Engine service agent in `X-Serverless-Authorization`; grant that service agent `roles/run.invoker`. End-user OAuth (when configured) arrives in `Authorization` |
 
 Agent Runtime consequence: `RemoteA2aAgent(agent_card="https://.../a2a/.well-known/agent-card.json")`
@@ -49,12 +49,38 @@ people describe. Treat as community report.
   2.8.0 (`integrations/agent_registry/agent_registry.py`, source-verified
   method names) and need `google-adk[a2a,agent-identity]`; 2.11.0 resolves
   registry MCP bindings for a deployed agent at runtime (CHANGELOG 9115d61).
-- Agent Gateway egress (2026 codelab): deploy with
-  `identity_type=AGENT_IDENTITY` and an `agent_to_anywhere_config`, register
-  MCP servers with `--mcp-server-spec-content` and
-  `--interfaces=url=...,protocolBinding=JSONRPC`, grant `roles/iap.egressor`
-  with a CEL condition on `iap.googleapis.com/mcp.toolName`, allow an empty
-  tool name so `initialize` and `tools/list` pass, and start in `DRY_RUN`.
+- Agent Gateway egress (codelab
+  https://codelabs.developers.google.com/agw-cuj-arun-egress-emcp and the
+  runtime routing page, both read 2026-10-21): create the runtime with
+  `client.runtimes.create(...)`, `identity_type="AGENT_IDENTITY"` and
+  `agent_gateway_config={"agent_to_anywhere_config": {"agent_gateway":
+  "projects/P/locations/R/agentGateways/G"}}`; the gateway binding is set
+  at creation and is SDK-only. Register MCP servers with
+  `--mcp-server-spec-content` and `--interfaces=url=...,protocolBinding=JSONRPC`,
+  grant `roles/iap.egressor` with the condition
+  `api.getAttribute('iap.googleapis.com/mcp.toolName', '') in ['<tool>', '']`
+  (the empty name lets `initialize` and `tools/list` pass), and start in
+  `DRY_RUN`. The agent's principal has the form
+  `principal://agents.global.org-<N>.system.id.goog/resources/aiplatform/projects/<P>/locations/<R>/reasoningEngines/<ID>`
+  and the attribute `iap.googleapis.com/mcp.tool.isReadOnly` is also offered
+  in conditions (Google's `google-cloud-solution-multi-agent-security` skill,
+  read 21 October 2026; vendor guidance, confirm against current docs). The
+  Vertex AI service agent `service-<N>@gcp-sa-aiplatform.iam.gserviceaccount.com`
+  needs `networkservices.agentGateways.get` on the gateway project or
+  creation fails at once; `roles/networkservices.viewer` carries it and the
+  `agentGatewayUser` role does not (runtime routing page and Google's
+  `apigee-agent-gateway-governance` skill, read 2026-10-21). Limits: the
+  gateway governs agents on Agent Runtime (ingress and egress) and Gemini
+  Enterprise (egress) only (overview page, read 2026-10-21); at most four
+  custom AuthzPolicies attach to one gateway and the order of two
+  `CONTENT_AUTHZ` policies is undefined (Google skill, vendor guidance).
+  When the gateway, its egress policies or Agent Registry entries must be
+  provisioned, consult the installed Google skill
+  `google-cloud-solution-multi-agent-security` (from google/skills); when
+  the gateway's LLM egress must be metered or screened through Apigee,
+  `apigee-agent-gateway-governance`; if either is not installed,
+  adk-engineer explains how to get it. The deployment itself, including the
+  Agent Identity settings, belongs to `deploy-adk-on-google-cloud`.
   Agent Identity (`integrations/agent-identity.md`, Python ≥ 1.30):
   `CredentialManager.register_auth_provider(GcpAuthProvider())` and a
   `GcpAuthProviderScheme(name="projects/.../authProviders/...", continue_uri=...)`

@@ -50,7 +50,16 @@ The lab once passed operator evaluation while runtime lacked
 well as query.
 Check the selected SDK's actual calls and narrow permissions rather than
 copying a role wholesale. Keep internal denied-stage codes separate from a safe
-public no-answer result. Verify that the serving identity holds read permissions only; import and
+public no-answer result. For the operator-side read, the current SDK shape is
+`rag.retrieval_query(rag_corpora=[corpus_name], text=question, similarity_top_k=k)`,
+whose `contexts.contexts[]` carry `text` and `source_uri`, and
+`RagRetrievalConfig(top_k=..., filter=RagRetrievalConfigFilter(vector_similarity_threshold=...))`
+for a threshold (Google's `agent-platform-rag-engine-management` skill, read
+21 October 2026; its import path prints a deprecation warning, so verify the
+installed SDK). Use it to confirm the corpus answers as the operator; the
+serving path keeps its own scoped retrieval, and attaching a `VertexRagStore`
+tool to `generate_content` is the model-service path from §1 that application
+hooks cannot inspect. Verify that the serving identity holds read permissions only; import and
 promotion belong to the publishing identity.
 
 ## 3. Implement the serving contract
@@ -78,6 +87,7 @@ Define a stable public unavailable/no-supported-answer contract that discloses t
 - Admit approved sources through a separate ingestion identity. Inspect/classify them under the target policy and quarantine incomplete checks. A credential-pattern scan or self-declared `clean` manifest covers one check; privacy review and hostile-content review each need their own pass.
 - Preserve document structure needed to understand headings, tables and exceptions. Evaluate chunking and overlap against representative questions rather than copying fixture settings.
 - Stage immutable source/index versions and bind review to their bytes. Associate the evaluation artefact with the exact candidate digest, collection and release; reject mismatches or stale results.
+- For a Cloud Storage registry, keep the bucket on uniform bucket-level access with public access prevention, give the publisher `roles/storage.objectCreator` plus `roles/storage.objectViewer` rather than `objectUser` or `objectAdmin`, which both include delete, and count soft-deleted staging objects as retained copies at retirement because soft delete keeps them for its retention window (Google's `google-cloud-storage-basics` skill, read 21 October 2026). When creating that bucket, consult the installed Google skill `google-cloud-storage-bucket-architect`; for its IAM, a 403 or a signed URL, `google-cloud-storage-basics` (both from google/skills); if either is not installed, adk-engineer explains how to get it. Generation preconditions stay as specified here; those skills do not cover them.
 - Promote with a compare-and-swap or generation precondition on the active pointer. On conflict, re-read and report the competing state rather than overwriting it blindly.
 - Define cutover semantics. An atomic pointer change takes effect for new requests; in-flight requests keep the evidence they resolved, and caches extend visibility further. Preserve release provenance and implement stronger admission/release checks only where required.
 - Record accepted import and other long-running operation handles before retrying uncertain work. Resume or reconcile the known operation instead of creating an untracked replacement.

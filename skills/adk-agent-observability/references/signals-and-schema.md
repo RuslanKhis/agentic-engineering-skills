@@ -66,6 +66,10 @@ Logs carry `user.id` as a log-only attribute when the session has a user id; spa
 
 ADK's docs call the token histogram `gen_ai.client.token.usage`; the current semconv draft defines `gen_ai.client.inference.usage.input_tokens` and siblings (vendor guidance, 2026-10-05). Observe the name your installed semconv package emits before writing a dashboard.
 
+### Names in Cloud Monitoring (vendor guidance, confirm in your export)
+
+The name a dashboard or alert queries depends on the export path, and no Google page read on 2026-10-21 states it for ADK. Google's own agent alert templates query the histograms as `workload.googleapis.com/gen_ai.invoke_agent.duration` and `workload.googleapis.com/gen_ai.client.token.usage`, in PromQL `workload_googleapis_com:gen_ai_invoke_agent_duration_bucket` or `_count` and `workload_googleapis_com:gen_ai_client_token_usage_bucket`, with attribute dots turned into underscores (`gen_ai_agent_name`, `error_type`, `gen_ai_token_type`) on monitored resource `generic_node`, whose `namespace` label carries the agent key for token usage (Google's `agent-platform-alert-configuration` skill, read 21 October 2026). The OTLP path ADK 2.8.0 uses for Google Cloud (`telemetry.googleapis.com`) is documented as naming metrics with the `prometheus.googleapis.com` prefix plus a point-kind suffix (https://docs.cloud.google.com/stackdriver/docs/otlp/overview, 2026-10-20). List the metric descriptors in the target project before writing a query; when the deliverable is that descriptor lookup or the PromQL itself, consult the installed Google skill `cloud-monitoring-metric-selection` or `cloud-monitoring-promql-query` (from google/skills); if it is not installed, adk-engineer explains how to get it.
+
 ## Token arithmetic (`_token_usage.py`)
 
 - A streamed call reports cumulative usage on each chunk. `TokenUsage.from_llm_responses` takes the newest report that has usage, so a trailing chunk without usage does not drop the figure. Summing chunks double counts.

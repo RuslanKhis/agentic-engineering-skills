@@ -245,7 +245,11 @@ Compare phase 1 with the capacity:
   part-time or interrupted people and about 0.8 for a dedicated block such as
   a single afternoon.
 - First use of ADK, GCP or a new provider costs setup time: an hour for a local
-  agent with an API key, half a day or more for a GCP project with IAM.
+  agent with an API key, half a day or more for a GCP project with IAM. In an
+  organisation-managed account the project, billing link and policy
+  exceptions are an administrator's calendar wait rather than team hours; the
+  foundation section of [GCP decisions](gcp-decisions.md#project-foundation-the-first-goal-needs)
+  says how to tell and what to ask.
 - Keep 20 to 30 percent in reserve for demo preparation, setup surprises and
   the final run.
 

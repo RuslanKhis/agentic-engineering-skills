@@ -155,6 +155,41 @@ present (`_get_mtls_transport`, `_RefreshableAsyncCredentials`); 2.9.0 and
 f9f4a39, 5a018c9). Set `GOOGLE_API_USE_CLIENT_CERTIFICATE=false` on 2.8.0
 when the MCP host is not Google's and you do not want ADC offered to it.
 
+## Google-hosted MCP servers on API Gateway
+
+API Gateway can serve an OpenAPI 3.x REST API as a stateless remote MCP
+server at `POST https://<defaultHostname>/mcp` (Public Preview;
+https://docs.cloud.google.com/api-gateway/docs/mcp-configure, read
+2026-10-21). Client facts that change your `McpToolset`:
+
+- `tools/list` is "by default ... unauthenticated" until the spec names
+  exactly one JWT or API-key scheme under
+  `x-google-api-management.mcp.tools-list.security`; `tools/call` inherits
+  the REST operation's `security`, so a quota-bearing operation needs
+  `x-api-key` as well as the JWT. Send `MCP-Protocol-Version: 2025-11-25`
+  after `initialize` or the gateway falls back to `2025-03-26`.
+- No `Mcp-Session-Id`, no SSE `GET`, no annotations (`readOnlyHint`,
+  `destructiveHint`), text responses only; a JSON request body travels under
+  `arguments.body`. Tier these tools from your own review.
+- OpenAPI `in: header` parameters are exposed as tool arguments and injected
+  into the backend request, so a server that declares an identity or tenant
+  header as a parameter has handed it to the model; `x-google-mcp-tool: false`
+  removes a route from MCP but leaves its REST path live (Google's
+  `api-gateway-backend-security-and-rate-limiting` skill, read 21 October
+  2026).
+- An invalid API key on `tools/list` can return HTTP 200 with JSON-RPC error
+  `-32000`; check the JSON-RPC `error` field, not only the status (same
+  skill).
+- The credential still goes through `header_provider`, minted for the
+  gateway's audience and refreshed before expiry; a Google ID token is
+  short-lived, and a static `connection_params.headers` entry would share one
+  user's token across every session.
+
+When that gateway must be created, annotated or secured, consult the
+installed Google skills `api-gateway-mcp-server` and
+`api-gateway-backend-security-and-rate-limiting` (from google/skills); if
+they are not installed, adk-engineer explains how to get them.
+
 ## Confirmation and results
 
 - `require_confirmation=True` makes every tool request confirmation;

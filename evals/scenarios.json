@@ -768,6 +768,34 @@
         "Runs or describes the deck check so that every slide carries an evidence citation, and produces a one-page decision memo with the decision, owners and the date.",
         "Does not modify application code, rerun evaluations or invent a demo result to fill a gap in evidence."
       ]
+    },
+    {
+      "id": "engineer-google-skills-supporting-missing",
+      "prompt": "Carry out docs/tickets/support-agent/G04.md: deploy the ADK support agent to Cloud Run privately behind our existing load balancer. Its supporting skills list google/skills:cloud-run-basics for the service and ingress provisioning. Verify the acceptance cases locally and fill in the Evidence section.",
+      "available_skills": ["adk-engineer", "deploy-adk-on-google-cloud", "adk-tool-auth-and-secrets", "adk-agent-observability"],
+      "context": "A plain ADK repository with a Dockerfile, a pinned requirements file and an existing offline test suite. The ticket names deploy-adk-on-google-cloud as primary skill and google/skills:cloud-run-basics as a supporting skill. No Google product skill is installed, finding-google-skills is absent, and no cloud mutation has been authorised beyond a local image build.",
+      "expected_primary": "deploy-adk-on-google-cloud",
+      "assertions": [
+        "Names deploy-adk-on-google-cloud as the specialist and treats the google/skills entry as a product skill to operate the mechanism, not as a replacement for the deployment decisions.",
+        "Reports that cloud-run-basics is not installed and shows the npx skills add google/skills --skill cloud-run-basics command, without fabricating that skill's instructions.",
+        "Completes the local work that does not depend on it: packaging, identity choice, ingress setting implied by the load balancer, local tests and the deployment readback plan.",
+        "Keeps private-by-default ingress, scoped --project and --region flags and platform identity even if a product skill's examples would deploy public or set global gcloud config.",
+        "Records the provisioning step as an execution-scope prerequisite in the Evidence section rather than running gcloud mutations without approval."
+      ]
+    },
+    {
+      "id": "designer-names-google-product-skills",
+      "prompt": "Design a production ADK application on Cloud Run that answers warranty questions from our product database and files a return request on confirmation. Two developers, six weeks, real customer data. Design only, then write the goal plan.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "deploy-adk-on-google-cloud", "adk-agent-observability", "adk-tool-auth-and-secrets", "finding-google-skills"],
+      "context": "No repository yet. The organisation already uses Google Cloud with a landing zone. Google's finding-google-skills router is installed; no other google/skills skill is. The user asked for design and plan only.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Produces the design and phased plan with contracts, and keeps the conversation at design level without fetching, installing or running any Google product skill.",
+        "Writes google/skills:<name> entries with a purpose into the supporting skills of goals whose routes need a product provisioned, queried or administered, for example cloud-run-basics for the service, iam-helper-for-policy-management for the runtime identity bindings and cloud-run-alert-configuration once SLIs are decided.",
+        "Keeps this toolkit's specialist as the primary skill on every goal and never names a Google product skill as primary.",
+        "Leaves the product steps as execution-scope prerequisites and notes that adk-engineer will install or fetch the product skill when it carries out the goal."
+      ]
     }
+
   ]
 }

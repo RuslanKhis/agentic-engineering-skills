@@ -61,6 +61,8 @@ Live tests require explicit approval, an isolated target, synthetic data, per-ca
 
 Verify model/backend and runtime identity independently of deployer access. For a repair, confirm the running revision/digest contains the rebuilt source and reproduce the repaired behaviour through the intended user workflow. A local pass or a newly built image that never receives traffic is not a live repair verification.
 
+Model availability in a region is a paid, single-request probe, not a listing: one minimal `POST https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT/locations/LOCATION/publishers/google/MODEL:generateContent` with the runtime's credentials returns 200 when the model serves there and 404 when it does not; any other status is inconclusive and needs its own diagnosis. Probe only the exact model and location the deployment will use, count it in the model budget, and do not switch regions silently on a 404 (Google's `agent-platform-inference` skill, read 21 October 2026; vendor guidance, confirm against the current docs).
+
 Use explicit evidence labels:
 
 - **Local real component:** actual server/SDK/session store, with precise external boundaries identified.

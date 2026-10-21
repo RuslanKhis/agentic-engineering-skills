@@ -143,3 +143,8 @@ semantics, not PostgreSQL compatibility, streaming delivery or native skill disc
 
 Attach a new claim only to evidence that exercises its actual boundary. Keep
 historical failures and subsequent repair results distinguishable.
+
+Reviewed external source, 21 October 2026: Google's `google/skills` collection
+(Apache-2.0) for Cloud Run and Agent Runtime metric names, Dynamic Shared Quota
+behaviour, thinking-token accounting and runtime log names; each imported fact
+carries its own citation and no recorded environment above was rerun.

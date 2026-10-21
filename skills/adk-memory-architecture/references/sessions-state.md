@@ -44,6 +44,33 @@ Verify state-prefix semantics against the actual backend. A prefix is a namespac
 Protect a value before writing state, events, artefacts or queues; screening the later tool response does not undo an earlier write.
 For ADK, inspect `ToolContext.state`, callback state, `output_key` or explicit event deltas as applicable to the existing code.
 
+## Connect a relational session store with the runtime identity
+
+If the target uses ADK's `DatabaseSessionService` on Cloud SQL or AlloyDB for
+PostgreSQL, connect through the Cloud SQL or AlloyDB Python connector with IAM
+database authentication, not a password. The Cloud SQL connector takes
+`enable_iam_auth=True` and a service-account user named without the
+`.gserviceaccount.com` suffix
+(https://github.com/GoogleCloudPlatform/cloud-sql-python-connector); the
+runtime needs `roles/cloudsql.instanceUser` to log in and `roles/cloudsql.client`
+to connect through the proxy or connector
+(https://docs.cloud.google.com/sql/docs/postgres/iam-logins). On AlloyDB the
+runtime needs `roles/alloydb.databaseUser` and
+`roles/serviceusage.serviceUsageConsumer`, and the user is created with
+`gcloud alloydb users create ... --type=IAM_BASED` before any SQL `GRANT`,
+because the control plane registers IAM users and SQL alone cannot
+(https://docs.cloud.google.com/alloydb/docs/manage-iam-authn). Cloud Run reaches
+a private-IP instance only through Direct VPC egress or a Serverless VPC Access
+connector (Google's `alloydb-basics` skill, read 21 October 2026). The session
+expiry chosen below is not the only copy of a row: point-in-time recovery keeps
+up to 7 days of logs on Cloud SQL Enterprise and 35 on Enterprise Plus
+(https://docs.cloud.google.com/sql/docs/postgres/editions-intro), and AlloyDB
+continuous backup defaults to 14 days, configurable from 1 to 35
+(https://docs.cloud.google.com/alloydb/docs/backup/overview). When provisioning,
+sizing or backing up that instance, consult the installed Google skill
+`cloud-sql-basics` or `alloydb-basics` (from google/skills); if it is not
+installed, adk-engineer explains how to get it.
+
 ## Separate retained history from active context
 
 - Choose session expiry explicitly and verify the stored resource; service defaults are not the product's retention decision.

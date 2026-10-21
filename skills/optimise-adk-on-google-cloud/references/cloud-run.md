@@ -164,6 +164,22 @@ request handling. Inspect service-level `--min` versus revision-level
 Check the current [Cloud Run billing settings](https://docs.cloud.google.com/run/docs/configuring/billing-settings)
 before preparing the cost and configuration comparison.
 
+Read the platform's own series for these measurements rather than inferring
+them from client timings: `run.googleapis.com/container/startup_latencies`
+classifies cold invocations, `container/instance_count` (label `state`) against
+the configured maximum shows saturation, `container/billable_instance_time`
+exposes what minimum instances and CPU allocation actually bill, and
+`container/memory/utilizations` and `container/cpu/utilizations` locate
+exhaustion before exit code 137 ([Cloud Run monitoring](https://docs.cloud.google.com/run/docs/monitoring),
+[development tips](https://docs.cloud.google.com/run/docs/tips/general), read
+21 October 2026). In PromQL these metrics need the label matcher
+`monitored_resource="cloud_run_revision"` because the same names exist for
+worker pools, and alert conditions over lookbacks longer than 25 hours must omit
+`duration` (Google's `cloud-run-alert-configuration` skill, read 21 October
+2026). When the task is to generate the alert policies themselves as Terraform,
+consult that installed Google skill (from google/skills); if it is not installed,
+adk-engineer explains how to get it.
+
 ## Gate and recover traffic changes
 
 For an authorised production canary, lock deployment, record the stable revision

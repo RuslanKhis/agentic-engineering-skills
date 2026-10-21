@@ -8,6 +8,10 @@ to design and verify the particular application change. Add **Matt Pocock's
 skills** when you want a development method such as test-first implementation
 or code review.
 
+Google's separate [skills collection](google-cloud-skills.md) covers the
+products around the agent (Cloud Run, IAM, monitoring, databases); this guide
+is about the ADK lifecycle skills.
+
 There is overlap: Google's recipes already cover memory, approvals, credentials
 and other engineering concerns. The useful combination is to adapt those
 recipes using this toolkit's guidance on application boundaries and validation.

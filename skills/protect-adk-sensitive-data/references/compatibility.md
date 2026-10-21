@@ -84,6 +84,15 @@ samples do not establish production capacity or latency. Hosted deployment,
 production identity, durable history, comprehensive security certification and
 today's fresh cloud access were outside that evidence.
 
+## Reviewed external sources
+
+Read 21 October 2026: the google/skills `skills/cloud/` collection
+(Apache-2.0), in particular `apigee-agent-gateway-governance` (gateway-level
+Model Armor modes, semantic-cache cross-caller behaviour, fault-body leakage)
+and `google-cloud-solution-multi-agent-security` (Agent Gateway Model Armor
+settings). Those facts are cited inline as vendor guidance; nothing from them
+was executed here, and `last-tested` is unchanged.
+
 ## Licence and authorship
 
 The workflow and adapted controller lessons derive from Chapter 8 of *Agentic

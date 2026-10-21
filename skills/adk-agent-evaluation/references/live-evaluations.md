@@ -52,6 +52,17 @@ Record three roles separately: agent model, simulated-user model and managed sco
 
 Make score persistence an acceptance item before paid execution: inspect the installed results/export interface, exercise local serialisation with controlled data where possible, and verify the intended destination retains case/metric identifiers, status and numeric scores. Console capture or pytest `-s` is not a durable export contract. The historical managed run passed its thresholds but did not retain exact scores; report that limit instead of reconstructing values from a pass.
 
+### The managed scorer's own contract
+
+ADK's `rubric_based_*` and `multi_turn_*_v1` metrics call the Agent Platform evaluation service, which the Gen AI client reaches directly as `client.evals.evaluate(dataset=..., metrics=[types.RubricMetric.MULTI_TURN_TASK_SUCCESS, ...])` after `pip install google-cloud-aiplatform[adk,evaluation]` (Google's agent-evaluation page, read 21 October 2026; the page imports `from vertexai import Client`, Google's `agent-platform-eval-flywheel` skill imports `agentplatform`; check the installed package for which name resolves). Facts worth testing before relying on that route (Google's `agent-platform-eval-flywheel` skill, read 21 October 2026; vendor guidance, confirm against current docs):
+
+- Persist `result.model_dump_json(fallback=str)`; a DataFrame-backed dataset without `fallback=str` raises `PydanticSerializationError`. This is the durable export the historical run lacked.
+- `judge_model` is forwarded as `autorater_config.autorater_model` even when the client logs an "ignored" warning for a predefined `RubricMetric`; a short model name is rejected with `400 Invalid autorater model resource name`, so pass `projects/{project}/locations/{location}/publishers/google/models/{model}`. Pin the judge by that full name and record it; the predefined metrics otherwise run on a server-side autorater you did not choose.
+- `judge_model_sampling_count` (default 1, maximum 32) is the service-side counterpart of ADK's `num_samples`; record which one applied.
+- The superseded `from vertexai.evaluation import PointwiseMetric, EvalTask` classes fail with `TypeError` on the new arguments, not `ImportError`; a traceback there is a version problem, not a product failure.
+
+When the target is a model or endpoint rather than an ADK agent, when scenarios must be generated server-side (`generate_conversation_scenarios`), or when more than ten failures on one metric call for clustering (`generate_loss_clusters`, `global` location, `multi_turn_task_success` and `multi_turn_tool_use_quality` only), consult the installed Google skill `agent-platform-eval-flywheel` (from google/skills); if it is not installed, adk-engineer explains how to get it. Its `temperature=0` and prompt-tightening fixes do not replace this skill's judge calibration, holdout and code-side guards.
+
 Use [execution-evidence.md](execution-evidence.md) for worker-deadline tests, logical-call versus transport-attempt accounting and usage deduplication; use [evaluation-design.md](evaluation-design.md) when implementing additional pre-dispatch budgets. Neither the historical campaign's observer nor a simulator turn limit is a shipped, universal spending cap.
 
 ## Completion and provenance

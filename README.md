@@ -1355,7 +1355,7 @@ the card before we register it.
 
 *Bring complementary instructions to the same task.*
 
-Both collections below are optional. Install them in the same project or user
+The collections below are optional. Install them in the same project or user
 scope, then name the skills you want your coding agent to combine.
 
 ### Using These with Google's Agents CLI
@@ -1437,6 +1437,54 @@ Read the [three worked usage examples](docs/integrations/agents-cli.md#three-pra
 for feature development, evaluation and deployment planning. That guide also
 explains how Matt's `tdd` or `code-review` can supply the development method
 alongside both collections.
+
+### Using These with Google's Cloud Skills
+
+*Our skills decide what the application needs; Google's skills operate the product.*
+
+[Google's skills collection](https://github.com/google/skills) holds about
+170 skills for Google products: gcloud recipes, IAM policies, Cloud Run and
+GKE operations, Terraform alert policies, PromQL and trace queries, database
+administration and the Agent Platform services. About ten are agent-specific
+and none covers building an ADK application, so there is no overlap with this
+toolkit's journey, only a division of labour. A specialist here chooses the
+mechanism and its contracts (which identity, which ingress, which SLI, which
+store); Google's product skill carries it out (the role binding, the deploy
+flags, the alert policy, the instance).
+
+The designer writes the product skill into a goal's supporting skills as
+`google/skills:<name>` with its purpose, and `adk-engineer` treats that entry
+like a missing specialist: it uses the skill when installed, shows the
+install command or asks Google's `finding-google-skills` router when not,
+continues the local work and records the product step as a prerequisite
+until you authorise it. Each specialist also names the product skill to
+consult at the decision it serves, for example
+`iam-helper-for-policy-management` when a role binding must be written or
+`cloud-run-alert-configuration` once the SLIs are decided.
+
+```bash
+npx skills@latest add google/skills --skill '*' -a claude-code
+```
+
+Install one skill with `--skill cloud-run-basics`, or only
+`finding-google-skills`, which fetches the rest on demand. Then, for a goal
+that needs a product step:
+
+```text
+/adk-engineer Carry out G04 from docs/plans/warranty.md. Use
+deploy-adk-on-google-cloud for the packaging, identity and readback plan and
+the installed cloud-run-basics skill for the service and ingress commands.
+Deploy nothing until I approve the exact command.
+```
+
+Google's skills were written for an operator at a terminal; this toolkit's
+floor (scoped flags, platform identity, private by default, approval per
+scope) still governs the commands they propose. The
+[combined setup guide](docs/integrations/google-cloud-skills.md) has the
+mapping from each specialist to the product skills it pulls in and the
+[comparison note](docs/research/google-skills-comparison-2026-10-21.md)
+records what was imported from that collection, what is routed and what was
+left out.
 
 ### Using These with Matt Pocock's Skills
 
@@ -1773,7 +1821,31 @@ recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
 
+### Google Cloud skills alignment · 21 October 2026
+
+Google's [skills collection](https://github.com/google/skills) (about 170
+product skills: gcloud, IAM, Cloud Run, GKE, monitoring, databases, Agent
+Platform) was compared with every specialist. The result is a division of
+labour, not a merge: a goal names the product skill it needs as
+`google/skills:<name>`, the designer's handoff and the engineer's composition
+reference carry the mapping, and `adk-engineer` treats a missing one like a
+missing specialist. Nineteen packages also gained facts that change an ADK
+decision, each cited to the page that confirmed it or labelled vendor
+guidance; the largest replaces the statement that a dedicated Agent Runtime
+identity was not implemented with the Agent Identity mechanism. A
+[comparison note](docs/research/google-skills-comparison-2026-10-21.md)
+records what was imported, routed and left out. Two fresh-agent trials, one
+carrying out a ticket whose two product skills were not installed and one
+designing a production application in one pass, both rated the mechanism
+4 of 5; the engineer showed the install commands without inventing the
+skills' content and kept private ingress, and the designer wrote the product
+skills into the right goals without fetching anything. The four mapping gaps
+they found were fixed the same day. All **22 packages** pass validation and
+**695 tests** pass with **59 optional SDK checks skipped**. See the
+[trial record](docs/testing/google-skills-alignment-2026-10-21.md).
+
 ### Discovery and presenter · 15 October 2026
+
 
 Two skills now bracket the design-and-build journey. `adk-discovery` runs
 before the designer when a company has only an area in mind, or no use case

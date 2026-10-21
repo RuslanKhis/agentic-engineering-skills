@@ -93,6 +93,24 @@ hits = search_hybrid(conn, query, k=4, embed=embed, unit_vectors=vectors)
 vectors computed at index time. A cross-encoder reranker over the fused top
 candidates is optional and is measured on the gold set like any other change.
 
+## When the corpus outgrows a local index
+
+The same lexical-plus-dense shape exists as managed SQL. BigQuery offers
+`AI.SEARCH(... mode => 'HYBRID')` over autonomously embedded columns,
+`VECTOR_SEARCH(... lexical_search_columns)` and `CREATE VECTOR INDEX` (TREE_AH or
+IVF); AlloyDB offers a ScaNN index tuned by `num_leaves` (the square root of the
+row count as a starting point), `scann.max_pct_leaves_to_search` and
+`scann.pre_reordering_num_neighbors`, with `evaluate_query_recall` measuring
+recall inside the database the way the gold set does here (Google's
+`google-cloud-solution-hybrid-search-alloydb` and `bigquery-ai-ml` skills, read
+21 October 2026; vendor guidance, confirm against current docs). Whichever store
+you choose, embed documents with task type `RETRIEVAL_DOCUMENT` at index time
+and queries with `RETRIEVAL_QUERY`: the pair is asymmetric, and the vendor
+states that corpus and queries must use different task types for best
+performance
+(https://docs.cloud.google.com/vertex-ai/generative-ai/docs/embeddings/task-types).
+Measure the managed index on the same gold set before switching.
+
 ## Emit retrieval sufficiency as a stage output
 
 The retrieval stage returns, per issue, the operative units found with their

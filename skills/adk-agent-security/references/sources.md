@@ -54,6 +54,32 @@ Entries marked "not re-fetched" were supplied by the coordinator's research on
 - Agent Identity: https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/runtime/agent-identity
   (lifecycle-bound principal, certificate-bound tokens, new principal per
   redeploy; IAM conditions scoped to one dataset). Supplied by research.
+- Agent Gateway: overview
+  https://docs.cloud.google.com/gemini-enterprise-agent-platform/govern/gateways/agent-gateway-overview
+  (governs Agent Runtime ingress and egress and Gemini Enterprise egress;
+  Model Armor on both paths), set-up page (`governedAccessPath`
+  `CLIENT_TO_AGENT` and `AGENT_TO_ANYWHERE`, `gcloud network-services
+  agent-gateways import`) and egress codelab
+  https://codelabs.developers.google.com/agw-cuj-arun-egress-emcp
+  (`roles/iap.egressor`, `api.getAttribute('iap.googleapis.com/mcp.toolName', '')`,
+  empty name allowed for the handshake, `DRY_RUN` then enforced). Read
+  2026-10-21.
+- API Gateway MCP: https://docs.cloud.google.com/api-gateway/docs/mcp-configure
+  (`tools/list` "By default, this method is unauthenticated"; one JWT or API
+  key scheme; `MCP-Protocol-Version: 2025-11-25`; header parameters become
+  tool arguments). Read 2026-10-21.
+- Security Command Center, Agent Platform Threat Detection overview:
+  https://docs.cloud.google.com/security-command-center/docs/agent-platform-threat-detection-overview
+  (runtime and control-plane detectors for agents on Agent Runtime). Read
+  2026-10-21.
+- google/skills (Apache-2.0), `skills/cloud/` collection, read 2026-10-21:
+  `google-cloud-solution-multi-agent-security` (Agent Gateway assets, at most
+  four custom AuthzPolicies per gateway), `iam-helper-for-policy-management`
+  (deny-policy recipes), `google-cloud-scc-query` and
+  `google-cloud-scc-remediation` (finding classes and consent-gated
+  playbooks), `api-gateway-mcp-server` and
+  `api-gateway-backend-security-and-rate-limiting` (MCP preview limits).
+  Facts not confirmed on a Google page are labelled vendor guidance.
 - Model Armor overview: https://docs.cloud.google.com/model-armor/overview
   (prompt injection and jailbreak, responsible AI, SDP, malicious URL filters;
   stateless per message; floor settings). Read 2026-10-07. Configuration

@@ -62,6 +62,7 @@ assume it.
 | Strict auth and tight network path between agent and MCP server | ADK docs; VPC-SC and Private Google Access on GCP (vendor guidance) |
 | Filesystem servers get restrictive absolute roots | ADK docs |
 | Google-managed MCP servers can sit behind Model Armor floor settings | Security Command Center release note 2025-12-15 (vendor guidance; configuration with `protect-adk-sensitive-data`) |
+| An API Gateway MCP server (Public Preview) authenticates `tools/list` only when the spec names a scheme under `x-google-api-management.mcp.tools-list.security`; `x-google-mcp-tool: false` hides a route from MCP but leaves its REST path live; no `readOnlyHint` or `destructiveHint` is emitted; OpenAPI `in: header` parameters become model-supplied tool arguments | API Gateway MCP docs, read 2026-10-21 (https://docs.cloud.google.com/api-gateway/docs/mcp-configure). Tier such tools from your own review; never declare an identity or tenant header as a parameter on an MCP-exposed operation |
 
 ## SSRF and egress rules for fetch tools
 
@@ -129,3 +130,8 @@ needs (`adk-tool-interface-design` covers the schema), and pin its hash.
   destination rules the agent enforces or the server documents.
 - The adversarial suite has a poisoned-description and a poisoned-result case
   for this server ([adversarial testing](adversarial-testing.md)).
+- For a server you host on API Gateway, `tools/list` names a JWT or API-key
+  scheme and admin routes keep REST `security`; when provisioning or securing
+  that gateway, consult the installed Google skills `api-gateway-mcp-server`
+  and `api-gateway-backend-security-and-rate-limiting` (from google/skills);
+  if not installed, adk-engineer explains how to get them.

@@ -26,6 +26,19 @@ conditions can scope, for example, one BigQuery dataset (vendor guidance);
 those conditions are not exercised by local `adk web` runs under developer
 ADC.
 
+An IAM v2 deny policy is the concrete form of "no matter what the model
+decides": it is evaluated before every allow policy and names permissions the
+agent's principal can never use, for example
+`iam.googleapis.com/serviceAccounts.getAccessToken` or
+`secretmanager.googleapis.com/versions.access` on a reader agent (Google's
+`iam-helper-for-policy-management` skill, read 21 October 2026). A deny policy
+holds when a binding is widened by mistake; an allow-only design does not.
+When a binding or deny policy on the agent's service account must be created
+or changed, consult the installed Google skill `iam-helper-for-policy-management`
+(from google/skills); when an existing production binding is being narrowed,
+replay it first with `iam-helper-for-policy-simulator`; if either is not
+installed, adk-engineer explains how to get it.
+
 ## Confirmation as code
 
 Human approval is a state transition in trusted code, not a sentence in the

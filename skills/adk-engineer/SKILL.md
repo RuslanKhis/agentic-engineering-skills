@@ -113,6 +113,18 @@ the coding agent; an already running session keeps the skill list it started
 with. Continue independent inspection, and resume specialist-dependent work
 once its instructions are available.
 
+A goal or ticket may also list a Google product skill as
+`google/skills:<name>` among its supporting skills (for provisioning,
+querying or administering the Google Cloud product a route needs). That skill
+operates the product; the specialist still decides what the application
+needs. If it is not installed, show the equivalent
+`npx skills@latest add google/skills --skill <name>` command or use Google's
+`finding-google-skills` router when present, continue the local work, and
+record the product step as an execution-scope prerequisite in the Evidence
+section.
+[Working with other skill collections](references/composition.md) has the
+mapping and the rules that stay ours.
+
 Specialists refer to `$SKILL_DIR` when running their helper scripts; it means
 the directory that contains that specialist's `SKILL.md`. Helper output kept as
 evidence goes in `.adk-evidence/` at the project root (create it and add it to

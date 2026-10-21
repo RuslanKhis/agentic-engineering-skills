@@ -43,6 +43,8 @@ python "$SKILL_DIR/scripts/events_to_eval_set.py" --session ./saved_session.json
 
 Modes compose. A new alert that needs a metric the agent does not yet emit is (b) plus (a); an incident review that produces regression cases is (c) plus (d). Structured analytics in BigQuery belong to [bigquery analytics](references/bigquery-analytics.md) and apply to (a), (b) and (d).
 
+Division of labour with Google's cloud skills: this skill decides which ADK signal means what and which SLI, alert, query or sink the agent needs; when the deliverable is the dashboard widget, alert policy, PromQL or SQL query, notification channel or log sink itself, consult the installed Google skill named at that decision in the references (from google/skills; if it is not installed, adk-engineer explains how to get it).
+
 ## Implement the change
 
 - Keep one owner per signal. `maybe_set_otel_providers` does not replace a provider that is already set; a second owner (an OpenInference instrumentor, an application `TracerProvider`, a `MeterProvider` created before ADK's) produces duplicate or orphan spans and, on Agent Runtime, disables the request-driven metric reader with a warning. Run the agent with `run_async`; a synchronous `Runner.run` executes on a worker thread, which third-party integrations document as breaking context propagation (vendor guidance).

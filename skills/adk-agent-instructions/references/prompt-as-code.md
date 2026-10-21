@@ -32,6 +32,18 @@ The linter auto-discovers `prompts/<agent>/instruction.md` and the sibling
 `description.txt`; any other file is linted with `--prompt-file`. A ready
 template lives in this skill's `assets/prompt-layout/` directory.
 
+A third place, the Vertex managed prompt resource (`vertexai.preview.prompts`,
+versioned with `prompt_id` and `version_id`), suits a team that edits prompts
+in Agent Platform Studio. It is not a prompt-as-code layout: the text is
+outside the repository, its template variables collide with ADK state
+templating ([ADK instruction mechanics](adk-instruction-mechanics.md), pitfalls
+table), and it rides on the `vertexai` preview SDK rather than `google-genai`.
+When the request is to create, list, version or delete such a resource, consult
+the installed Google skill `agent-platform-prompt-management` (from
+google/skills); if it is not installed, adk-engineer explains how to get it.
+Keep the loader, contract test and changelog here regardless of where the
+text is stored.
+
 ## The loader
 
 ```python
