@@ -25,8 +25,9 @@ Trace one invocation in this order: trusted request → routing → value resolu
 | Correct aggregates fail only because of column names | Explicit equivalence of each alias, every value and required metric | Preserve the failure; add only justified aliases with regression tests and replay the exact saved response. Do not rerun the model until it produces a preferred alias. |
 | Browser automation times out after an answer appears | Application/job state and rendered final event versus selector state | Observe again without resubmission. Record an observer failure separately from an application or provider timeout. |
 | History survives restart | Model/query counters around reload | Prove history rendering causes no new work. It does not demonstrate semantic follow-ups, result freshness or permission revalidation. |
+| A query that passed policy is slow or expensive | `total_bytes_billed` against `total_slot_ms` for that job in `INFORMATION_SCHEMA.JOBS` (https://docs.cloud.google.com/bigquery/docs/information-schema-jobs, fetched 21 October 2026) | High bytes with low slot time is a scan problem: a missing partition filter, clustering the predicate does not reach, or a wide projection; fix the template or the table layout. Low bytes with high slot time is a compute problem: a row-multiplying join, a wide aggregation or a sort; fix the query shape. Under a reservation only the slot figure costs money. |
 
-These signatures came from the September 2026 companion audits. The corrections address recorded cases, not every possible cause of the symptom. The extended policy cases below are implementation recommendations and require target-specific tests.
+These signatures came from the September 2026 companion audits, except the bytes-versus-slots row, which is a diagnostic rule (sources in [compatibility.md](compatibility.md#provenance-map)). The corrections address recorded cases, not every possible cause of the symptom. The extended policy cases below are implementation recommendations and require target-specific tests.
 
 ## SQL policy tests worth preserving
 

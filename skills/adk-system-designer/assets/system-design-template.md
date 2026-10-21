@@ -112,6 +112,9 @@ product with no untrusted input.
 Record workload assumptions, complete-request latency and first meaningful output,
 model/tool/retry fan-out, concurrent demand, usage units and enforcement points.
 State restart behavior, exhaustion outcomes and dated/symbolic cost assumptions.
+At MVP profile and above, cite the cost contract by ID here: ceiling at
+volume, variable and fixed parts, the stop that enforces it, the labels that
+attribute the bill, and the goal that reads the first live bill against it.
 
 ## Failure and recovery
 

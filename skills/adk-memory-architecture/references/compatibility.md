@@ -94,3 +94,12 @@ Poetry tables, URLs or complete range constraints. Tests can produce mode
 signals and comments can contain version declarations. Missing signals do not
 establish absent features. Manually inspect relevant manifests, locks and
 runtime seams before drawing conclusions. The helper never changes a pin.
+
+## Cited external sources
+
+The BigQuery cost and layout facts in [bigquery.md](bigquery.md) (result cache,
+job labels, clustering order, `MERGE` partition pruning) were prompted by
+Khissamiyev, R., "The $10,000 LIMIT clause: architecting BigQuery tables that
+don't bankrupt your pipeline", 4 August 2026 (author's article; URL to be
+added). Each fact was re-verified on the official BigQuery page cited inline;
+the article's prose is not reproduced.

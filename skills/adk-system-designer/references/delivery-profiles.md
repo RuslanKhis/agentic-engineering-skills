@@ -56,7 +56,7 @@ cheapest form that keeps the floor, usually a configuration line or a test.
 | External writes and effects | Minimal: fake or staging targets, or a human sends | Build: confirmation for writes | Build: idempotent writes for money and orders | Build: full replay and reconciliation |
 | Sensitive data | Defer with synthetic or anonymised data; otherwise Minimal | Minimal: scoped access and no content in logs | Build | Build |
 | Prompt injection and agency | Minimal: break the untrusted-input-plus-write combination | Build: per-agent exposure check | Build | Build: threat model and adversarial suite |
-| Budgets and loop limits | Minimal: `max_llm_calls` and a spend cap | Minimal | Build: per-user allowance | Build: shared budgets and approval |
+| Budgets and loop limits | Minimal: `max_llm_calls` and a spend cap | Minimal | Build: per-user allowance; a cost contract with a stop | Build: shared budgets and approval; the cost contract, labels and a cost review |
 | Memory and retrieval | Only what the journey needs; in-memory sessions | Build what the journey needs | Build | Build |
 | Frontend | `adk web` or the simplest page | A simple authenticated page or an existing tool | Build | Build |
 | Hosting | Local, or one Cloud Run service | Cloud Run behind IAP or the existing platform | Chosen host with a rollback | Chosen host with recovery and cleanup |
@@ -87,6 +87,12 @@ lowers the depth, never the floor.
   `adk web` or another host you do not configure, put the cap on the model
   project instead: a quota stops calls, while a budget alert only warns
   someone who must then act.
+- A resource that charges while provisioned (a database instance, a deployed
+  vector index, a managed RAG database, minimum instances, a reservation, a
+  load balancer) is created only after the goal records its idle cost at the
+  chosen configuration with the pricing date, its cleanup command and how its
+  absence is verified; a POC's plan ends with a teardown goal that runs them.
+  The [resource cost ledger](resource-costs.md) says which resources these are.
 - Nothing irreversible or visible to a real outside person (money moved, a
   message sent, a record changed) happens without a human approving it, unless
   the user explicitly accepts that risk after hearing it in one sentence.
@@ -285,6 +291,18 @@ A phase boundary that needs someone's decision gets a presentation goal
 (`adk-presenter`) before it and the decision date as a calendar wait after
 it; the goals that need the decision depend on that wait, not on the deck.
 
+A phase whose resources are not carried into the next one ends with a
+**teardown goal**: a POC after its review, a pilot that is not continued, a
+disposable environment. It runs each cleanup command recorded on the goals
+that created a while-provisioned resource, deletes dependants before owners,
+checks the dependent resources and retention the ledger names, inspects the
+resource list, and reads the billing report once it has caught up. Its
+acceptance is "absent" per resource or "retained" with a reason and an
+owner, never "the delete command returned". It follows the review goal, so
+the demo still exists when the decision is made, and its hours count against
+the phase's capacity even though they fall after the demo. Estimate it like
+any goal; the deploy skill's historical teardown took as long as the setup.
+
 Say whether phase 1 code is meant to be kept. A throwaway demo can hard-code
 what a kept slice would configure; a kept slice puts the same choice where
 phase 2 can change it. Most POCs that impress get continued, so prefer the kept
@@ -294,7 +312,8 @@ form when it costs little more.
 
 A proof of concept or a time-boxed assignment gets one file of about 1,200
 words: the design and plan together (about 1,600 when the journey writes to
-an external system, because the failure grid is kept). Its reader has minutes and the builder
+an external system or provisions a resource that charges while idle, because
+the failure grid or the resources rows and teardown goal are kept). Its reader has minutes and the builder
 has hours; a document longer than the work it plans has failed its profile.
 Use these sections and leave the rest of the design template out, rather than
 marking each section not applicable:
@@ -314,7 +333,9 @@ marking each section not applicable:
    and evidence** line that `adk-engineer` fills with one line per contract
    proved, and numbered measurement records `M1`, `M2` and incident records
    `I1`, `I2` for a pilot or production run, each with value, baseline,
-   window, sample, method, owner and build), the capacity sum and cut line, phase 2
+   window, sample, method, owner and build), a one-line **Resources created**
+   entry on any goal that provisions something that charges while idle, the
+   teardown goal that closes phase 1 after the demo, the capacity sum and cut line, phase 2
    goals of one to three lines each, and the later list. The estimates a
    review decides on (hours, spend, cost per unit) stay in the plan so the
    next review measures against them.

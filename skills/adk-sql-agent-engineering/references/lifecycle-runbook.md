@@ -192,7 +192,21 @@ For an approved lab, implement this sequence:
    verify the setting from `INFORMATION_SCHEMA.TABLE_OPTIONS`
    (`option_name = 'require_partition_filter'`) alongside the partitioning column
    from `INFORMATION_SCHEMA.COLUMNS.is_partitioning_column` (Google's
-   `bigquery-troubleshooting` skill, read 21 October 2026). When fixture or
+   `bigquery-troubleshooting` skill, read 21 October 2026). Order clustering
+   columns by the predicates the approved templates actually issue: clustering
+   prunes only when a filter starts at the first clustered column, so a query
+   filtering on the second column alone is not optimised, and at most four
+   columns are allowed (https://docs.cloud.google.com/bigquery/docs/clustered-tables,
+   fetched 21 October 2026). Read the real filter patterns from the `query` and
+   `referenced_tables` columns of `INFORMATION_SCHEMA.JOBS` rather than ranking
+   columns by cardinality, or take the partition and cluster recommender's
+   proposal, computed from up to 30 days of the organisation's workload and
+   surfaced in the console, the Recommender API and
+   `INFORMATION_SCHEMA.RECOMMENDATIONS`
+   (https://docs.cloud.google.com/bigquery/docs/view-partition-cluster-recommendations,
+   fetched 21 October 2026). A dry run cannot see cluster pruning, so the
+   estimate for a clustered table is an upper bound and a byte cap set below it
+   refuses queries that would have been cheap. When fixture or
    serving tables need partitioning, clustering or materialized-view design
    beyond this lab shape, consult the installed Google skill
    `bigquery-optimization`; for dataset, table or Terraform scaffolding and the

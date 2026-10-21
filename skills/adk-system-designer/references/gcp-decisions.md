@@ -2,7 +2,10 @@
 
 Use this when a design needs service choices, capacity or costs. Favor the
 project's existing stack where it satisfies the contracts. A design can name a
-provisional product and its verification task without provisioning it.
+provisional product and its verification task without provisioning it. Each
+product also has a billing basis: per use, or while provisioned until deleted;
+the [resource cost ledger](resource-costs.md) says which, what keeps charging
+after the obvious delete, and how to verify absence.
 
 ## Make independent choices
 
@@ -172,7 +175,9 @@ Estimate per-request cost as the sum of the model input/output work, tool/API
 work, retrieval/screening and storage/network work that the design actually uses.
 State model mix, token sizes, expected calls, retry bounds, region, currency and
 pricing date. Separate fixed/minimum capacity and recurring storage from request
-cost. Include failures and background memory/evaluation/cleanup work.
+cost; the while-provisioned rows of the [resource cost ledger](resource-costs.md)
+are the fixed part, and each one the design keeps needs an owner for its
+lifetime. Include failures and background memory/evaluation/cleanup work.
 
 If prices or traffic are unknown, provide a symbolic estimate and a sensitivity
 range; label illustrative inputs. The symbolic form, filled with what is
@@ -188,7 +193,8 @@ Fill the token counts (measure one representative request offline), the
 calls per request (from the workflow) and the volume (from the brief); leave
 `p_in` and `p_out` symbolic with the pricing date to check, give the spend
 ceiling the sponsor accepted, and name the goal that reads the actual bill
-in the first live week. Never present that as a validated bill or a
+in the first live week; at MVP and above that goal proves the cost contract
+(see the budgets section of [design decisions](design-decisions.md#latency-capacity-budgets-and-operations)). Never present that as a validated bill or a
 hard spending cap. Alerts-only Cloud Billing budgets notify about spend and do
 not automatically cap usage. Verify current coverage and limitations before
 relying on a provider spend-cap feature. Admission checks, durable accounting when required,

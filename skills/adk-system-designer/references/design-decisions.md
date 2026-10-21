@@ -321,6 +321,34 @@ configuration/policy versions and deployment identity will be verified in the
 running process. Cleanup needs resource ownership and absence checks; deleting a
 service does not imply deleting its retained sessions, artifacts or provider data.
 
+At MVP profile and above, cost is a contract like any other, not a line in
+the assumptions. Write it with the six contract fields: the invariant is a
+spend ceiling at a stated volume ("at 20,000 requests a month the application
+spends under X; one request costs under Y at p95"), split into the variable
+part (model, tool, screening and query work per request, from the symbolic
+formula in [GCP decisions](gcp-decisions.md#cost-and-capacity-assumptions))
+and the fixed part (every while-provisioned row of the
+[resource cost ledger](resource-costs.md) the design keeps, its per-day idle
+cost times the days in the month). Scope is the
+project and environment. Authority is the Cloud Billing export, not an
+estimate. Enforcement is a stop that acts without a person: `max_llm_calls`
+and the application's admission control for the model work, maximum bytes
+billed and a daily quota for queries, maximum instances for the host; a quota
+on the model project is the stop only for a host you do not configure (a
+demo through `adk web`), and a backstop behind admission control on your
+own host. Beside the automatic stop, keep the operator stop the budgets
+paragraph above describes, independent of it. A billing budget and
+its alert are evidence, never the enforcement, because they notify after the
+spend. Failure outcome says what degrades first when the ceiling is reached
+(new sessions refused, the cheaper model, a queue) and who is told. Evidence
+is a goal in the first live week that reads the bill against the contract,
+and a recurring cost review in the plan's Later table with a date trigger.
+Every owned resource carries labels for environment, team and application,
+set in the deployment code, so the export can be sliced by this application;
+a bill that cannot be attributed cannot prove the contract. The Later table
+also carries the decommission item: who deletes what when the application
+retires, with the ledger's dependants and retention included.
+
 Four checks from Google's Well-Architected Framework belong in this section
 whenever the profile is MVP or above (the reliability and cost pillar pages,
 fetched 21 October 2026; see [WAF review](waf-review.md) for the full list):

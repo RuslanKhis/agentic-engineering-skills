@@ -206,7 +206,9 @@ status contracts. A contract with no mechanism behind it is a gap, recorded as
 one, not a guarantee. Size the set to the profile: a read-only assistant needs
 a few (identity, retrieval scope, grounded answers, failure); money,
 publishing or messages to real people add rights, confirmation, inventory,
-idempotency and recovery contracts.
+idempotency and recovery contracts; an MVP or production profile adds a cost
+contract whose enforcement is a stop, not a budget alert (see the budgets
+section of [design decisions](references/design-decisions.md#latency-capacity-budgets-and-operations)).
 
 The contracts table is where each promise is stated once. Decisions, goals
 and failure rows cite its ID instead of restating the invariant, so the table
@@ -248,7 +250,10 @@ between storage, execution and the user's visible result.
 ## Select ADK and GCP components for those responsibilities
 
 Use [GCP decisions](references/gcp-decisions.md) when selecting services or
-estimating capacity and cost. Separate application hosting from model inference,
+estimating capacity and cost. Before naming a resource that charges while
+provisioned, read its row in the [resource cost ledger](references/resource-costs.md):
+the goal that creates it records the idle cost, the cleanup command and the
+verification, and the plan says which goal ends its life. Separate application hosting from model inference,
 conversation storage, business records, artifacts and identity. Record which
 component owns retries, authorization, shared state and recovery.
 
@@ -354,16 +359,28 @@ technical), estimated in human hours because preparing and giving it is
 hands-on work, with the review date as a calendar wait on the goals that
 depend on the decision. The approval goal before the build is the first
 goal of phase 1 and depends on nothing but the design; the proof-of-concept
-review goal closes phase 1; the results review goal closes the production
+review goal closes phase 1's build, followed by the teardown goal when its
+resources are not carried forward; the results review goal closes the production
 phase and is followed by an optional case-study goal when the result may be
 shared. Its acceptance is that
 the outline passes the presenter's deck check and every claim cites evidence
 recorded in this plan; the goal cannot complete before the goals whose
 evidence it presents. Each
 goal needs a stable ID, phase, estimate, the contracts it proves and decisions
-it implements (by ID), bounded changes and integration points, a `Primary
+it implements (by ID), bounded changes and integration points, the resources
+it creates (each with idle cost, cleanup command and verification), a `Primary
 skill` and `Supporting skills` line, prerequisites, acceptance cases that cite
 those contracts, status, unresolved blockers and its own one-line run prompt.
+
+A phase whose resources are not carried forward (a POC after its review, a
+pilot that stops, a disposable environment) ends with a **teardown goal**
+placed after the review goal and counted in the phase's hours,
+`Primary skill: deploy-adk-on-google-cloud`, that runs the recorded cleanup
+commands, checks dependants and retention, and reads the billing report;
+its acceptance is absent-or-retained-with-owner per resource, as
+[delivery profiles](references/delivery-profiles.md#split-the-plan-into-phases)
+describes. At MVP and above, the same resources are instead owned by a cost
+contract and a decommission item in the Later list.
 Separate discovery questions from ready implementation; an unknown cloud guarantee need
 not block independent local work. When the user wants tickets, write one file
 per ready goal from the [ticket template](assets/ticket-template.md) under

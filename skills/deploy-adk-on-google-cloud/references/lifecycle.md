@@ -56,6 +56,11 @@ A second model invocation is another paid attempt even when no answer appears. R
 
 ## Cleanup is its own operation
 
+Write the deletion script when you write the deployment script, and test it
+with a dry run in the same change; a resource that charges while provisioned
+is created only once its cleanup is executable and its verification is named.
+Cleanup itself still runs as the separately approved operation below.
+
 1. Present the exact deletion plan and obtain confirmation. Re-read provider identities against the journal, retaining pre-existing resources and IAM grants. Source-name prefixes and labels alone are insufficient proof.
 2. Ensure builds and operations are terminal before revoking permissions they still need. Delete dependants before their owned containers: sessions/workloads, services/runtimes, exact staged objects and owned repositories/buckets/cluster as applicable. Respect existing IaC dependency ordering.
 3. Remove only grants that this invocation added, matching member, role and condition. Prefer conditional updates/etags so concurrent policy changes survive. If a grant recorded as removed appears again, preserve it until ownership is reconciled: another actor may have added the later grant, and the old receipt is not renewed deletion authority.

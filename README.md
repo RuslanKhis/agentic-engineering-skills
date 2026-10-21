@@ -1821,7 +1821,63 @@ recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
 
+### Production cost contract and BigQuery cost facts · 21 October 2026
+
+At MVP profile and above, cost is now a contract like any other requirement:
+a ceiling at a stated volume, split into the per-request work and the fixed
+cost of the provisioned resources the design keeps, with the billing export
+as its authority, a stop that acts without a person as its enforcement, what
+degrades first, and a goal in the first live week that reads the bill. A
+billing budget alert is evidence, never the cap. Every owned resource carries
+labels, and the plan's Later table always holds the recurring cost review and
+the decommission item. The SQL and memory specialists also gained the
+BigQuery facts an agent application trips over, each verified on Google's
+pages: the per-user result cache that reviewed templates hit and generated
+SQL never does, job labels, custom daily quotas, clustering order from real
+predicates, the `MERGE` pattern for a partitioned history table, and which
+cost control applies under on-demand versus editions pricing. A fresh-agent
+trial designing a production claims assistant under a sponsor's ceiling wrote
+the six-field contract, the labels, the first-bill goal and the decommission
+item unprompted and rated the part 4 of 5; a second trial carrying out a
+ticket for a SQL agent whose bill had tripled added the pre-execution ceiling,
+the attribution labels and the cache-friendly query text from the new
+references and removed the timestamp instruction that defeated the cache. The
+five frictions the two trials found were fixed the same day. All **22 packages** pass validation and **695 tests**
+pass with **59 optional SDK checks skipped**. See the
+[trial record](docs/testing/cost-contract-and-bigquery-2026-10-21.md).
+
+### Resource cost floor and teardown goals · 21 October 2026
+
+
+A colleague's RAG prototype once left a Vector Search deployed index running
+after the demo; the bill arrived weeks later for a service nobody used. The
+floor that every profile keeps now covers resources that charge while
+provisioned, not only model calls: a goal creates one only after recording
+its idle cost with the pricing date, its cleanup command and how absence is
+verified. A new resource cost ledger in the designer lists twenty such
+resources (Cloud Run minimum instances, Agent Runtime, Vector Search, the RAG
+Engine managed database, Cloud SQL and AlloyDB with their backups, Memorystore,
+BigQuery reservations, Cloud Storage soft delete, GKE, load balancers,
+Cloud NAT, Provisioned Throughput and more), each verified against Google's
+pricing page on the date shown, with what people forget and how to prove it
+is gone. Goals and tickets carry a **Resources created** block; a phase whose
+resources are not kept ends with a teardown goal whose acceptance is "absent,
+or retained with an owner" per resource and a billing readback; and
+`adk-engineer` writes the deletion script beside the creation script in the
+same change. A fresh-agent trial designing a three-day Vector Search proof of
+concept wrote the resource rows and the teardown goal unprompted and rated the
+mechanism 4 of 5; a second trial carrying out a ticket that creates a Cloud
+SQL instance shipped the deletion script beside the creation script with an
+ownership journal, scope refusal and dry-run tests, and recorded the instance
+as absent with its price left honestly unfilled. The eight frictions the two
+trials found, among them a ticket status vocabulary three earlier trials had
+asked for, were fixed the same day. All
+**22 packages** pass validation and **695 tests** pass with **59 optional SDK
+checks skipped**. See the
+[trial record](docs/testing/resource-cost-floor-2026-10-21.md).
+
 ### Google Cloud skills alignment · 21 October 2026
+
 
 Google's [skills collection](https://github.com/google/skills) (about 170
 product skills: gcloud, IAM, Cloud Run, GKE, monitoring, databases, Agent

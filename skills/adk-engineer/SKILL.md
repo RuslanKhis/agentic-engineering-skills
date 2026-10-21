@@ -152,6 +152,21 @@ specialist controls you deliberately left out in the Evidence section, with
 the later goal or trigger that would add them, instead of building them or
 dropping them silently.
 
+When a ticket creates a resource that charges while provisioned (a database
+instance, a deployed vector index, a managed RAG database, minimum instances,
+a reservation, a load balancer), write the deletion script beside the script
+that creates it, in the same change: it deletes only what this ticket owns,
+dependants before owners, refuses to run without the approved scope, and is
+tested at least by a dry run. Record each such resource in the Evidence
+section as one line, `<resource>: <absent | retained: reason | unknown>;
+cleanup: <command>; verified: <how, when>`. When the ticket asks for a price
+and the pricing page cannot be read in this session, leave the placeholder,
+say so in Evidence and keep that acceptance item open; never fill it from
+memory. A teardown goal or ticket completes only when the
+resource list and, once it has caught up, the billing report show the
+resources gone; a delete command returning successfully is where
+verification starts.
+
 A ticket's estimate is human hours with a coding agent: hands-on plus review
 and verify. Before editing, compare the work the acceptance cases need with
 that estimate. If it is clearly larger (for example the high end would at least

@@ -795,6 +795,46 @@
         "Keeps this toolkit's specialist as the primary skill on every goal and never names a Google product skill as primary.",
         "Leaves the product steps as execution-scope prerequisites and notes that adk-engineer will install or fetch the product skill when it carries out the goal."
       ]
+    },
+    {
+      "id": "designer-poc-teardown-goal",
+      "prompt": "Design a three-day proof of concept: an ADK agent that answers questions over our 2,000 product manuals using Vector Search for retrieval, demoed to the client on Friday. One developer, synthetic questions, read only. Design only, compact form, then the goals.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "deploy-adk-on-google-cloud"],
+      "context": "No repository yet. The user has a personal Google Cloud project with billing enabled and a small allowance. Nothing is provisioned. The demo is on Friday and nothing is decided about what happens afterwards.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Names the Vector Search deployed index endpoint as a resource that charges while provisioned, with its idle cost basis and pricing date, its cleanup commands (undeploy the index, delete the endpoint and the index) and how absence is verified, in the goal that creates it.",
+        "Ends phase 1 with a teardown goal after the demo whose acceptance lists each created resource as absent, or retained with a reason and an owner, and includes reading the billing report once it has caught up.",
+        "Keeps the floor despite the three-day box: the idle-cost line, the spend stop and the pinned model appear even in the compact form.",
+        "Does not provision, price-check live or install anything during the design, and leaves the alternative of a local index for a demo this small visible as a trade-off."
+      ]
+    },
+    {
+      "id": "engineer-ticket-creates-cloud-sql",
+      "prompt": "Carry out docs/tickets/support/G03.md: create the Cloud SQL Postgres instance for the session store and wire DatabaseSessionService to it. Verify locally what you can and fill in the Evidence section.",
+      "available_skills": ["adk-engineer", "adk-memory-architecture", "deploy-adk-on-google-cloud", "adk-tool-auth-and-secrets"],
+      "context": "An existing ADK repository with a deploy script under deploy/ and no deletion script. The ticket's Resources created section names the Cloud SQL instance with its idle cost and the teardown ticket that owns it. Instance creation is authorised for the dev project; nothing else is.",
+      "expected_primary": "adk-memory-architecture",
+      "assertions": [
+        "Writes the deletion script beside the creation script in the same change, deleting only the instance this ticket owns, refusing to run without the approved scope, and tests it at least by a dry run.",
+        "Records the instance in the Evidence section with its cleanup command and current state (absent, retained, or unknown) rather than only the creation command's success.",
+        "Notes that backups and point-in-time recovery retention outlive the instance and that the teardown ticket must check them.",
+        "Does not delete the instance in this ticket and does not treat a successful create as proof of cost; names the billing readback as the teardown ticket's verification."
+      ]
+    },
+    {
+      "id": "designer-production-cost-contract",
+      "prompt": "Design the production version of our ADK claims assistant on Cloud Run with Cloud SQL sessions, BigQuery for claim history and Sensitive Data Protection on every reply. 20,000 requests a month, the sponsor accepts a ceiling of 1,500 dollars a month. Two developers, eight weeks. Design only, then the plan.",
+      "available_skills": ["adk-system-designer", "adk-engineer", "adk-operational-guardrails", "adk-sql-agent-engineering", "deploy-adk-on-google-cloud", "adk-agent-observability"],
+      "context": "An existing proof of concept with a plan whose phase 1 is complete. The organisation uses Cloud Billing export to BigQuery. The sponsor's ceiling is a number, not a hope; nobody has said how it would be enforced.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Writes a cost contract with the six fields: a ceiling at the stated volume split into variable per-request work and the fixed while-provisioned resources, scope, the billing export as authority, an enforcement stop that acts without a person (admission control and max_llm_calls for model work, maximum bytes billed and a daily quota for BigQuery, maximum instances for the host), what degrades first, and the goal that reads the first live bill.",
+        "States that a billing budget alert is evidence and not enforcement, and does not present it as the cap.",
+        "Requires labels for environment, team and application on every owned resource, set in deployment code, so the export can be attributed to this application.",
+        "Puts a recurring cost review with a date trigger and a decommission item (dependants and retention included) in the Later table, and lists each while-provisioned resource with its idle cost and owner on the goal that creates it.",
+        "Keeps design-only scope: no provisioning, no budget creation, no live price lookups presented as retrieved."
+      ]
     }
 
   ]

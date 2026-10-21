@@ -86,7 +86,12 @@ goals coarse when an unresolved decision could change their scope. A
 presentation goal sits at each phase boundary that needs someone's decision
 (`Primary skill: adk-presenter`, one per audience); it depends on the goals
 whose evidence it presents, and the decision date is a calendar wait that the
-next phase's goals depend on.
+next phase's goals depend on. A phase whose resources are not carried
+forward ends with a teardown goal (`Primary skill:
+deploy-adk-on-google-cloud`) that runs every cleanup command recorded under
+**Resources created**, checks dependants and retention, and reads the billing
+report; its acceptance lists each resource as absent, or retained with a
+reason and an owner.
 
 ### G01 — <first useful behavior or precise decision>
 
@@ -100,6 +105,10 @@ next phase's goals depend on.
   keeps; specialist controls deliberately left for a later goal>
 - **Implementation route:** <ADK/application components, interfaces and inspected
   or proposed modules; required infrastructure and compatibility checks>
+- **Resources created:** <none, or one line per resource that charges while
+  provisioned: resource and configuration; idle cost per day with pricing date
+  and URL; cleanup command; how absence is verified; the teardown goal or cost
+  contract that owns its lifetime>
 - **Prerequisites:** <goal/decision IDs, dependencies, setup or provider guarantee>
 - **Primary skill:** <one specialist that leads this goal>
 - **Supporting skills:** <only those this goal's boundaries need, each with its
@@ -112,7 +121,8 @@ next phase's goals depend on.
   fixtures; distinguish offline, local integration and authorized live/hosted evidence>
 - **Execution scope:** <what is already authorized; exact external prerequisites
   still needed for this goal>
-- **Status and evidence:** <planned initially; later record files, actual commands,
+- **Status and evidence:** <planned, in_progress, blocked, verified_local,
+  verified_live or done; then record files, actual commands,
   results and limitations, with one line per contract: C3 evidenced, local, A2.
   A pilot or production run adds numbered measurement records (M1: value,
   baseline, window, sample, method, owner, build) and incident records (I1:
@@ -135,6 +145,12 @@ Deferred items not yet written as goals, one line each:
 
 | Item | Trigger that brings it forward | Risk accepted while it waits | Likely primary skill |
 | --- | --- | --- | --- |
+
+At MVP profile and above this table always holds the recurring cost review
+(trigger: a date, the first bill, or a volume step) and the decommission item
+(who deletes what, dependants and retention included, when the application
+retires); the goal that reads the first live bill against the cost contract
+is a phase goal, not a Later item.
 
 ## What the reviewer reads
 

@@ -15,7 +15,7 @@ estimate:                # human hours, agent-assisted
   total: <range>
   calendar_waits: <none, or what and how long>
 owner: <person or role, when several people share the work>
-status: ready
+status: ready            # ready | in_progress | blocked | verified_local | verified_live | done
 ---
 
 # <G01> <title>
@@ -32,6 +32,14 @@ implements, e.g. D1, D3.>
 - Depth: <build at this profile's depth; the floor kept; controls left for
   later goals, by ID>
 
+## Resources created
+
+<none, or one line per resource that charges while provisioned: resource and
+configuration; idle cost per day with pricing date and URL; cleanup command;
+how absence is verified; the teardown ticket or cost contract that owns its
+lifetime. The deletion script is written and tested in this ticket, beside the
+script that creates the resource.>
+
 ## Acceptance
 
 - [ ] A1 <happy path, observable> (C1)
@@ -45,7 +53,8 @@ integration or authorised live>.
 
 <Filled in by the agent that carries the ticket out: files changed, commands
 run with results, one line per contract (C3: evidenced, local, A2 and A3),
-controls deliberately deferred, what remains unverified, the human review and
+controls deliberately deferred, the state of each resource created (absent,
+retained with reason, or unknown) with its cleanup command, what remains unverified, the human review and
 verification still owed (hours, and what to check), steps only a person can do, and whether the work proved larger than its estimate. Leave
 empty when writing the ticket.>
 
@@ -54,5 +63,7 @@ empty when writing the ticket.>
 ```text
 /adk-engineer Carry out <path to this ticket>. Read its design and plan,
 use its primary and supporting skills, run its verification locally,
-fill in the Evidence section and set status. Leave changes uncommitted.
+fill in the Evidence section and set status (verified_local when every
+acceptance case that can run offline has, verified_live after the authorised
+run, done when the owner accepts). Leave changes uncommitted.
 ```

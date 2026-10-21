@@ -123,7 +123,10 @@ Each goal delivers a testable user behavior or resolves a named uncertainty.
 
 For each goal record outcome, the contracts it proves (C IDs from the design),
 scope, integration points, ADK/GCP choices, prerequisites and dependency IDs,
-skills, acceptance cases and evidence tier. Each acceptance case names the
+skills, acceptance cases and evidence tier, and the resources it creates that
+charge while provisioned (idle cost with pricing date, cleanup command,
+verification, and the teardown goal or cost contract that owns them; the
+[resource cost ledger](resource-costs.md) supplies the rows). Each acceptance case names the
 contract it proves, so evidence lands against a contract rather than only
 against the goal; a critical contract no goal cites is a gap to record.
 Distinguish decision readiness from authorization: a goal can be ready in design
