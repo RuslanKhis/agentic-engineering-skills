@@ -139,12 +139,13 @@ Entries marked "not re-fetched" were supplied by the coordinator's research on
   Consumption). Read 2026-10-07.
 - OWASP Top 10 for Agentic Applications 2026, published 2025-12-09:
   https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
-  (ASI01 Goal Hijack, ASI02 Tool Misuse, ASI03 Identity and Privilege Abuse,
-  ASI04 Agentic Supply Chain, ASI05 Unexpected Code Execution, ASI06 Memory
-  and Context Poisoning, ASI07 Insecure Inter-Agent Communication, ASI08
-  Cascading Failures, ASI09 Human-Agent Trust Exploitation, ASI10 Rogue
-  Agents). List taken from secondary summaries; verify titles against the
-  published document.
+  (ASI01 Agent Goal Hijack, ASI02 Tool Misuse and Exploitation, ASI03
+  Identity and Privilege Abuse, ASI04 Agentic Supply Chain Vulnerabilities,
+  ASI05 Unexpected Code Execution (RCE), ASI06 Memory & Context Poisoning,
+  ASI07 Insecure Inter-Agent Communication, ASI08 Cascading Failures, ASI09
+  Human-Agent Trust Exploitation, ASI10 Rogue Agents). Titles checked against
+  the published document (Version 2026, December 2025) on 2026-10-23; the
+  earlier list came from secondary summaries.
 - Simon Willison, "The lethal trifecta for AI agents", 2025-06-16.
   https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/ ("95% detection
   is a failing grade"). Read 2026-10-07.

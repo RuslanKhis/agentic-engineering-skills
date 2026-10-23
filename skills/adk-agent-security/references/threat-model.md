@@ -119,9 +119,9 @@ and a service-account credential. Lessons that generalise:
 Use the LLM Top 10 (2025) for model-boundary findings and the Agentic Top 10
 (2026) for action-boundary findings; the checklist asset holds the full table.
 A finding usually maps to one of each: an unfiltered MCP server with a
-poisoned description is LLM03 Supply Chain and ASI04 Agentic Supply Chain; a
+poisoned description is LLM03 Supply Chain and ASI04 Agentic Supply Chain Vulnerabilities; a
 free-form send tool reachable after reading mail is LLM06 Excessive Agency and
-ASI02 Tool Misuse with LLM01 as the trigger.
+ASI02 Tool Misuse and Exploitation with LLM01 as the trigger.
 
 When the reader works from MITRE ATLAS or the CoSAI Risk Map, put that
 identifier beside the OWASP one rather than translating; both are Apache-2.0
