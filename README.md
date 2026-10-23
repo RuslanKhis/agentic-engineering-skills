@@ -1890,6 +1890,24 @@ recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
 
+### Demo polish · 23 October 2026
+
+The house design now looks like a product rather than a chat widget: an app
+shell with conversation history, an empty-state screen, a floating composer
+with a data line, folded tool steps, citations that quote their supporting
+passage, a Sources panel and an approval card that shows the exact email.
+Four invented demo brands (a bank, a retailer, a manufacturer and a health
+insurer) apply through the brand override with `apply_brand.py`, which
+rechecks contrast and lint, and a new demo-readiness guide covers seeded data,
+a labelled replay mode, the golden-path script and the screens around the
+chat. Five research notes, including one on what enterprise users expect,
+drove the changes. Every house and brand screen renders with no overflow and
+0 axe violations. All **23 packages** pass validation and **753 tests** pass
+with **59 optional SDK checks skipped**. See the
+[before and after](docs/design/house-theme/before-after-1280-light.png), the
+[brands overview](docs/design/house-theme/brands-overview.png) and the
+[record](docs/testing/demo-polish-2026-10-23.md).
+
 ### Web-app baseline · 23 October 2026
 
 The designer now gives a proof of concept with its own web interface a
