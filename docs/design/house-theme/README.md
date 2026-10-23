@@ -1,115 +1,118 @@
-# House theme: rendered check, 23 October 2026
+# House theme: rendered check, 23 October 2026 (second version)
 
-These images show the house theme from [`skills/adk-frontend-integration/assets/design/DESIGN.md`](../../../skills/adk-frontend-integration/assets/design/DESIGN.md) rendered in a real shadcn/ui (Base UI) app. The checks behind them: no horizontal overflow, and zero serious or critical axe findings at every size, in light and dark.
+These images show the house theme from [`skills/adk-frontend-integration/assets/design/DESIGN.md`](../../../skills/adk-frontend-integration/assets/design/DESIGN.md) rendered in a real shadcn/ui (Base UI) app. This second version adds the app shell, an empty-state screen, the redesigned conversation patterns and the tinted status surfaces, following [premium AI product UI](../../research/premium-ai-product-ui-2026-10-23.md), [user expectations](../../research/ai-ui-user-expectations-2026-10-23.md) (which wins where the two conflict), [frontend craft](../../research/frontend-craft-2026-10-23.md) and [demo readiness](../../research/demo-ready-poc-2026-10-23.md). The checks behind the images: no horizontal overflow, and zero axe violations of any impact at every size, in light and dark, with axe's `target-size` rule switched on.
+
+![Before and after, conversation screen at 1280 px, light](before-after-1280-light.png)
 
 ## What the images are
 
 | File | Content |
 |---|---|
-| `house-design-system-{375,768,1280}-{light,dark}.png` | Design-system page: colour roles as surface and text pairs, semantic colours, lines and chart marks, the type scale, buttons (including hover, pressed and disabled), a keyboard-focused button, inputs with an error, badges, a hairline card and a floating layer |
-| `house-conversation-{375,768,1280}-{light,dark}.png` | Agent conversation screen with these parts:<br>• the empty state with suggested prompts, shown as a side panel at 1280 and above the thread when narrower<br>• user messages<br>• reasoning, collapsed<br>• a Trace with ran, failed and running lines<br>• an answer with numbered citations and a sources panel<br>• "AI-generated" labels<br>• a partial answer marked incomplete, with Retry<br>• an approval card, with keyboard focus on Approve<br>• a streaming answer with a running shimmer line and a caret<br>• the composer with Stop |
-| `comparison-1280-light.png` | The same conversation markup. House theme on the left; shadcn 4.22.1's stock theme on the right (neutral tokens, Geist, default focus ring) |
+| `house-design-system-{375,768,1280}-{light,dark}.png` | Design-system page: colour roles, the new `*-subtle` status surfaces, type scale, radius and elevation (6, 8 and 12 px), buttons, inputs, badges and cards, answer formatting (headings, lists, inline code, a code block with Copy), and a **Patterns** section: shell (a static miniature), empty state, folded turn (expanded), citation preview, approval card, incomplete answer, composer (Send and Stop) and side panel |
+| `house-empty-state-{375,768,1280}-{light,dark}.png` | New-conversation screen inside the shell: serif greeting, the can-and-cannot line, the composer with its data line, and a 2 × 2 grid of suggestions |
+| `house-conversation-{375,768,1280}-{light,dark}.png` | Conversation screen inside the shell. Parts:<br>• sidebar with date-grouped history (9 seeded conversations), workspace slot and user (expanded at 1280, icon rail at 768, a closed sheet at 375)<br>• header with title, "Pilot" environment badge and side-panel toggle<br>• turn 1: folded steps ("Worked for 4 s · 3 steps · 1 failed · searched 42 contracts"), an answer-first reply with claim-level citation chips, a table in tabular figures, a "check before use" figure, an honest "I could not find…", "View all 4 sources", per-answer actions (Copy, Copy with sources, thumbs, Retry) and follow-up chips<br>• turn 2: a partial answer with the unbordered incomplete notice and Retry<br>• turn 3 (with the 150 ms entrance): running steps visible, the approval card with the email text open and keyboard focus on Approve, a streaming answer with a caret<br>• the floating two-row composer with Stop, the sources toggle and the data line<br>• at 1280 only: the resizable side panel open on Sources (`?panel=sources`) |
+| `before-after-1280-light.png` | The first version's conversation screen (left) against this one (right), both 1280 px light |
+| `comparison-1280-light.png` | Kept from the first version: the old conversation markup with the house theme on the left and shadcn 4.22.1's stock theme on the right. It still shows the token, font and focus differences, but not the current screens |
 
-Images are 1× PNGs. Captures stop at 2600 px tall: the 375 px design-system page is 3700 px tall, so its last sections are cut off in the image. Axe and the overflow check still ran on the whole page. The 13 images total about 2.8 MB.
+Images are 1× PNGs, reduced to 256 colours with Pillow 9.2.0 (median cut, no dither) after a visual check of text edges. Conversation images are as tall as the thread (2246–2972 px); the design-system images are full height (7103–10520 px). The 20 images total 3.6 MB.
 
 ## Versions
 
 | Package | Version |
 |---|---|
-| shadcn CLI | 4.22.1 (`init --base base --preset nova --template vite`; style `base-nova`, base colour `neutral`) |
+| shadcn CLI | 4.22.1 (`base-nova`, base colour `neutral`) |
 | @base-ui/react | 1.9.0 |
 | react, react-dom | 19.3.1 |
+| react-resizable-panels | 4.14.8 (installed by the `resizable` item) |
 | vite | 8.3.5 (@vitejs/plugin-react 6.1.2) |
 | tailwindcss, @tailwindcss/vite | 4.3.3 |
 | typescript | 6.0.3 |
 | tw-animate-css | 1.4.0 |
 | lucide-react | 1.61.0 |
+| cn | 0.5.0 (shadcn's own package, imported by the components) |
 | @fontsource-variable/inter | 5.3.0 |
-| @fontsource-variable/source-serif-4 | 5.3.1 (`opsz.css`) |
+| @fontsource-variable/source-serif-4 | 5.3.1 (`wght.css`; was `opsz.css`) |
 | @fontsource-variable/jetbrains-mono | 5.3.0 |
-| @fontsource-variable/geist (stock render only) | 5.3.0 |
 | playwright | 1.64.1 with `channel: "chrome"` (Google Chrome 155.0.8059.86, headless) |
 | @axe-core/playwright, axe-core | 4.14.0 |
 | @google/design.md | 0.4.0 |
 | Node | 22.23.2 |
 
-shadcn components used: button, card, badge, collapsible, input, textarea, label, separator, item, tooltip, popover and trace. The empty state, user message, citation marker, sources panel, AI label and error notice are hand-built from tokens.
+shadcn components used: sidebar, sheet, resizable, tabs, hover-card, dropdown-menu, avatar, badge, button, collapsible, input, textarea, label, separator, skeleton (installed with sidebar), tooltip, popover and trace. Hand-built from tokens: the composer, citation chip and passage preview, check-before-use mark, folded-steps line, approval card layout, incomplete notice, side-panel content, suggestion cards and the shell miniature.
 
 ## How it was produced
 
-The preview app was built in a scratch directory and is not part of the repository.
+The preview app lives in a scratch directory and is not part of the repository. It is the first version's app, copied without `node_modules` and moved forward.
 
-1. Scaffold the app and add the components:
-
-   ```
-   npx -y shadcn@4.22.1 init --base base --preset nova --template vite --name preview --no-monorepo -y
-   npx -y shadcn@4.22.1 add card badge collapsible input textarea separator item tooltip popover label trace -y
-   ```
-
-2. Generate the house theme CSS from the DESIGN.md front matter with a scratch script. It maps each colour token to its shadcn variable: `X` goes to `:root` and `dark-X` to `.dark`, and each one is registered in `@theme inline`. It also writes the fonts, the pinned radius steps, the `type-*` utilities, flat shadows, the 2 px `:focus-visible` outline and reduced-motion rules.
-3. Add two small preview-only CSS overrides. Badges get `rounded-sm`, and `[data-slot=trace-description]` gets full `muted-foreground` instead of shadcn's `/70` opacity (see the findings).
-4. Leave the component files exactly as shadcn wrote them.
-5. Build the default-theme page from the stock `index.css`, untouched, plus a shim that gives the `type-*` utilities the same sizes so the two layouts line up. The shim sets no colours or fonts.
-6. Build, serve and render:
+1. Add the new components to the existing app:
 
    ```
-   npx vite build && npx vite preview --port 4317
-   node render.mjs http://localhost:4317 <out> results.json
+   npx -y shadcn@4.22.1 add sidebar sheet hover-card resizable tabs avatar skeleton dropdown-menu -y --overwrite
    ```
 
-   For each page, `render.mjs` does the following:
-   - Waits for `document.fonts.ready`.
-   - Presses Tab, then focuses the sample button and checks that it matches `:focus-visible`.
-   - Checks overflow (`scrollWidth <= clientWidth`).
-   - Runs `new AxeBuilder({ page }).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa","wcag22aa"])`.
-   - Pins the sticky composer in normal flow, then takes the screenshot, because full-page captures position sticky elements unreliably.
-7. Compose `comparison-1280-light.png` from a local HTML page holding both screenshots.
+2. Edit the stock component classes to DESIGN.md's rules in the component files themselves (the first version only overrode them in CSS): button hover to `primary-hover` and press to `primary-active`, no `translate-y-px` and no `transition-all`; badges `rounded-sm`; `TraceDescription`, `SidebarGroupLabel` and `TabsTrigger` text at full `muted-foreground`; `ring-ring/50` focus shadows removed in favour of the house outline; `dark:` colour overrides removed from button, badge, tabs, input and textarea; sidebar easing `ease-out`; the sheet scrim set to the light `foreground` at 40% with no blur.
+3. Generate the theme CSS from the DESIGN.md front matter with a scratch script (`gen_theme.py`). It maps each colour token to its shadcn variable, writes the fonts, the radius pins (now including `--radius-2xl: 12px`), the `type-*` utilities, flat shadows, the focus outline and reduced-motion rules, and recomputes 224 contrast pairs, including every new `*-subtle` pair. Fonts and radius steps go in a plain `@theme static` block so a brand can override them at run time. Conversation patterns (composer shadow and focus, scroll fade, answer prose, turn entrance, theme-switch rule, dark-mode shadow removal) are in a separate hand-written `house-patterns.css`.
+4. Add the no-flash theme script and `<meta name="color-scheme" content="light dark">` plus `theme-color` metas to `index.html`. Each screen is a lazy route chunk, so the build gives no chunk-size warning.
+5. Build, serve and render:
 
-Lint: `npx -y @google/design.md@0.4.0 lint skills/adk-frontend-integration/assets/design/DESIGN.md` gave 0 errors, 0 warnings and 1 info ("74 colors, 11 typography scales, 4 rounding levels, 13 spacing tokens, 69 components"), and exited with 0. The contrast pairs, including the 3:1 non-text pairs the linter does not check, were also recomputed from the DESIGN.md tokens with a scratch OKLCH-to-sRGB script. No pair fell below its floor, and every colour is inside the sRGB gamut.
+   ```
+   npx tsc -b && npx vite build && npx vite preview --port 4318
+   node render.mjs http://localhost:4318 <out> results.json
+   ```
+
+   For each screen, mode and width, `render.mjs` does the following:
+   - Sets `colorScheme`, `en-GB` locale and the `Europe/London` time zone, waits for `document.fonts.ready` and 400 ms for the turn entrance.
+   - Presses Tab, focuses the sample control (Focused button, Approve, or the composer) and records its computed outline.
+   - Checks horizontal overflow on the document, the thread scroller and the sidebar inset.
+   - Runs `new AxeBuilder({ page }).options({ rules: { "target-size": { enabled: true } } }).withTags(["wcag2a","wcag2aa","wcag21a","wcag21aa","wcag22aa"])`, and confirms that `target-size` ran.
+   - Grows the viewport until the whole thread fits (the shell scrolls inside the thread, not the page), then captures the viewport.
+   - Then two extra checks: with the app's JavaScript blocked, the inline script alone must set the theme from the OS setting; and under `reducedMotion: "reduce"` the new turn must not translate.
+
+6. Compose `before-after-1280-light.png` from a local HTML page holding the saved first-version image and the new one, then reduce all images to 256 colours.
+
+Lint: `npx -y @google/design.md@0.4.0 lint skills/adk-frontend-integration/assets/design/DESIGN.md` gave 0 errors, 0 warnings and 1 info ("82 colors, 11 typography scales, 5 rounding levels, 13 spacing tokens, 94 components"). The scratch contrast script found no pair below its floor; the smallest margins were `warning` on `sidebar-accent` (5.06:1, light, 4.5 floor) and `input` on `accent` (3.13:1, dark, 3.0 floor). Every colour is inside the sRGB gamut. `scripts/check_theme.py --css` on the generated theme found no stock tokens. The skill's 79 unit tests pass on Python 3.13, and `scripts/apply_brand.py --dry-run` exits 0 for all four shipped brands against the updated DESIGN.md.
 
 ## Results
 
-Axe counts are violating nodes by impact (critical / serious / moderate / minor).
+Axe counts are violating nodes by impact (critical / serious / moderate / minor); `target-size` ran on every page.
 
-| Image | Overflow (scrollWidth / clientWidth) | Axe | Focus visible | Fonts loaded |
+| Image | Overflow | Axe | Axe incomplete | Focus visible |
 |---|---|---|---|---|
-| house-design-system-375-light | none (375 / 375) | 0 / 0 / 0 / 0 | yes | Inter, Source Serif 4, JetBrains Mono |
-| house-design-system-768-light | none (768 / 768) | 0 / 0 / 0 / 0 | yes | same |
-| house-design-system-1280-light | none (1280 / 1280) | 0 / 0 / 0 / 0 | yes | same |
-| house-design-system-375-dark | none (375 / 375) | 0 / 0 / 0 / 0 | yes | same |
-| house-design-system-768-dark | none (768 / 768) | 0 / 0 / 0 / 0 | yes | same |
-| house-design-system-1280-dark | none (1280 / 1280) | 0 / 0 / 0 / 0 | yes | same |
-| house-conversation-375-light | none (375 / 375) | 0 / 0 / 0 / 0 | yes | Inter, Source Serif 4 |
-| house-conversation-768-light | none (768 / 768) | 0 / 0 / 0 / 0 | yes | same |
-| house-conversation-1280-light | none (1280 / 1280) | 0 / 0 / 0 / 0 | yes | same |
-| house-conversation-375-dark | none (375 / 375) | 0 / 0 / 0 / 0 | yes | same |
-| house-conversation-768-dark | none (768 / 768) | 0 / 0 / 0 / 0 | yes | same |
-| house-conversation-1280-dark | none (1280 / 1280) | 0 / 0 / 0 / 0 | yes | same |
-| stock default, conversation 1280 light | none (1280 / 1280) | **0 / 3 / 0 / 0** | yes, but see below | Geist |
+| house-design-system-375-light / dark | none | 0 / 0 / 0 / 0 | color-contrast: 8 | yes, 2 px `ring` outline |
+| house-design-system-768-light / dark | none | 0 / 0 / 0 / 0 | color-contrast: 6 | yes |
+| house-design-system-1280-light / dark | none | 0 / 0 / 0 / 0 | color-contrast: 6 | yes |
+| house-empty-state-375-light / dark | none | 0 / 0 / 0 / 0 | none | yes (composer card) |
+| house-empty-state-768-light / dark | none | 0 / 0 / 0 / 0 | none | yes |
+| house-empty-state-1280-light / dark | none | 0 / 0 / 0 / 0 | none | yes |
+| house-conversation-375-light / dark | none | 0 / 0 / 0 / 0 | color-contrast: 1 | yes (Approve) |
+| house-conversation-768-light / dark | none | 0 / 0 / 0 / 0 | color-contrast: 1 | yes |
+| house-conversation-1280-light / dark | none | 0 / 0 / 0 / 0 | color-contrast: 2 | yes |
 
-- **Incomplete results.** Axe marked one item "incomplete" (it needs a human check) on every conversation render: the running Trace title. Its shimmer is a gradient text fill, so axe cannot measure its contrast.
+- **Incomplete items.** These are places where axe could not measure the background: the tab count sits over the active tab's underline pseudo-element; side-panel rows sit in their own scroll region; and on the conversation screen, text is partly under the floating composer. The tokens behind each pair are in the contrast table and pass.
+- **First run.** Before a fix, the account button in the sidebar footer failed `label-content-name-mismatch` (serious): its `aria-label` did not contain its visible name. The label was removed and the visible text now names it.
+- **No flash.** With the app's JavaScript blocked, `colorScheme: "dark"` gave `<html class="dark">`, `color-scheme: dark` and a body background of `oklch(0.185 0.004 85)`; light gave the light values.
+- **Reduced motion.** The new turn used the fade-only keyframes (`turn-fade`, 1 ms under the global rule) and no transform.
 - **Console errors.** None on any page.
 
-### House against default
+## Applying a brand in the preview
 
-- **Contrast.** The stock theme has 3 serious `color-contrast` violations: the Trace durations (`text-muted-foreground/70`) measure 2.71:1 on white. With house tokens the same stock class measured 3.28:1, which is still a failure. That is why the house theme sets full `muted-foreground`. DESIGN.md now says to make the same change in `trace.tsx`.
-- **Focus.** Computed styles of the focused Approve button:
-  - **House:** a 2 px solid outline, colour `oklch(0.5 0.1 250)` light and `oklch(0.74 0.09 250)` dark, with a 2 px offset and no box-shadow ring. That is 5.8:1 against the light background and 8.1:1 against the dark one.
-  - **Stock:** no outline. The ring is a 3 px box-shadow in `oklab(0.708 0 0 / 0.5)`, which measures 1.54:1 against white.
-- **Field edges.** The stock `--input` is 1.26:1 against white. The house `input` edge is 3.5:1 in light and 4.2:1 in dark.
-- **Why axe passes the stock focus ring and borders.** axe-core does not test 1.4.11 non-text contrast, so the ring and border failures appear only in the computed figures above, not in the axe counts. That matches the research note's prediction.
+The preview reads one brand file, `src/brand/brand.json` (name, product, the reserved `.example` domain used for source hosts, accent-ramp colours, font stacks, control radius, logo file names). Beside it are `fonts.css` (the `@fontsource-variable` imports) and `logo.svg` and `mark.svg`, which are inlined so a mark drawn in `var(--primary)` follows light and dark mode. `applyBrand()` refuses any colour outside the DESIGN.md brand override, sets the `sidebar-primary*` and `sidebar-ring` followers, and accepts only 4 px or 8 px for the radius. The scratch converter `brand_to_preview.py <brands/slug> <preview/src/brand>` writes all four files from a `brand.yaml` and prints the font packages to install. It was tried once with Marrowby in a copy of the preview: Figtree and Fraunces loaded, the green ramp and 8 px controls applied, and the empty state had zero axe violations in light and dark. Those images are not in this folder.
 
 ## Not verified
 
 - **Visual judgement.**
-  - The screenshots were looked at by an agent, not reviewed by a designer.
-  - No other browsers were tried (Firefox, Safari), and no device pixel ratio other than 1.
+  - The screenshots were looked at by an agent, not reviewed by a designer or shown to clients.
+  - No other browsers were tried (Firefox, Safari), and no device pixel ratio other than 1. Decks need 2× captures, which these are not.
   - Forced-colours mode and Windows font rendering were not tried.
 - **Interaction.**
-  - Hover, pressed and disabled states are shown with static classes, not real pointer states.
-  - Tooltip and popover contents were not opened, so the AI-label popover and the floating-layer shadow on a real popover were not captured.
-  - Reduced-motion behaviour was not rendered: the CSS rules exist but were not run under `prefers-reduced-motion: reduce`.
-  - No screen-reader run was done; live-region announcements are untested.
-- **Component edits.** The house treatments for focus, badge radius and Trace descriptions are applied as unlayered CSS in the preview, so the stock component files could be shared with the default render. A real project should edit the `cva` classes as DESIGN.md says. Those edits were not exercised here.
-- **Chart marks and colour blindness.** Chart marks were shown only as swatches. Separation for colour-blind readers was not simulated.
-- **Brand overrides.** The override procedure in DESIGN.md (accent ramp, fonts, logo, radius) was not exercised with a real client brand.
+  - Hover cards, tooltips, menus and the mobile sheets were not opened in the captures. The citation preview is shown as a static card on the design-system page. The sidebar sheet at 375 px and the side-panel sheet below 1024 px were not rendered open.
+  - Resizing the side panel by pointer or keyboard, collapsing the sidebar, and the URL update on toggling the panel were not exercised by a test.
+  - Enter, Shift+Enter and IME composition in the composer, Stop, follow-up chips, Copy and Copy with sources have no behaviour in the preview. DESIGN.md states the rules, but nothing here tests them.
+  - Scroll-following and shadcn's `message-scroller` were not used; the thread is static.
+  - On touch, the citation chip should open a popover rather than a hover card. That was not built.
+  - No screen-reader run was done. Live-region announcements, the hidden "check before use" text and the summary-line commas are untested with VoiceOver or NVDA.
+- **Content.**
+  - Tollmere, Brackwater Freight and the other names were checked only against the toolkit's own notes, not in a trademark search.
+  - The data line ("europe-west2", not used for training) is fictional demo copy.
+- **Brands.** A brand was applied only in a scratch copy (Marrowby, empty state), not across all screens or all four brands.
+- **Quantised images.** The 256-colour images were checked by eye on a few crops only; contrast results come from the live page, not the images.
