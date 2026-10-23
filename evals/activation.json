@@ -462,6 +462,48 @@
       "prompt": "Our ADK shopping agent's tools render product cards and a comparison chart next to the reply, but the cards show up twice and a refresh after a preference change never reaches the browser. Fix the widget pipeline.",
       "should_trigger": true,
       "rationale": "Interface widgets rendered by tools are an agent-to-browser contract the frontend specialist owns, including the staging and emission rules behind duplicate or vanishing widgets."
+    },
+    {
+      "id": "fastapi-backend-documents-positive",
+      "skill": "adk-fastapi-backend",
+      "prompt": "Add an endpoint so users can list and delete the documents they uploaded to our ADK assistant.",
+      "should_trigger": true,
+      "rationale": "Owner-filtered domain routes behind the verified principal are ordinary backend work around the agent, which this skill owns."
+    },
+    {
+      "id": "fastapi-backend-migrations-positive",
+      "skill": "adk-fastapi-backend",
+      "prompt": "Set up migrations for our app tables; the ADK agent already stores sessions in the same Postgres.",
+      "should_trigger": true,
+      "rationale": "Application migrations must exclude ADK's session tables, a backend data boundary this skill owns."
+    },
+    {
+      "id": "fastapi-backend-client-positive",
+      "skill": "adk-fastapi-backend",
+      "prompt": "Generate a typed TypeScript client for the React app from the FastAPI backend of our ADK assistant and keep it in sync.",
+      "should_trigger": true,
+      "rationale": "The public OpenAPI contract, offline dump and drift-checked generated client belong to this skill."
+    },
+    {
+      "id": "fastapi-backend-stream-near-miss",
+      "skill": "adk-fastapi-backend",
+      "prompt": "Stream tool progress into the chat UI while the ADK agent runs.",
+      "should_trigger": false,
+      "rationale": "The agent's run and stream contract and tool progress display belong to adk-frontend-integration."
+    },
+    {
+      "id": "fastapi-backend-drive-near-miss",
+      "skill": "adk-fastapi-backend",
+      "prompt": "Each user should connect their own Google Drive for the ADK agent's tool.",
+      "should_trigger": false,
+      "rationale": "Delegated per-user OAuth for a tool belongs to adk-tool-auth-and-secrets."
+    },
+    {
+      "id": "fastapi-backend-plain-crud-near-miss",
+      "skill": "adk-fastapi-backend",
+      "prompt": "Build a FastAPI CRUD service for our inventory system.",
+      "should_trigger": false,
+      "rationale": "FastAPI work with no ADK agent is outside this toolkit; FastAPI's own skill covers it."
     }
   ]
 }
