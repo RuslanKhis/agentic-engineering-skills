@@ -20,6 +20,10 @@ are in the repository's research note `docs/research/slide-craft.md`.
   cannot be avoided has at most four items of two lines. About 40 words in
   total, at least 20 point; caption at least 14 point; no all-caps.
 - **Caption:** source, sample, repeats, interval, dates, who measured.
+- **Product screenshots** come from the demo capture kit at 2× scale
+  (`adk-frontend-integration`'s demo readiness); a slide or one-pager that
+  shows the product marks what is simulated, and a demo brand is named as a
+  fictional company.
   Projections say "estimate"; untested claims say "hypothesis".
 - **What the audience must recall exactly** (a threshold, a cost, a date,
   the decision asked) is written on the slide as a call-out; that is the one

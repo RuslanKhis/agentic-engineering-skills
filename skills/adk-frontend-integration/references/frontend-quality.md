@@ -23,9 +23,11 @@ exactly; fail on any error or warning, read from the JSON output, because at
 | Generated-client drift: regenerate from the offline OpenAPI dump, `git diff --exit-code` (`adk-fastapi-backend`) | When handed over | Always |
 | DESIGN.md lint and `scripts/check_theme.py --project frontend` (no shadcn default tokens or fonts left) | When handed over | Always |
 | No raw colour values outside the theme file (grep for hex, `rgb(`, `oklch(` and palette classes such as `bg-blue-500`) | When handed over | Always |
-| `@axe-core/playwright` on the main view | 0 serious or critical | 0 serious or critical in idle, streaming, approval, tool-error and empty states |
+| `@axe-core/playwright` on the main view, with the `target-size` rule enabled by ID (axe-core 4.14.0 ships it switched off) | 0 serious or critical | 0 serious or critical in idle, streaming, approval, tool-error and empty states |
 | Screenshots at 375, 768 and 1280 px, light and dark, no horizontal overflow | Reviewed by eye | Baselines with `toHaveScreenshot` on a pinned browser |
 | Browser journey (sign-in, send, streamed answer with tool progress, approve and reject) against the real API with the model replaced | One journey | Per state, with keyboard-only send, stop, approve and deny |
+| Lab vitals: a pinned `npx lighthouse` run on the FastAPI-served build with the model replaced (never Lighthouse CI's public temporary storage) | Recorded before a demo: LCP, CLS, initial JavaScript size, time to first token | LCP ≤ 2.5 s and CLS ≤ 0.1 |
+| First frame in dark mode and a reduced-motion run | Reviewed by eye | Screenshot baselines |
 
 Automated accessibility checks find only part of WCAG; they are a floor, not
 conformance.
@@ -34,30 +36,56 @@ conformance.
 `--css PATH`) and exits 1 while shadcn's default token values or default font
 stacks remain. So that `make check` works without the skill installed, copy it
 into the project (for example `frontend/scripts/`; it is MIT like this skill)
-and run it with Python 3.11 or later.
+and run it with Python 3.11 or later. Its defaults are recorded from a pinned
+shadcn version; update the recorded set when the project's shadcn version
+moves.
 
-After each `shadcn add`, read the `package.json` diff: in an engineer trial on
-23 October 2026, shadcn 4.22.1 added an unrelated `cn` package and imported
-`cn` from it instead of the local `@/lib/utils`. Its defaults are recorded from a pinned shadcn version; a newer
-shadcn may change them, so update the recorded set when the project's shadcn
-version moves.
+After each `shadcn add`, read the `package.json` diff. shadcn now publishes its
+own `cn` package (`shadcn-ui/cn`), which registry items such as the
+`message-scroller` list as a dependency; an engineer trial on 23 October 2026
+saw components switch to importing `cn` from it instead of the local
+`@/lib/utils`. Keep one source and make the imports agree.
 
 ## Streaming-UI rules
 
 - Abort the fetch on unmount and on Stop (`AbortController`); a disconnect
   does not prove the server-side effect stopped.
-- Buffer tokens in a ref or store and render with `useDeferredValue` or
-  `startTransition`; never re-render the whole thread for each token.
+- Show the person's message and the status line before the first network
+  byte arrives.
+- Buffer deltas in a ref or store and publish them at most once per animation
+  frame; earlier message rows must not re-render during a stream (check with
+  the React Profiler; `useDeferredValue` helps only with memoised rows).
+- Follow the stream only while the reader is at the bottom and release on any
+  upward scroll: shadcn's Message Scroller (`@shadcn/react`, pinned exactly,
+  React 19 or later) or `use-stick-to-bottom`. Under reduced motion, scroll
+  instantly; neither library checks it.
 - Read the stream with `fetch` and a bearer token, never native
   `EventSource` or a token in the URL (SB08). Validate each event at run time
   (for example with zod); a type assertion is not validation.
 - Never send a user ID from the browser; the server derives it (SB03).
 - Render model output as text or markdown with raw HTML off, a URL-protocol
   allowlist and images only from listed hosts; no `dangerouslySetInnerHTML`
-  (SB10).
+  (SB10). Streamdown 2.7.1, used by shadcn's chat components, enables raw HTML
+  (`rehype-raw`) and allows every link, image and protocol by default: pass
+  `skipHtml`, replace `rehypePlugins` without the raw plugin, and set its
+  harden prefixes to the SB10 allowlist.
 - No edit or regenerate without a server checkpoint to resume from.
 - Never wait for network idle in a browser test of a streaming page; wait for
   the visible state instead.
+
+## First paint
+
+- Put an inline theme script and the `color-scheme` meta tag in `index.html`;
+  shadcn's Vite theme provider applies the dark class only after first paint,
+  so a dark-mode user sees a light flash.
+- Preload only the interface font's latin file, and give the three font
+  stacks metric-matched fallbacks (for example with `fontaine`) so swapping
+  fonts does not shift the layout.
+- Lazy-load every route and any highlighter, diagram or maths renderer;
+  treat a Vite chunk-size warning as a failure.
+
+Sources for this section and the streaming rules, read 23 October 2026, are
+in the toolkit repository's `docs/research/frontend-craft-2026-10-23.md`.
 
 ## Recorded browser stack and the gap
 

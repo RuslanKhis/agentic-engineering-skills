@@ -116,7 +116,9 @@ The demo is a recording of the build that produced the numbers, labelled
 with build and date, narrated live; when there is none, say so and show the
 measured result instead. A live run belongs only in a technical
 session, with the recording open as the fallback. Nobody wants to watch
-anyone type.
+anyone type. Record from the replay mode of the measured build
+(`adk-frontend-integration`'s demo readiness) and say aloud that it is a
+replay, and of which date.
 
 ## Rehearsal checklist
 

@@ -59,7 +59,7 @@ cheapest form that keeps the floor, usually a configuration line or a test.
 | Prompt injection and agency | Minimal: break the untrusted-input-plus-write combination | Build: per-agent exposure check | Build | Build: threat model and adversarial suite |
 | Budgets and loop limits | Minimal: `max_llm_calls` and a spend cap | Minimal | Build: per-user allowance; a cost contract with a stop | Build: shared budgets and approval; the cost contract, labels and a cost review |
 | Memory and retrieval | Only what the journey needs; in-memory sessions | Build what the journey needs | Build | Build |
-| Frontend | `adk web` on loopback for a builder-only demo. Otherwise Build: the baseline single-page app from web application defaults, one browser journey | Build | Build | Build |
+| Frontend | `adk web` on loopback for a builder-only demo. Otherwise Build: the baseline single-page app from web application defaults, one browser journey; when a demo audience judges it, a demo-readiness goal too | Build | Build | Build |
 | API contract and typed client | Build when handed over: generated client and drift check | Build | Build, with a breaking-change check | Build, with a breaking-change gate |
 | Web security baseline | Tiers 1–2; also tier 3 when reachable at a URL or handed over | Tiers 1–4 | Tiers 1–5 | Tiers 1–6 |
 | Hosting | Local, or one Cloud Run service | Cloud Run behind IAP or the existing platform | Chosen host with a rollback | Chosen host with recovery and cleanup |

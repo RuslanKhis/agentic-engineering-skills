@@ -73,6 +73,7 @@ more. Each is cheap, and each makes later work additive rather than a rewrite.
 | One browser journey covers sign-in, sending, the streamed answer with tool progress, and approving or rejecting an action. | The journey passes against the real API with the model replaced. |
 | An `AGENTS.md` under about 200 lines names the commands, constraints and companion skills with install lines and pins, with a one-line `CLAUDE.md` containing `@AGENTS.md`. | It is the only home of the companion pins once the first goal has written it. |
 | Handover notes. | The final goal's evidence lists each security rule as evidenced, not applicable or deferred with its trigger. |
+| Demo-ready, when stakeholders will see it: domain story, a client or demo brand, seeded fictional data, golden-path script, replay mode, app shell and an About page (`adk-frontend-integration`'s demo readiness). | `make demo-reset && make demo-replay` runs the golden path with no model calls, and the screenshots come from the current build. |
 
 ## Design system
 
@@ -80,8 +81,10 @@ more. Each is cheap, and each makes later work additive rather than a rewrite.
 `assets/design/DESIGN.md`: a restrained enterprise look in Google's open
 DESIGN.md format. The first UI goal copies it to `docs/design/DESIGN.md`. A
 client brand overrides only the surface that file names (accent ramp, fonts
-if licensed, logo, optionally radius); everything else stays fixed. Record the
-choice of house or client system as a decision.
+if licensed, logo, optionally radius); everything else stays fixed. When the
+client's brand cannot be used yet, the same skill ships fictional demo brands
+that apply through the same surface. Record the choice of house, client or
+demo brand as a decision.
 
 ## Companion skills
 
