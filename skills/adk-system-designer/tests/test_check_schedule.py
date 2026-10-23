@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 import tempfile
@@ -62,6 +63,18 @@ status: ready
 ---
 
 # {goal}
+"""
+
+CONTRACTS = """| ID | From | Invariant | Scope | Authority | Enforcement | Failure outcome | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| C1 | R1 | rights | account | rights system | filter | fewer results | planned |
+| C2 | R2 | confirm | quote | proposal | binding | refused | planned |
+"""
+
+SECURITY = """| Rule | Component | Depth now | Proved by (G/A), n/a: reason, or deferred: trigger |
+| --- | --- | --- | --- |
+| SB01 | /api routes | Build | {sb01} |
+| SB05 | ADK runtime | Build | {sb05} |
 """
 
 
@@ -141,6 +154,77 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(parse_scalar("[G03]   # cross-person mention"), ["G03"])
         self.assertEqual(parse_scalar("[G01, G02] # two"), ["G01", "G02"])
         self.assertEqual(parse_scalar("none   # or what"), "none")
+
+    def test_plan_template_schedule_block_passes_design_check(self):
+        # Regression: the template's commented list lines once parsed as "[C1" and "C3]",
+        # so every plan that kept the comments failed --design.
+        template = SCRIPT.parents[1] / "assets" / "implementation-plan-template.md"
+        block = re.search(r"^```yaml\n(- goal: G01\n.*?)^```", template.read_text(), re.M | re.S).group(1)
+        self.assertIn("  contracts: [C1, C3]    # design contracts", block)
+        self.assertIn("  mentions_only: []      # IDs", block)
+        with tempfile.TemporaryDirectory() as root:
+            plan = Path(root) / "plan.md"
+            plan.write_text("```yaml\n" + block + "```\n")
+            design = Path(root) / "design.md"
+            design.write_text(CONTRACTS.replace("| C2 | R2 | confirm | quote |", "| C3 | R2 | confirm | quote |")
+                              + "\n" + SECURITY.format(sb01="G01/A1", sb05="G01/A2"))
+            code, out, err = self.run_check("--plan", str(plan), "--design", str(design), "--json")
+            result = json.loads(out)
+            self.assertEqual(result["problems"], [], err + out)
+            self.assertEqual(code, 0)
+            self.assertEqual(result["contract_coverage"]["cited"], ["C1", "C3"])
+            self.assertEqual(result["settled_as_mention_only"], [])
+
+    def test_every_build_or_minimal_rule_is_cited_or_settled(self):
+        with tempfile.TemporaryDirectory() as root:
+            plan = self.write_plan(root)
+            text = plan.read_text().replace("  owner: Ana\n  blocked_by: []\n",
+                                            "  owner: Ana\n  blocked_by: []\n  security: [SB01, SB99]\n", 1)
+            plan.write_text(text + "\n### G02 Chat\n- [ ] A1 another user's session is not found (C2, SB03)\n")
+            design = Path(root) / "design.md"
+            design.write_text("| Rule | Component | Depth now | Proved by (G/A), n/a: reason, or deferred: trigger |\n"
+                              "| --- | --- | --- | --- |\n"
+                              "| SB01 | /api routes | Build | G01/A1 |\n"
+                              "| SB03 | agent routes | Build | G02/A1 |\n"
+                              "| SB05 | ADK runtime | Build | planned |\n"
+                              "| SB07 | API config | Minimal | |\n"
+                              "| SB11 | uploads | n/a | n/a: no uploads |\n"
+                              "| SB14 | logging | Build | deferred: internal-tool depth |\n"
+                              "| SB20 | identity | Defer | MVP |\n")
+            code, out, _ = self.run_check("--plan", str(plan), "--design", str(design), "--json")
+            result = json.loads(out)
+            self.assertEqual(code, 1)
+            self.assertEqual(len(result["problems"]), 3, result["problems"])
+            self.assertIn("G01 cites SB99, which is not in the design's web security baseline", result["problems"][0])
+            self.assertIn("security rule SB05 (Build): no goal cites it", result["problems"][1])
+            self.assertIn("security rule SB07 (Minimal): no goal cites it", result["problems"][2])
+            self.assertEqual(result["security_coverage"]["cited"], ["SB01", "SB03"])
+            self.assertEqual(sorted(result["security_coverage"]["not_covered_by_choice"]), ["SB11", "SB14"])
+
+    def test_design_without_security_table_skips_rule_coverage(self):
+        with tempfile.TemporaryDirectory() as root:
+            plan = self.write_plan(root)
+            plan.write_text(plan.read_text().replace("  owner: Ana\n  blocked_by: []\n",
+                                                     "  owner: Ana\n  blocked_by: []\n  contracts: [C1, C2]\n", 1))
+            design = Path(root) / "design.md"
+            design.write_text(CONTRACTS)
+            code, out, _ = self.run_check("--plan", str(plan), "--design", str(design), "--json")
+            result = json.loads(out)
+            self.assertEqual(result["problems"], [])
+            self.assertNotIn("security_coverage", result)
+
+    def test_ticket_security_rules_must_match_the_plan(self):
+        with tempfile.TemporaryDirectory() as root:
+            plan = self.write_plan(root)
+            plan.write_text(plan.read_text().replace("  owner: Ana\n  blocked_by: []\n",
+                                                     "  owner: Ana\n  blocked_by: []\n  security: [SB01]\n", 1))
+            tickets = Path(root) / "tickets"
+            tickets.mkdir()
+            ticket = TICKET.format(goal="G01", hands_on="3-4", review="1-2", total="4-6", owner="Ana", blocked="[]")
+            (tickets / "G01.md").write_text(ticket.replace("status: ready", "security: [SB01, SB05]\nstatus: ready"))
+            code, out, _ = self.run_check("--plan", str(plan), "--tickets", str(tickets))
+            self.assertEqual(code, 1)
+            self.assertIn("G01.md: security ['SB01', 'SB05'] differ from plan ['SB01']", out)
 
     def test_prose_mentions_outside_the_schedule_are_listed_for_review(self):
         with tempfile.TemporaryDirectory() as root:

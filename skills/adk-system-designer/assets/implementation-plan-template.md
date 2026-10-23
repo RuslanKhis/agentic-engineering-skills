@@ -58,6 +58,7 @@ designer's `scripts/check_schedule.py` reads it; tickets copy it):
   wait_days: 0           # working days the wait adds, as a range if unsure
   handoff: 0             # hours in total for picking up work from another person
   contracts: [C1, C3]    # design contracts this goal's acceptance proves
+  security: [SB01, SB05] # web security rules this goal's acceptance proves, if any
   mentions_only: []      # IDs (or wait) the prose names without depending on them
 ```
 

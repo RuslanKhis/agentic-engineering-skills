@@ -13,7 +13,11 @@ With ``--design`` it checks that every coverage-grid cell cites an existing
 acceptance item (``G04/A2``) or says ``n/a: <reason>``, and, when the design has
 a contracts table, that every contract is cited by a goal (its ``contracts``
 field or prose) or records ``gap:`` or ``deferred:``, and that no goal cites a
-contract the design lacks.
+contract the design lacks. When the design has a web security baseline table
+(``Rule | Component | Depth now | Proved by ...``), every rule at depth Build or
+Minimal must be cited by a goal (its ``security`` field or prose, e.g.
+``(C2, SB03)``) unless its row records ``n/a:`` or ``deferred:``, and no goal may
+cite a rule the table lacks.
 
 Estimates are ranges of human hours (``1-2``, ``1.5 to 3``, ``2 h``). Exit
 status: 0 when consistent and within capacity and calendar, 1 when something
@@ -42,6 +46,8 @@ CITATION = re.compile(r"\b([A-Z]\d+)/A(\d+)\b")
 HEADING = re.compile(r"^#{2,4}\s+(.*)$", re.MULTILINE)
 CONTRACT = re.compile(r"(?<![\w/-])C\d+(?![\w/-])")
 UNCOVERED_OK = re.compile(r"\b(?:gap|deferred)\s*:", re.IGNORECASE)
+RULE = re.compile(r"(?<![\w/-])SB\d+(?![\w/-])")
+RULE_SETTLED = re.compile(r"(?:\bn/a|\bdeferred)\s*:", re.IGNORECASE)
 
 
 class InputError(Exception):
@@ -105,6 +111,12 @@ def flatten(entry):
     return entry
 
 
+def id_list(value):
+    if isinstance(value, str):
+        return [v.strip() for v in value.split(",") if v.strip() and v.strip().lower() != "none"]
+    return [v for v in value if v]
+
+
 def normalise(entry, where):
     goal = str(entry.get("goal", "")).strip()
     if not goal:
@@ -124,13 +136,10 @@ def normalise(entry, where):
     settled = entry.get("mentions_only", [])
     if isinstance(settled, str):
         settled = [m.strip() for m in settled.split(",") if m.strip()]
-    contracts = entry.get("contracts", [])
-    if isinstance(contracts, str):
-        contracts = [c.strip() for c in contracts.split(",") if c.strip() and c.strip().lower() != "none"]
     return {"goal": goal, "phase": str(entry.get("phase", "")).strip(), "total": total,
             "handoff": str(entry.get("handoff", "")).strip(), "mentions_only": settled, "text": "",
             "hands_on": hands_on, "review": review, "owner": str(entry.get("owner", "")).strip(),
-            "contracts": [c for c in contracts if c],
+            "contracts": id_list(entry.get("contracts", [])), "security": id_list(entry.get("security", [])),
             "blocked_by": [b for b in blocked if b], "waits": str(waits).strip(), "wait_days": wait_days}
 
 
@@ -305,6 +314,45 @@ def check_contracts(path, goals):
     return problems, summary
 
 
+def check_security(path, goals):
+    """Every rule at depth Build or Minimal is cited by a goal or marked n/a or deferred; goals cite known rules."""
+    rules, header = {}, None
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        line = raw.strip()
+        if not line.startswith("|"):
+            header = None
+            continue
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if header is None:
+            lowered = [c.lower() for c in cells]
+            if lowered and lowered[0] == "rule" and any(c.startswith("depth") for c in lowered):
+                header = lowered
+            continue
+        if set("".join(cells)) <= set("-: ") or not re.fullmatch(r"SB\d+", cells[0]):
+            continue
+        depth = next((cell for name, cell in zip(header, cells) if name.startswith("depth")), "")
+        rules[cells[0]] = (depth, cells[-1])
+    if not rules:
+        return [], {}
+    cited = {}
+    for goal in goals:
+        for rule in set(goal["security"]) | set(RULE.findall(goal.get("text", ""))):
+            cited.setdefault(rule, []).append(goal["goal"])
+    problems = [f"{', '.join(sorted(cited[r]))} cites {r}, which is not in the design's web security baseline table"
+                for r in sorted(cited) if r not in rules]
+    settled = {}
+    for rule, (depth, status) in rules.items():
+        if rule in cited:
+            continue
+        if RULE_SETTLED.search(status):
+            settled[rule] = status
+        elif re.match(r"\s*(?:build|minimal)\b", depth, re.IGNORECASE):
+            problems.append(f"security rule {rule} ({depth}): no goal cites it; add it to a goal's security list and "
+                            "acceptance, or write 'n/a: <reason>' or 'deferred: <trigger>' in its last cell")
+    summary = {"rules": len(rules), "cited": sorted(r for r in rules if r in cited), "not_covered_by_choice": settled}
+    return problems, summary
+
+
 def hours_per_day(people, default):
     table = {}
     for item in people or []:
@@ -432,9 +480,10 @@ def compare(plan_goals, ticket_goals):
         for field in ("total", "hands_on", "review", "owner", "waits"):
             if ticket[field] and source[field] and ticket[field] != source[field]:
                 problems.append(f"{ticket['file']}: {field} {show(ticket[field])} differs from plan {show(source[field])}")
-        if ticket["contracts"] and source["contracts"] and set(ticket["contracts"]) != set(source["contracts"]):
-            problems.append(f"{ticket['file']}: contracts {sorted(ticket['contracts'])} differ from plan "
-                            f"{sorted(source['contracts'])}")
+        for field in ("contracts", "security"):
+            if ticket[field] and source[field] and set(ticket[field]) != set(source[field]):
+                problems.append(f"{ticket['file']}: {field} {sorted(ticket[field])} differ from plan "
+                                f"{sorted(source[field])}")
         if set(ticket["blocked_by"]) != set(source["blocked_by"]):
             problems.append(f"{ticket['file']}: blocked_by {sorted(ticket['blocked_by'])} differs from plan "
                             f"{sorted(source['blocked_by'])}")
@@ -481,6 +530,11 @@ def report(result):
         lines.append(f"Contracts: {len(coverage['cited'])} of {coverage['contracts']} cited by goals")
         for contract, evidence in sorted(coverage["not_covered_by_choice"].items()):
             lines.append(f"  {contract} not covered by a goal: {evidence}")
+    security = result.get("security_coverage")
+    if security:
+        lines.append(f"Security rules: {len(security['cited'])} of {security['rules']} cited by goals")
+        for rule, status in sorted(security["not_covered_by_choice"].items()):
+            lines.append(f"  {rule} not covered by a goal: {status}")
     for problem in result["problems"]:
         lines.append(f"PROBLEM: {problem}")
     return "\n".join(lines)
@@ -491,7 +545,7 @@ def main(argv=None):
     parser.add_argument("--plan", type=Path, help="plan Markdown with a fenced yaml schedule block")
     parser.add_argument("--tickets", type=Path, help="directory of ticket files with front matter")
     parser.add_argument("--design", type=Path,
-                        help="design Markdown whose coverage grid and contracts table are checked")
+                        help="design Markdown whose coverage grid, contracts and security tables are checked")
     parser.add_argument("--phase", default="1", help="phase to check; empty for all goals")
     parser.add_argument("--capacity", type=float,
                         help="phase hours available after the reserve; computed from --days and owners if omitted")
@@ -518,6 +572,7 @@ def main(argv=None):
                 goal["text"] += "\n" + ticket["text"]
                 goal["mentions_only"] = sorted(set(goal["mentions_only"]) | set(ticket["mentions_only"]))
                 goal["contracts"] = sorted(set(goal["contracts"]) | set(ticket["contracts"]))
+                goal["security"] = sorted(set(goal["security"]) | set(ticket["security"]))
         goals = plan_goals or ticket_goals
         if not 0.0 <= args.reserve < 1.0:
             raise InputError("--reserve is a share between 0 and 1, e.g. 0.25")
@@ -530,6 +585,10 @@ def main(argv=None):
             result["problems"] += contract_problems
             if coverage:
                 result["contract_coverage"] = coverage
+            security_problems, security = check_security(args.design, goals)
+            result["problems"] += security_problems
+            if security:
+                result["security_coverage"] = security
     except (InputError, OSError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
