@@ -12,7 +12,7 @@ If introducing a request reference, add it to server success/error models, heade
 
 ## Server implementation order
 
-1. Reuse the app's verified authentication dependency. Keep model access behind it. Check user/session scope before execution; put the same check on any added history or cancellation endpoint. For greenfield offline work, use a test-only dependency override; fail closed in the production route until its real verifier is configured.
+1. Reuse the app's verified authentication dependency (`adk-fastapi-backend` builds it: one fail-closed principal for every `/api` router). Keep model access behind it. Check user/session scope before execution; put the same check on any added history or cancellation endpoint. For greenfield offline work, use a test-only dependency override; fail closed in the production route until its real verifier is configured.
 2. Reuse stable agent configuration. Create loop-bound session/client resources in the web application's lifespan, after worker creation, and close them at shutdown using the pinned SDK's supported lifecycle. In-memory sessions are suitable only when process-local persistence is acceptable.
 3. Put the overall timeout outside conversation-lock acquisition and agent execution. Key admission by trusted user/tenant plus conversation. A process-local `asyncio.Lock` does not coordinate replicas. Preserve cancellation as control flow, and own the iterator until consumption and closure finish.
 4. Construct the model's new user content from the validated request. Do not replay browser-supplied history as authoritative stored history when the server already owns the session.

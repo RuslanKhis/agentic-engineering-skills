@@ -1,6 +1,6 @@
 ---
 name: adk-frontend-integration
-description: Implement, adapt, review or select a web interface for a Google ADK agent using a custom JSON API or AG-UI with CopilotKit, including gateways to managed Agent Runtime. Use for agent-to-browser contracts, session ownership, streaming text and tool displays, and interface widgets that tools render beside the reply (A2UI). Do not activate for ordinary React styling, agent prompting alone (adk-agent-evaluation owns decision quality), general cloud provisioning or non-ADK chat applications.
+description: Implement, adapt, review or select a web interface for a Google ADK agent using a custom JSON API or AG-UI with CopilotKit, including gateways to managed Agent Runtime. Use for agent-to-browser contracts, session ownership, streaming text and tool displays, agent UI states (tool timeline, approvals, errors after a partial answer), setting up an ADK interface's design system from the house DESIGN.md with shadcn, and interface widgets that tools render beside the reply (A2UI). Do not activate for isolated styling tweaks to an existing page, agent prompting alone (adk-agent-evaluation owns decision quality), general cloud provisioning or non-ADK chat applications.
 license: MIT
 metadata:
   author: Ruslan Khissamiyev
@@ -37,6 +37,8 @@ Choose transport and execution location independently.
 | Connect, provision, recover or clean up a managed test deployment | Add [deployment-runbook.md](references/deployment-runbook.md) |
 | Production identity, several replicas, mutating tools, replay or approval continuation | Add the relevant section of [production.md](references/production.md) |
 | Missing/duplicate output, failed connections, cancellation or latency investigation | Use [troubleshooting.md](references/troubleshooting.md) to select a probe and regression |
+| Showing tool steps, approvals, reasoning, citations or a failed turn in the conversation UI | [agent-ui-states.md](references/agent-ui-states.md) |
+| A new interface, its look, or a ticket naming a design system: start from the house theme [assets/design/DESIGN.md](assets/design/DESIGN.md), copied to `docs/design/DESIGN.md`, never shadcn's default theme | [frontend-quality.md](references/frontend-quality.md) for the gates and `scripts/check_theme.py` |
 | A recommendation or review rather than an implementation | Apply the same decision criteria; report a concrete design or findings without creating an app |
 
 An existing ADK API service can sit behind the JSON gateway. A plain JSON response is collected, even if the upstream emits events; it can still render a validated completed tool result as a card. Choose AG-UI for incremental event semantics. AG-UI does not automatically add durable replay, tenant isolation or human approval.
