@@ -50,7 +50,9 @@ Contract consequences:
 - Progress text leaks intermediate reasoning to the host; if the agent
   handles private data, set `include_contents` and sub-agent structure so
   that only the final answer is sendable (`adk-agent-security`).
-- MCP SDK 2.x changes the server class; the 2.11.0 source routes the import
+- MCP SDK 2.x renames the server class: `FastMCP` is `MCPServer` and the
+  old import path is gone rather than deprecated (python-sdk v2
+  `docs/whats-new.md`, read 2026-10-22); the 2.11.0 source routes the import
   through a `dependencies._mcp` shim while the public return type stays
   `FastMCP` in the signature. Verify on the installed SDK before promising a
   type to callers.
@@ -100,4 +102,46 @@ server declares what it requires.
   entry point production uses, and asserts the content blocks and the
   per-connection session behaviour you promise.
 - The published description, name and schema are committed next to the
-  server so a consumer's manifest diff has something to compare with.
+  server so a consumer's manifest diff has something to compare with. The
+  helper lives in this skill, not in the project: copy
+  `scripts/mcp_tool_inventory.py` into the project's tooling directory with
+  its header intact (MIT), or run it from a pinned checkout of this
+  collection in CI, and record which.
+- Bind the address explicitly. `MCPServer.run(transport, **kwargs)` on `mcp`
+  2.3.0 forwards keyword arguments to the transport runner, and
+  `run_streamable_http_async(*, host="127.0.0.1", port=8000,
+  streamable_http_path="/mcp", json_response=False, stateless_http=False,
+  event_store=None, retry_interval=None, max_request_body_size=4194304,
+  session_idle_timeout=1800, max_sessions=10000, transport_security=None)` is
+  what receives them (signature read in the installed SDK on 2026-10-22), so
+  `to_mcp_server(agent).run(transport="streamable-http", host="127.0.0.1",
+  port=int(os.environ["PORT"]))` is the whole bind; there is no
+  `settings.host` to set on 2.x. Observed on that SDK with google-adk 2.12.0:
+  the server negotiates `initialize` with a 2025-06-18 client and answers
+  2026-07-28 stateless requests on the same `/mcp` path, and an unknown tool
+  name returns a result with `isError: true` rather than a JSON-RPC error;
+  stdio framing was not exercised in that spike.
+- Decide which specification revision the server speaks and write it down
+  with the `mcp` major version. On 2026-07-28 (same repository, `docs/specification/2026-07-28/`, read 2026-10-22) there is no
+  `initialize` handshake and no `Mcp-Session-Id`: every request carries its
+  protocol version and client capabilities in `_meta`, servers must implement
+  `server/discover`, list results carry `ttlMs` and `cacheScope`, every result
+  carries `resultType` (`complete` or `input_required`), server-initiated
+  sampling and elicitation give way to multi round-trip `input_required`
+  results, SSE resumability is gone (a broken stream loses the request and the
+  client re-issues it with a new id), and Roots, Sampling, Logging and the
+  HTTP+SSE transport are deprecated. The SDK implements the wire changes; two
+  of them change your design. First, cross-call state travels as "explicit,
+  server-minted handles passed as ordinary tool arguments", so a handle the
+  model sees is data: make it unguessable, bind it to the caller's identity and
+  expiry, and never let it select another user's session. Second, servers
+  "SHOULD return tools from `tools/list` in a deterministic order" for client
+  caching and prompt-cache hits, so sort the exposed tools and keep names
+  stable across deploys; the inventory manifest diff enforces that.
+- Run the official conformance suite against the local instance, pinned, and
+  commit its baseline (the procedure and the observed results are in
+  [validation](validation.md#6-protocol-conformance-local-pinned)):
+
+  ```bash
+  npx -y @modelcontextprotocol/conformance@0.2.0-alpha.12 server --url http://127.0.0.1:$PORT/mcp --requirements 2026-07-28 --expected-failures conformance-baseline.yml
+  ```

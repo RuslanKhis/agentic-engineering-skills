@@ -45,7 +45,7 @@ State a short plan naming the affected boundary and tests before broad edits. Re
 
 Put retry policy in trusted code and make it provider-specific. Distinguish internal attempts from a new tool invocation. A bounded tool call is not a bounded model conversation. Preserve caller cancellation and inspect the actual deadline object's state before attributing a timeout.
 
-For a write, preserve the same authorised logical operation, canonical payload and provider replay identity across permitted retries. Reconcile an ambiguous outcome; a later rejected attempt does not establish that earlier attempts had no effect. Durable recovery, exact money and business authorisation are production design requirements, not features supplied by this skill or by a mock test.
+For a write, preserve the same authorised logical operation, canonical payload and provider replay identity across permitted retries; a workflow node that re-runs on resume (ADK 2.9.0 and later) is a retry in this sense, see [writes and confirmation](references/writes-and-confirmation.md). Reconcile an ambiguous outcome; a later rejected attempt does not establish that earlier attempts had no effect. Durable recovery, exact money and business authorisation are production design requirements, not features supplied by this skill or by a mock test.
 
 For ADK, test the real tool wrapper and chosen client/session path. Missing or rejected confirmation must not run the side effect. Rejection should be explained as cancellation with no attempt, separately from provider uncertainty. Confirmation does not authenticate the caller; prompt instructions do not deterministically block another approved tool call.
 

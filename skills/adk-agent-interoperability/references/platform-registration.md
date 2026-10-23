@@ -45,7 +45,13 @@ flags a missing top-level `url` on a 1.0-shaped card. Gemini Enterprise
 "supports the A2A v0.3 streaming mechanism"; a 1.0.0 or later server must
 offer the compatibility layer (`a2a.compat.v0_3` in the Python SDK; ADK's
 `attach_a2a_routes_to_app(enable_v0_3_compat=True)` is the default on the
-1.x path, source-verified). Registration uses the REST methods
+1.x path, source-verified). Google's long-horizon-harness recipe runs exactly
+that configuration: `a2a-sdk[http-server,sqlite]>=1.0,<2` with
+`google-adk>=2.8.0,<3`, one `/a2a` endpoint serving the web UI on the native
+1.0 wire and Gemini Enterprise on the v0.3 interface, with one converter
+reshaping streams for both clients (google/adk-recipes be63596,
+`core/python/long-horizon-harness/AGENTS.md`, "Pinned versions" and the A2A
+row, read 2026-10-22; vendor sample). Registration uses the REST methods
 `agents.create`, `agents.patch` and `agents.delete` (Agents CLI calls
 `v1alpha/.../engines/{engine}/assistants/default_assistant/agents` with
 `a2aAgentDefinition.jsonAgentCard`, or `adkAgentDefinition` for a native
@@ -145,6 +151,18 @@ people describe. Treat as community report.
   `user_identity`, `api_key`, `manual_token` and `from_adk_auth_config`, plus
   `secure_params` (toolbox-adk ≥ 1.4.0). Bound parameters never reach the
   model. Verify the installed `toolbox-adk` version before using these names.
+  Re-read 2026-10-22 in the Toolbox Python ADK SDK page (mcp-toolbox v1.14.0,
+  `docs/en/documentation/connect-to/toolbox-sdks/python-sdk/adk/index.md`):
+  the strategies are `workload_identity(target_audience=)`, `user_identity`
+  (the ADK-native three-legged flow; the `openid` scope is required for a
+  valid ID token), `api_key(header_name=)`, `manual_token`,
+  `manual_credentials`, `toolbox_identity` (no auth, local only) and
+  `from_adk_auth_config` / `from_adk_credentials`; the default protocol is
+  MCP 2026-07-28 with `Protocol.MCP_v2025xxxx` values to pin an older
+  revision. On adk-python main `ToolboxToolset` takes
+  `credentials: CredentialConfig | None` (source-verified, `tools/toolbox_toolset.py`,
+  ed76f94).
+
 - Application Integration on Agent Runtime: the research notes that the
   execution role must be `roles/integrations.integrationEditor` rather than
   `integrationInvoker` to avoid 403s, that `ExecuteConnection` needs the

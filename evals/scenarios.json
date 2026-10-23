@@ -566,7 +566,7 @@
       "expected_primary": "adk-release-engineering",
       "assertions": [
         "Runs the release inventory, pins the judge model explicitly because the 2.8.0 default retires, and records every model, prompt hash and eval set in a release manifest.",
-        "Designs the gate with pytest and AgentEvaluator or conformance replay as the failing step, explaining that adk eval returns exit code 0 on failures, with repeats, a cost ceiling and NOT RUN treated as failure to produce evidence.",
+        "Designs the gate with pytest and AgentEvaluator or conformance replay as the failing step, explaining that adk eval returns exit code 0 on failures on every release through 2.12.0 and that the exit code is checked on the pinned version, with repeats, a cost ceiling and NOT RUN treated as failure to produce evidence.",
         "Plans the migration as a side-by-side comparison on the frozen development set with a holdout run once, handing the measurement to adk-agent-evaluation and the thinking and temperature settings to adk-model-and-output-contracts.",
         "Describes the Cloud Run tagged-revision canary and the joint rollback bundle without executing any deployment."
       ]
@@ -862,7 +862,354 @@
         "Writes scripted-model Runner tests of effects (saved, restart persistence, cross-user denial, forgetting) and states that these are application checks, not the behavioural unit tests the workflow skill discourages.",
         "Does not start the workflow's spec phase, scaffold enhance, or a live evaluation because those skills are installed; names the live evaluation as separate work with its Agents CLI dataset format."
       ]
+    },
+    {
+      "id": "release-post-launch-quality-loop-aqua",
+      "prompt": "Carry out ticket G07: watch production quality after launch and feed recurring defects back into the eval set. The ticket names google/adk-recipes:agents-cli-aqua as a supporting skill.",
+      "available_skills": ["adk-engineer", "adk-release-engineering", "adk-agent-evaluation", "adk-agent-observability"],
+      "context": "An Agents CLI project on google-adk>=2.12.0 writing BigQuery Agent Analytics rows, with a production design (contracts for a CI gate and weekly production quality) and a release manifest. The agents-cli-aqua skill is not installed; no network or credentials.",
+      "expected_primary": "adk-release-engineering",
+      "assertions": [
+        "Does not build a scheduled evaluator, dedup store or dashboard of its own; names Google's Ambient Quality Agent extension as the operator, pinned by its release tag, and shows how to get its skill.",
+        "Writes into the release record which insight statuses on which slice block a promotion and which open a case, instead of letting an insight gate implicitly.",
+        "Records a week with no investigation run as missing evidence (NOT RUN), never as a clean week, and says so in the Evidence section.",
+        "Routes a found defect into a redacted regression case through the observability converter and keeps the deterministic CI gate primary; all cloud steps recorded as not run."
+      ]
+    },
+    {
+      "id": "memory-write-back-loop-from-horizon",
+      "prompt": "PreloadMemoryTool recalls but nothing ever writes to memory. Design and implement the write-back side: what is saved, when, under whose consent, how it is corrected and forgotten, and what happens when the memory service is down. Engineers share sites; one engineer's preference must never surface for another. Offline tests only.",
+      "available_skills": ["adk-engineer", "adk-memory-architecture", "adk-agent-evaluation", "optimise-adk-on-google-cloud"],
+      "context": "google-adk==2.8.0 project with Memory Bank in deploy and InMemoryMemoryService in tests, a DatabaseSessionService, two tools and no consent or erasure code. No network or credentials.",
+      "expected_primary": "adk-memory-architecture",
+      "assertions": [
+        "Chooses an after_agent_callback write-back scoped by the trusted user and site, throttled, and names the Horizon recipe's loop (throttled flush, background judge fork, pre-compaction flush, nightly consolidation) as a pattern to lift rather than copying its code.",
+        "Adds what the recipe lacks: consent per topic, correction and erasure by label or revision, and a test that a memory-service failure is observable rather than an empty result.",
+        "Treats written memory as an untrusted-input boundary (content scan before write) and keeps exact user settings in a profile record, not semantic memory.",
+        "Writes scripted-model Runner tests for cross-user denial and forgetting, reported as not run without the SDK, and does not change the google-adk pin."
+      ]
+    },
+    {
+      "id": "frontend-tool-widgets-staged-emission",
+      "prompt": "Our shopping agent's A2UI widgets misbehave: two tools that stage the same widget id show the cards twice, a refresh callback that re-renders after a preference change reaches the browser as nothing, and 'show me those again' re-runs the search. Fix the widget pipeline; keep the tools' names and result shapes; offline tests only.",
+      "available_skills": ["adk-engineer", "adk-frontend-integration", "adk-tool-interface-design", "adk-workflow-design"],
+      "context": "An ADK agent whose three tools each call render_ui_widget inline and an after_agent_callback that renders without writing state. google-adk not installed; no network.",
+      "expected_primary": "adk-frontend-integration",
+      "assertions": [
+        "Moves rendering out of the tools into one after_agent_callback that emits staged payloads in a declared order, with a test that fails on any second render call site.",
+        "Explains the two ADK facts behind the bugs: the duplicate-id check is per call context, and a callback with no content and no state delta produces no event, so the per-widget emitted flag is written as the state delta.",
+        "Answers 'show again' from the staged payload without recomputation and suppresses a byte-identical re-render.",
+        "Keeps tool names and result shapes, writes Runner tests reported as not run without the SDK, and does not install or upgrade packages."
+      ]
+    },
+    {
+      "id": "sql-toolbox-read-only-and-secure-tenant",
+      "prompt": "Carry out ticket G03: tenant-scoped revenue answers through MCP Toolbox, with the warehouse read-only at the source and the tenant id never chosen by the model.",
+      "available_skills": ["adk-engineer", "adk-sql-agent-engineering", "adk-tool-auth-and-secrets", "adk-agent-interoperability"],
+      "context": "An ADK agent using ToolboxToolset against a tools.yaml with a free-form bigquery-execute-sql tool, a bigquery-sql template whose table name is a templateParameter, a tenant_id ordinary parameter the instruction tells the model to read from the user's message, and a server that decodes an IAP assertion without verifying it. No network; toolbox-adk and google-adk not installed.",
+      "expected_primary": "adk-sql-agent-engineering",
+      "assertions": [
+        "Sets readOnly: true on the BigQuery source (writeMode blocked, allowedDatasets) and explains that the lock is enforced by Toolbox's dry-run statement-type check, not by the prompt or a SELECT string check.",
+        "Removes or justifies the free-form bigquery-execute-sql tool, citing its page's developer-assistant note, and replaces the templateParameter table name with a basic parameter or an allowedValues-bound one.",
+        "Binds tenant_id as a secure parameter in code from the verified assertion, strips it from the model-facing declaration, and adds a test that a model-supplied tenant_id returns a tool error.",
+        "Adds the CTE-DELETE, writing-UDF and COMMIT-chaining fixtures as fail-closed negative cases against the Toolbox double, reports the live Toolbox steps as not run, and hands the assertion verification to adk-tool-auth-and-secrets."
+      ]
+    },
+    {
+      "id": "release-bigquery-analytics-score-gate-and-drift",
+      "prompt": "Production sessions land in BigQuery agent_events. Add a nightly job that scores yesterday's sessions with Google's BigQuery Agent Analytics SDK and blocks the next promotion when they fail, say which exit code means what and what happens when BigQuery is unreachable, and a monthly report of how much real traffic our golden questions still cover and which cases have saturated. Offline only.",
+      "available_skills": ["adk-engineer", "adk-release-engineering", "adk-agent-observability", "adk-agent-evaluation"],
+      "context": "An ADK 2.12 agent with the BigQuery Agent Analytics plugin, a golden_questions table of 40 reviewed questions, a release record with pins, and a CI workflow that runs unit tests only. No BigQuery access, no SDK installed.",
+      "expected_primary": "adk-release-engineering",
+      "assertions": [
+        "Pins bigquery-agent-analytics at 0.6.1 or later, uses bq-agent-sdk evaluate --exit-code as a tier-3 gate over stored sessions, and maps exit 1 to block and exit 2 to NOT RUN rather than a pass.",
+        "Keeps the deterministic pull-request gate primary and treats the judge-scored nightly as a comparison against the previous night, with the judge pinned.",
+        "Reports the SDK's cost-per-session and token-efficiency numbers with their stated caveats (no thought tokens in cost; cache metric passes on missing telemetry unless told to fail) and does not present them as invoice reconciliation.",
+        "Writes the drift report from drift_detection over the golden table and the saturation flag from the suite's health check as triggers for the retire-or-harden decision, with every live command recorded as not run."
+      ]
+    },
+    {
+      "id": "security-code-execution-environment-selection",
+      "prompt": "Security review of the code execution path: the agent runs model-written Python on customer uploads that must not leave the EU project. Tell us which executor or environment to use and why, fix the agent to use it, and write the offline tests for the isolation, residency and egress contracts. Keep google-adk 2.12.",
+      "available_skills": ["adk-engineer", "adk-agent-security", "deploy-adk-on-google-cloud", "adk-tool-interface-design"],
+      "context": "An ADK 2.12 agent on Cloud Run with UnsafeLocalCodeExecutor, an EnvironmentToolset over a Daytona environment, a tool that downloads uploads and a tool that emails anyone. No cloud calls, no SDK installed.",
+      "expected_primary": "adk-agent-security",
+      "assertions": [
+        "Replaces UnsafeLocalCodeExecutor and the Daytona environment with a sandbox that keeps the data in the project (the Cloud Run sandbox executor on the same container, the Agent Engine sandbox environment or GKE Agent Sandbox), and says why Daytona and E2B are out: the code runs outside Google Cloud and Daytona's public repository is unmaintained.",
+        "Distinguishes a code executor (one code string) from the environment toolset (execute, read, write, edit tools over a workspace) and tiers the environment as a write tool with a capability gate.",
+        "Writes scripted-model Runner tests in which code that reaches 169.254.169.254 or an egress address fails at the boundary and the email tool refuses an address taken from file contents, reported as not run without the SDK.",
+        "Keeps the pin, records the sandbox's residency and egress claims as planned live verification, and does not treat an instruction sentence as the control."
+      ]
+    },
+    {
+      "id": "interoperability-expose-mcp-server-with-conformance-baseline",
+      "prompt": "Expose our ADK research agent as an MCP server for the platform team's hosts, and give us a CI check that proves the server speaks the protocol correctly and tells us when the suite or the SDK moves.",
+      "available_skills": ["adk-agent-interoperability", "adk-release-engineering", "adk-agent-security"],
+      "context": "An ADK 2.12 project pinning mcp 2.x, one LlmAgent with two tools, a scripted model available for tests, Node 22 on the CI runner, no cloud credentials.",
+      "expected_primary": "adk-agent-interoperability",
+      "assertions": [
+        "Serves the agent with to_mcp_server over streamable HTTP, commits the tool manifest from the inventory helper, and keeps the tool's description a capability statement without the instruction.",
+        "Adds the pinned conformance command with --requirements for the revision the server speaks and an expected-failures baseline whose entries name the fixture-dependent scenarios or checks with reasons, run with a scripted model so no credentials are needed.",
+        "Explains that a baseline entry that starts passing makes the run exit 1, so the baseline shrinks on purpose, and places the check in the pull-request tier.",
+        "Does not widen the server to fixture tools, resources or prompts to make the suite green, and records the approval gate for MCP callers as not satisfiable by an MCP host."
+      ]
+    },
+    {
+      "id": "security-refund-agent-build-time-controls-vs-screening",
+      "prompt": "Harden our refund agent before the launch review. Leadership wants Model Armor and the new semantic policies turned on; the reviewer wants proof that refunds cannot exceed the policy even if a prompt gets through. Tell us what to build and what to prove.",
+      "available_skills": [
+        "adk-agent-security",
+        "adk-operational-guardrails",
+        "safe-api-tool-calls",
+        "adk-agent-interoperability"
+      ],
+      "context": "An ADK 2.12 refund agent behind Agent Gateway, a refund tool that posts to the payments API, a per-refund limit in the instruction, no aggregate bound, screening available but not yet configured. No network or credentials in the session.",
+      "expected_primary": "adk-agent-security",
+      "assertions": [
+        "Treats Model Armor and Semantic Governance Policies as a screening layer with its Preview status and the vendor's own accuracy caveat, and keeps the per-refund and aggregate bounds in code that holds with screening off.",
+        "Adds an aggregate bound keyed on the business object in the operation record and shows why eight small refunds against one order must trip it (smurfing), rather than relying on a per-call limit alone.",
+        "Signs or otherwise integrity-protects the write so an edited amount fails the ledger audit, beside the idempotency key, and names the test for it.",
+        "Offers a deterministic policy service as an A2A peer only when a rule must not depend on a model, and does not present the blueprint's simulated anomaly detection as a product."
+      ]
+    },
+    {
+      "id": "observability-semconv-drift-and-evaluation-events",
+      "prompt": "Our traces go to an OTLP backend. Make sure our dashboards follow the current GenAI semantic conventions, give us a check that tells us when ADK's telemetry drifts from them, and get our nightly judge scores onto the traces instead of only into BigQuery.",
+      "available_skills": [
+        "adk-agent-observability",
+        "adk-agent-evaluation",
+        "adk-release-engineering"
+      ],
+      "context": "An ADK 2.11 agent exporting OTLP to a third-party backend, dashboards keyed on gen_ai.system, a nightly judge writing scores to BigQuery. No network or credentials in the session.",
+      "expected_primary": "adk-agent-observability",
+      "assertions": [
+        "Rekeys the dashboards on gen_ai.provider.name, gen_ai.operation.name and gen_ai.agent.name and keeps the gcp.vertex.agent.* keys as ADK-specific joins, explaining that gen_ai.system was removed from the conventions.",
+        "Plans the conventions' reference scenario and Weaver live-check as the drift check, diffing against the upstream expected-violation list for google-adk, and records that the scenario is pinned to 2.11.0 and patches ADK's native tool spans.",
+        "Emits judge scores as gen_ai.evaluation.result events parented to the evaluated span with the required and recommended attributes and the judge identity, reported as not run without the SDK.",
+        "Labels every convention as Development status and does not promise the backend will keep the attribute names."
+      ]
+    },
+    {
+      "id": "interoperability-consume-enterprise-mcp-server-registration-and-sso",
+      "prompt": "Connect our ADK agent to the vendor's remote MCP server. Their authorization server supports client ID metadata documents and our IdP offers enterprise-managed authorization; security wants no dynamic client registration and no per-user consent screens. Tell us how to register, how to bind the credentials, and what the tool contract must survive.",
+      "available_skills": [
+        "adk-agent-interoperability",
+        "adk-tool-auth-and-secrets",
+        "adk-tool-interface-design"
+      ],
+      "context": "An ADK 2.12 agent with mcp 2.x pinned, a remote streamable-HTTP MCP server that speaks revision 2026-07-28, an enterprise IdP, no network or credentials in the session.",
+      "expected_primary": "adk-agent-interoperability",
+      "assertions": [
+        "Registers through a hosted Client ID Metadata Document (HTTPS URL with a path, client_id equal to the URL, client_name and redirect_uris present) rather than dynamic registration, and says why DCR is only a fallback.",
+        "Keys the stored credentials by the authorization server's issuer, validates a present iss in the authorization response against it, and places both in the credential index the tool-auth skill keeps.",
+        "Uses Enterprise-Managed Authorization (token exchange at the IdP for an identity-assertion grant, presented as a JWT bearer grant to the resource authorization server) for signed-in users, and names the client-credentials profile as a draft for headless runs.",
+        "Records the mcp major version and the 2026-07-28 revision in the ticket, treats any server-minted state handle as data bound to the caller, keeps tool names inside the specification's character and length rules, and notes that schema keywords ADK's conversion drops must be checked in the recorded-definition test."
+      ]
+    },
+    {
+      "id": "evaluation-repeated-trials-pass-hat-k-and-end-state",
+      "prompt": "Our booking agent passes the eval set on Monday and fails on Tuesday with no code change. Give us a reliability number we can gate on and a way to grade bookings that doesn't break every time the model picks a different but correct order of calls.",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-release-engineering",
+        "adk-agent-observability"
+      ],
+      "context": "An ADK 2.12 agent with a scripted-model test harness and an in-memory booking backend fixture, an eval set of 40 cases, a nightly CI job, no model access in the session.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Runs each case several times and reports the unbiased pass^k (C(c,k)/C(n,k)), refuses k above the trial count, keeps infrastructure failures out of the denominator but in the report, and defines success from the whole case, not one metric.",
+        "Grades bookings by replaying the case's reference trajectory on a fresh backend copy and comparing end states, so a different correct order passes and an extra mutation fails, instead of loosening to ANY_ORDER.",
+        "Scores a run that stopped for any reason other than the agent or user finishing as zero, multiplies component results, and treats an undefined criterion as not evaluated.",
+        "Pins the judge and model ids in the gate's manifest and states that a judge change starts a new baseline; model-dependent runs reported as not run."
+      ]
+    },
+    {
+      "id": "evaluation-judge-agreement-and-harness-bridge",
+      "prompt": "We have two LLM judges and a set of 60 human-labelled traces; the judges disagree more than we expected. Tell us how to measure agreement properly, and whether we can run our ADK agent under Inspect to reuse its repeated-trial reducers without rewriting the agent.",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-release-engineering",
+        "adk-agent-observability"
+      ],
+      "context": "An ADK 2.12 agent, two judge prompts on gemini models, 60 labelled traces with ordinal 1-5 ratings, a scripted-model harness, no model access in the session.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Reports Krippendorff's alpha at the ordinal level with the level recorded, explains what 1, 0 and negative values mean, and measures each judge against the human labels as well as against each other.",
+        "States that the ADK agent can run under Inspect through agent_bridge with Gemini(model='inspect') and a placeholder API key, that streaming mode cannot be bridged, and that this was proven only without tool round trips under a real model.",
+        "Treats a NaN or missing reliability figure as not run rather than passed, and keeps ADK's own evaluators and scripted-model Runner tests as the primary evidence.",
+        "Pins judge ids and rubric versions, and reports model-dependent runs as not run."
+      ]
+    },
+    {
+      "id": "release-promptfoo-gate-exit-codes-and-trajectory-assertions",
+      "prompt": "The platform team standardised on Promptfoo for agent evals. Wire our ADK agent into it so the nightly job asserts on tool trajectories and native spans, and tell us exactly how the job should read Promptfoo's result.",
+      "available_skills": [
+        "adk-release-engineering",
+        "adk-agent-evaluation",
+        "adk-agent-observability"
+      ],
+      "context": "An ADK 2.12 agent, Node and Python on the runner, a model key available only in the nightly job, no model access in the session.",
+      "expected_primary": "adk-release-engineering",
+      "assertions": [
+        "Wraps the agent as an in-process Python provider that calls runner.run_async, returns session state and artifacts for deterministic assertions, and uses trajectory:tool-used, tool-args-match and tool-sequence plus trace-span-count on the native spans.",
+        "Maps exit code 100 to block, 0 to pass and 1 to NOT RUN, names PROMPTFOO_PASS_RATE_THRESHOLD as a placeholder until a baseline campaign sets it, and places the job in the model-dependent tier.",
+        "Treats repeat with repeat-min-pass as an observed at-least-m-of-n rule recorded beside the figure, not as an estimator, and keeps results unshared unless a share key is configured on purpose.",
+        "Keeps the scripted-model Runner tests and adk eval as the primary evidence and labels the Promptfoo guide as vendor guidance to confirm on the installed version."
+      ]
+    },
+    {
+      "id": "security-adversarial-suite-ported-goal-classes",
+      "prompt": "Extend our injection test suite so it covers the attack classes the public benchmarks use, without paying for a live red-team run yet, and tell us what a live run would add.",
+      "available_skills": [
+        "adk-agent-security",
+        "adk-agent-evaluation",
+        "adk-operational-guardrails"
+      ],
+      "context": "An ADK 2.12 workspace assistant with mail, calendar, drive and payment tools, a scripted-model Runner harness, no model access in the session.",
+      "expected_primary": "adk-agent-security",
+      "assertions": [
+        "Adds cases in the asset's shape for the ported goal classes (split transfer, bulk post-out, code forwarding with trace deletion, steered booking) with invented fixtures, the attribution in the origin field, and end-state assertions through fakes rather than judges.",
+        "Keeps the forbidden effects at the gates (allow-list, confirmation, aggregate bound) and asserts the fakes recorded nothing, not that the model refused.",
+        "Describes the live route as an adapter wrapping the Runner as a pipeline element reporting attack success rate, as approved paid work with a cost ceiling and version-conditional because the benchmark's API may change.",
+        "Imports no benchmark data and reports the Runner tests as not run without the SDK."
+      ]
+    },
+    {
+      "id": "interoperability-expose-a2a-with-tck-acceptance",
+      "prompt": "Expose our ADK triage agent over A2A for a partner team and write the acceptance checks for the card, versioning and authentication before we register it anywhere.",
+      "available_skills": [
+        "adk-agent-interoperability",
+        "adk-tool-auth-and-secrets",
+        "adk-release-engineering"
+      ],
+      "context": "An ADK 2.12 project with a2a-sdk 1.x pinned, one root agent, to_a2a available, a partner that will call with an OAuth client-credentials token, no cloud credentials and no network in the session.",
+      "expected_primary": "adk-agent-interoperability",
+      "assertions": [
+        "Writes the card with securitySchemes and protocolVersion, runs agent_card_check.py on it, and lists signing, caching headers and extended-card authentication as manual checks the helper does not cover.",
+        "Names the scoped TCK command against a local to_a2a instance as a planned verification with the requirement ids it proves and the ones deferred (authentication, scripted core operations), never pointing the TCK at Agent Runtime or a registered endpoint.",
+        "States that the TCK sends no authentication header, so AUTH-SERVER-002 is verified by the project's own test, and records the run's exit code and reports as the evidence to attach.",
+        "Keeps the pins, adds the origin-pinning rule for any raw SDK client that calls the peer, and leaves registration as separate, approved work."
+      ]
+    },
+    {
+      "id": "frontend-agui-approval-contract-declared",
+      "prompt": "Our CopilotKit frontend asks the user to approve refunds, but after we upgraded the JavaScript client the next turn is refused until the approval is answered some other way. Fix the approval flow and tell us which contract we are on.",
+      "available_skills": [
+        "adk-frontend-integration",
+        "adk-operational-guardrails",
+        "adk-agent-security"
+      ],
+      "context": "An ADK 2.12 agent behind ag-ui-adk with emit_interrupt_outcome left at its default, a CopilotKit app on @ag-ui/client 1.0 that answers approvals with useHumanInTheLoop tool messages, require_confirmation on the refund tool. No network in the session.",
+      "expected_primary": "adk-frontend-integration",
+      "assertions": [
+        "Names the two AG-UI approval contracts, diagnoses the mismatch between a 1.0 client that expects interrupt outcomes answered by resume and a middleware answering with tool messages, and makes the ticket declare one contract.",
+        "Either keeps the flag off and the tool-message answer, or turns emit_interrupt_outcome on and moves the client to resume, and writes the test that a tool-message answer under the flag returns INTERRUPT_RESUME_REQUIRED.",
+        "Uses ADKAgent.from_app with resumability for the paused position rather than the deprecated fire-and-forget constructor path, and strips client-supplied app: and user: state keys.",
+        "Keeps the backend confirmation gate as the control (adk-operational-guardrails) and treats the UI decision as permission, not completion; SDK tests reported as not run."
+      ]
+    },
+    {
+      "id": "security-adopt-third-party-mcp-server-with-scan",
+      "prompt": "Platform wants every third-party MCP server scanned with Snyk Agent Scan before we adopt it. Add the scan to our adoption checklist and CI without weakening what we already do.",
+      "available_skills": [
+        "adk-agent-security",
+        "adk-agent-interoperability",
+        "adk-release-engineering"
+      ],
+      "context": "An ADK 2.12 agent adopting a vendor's stdio MCP server, CI with containers, a Snyk token in CI secrets, no network in the session.",
+      "expected_primary": "adk-agent-security",
+      "assertions": [
+        "Keeps the allow-list, recorded definitions and hash pin as the control and adds the scan as pinned evidence (uvx with an exact version, --ci, exit code read, fields not parsed).",
+        "Runs the scan only in an ephemeral container with --dangerously-run-mcp-servers after reviewing the server command, and never against a configuration holding production credentials.",
+        "States what the scan uploads to Snyk (configurations, tool names and descriptions, skill content, secrets redacted) under Snyk's terms, offers inspect as the local no-upload mode, and gets the data-handling decision from the owner.",
+        "Records that the scan was documented, not run, in the session and that its output schema is experimental."
+      ]
+    },
+    {
+      "id": "security-review-with-atlas-and-cosai-ids",
+      "prompt": "Our security team tracks findings against MITRE ATLAS and the CoSAI Risk Map, not OWASP. Review the agent and report findings in their vocabulary without losing the enforcement points.",
+      "available_skills": [
+        "adk-agent-security",
+        "adk-operational-guardrails",
+        "adk-memory-architecture"
+      ],
+      "context": "An ADK 2.12 agent with mail, drive and an unfiltered MCP server, RAG over a shared corpus, no budget on turns. No network in the session.",
+      "expected_primary": "adk-agent-security",
+      "assertions": [
+        "Reports each finding with its OWASP id and the ATLAS technique id and CoSAI risk id beside it (for example tool poisoning as AML.T0110 and riskToolSourceProvenance; the unbounded loop as AML.T0034.002, riskRunawayAgentToolLoops and controlAgentExecutionBounds), cited by id with links rather than copied tables.",
+        "Keeps the enforcement point and observable check for every finding; identifiers never replace the gate.",
+        "Takes ATLAS ids from ATLAS 2026.09 rather than the Risk Map's older mappings and says why.",
+        "Routes the runtime bound to the guardrails skill and the corpus poisoning to the memory skill, and reports the Runner tests as not run."
+      ]
+    },
+    {
+      "id": "workflow-durable-refund-resume-or-engine",
+      "prompt": "Our refund workflow pauses for a manager's approval that can take days, and a worker restart last week re-issued a refund. Decide whether ADK resume is enough or we need a durable execution engine, and write the test that proves the choice.",
+      "available_skills": [
+        "adk-workflow-design",
+        "safe-api-tool-calls",
+        "adk-system-designer",
+        "adk-operational-guardrails"
+      ],
+      "context": "An ADK 2.12 workflow with a refund tool against a payments API that supports idempotency keys, Postgres available, no Temporal cluster yet, no network in the session.",
+      "expected_primary": "adk-workflow-design",
+      "assertions": [
+        "States that ADK resume runs tools at least once, needs a caller to re-invoke and is unsupported from the web UI and CLI, so a days-long wait with no caller points at an engine, and compares Temporal and DBOS by what the project has (Postgres favours DBOS; Temporal's MCP toolset fixes mcp 1.x; secrets must stay out of Temporal history).",
+        "Keeps the idempotency key and reconciliation inside the durable step because an engine checkpoints results and a crash between the provider's acceptance and the checkpoint re-executes the step.",
+        "Writes the kill-after-the-write test in both positions (after the tool returns; after the provider double accepted) and the negative control on plain resume, with the engine's replay test added to the suite and reported as not run without the SDKs.",
+        "Pins the engine version, records the decision and its evidence in the design, and treats the approval gate as code."
+      ]
+    },
+    {
+      "id": "guardrails-unanswered-approval-and-screening-placement",
+      "prompt": "Last week a refund approval request sat unanswered over the weekend and Monday's first message executed it. Also, our output screen runs in parallel and sometimes the tool has already fired. Fix both.",
+      "available_skills": [
+        "adk-operational-guardrails",
+        "adk-agent-security",
+        "adk-frontend-integration"
+      ],
+      "context": "An ADK 2.12 agent with require_confirmation on the refund tool, a Model Armor output screen configured to run beside the model call, no network in the session.",
+      "expected_primary": "adk-operational-guardrails",
+      "assertions": [
+        "Rejects an approval request that is still unanswered when the next invocation starts, records the rejection, and makes a late answer start a new request rather than authorise the old call; tests it with a scripted model.",
+        "Makes the approval rule fail closed on arguments it cannot read (missing, malformed, non-object, NaN) by routing to manual review.",
+        "Moves the screen that must prevent an effect to a blocking position before the agent and keeps a rejected output's completed tool events while substituting a static data-free message.",
+        "Keeps the gate in code and reports the Runner tests as not run."
+      ]
+    },
+    {
+      "id": "optimise-compaction-atomic-groups-three-points",
+      "prompt": "Our custom summariser plugin occasionally produces requests the model rejects with a dangling function call, and nobody can say when compaction runs. Fix the plugin and define where compaction happens.",
+      "available_skills": [
+        "optimise-adk-on-google-cloud",
+        "adk-memory-architecture",
+        "adk-agent-evaluation"
+      ],
+      "context": "An ADK 2.12 agent with App-level compaction plus a custom trimming plugin, a Postgres session store, no model access in the session.",
+      "expected_primary": "optimise-adk-on-google-cloud",
+      "assertions": [
+        "Treats a function call and its responses as an atomic group that is kept or dropped together and writes the test that a trimmed history never carries a call without its result or a result without its call.",
+        "Names the three compaction points (inside the run, before persisting, as maintenance over stored history) with a budget and a test for each.",
+        "Measures with the retained-history accounting rather than guessing, and keeps the static instruction prefix intact.",
+        "Reports model-dependent checks as not run."
+      ]
+    },
+    {
+      "id": "memory-poisoned-fact-rollback-and-update-cases",
+      "prompt": "A user reported that the assistant keeps repeating an old delivery address after they changed it, and last month a prompt injection planted a fake 'VIP discount' memory. Make the memory feature handle both and prove it.",
+      "available_skills": [
+        "adk-memory-architecture",
+        "adk-agent-security",
+        "adk-agent-evaluation"
+      ],
+      "context": "An ADK 2.12 agent on Vertex Memory Bank with revisions enabled, a nightly generate pass, a gold set with no update or abstention cases, no cloud access in the session.",
+      "expected_primary": "adk-memory-architecture",
+      "assertions": [
+        "Explains that Memory Bank's consolidation updates a memory the new address contradicts and that the test is a knowledge-update case where the new value wins and the old is not surfaced.",
+        "Rolls the poisoned memory back to its previous revision by target_revision_id and labels generated revisions by data source so the injection's revisions can be listed and erased.",
+        "Adds knowledge-update and abstention cases to the gold set structured by the five memory abilities, measured before and after.",
+        "Keeps memory as an untrusted-input boundary with screening before write-back, and reports the live Memory Bank calls as not run."
+      ]
     }
-
   ]
 }

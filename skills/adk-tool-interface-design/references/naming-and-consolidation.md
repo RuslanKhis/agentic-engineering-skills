@@ -66,6 +66,13 @@ own note after the docstring, and some tool browsers show only the first line.
   `github_list_prs`, `jira_create_issue`. Vendor guidance (V, Anthropic and
   OpenAI) agrees that prefixing reduces wrong-service selection; ADK supplies
   `tool_name_prefix` on toolsets for the same purpose.
+- Stay inside MCP's name rules whenever a tool may be exposed through
+  `to_mcp_server` or consumed from a server: 1 to 128 characters, only ASCII
+  letters, digits, underscore, hyphen and dot, case-sensitive, unique within a
+  server, no spaces or commas (SEP-986, all SHOULD; modelcontextprotocol/modelcontextprotocol commit 80041ab, `docs/specification/2025-11-25/`, read 2026-10-22).
+  `snake_case` `verb_noun` already satisfies it; a prefix joined with a dot
+  (`admin.tools.list` is the specification's own example) does too, and a
+  Gemini function declaration accepts the same characters.
 - Make sibling names distinguish along the axis the model must decide:
   `search_products` versus `get_product_by_sku`, not `search_products` versus
   `search_products_v2`. The linter flags names whose token sets overlap above

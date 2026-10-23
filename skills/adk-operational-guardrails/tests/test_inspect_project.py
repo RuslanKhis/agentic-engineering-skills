@@ -30,6 +30,15 @@ class InspectorTests(unittest.TestCase):
         path.write_text(content, encoding="utf-8")
         return path
 
+    def test_extras_marker_on_pin_is_accepted(self):
+        self.write("pyproject.toml", '[project]\ndependencies = ["google-adk[gcp]>=2.12.0,<3", "google_genai[aiohttp] >= 1.0"]\n')
+        result = self.run_cli("--project", str(self.root))
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        report = json.loads(result.stdout)
+        self.assertEqual(report["declared"]["google-adk"], [">=2.12.0,<3"])
+        self.assertEqual(report["declared"]["google-genai"], [">=1.0"])
+        self.assertNotIn("unsupported_or_invalid_selected_version_constraint", report["warnings"])
+
     def test_help_requires_no_project(self):
         result = self.run_cli("--help")
         self.assertEqual(result.returncode, 0, result.stderr)

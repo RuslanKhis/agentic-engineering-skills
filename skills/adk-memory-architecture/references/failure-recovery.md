@@ -1,7 +1,8 @@
 # Diagnose failures without repeating accepted work
 
 Read this for provisioning, retrieval, screening, hosted evidence, credential
-expiry or cleanup failures. The entries distinguish observed failures from
+expiry or cleanup failures; the outcome of a memory write (accepted, failed,
+indeterminate) and its reconciliation are in [memory-bank.md](memory-bank.md). The entries distinguish observed failures from
 proposed remedies. Preserve the current scope, journal and call budget; a
 diagnosis does not authorise another model turn, write or deployment.
 

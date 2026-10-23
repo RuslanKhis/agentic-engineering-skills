@@ -17,6 +17,27 @@ Entries marked "not re-fetched" were supplied by the coordinator's research on
 - `adk-python` main at 2.11.0 and `CHANGELOG.md`, read 2026-10-07:
   `plugins/_tool_call_integrity_plugin.py`, `flows/llm_flows/context/_fencing.py`,
   `tools/mcp_tool/mcp_tool.py`, `a2a/agent/_remote_a2a_agent.py`.
+- kubernetes-sigs/agent-sandbox v1.0.7 (commit f62190c; Apache-2.0):
+  `README.md`, `examples/{sandbox-ksa,composing-sandbox-nw-policies,containarium-execution-scoped-token,code-interpreter-agent-on-adk}/README.md`;
+  https://docs.cloud.google.com/kubernetes-engine/docs/how-to/how-install-agent-sandbox
+  (updated 2026-10-14); Google Cloud blog "Agent Sandbox on GKE is now
+  available for everyone" (2026-05-21). Read 2026-10-22; vendor
+  documentation and figures, not executed.
+- `adk-python` main commit ed76f94 (2026-10-21), read 2026-10-22:
+  `code_executors/gke_code_executor.py` (`executor_type`, `k8s_agent_sandbox`
+  import), `integrations/cloud_run/_cloud_run_sandbox_code_executor.py`,
+  `tools/environment/`, `environment/_base_environment.py`,
+  `integrations/{vmaas,daytona,e2b,opensandbox}/`, with `git tag --contains`
+  for the first release of each; `github.com/daytonaio/daytona` README for
+  the maintenance notice. Source-verified, not executed.
+- `adk-python` `CHANGELOG.md` at main commit ed76f94 (2026-10-21), read
+  2026-10-22, for the 2.12.0 release (2026-10-13): fdda17c
+  (`after_tool_callback` output screening), 988fd1a (node
+  `require_confirmation`), bfdeb4a (one run per approval), 63aed55 (OAuth2
+  secrets over the serving endpoints), d0c4060 (user id from an authenticated
+  principal), 97f9379, eca36ac, 7e4407f and ec7756b (loopback-only dev
+  endpoints), d8483a0, 82af2ef, 42a17a9, 2e06fdc, 74cd0ef, b3ccb29.
+  Source-verified in the changelog; the fixed code paths were not read.
 - ADK docs, Safety and Security: https://adk.dev/safety/ (source
   `docs/safety/index.md`, read 2026-10-07). Agent-auth versus user-auth,
   in-tool guardrails from `ToolContext`, callbacks and plugins, sandboxed code
@@ -32,10 +53,16 @@ Entries marked "not re-fetched" were supplied by the coordinator's research on
   https://adk.dev/runtime/web-interface/ ("not meant for use in production
   deployments"); Evaluate: https://adk.dev/evaluate/ (read 2026-10-07).
 - adk-recipes `core/python/safety-plugins/AGENTS.md` (LlmAsAJudge and Model
-  Armor plugins, planted poisoned tool result demonstration) and
-  `long-horizon-harness/docs/security-model.md` (hard-deny guards before
-  soft-ask approval, headless "ask as deny", hermetic network). Vendor
-  samples; supplied by research, not re-fetched.
+  Armor plugins, planted poisoned tool result demonstration). Vendor
+  sample; supplied by research, not re-fetched.
+- google/adk-recipes commit be63596 (2026-10-20), read 2026-10-22:
+  `core/python/long-horizon-harness/docs/security-model.md` (hard deny before
+  soft ask, argv classification, grant narrowing, `ask_is_deny`, sandbox
+  egress), `horizon/guardrails/{command_safety,permission_guard,exfil_guard,
+  repeated_failure,no_progress,guardrails_plugin}.py` and
+  `default_policies.jsonl`, `tests/eval/evalsets/*.evalset.json` with
+  `tests/eval/eval_config.json`; repository `README.md` ("not production
+  use"; Apache-2.0, no NOTICE). Vendor sample; read, not executed.
 
 ## Google frameworks and GCP (vendor guidance)
 
@@ -160,4 +187,11 @@ Entries marked "not re-fetched" were supplied by the coordinator's research on
   `tool-sequence` assertions; updated 2026-10-06) and red-team plugins
   https://promptfoo.dev/docs/red-team/plugins/indirect-prompt-injection .
   NVIDIA garak (model endpoints) and Microsoft PyRIT (orchestrated attack
-  generation). Read 2026-10-07.
+  generation; the repository is github.com/microsoft/PyRIT, formerly
+  Azure/PyRIT, confirmed 2026-10-22). Read 2026-10-07.
+
+- ethz-spylab/agentdojo v0.1.35 (commit 089ed46, 2026-06-02; MIT): `src/agentdojo/default_suites/v1/{banking,slack,travel,workspace}/injection_tasks.py`, `attacks/important_instructions_attacks.py`, `agent_pipeline/base_pipeline_element.py`, `data/suites/banking/injection_vectors.yaml`, `README.md`. Read 2026-10-22; goal classes paraphrased into `assets/adversarial-cases.json` cases a11 to a14; no data or code copied; not executed.
+
+- snyk/agent-scan commit 73c0966 (2026-10-21; Apache-2.0 code, Snyk terms of use for the service): `README.md`, `docs/cli-reference.md`, `docs/failure-codes.md`, `docs/risks.md` (names only). Read 2026-10-23; facts in [tool-supply-chain](tool-supply-chain.md) item 6; not run.
+
+- mitre-atlas/atlas-data commit 3259f38 (2026-09-10; Apache-2.0): `dist/ATLAS-latest.yaml` version 2026.09 (counts and technique ids). cosai-oasis/secure-ai-tooling commit 622605a (2026-10-20; Apache-2.0): `risk-map/yaml/{risks,controls,frameworks}.yaml` (risk and control ids, the ATLAS pin and the `@5.0.1` mappings). Read 2026-10-23; ids cited in [threat-model](threat-model.md) section 6 and the checklist asset; nothing copied.

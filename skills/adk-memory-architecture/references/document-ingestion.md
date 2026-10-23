@@ -17,7 +17,16 @@ Run the target's extractor over every page once, then qualify the result:
 ```
 
 Set `PYTHON` to the project's interpreter and `SKILL_DIR` to this installed
-skill. The inventory is a list of page records from your extractor:
+skill. When the project has no extractor yet, Docling is the one to reach
+for (docling-project/docling commit 29caea8, MIT; PyPI `docling` 2.142.0,
+2026-10-22; Python 3.10 or later; read 2026-10-23, not run here): its
+`DocumentConverter` returns a document with page layout, reading order,
+table structure and OCR for scanned pages, exports to Markdown and other
+formats, and ships chunkers for retrieval; a page record for the inventory
+below is one page's exported text plus its picture and drawing counts. Pin
+the version in the project and record the model weights it downloads as a
+dependency with a licence of their own. The inventory is a list of page
+records from your extractor:
 `document`, `page`, `text`, `image_count` and, where known, `vector_drawing_ops`.
 The report gives each page its character count, alphanumeric ratio, density
 class (`text`, `low_density`, `image_only`), table and drawing hints, the

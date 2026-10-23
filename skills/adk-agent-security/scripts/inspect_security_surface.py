@@ -80,7 +80,7 @@ PRIVATE_TOKENS = {"customer", "customers", "account", "accounts", "order", "orde
                   "bigquery", "crm", "hr", "ticket", "tickets", "memory", "session", "history",
                   "file", "files", "document", "documents", "notes", "vault", "key", "keys",
                   "token", "tokens", "balance", "transactions", "transaction", "internal",
-                  "private", "confidential"}
+                  "private", "confidential", "corpus", "knowledge", "kb"}
 BUILTIN_TOOLS = {
     "google_search": {"untrusted"}, "GoogleSearchTool": {"untrusted"},
     "enterprise_web_search": {"untrusted"}, "EnterpriseWebSearchTool": {"untrusted"},

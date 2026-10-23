@@ -10,7 +10,7 @@ model call.
 python "$SKILL_DIR/scripts/lint_tool_schemas.py" --project . --max-tools 20 > .adk-evidence/lint-after.json
 ```
 
-Compare `counts` with the pre-change run. Expect no new findings of the types
+Compare `counts` with the pre-change run (on a greenfield ticket there is none; the first run is the baseline and is kept as evidence). Expect no new findings of the types
 the change targeted; explain any remaining `identity_parameter_review` or
 `similar_tool_*` entries in the report. A `partial: true` result means an area
 was not scanned; inspect it manually. The output names identifiers only, not
@@ -68,6 +68,10 @@ from google.adk.tools import FunctionTool
 from google.genai import types
 
 
+# `scripted_model` is a BaseLlm double: a queue of LlmResponse values served by
+# generate_content_async(llm_request, stream=False), an exception once the queue is
+# empty, and a fixture finaliser that fails on a non-empty queue; its 2.12.0
+# signatures are in adk-agent-evaluation's deterministic-tests reference.
 def test_lookup_order_wiring(scripted_model):
     scripted_model.script([
         types.Part.from_function_call(name="lookup_order", args={"order_id": "ORD-123456"}),

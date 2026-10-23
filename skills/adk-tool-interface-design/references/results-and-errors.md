@@ -123,6 +123,8 @@ def lookup_order(order_id: str) -> dict:
 
 ## Confirmation and pending results
 
+A deferred tool call is one of two kinds, and the interface says which: a call that needs a human's approval before it runs, and a call that is executed somewhere else (a frontend, a background worker) whose result comes back later; both end the current run with a typed record of the pending calls keyed by call id, or are resolved inline by a handler that answers some and lets the rest bubble up, and results re-enter by the same call id pydantic/pydantic-ai commit eb0bd08, MIT, read 2026-10-23; another framework's documentation, restated, `docs/deferred-tools.md`). On ADK the approval kind is `require_confirmation` with `adk_request_confirmation` and the external kind is a `LongRunningFunctionTool` answered by a later `function_response` with the original call id; a tool that is both declares the approval first.
+
 When a tool requires confirmation, the model receives `{"error": "This tool
 call requires confirmation, please approve or reject."}` and no further
 summary (`skip_summarization` is set). For a `LongRunningFunctionTool`, return
@@ -142,7 +144,22 @@ specification tells clients not to trust from untrusted servers. Consequences
 for the interface:
 
 - Do not derive confirmation, budget or write policy from server annotations;
-  decide per allow-listed tool name in your own configuration.
+  decide per allow-listed tool name in your own configuration. The 2026-07-28
+  revision keeps the rule: clients "MUST consider tool annotations to be
+  untrusted unless they come from trusted servers" (same repository, `docs/specification/2026-07-28/`, read 2026-10-22).
+- Return input-validation failures as tool execution errors, not protocol
+  errors: the 2025-11-25 revision clarified this "to enable model
+  self-correction" (SEP-1303), which is the same split as the `status: error`
+  dict above (modelcontextprotocol/modelcontextprotocol commit 80041ab, `docs/specification/2025-11-25/`, read 2026-10-22). A server that answers a bad argument with a
+  JSON-RPC error denies the model its repair loop.
+- Expect any JSON Schema 2020-12 keyword in a server's `inputSchema` and
+  `outputSchema`: 2020-12 became the default dialect in 2025-11-25 (SEP-1613)
+  and 2026-07-28 loosened both schemas to any 2020-12 keyword with `$ref`
+  resolution requirements (SEP-2106). ADK's declaration conversion keeps only
+  the Gemini-supported subset ([sources](sources.md)), so a server schema
+  that leans on `oneOf`, `if`/`then`, `patternProperties` or `$ref` loses
+  those constraints before the model sees them; the recorded-definition test
+  in [validation](validation.md) is where that loss shows.
 - Treat results from external servers as data in your own tool wrappers:
   wrap the MCP toolset's tools in your own `FunctionTool` when you need to
   reshape, truncate or label their output.

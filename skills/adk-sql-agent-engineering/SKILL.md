@@ -44,7 +44,7 @@ Within one application, combine these paths as needed:
 - **Reviewed template:** the full metric, grain, filter, ranking and period contract matches an approved query. Validate typed values and run the template without custom SQL authoring.
 - **Generated query:** supported business question with enough approved context. Select a bounded semantic domain, retrieve relevant metadata in application code, then use a tool-free SQL author.
 - **Clarify or refuse:** missing meaning, ambiguous categorical values, unavailable metadata or unsupported relationships. Stop before SQL authoring or execution where possible.
-- **Managed/specialist integration:** a separately evaluated option when that service owns the required semantics. Establish its execution and permission boundary before connecting it; see [references/implementation.md](references/implementation.md#managed-tools-and-follow-ups).
+- **Managed/specialist integration:** a separately evaluated option when that service owns the required semantics. Establish its execution and permission boundary before connecting it; see [references/implementation.md](references/implementation.md#managed-tools-and-follow-ups), and when MCP Toolbox for Databases or a managed data agent is the executor, the branch checklists in [acceptance and extensions](references/acceptance-and-extensions.md#6-choose-and-test-a-managed-or-specialist-branch).
 
 Before broad edits, give a short plan naming the path, files, preserved contracts and tests. Read [references/implementation.md](references/implementation.md) for implementation or architectural selection. In a review, read only its relevant boundary.
 
@@ -56,6 +56,7 @@ Load deeper guidance only for the work at hand:
 | Wire ADK models, callbacks, events or credentials | [ADK runtime](references/adk-runtime.md); its bundled offline contract asset preserves the real framework and SDK |
 | Provision, resume or clean up BigQuery/Vertex resources | [Lifecycle runbook](references/lifecycle-runbook.md); the tested serving surface was local ADK Web, not a deployed cloud frontend |
 | Investigate a wrong answer, refusal, SDK failure or misleading PASS | [Troubleshooting](references/troubleshooting.md) |
+| MCP Toolbox for Databases or a managed data agent is the executor | [Acceptance and extensions, section 6](references/acceptance-and-extensions.md#6-choose-and-test-a-managed-or-specialist-branch): the Toolbox branch checklist (read-only at the source, flags, parameters, secure tenant ids, bypass fixtures) and the `DataAgentToolset` facts |
 | Test the public app, add telemetry, follow-ups or a managed branch | [Acceptance and extensions](references/acceptance-and-extensions.md) |
 
 ## 3. Implement and enforce the boundaries

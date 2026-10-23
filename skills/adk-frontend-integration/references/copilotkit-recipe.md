@@ -1,5 +1,7 @@
 # CopilotKit v2 implementation recipe
 
+CopilotKit's own ADK example lives at `examples/integrations/adk` in the CopilotKit monorepo (the separate `with-adk` repository is archived); its pins and the generation mix are recorded in [compatibility](compatibility.md), and the approval contract it answers with is the tool-message one unless it adopts `useInterrupt` ([AG-UI reference](ag-ui.md#choose-the-approval-contract-and-declare-it)).
+
 Use these pieces when wiring a CopilotKit frontend or its AG-UI HTTP boundary. They target `@copilotkit/react-core` / `@copilotkit/runtime` **1.69.0**, their **`/v2` APIs**, `@ag-ui/client` 0.0.57 and Zod 3.25.76. Check the target's versions against [compatibility.md](compatibility.md); these examples do not authorise changing pins. The recorded Next.js app requires Node >=22.12. Snippets assume the usual `@/*` → `src/*` TypeScript alias; adapt paths to the existing app.
 
 ## Connect the runtime, client and renderer

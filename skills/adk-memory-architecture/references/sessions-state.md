@@ -41,7 +41,7 @@ Done means the owner predicate is demonstrable at each exposed route; a hidden i
 | Identity, permission or secret locator | Keep it in trusted server context, outside model arguments and public state |
 
 Verify state-prefix semantics against the actual backend. A prefix is a namespace, not encryption or a client-write prohibition.
-The prefixes themselves (https://adk.dev/sessions/state/, read 22 October 2026): no prefix is session scope; `user:` is shared across the user's sessions within one `app_name`; `app:` is shared across all users; `temp:` is discarded when the invocation completes. Session, `user:` and `app:` values persist only with `DatabaseSessionService` or `VertexAiSessionService`; `InMemorySessionService` holds them until restart. The same `user:` prefix on an artifact filename makes the artifact user-scoped (Agents CLI 1.11.0, `google-agents-cli-adk-code` skill, `references/adk-python.md`, read 22 October 2026; vendor guidance, confirm against the installed ADK version). An exact operational setting in `user:` state is a deterministic store only when the backend is persistent and the write path is trusted code; it still lacks the ownership checks of a profile.
+The prefixes themselves (https://adk.dev/sessions/state/, read 22 October 2026): no prefix is session scope; `user:` is shared across the user's sessions within one `app_name`; `app:` is shared across all users; `temp:` (readable by later tools and callbacks within the same invocation on adk-python main, never persisted; `adk-workflow-design`'s runtime reference has the source) is discarded when the invocation completes. Session, `user:` and `app:` values persist only with `DatabaseSessionService` or `VertexAiSessionService`; `InMemorySessionService` holds them until restart. The same `user:` prefix on an artifact filename makes the artifact user-scoped (Agents CLI 1.11.0, `google-agents-cli-adk-code` skill, `references/adk-python.md`, read 22 October 2026; vendor guidance, confirm against the installed ADK version). An exact operational setting in `user:` state is a deterministic store only when the backend is persistent and the write path is trusted code; it still lacks the ownership checks of a profile.
 `Runner.rewind_async(user_id=, session_id=, rewind_before_invocation_id=)` restores session-level state and artifacts to their condition before that invocation; `app:` and `user:` state and artifacts are not restored, and nothing a tool did in an external system is undone (https://adk.dev/sessions/session/rewind/, read 22 October 2026; ADK Python from 1.17.0, confirm support for the selected session service). Treat a rewind as one more replay path in the retry table below: an erased or completed external effect must not reappear as pending because the session was rewound.
 Protect a value before writing state, events, artefacts or queues; screening the later tool response does not undo an earlier write.
 For ADK, inspect `ToolContext.state`, callback state, `output_key` or explicit event deltas as applicable to the existing code.
@@ -50,7 +50,16 @@ For ADK, inspect `ToolContext.state`, callback state, `output_key` or explicit e
 
 If the target uses ADK's `DatabaseSessionService` on Cloud SQL or AlloyDB for
 PostgreSQL, connect through the Cloud SQL or AlloyDB Python connector with IAM
-database authentication, not a password. The Cloud SQL connector takes
+database authentication, not a password. Plan for a failover mid-query:
+SQLAlchemy's `pool_pre_ping` validates a connection only at checkout, so a
+connection severed during a query or a refused connect during a proxy bounce
+still fails; Google's long-horizon-harness recipe wraps every session-store
+operation in a retry that fires only on transient disconnect errors (three
+attempts, exponential backoff) beside `pool_pre_ping`, `pool_recycle` and a
+connect timeout (google/adk-recipes be63596,
+`core/python/long-horizon-harness/horizon/infrastructure/db_resilience.py`
+and `AGENTS.md`, read 2026-10-22; vendor sample). That is a production
+addition here: a retry must not replay a write whose outcome is unknown. The Cloud SQL connector takes
 `enable_iam_auth=True` and a service-account user named without the
 `.gserviceaccount.com` suffix
 (https://github.com/GoogleCloudPlatform/cloud-sql-python-connector); the

@@ -30,7 +30,10 @@ manager and dependency pins. The book and companion repository are not required.
    Identify the requested outcome; an audit or recommendation ends in a list
    of gaps with remedies, and implementation waits for its own request. Inspect imports and test setup before
    executing them: either can initialise remote clients or load credentials.
-2. Use the target's existing interpreter. Optionally run the bounded, read-only
+2. Use the target's existing interpreter for the project's tests (when none at
+   hand meets the project's `requires-python`, run them on the newest
+   available one, say so, and install nothing), and any Python 3.11 or later
+   for this skill's helpers, as adk-engineer states. Optionally run the bounded, read-only
    [inspector](scripts/inspect_project.py):
    `"$PYTHON" "$SKILL_DIR/scripts/inspect_project.py" --project "$PROJECT_DIR"`.
    Set these variables to the selected interpreter, installed skill directory

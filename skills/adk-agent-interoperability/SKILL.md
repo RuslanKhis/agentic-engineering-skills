@@ -38,7 +38,12 @@ source-verified against google-adk 2.8.0 unless another version is named).
    quoting any behaviour: MCP SDK 2.x arrives in 2.9.0, the a2a-sdk 0.3 and
    1.x shapes differ, and several remote-agent fixes land in 2.9.0 to 2.11.0.
    Preserve the pins; present an upgrade as a decision with its CHANGELOG
-   entries.
+   entries. When a ticket or contract names an MCP server, state both the
+   `mcp` major version the agent installs and the specification revision
+   the server speaks: the python-sdk v2 line (2.3.0 on PyPI, 2026-10-02)
+   speaks 2026-07-28 and renames `FastMCP` to `MCPServer` with the old
+   import path removed, while 2.8.0 pins SDK 1.x
+   ([compatibility](references/compatibility.md)).
 3. Record the hosting and identity facts: where the agent runs, where each
    MCP server and remote agent runs, which principal calls whom, and whether
    a token for one party is ever visible to another.
@@ -72,7 +77,7 @@ registry or platform must list the agent, and who the human controller is.
 | (c) Expose ADK as an MCP server | Read [mcp-exposure](references/mcp-exposure.md): `to_mcp_server` (one tool, one session per connection, stdio or streamable-http chosen by the caller) versus hand-built servers with `adk_to_mcp_tool_type`, and what the exposed description promises. |
 | (d) Topology decision | Read [topology](references/topology.md): one agent, in-process sub-agents or `AgentTool`, or a remote A2A agent; the vendor criteria and the independent evidence on when multi-agent helps and how it fails. |
 | (e) Consume a remote A2A agent | Read [a2a-contracts](references/a2a-contracts.md) and [remote-failures](references/remote-failures.md): `RemoteA2aAgent` card resolution and validation, task states including INPUT_REQUIRED, AUTH_REQUIRED and REJECTED, `a2a:` metadata keys, streaming, timeouts, failure as error events, and peer messages as data rather than user authority. |
-| (f) Expose via A2A and register | Read [a2a-contracts](references/a2a-contracts.md) and [platform-registration](references/platform-registration.md): `to_a2a` and `adk api_server --a2a`, what the generated card contains and omits, persistent task stores, Agent Runtime's A2A template and Gemini Enterprise registration fields and auth. |
+| (f) Expose via A2A and register | Read [a2a-contracts](references/a2a-contracts.md), and [platform-registration](references/platform-registration.md) only when the ticket registers the agent on a platform: `to_a2a` and `adk api_server --a2a`, what the generated card contains and omits, persistent task stores, Agent Runtime's A2A template and Gemini Enterprise registration fields and auth. |
 | (g) Audit existing wiring | Use all references plus [evaluation-across-boundaries](references/evaluation-across-boundaries.md) and the [review checklist](assets/interop-review-checklist.md); report per boundary with `file:line`, the contract gap, the observable check, the evidence label and the owning skill. Change nothing unless asked. |
 
 A request often needs two rows (select a source, then consume it; decide the

@@ -57,6 +57,38 @@ Entries marked "supplied by research" came from the coordinator's research on
   `cacheScope` on list results; deterministic `tools/list` order recommended;
   Roots, Sampling, Logging, HTTP+SSE and Dynamic Client Registration
   deprecated.
+- modelcontextprotocol/conformance commit c37eec8 (2026-10-01; npm
+  `@modelcontextprotocol/conformance@0.2.0-alpha.12`, published 2026-10-01;
+  MCP-project licence in transition from MIT to Apache-2.0): `README.md`
+  (server mode, `--requirements`, expected-failures semantics, per-check
+  baseline entries), `requirements/2025-11-25.yaml`, `requirements/2026-07-28.yaml`,
+  `src/scenarios/server/`. Read 2026-10-22 and executed the same day against a
+  scripted-model `to_mcp_server` on google-adk 2.12.0 with `mcp` 2.3.0 on
+  loopback; results in [validation](validation.md). The npm package was
+  invoked; the repository was read, not run.
+- Model Context Protocol specification, modelcontextprotocol/modelcontextprotocol
+  commit 80041ab (2026-10-20): `docs/specification/2025-11-25/changelog.mdx`,
+  `docs/specification/2026-07-28/changelog.mdx`, `2026-07-28/server/tools.mdx`,
+  `2026-07-28/basic/authorization/client-registration.mdx`. Read 2026-10-22;
+  facts in [mcp-exposure](mcp-exposure.md) and [mcp-consumption](mcp-consumption.md).
+- modelcontextprotocol/ext-auth commit fb374c7 (2026-06-18; MIT):
+  `specification/stable/enterprise-managed-authorization.mdx`,
+  `specification/draft/oauth-client-credentials.mdx`. Read 2026-10-22; facts
+  in [mcp-consumption](mcp-consumption.md).
+- a2aproject/a2a-tck v0.2.5 (commit 5daf014, 2026-10-20; Apache-2.0):
+  `README.md`, `run_tck.py`, `tck/requirements/{auth,agent_card,versioning}.py`,
+  `scenarios/core_operations.feature`, `tck/transport/jsonrpc_client.py`,
+  `AGENTS.md` (companion skills). Read 2026-10-22; not run (not published
+  to PyPI; executing a downloaded repository is outside this review's
+  rules). google/agents-cli main `src/google/agents/cli/run/_a2a_pinning.py`
+  (origin pinning note), read 2026-10-22. a2aproject/a2a-samples HEAD
+  6603ba3, listed by name only.
+- MCP python-sdk v2, `docs/whats-new.md` (v2.3.0 stable line): `FastMCP`
+  renamed `MCPServer`, old import path removed, both revisions served from
+  one app, `mcp>=1.28,<2` advice for unmigrated libraries. Read 2026-10-22.
+- A2A specification `CHANGELOG.md` (1.0.0, 2026-03-12; 1.0.1, 2026-05-26):
+  `application/a2a+json` preferred in the HTTP binding, implicit and
+  password OAuth flows removed, device code and PKCE added. Read 2026-10-22.
 - MCP Security Best Practices, revision 2026-07-28:
   https://modelcontextprotocol.io/specification/latest/basic/security_best_practices
   (token passthrough MUST NOT, audience validation, confused deputy and
@@ -85,6 +117,14 @@ Entries marked "supplied by research" came from the coordinator's research on
   authorization, OpenTelemetry and W3C trace headers, webhook security).
   Supplied by research.
 
+## Google recipes (vendor samples)
+
+- google/adk-recipes commit be63596 (2026-10-20; Apache-2.0):
+  `core/python/long-horizon-harness/AGENTS.md` ("Pinned versions": `a2a-sdk>=1.0,<2`
+  with `google-adk>=2.8.0,<3`; one `/a2a` endpoint serving the 1.0 wire and
+  Gemini Enterprise's v0.3 interface). Read 2026-10-22; cited in
+  [platform-registration](platform-registration.md).
+
 ## Google Cloud platform (vendor guidance)
 
 - Gemini Enterprise, "Register and manage an A2A agent", last updated
@@ -108,6 +148,9 @@ Entries marked "supplied by research" came from the coordinator's research on
   (`integrations/agent-identity.md`), MCP Toolbox for Databases ADK page
   (mcp-toolbox.dev), Application Integration role notes. Supplied by
   research; commands and role names to confirm on the live pages.
+- `googleapis/mcp-toolbox` README (repository renamed from
+  `googleapis/genai-toolbox`; latest tag v1.14.0; Python SDKs including
+  `toolbox-adk` in `googleapis/mcp-toolbox-sdk-python`), read 2026-10-22.
 - Read 2026-10-21: Agent Gateway egress codelab
   https://codelabs.developers.google.com/agw-cuj-arun-egress-emcp
   (`roles/iap.egressor`, `api.getAttribute('iap.googleapis.com/mcp.toolName', '')`,

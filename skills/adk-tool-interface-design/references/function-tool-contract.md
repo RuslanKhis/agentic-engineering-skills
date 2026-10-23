@@ -135,7 +135,9 @@ without a model call:
 from google.adk.tools import FunctionTool
 
 tool = FunctionTool(lookup_order)
-declaration = tool._get_declaration()   # private API; verify it exists in the pinned version
+declaration = tool._get_declaration()   # private API; verify it exists in the pinned version;
+# if it does not, read the declaration the Runner sends: capture llm_request.config.tools in
+# the scripted model's generate_content_async and dump the FunctionDeclaration from there
 print(declaration.model_dump_json(exclude_none=True, indent=2))
 ```
 

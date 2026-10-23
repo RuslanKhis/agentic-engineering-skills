@@ -5,7 +5,8 @@
 #   live-gate      label "run-live-eval" or push to main; agent inference, no judge; blocks promotion
 #   judge-nightly  schedule; judge metrics with the judge pinned; reported, compared with the previous run
 #
-# Gate choice: `adk eval` exits 0 whatever the pass/fail counts (google-adk 2.8.0 and main),
+# Gate choice: `adk eval` exits 0 whatever the pass/fail counts on every release through 2.12.0
+# (main commit c2ff634, 2026-10-15, exits 1 on failures; confirm on the pinned version),
 # so the failing steps are pytest + AgentEvaluator (writes the CSV, then asserts), the strict
 # CSV checker from the adk-agent-evaluation skill, and `adk conformance test` (replay mode).
 # No secrets appear here; provider credentials come from the repository's secret store through
@@ -188,6 +189,16 @@ jobs:
           # against the previous nightly is reported, and a drop beyond the agreed margin opens a release blocker.
           python -m pytest tests/eval/test_nightly_judge.py -q || true
           test -s "${RESULTS_DIR}/judge.csv" || { echo "::error::No judge CSV produced: NOT RUN"; exit 1; }
+      # Optional, only when production sessions land in BigQuery through the Agent Analytics plugin
+      # (references/ci-eval-gates.md, "A fourth gate"). Pin the SDK; exit 1 blocks, exit 2 is NOT RUN, never a pass.
+      # - name: Tier 3 BigQuery score gate over yesterday's production sessions
+      #   env:
+      #     BQ_AGENT_PROJECT: <project>
+      #     BQ_AGENT_DATASET: <analytics dataset>
+      #   run: |
+      #     pip install "bigquery-agent-analytics==<PIN, 0.6.1 or later>"
+      #     bq-agent-sdk evaluate --evaluator=error_rate --threshold=<measured> --last=24h --exit-code; rc=$?
+      #     case "$rc" in 0) echo "gate passed";; 1) echo "::error::production score gate failed"; exit 1;; *) echo "::error::score gate NOT RUN (exit $rc)"; exit 1;; esac
       - name: Upload evidence
         if: always()
         uses: actions/upload-artifact@v4

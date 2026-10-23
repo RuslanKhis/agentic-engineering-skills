@@ -12,7 +12,7 @@ python "$SKILL_DIR/scripts/inspect_security_surface.py" --project . > .adk-evide
 python "$SKILL_DIR/scripts/inspect_security_surface.py" --project . > .adk-evidence/security-after.json
 ```
 
-Compare `counts` and each agent's `trifecta`. Expect the targeted findings to
+Compare `counts` and each agent's `trifecta`; a `tool_filter` built from a constant or any non-literal list is reported as `predicate`, which still clears `mcp_unfiltered`; a retrieval tool counts as a private source only when its name carries a private token (`corpus`, `knowledge`, `kb`, `customer`, `records` and similar), so confirm the trifecta in the tool body when the inventory says otherwise; the inspector resolves only literal `name=` strings, so an agent built by a factory that passes `name` through a parameter appears as `<unnamed agent>` until the name is a literal (a helper change is owed); it also counts agents and findings in test files, so exclude `tests/` from the inventory you compare or expect the test agents to appear. Expect the targeted findings to
 disappear (`trifecta_present`, `write_tool_without_gate`, `mcp_unfiltered`,
 `unsafe_code_executor`, `bash_policy_allow_all`, `identity_parameter_review`)
 and explain any that remain. A `partial: true` result means an area was not
@@ -36,7 +36,12 @@ residual risk.
 
 For each `McpToolset` and `OpenAPIToolset`, resolve the tools in a test
 (`await toolset.get_tools(readonly_context)`), dump name, description and
-input schema, and compare the SHA-256 of each against the committed hash.
+input schema, and compare the SHA-256 of each against the committed hash;
+the committed form is the interoperability skill's `mcp_tool_inventory.py`
+manifest (`description_sha256`, `input_schema_sha256` per tool), so the
+two skills pin the same thing and `--diff` is the SDK-free form of this
+test. On an interpreter below 3.11 the inspector exits 2 with a message on
+stderr; a redirected file holding that message is not evidence.
 Assert the allowlist equals the expected names. A hash mismatch fails the
 test; the fix is a review, not a hash update without one.
 

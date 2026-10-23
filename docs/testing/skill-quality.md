@@ -43,6 +43,15 @@ python -m unittest discover -s skills/adk-workflow-design/tests -p test_runtime_
 python -m unittest discover -s skills/adk-operational-guardrails/tests -p adk_boundary.py
 ```
 
+A third optional step scans the packages themselves for the skill risks a
+host's scanner would flag (prompt injection in instructions, suspicious
+download URLs, credential handling): `uvx snyk-agent-scan@0.6.9 --ci skills`
+in an ephemeral environment with a `SNYK_TOKEN`. It uploads the skill content
+to Snyk's analysis API under Snyk's terms, so it is a maintainer's choice, not
+part of `check_repo.py`, and it was documented from the tool's README and CLI
+reference on 23 October 2026, not run here; its output schema is declared
+experimental, so only the exit code (1 when risks or failures remain) is read.
+
 Read their source and prerequisites first. Installing compatible SDKs also
 enables optional optimization/auth checks. A skipped contract is not a passing
 contract. Live evaluations remain separately scoped work. “Offline” here names

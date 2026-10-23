@@ -154,6 +154,22 @@ class StdioTests(unittest.TestCase):
         self.assertEqual(payload["sources"][0]["status"], "failed")
         self.assertIn("not JSON", payload["sources"][0]["error"])
 
+    def test_diff_compares_by_name_when_each_manifest_has_one_target(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            manifest = Path(tmp) / "manifest.json"
+            code, payload, _ = run("--command", stdio_command(), "--out", str(manifest), "--no-resources")
+            self.assertEqual(code, 0)
+            pinned = json.loads(manifest.read_text(encoding="utf-8"))
+            pinned["tools"] = {"https://staging.example.invalid/mcp::" + key.split("::", 1)[1]: value
+                               for key, value in pinned["tools"].items()}
+            manifest.write_text(json.dumps(pinned), encoding="utf-8")
+            code, payload, _ = run("--command", stdio_command(), "--diff", str(manifest), "--no-resources")
+            self.assertEqual(code, 0)
+            self.assertEqual(payload["diff"]["keyed_by"], "name")
+            self.assertFalse(payload["diff"]["rug_pull_signal"])
+            self.assertEqual(payload["diff"]["added"], [])
+            self.assertEqual(payload["diff"]["removed"], [])
+
     def test_manifest_written_and_diff_reports_rug_pull(self):
         with tempfile.TemporaryDirectory() as tmp:
             manifest = Path(tmp) / "pinned.json"

@@ -383,8 +383,9 @@ describes. At MVP and above, the same resources are instead owned by a cost
 contract and a decommission item in the Later list.
 Separate discovery questions from ready implementation; an unknown cloud guarantee need
 not block independent local work. When the user wants tickets, write one file
-per ready goal from the [ticket template](assets/ticket-template.md) under
-`docs/tickets/<topic>/`; the plan stays the source of decisions.
+per goal of the phase from the [ticket template](assets/ticket-template.md) under
+`docs/tickets/<topic>/`, with sibling dependencies in `blocked_by`; the plan
+stays the source of decisions.
 
 End the conversation with a short closing message in chat: where the documents
 were saved, the profile and the cut line (what phase 1 delivers in how many of

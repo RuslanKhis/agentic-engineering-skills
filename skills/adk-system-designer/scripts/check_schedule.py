@@ -65,10 +65,10 @@ def parse_scalar(text):
     text = text.strip()
     if len(text) >= 2 and text[0] == text[-1] and text[0] in "'\"":
         return text[1:-1]
+    if " #" in text and not (text[0] in "'\""):
+        text = text.split(" #", 1)[0].rstrip()
     if text.startswith("[") and text.endswith("]"):
         return [item.strip().strip("'\"") for item in text[1:-1].split(",") if item.strip()]
-    if " #" in text:
-        text = text.split(" #", 1)[0].rstrip()
     return text
 
 

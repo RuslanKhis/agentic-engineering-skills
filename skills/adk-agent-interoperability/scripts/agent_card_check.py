@@ -93,13 +93,36 @@ def to_camel(key: str) -> str:
     return parts[0] + "".join(p[:1].upper() + p[1:] for p in parts[1:])
 
 
-def normalise(value):
-    """Return a copy with every mapping key in camelCase so both SDK spellings compare alike."""
+_NAME_MAPS = {"securitySchemes", "schemes", "scopes"}
+
+
+def normalise(value, keep_keys=False):
+    """Return a copy with every mapping key in camelCase so both SDK spellings compare alike.
+
+    Keys that name things the author chose (security scheme names, requirement
+    scheme names, scope names) are kept as written, so the report shows the
+    card's own names.
+    """
     if isinstance(value, dict):
-        return {to_camel(str(k)): normalise(v) for k, v in value.items()}
+        out = {}
+        for k, v in value.items():
+            key = str(k) if keep_keys else to_camel(str(k))
+            out[key] = normalise(v, keep_keys=(key in _NAME_MAPS) or (keep_keys and key not in _NAME_MAPS and False))
+        return out
     if isinstance(value, list):
-        return [normalise(v) for v in value]
+        return [normalise(v, keep_keys=keep_keys) for v in value]
     return value
+
+
+def _normalise_card(raw):
+    """normalise() plus the two places where a 0.3 card keys by author-chosen name."""
+    card = normalise(raw)
+    if isinstance(raw, dict):
+        for key in ("security", "security_requirements", "securityRequirements"):
+            if isinstance(raw.get(key), list):
+                card[to_camel(key)] = [{str(k): normalise(v, keep_keys=True) for k, v in entry.items()}
+                                       if isinstance(entry, dict) else normalise(entry) for entry in raw[key]]
+    return card
 
 
 def origin(url: str) -> tuple[str, str, int | None]:
@@ -283,7 +306,7 @@ def check_card(card: dict, *, fetched_from: str | None, legacy_path: bool, insta
                            "message": f"RPC url origin differs from where the card was fetched ({fetched_from}); RemoteA2aAgent 2.8.0 refuses it: {url}"})
 
     schemes = card.get("securitySchemes")
-    requirements = card.get("security")
+    requirements = card.get("security") or card.get("securityRequirements")
     has_schemes = isinstance(schemes, dict) and bool(schemes)
     if any_remote_rpc and not has_schemes:
         checks.append({"code": "no_security_schemes", "level": "error", "heuristic": False,
@@ -412,7 +435,7 @@ def main(argv=None) -> int:
             raw = load_card_from_file(args.file)
             legacy = False
             fetched_from = None
-        card = normalise(raw)
+        card = _normalise_card(raw)
         result.update(check_card(card, fetched_from=fetched_from, legacy_path=legacy,
                                  installed_sdk=args.installed_a2a_sdk))
     except CardError as exc:

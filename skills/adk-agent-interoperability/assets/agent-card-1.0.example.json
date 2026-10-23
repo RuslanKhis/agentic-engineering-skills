@@ -1,0 +1,57 @@
+{
+  "name": "triage",
+  "description": "Classifies support tickets into queues and returns the queue name.",
+  "supportedInterfaces": [
+    {
+      "url": "https://triage.example.com/",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "version": "0.9.0",
+  "capabilities": {
+    "streaming": true
+  },
+  "securitySchemes": {
+    "partner_oauth": {
+      "oauth2SecurityScheme": {
+        "description": "Partner client credentials",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://idp.example.com/oauth2/token",
+            "scopes": {
+              "triage:classify": "Classify tickets"
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityRequirements": [
+    {
+      "schemes": {
+        "partner_oauth": {
+          "list": [
+            "triage:classify"
+          ]
+        }
+      }
+    }
+  ],
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain"
+  ],
+  "skills": [
+    {
+      "id": "classify_ticket",
+      "name": "Classify ticket",
+      "description": "Routes a ticket to a queue",
+      "tags": [
+        "support"
+      ]
+    }
+  ]
+}

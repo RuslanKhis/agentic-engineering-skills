@@ -123,6 +123,36 @@ poisoned description is LLM03 Supply Chain and ASI04 Agentic Supply Chain; a
 free-form send tool reachable after reading mail is LLM06 Excessive Agency and
 ASI02 Tool Misuse with LLM01 as the trigger.
 
+When the reader works from MITRE ATLAS or the CoSAI Risk Map, put that
+identifier beside the OWASP one rather than translating; both are Apache-2.0
+and are cited by id with a link, never copied as tables. ATLAS 2026.09
+(mitre-atlas/atlas-data commit 3259f38, `dist/ATLAS-latest.yaml`, read
+2026-10-23: 16 tactics, 136 techniques, 88 sub-techniques by count of that
+file) names the agent techniques this skill's findings land on: `AML.T0051`
+LLM Prompt Injection, `AML.T0080` AI Agent Context Poisoning (with `.000`
+Memory), `AML.T0070` RAG Poisoning, `AML.T0110` AI Agent Tool Poisoning,
+`AML.T0084.001` discovery of tool definitions, `AML.T0083` Credentials from AI
+Agent Configuration, `AML.T0098` AI Agent Tool Credential Harvesting,
+`AML.T0086` Exfiltration via AI Agent Tool Invocation, `AML.T0101` Data
+Destruction via AI Agent Tool Invocation, `AML.T0034.002` Agentic Resource
+Consumption and `AML.T0118` Autonomous AI Agent Communication. The CoSAI
+Risk Map (cosai-oasis/secure-ai-tooling commit 622605a, `risk-map/yaml/`,
+read 2026-10-23) names the risks a security ticket can cite
+(`riskPromptInjection`, `riskRogueActions`, `riskToolSourceProvenance`,
+`riskToolRegistryTampering`, `riskRetrievalVectorStorePoisoning`,
+`riskRunawayAgentToolLoops`, `riskEconomicDenialOfWallet`,
+`riskAgentDelegationChainOpacity`, `riskStaleAgentIdentityBinding`,
+`riskOrchestratorRouteHijacking`) and the controls this toolkit implements
+under its own names: `controlAgentExecutionBounds` (a mandatory `max_turns`
+default, per-agent and per-session tool-call budgets enforced before each
+invocation, a context-window budget and circuit breakers, which is
+`adk-operational-guardrails`' runtime bounds), `controlAgentCredentialIsolation`,
+`controlToolRegistryAndDiscoveryIntegrity`, `controlAgentPluginPermissions`,
+`controlComponentIdentityProvenance` and `controlAgentObservability`. One
+caution: the Risk Map's `frameworks.yaml` pins `mitre-atlas@2026.09` as
+current, but its risk entries still map to `@5.0.1` technique ids, so take
+ATLAS ids from ATLAS, not from the map.
+
 ## Completion
 
 Every agent has a worksheet; every trifecta agent has a named leg to remove or

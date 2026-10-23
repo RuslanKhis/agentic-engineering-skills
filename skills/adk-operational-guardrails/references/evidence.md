@@ -48,3 +48,15 @@ The second audit re-opened the current manuscript, source/tests, initial failure
 | Active resources versus retained cost and incomplete inventories | `verification/project-cleanup-recheck-2026-09-15.md`: broader project read-only audit, including retained storage, denied/disabled APIs and region/pagination limits. This is not a Chapter 2 cloud lifecycle test or current zero-cost guarantee. |
 
 No personal project IDs, accounts, resource names or past paid-campaign authority are carried into the reusable procedures. Provider-specific hosting/retention guidance links official documentation and must be rechecked for the selected target.
+
+## adk-recipes review — 22 October 2026
+
+Read google/adk-recipes at commit be63596 (2026-10-20; Apache-2.0):
+`core/python/long-horizon-harness/horizon/guardrails/{repeated_failure,no_progress,guardrails_plugin}.py`,
+`docs/security-model.md`, `AGENTS.md`, and `core/python/ambient-expense-agent/expense_agent/fast_api_app.py`
+with its README. Imported as vendor-sample facts into [runtime-bounds.md](runtime-bounds.md)
+(the identical-signature hash, the 600 s decay, the shared halt state, the
+graceful-handoff divergence recorded against this skill's no-extra-call rule)
+and [human-review.md](human-review.md) (ask-as-deny on headless chains,
+sub-agent approval resurfacing, the approval UI reading pending sessions).
+Nothing was copied or executed.

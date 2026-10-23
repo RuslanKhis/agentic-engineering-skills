@@ -95,7 +95,13 @@ candidates is optional and is measured on the gold set like any other change.
 
 ## When the corpus outgrows a local index
 
-The same lexical-plus-dense shape exists as managed SQL. BigQuery offers
+The same lexical-plus-dense shape exists as a managed recipe: Google's
+`multiformat-hybrid-rag` fuses BM25 and semantic results by reciprocal rank
+fusion on Vector Search 2.0 and prepends Gemini-generated context to each
+chunk before embedding (google/adk-recipes be63596,
+`contrib/python/multiformat-hybrid-rag/README.md` and `architecture.md`, read
+2026-10-22; vendor sample); measure the enrichment on the gold set like any
+other change. It also exists as managed SQL. BigQuery offers
 `AI.SEARCH(... mode => 'HYBRID')` over autonomously embedded columns,
 `VECTOR_SEARCH(... lexical_search_columns)` and `CREATE VECTOR INDEX` (TREE_AH or
 IVF); AlloyDB offers a ScaNN index tuned by `num_leaves` (the square root of the
@@ -130,6 +136,22 @@ An empty problem list is the admission condition for drafting. A non-empty list
 is data for the next stage, not a reason to raise `k` on the spot.
 
 ## Measure recall on a gold set before drafting
+
+For a memory feature (facts recalled across sessions) rather than a document
+corpus, structure the gold set by the five abilities LongMemEval tests, so a
+recall figure says which ability moved (xiaowu0162/LongMemEval commit 9e0b455, MIT code; the 500-question dataset is hosted on Hugging Face and is not imported; read 2026-10-23): information extraction
+(a fact stated once), multi-session reasoning (a fact assembled from several
+sessions), knowledge updates (the newer value wins and the old one is not
+surfaced), temporal reasoning (when something was said, in the user's
+time), and abstention (the right answer is "nothing is known", with no
+fabricated memory). The knowledge-update and abstention cases are the ones
+that catch a store that only appends; the memory-bank reference's
+consolidation semantics are what makes them pass. A case carries the
+session turns that seed the store (with author and timestamp), the
+question, the operative claims the answer must contain, the claims it must
+not (the superseded value, the planted fact), `expected: null` for an
+abstention case, and the scope and "now" the recall runs under; the same
+file scores offline against a provider double and live against the store.
 
 For each development case, record the operative units a competent reviewer
 would cite. Keep that gold set with the evaluator, never in retriever or model

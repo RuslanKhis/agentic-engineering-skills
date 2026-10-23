@@ -36,8 +36,10 @@ In ADK 2.8.0 the request processors build an `LlmRequest` in this order (D,
    isolation scopes, empty content and ADK framework, auth and confirmation
    events, materialises compaction summaries at their end timestamp while
    removing raw events inside kept ranges, drops orphaned function responses
-   and rewrites other agents' replies as user-role context. With
-   `include_contents='none'`, `_get_current_turn_contents` scans backwards to
+   and rewrites other agents' replies as user-role context. A custom trim or
+   summariser plugin on top of this has its own rules, in
+   [Trim or summarise without breaking call pairs](#trim-or-summarise-without-breaking-call-pairs).
+   With `include_contents='none'`, `_get_current_turn_contents` scans backwards to
    the latest user or other-agent event that starts the current turn and builds
    contents from there only, so current-turn tool exchanges remain.
 3. **Dynamic placement.** `_insert_transient_user_content` inserts the dynamic
@@ -194,7 +196,7 @@ Two lighter alternatives exist. `ContextFilterPlugin(num_invocations_to_keep=,
 custom_filter=, remove_amount=)` in `plugins/context_filter_plugin.py` (2.8.0
 D; absent from the docs site) trims request contents without a summariser; it
 changes what the model sees, not what storage holds, so test open tool pairs
-across the cut. The adk-recipes long-horizon harness (ADK 2.8.x) prunes old
+across the cut. The adk-recipes long-horizon harness (ADK 2.5.x per its README stack table, read 2026-10-22) prunes old
 large tool-result bodies behind `LHA_PRUNE_TOOL_OUTPUTS`, saves large outputs to
 GCS artifacts and caps memory prefetch so a changing prefetch does not
 invalidate the cached prefix each turn (V, sample repository, not inspected
@@ -275,6 +277,40 @@ Check: the child's captured request lacks the parent's old-history marker and
 contains the handoff fields; the parent's next request contains the child's
 summary once; nested model and tool calls are counted in the shared budget.
 
+## Trim or summarise without breaking call pairs
+
+A function call and its responses are an atomic group, kept or dropped
+together: a call without its result, or a result without its call, breaks
+the next request, which is the failure ADK's 2.12.0 orphaned-call fix
+repaired inside the framework (microsoft/agent-framework commit 0200599,
+MIT, `docs/decisions/0019-python-context-compaction-strategy.md`, accepted,
+read 2026-10-23, states the rule for any framework). The safe cut for a
+custom plugin that slices `llm_request.contents` in `before_model_callback`
+is a turn start: a user content that carries no `function_response` part.
+Every call and its result sit between two turn starts, so cutting only there
+keeps groups whole, and a model content's thought signature stays with its
+call. Treat the budget as a minimum (keep more, never split a group) and
+always send the current turn even when it alone exceeds the budget.
+
+An unmatched call is reported, not pruned: a call waiting on a person or a
+long-running tool looks the same as one whose process died (#7236 in the
+pitfalls below), and pruning a pending approval loses it. Log it with its
+id and age; prune only after the owning flow has recorded it as abandoned.
+
+The three compaction points, mapped to ADK:
+
+| Point | ADK mechanism | Stored history | Test |
+| --- | --- | --- | --- |
+| Inside the run, between model calls | a plugin or agent `before_model_callback` that trims what is sent | untouched | scripted-model Runner test: no request carries a split pair; the current turn is always present |
+| After an invocation | `App(events_compaction_config=...)`, which appends a summary event over a range; raw events stay in the session store | appended to | the trigger test below, on the pinned version and the target session backend |
+| Maintenance over stored history | outside ADK: a job over the session store | rewritten | a retention and erasure decision first (`adk-memory-architecture`), then a migration test |
+
+Both the plugin and compaction travel on the `App`; a `Runner` built from
+`root_agent` alone drops them silently, so confirm the server loads the
+`App` object. `ContextFilterPlugin` (below) is the built-in alternative to a
+custom trim; check its cut is pair-safe on the pinned version before relying
+on it.
+
 ## Know the compaction trigger in the pinned version
 
 Facts read from 2.8.0 `apps/compaction.py` and `apps/_configs.py` (D):
@@ -311,16 +347,29 @@ Facts read from 2.8.0 `apps/compaction.py` and `apps/_configs.py` (D):
   releases excluded pending function calls (1.28.0), human-in-the-loop events
   (1.34.0) and rewound invocations (2.5.0). Token compaction remains
   experimental (discussion #4215).
+- 2.12.0 (CHANGELOG at main commit ed76f94, read 2026-10-22) skips a
+  compaction instead of failing when the summariser errors (5c54055) or when
+  compaction cannot shrink the request (36779a0), stops an orphaned
+  `function_call` from blocking compaction permanently (3f34675, #7236),
+  tolerates tool responses JSON cannot encode (d4f9eb1), and keeps tool
+  sub-branch events out of the calling agent's LLM context (2e06fdc). The
+  entries imply that earlier versions failed the turn instead; confirm on
+  the pinned version, and write the compaction test to assert whichever
+  outcome the pin has (a logged skip with a retry on the next window, or a
+  failed turn) rather than assuming either.
 - Measured example: Bo Yang, "2-Minute ADK: Context Compaction", 2025-10-11,
   interval 3 and overlap 1 cut one prompt from 1,427 to 868 tokens, about 39%
   (E, one published run). A "60-80%" figure circulating on dev.to is
-  unverified. The adk-recipes long-horizon harness (ADK 2.8.x) ships
+  unverified. The adk-recipes long-horizon harness (ADK 2.5.x, same source) ships
   `EventsCompactionConfig(summarizer=HorizonSummarizer, token_threshold=750_000,
   event_retention_size=20, compaction_interval=8, overlap_size=2)` with a
   `static_instruction` built once as a pure function of tool names, model and
-  code-executor presence, and volatile data appended as trailing content (V,
-  sample repository, not inspected here). Treat these as starting points to
-  measure, not defaults.
+  code-executor presence, and volatile data appended as trailing content; its
+  summariser subclasses `LlmEventSummarizer` to fire a memory flush before the
+  lossy summary and to prepend a reference-only banner to it (V, google/adk-recipes
+  be63596, `core/python/long-horizon-harness/AGENTS.md` and `docs/memory.md`,
+  read 2026-10-22; `adk-memory-architecture` owns what the flush saves). Treat
+  these as starting points to measure, not defaults.
 - Agents CLI's cheatsheet recommends token-based compaction over a turn count
   because it "triggers on actual prompt-token volume", and shows
   `EventsCompactionConfig(token_threshold=32000, event_retention_size=5,
@@ -354,7 +403,7 @@ cache is claimed; a configuration print proves neither.
 
 | Issue | Observed | Status at writing | Detection |
 | --- | --- | --- | --- |
-| adk-python #7236 | An orphaned `function_call` (process died mid-tool) silently disables token compaction after the first compaction | Reported 2026-09-22 against 2.9.2, open | `context_budget.py` orphan report; ensure every call receives a response or prune orphans at the app layer |
+| adk-python #7236 | An orphaned `function_call` (process died mid-tool) silently disables token compaction after the first compaction | Reported 2026-09-22 against 2.9.2, open | `context_budget.py` orphan report; ensure every call receives a response, and prune at the app layer only calls the owning flow has recorded as abandoned (a pending approval or long-running call is not an orphan) |
 | adk-python #3530 | Compaction crash on `DatabaseSessionService`, `'dict' object has no attribute 'start_timestamp'` | November 2025, closed; fix version unclear | Run a compaction through the real session backend offline before deploying |
 | adk-python #6062 | Explicit cache never created while `static_instruction` and dynamic `instruction` coexist | June 2026, PR #6367; verify on the pinned version | Two consecutive fingerprints differ while system instruction and tools are equal |
 | adk-python #6945 | Cache application emptied request contents | Fixed in 2.9.0 | Captured request after cache application still holds the current turn |
@@ -381,6 +430,6 @@ Issue links follow `https://github.com/google/adk-python/issues/<number>`.
 | ADK CHANGELOG, tags 2.6.0 to 2.11.0 | D | Version-specific behaviour named above; check the pinned version against the changelog |
 | Bo Yang, "2-Minute ADK: Context Compaction", 2025-10-11, https://medium.com/google-cloud/2-minute-adk-context-compaction-in-a-snap-470da15c30f4 | E, one run | 1,427 to 868 prompt tokens with interval 3, overlap 1 |
 | Balaji Subramaniam, "How to Slash Token Costs with Context Caching in Agent Harnesses", 2026-09-01, https://medium.com/google-cloud/how-to-slash-token-costs-with-context-caching-in-agent-harnesses-6431ba16d931 | E, one run | 74-79% fewer transmitted input tokens; rules of thumb |
-| adk-recipes, `core/python/long-horizon-harness/AGENTS.md`, https://github.com/google/adk-recipes | V, sample | Production-style compaction and static-prefix values; not inspected here |
+| adk-recipes, `core/python/long-horizon-harness/AGENTS.md`, https://github.com/google/adk-recipes | V, sample | Production-style compaction and static-prefix values; its README stack table says ADK 2.5.x (read 2026-10-22); code not inspected here |
 | adk-python discussions #3374 and #4215, https://github.com/google/adk-python/discussions | V | Explicit summariser for workflow roots; experimental status |
 | Google `agents-cli` 1.11.0 (Apache-2.0), `google-agents-cli-adk-code` skill, `references/adk-python.md`, read 22 October 2026 from a local snapshot | V | Token-based compaction recommendation and example values; `ContextCacheConfig` example; written for `google-adk>=2.12.0`; not executed or bundled |

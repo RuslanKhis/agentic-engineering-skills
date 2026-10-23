@@ -49,6 +49,43 @@ assume it.
    capability gate from [injection patterns](injection-patterns.md). Prefer
    one `McpToolset` per agent where the agents are separated by the trifecta
    rule.
+6. **When a platform mandates a third-party scan, or you choose one, run it
+   pinned before adoption, knowing what it sends.** Snyk Agent Scan (formerly mcp-scan) scans MCP configurations,
+   tools, prompts, resources and skill folders for fourteen scored risks
+   (`prompt_injection_tool_desc`, `untrusted_content`, `private_data`,
+   `destructive_capabilities` for servers; `prompt_injection_skill_instructions`,
+   `suspicious_download_url`, `malicious_code` and credential handling for
+   skills). Facts that decide whether and how to run it (snyk/agent-scan commit 73c0966, Apache-2.0 code under Snyk's terms of use; `README.md`, `docs/cli-reference.md`, `docs/failure-codes.md`, read 2026-10-23; PyPI snyk-agent-scan 0.6.9, 2026-10-20; documented, not run): it is
+   installed by `uvx snyk-agent-scan@<version>` or a signed release binary,
+   never npm; it needs a `SNYK_TOKEN`; `scan` sends agent application details,
+   MCP configurations and signatures, tool names and descriptions and skill
+   content to Snyk's analysis API with secrets redacted, under Snyk's terms,
+   while `inspect` lists tools, prompts, resources and skills locally without
+   requesting analysis; it starts stdio servers by executing their configured
+   commands, so in CI it runs only in an ephemeral container with
+   `--dangerously-run-mcp-servers` after the commands and URLs were reviewed;
+   `--ci` exits 1 when risks or operational failures remain, 0 when none
+   remain after `--ignore-risks` and `--ignore-failure-codes`, 2 on invalid
+   usage; and the README calls the output schema, risk names and scores
+   experimental, so a pipeline keys on the exit code and a pinned version,
+   never on fields. The scan is evidence beside this skill's own allow-list,
+   recorded definitions and hash pin, not a replacement: a clean scan of a
+   server whose definitions are not pinned proves nothing about tomorrow's
+   definitions. Do not point it at a configuration that holds credentials for
+   a production server, and do not run it on content that must not leave the
+   organisation. The invocation shape, from the README (documented, not
+   run): the positional argument is a configuration file in the
+   `mcpServers` JSON shape the popular hosts write (the README's examples
+   scan `~/.vscode/mcp.json` and a `~/.claude/skills` folder), so a project
+   keeps a small `mcp-scan/<server>.json` holding exactly the agent's command
+   and arguments and no credentials, with a test that parses the agent module
+   and asserts the two commands are equal; the CI job is then
+   `uvx snyk-agent-scan@0.6.9 scan --ci --dangerously-run-mcp-servers
+   mcp-scan/<server>.json` on a runner that has Node for the server's `npx`,
+   `SNYK_TOKEN` from secrets, independent of the test job, with exit 0 as
+   pass, 1 as block, any other code and a missing token as NOT RUN (the
+   release skill's gate vocabulary). The positional form is read from the
+   README and confirmed on the first run.
 
 ## Transport, identity and secrets
 
@@ -58,7 +95,7 @@ assume it.
 | Per-user credentials through `header_provider(readonly_context)`, never hardcoded headers | ADK docs; `adk-tool-auth-and-secrets` owns the token lifecycle |
 | No token passthrough | MCP Security Best Practices, 2025-11-25 (documented behaviour): a server MUST NOT accept tokens that were not issued for it; an agent must not forward the user's upstream token to a downstream server |
 | Per-client consent, session IDs bound to the user, scope minimisation | Same specification: confused-deputy and session-hijack sections |
-| Treat tool annotations (`readOnlyHint`, `destructiveHint`) as hints | The specification says clients must not trust annotations from untrusted servers; never derive the tool tier or confirmation policy from them |
+| Treat tool annotations (`readOnlyHint`, `destructiveHint`) as hints | The specification says clients must not trust annotations from untrusted servers; never derive the tool tier or confirmation policy from them. A server you operate can make the hint true: MCP Toolbox for Databases advertises `readOnlyHint: true` only when the source is `readOnly: true`, which it enforces at the database engine through the connection string rather than a runtime `SET` (mcp-toolbox v1.14.0, `docs/en/documentation/configuration/security/read-only.md`, read 2026-10-22; vendor documentation); the lock, not the hint, is what the tier rests on |
 | Strict auth and tight network path between agent and MCP server | ADK docs; VPC-SC and Private Google Access on GCP (vendor guidance) |
 | Filesystem servers get restrictive absolute roots | ADK docs |
 | Google-managed MCP servers can sit behind Model Armor floor settings | Security Command Center release note 2025-12-15 (vendor guidance; configuration with `protect-adk-sensitive-data`) |
@@ -123,7 +160,13 @@ needs (`adk-tool-interface-design` covers the schema), and pin its hash.
 - Operator identified; transport and authentication recorded.
 - `tool_filter` lists names; read-only in production unless a write is
   tiered and gated ([agency and output](agency-and-output.md)).
-- Declarations dumped, read, hashed and committed; a test compares hashes.
+- Declarations dumped, read, hashed and committed as the interoperability
+  skill's `mcp_tool_inventory.py --out` manifest, the one pin format both
+  skills use; a test runs `--diff` against it (or compares the same hashes
+  from `get_tools` when the SDK is present).
+- When a scan is mandated or chosen: the pinned scan job in CI with its exit
+  codes mapped, the scanned configuration tied to the agent's command by a
+  test, and the data-handling decision recorded (item 6).
 - `tool_name_prefix` set when more than one server is present.
 - No token passthrough; `header_provider` supplies per-user credentials.
 - Fetch and send tools inside the server's allowlist have SSRF and

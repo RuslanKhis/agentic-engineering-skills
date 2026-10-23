@@ -41,6 +41,35 @@ Write the effective value of each gate into the review. `OTEL_SDK_DISABLED=true`
 
 `error.type` on model calls derives from the provider status code (`str(error.code)` for `APIError`, else the exception class name; 2.6.0 CHANGELOG).
 
+The OpenTelemetry GenAI conventions now live in their own repository
+(open-telemetry/semantic-conventions-genai, commit 9ffc7e0, 2026-10-21;
+Apache-2.0; read 2026-10-22), every agent span and event there still carries
+**Development** status, and that repository ships a reference scenario for
+google-adk pinned to `google-adk==2.11.0`
+(`reference/scenarios/google-adk/`). Its README marks `invoke_agent`
+(internal), `invoke_workflow`, `execute_tool`, memory and `SkillToolset`
+spans as implemented and inference as correctly delegated to `google-genai`;
+its `conformance.yaml` lists the ten violations a conformant run is expected
+to show, which is the list to diff against on your own export; this skill
+carries them as data in
+[assets/semconv-expected-violations.adk-2.11.0.json](../assets/semconv-expected-violations.adk-2.11.0.json)
+(exactly five `gcp.vertex.agent.*` keys: `event_id`, `invocation_id`,
+`llm_request`, `llm_response`, `session_id`; the tool-argument and
+tool-response keys under the same prefix are not in the upstream list, so
+they count as drift until the list changes; the removed `gen_ai.system`
+attribute, `process.exit.code`, the `execute_tool <gen_ai.tool.name>`
+span-name refinement, and histogram unit `1` where the conventions want
+`{inference_call}` and `{tool_call}`). Two cautions before using it as a
+baseline: the scenario runs the conventions' own reference instrumentation
+over ADK and patches ADK's native `trace_tool_call` and
+`trace_merged_tool_calls` out (`scenario.py`), so it describes ADK's
+operations and attributes, not ADK's native tool spans; and it was checked
+against 2.11.0, not 2.12.0. Do not key a dashboard or alert on
+`gen_ai.system`; key on `gen_ai.provider.name`, `gen_ai.operation.name` and
+`gen_ai.agent.name`, and carry the proprietary `gcp.vertex.agent.*` keys as
+ADK-specific joins. A new violation beyond that list on your pinned version
+is drift to record, not a dashboard to fix.
+
 ## Log records
 
 | Event name | Body | Gate |

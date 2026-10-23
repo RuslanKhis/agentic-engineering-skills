@@ -64,7 +64,7 @@ private destinations inside a trusted adapter; return opaque references rather
 than addresses. Do not make the model invent its own authorisation evidence.
 
 Screen free text **before** a ticket write, email send, durable record or other
-side effect. Output callbacks are too late to undo a write. Use a stable
+side effect. Output callbacks are too late to undo a write, so a screen that must prevent an effect runs on the model response before its function calls are dispatched (an `after_model_callback` that replaces a blocked response with a static message carrying no function call, with `before_tool_callback` as the second boundary), never beside the model call; a screen that only shapes the visible answer may run at release. Use a stable
 domain-specific idempotency key and durable deduplication before retrying a
 non-idempotent action (**production guidance**). The historical receipt tool
 returned a deterministic synthetic reference and sent no real email; its hash

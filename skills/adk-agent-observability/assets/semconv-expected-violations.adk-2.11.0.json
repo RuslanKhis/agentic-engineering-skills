@@ -1,0 +1,66 @@
+{
+  "kind": "expected_semconv_violations",
+  "instrumented_library": "google-adk",
+  "checked_against": {
+    "google-adk": "2.11.0",
+    "conventions": "open-telemetry/semantic-conventions-genai commit 9ffc7e0 (2026-10-21)",
+    "source_file": "reference/scenarios/google-adk/conformance.yaml",
+    "read": "2026-10-23"
+  },
+  "note": "Restated from the conventions' reference scenario for google-adk (Apache-2.0); each entry is a deviation a conformant ADK export is expected to show. A deviation not in this list on your pinned version is drift to record. The scenario patches ADK's native tool spans out and runs the conventions' reference instrumentation, so it describes operations and attributes, not ADK's native tool spans.",
+  "expected": [
+    {
+      "id": "missing_attribute",
+      "attribute_key": "gcp.vertex.agent.event_id",
+      "why": "ADK-owned attribute outside the registry"
+    },
+    {
+      "id": "missing_attribute",
+      "attribute_key": "gcp.vertex.agent.invocation_id",
+      "why": "ADK-owned attribute outside the registry"
+    },
+    {
+      "id": "missing_attribute",
+      "attribute_key": "gcp.vertex.agent.llm_request",
+      "why": "ADK-owned attribute outside the registry"
+    },
+    {
+      "id": "missing_attribute",
+      "attribute_key": "gcp.vertex.agent.llm_response",
+      "why": "ADK-owned attribute outside the registry"
+    },
+    {
+      "id": "missing_attribute",
+      "attribute_key": "gcp.vertex.agent.session_id",
+      "why": "ADK-owned attribute outside the registry"
+    },
+    {
+      "id": "missing_attribute",
+      "attribute_key": "gen_ai.system",
+      "why": "removed from the conventions; gen_ai.provider.name is the registry key"
+    },
+    {
+      "id": "missing_attribute",
+      "attribute_key": "process.exit.code",
+      "why": "process attribute referenced by the command-tool refinement, not in the GenAI registry"
+    },
+    {
+      "id": "genai_span_name_format",
+      "operation": "execute_tool",
+      "expected_form": "execute_tool or 'execute_tool <gen_ai.tool.name>'",
+      "why": "the runner does not recognise the span-name refinements for skill and command tools"
+    },
+    {
+      "id": "unit_mismatch",
+      "metric_unit": "1",
+      "expected": "{inference_call}",
+      "why": "histogram emitted with unit 1"
+    },
+    {
+      "id": "unit_mismatch",
+      "metric_unit": "1",
+      "expected": "{tool_call}",
+      "why": "histogram emitted with unit 1"
+    }
+  ]
+}

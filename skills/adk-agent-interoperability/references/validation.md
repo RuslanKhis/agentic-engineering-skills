@@ -21,6 +21,12 @@ escalated to `adk-agent-security`; card `counts.errors` zero and
 manifest; a test compares the live list with it. Exit 1 (`partial`) means a
 source was unreachable and must be explained.
 
+The diff compares tools by bare name whenever each manifest holds a single
+target, so a manifest pinned against a staging URL or a loopback fake diffs
+cleanly against production; `keyed_by` in the output says which key was used,
+and a multi-target manifest keeps `target::name`. The committed manifest
+lives beside the agent, not under `.adk-evidence/`, which holds run output.
+
 ## 2. Source and pin check
 
 - `google-adk`, `mcp` and `a2a-sdk` pins unchanged, or the change is a
@@ -57,6 +63,83 @@ server or peer: one `tools/list` and one read-only `tools/call` for MCP, one
 `message/send` reaching a terminal state for A2A, recorded with date,
 versions, identity used and the response's state. Label it live. For
 platform registration, the platform's own test call is the live evidence.
+
+## 6. Protocol conformance (local, pinned)
+
+The MCP project's conformance suite (`@modelcontextprotocol/conformance`,
+npm; `0.2.0-alpha.12` published 2026-10-01, repository
+modelcontextprotocol/conformance commit c37eec8; MCP-project licence, in
+transition from MIT to Apache-2.0; invoked, never vendored) runs scenarios
+against a server URL and exits 0 when every scenario passed and 1 otherwise.
+Three facts decide how to use it, all from its README and confirmed by running
+it on 2026-10-22 against a `to_mcp_server` instance on google-adk 2.12.0 with
+`mcp` 2.3.0, streamable HTTP on loopback, a scripted model and no network:
+
+- **Run a requirement set, not the whole suite.** `--requirements 2025-11-25`
+  or `--requirements 2026-07-28` runs exactly what that revision requires at
+  that revision's wire format (the dated revisions through 2025-11-25 use the
+  `initialize` handshake, 2026-07-28 is stateless with per-request `_meta`),
+  replaces `--suite`, `--spec-version` and `--scenario`, and lists unscored
+  extension and pending scenarios separately. `list --requirements <rev>`
+  prints the set. A server that serves both revisions is run twice.
+- **Most scenarios call fixture tools and fail on a business server by
+  design.** The `tools-call-*` (image, audio, embedded resource, mixed
+  content, logging, progress, sampling, elicitation), `elicitation-*`,
+  `resources-read-*`, `resources-templates-read`, `resources-subscribe`,
+  `prompts-get-*`, `completion-complete`, `logging-set-level`,
+  `json-schema-2020-12`, `http-custom-header-server-validation` and
+  `input-required-result-*` scenarios look for the reference "everything"
+  server's tools, resources and prompts (`json_schema_2020_12_tool`, tools
+  with `x-mcp-header` annotations, a `test_missing_capability` diagnostic
+  tool); the ADK server answers an unknown tool name with an `isError` result,
+  which those checks read as a failure, not a rejection. They go into the
+  baseline with the reason. The checks that need no fixture are the real
+  test, and the ADK 2.12.0 server passed every one of them: `server-initialize`,
+  `server-session-lifecycle`, `ping`, `tools-list`, `tools-call-simple-text`,
+  `tools-call-error`, `server-sse-multiple-streams`, `resources-list`,
+  `prompts-list`, `dns-rebinding-protection`, `caching` (7 of 7),
+  `http-header-validation` (14 of 14), `sep-2164-resource-not-found`, and 25
+  of the 27 checks in `server-stateless` (the two failures are the
+  diagnostic-tool checks `sep-2575-server-rejects-undeclared-capability` and
+  `sep-2575-missing-capability-http-400`, so the per-check baseline entries
+  are `server-stateless:sep-2575-server-rejects-undeclared-capability` and
+  `server-stateless:sep-2575-missing-capability-http-400`; check ids appear
+  only in run output and in the suite's `src/scenarios/server/` sources, not
+  in `list`). Totals on that server: 44 passed and 21
+  failed in the default active suite; 45 and 23 under 2025-11-25 with 3
+  unscored; 113 and 56 under 2026-07-28 with 13 unscored (the Tasks extension
+  and three pending scenarios).
+- **The baseline is a YAML file and it fails both ways.** `server:` lists
+  scenario names or single checks as `<scenario>:<check-id>`; a failing entry
+  in the baseline exits 0, a failing scenario not in it exits 1, and a
+  baselined scenario that now passes exits 1 as a stale entry ("Baseline is
+  stale: update your expected-failures file"), which is what makes the file
+  a drift detector; a baselined check that a scenario never reaches is
+  tolerated. All three exit paths were observed. Keep one baseline per
+  revision, each entry with a comment naming the fixture it depends on, and
+  prefer per-check entries so the other checks in a scenario stay enforced.
+
+For an exposed A2A agent the counterpart is the A2A TCK, scoped to the card
+and versioning requirements against a local `to_a2a` instance; the command,
+the requirement ids, what the TCK cannot test on a real agent and why it was
+not run here are in [a2a-contracts](a2a-contracts.md#checklist-per-boundary).
+Record its `reports/compatibility.json` and the deferred ids as local
+evidence once it has run on the pinned a2a-sdk.
+
+The conformance suite needs Node 22 and the npm registry; it does not need a
+model, a project or credentials when the agent behind the server runs a
+scripted model. A server that serves both revisions is gated on both, one
+baseline each; the first run is what turns scenario-level entries into
+per-check ones. The producer-side security review is the tier review of the
+tools behind the server in `adk-agent-security` (outputs as data, no
+model-chosen recipient, read-only where possible); this skill's exposure
+reference and checklist carry the rest of the producer's obligations. The same server answered this skill's `mcp_tool_inventory.py` over
+the `initialize` handshake at protocol 2025-06-18 (one tool, exit 0), so the
+inventory manifest and the conformance baseline can sit side by side in the
+repository. The Inspector CLI (`@modelcontextprotocol/inspector`, 2.12.0 on
+npm on 2026-10-22; `--method tools/list`) is an independent manual
+cross-check of the same manifest; where it stores OAuth tokens was not
+verified here.
 
 ## Completion report
 

@@ -14,6 +14,38 @@ Build a `TracerProvider` with `InMemorySpanExporter` and a `MeterProvider` with 
 - Metrics: one `gen_ai.invoke_agent.duration` point, one `gen_ai.execute_tool.duration` point, `gen_ai.invoke_agent.inference_calls` equal to the scripted call count; `adk.experimental.invoke_agent.total_tokens` absent without the opt-in and present with it.
 - Duplicate-owner regression: install `GoogleADKInstrumentor` (if the project uses it) in the same test and assert the span count does not double; if it does, the project has two owners and must choose.
 
+## Local: semantic-convention check (planned until run)
+
+The conventions repository's companion runner
+(open-telemetry/semantic-conventions-conformance, commit 3a5dd62; `tools/gen-ai/`
+holds the registry pin, advice policies and a mock LLM server so a scenario
+runs without a provider) checks one scripted invocation with Weaver
+live-check and compares the violations with the scenario's
+`expected_violations`. It is installed from the repository (`pip install -e
+tools/runner -e tools/gen-ai/mock-server -e tools/gen-ai/runner`), is not
+published to PyPI as of 2026-10-22, and was not run here. On the target, the
+check is: one scripted invocation of the real `Runner` under the runner's
+mock server (`MOCK_LLM_URL`), Weaver live-check over the exported spans and
+metrics, and a diff of its violations against the upstream
+`conformance.yaml` for google-adk; anything new is drift on your pinned
+version and goes into the release record with the convention commit it was
+checked against. Record the runner commit, the Weaver version and the ADK
+version with the result.
+
+Without the runner (it is unpublished and needs its mock server), build the
+drift check from parts this skill already has: the expected-violation list
+as data (the asset above), the in-memory exporter test below as the export
+(spans and metrics from the real `Runner` under a scripted model), a small
+classifier that reads every attribute, span name and metric unit the export
+carries against the registry names in [signals and schema](signals-and-schema.md)
+and labels each deviation `known` (in the list) or `drift`, and a committed
+baseline of the observed export so a later run diffs against what this
+version emitted. Exit codes for CI: 0 no drift, 1 drift found, 2 the check
+could not run (no export, no SDK). The same scripted-Runner test produces
+the saved session the two helpers read: dump the in-memory session service's
+session for the test's `session_id` to JSON after the run, so the helpers
+have input in a project with no production export yet.
+
 ## Local: saved-session helpers
 
 - `invocation_summary.py` over a fixture with a streamed call (two partial events with cumulative usage, one final event): input and output tokens equal the final chunk's figures; a final event without usage takes the newest partial's figures and sets the `usage_taken_from_newest_partial_on_1_calls` flag. The bundled tests (`tests/test_invocation_summary.py`) cover this; run them from the target's interpreter too.

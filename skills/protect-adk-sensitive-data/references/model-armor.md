@@ -30,7 +30,27 @@ before applying this ordering on another version.
 
 At this tested version the native plugin screens the latest user text and model
 text, skips function responses, and does not screen function-call arguments as
-text. It blocks `MATCH_FOUND`; it does not substitute advanced SDP transformed
+text. ADK 2.12.0 changes the first gap: the plugin gains an
+`after_tool_callback` that screens tool output against a separate
+`tool_output_template_name`, chunked at 65,536 characters with a 4,096
+overlap, and the config raises when a tool-output template is required but
+unset (CHANGELOG 2.12.0 fdda17c, closes #6966; `integrations/model_armor/_plugin.py`
+and `_config.py` at adk-python main ed76f94, read 2026-10-22; source-verified,
+not executed). On 2.8.0 the application hook in [boundaries](boundaries.md)
+remains the only tool-result screen; on 2.12.0 and later the plugin screens the
+result as text and the hook still owns projection and the structured fields.
+Two other Google paths screen tool traffic outside your code: Agent Gateway
+applies one Model Armor template to ingress (client to agent) and one to
+egress (agent to tools and services), with region and traffic-type limits; and
+project-wide Model Armor floor settings screen `tools/call` and `prompts/get`
+requests, responses and tool errors for the Google Cloud MCP servers that
+support them, not for any other MCP server, with streaming transports
+unscreened and basic SDP only (MCP Toolbox for Databases v1.14.0,
+`docs/en/documentation/configuration/security/model-armor.md`, read
+2026-10-22; vendor documentation, confirm against the Model Armor pages it
+links). That page's own ADK sample screens with `before_model_callback` and
+`after_model_callback` and skips tool-result turns, so it is not a tool-result
+screen for ADK; only its LangChain middleware screens tool data as ingress. It blocks `MATCH_FOUND`; it does not substitute advanced SDP transformed
 text. `block_on_screening_failure=False` changes screening-error behaviour; it
 is **not** a shadow/observe-only switch. A native plugin alone therefore does
 not establish protection before user-event persistence, complete-history

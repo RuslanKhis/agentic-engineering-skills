@@ -1271,8 +1271,10 @@ versioning, pinned model and judge IDs, evaluation gates in CI with threshold,
 repeat and cost policy, model-version migration with re-baselining, staged
 promotion on Cloud Run and Agent Runtime, joint rollback of prompt, model,
 tool schema and secrets, and refreshing eval sets from production. It records
-that `adk eval` exits successfully even when cases fail, so the gate must use
-pytest or conformance replay. A helper inventories every model, judge, prompt
+that `adk eval` exits successfully even when cases fail on every release
+through 2.12.0 (a main commit changes this), so the gate uses pytest or
+conformance replay and the exit code is checked on the pinned version. A
+helper inventories every model, judge, prompt
 hash, eval set and deploy artefact into a release manifest. Writing the eval
 cases stays with [adk-agent-evaluation](#adk-agent-evaluation).
 
@@ -1824,6 +1826,436 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### MITRE ATLAS and the CoSAI Risk Map · 23 October 2026
+
+[ATLAS](https://github.com/mitre-atlas/atlas-data) 2026.09 (commit 3259f38)
+and the [CoSAI Risk Map](https://github.com/cosai-oasis/secure-ai-tooling)
+(commit 622605a), both Apache-2.0, were read for identifiers only: the
+security skill now names eleven ATLAS agent techniques, ten Risk Map risks
+and six controls beside the OWASP ids, cited by id with links, and records
+that the map's technique mappings still point at the older ATLAS release. A
+fresh-agent trial writing a review in that vocabulary rated the work 4 of 5;
+eight frictions were fixed the next day, including the security inspector
+missing a shared-corpus search as a private source, now covered with a test.
+All **22 packages** pass validation and **700 tests** pass with **59
+optional SDK checks skipped**. See the
+[comparison note](docs/research/atlas-cosai-comparison-2026-10-23.md)
+and the [trial record](docs/testing/atlas-cosai-alignment-2026-10-23.md).
+
+### Snyk Agent Scan · 23 October 2026
+
+[snyk/agent-scan](https://github.com/snyk/agent-scan) (formerly mcp-scan;
+commit 73c0966, Apache-2.0 code under Snyk's terms) was documented, not run,
+because running it uploads configurations, tool descriptions and skill
+content to Snyk: the security skill names it as pinned optional evidence
+beside the allow-list, recorded definitions and hash pin, with its local
+`inspect` mode, its CI exit codes, its experimental-output caveat and the
+container-only rule, and the testing guide names an optional maintainer scan
+of the packages as a choice. A fresh-agent trial adopting a vendor's stdio
+server with a mandated scan rated the work 4 of 5; six frictions were fixed
+the same day, including one canonical pin format across the security and
+interoperability skills. All **22 packages** pass validation and **699
+tests** pass with **59 optional SDK checks skipped**. See the
+[comparison note](docs/research/agent-scan-comparison-2026-10-23.md)
+and the [trial record](docs/testing/agent-scan-alignment-2026-10-23.md).
+
+### Promptfoo · 22 October 2026
+
+[promptfoo](https://github.com/promptfoo/promptfoo) (commit 15bcb0d, MIT;
+npm 0.124.1) was read for its ADK 2.x guide and its exit codes were
+observed with the `echo` provider rather than taken from the docs: 100 on a
+failed test, 0 under a cleared pass-rate threshold, 0 on all pass. The
+evaluation skill carries the in-process Python provider shape, the
+trajectory and trace assertion types, the tracing configuration keys and
+the content-gate dependency; the release skill maps the exit codes onto the
+gate vocabulary with the two traps an empty suite and errored rows set; the
+observability skill notes the guide's dependence on ADK-owned span keys. A
+fresh-agent trial wiring a nightly gate rated the work 3 of 5; six frictions
+were fixed the next day, including the 2.12.0 model-span name read from the
+installed package. All **22 packages** pass validation and **699 tests**
+pass with **59 optional SDK checks skipped**. See the
+[comparison note](docs/research/promptfoo-comparison-2026-10-22.md)
+and the [trial record](docs/testing/promptfoo-alignment-2026-10-23.md).
+
+### AgentDojo · 22 October 2026
+
+[AgentDojo](https://github.com/ethz-spylab/agentdojo) (v0.1.35, commit
+089ed46, MIT) was read for its injection goal classes, not its data: four
+attributed synthetic cases and fixtures joined the security skill's
+adversarial asset (a split transfer from a poisoned bill, a bulk post-out
+from a channel message, a security code forwarded and the trace deleted, a
+reservation steered by a review), with the benchmark's important-instructions
+envelope restated and its end-state grading noted as the asset's own
+discipline; the live attack-success-rate route is written as an approved
+paid campaign, version-conditionally. A fresh-agent trial extending a
+workspace assistant's suite rated the work 4 of 5; seven frictions were
+fixed the next day, including the confirmation protocol's wire shape read
+from the 2.12.0 flow. All **22 packages** pass validation and **699 tests**
+pass with **59 optional SDK checks skipped**. See the
+[comparison note](docs/research/agentdojo-comparison-2026-10-22.md)
+and the [trial record](docs/testing/agentdojo-alignment-2026-10-22.md).
+
+### Designer proposals from the research memo, tested · 23 October 2026
+
+The integration memo's eight proposals for the system designer's templates
+were treated as hypotheses: one synthetic design, two designer trials (the
+current ticket template against a prototype carrying every proposal), and
+two engineer trials carrying out the first ticket of each set. Adopted into
+the ticket template: `touches` and `parallel_safe` with definitions, a
+`docs` list, EARS wording for acceptance items with a `(floor)` tag,
+automated and manual verification split with the interpreter named,
+per-item evidence with a `Rulings:` list and a `done` rule, and optional
+`contract_deltas`. Declined: a `reference_patterns` field, a `constraints`
+pointer, a project-instructions goal in every plan, and companion lines in
+every ticket (the lead-method rule now lives once in the handoff reference).
+Both trial pairs also asked for the same repairs to the existing template,
+now made, and found a comment-parsing bug in the schedule helper, fixed with
+a test. All **22 packages** pass validation and **699 tests** pass with
+**59 optional SDK checks skipped**. See the
+[research note](docs/research/phase-d-designer-proposals-2026-10-23.md)
+and the [trial record](docs/testing/phase-d-designer-trials-2026-10-23.md).
+
+### Pydantic AI, LangGraph and companion collections · 23 October 2026
+
+Four documentation sources were read for rules and shapes, none imported as
+code. [Pydantic AI](https://github.com/pydantic/pydantic-ai) (commit
+eb0bd08, MIT) gave the tool-interface skill the two kinds of deferred call,
+the evaluation skill span-based trajectory grading, and the observability
+skill the shape of an online evaluator. LangGraph's
+[rules of interrupts](https://github.com/langchain-ai/docs) (commit 23152b1,
+MIT) are restated for ADK's resumable nodes in the workflow skill. Google's
+coding-with-AI page and the [AGENTS.md](https://github.com/agentsmd/agents.md)
+convention give the engineer's composition reference the three channels for
+ADK context and where a project's standing agent instructions live;
+[Superpowers](https://github.com/obra/superpowers) and
+[Matt Pocock's skills](https://github.com/mattpocock/skills) were read as
+inputs to the designer trials, with Kiro's EARS template. Their journeys are
+covered by the durable-execution, observability and designer trials. See the
+[Pydantic AI note](docs/research/pydantic-ai-docs-comparison-2026-10-23.md),
+the [LangGraph note](docs/research/langgraph-interrupts-comparison-2026-10-23.md)
+and the [companion collections note](docs/research/companion-collections-comparison-2026-10-23.md).
+
+### Memory Bank revisions, LongMemEval and Docling · 23 October 2026
+
+Three memory sources read for the memory skill: Google's "Memory revisions"
+page (updated 2026-10-21) for the consolidation outcomes, `previous_revision`,
+`rollback` and `revision_labels` that the reconciliation table and erasure
+rules now rest on; [LongMemEval](https://github.com/xiaowu0162/LongMemEval)
+(commit 9e0b455, MIT; no data imported) for the five abilities a memory gold
+set is structured by; [Docling](https://github.com/docling-project/docling)
+(2.142.0, MIT) as the extractor to reach for behind the ingestion inventory.
+A fresh-agent trial fixing a stale address and a planted memory rated the
+work 3 of 5; six frictions were fixed the same day from the installed
+2.12.0 package, including a sample request that had disabled the revisions
+the rollback path needs. All **22 packages** pass validation and **699
+tests** pass with **59 optional SDK checks skipped**. See the
+[comparison note](docs/research/memory-sources-comparison-2026-10-23.md)
+and the [trial record](docs/testing/memory-sources-alignment-2026-10-23.md).
+
+### Temporal and DBOS ADK integrations · 23 October 2026
+
+[temporalio/ai-integrations](https://github.com/temporalio/ai-integrations)
+(`python/google_adk`, commit bb179c3, MIT; package 0.0.1, pre-release) and
+[dbos-google-adk](https://github.com/dbos-inc/dbos-google-adk) (commit
+288757e, MIT; 0.1.0) were read beside Google's resume page. The workflow
+skill now states that ADK resume runs tools at least once and needs a
+caller, lists each engine's facts that change a design (Temporal's MCP
+toolset needs SDK 1.x, its history records activity arguments, replays
+re-record telemetry; DBOS wants Postgres and declares an older ADK floor),
+names both engines' replay tests as the shape of a determinism regression
+test, and gives the choice order with the kill-after-the-write acceptance
+test; the designer records the three-way decision and the safe-API skill
+says why the idempotency key survives an engine. LangGraph's four rules for
+code around a pause and pydantic-ai's framing joined the same section. A
+fresh-agent trial deciding for a days-long refund approval rated the work
+3 of 5; four frictions were fixed the same day, among them routing rows
+that now name durable execution. All **22 packages** pass validation and
+**699 tests** pass with **59 optional SDK checks skipped**. See the
+[comparison note](docs/research/durable-execution-comparison-2026-10-23.md)
+and the [trial record](docs/testing/durable-execution-alignment-2026-10-23.md).
+
+### kubernetes-sigs/agent-sandbox and GKE Agent Sandbox · 22 October 2026
+
+The controller behind `GkeCodeExecutor`'s sandbox mode
+([agent-sandbox](https://github.com/kubernetes-sigs/agent-sandbox) v1.0.7,
+Apache-2.0) and Google's GKE sample were read with the GKE install page and
+the GA announcement: the security skill carries the CRDs, the version floor
+and flag, the admission policy as a table, the 2.12.0 executor's sandbox
+parameters and install extra, and the examples a design can cite as checks;
+the deploy skill carries Google's Terraform identity layout, the cluster-side
+rules and where warm pools bill; the optimise skill the warm-pool line. A
+fresh-agent trial moving a data helper to sandbox mode rated the work 3 of
+5; seven frictions were fixed the next day. All **22 packages** pass
+validation and **699 tests** pass with **59 optional SDK checks skipped**.
+See the [comparison note](docs/research/agent-sandbox-comparison-2026-10-22.md)
+and the [trial record](docs/testing/agent-sandbox-alignment-2026-10-22.md).
+
+### Approval, screening and compaction rules from other frameworks · 23 October 2026
+
+Two documentation sources were read for rules, not code:
+[OpenAI's Agents SDK docs](https://github.com/openai/openai-agents-python)
+(commit 841dfdd, MIT) and two
+[Microsoft Agent Framework decision records](https://github.com/microsoft/agent-framework/tree/main/docs/decisions)
+(commit 0200599, MIT). The guardrails skill now rejects an approval left
+unanswered when the next invocation starts and fails closed on arguments a
+rule cannot read, with the ADK hook named; the security skill carries four
+placement rules for any screening layer; the evaluation skill asks for a
+strict scripted model that fails on extra or missing model calls; the
+optimise skill treats a function call and its results as an atomic group
+and names three compaction points. A fresh-agent trial fixing a refund
+approved after a weekend and a screen that ran beside the tool rated the work
+4 of 5; seven frictions were fixed the same day. All **22 packages** pass
+validation and **698 tests** pass with **59 optional SDK checks skipped**.
+See the [comparison note](docs/research/approval-and-screening-rules-comparison-2026-10-23.md)
+and the [trial record](docs/testing/approval-and-screening-rules-alignment-2026-10-23.md).
+
+### OpenTelemetry GenAI conventions and conformance · 23 October 2026
+
+The GenAI conventions' new home
+([semantic-conventions-genai](https://github.com/open-telemetry/semantic-conventions-genai),
+commit 9ffc7e0) ships a reference scenario for google-adk with a list of the
+violations a conformant export is expected to show; the observability skill
+now carries that list as data, the rule to key dashboards on the registry
+names rather than the removed `gen_ai.system`, a drift check that works
+without the unpublished conformance runner, and the `gen_ai.evaluation.result`
+event as the way to put judge scores on traces. A fresh-agent trial rekeying
+dashboards and building the drift check rated the work 3 of 5; six frictions
+were fixed the same day. All **22 packages** pass validation and **698
+tests** pass with **59 optional SDK checks skipped**. See the
+[comparison note](docs/research/otel-genai-conformance-comparison-2026-10-22.md)
+and the [trial record](docs/testing/otel-genai-conformance-alignment-2026-10-23.md).
+
+### A2A TCK, AG-UI 1.0 and the CopilotKit example · 22 October 2026
+
+Two protocol sources closed on the same day. The
+[A2A TCK](https://github.com/a2aproject/a2a-tck) (v0.2.5, commit 5daf014,
+Apache-2.0) was read, not run, because it is not published to PyPI: the
+interoperability skill now carries the scoped MUST run against a local
+`to_a2a` instance, the requirement ids as a table, what the kit cannot test
+on a real agent, and the origin-pinning rule for raw SDK clients; the
+designer's handoff writes the A2A acceptance as planned verification. The
+fresh-agent trial exposing a triage agent (3 of 5) surfaced what the 0.3-era
+material lacked, fixed the next day from the pinned SDK: a 1.0 card example
+generated from a2a-sdk 1.2.3, the 2.12.0 `to_a2a` signature with its new
+security parameters, an inbound-authentication recipe with the executor's
+principal rule, and a card checker that keeps scheme names and accepts the
+1.0 requirement key (with tests).
+[AG-UI 1.0](https://github.com/ag-ui-protocol/ag-ui) (commit 85a427d, MIT)
+and the CopilotKit ADK example gave the frontend skill the two approval
+contracts the `ag-ui-adk` middleware implements behind one flag, their
+enforcement codes, and after the trial (4 of 5 finding, 3 applying) the wire
+shapes a test needs. All **22 packages** pass validation and **698 tests**
+pass with **59 optional SDK checks skipped**. See the
+[TCK comparison](docs/research/a2a-tck-comparison-2026-10-22.md), the
+[AG-UI comparison](docs/research/ag-ui-copilotkit-comparison-2026-10-22.md)
+and the trial records for the [TCK](docs/testing/a2a-tck-alignment-2026-10-22.md)
+and [AG-UI](docs/testing/ag-ui-copilotkit-alignment-2026-10-22.md).
+
+### tau2-bench and Inspect AI · 22 October 2026
+
+Two evaluation harnesses were read for method, not data.
+[tau2-bench](https://github.com/sierra-research/tau2-bench) (commit 05736c2,
+MIT) gave the evaluation skill the unbiased pass^k rules (refuse `k` above
+the trial count, keep infrastructure failures out of the denominator, define
+success from the whole reward), a new section on grading the end state by
+replaying one reference trajectory on a fresh backend, the multiplicative,
+premature-stop and missing-criterion rules, and the release skill the public
+precedent that a judge change starts a new baseline.
+[Inspect AI](https://github.com/UKGovernmentBEIS/inspect_ai) (commit c2fc3d9,
+MIT) added the NaN-on-short reducers, `at_least`, Krippendorff's α for judge
+agreement, and one proven integration: a spike outside the repository showed
+`agent_bridge()` intercepting a google-adk 2.12.0 agent's model calls under
+the mock model, with streaming as the limit. A fresh-agent trial building a
+reliability gate for flaky booking evals rated the work 3 of 5; seven
+frictions were fixed the next day, including a false claim about reversible
+mutations and the google-genai provider selector. All **22 packages** pass
+validation and **697 tests** pass with **59 optional SDK checks skipped**.
+See the [tau2-bench comparison](docs/research/tau2-bench-comparison-2026-10-22.md),
+the [Inspect comparison](docs/research/inspect-ai-comparison-2026-10-22.md)
+and the [trial record](docs/testing/tau2-bench-alignment-2026-10-22.md).
+
+### MCP specification revisions and ext-auth · 22 October 2026
+
+The [MCP specification](https://github.com/modelcontextprotocol/modelcontextprotocol)
+revisions 2025-11-25 and 2026-07-28 (commit 80041ab) and
+[ext-auth](https://github.com/modelcontextprotocol/ext-auth) (commit fb374c7)
+were read for the rules that change a recommendation: tool-name bounds,
+validation errors as tool execution errors and the schema-dialect gap for the
+tool-interface skill; the stateless protocol's two design consequences
+(server-minted state handles are model-visible data, deterministic listing
+is a cache contract), discovery, registration priority and issuer binding for
+the interoperability skill; issuer-keyed registrations, `iss` validation and
+Enterprise-Managed Authorization for the tool-auth skill. A fresh-agent
+trial moving a triage agent to a vendor's remote MCP server with enterprise
+sign-on rated the work 4 of 5; its frictions were fixed the next day,
+including the inventory helper's URL-keyed manifest diff (now by name, with
+a test) and the 2.12.0 flag that selects the modern connect path. All
+**22 packages** pass validation and **697 tests** pass with **59 optional
+SDK checks skipped**. See the
+[comparison note](docs/research/mcp-spec-ext-auth-comparison-2026-10-22.md)
+and the [trial record](docs/testing/mcp-spec-ext-auth-alignment-2026-10-22.md).
+
+### GoogleCloudPlatform/generative-ai ADK blueprints · 22 October 2026
+
+Four blueprints under [generative-ai `agents/adk/`](https://github.com/GoogleCloudPlatform/generative-ai/tree/main/agents/adk)
+(commit 3a716a8, Apache-2.0) were read beside two Google product pages:
+the zero-trust pair (signed writes, a hermetic sandbox, a deterministic
+gateway, and the eight-refund aggregate exploit that shows why the bound
+lives in code), the agent quality flywheel (a rubric metric paired with a
+deterministic one) and the contract-compliance pipeline (a deterministic
+policy service as an A2A peer). Semantic Governance Policies were confirmed
+as a Preview product with the vendor's own accuracy caveat; Agent Anomaly
+Detection was not, and the blueprint's version is recorded as a simulation.
+The facts went to seven specialists at the decisions they change. A
+fresh-agent trial hardening a refund path after two incidents rated the
+work 3 of 5; eight frictions were fixed the same day, including the
+guardrails inspector's rejection of a pin with an extras marker, which now
+has a test. All **22 packages** pass validation and **696 tests** pass
+with **59 optional SDK checks skipped**. See the
+[comparison note](docs/research/generative-ai-agents-comparison-2026-10-22.md)
+and the [trial record](docs/testing/generative-ai-agents-alignment-2026-10-22.md).
+
+### MCP conformance suite · 22 October 2026
+
+The MCP project's [conformance suite](https://github.com/modelcontextprotocol/conformance)
+(npm `0.2.0-alpha.12`, commit c37eec8) was not only read but run, outside
+the repository, against a scripted-model ADK 2.12.0 server on loopback:
+requirement sets per revision, the fixture-dependent scenarios that fail on
+a business server by design, the scenarios the ADK server passed, and the
+baseline file's three exit paths (new failure, excused failure, stale
+entry) were all observed before being written. The interoperability skill
+gained a protocol-conformance section and the pinned command; the release
+skill a tier 1 gate; the designer an acceptance phrase. A fresh-agent trial
+exposing a research agent with a CI check rated the work 4 of 5; nine
+frictions were fixed the same day, among them the 2.x server bind
+signature and the two `server-stateless` check ids. All **22 packages**
+pass validation and **695 tests** pass with **59 optional SDK checks
+skipped**. See the
+[comparison note](docs/research/mcp-conformance-comparison-2026-10-22.md)
+and the [trial record](docs/testing/mcp-conformance-alignment-2026-10-22.md).
+
+### google/adk-python main · 22 October 2026
+
+The ADK repository itself ([google/adk-python](https://github.com/google/adk-python)
+at commit ed76f94, Apache-2.0) was read for what the 2.8.0 baseline could
+not show: the code-execution environment layer (`EnvironmentToolset` and its
+local, Vertex, Daytona, E2B and OpenSandbox backends with their first
+versions and maintenance state), the GKE executor's Agent Sandbox mode, the
+Agent Engine and Cloud Run sandbox executors' constructor cases and
+defaults, how input files reach an executor and how a tool stages one, the
+maintainer skill's anti-flake habits for Runner tests with the 2.12.0
+signatures those tests depend on, the SQLite memory service, the bundled
+BigQuery skills and the reference wiring samples. A fresh-agent trial
+choosing an execution environment for a data helper rated the work 3 of 5
+because the SDK shapes were missing; seven frictions were fixed the same day
+from the installed 2.12.0 package, and an inspector rule for execution
+toolsets is recorded as owed. All **22 packages** pass validation and
+**695 tests** pass with **59 optional SDK checks skipped**. See the
+[comparison note](docs/research/adk-python-main-comparison-2026-10-22.md)
+and the [trial record](docs/testing/adk-python-main-alignment-2026-10-22.md).
+
+### BigQuery Agent Analytics SDK · 22 October 2026
+
+Google's [BigQuery Agent Analytics SDK](https://github.com/GoogleCloudPlatform/BigQuery-Agent-Analytics-SDK)
+(v0.6.1, Apache-2.0) is the read side of the `agent_events` table the
+observability skill tells an agent to write, and it now has a section of its
+own there: what it reconstructs, its seven deterministic evaluators and judge
+metrics, the CLI with exit 0, 1 and 2, continuous-query templates and the
+reservation they need, the labels on every job it submits, its documented
+call shapes and flag names, and three caveats it states about itself (no
+thought tokens in its cost figure, a cache metric that passes on missing
+telemetry unless told to fail, a `pass^k` formula that differs from the
+unbiased estimator). The release skill gained a fourth gate over stored
+production sessions with those exit codes mapped to promote, block and NOT
+RUN, the rule for a gate that must exist before its baseline is measured,
+and drift detection, graduation and saturation as triggers for the decisions
+it already defines. A fresh-agent trial building a nightly production gate
+and a monthly coverage report rated the work 3 of 5 because the call shapes
+were missing; they were added the same day, with the five other frictions.
+All **22 packages** pass validation and **695 tests** pass with **59
+optional SDK checks skipped**. See the
+[comparison note](docs/research/bigquery-agent-analytics-sdk-comparison-2026-10-22.md)
+and the [trial record](docs/testing/bigquery-agent-analytics-sdk-alignment-2026-10-22.md).
+
+### MCP Toolbox for Databases · 22 October 2026
+
+Google's [mcp-toolbox](https://github.com/googleapis/mcp-toolbox) (formerly
+genai-toolbox, v1.14.0, Apache-2.0) was read as the executor the SQL
+specialist had described only generically. The SQL skill now carries a
+Toolbox branch checklist that maps its four boundaries onto Toolbox
+configuration: read-only enforced at the database engine through the
+connection string rather than a prompt or a `SELECT` check, the BigQuery
+flags and the `allowedDatasets` analysis with what it cannot analyse, the
+prebuilt free-form tool's own "not for production agents" note, basic over
+template parameters with the vendor's injection warning, tenant ids as
+secure parameters the model never sees, and the three bypass statements
+(CTE delete, writing UDF, `COMMIT;` chaining) as deterministic fixtures.
+The interoperability, security, sensitive-data and auth skills gained the
+client's protocol pin and credential strategies, the `readOnlyHint`
+enforcement note, the Google paths that screen tool traffic outside the
+agent, and the IAP assertion facts. Two memo claims were corrected against
+the sources: the Toolbox Model Armor page's ADK sample does not screen tool
+results, and ADK's own plugin gained tool-output screening in 2.12.0. A
+fresh-agent trial carrying out a tenant-scoped Toolbox ticket rated the
+checklist 4 of 5 and its six frictions were fixed the same day. All **22
+packages** pass validation and **695 tests** pass with **59 optional SDK
+checks skipped**. See the
+[comparison note](docs/research/mcp-toolbox-comparison-2026-10-22.md) and
+the [trial record](docs/testing/mcp-toolbox-alignment-2026-10-22.md).
+
+### Google's ADK recipes · 22 October 2026
+
+Google's [adk-recipes](https://github.com/google/adk-recipes) repository
+(commit `be63596`, Apache-2.0, "not production use") was read recipe by
+recipe against the specialists. Eleven packages gained facts at the decision
+each serves, every one cited to the recipe file and labelled a vendor sample:
+the long-horizon harness's write-back memory loop with its own honesty notes,
+its repeated-failure signature and halt plugin, its guard shape with argv
+classification and grant narrowing, its evalsets as case and rubric templates,
+and its callback chain written down as the contract; the ambient expense
+agent's deterministic-first graph with the pause on the review node; the
+three managed RAG recipes and the inspection point that one of them bypasses;
+and the staged-widgets recipe, whose two ADK facts behind duplicate and
+vanishing widgets were confirmed in the ADK source. The Ambient Quality Agent
+was routed, not rebuilt: adk-release-engineering decides whether its insights
+gate a release and counts a missing investigation as incomplete evidence, and
+the extension's `agents-cli-aqua` skill joins the engineer's and designer's
+mappings. Three fresh-agent trials, a post-launch quality loop ticket, a
+memory write-back design and a widget pipeline fix, rated the work 4, 3 and 4
+of 5; their fourteen frictions, among them a missing routing row for widgets,
+the absent write-back sequence and accessor names in the memory skill, and
+the callback-context and parallel-merge facts, were fixed the same day with
+the ADK facts confirmed in source. All **22 packages** pass validation and
+**695 tests** pass with **59 optional SDK checks skipped**. See the
+[comparison note](docs/research/adk-recipes-comparison-2026-10-22.md) and the
+[trial record](docs/testing/adk-recipes-alignment-2026-10-22.md).
+
+### Drift fixes against ADK 2.12 and current upstreams · 22 October 2026
+
+Fourteen facts the skills carried had drifted since the early-October check,
+and each was re-verified against its primary source before the text changed:
+the ADK source at main with tags 2.8.0 and 2.12.0, the changelogs of
+OpenInference, AG-UI, A2A and agents-cli, the mcp-toolbox and Horizon READMEs,
+the python-sdk v2 notes and the Vertex model lifecycle page. Three change what
+the skills assert. ADK 2.12.0 stops OAuth2 secrets reaching the serving
+endpoints and takes the user id only from an authenticated principal, so the
+security and auth skills now set 2.12.0 as the floor for an agent that serves
+several users or holds delegated credentials. The `adk eval` exit code is
+stated version-conditionally: 0 on every release through 2.12.0, 1 on
+failures from an unreleased main commit, confirmed by a deliberately failing
+case on the pinned version, with the pytest gate kept primary. And ADK 2.9.0's
+rule that a failed workflow node re-runs on resume now sits in the workflow
+runtime reference and makes the idempotency rules in safe-api-tool-calls
+load-bearing. The rest are version and tense corrections: the OpenInference
+instrumentor's 2.10 floor and its fixed workflow spans, the new home of the
+GenAI OTel instrumentation, AG-UI 1.0 and ag-ui-adk 0.11.0 with its security
+fix, the mcp-toolbox rename, python-sdk v2's `MCPServer` rename, A2A 1.0.1,
+the Horizon recipe's real ADK version, and `gemini-2.5-flash` as retired on
+Vertex rather than retiring. Two memo claims did not survive verification and
+were not imported. All **22 packages** pass validation and **695 tests** pass
+with **59 optional SDK checks skipped**; no helper, test or `last-tested`
+date changed. See the [drift record](docs/research/drift-fixes-2026-10-22.md).
 
 ### Agents CLI 1.11.0 alignment · 22 October 2026
 

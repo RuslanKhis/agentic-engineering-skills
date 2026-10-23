@@ -59,6 +59,84 @@ complete event to establish the service-side transition. Earlier local reads are
 not proof that a persistent service committed the value. `temp:` keys are scratch
 space, not durable resume data.
 
+Resume and durable execution are different promises. ADK's own resume
+(`ResumabilityConfig(is_resumable=True)` on the `App`) restarts an
+interrupted invocation from the last completed step with the tools run
+**at least once**, "and may run more than once"; it is not supported from
+`adk web` or the CLI, not on by default for custom agents, and a workflow
+modified between pause and resume is unsupported (google/adk-docs
+`docs/runtime/resume.md`, read 2026-10-23; vendor documentation). So the
+caller still detects the failure and re-invokes, and every tool behind a
+resumable step carries the idempotency key and reconciliation from
+`safe-api-tool-calls`. A durable-execution engine removes the caller from
+that loop and survives a worker crash or a wait of days; it does not remove
+the key, because every engine checkpoints a step's result, and a crash after
+the provider accepted the write but before the checkpoint re-executes the
+step. Two engines publish ADK integrations with tests worth copying:
+
+- **Temporal** (`temporalio-google-adk` 0.0.1 on PyPI, 2026-10-07,
+  pre-release; temporalio/ai-integrations commit bb179c3, MIT,
+  `python/google_adk/README.md` and `tests/`, read 2026-10-23). Each model
+  call runs as the `invoke_model` activity and MCP tools as activities
+  through `TemporalMcpToolSet`; the `GoogleAdkPlugin` makes the workflow
+  deterministic by routing ADK's `time` and `uuid` through the workflow
+  clock and id generator. Facts that change a design: the MCP toolset
+  requires MCP SDK 1.x, which fixes the `mcp` major for a project that
+  adopts it; `factory_argument` values are recorded in workflow history and
+  visible in the web UI without a payload codec, so credentials are
+  resolved worker-side inside the toolset factory; on a human-in-the-loop
+  resume, completed nodes fast-forward and `rerun_on_resume=True` bodies
+  re-execute, so side effects go through activities or are idempotent;
+  long chats grow history and need `continue-as-new` boundaries between
+  turns; and workflow code re-executes on every replay, so ADK's
+  OpenTelemetry metrics, spans and logs are re-recorded unless Temporal's
+  replay-safe providers are installed (one execution plus three replays
+  recorded four times in its own example). Its `Replayer` tests replay
+  recorded histories for single-agent, multi-agent, graph-workflow and
+  human-in-the-loop cases, which is the shape of a determinism regression
+  test: a recorded history that no longer replays is a breaking change.
+- **DBOS** (`dbos-google-adk` 0.1.0 on PyPI, 2026-05-07; dbos-inc/dbos-google-adk
+  commit 288757e, MIT, `README.md` and `tests/test_dbos_plugin.py`, read
+  2026-10-23; declares `google-adk>=1.32.0`, unverified on 2.x here). Needs
+  only Postgres, and its declared ADK floor predates 2.x, so a project on a
+  2.x pin adopts it behind a compatibility gate: a planned test that imports
+  the plugin against the pinned google-adk and runs its fork-replay case,
+  reported as not run until the packages are installed; the pin is not
+  changed for the engine. `DBOSPlugin` on the `Runner` checkpoints every model call
+  and must run inside a `@DBOS.workflow()`, tools are `@DBOS.step()`
+  functions, and `DBOSEventSummarizer` makes the compaction call durable
+  too. Its replay test forks past the last recorded step and asserts the
+  tool body ran once (`call_count == 1`), and its failure test records that
+  ADK does not recover from a tool exception on its own; the exception
+  propagates and the step's retry policy decides.
+
+The same decision has two neighbours that name the other half: the review
+record that outlives a process (`adk-operational-guardrails`, human review,
+"a separate durable review operation") and the idempotency key that the
+engine does not retire (`safe-api-tool-calls`, writes and confirmation).
+Choose in this order: plain `ResumabilityConfig` with idempotent tools when
+a caller can re-invoke and nothing waits longer than a request; an engine
+when runs must survive a crash with no caller or wait for a human for days;
+and in both cases the kill-after-the-write test from `safe-api-tool-calls`
+(kill after the tool returns: body ran once; kill after the provider
+accepted: one effect at the provider double through the key; the same test
+on plain resume shows the duplicate the key absorbs). Version-pin the
+engine, keep secrets out of its history, and treat its replay tests as part
+of the suite.
+
+Four rules for code around a pause, whichever engine resumes it (langchain-ai/docs commit 23152b1, MIT, `src/oss/langgraph/interrupts.mdx`, "Rules of interrupts", read 2026-10-23; another framework's rules, restated for ADK): a
+node re-runs from its beginning on resume, so everything before the pause
+runs again and any side effect there is idempotent or moved after the pause;
+never wrap the pause in a bare exception handler, because a pause that is
+caught never reaches the caller (catch specific exceptions, and keep the
+pause outside the handled block); never reorder or make conditional the
+pause points inside one node, because resume values are matched to pauses
+by position; and never loop around a pause with a condition that can differ
+between executions, such as a `while True` validation loop. On ADK the node
+is a workflow node with `rerun_on_resume=True` or a tool that requests
+confirmation, and the first rule is the at-least-once statement above read
+from the node's side.
+
 Tracked writes occur at the top-level state assignment/update boundary in the
 checked SDK. `context.state["cart"]["items"].append(item)` can change a local
 object without producing a state delta. Use copy–modify–reassign when changing
@@ -80,6 +158,17 @@ delta; persistence claims additionally require the configured durable service.
 Choose state scope deliberately: unprefixed keys are session-scoped, `user:` is
 shared across one user's sessions within an app, `app:` across the app's users
 and sessions, and `temp:` is invocation scratch state omitted from persistence.
+On adk-python main a `temp:` delta is applied to the in-memory session state
+for the rest of the invocation and trimmed from the persisted event
+(`sessions/base_session_service.py`, `_apply_temp_state` and
+`_trim_temp_delta_state`, ed76f94, read 2026-10-22; confirm on the pinned
+version), so a later tool or callback in the same invocation can read it and
+the next invocation cannot. When parallel function calls complete, ADK merges
+their response events into one: actions are deep-merged, nested dicts
+recursively and otherwise the later event's value winning for the same key,
+and UI widgets are concatenated without a duplicate check
+(`flows/llm_flows/tools/_batch_executor.py`, same commit). Give tools that
+may run in parallel distinct top-level state keys.
 Keep caller-specific results and permissions out of `app:` and mutable module
 globals. These scopes do not authenticate the supplied user ID or isolate tool
 credentials; test populated control sessions when claiming data separation.
@@ -128,3 +217,15 @@ idempotent child nodes and reconcile uncertain provider outcomes before retries.
 The historical chapter tested completed-history persistence, not interruption
 and replay of a child workflow. Reproduce actual interruption/recovery if the
 target feature depends on it, and label that new evidence separately.
+
+From ADK 2.9.0 a node that failed runs again when the workflow resumes;
+before 2.9.0 it replayed as though it had completed (CHANGELOG 2.9.0,
+91573eb: "Make node bodies idempotent: a node that performs an external side
+effect and then fails will perform that side effect again on every resume";
+read 2026-10-22 at main commit ed76f94). On the 2.8.0 baseline the old replay
+applies, so the same workflow behaves differently across the pin. Either way,
+a node body that writes outside the process carries an idempotency key and
+reconciles an uncertain outcome before it acts again; `safe-api-tool-calls`
+owns that contract and its tests. Acceptance on 2.9.0 or later: a test fails
+a node after its side effect, resumes, and asserts the effect occurred once at
+the provider double.

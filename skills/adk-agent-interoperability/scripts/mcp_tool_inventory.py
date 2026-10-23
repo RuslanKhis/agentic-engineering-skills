@@ -530,9 +530,22 @@ def build_manifest(sources: list[dict]) -> dict:
     return {"manifest_version": 1, "tools": dict(sorted(tools.items()))}
 
 
+def _single_target_rekey(tools: dict) -> tuple[dict, bool]:
+    """Key tools by bare name when every entry comes from one target."""
+    targets = {key.split("::", 1)[0] for key in tools if "::" in key}
+    if len(targets) == 1 and all("::" in key for key in tools):
+        return {key.split("::", 1)[1]: value for key, value in tools.items()}, True
+    return tools, False
+
+
 def diff_manifests(prior: dict, current: dict) -> dict:
     prior_tools = prior.get("tools") if isinstance(prior.get("tools"), dict) else {}
     current_tools = current["tools"]
+    keyed_by = "target::name"
+    prior_rekeyed, prior_single = _single_target_rekey(prior_tools)
+    current_rekeyed, current_single = _single_target_rekey(current_tools)
+    if prior_single and current_single:
+        prior_tools, current_tools, keyed_by = prior_rekeyed, current_rekeyed, "name"
     added = sorted(set(current_tools) - set(prior_tools))
     removed = sorted(set(prior_tools) - set(current_tools))
     changed = []
@@ -542,7 +555,7 @@ def diff_manifests(prior: dict, current: dict) -> dict:
                   if before.get(f) != after.get(f)]
         if fields:
             changed.append({"tool": key, "fields": fields})
-    return {"added": added, "removed": removed, "changed": changed,
+    return {"added": added, "removed": removed, "changed": changed, "keyed_by": keyed_by,
             "rug_pull_signal": bool(added or removed or changed)}
 
 

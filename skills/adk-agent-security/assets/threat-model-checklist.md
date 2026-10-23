@@ -43,6 +43,8 @@ against https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-f
 | LLM09 | Misinformation | truthful tool-derived status; grounded output checks | Receipt and status rendered from trusted tool output in tests | adk-model-and-output-contracts, adk-agent-evaluation |
 | LLM10 | Unbounded consumption | invocation, token and tool-repeat limits; result size bounds | Budget tests from the guardrails skill pass | adk-operational-guardrails |
 
+Companion identifiers for readers on other frameworks (ATLAS 2026.09 and the CoSAI Risk Map, cited by id; see the threat-model reference): LLM01 with `AML.T0051` and `riskPromptInjection`; LLM02 with `AML.T0083` and `AML.T0098`; LLM03 with `AML.T0110`, `riskToolSourceProvenance` and `riskToolRegistryTampering`; LLM04 and LLM08 with `AML.T0070`, `AML.T0080` and `riskRetrievalVectorStorePoisoning`; LLM06 with `AML.T0086`, `AML.T0101` and `riskRogueActions`; LLM10 with `AML.T0034.002`, `riskRunawayAgentToolLoops` and `controlAgentExecutionBounds`; LLM02 by cross-tenant retrieval with `riskSensitiveDataDisclosure` (ATLAS 2026.09 has no technique for the disclosure itself; cite `AML.T0064` Gather RAG-Indexed Targets when an attacker probes the index); LLM05 with `riskInsecureModelOutput`; LLM07 with `AML.T0084` Discover AI Agent Configuration and `AML.T0083`. Where no companion id fits, write "no listed ATLAS id" rather than stretching one.
+
 ## Per-agent trifecta worksheet
 
 Fill one per `LlmAgent` and one per workflow agent that chains children through

@@ -93,6 +93,15 @@ and `google-cloud-solution-multi-agent-security` (Agent Gateway Model Armor
 settings). Those facts are cited inline as vendor guidance; nothing from them
 was executed here, and `last-tested` is unchanged.
 
+Read 22 October 2026: `googleapis/mcp-toolbox` v1.14.0
+(`docs/en/documentation/configuration/security/model-armor.md`; Apache-2.0)
+for the Agent Gateway and floor-setting screening paths and the finding that
+its ADK sample does not screen tool results, and adk-python main ed76f94
+(`integrations/model_armor/_plugin.py`, `_config.py`, `CHANGELOG.md`) for the
+2.12.0 tool-output screening. Cited inline in [model-armor.md](model-armor.md)
+as version-conditional facts; nothing was executed and `last-tested` is
+unchanged.
+
 ## Licence and authorship
 
 The workflow and adapted controller lessons derive from Chapter 8 of *Agentic

@@ -178,6 +178,34 @@ before relying on it.
   confirm the keyword exists on the installed version). Acceptance: a test
   resumes the paused run with a scripted reply and asserts which node ran
   again and what the successor received.
+- **Deterministic first, the model for ambiguity.** The ambient-expense-agent
+  recipe keeps the `$100` threshold in code (`config.review_threshold`), routes
+  with `Event(route="AUTO_APPROVE" | "NEEDS_REVIEW", output=node_input)` so
+  only the review branch reaches an `LlmAgent`, pauses that branch with
+  `RequestInput` for a manager, and is driven by Pub/Sub push to the ADK
+  trigger endpoint (`trigger_sources=["pubsub"]` on the FastAPI app; the
+  trigger payload is base64 in production and plain JSON in local tests)
+  (google/adk-recipes be63596, `core/python/ambient-expense-agent/expense_agent/{agent,fast_api_app}.py`
+  and `README.md`, read 2026-10-22; vendor sample, "not production use").
+  Copy the shape: business rules in function nodes, judgement in one LLM node,
+  the pause on the node that needs a person. The recipe's Terraform owns
+  Pub/Sub, two Cloud Run services and IAP; a redelivered Pub/Sub message is a
+  repeat of the same expense, which the 2.12.0 trigger delivery id lets the
+  parse node detect (`adk-operational-guardrails`).
+- **Reference wiring.** ADK's repository carries twenty-four workflow
+  samples under `contributing/samples/workflows/`, among them `retry`,
+  `dynamic_fan_out_fan_in`, `request_input` and `request_input_rerun`, and
+  `hitl/` samples for the confirmation and request-input gates (main ed76f94,
+  read 2026-10-22); read one for the API shape on the installed version and
+  keep this reference's acceptance contracts.
+- **Confirming a node.** From ADK 2.12.0 a workflow node (`@node`,
+  `FunctionNode`) takes `require_confirmation`, so an approval gate can sit
+  on the node rather than inside a tool (CHANGELOG 2.12.0, 988fd1a, read
+  2026-10-22; absent on the 2.8.0 baseline). The gate stays code:
+  `adk-operational-guardrails` owns the approval contract and its
+  duplicate-reply test. From 2.9.0 a failed node re-runs on resume (see
+  [runtime](runtime.md#recovery-claims)), so a confirmed node whose body
+  writes externally still needs the idempotency key.
 - **State written by a node.** An `Event` carries `output` (to the successor),
   `route` (edge selection) and `state` (a delta committed with the node's
   events). adk.dev says to write state through `ctx.state` rather than

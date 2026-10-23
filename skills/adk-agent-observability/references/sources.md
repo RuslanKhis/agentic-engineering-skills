@@ -15,6 +15,8 @@ Every claim in this skill is one of: **source-verified** (read in a local checko
 | URL | Date | Used for |
 | --- | --- | --- |
 | https://github.com/open-telemetry/semantic-conventions-genai (agent spans, metrics, registry) | 2026-10-05 | Development status, span and attribute names, Opt-In content attributes, token usage metric naming |
+| open-telemetry/semantic-conventions-genai commit 9ffc7e0 (2026-10-21; Apache-2.0): `reference/scenarios/google-adk/{README.md,conformance.yaml,scenario.py,pyproject.toml}`, `docs/gen-ai/gen-ai-events.md`, `gen-ai-agent-spans.md`; open-telemetry/semantic-conventions-conformance commit 3a5dd62: `README.md`, `tools/gen-ai/` | read 2026-10-22 | The reference scenario's implemented operations and expected violations in [signals and schema](signals-and-schema.md); the `gen_ai.evaluation.result` event in [trace to evaluation](trace-to-evaluation.md); the planned Weaver check in [validation](validation.md); neither repository executed |
+| https://github.com/Arize-ai/openinference (google-adk instrumentation `CHANGELOG.md`) and https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/instrumentation-genai (README) | read 2026-10-22 | OpenInference 1.0 floor on ADK 2.10 and 1.0.3 workflow spans; GenAI instrumentations moved to opentelemetry-python-genai |
 | https://docs.cloud.google.com/stackdriver/docs/instrumentation/ai-agent-adk | 2026-09-30 | APIs, writer roles, `EVENT_ONLY` guidance, invalid `true` under latest semconv |
 | https://docs.cloud.google.com/stackdriver/docs/otlp/overview | fetched 2026-10-07 | Telemetry API OTLP ingestion, quota project header, billing as Prometheus samples |
 | https://docs.cloud.google.com/trace/docs/quotas | fetched 2026-10-07 | Span attribute, name, event and retention limits |
@@ -30,6 +32,13 @@ Every claim in this skill is one of: **source-verified** (read in a local checko
 | https://docs.cloud.google.com/trace/docs/analytics | 2026-10-20 | `PROJECT_ID.LOCATION._Trace.Spans._AllSpans`, `observability.googleapis.com`, linked dataset needed for alert policies on query results |
 | https://docs.cloud.google.com/stackdriver/docs/otlp/overview | 2026-10-20 | `prometheus.googleapis.com` naming of OTLP metrics through the Telemetry API |
 | https://cloud.google.com/bigquery/pricing#data-ingestion-pricing | fetched 2026-10-07 | Storage Write API billing |
+
+## Google recipes
+
+| Reference | Date | Used for |
+| --- | --- | --- |
+| google/adk-recipes commit be63596: `core/python/ambient-quality-agent/README.md` (Apache-2.0; vendor sample) | read 2026-10-22 | AQuA as a source of failing conversation traces and deduplicated insights in [trace to evaluation](trace-to-evaluation.md); the three telemetry sources it reads |
+| GoogleCloudPlatform/BigQuery-Agent-Analytics-SDK v0.6.1 (commit 68ef3fa, 2026-10-20; Apache-2.0, no NOTICE): `README.md`, `SDK.md`, `CHANGELOG.md`, `deploy/continuous_queries/README.md`, `examples/evalbench_score_gate.sh` | read 2026-10-22 | The SDK section of [bigquery analytics](bigquery-analytics.md): evaluators, CLI exit codes, continuous queries, job labels, token and cache caveats |
 
 ## Other vendor documentation
 
@@ -54,3 +63,5 @@ google/adk-python issues #7311 (`AuthCredential` fields in tool-call span attrib
 ## Repository references
 
 Sibling skills are cited by name: protect-adk-sensitive-data (content policy and capture baseline in `references/implementation-recipes.md`), optimise-adk-on-google-cloud (`references/gke-serving.md`, `assets/session_observation.py`), adk-agent-evaluation (`references/execution-evidence.md` usage-counting rule, evaluation design), deploy-adk-on-google-cloud (first deployment), adk-operational-guardrails (budgets and loop limits), adk-model-and-output-contracts (finish reasons, failover), adk-frontend-integration and adk-tool-auth-and-secrets (feedback endpoint and identity). Google's `google-agents-cli-observability` skill is an optional composition per `docs/integrations/agents-cli.md`.
+
+| promptfoo/promptfoo commit 15bcb0d, `site/docs/guides/evaluate-google-adk.md` | read 2026-10-22 | Native-span assertion shapes in [trace to evaluation](trace-to-evaluation.md); not executed |

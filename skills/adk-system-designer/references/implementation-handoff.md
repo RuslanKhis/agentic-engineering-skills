@@ -12,7 +12,10 @@ skill → acceptance**. Identify what exists and what is proposed. For greenfiel
 work, propose a small module/interface layout and label it as such. Verify SDK names
 and provider constraints against the target version before offering executable
 code. Unknown interfaces become explicit investigation tasks with a deciding
-question and bounded evidence needed.
+question and bounded evidence needed. A route that lifts a pattern from
+`google/adk-recipes` names the recipe and the file, carries the repository's
+"not production use" disclaimer into the goal, and lists the controls the
+recipe omits as acceptance items; the design never copies recipe code.
 
 These are starting points, not a stack to install in every application:
 
@@ -22,7 +25,7 @@ These are starting points, not a stack to install in every application:
 | Agent instructions and sub-agent descriptions | Instruction text at the right altitude with session-state templating; tool-use guidance in prose; each sub-agent `description` written as the routing text the parent reads verbatim; the prompt kept as versioned code with a rendered-request test. Anything the application already knows moves to code. | None beyond the model endpoint | `adk-agent-instructions` |
 | Model-facing tool interfaces and tool budgets | One declaration per tool as the model sees it: name, docstring, primitive parameters, bounded result dict with a status and actionable errors; per-agent tool count and toolset filtering; the delegation interface (`AgentTool` versus sub-agent modes). | None; server-supplied toolsets bring their own hosting | `adk-tool-interface-design` |
 | Output schemas, model and backend selection | `output_schema` with a first-class refusal shape; validation failure handled at a boundary the application owns with a bounded repair budget; pinned model ID with its lifecycle date; thinking and sampling settings; failover as a decision. | The chosen backend (Gemini API or Vertex) decides how a schema is enforced | `adk-model-and-output-contracts` |
-| Tools or agents across a process boundary | Tool source per capability (function tool, OpenAPI, MCP, managed toolset); `McpToolset` with an allow-list and recorded definitions; `RemoteA2aAgent` with a deliberate timeout, task-state handling and peer output treated as data; an agent card that declares capability and security schemes when exposing. | Server or peer hosting, identity between the parties, registry entries | `adk-agent-interoperability` |
+| Tools or agents across a process boundary | Tool source per capability (function tool, OpenAPI, MCP, managed toolset); `McpToolset` with an allow-list and recorded definitions; `RemoteA2aAgent` with a deliberate timeout, task-state handling and peer output treated as data; an agent card that declares capability and security schemes when exposing; a deterministic policy service is a valid A2A peer when a hard rule must not depend on a model. For an exposed MCP server, the acceptance check is a pinned command with a reviewed baseline: `npx -y @modelcontextprotocol/conformance@0.2.0-alpha.12 server --url http://127.0.0.1:$PORT/mcp --requirements <revision> --expected-failures conformance-baseline.yml` exits 0, every baseline entry names a scenario or check and the fixture it depends on (proven on google-adk 2.12.0 on 2026-10-22; the interoperability skill's validation reference has the results). For an exposed A2A agent, the acceptance item is a planned verification whose first step is the spike: `./run_tck.py --sut-host http://127.0.0.1:$PORT --level must -- -k 'agent_card or versioning'` on the pinned a2a-sdk with `reports/compatibility.json` attached and the deferred requirement ids listed (the TCK was read, not run, on 2026-10-22). | Server or peer hosting, identity between the parties, registry entries | `adk-agent-interoperability` |
 | Persistent conversation or exact preferences | Assess `DatabaseSessionService` for ADK events; use application-owned profile records for exact user settings. Load a trusted user's profile at the invocation boundary. | Reuse the existing database where compatible; Cloud SQL is a candidate when a new managed PostgreSQL service is justified | `adk-memory-architecture` |
 | Context-window shaping | Decide what enters each model request: a stable instruction and tool prefix for caching, tool results bounded at the tool boundary, compaction or filtering of retained history, and an overflow rule per slice. Measure on captured requests, not configuration. | Provider caching minimums and billing | `optimise-adk-on-google-cloud` |
 | Browser replies and progress | Authenticated API around the Runner or remote runtime; custom JSON or AG-UI adapter; application-owned text, tool-result and completion schema connected to the existing UI. | Gateway hosting, streaming transport and session access | `adk-frontend-integration` |
@@ -92,6 +95,7 @@ is an execution-scope prerequisite until authorised.
 | Direct Gemini calls outside ADK, fine-tuning, self-hosted open models | `gemini-api`, `agent-platform-tuning`, `agent-platform-inference` |
 | Audio or video streaming | `google-cloud-solution-agentic-ai-bidirectional-streaming`, `gemini-live-api` |
 | Security Command Center findings on the agent's project | `google-cloud-scc-query`, `google-cloud-scc-remediation` |
+| A scheduled evaluator over production traces after launch | `google/adk-recipes:agents-cli-aqua` (installed by the Ambient Quality Agent extension from `google/adk-recipes`, pinned by `--ref`; `adk-release-engineering` decides whether its insights gate a release) |
 
 The names above were read from the published catalogue on 21 October 2026.
 When Google's router is installed, confirm a name against the current
@@ -168,6 +172,18 @@ When the user wants one file per unit of work, for a tracker or for parallel
 sessions, copy each ready goal into the [ticket template](../assets/ticket-template.md)
 under `docs/tickets/<topic>/`. Each ticket ends with its own run prompt, and the
 agent that carries it out fills in its Evidence section.
+Write one ticket per goal of the phase, not only for the first: `blocked_by`
+carries the sibling goals it waits for, and `status: ready` means nothing
+outside the phase blocks it. One lead method runs a ticket: `adk-engineer` in
+this session, or an installed alternative such as Superpowers'
+subagent-driven-development, which replaces it rather than joining it;
+companions such as an installed `wizard` skill take the steps only a person
+can do (IAM grants, secret values, consent screens). A project's standing
+instructions for coding agents (pins, test commands, the evidence directory,
+the design's invariants) belong in a root `AGENTS.md` with a one-line
+`CLAUDE.md` include, written when the project first needs them rather than as
+a goal of every plan; `adk-engineer`'s composition reference names the
+convention.
 
 ### Other planning workflows (skip unless the user chose one)
 

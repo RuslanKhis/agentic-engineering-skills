@@ -38,11 +38,18 @@ choices; restart discovery only for a material new gap. For "the next ready
 goal", pick the first goal whose prerequisites are complete. On finishing, write
 actual evidence and status into the ticket's Evidence section or the plan's goal
 entry, one line for each design contract the goal cites (its ID, the tier
-reached: offline, local, live or release, and the acceptance cases that
+reached (offline: no SDK, policy and tool functions on duck-typed inputs;
+local: the real Runner with a scripted model or a local backend; live: an
+authorised call; release: the promoted build), and the acceptance cases that
 showed it), with a numbered measurement record (`M<n>`: value, baseline,
 window, sample, method, owner, build) for every figure a pilot or production
 run produced and an incident record (`I<n>`) for every incident, so that
-`adk-presenter` can cite them, and end with the run prompt for the next
+`adk-presenter` can cite them, set the ticket's status with the template's
+vocabulary (`verified_local` when every acceptance case that can run offline
+has run here; `in_progress` with the owed run named in Evidence when the
+SDK-tier cases are written but the SDK is absent in this session; `verified_live`
+after the authorised run; `done` when the owner accepts; `blocked` only for a
+decision or dependency outside the ticket), and end with the run prompt for the next
 ready goal or ticket.
 When there is none, end instead with the prompt for the most useful follow-up: the
 verification still owed (for example the SDK tests marked not run) or the new
@@ -63,23 +70,23 @@ change crosses its boundary. Before any edit, tell the user in one line:
 | --- | --- |
 | Where AI should be introduced at all, which workflow or use case to improve first, what business outcome to measure, or whether an agent, classical ML, rules or a process change is the right tool | `adk-discovery` |
 | Whole-application architecture, requirements and trade-offs before coding, or a cross-cutting system review | `adk-system-designer` |
-| Workflow structure, handoffs, parallel work, loops, events or callbacks | `adk-workflow-design` |
-| External API retries, deadlines, duplicate writes or uncertain outcomes | `safe-api-tool-calls` |
+| Workflow structure, handoffs, parallel work, loops, events or callbacks; resume versus a durable-execution engine (Temporal, DBOS) when a run must survive a worker restart or wait days for a person | `adk-workflow-design` |
+| External API retries, deadlines, duplicate writes, uncertain outcomes, or writes that must be tamper-evident (signed payloads, a ledger that detects an edited row) | `safe-api-tool-calls` |
 | Runaway invocations, usage budgets or human approval of agent actions | `adk-operational-guardrails` |
 | Hosting choice, packaging or deployment on Google Cloud | `deploy-adk-on-google-cloud` |
-| Measured latency, cost, concurrency, startup or scaling problems; long sessions, context growth per turn or cache misses | `optimise-adk-on-google-cloud` |
-| Browser interfaces, JSON APIs, AG-UI, CopilotKit or streaming contracts | `adk-frontend-integration` |
+| Measured latency, cost, concurrency, startup or scaling problems; long sessions, context growth per turn or cache misses; a history trimming or summariser plugin, or a request rejected for a dangling function call | `optimise-adk-on-google-cloud` |
+| Browser interfaces, JSON APIs, AG-UI, CopilotKit, streaming contracts, or interface widgets that tools render beside the reply (A2UI cards, tables, charts) | `adk-frontend-integration` |
 | Conversation state, cross-session memory, document retrieval or history | `adk-memory-architecture` |
 | Agent behaviour tests, evaluation datasets, replay or result auditing | `adk-agent-evaluation` |
 | Decisions or answers are wrong on a labelled set; error analysis, one change per iteration, model comparison | `adk-agent-evaluation` (quality iteration) |
 | Instruction text: prompt structure, state templating, tool-use guidance, sub-agent descriptions for routing, prompt versioning | `adk-agent-instructions` |
 | Wrong tool or wrong arguments chosen, tool docstrings and parameter schemas, tool count, result size, AgentTool versus sub-agents | `adk-tool-interface-design` |
 | Structured output arrives as prose or invalid JSON, response-schema design, model selection, thinking or temperature settings, model failover | `adk-model-and-output-contracts` |
-| Prompt-injection resilience, MCP or tool supply-chain vetting, excessive agency, code-execution sandboxing or a pre-release security review | `adk-agent-security` |
+| Prompt-injection resilience, MCP or tool supply-chain vetting, excessive agency, code-execution sandboxing (the executor and its policy; the GKE cluster side of Agent Sandbox is `deploy-adk-on-google-cloud`) or a pre-release security review | `adk-agent-security` |
 | Missing or duplicated telemetry, token and cost attribution, SLOs and alerts, dashboards, production incidents, production traces into eval cases | `adk-agent-observability` |
 | Model deprecation notices, prompt and model version pinning, eval gates in CI, canary or rollback of a release | `adk-release-engineering` |
 | Consuming or exposing MCP servers, remote A2A agents and agent cards, the in-process versus remote topology choice, Gemini Enterprise or Agent Registry registration | `adk-agent-interoperability` |
-| Personal data in prompts, tools, storage, logs or streamed answers | `protect-adk-sensitive-data` |
+| Personal data in prompts, tools, storage, logs or streamed answers; where a response screen (Model Armor or another) sits relative to tool dispatch and release | `protect-adk-sensitive-data` |
 | Tool identity, credentials, Secret Manager or delegated OAuth | `adk-tool-auth-and-secrets` |
 | Natural-language SQL agents, schema retrieval or controlled query execution | `adk-sql-agent-engineering` |
 | A presentation, deck, narrative, questions to expect or decision memo for a proof-of-concept approval, a production decision, a results review, or a public case study | `adk-presenter` |
@@ -130,7 +137,19 @@ the directory that contains that specialist's `SKILL.md`. Helper output kept as
 evidence goes in `.adk-evidence/` at the project root (create it and add it to
 `.gitignore`); the helpers never scan it, nor the installed skill folders. The helpers need
 Python 3.11 or later; if the project's interpreter is older, use any available
-3.11+ interpreter for the helper only, without changing the project.
+3.11+ interpreter for the helper only, without changing the project. When no
+interpreter at hand meets the project's `requires-python`, run the project's
+tests with the newest one available, say which one ran and that it is below
+the pin, and install nothing; the tests the pin matters for are reported as
+not run. When the only interpreter that meets the pin lacks the project's
+test runner, run what the standard library runner can collect there, the
+rest on the older interpreter, and report both runs by interpreter; write
+new tests so the standard library runner can collect them (`unittest`-style
+classes, which pytest collects as well, so a project's pytest job is
+unaffected) when that is the runner that will see them; the command for a
+`tests/` directory without `__init__.py` is
+`PYTHONPATH=. python -m unittest discover -s tests`, since `discover -t .`
+refuses a start directory that is not a package.
 
 ## Apply the guidance
 
@@ -185,9 +204,19 @@ what the requester acts on.
 
 Keep tests runnable without the ADK SDK where possible: test tool functions,
 schemas and policy modules directly, and keep `google.adk` imports out of
-package `__init__.py` files so those tests can import them. Tests that need the
+package `__init__.py` files and out of the module that defines the tool
+functions so those tests can import them; when a project keeps its tools
+inside the agent module, moving them out is in scope for any testing or
+security request, because the suite cannot import them otherwise. `adk web` discovers
+`<package>/agent.py:root_agent` without any export from `__init__.py`; only
+when the package must also export `root_agent` does a module-level
+`__getattr__` that imports on first access keep both working (confirm
+discovery once on the target). Tests that need the
 SDK or a live model are written but reported as **not run** when the SDK is
-absent; never imitate the SDK with hand-built stand-ins and call the result a
+absent (a duck-typed stand-in passed to your own callback or policy function
+proves that function, and is labelled so; the rule below is about faking
+the Runner, the flow or the confirmation protocol); never imitate the SDK
+with hand-built stand-ins and call the result a
 pass.
 
 For example, “add memory” starts with `adk-memory-architecture`. Determine

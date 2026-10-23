@@ -116,3 +116,23 @@ These results come from `INDEPENDENT_HOSTED_ACCEPTANCE_2026-09-14.md`,
 `verification/2026-09-15-cost-closure/`. Exact source versions are in
 [compatibility.md](compatibility.md). Current skill tests are recorded separately
 in [skill-validation.md](skill-validation.md).
+
+## adk-recipes review — 22 October 2026
+
+Read google/adk-recipes at commit be63596 (2026-10-20; Apache-2.0, no
+NOTICE; `core/python/cross-session-memory` carries its own Apache LICENSE):
+`core/python/long-horizon-harness/docs/memory.md` and `horizon/memory/`,
+`horizon/infrastructure/db_resilience.py`, `AGENTS.md`;
+`core/python/rag-vector-search/README.md`, `core/python/rag-agent-search/README.md`,
+`contrib/python/multiformat-hybrid-rag/README.md` and `architecture.md`.
+Imported as vendor-sample facts into [memory-bank.md](memory-bank.md)
+(the write-back loop and its honesty notes), [rag.md](rag.md) (the three
+managed retrieval recipes and the inspection-point consequence of
+`VertexAiSearchTool`), [retrieval-strategy.md](retrieval-strategy.md) (the
+managed RRF twin) and [sessions-state.md](sessions-state.md) (`pool_pre_ping`
+is not enough). Nothing was copied or executed; the repository's "not
+production use" disclaimer applies to every recipe named.
+
+## Memory sources review — 23 October 2026
+
+Read Google's "Memory revisions" page (updated 2026-10-21) for consolidation outcomes, `previous_revision`, `rollback` and `revision_labels`; xiaowu0162/LongMemEval commit 9e0b455 (MIT) `README.md` for the five abilities (dataset not imported); docling-project/docling commit 29caea8 (MIT) `README.md` and PyPI metadata for 2.142.0. Imported into [memory-bank.md](memory-bank.md), [retrieval-strategy.md](retrieval-strategy.md) and [document-ingestion.md](document-ingestion.md); nothing executed or copied.

@@ -61,3 +61,11 @@ At aiplatform 1.153.1, the separate `[adk]` extra requires ADK below 2.0. Do not
 Fresh-project API activation, local Developer API inference, cloud-hosted frontends and live production multi-user/recovery tests remained unverified. Five-second first-answer targets were missed in 2/5 corrected warm JSON samples and 5/5 Copilot samples; tool finals stayed within 30 seconds. No underlying cause for two model-stage stalls was established.
 
 `audit/2026-09-15-cloud-cleanup.md` records empty active audit inventories where accessible, with retained deleted storage and visibility limits. Cleanup is not a zero-cost or physical-erasure guarantee. New deployments, paid tests, and cleanup require their own scoped authorisation.
+
+## AG-UI and CopilotKit review — 22 October 2026
+
+Read ag-ui-protocol/ag-ui at commit 85a427d (MIT): `integrations/adk-middleware/python/CHANGELOG.md` (0.7.1, 0.8.0, 0.9.0, 0.10.0, 0.11.0 and the unreleased section) and `README.md`, `docs/spec/1.0/changelog.mdx` and `basic/patterns/interrupt-resume.mdx`, `sdks/typescript/packages/client/src/verify/`; CopilotKit/CopilotKit at commit 54dddf7 (MIT): `examples/integrations/adk/agent/pyproject.toml` and `package.json`; the archived `CopilotKit/with-adk` README. Imported into [ag-ui.md](ag-ui.md) (the two approval contracts, the enforcement codes, `from_app()` and resumability, `protocolVersion`, the 0.11.0 state-key rule, `verifyEvents` against the bundled checker's scope), [production.md](production.md), [compatibility.md](compatibility.md) and the recipe's header. Nothing was executed; the bundled checker and its tests are unchanged and `last-tested` stands.
+
+## adk-recipes review — 22 October 2026
+
+Read google/adk-recipes at commit be63596 (2026-10-20; Apache-2.0): `contrib/python/staged-ui-widgets/README.md`, `pyproject.toml` and the `app/staging/` layout it describes. The two ADK facts the recipe rests on were confirmed in the google/adk-python source at main commit ed76f94 (`agents/context.py` `render_ui_widget` duplicate check within the current event actions; `agents/base_agent.py` event creation only on returned content or `state.has_delta()`), read 2026-10-22. Imported into [production.md](production.md) as "Widgets emitted by tools". Nothing was copied or executed; the A2UI protocol and SDK themselves were not reviewed here.

@@ -106,6 +106,25 @@ class CardServer:
 
 
 class FileCardTests(unittest.TestCase):
+    def test_author_chosen_scheme_names_and_10_requirements_are_kept(self):
+        card = {
+            "name": "triage", "description": "Classifies support tickets", "version": "0.9.0",
+            "supportedInterfaces": [{"url": "https://triage.example.com/", "protocolBinding": "JSONRPC", "protocolVersion": "1.0"}],
+            "capabilities": {"streaming": True},
+            "securitySchemes": {"partner_oauth": {"oauth2SecurityScheme": {"flows": {"clientCredentials": {
+                "tokenUrl": "https://idp.example.com/oauth2/token", "scopes": {"triage:classify": "Classify tickets"}}}}}},
+            "securityRequirements": [{"schemes": {"partner_oauth": {"list": ["triage:classify"]}}}],
+            "defaultInputModes": ["text/plain"], "defaultOutputModes": ["text/plain"],
+            "skills": [{"id": "classify_ticket", "name": "Classify ticket", "description": "Routes a ticket to a queue", "tags": ["support"]}],
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "card.json"
+            path.write_text(json.dumps(card), encoding="utf-8")
+            code, payload, _ = run("--file", str(path), "--installed-a2a-sdk", "1.2.3")
+        self.assertEqual(code, 0, payload)
+        self.assertEqual(payload["summary"]["security_schemes"], ["partner_oauth"])
+        self.assertNotIn("security_requirements_missing", codes(payload))
+
     def test_valid_03_card_has_no_errors(self):
         with tempfile.TemporaryDirectory() as tmp:
             code, payload, stderr = run("--file", write_card(tmp, VALID_03), "--installed-a2a-sdk", "0.3.9")

@@ -79,7 +79,8 @@ non-`None` result skips the tool and becomes the function response. Return
 
 ```python
 from typing import Any
-from google.adk.tools import BaseTool, ToolContext
+from google.adk.tools import BaseTool, ToolContext  # type hints only; annotate loosely (Any) in a
+# policy module that must import without the SDK, as adk-engineer asks for tool and policy modules
 
 EGRESS_TOOLS = {"send_email", "post_webhook"}
 EGRESS_ARGS = {"to", "url", "body"}
@@ -92,6 +93,8 @@ def capability_gate(tool: BaseTool, args: dict[str, Any], tool_context: ToolCont
         return {"status": "error", "error_message": f"{tool.name} is not in the approved plan",
                 "hint": "Ask the user to restart with a plan that includes this step."}
     if tool.name in EGRESS_TOOLS:
+        # The labeller stores values extracted from untrusted results (addresses, URLs, account ids),
+        # not whole chunks, so a short destination planted inside a long chunk still matches.
         tainted = set(state.get("taint:untrusted_fields", []))
         for key in EGRESS_ARGS & set(args):
             if str(args[key]) in tainted or any(t in str(args[key]) for t in tainted):

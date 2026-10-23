@@ -278,7 +278,17 @@ effects atomic; two different operations may also need a shared balance constrai
 
 For event-driven updates, include unique event identity, changed-payload rejection,
 out-of-order delivery, concurrent consumers and ledger retention. Model instructions
-and ordinary session persistence do not supply durable execution guarantees.
+and ordinary session persistence do not supply durable execution guarantees, and
+neither does ADK resume, which re-runs tools at least once and needs a caller to
+re-invoke. The design records one of three choices and its evidence: resume with
+idempotent tools (a caller exists, no wait outlives a request); a durable-execution
+engine (Temporal or DBOS, each with an ADK integration, when a run must survive a
+crash with no caller or wait days for a human; the engine's version is pinned,
+secrets stay out of its history, its replay tests join the suite); or neither,
+with the gap named. The kill-after-the-write test in `adk-workflow-design`'s
+runtime reference is the acceptance check for all three, because an engine
+checkpoints a step's result and a crash between the provider's acceptance and the
+checkpoint re-executes the step.
 
 For deferred work, durably record acceptance and dispatch intent before acknowledging
 the job. Specify owner-qualified status/result access and recovery. Keep the business

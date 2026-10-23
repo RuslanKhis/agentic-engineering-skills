@@ -158,7 +158,7 @@ or metadata host settings. Also account for session/model/tool destinations.
 | Infrastructure wait dominates | Current fast-starting-node/capacity-buffer support; available capacity is not a guarantee; additional capacity costs |
 | Long stable initialisation | Current snapshot support; sensitive captured state; recreate clients, pools, credentials and unique IDs before readiness after restore |
 | Non-CPU pressure | Supported adapter or direct metric feature, release/channel restrictions, stale/missing measurements and bounded admission |
-| Untrusted code execution | Separate sandbox isolation, identity/egress, claim limits, trust boundaries, warm-pool cost and storage cleanup |
+| Untrusted code execution | Separate sandbox isolation, identity/egress, claim limits, trust boundaries, warm-pool cost and storage cleanup. GKE Agent Sandbox's `SandboxWarmPool` keeps pre-warmed sandboxes that a `SandboxClaim` adopts; Google quotes 300 allocations per second per cluster with 90 percent inside 200 milliseconds from the pool (Google Cloud blog, 2026-05-21, read 2026-10-22; vendor figure), and every warm sandbox is a scheduled Pod that charges while idle under the designer's GKE ledger row, so size the pool from measured claim rates and TTL the idle ones |
 
 Check current official feature documentation and cluster support before proposing
 these; do not change release channels or install controllers speculatively. None

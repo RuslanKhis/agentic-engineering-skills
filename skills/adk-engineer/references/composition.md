@@ -14,6 +14,23 @@ its declared agent directory, framework, version and deployment target alongside
 the actual code. Read `.agents-cli-spec.md` when present and relevant. A manifest
 is evidence of project conventions, not permission to execute platform commands.
 
+Google's own page on coding ADK with an AI assistant names three ways to
+give a coding agent ADK context (google/adk-docs `docs/tutorials/coding-with-ai.md`,
+commit 0ac7ec6, read 2026-10-23): the Agents CLI skills installed by
+`uvx google-agents-cli setup` (lifecycle and coding guidelines,
+scaffolding, evaluation, deployment, publishing, tracing, an API quick
+reference and docs index), the ADK Docs MCP server a coding tool can
+query, and the machine-readable docs index in the `llms.txt` convention.
+This collection sits above them as the decision layer: when a project has
+them installed, route the mechanism to them and keep the decision here. A
+project's own standing instructions for coding agents belong in an
+`AGENTS.md` at the repository root, the open plain-Markdown format most
+coding tools read (agentsmd/agents.md commit d001185, MIT, read
+2026-10-23: a "README for agents" with sections such as environment tips,
+test commands and pull-request rules), paired with a one-line `CLAUDE.md`
+that includes it for tools that read only that file; `adk-system-designer`
+decides what goes in it.
+
 | Situation | How to proceed |
 | --- | --- |
 | User chose the Agents CLI lifecycle for a new project | Use the installed `google-agents-cli-workflow` for the requested lifecycle phases (understand with its spec gate, study recipes, scaffold, build, evaluate, deploy, publish, observe) and this toolkit's specialist for the feature. Reuse the agreed design; a design from `adk-system-designer` answers its spec phase. |
@@ -32,7 +49,30 @@ integration.” Load only the optional skills relevant to that division.
 - `google-agents-cli-adk-code`: ADK API cheatsheets (agents, tools, callbacks,
   state, the graph Workflow API, Live, managed agents) and the recipe
   catalogue in `google/adk-recipes` (memory, approval, RAG, safety plugins,
-  ambient triggers, a scheduled production-trace evaluator).
+  ambient triggers, a scheduled production-trace evaluator). That
+  repository's README says recipes are "for demonstration and as starting
+  points, not production use" (google/adk-recipes be63596, `README.md`, read
+  2026-10-22): `core/` holds the curated patterns, `contrib/` deployable
+  vertical agents, `plugins/` installable skills with an `EVAL.yaml`. A change
+  that lifts a recipe pattern repeats that disclaimer in its Evidence section
+  and names the controls the recipe lacks. Two recipes carry their own Apache
+  LICENSE (`core/python/cross-session-memory`,
+  `contrib/python/brand-aligned-presentations`); check the folder before
+  copying code.
+- google/adk-python's own `.agents/skills/` (`adk-agent-builder`,
+  `adk-architecture`, `adk-debug`, `adk-review`, `adk-unit-design` and
+  others; main ed76f94, read 2026-10-22) are the ADK maintainers' skills for
+  building and testing agents against the SDK's current API; they are not
+  installed with the package. When a project has adopted them, they operate
+  the SDK's shapes and this toolkit's specialist still decides the contracts
+  and the evidence; the flake habits in `adk-agent-builder`'s testing
+  reference are already carried in adk-agent-evaluation.
+- `agents-cli-aqua`: shipped into `.agents/skills/` by the Ambient Quality
+  Agent extension from `google/adk-recipes`
+  (`agents-cli extension add google/adk-recipes#core/python/ambient-quality-agent
+  --ref ambient-quality-agent/v0.1.0`), not by `google/skills`; operates the
+  scheduled evaluator over production traces that `adk-release-engineering`
+  decides how to use (its production-feedback reference).
 - `google-agents-cli-scaffold`: a requested project creation, enhancement or
   upgrade; its own text says to run the workflow's spec phase first.
 - `google-agents-cli-eval`: Agents CLI dataset, trace, metric and result
@@ -119,6 +159,7 @@ need the user's approval for that scope.
 | `adk-model-and-output-contracts` | `gemini-api`, `agent-platform-tuning`, `agent-platform-inference` | A tool calls Gemini directly; fine-tuning; a self-hosted open model endpoint |
 | `adk-frontend-integration` | `google-cloud-solution-agentic-ai-bidirectional-streaming`, `gemini-live-api` | Audio or video streaming in the journey |
 | `optimise-adk-on-google-cloud` | `gke-cost-optimization`, `gke-workload-scaling`, `google-cloud-networking-observability` | A GKE host; packet loss or Private Service Connect latency |
+| `adk-release-engineering`, `adk-agent-evaluation` | `agents-cli-aqua` (from the AQuA extension in `google/adk-recipes`, named in a goal as `google/adk-recipes:agents-cli-aqua`) | A scheduled evaluator over production traces is adopted after launch; the specialist decides whether its insights gate a release |
 
 When Google's sources disagree with each other, settle it in this order: the
 official product documentation decides a platform fact; the CLI's release

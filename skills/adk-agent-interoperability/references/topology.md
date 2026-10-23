@@ -94,6 +94,21 @@ peer's omissions do not travel unless its contract says they must.
 - Several remote peers under a `ParallelAgent` or `Workflow` with a
   `JoinNode`: `RemoteA2aAgent._run_impl` promotes the first terminal text to
   `event.output` so the join sees it (source-verified 2.8.0).
+- A deterministic policy service as the remote peer: Google's
+  contract-compliance blueprint has a Python ADK coordinator extract contract
+  fields deterministically and hand them over `RemoteA2aAgent` to a Go
+  service that is not an LLM agent at all, only a policy checker behind an
+  agent card and JSON-RPC `SendMessage`, on the principle "LLMs are useful
+  for ambiguity. Deterministic agents should enforce hard policy"
+  (GoogleCloudPlatform/generative-ai commit 3a716a8,
+  `agents/adk/contract-compliance-pipeline/README.md`, read 2026-10-22;
+  vendor sample). Two notes when copying it: the policy values travel in the
+  A2A data part per audit and the peer treats them as the effective policy,
+  which is only safe when the caller, not the model, sets them; and the Go
+  service serves its card at `/.well-known/agent.json`, the pre-0.3 path, so
+  point `RemoteA2aAgent` at that URL explicitly and expect the TCK's
+  discovery check at `/.well-known/agent-card.json` to fail until the card
+  moves.
 
 ## Shapes to question
 

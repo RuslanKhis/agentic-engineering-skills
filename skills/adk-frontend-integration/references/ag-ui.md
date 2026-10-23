@@ -38,6 +38,78 @@ The [AG-UI event reference](https://docs.ag-ui.com/concepts/events) also defines
 
 The teaching managed bridge uses fallback IDs and name-order matching for a small sequential tool example, and groups answer text into one message. General parallel tools, replay or multi-agent authors need a stronger translator and new tests.
 
+## Choose the approval contract and declare it
+
+AG-UI 1.0 splits human approval into two client contracts that do not mix,
+and `ag-ui-adk` implements both (ag-ui-protocol/ag-ui
+`integrations/adk-middleware/python/CHANGELOG.md` 0.7.1 of 2026-10-01 and
+0.8.0 of 2026-10-07, and `README.md`, read 2026-10-22; vendor middleware,
+confirm on the installed version):
+
+- **Plain tool-message answers** (the 0.x shape). The approval travels back
+  as a `role: "tool"` message for the pending `adk_request_confirmation`
+  call; CopilotKit's `useHumanInTheLoop` and the predictive-state
+  `confirm_changes` dialog answer this way. This is the default: the
+  middleware's `emit_interrupt_outcome` flag is `False`.
+- **Interrupt outcomes with resume** (the 1.0 shape). With
+  `emit_interrupt_outcome=True` on `ADKAgent` or `ADKAgent.from_app()`, a
+  tool confirmation ends the run with `RUN_FINISHED.outcome.type ==
+  "interrupt"` (`reason: "confirmation"`, the hint as `message`, the
+  original call under `metadata.adk`; `reason: "confirm_changes"` for a
+  predictive-state review), and the client must answer through
+  `RunAgentInput.resume` (CopilotKit `useInterrupt`). The middleware then
+  enforces the contract from session state on every instance: a run without
+  a `resume` while an interrupt is open, including an answer sent as a tool
+  message, is rejected with `RUN_ERROR` code `INTERRUPT_RESUME_REQUIRED`; a
+  `resume` that leaves an interrupt unanswered is rejected with
+  `INTERRUPT_RESUME_INCOMPLETE`; a `resume` entry naming no pending call ends
+  the run with `UNKNOWN_INTERRUPT`; a rejection changes nothing. The flag is
+  off by default precisely because `@ag-ui/client` 1.0 refuses the next run
+  until reported interrupts are answered by `resume`, which breaks a
+  tool-message frontend.
+
+A ticket declares which contract the frontend uses; a test with the flag on
+sends a tool-message answer and asserts `INTERRUPT_RESUME_REQUIRED`, and a
+test with the flag off asserts the tool message resumes the run. The wire
+shapes those tests need, read in the middleware source and the 1.0 pattern
+page (ag-ui-protocol/ag-ui main at 85a427d, `integrations/adk-middleware/python/src/ag_ui_adk/adk_agent.py`,
+`docs/spec/1.0/basic/patterns/interrupt-resume.mdx`, read 2026-10-23;
+confirm on the installed version): the error code is the `code` field of the
+`RUN_ERROR` event (`RunErrorEvent(type=RUN_ERROR, message=..., code=...)`);
+a resume entry is `{"interruptId": ..., "payload": ...}` where
+`interruptId` must name an interrupt from the run being resumed and
+`payload` is any JSON value, with optional `metadata`; a tool-message answer
+for `adk_request_confirmation` is accepted as `{"confirmed": bool}` or
+`{"approved": bool}` (`accepted` also works) or a bare word such as
+`approve`, `confirm`, `yes` or `true`, and the middleware maps it to the
+ADK `ToolConfirmation`; `emit_interrupt_outcome` defaults to `False` in
+the `ADKAgent` constructor on that commit. `ADKAgent.from_app(app,
+user_id=None, user_id_extractor=None, session_service=None, ...)` takes
+the services and configuration the constructor takes; `App` and
+`ResumabilityConfig` import from `google.adk.apps`. To learn which contract
+a running backend emits, record one paused run and look at `RUN_FINISHED`:
+an `outcome` of type `interrupt` means the interrupt contract; the bundled
+`check_agui_trace.py` validates the explicit 0.x profile and does not
+diagnose this, so the probe is that one recorded event or `verifyEvents`. Either way
+the decision is permission, not completion, and the backend gate in
+`adk-operational-guardrails` still owns the effect. For the ADK side, use
+`ADKAgent.from_app(app)` with `ResumabilityConfig(is_resumable=True)`
+(google-adk 1.16.0 or later): the middleware README deprecates the
+fire-and-forget HITL path of the direct `ADKAgent(adk_agent=...)`
+constructor and restores the paused position, including a `SequentialAgent`
+sub-agent position, only through `from_app()`. Two more 1.0-line facts to
+build against: every `RUN_STARTED` carries `protocolVersion` (0.8.0), and
+0.11.0 (2026-10-21) discards client-supplied `app:` and `user:` state keys
+at the HTTP endpoint, with `allow_scoped_state_keys=True` plus the
+server-side `extract_state_from_request` hook as the only way to write
+trusted scoped state (its security fix #2927); apply that stripping on any
+version. The TypeScript client exports `verifyEvents`
+(`sdks/typescript/packages/client/src/verify/`) to validate a recorded 1.0
+stream, including `outcome` and `protocolVersion`; the bundled
+`check_agui_trace.py` validates the explicit 0.x start, content and end
+profile and ignores reasoning, subagent and `outcome` fields, so a 1.0
+stream needs `verifyEvents` or a project test for those.
+
 ## Bound state and errors
 
 Project only authorised state keys and validate values, sizes and patch paths. A permitted key can still carry an unsafe or oversized value. Treat browser state as untrusted input; server state that confers identity or permission must remain outside browser-writable state.

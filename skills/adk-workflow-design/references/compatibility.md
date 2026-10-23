@@ -40,6 +40,13 @@ and `references/adk-python-workflows.md`, for the graph-API facts in
 the graph API itself is documented on adk.dev from 2.0.0. Nothing from those
 skills is bundled, and none of it was executed here.
 
+The `adk-python` `CHANGELOG.md` (main commit ed76f94, 2026-10-21) was read on
+22 October 2026 for two release facts carried in [runtime](runtime.md) and
+[orchestration](orchestration.md): 2.9.0 re-runs a failed node on resume
+(91573eb) and 2.12.0 adds `require_confirmation` on workflow nodes (988fd1a).
+Source-verified in the changelog; not executed on this skill's 2.8.0
+baseline, where the first does not apply and the second does not exist.
+
 ## Read-only helper
 
 Run `scripts/inspect_project.py` with the target project's Python interpreter.

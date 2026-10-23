@@ -11,7 +11,7 @@ verified by reading source, not by running it. Treat every statement as
 
 | Contract | What ADK 2.8.0 pins or implements | Current upstream | Consequence |
 | --- | --- | --- | --- |
-| MCP Python SDK | `mcp>=1.24,<2` (`pyproject.toml`); `initialize` handshake, `Mcp-Session-Id` sessions, server-initiated sampling and elicitation callbacks, `_read_field` tolerates camelCase and snake_case | main pins `mcp>=1.24,<3`; 2.9.0 "support MCP SDK 2.x alongside 1.x" but "keep resolving MCP 1.x by default"; 2.11.0 "add an opt-in modern-protocol connect path for MCP SDK 2.x" | The installed `mcp` version is the contract. Under 2.x, closed models drop unknown `CallToolResult` and tool-declaration keys except `_meta` (2.9.0 CHANGELOG note); servers should carry extensions under `_meta` |
+| MCP Python SDK | `mcp>=1.24,<2` (`pyproject.toml`); `initialize` handshake, `Mcp-Session-Id` sessions, server-initiated sampling and elicitation callbacks, `_read_field` tolerates camelCase and snake_case | main pins `mcp>=1.24,<3`; 2.9.0 "support MCP SDK 2.x alongside 1.x" but "keep resolving MCP 1.x by default"; 2.11.0 "add an opt-in modern-protocol connect path for MCP SDK 2.x"; 2.12.0 keeps `mcp>=1.24,<3` (`pyproject.toml` at tag v2.12.0, read 2026-10-22). python-sdk v2 (v2.3.0, PyPI 2026-10-02, the stable line; v1.x in maintenance) renames `FastMCP` to `MCPServer` and `mcp.server.fastmcp.*` to `mcp.server.mcpserver.*` with the old import path gone rather than deprecated, serves the 2025-11-25 and 2026-07-28 revisions from one app, and advises libraries not yet migrated to keep an upper bound such as `mcp>=1.28,<2` (python-sdk `docs/whats-new.md`, read 2026-10-22). A ticket states both the `mcp` major version and the spec revision | The installed `mcp` version is the contract. Under 2.x, closed models drop unknown `CallToolResult` and tool-declaration keys except `_meta` (2.9.0 CHANGELOG note); servers should carry extensions under `_meta` |
 | MCP specification | Behaviour matches the 2025-xx revisions SDK 1.x implements | Revision **2026-07-28** (previous 2025-11-25): removes protocol sessions and `Mcp-Session-Id`, removes the `initialize` handshake in favour of per-request `_meta` version and capabilities plus a mandatory `server/discover`, moves Tasks to an extension, replaces server-initiated requests with Multi Round-Trip Requests (`resultType: "input_required"`), requires `ttlMs` and `cacheScope` on list results, deprecates Roots, Sampling, Logging, HTTP+SSE and Dynamic Client Registration (Client ID Metadata Documents instead), removes SSE resumability (normative changelog, read 2026-10-08) | Treat the spec date as a compatibility note, not as a description of what your ADK does. `mcp_tool_inventory.py` speaks the SDK 1.x handshake and falls back to `server/discover` best-effort; a server that only speaks the 2026 revision is a version decision for the whole stack |
 | a2a-sdk | `a2a-sdk[http-server]>=0.3.4,<2`; `_compat.IS_A2A_V1` selects the branch by `a2a.types.StreamResponse`; 0.3 cards (`url`, `preferredTransport`, pydantic) and 1.x cards (`supportedInterfaces`, proto) both built and parsed; 1.x server routes keep `enable_v0_3_compat=True` | A2A specification 1.0.0 (`A2A-Version` header, `REJECTED` state, three bindings). 2.11.0 fixes a2a-sdk 0.3.4 to 0.3.10 breakage (5b079ee) | `agent_card_check.py --installed-a2a-sdk` compares the card's `protocolVersion` with the SDK generation. Numbers in 1.x data parts round-trip as floats (`_compat.data_part_dict` docstring) |
 
@@ -45,8 +45,11 @@ verified by reading source, not by running it. Treat every statement as
 | Prefer 2.10.0 | Fenced MCP descriptions; early-ending A2A streams reported; stale MCP sessions rebuilt; https required for remote card URLs (2.9.0) |
 | Prefer 2.11.0 | Human-input pause resume over A2A; dead-session detection behind dispatchers; a2a-sdk 0.3.4 to 0.3.10 fix |
 
-The repository's 2.8.0 pin sits between these. Preserve it and present the
-upgrade as a decision with the entries above.
+This toolkit's 2.8.0 reference baseline sits between these; it is the version
+the skill was read against, not your project's pin. Preserve the project's own
+pins and present an upgrade as a decision with the entries above. Facts
+checked on a later version say so beside the fact (the conformance spike in
+[validation](validation.md) ran on 2.12.0 with `mcp` 2.3.0).
 
 ## Evidence labels used in this skill
 

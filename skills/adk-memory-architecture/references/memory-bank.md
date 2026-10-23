@@ -46,7 +46,12 @@ Agents CLI scaffolds `google-adk>=2.12.0`):
 - `InMemoryMemoryService` performs keyword matching and does not survive a
   restart; `VertexAiMemoryBankService` extracts facts with a model and needs
   the Agent Platform resource and identity described in
-  [managed-deployment.md](managed-deployment.md).
+  [managed-deployment.md](managed-deployment.md). ADK 2.11.0 adds a SQLite
+  memory service (`memory/_sqlite_memory_service.py`, selected with a
+  `sqlite://` memory service URI; CHANGELOG 2.11.0, 9625b06, read
+  2026-10-22), a local durable store for one process that is still keyword
+  recall without extraction, consent or erasure; absent on the 2.8.0
+  baseline.
 
 The `cross-session-memory` recipe in `google/adk-recipes`
 (`app/app_utils/memory_config.py`, `app/agent.py`, `app/fast_api_app.py`)
@@ -59,6 +64,108 @@ calling it a memory feature. When the project has `agents-cli-manifest.yaml`,
 consult the installed `google-agents-cli-adk-code` skill
 (`references/adk-python.md`, "Memory", or the `cross-session-memory` recipe);
 if it is not installed, adk-engineer explains how to get it.
+
+The long-horizon-harness recipe in the same repository shows the write-back
+loop at production shape (google/adk-recipes be63596,
+`core/python/long-horizon-harness/docs/memory.md` and `horizon/memory/`, read
+2026-10-22; vendor sample, "not production use"): Memory Bank is its only
+durable cross-session store; an `after_agent_callback` flushes the session
+with `add_session_to_memory`, throttled per session (120 s cooldown, 50 per
+session); a model-callable `memory(content, scope)` tool writes `user` or
+`agent` facts under character limits (1375 and 2200), after an exact-text
+dedup and a content-safety scan, because memory is replayed into later turns
+and is therefore an untrusted-input boundary; a background "review fork" (a
+restricted sibling agent on its own runner, fire-and-forget, never blocking
+the reply) decides what is worth saving; a pre-compaction flush fires from the
+events summariser so facts are saved before old turns are summarised away;
+and a nightly pass calls Memory Bank `memories.generate` to consolidate a
+structured profile (schema applied to the Agent Engine resource at provision
+time) and to reconcile duplicates and contradictions, returning `created`,
+`updated` and `deleted` counts. Its own honesty notes carry over: the forks
+are best-effort and drained for about four seconds at shutdown, so a hard
+kill loses that turn's write; dedup before the nightly pass is exact-text
+only; the structured profile needs a Vertex Memory Bank engine with
+generation enabled and no-ops on any other service. What the recipe does not
+have is what this reference requires before the loop is a memory feature:
+consent per topic, the reconciliation table below, erasure by label and
+revision, and a test that a failed write is observable rather than silent.
+
+The consolidation and revision semantics the loop relies on are Memory
+Bank's own (Google Cloud, "Memory revisions", https://docs.cloud.google.com/gemini-enterprise-agent-platform/scale/memory-bank/revisions, updated 2026-10-21, read 2026-10-23; vendor documentation, confirm against the current page): on `memories.generate`, new information creates a
+memory when nothing in the same scope covers it, updates an existing memory
+when the consolidation process judges the new information "duplicative,
+complementary, or contradictory" to it, and deletes a memory the new
+information invalidates; the same three outcomes are available directly
+through `CreateMemory`, `UpdateMemory` and `DeleteMemory`. Revisions are on
+by default and record every change from either path; the generate response
+carries a `previous_revision` for each updated or deleted memory, and
+`memories.rollback(name=..., target_revision_id=...)` restores that
+revision, which is the rollback path for a poisoned fact. `revision_labels`
+passed in the generate `config` label the revisions with the data source
+that produced them, and `memories.revisions.list(name=..., config={"filter":
+'labels.<key>="<value>"'})` finds them, which is the erasure-by-source path
+the reconciliation table asks for. Disabling revisions
+(`disable_memory_revisions`, below) gives up both paths; say so in the
+design if it is chosen for cost. On 2.12.0 the generate request accepts
+`allowed_topics`, `disable_consolidation`, `disable_memory_revisions`,
+`metadata`, `metadata_merge_strategy`, `revision_expire_time`,
+`revision_labels`, `revision_ttl`, `ttl` and `wait_for_completion` through
+`custom_metadata` (installed package, `vertex_ai_memory_bank_service.py`,
+read 2026-10-23), so labels and topics travel on `add_events_to_memory`
+without a raw client. The gold set that proves the update and abstention
+behaviour is structured by the five memory abilities in
+[retrieval strategy](retrieval-strategy.md#measure-recall-on-a-gold-set-before-drafting).
+Two rules from the security skill apply on the write side: events from an
+invocation that read untrusted content (a fetched page, an inbound email, a
+search result) are not written back except through the quarantined reader
+path, and nothing in memory grants authority (an entitlement topic is never
+an allowed topic). When an existing design already keeps a product setting
+such as a delivery address in semantic memory rather than in a
+deterministic profile field, keep it working under the newest-wins rule and
+record the migration to a profile field as a decision; do not migrate inside
+a fix.
+
+### Minimal write-back sequence on 2.8.0
+
+The sections below state the contracts; this is the smallest implementation
+that meets them, with the accessor names read in the 2.8.0 source
+(`agents/context.py`, `memory/base_memory_service.py`; source-verified, not
+executed). One `Context` class backs tool and callback contexts and exposes
+`user_id`, `session`, `invocation_id`, `function_call_id` (set for a tool
+call), `custom_metadata` (the dict passed as `RunConfig.custom_metadata`),
+`run_config`, `state`, and the memory methods `add_session_to_memory()`,
+`add_events_to_memory()`, `add_memory()` and `search_memory()`.
+
+1. Consent and scope enter as trusted context, never as model arguments: the
+   verified user id is the Runner's `user_id`; a per-topic consent flag
+   travels in `RunConfig.custom_metadata` or a profile row read at the
+   invocation boundary.
+2. A tool (or an after-turn judge) stages a candidate per `function_call_id`
+   in `temp:` state with its topic; it does not write.
+3. One `after_agent_callback` rechecks consent and scope, then writes the
+   delta with `add_events_to_memory(app_name=, user_id=, events=, session_id=,
+   custom_metadata=)` carrying the policy metadata; `add_session_to_memory`
+   writes the whole session and is used only when every event is permitted.
+4. Each write lands in a ledger as accepted, failed or indeterminate; an
+   indeterminate write is reconciled by `search_memory` before any
+   resubmission, and the callback never raises into the user's turn.
+5. Recall is filtered in code after `search_memory`: foreign scope, topic,
+   tombstone, expiry and size, because the provider returns what it has.
+6. `BaseMemoryService` has no delete method in 2.8.0 nor in 2.12.0 (installed
+   package, read 2026-10-23: `add_session_to_memory`, `add_events_to_memory`,
+   `add_memory`, `search_memory` only), so forgetting
+   and erasure write a tombstone the recall filter honours first and then
+   delete through the provider's own API (for Memory Bank, the Agent Engine
+   memories resource, which the erasure section below treats as a sink to
+   settle and verify); `InMemoryMemoryService` is erased by removing the
+   entries directly.
+
+When several users share a subject (a site, an account, a customer), the
+memory scope stays `(app_name, user_id)` and the subject id is a tag on the
+fact and a filter at recall, never a scope of its own; a fact that every user
+of the subject should see belongs in the owning record, written by its tool.
+A test with two users on one subject proves the first user's preference never
+surfaces for the second.
 
 ### Actual ADK handoff and cardinality
 
@@ -93,7 +200,7 @@ def generation_policy(topic, policy_version):
             "application_policy_version": {"string_value": policy_version},
         },
         "metadata_merge_strategy": "REQUIRE_EXACT_MATCH",
-        "disable_memory_revisions": True,
+        "disable_memory_revisions": False,  # revisions stay on: rollback and label-scoped erasure need them
     }
 ```
 
@@ -160,7 +267,10 @@ A built-in retriever is suitable only if its actual metadata, scope, logging and
 
 For the inspected ADK 2.8.0 adapter, `MemoryEntry` has metadata-capable fields,
 but `VertexAiMemoryBankService.search_memory` populates only author, content and
-timestamp. Inspect the conversion code, not just the model schema, before
+timestamp; on 2.12.0 it also fills `custom_metadata` from the memory's
+metadata, with `author` always `user` and the fact as the content (installed
+package, read 2026-10-23), so scope, topic and expiry are your own metadata
+keys written at generation time, not provider fields. Inspect the conversion code, not just the model schema, before
 depending on scope/expiry/topic/policy metadata. The inspected malformed-result
 path also logs the raw retrieved object and exception chain. Test synthetic
 canaries at that actual adapter/logging boundary; model-input screening cannot

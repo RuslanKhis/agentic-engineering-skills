@@ -123,8 +123,12 @@ the first non-partial/final event and skip subsequent callbacks.
 For tools, import `ToolContext` from `google.adk.tools` and let ADK inject it.
 This baseline uses `.session.user_id`, `.invocation_id`, `.function_call_id`,
 `.custom_metadata` and `.state`. For callbacks, use `CallbackContext` from
-`google.adk.agents.callback_context`; it exposes session, invocation, metadata
-and state. Check required IDs and `memory_write_consent is True` at the write
+`google.adk.agents.callback_context`. On 2.8.0 both names resolve to the one
+`Context` class in `agents/context.py` (source-verified), so a callback has the
+same accessors as a tool: `user_id`, `session`, `invocation_id`, `state`,
+`custom_metadata`, `run_config`, `function_call_id` (None outside a tool
+call) and the memory methods `add_session_to_memory()`,
+`add_events_to_memory()`, `add_memory()`, `search_memory()`. Check required IDs and `memory_write_consent is True` at the write
 boundary. A model-visible `user_id` or `consent` argument is not a replacement.
 Exercise real contexts/Runner with doubles at the model/provider edge; a
 `SimpleNamespace` alone can make a nonexistent convenience property look valid.
@@ -144,7 +148,7 @@ def final_model_text(event):
     parts = content.parts or []
     if any(part.function_call or part.function_response for part in parts):
         return None
-    text = "".join(part.text for part in parts if part.text and not part.thought)
+    text = "".join(part.text for part in parts if part.text and not getattr(part, "thought", None))
     return text or None
 ```
 

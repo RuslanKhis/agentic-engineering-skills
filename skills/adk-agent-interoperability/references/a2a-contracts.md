@@ -13,6 +13,7 @@ page, not before.
 | Fact | Evidence |
 | --- | --- |
 | A2A 1.0.0 defines JSON-RPC, gRPC and HTTP+JSON bindings; clients MUST send `A2A-Version` (`Major.Minor`) and an empty value means 0.3 | Specification (normative, read 2026-10-08) |
+| A2A 1.0.1 (2026-05-26) prefers the `application/a2a+json` media type in the HTTP binding (#1753); 1.0.0 (2026-03-12) removed the implicit and password OAuth 2.0 flows from security schemes and added device code and PKCE (#1303), renamed `supportsAuthenticatedExtendedCard` to `supportsExtendedAgentCard` and moved `extendedAgentCard` into `AgentCapabilities` (#1222, #1307) | A2A `CHANGELOG.md`, read 2026-10-22; a2a-sdk 1.2.3 on PyPI 2026-10-19. A card that still declares an implicit or password flow is a 0.3 card; `adk-tool-auth-and-secrets` owns the flow the client implements |
 | Task states: `SUBMITTED`, `WORKING`, `COMPLETED`, `FAILED`, `CANCELED`, `REJECTED` (terminal), `INPUT_REQUIRED`, `AUTH_REQUIRED` (interrupted), `UNSPECIFIED` | Specification (normative) |
 | Agent card discovery at `/.well-known/agent-card.json` (renamed from `agent.json` in 0.3); registries and direct configuration are the other discovery routes; an authenticated extended card exists (`GetExtendedAgentCard`, gated by `capabilities.extendedAgentCard`) | a2a-protocol.org agent-discovery topic and specification (read 2026-10-08) |
 | Enterprise baseline: TLS 1.2+, auth declared in the card's `securitySchemes` and carried in HTTP headers (no in-band identity), 401 and 403 semantics, per-skill authorization, OpenTelemetry and W3C trace headers, webhook security | a2a-protocol.org enterprise-ready topic (vendor guidance, supplied by research 2026-10-08) |
@@ -134,6 +135,22 @@ to_a2a(agent_or_workflow, *, host="localhost", port=8000, protocol="http", rpc_p
        lifespan=None, agent_executor_factory=None) -> Starlette
 ```
 
+On 2.12.0 the same signature carries two more keyword parameters,
+`security_schemes: dict[str, SecurityScheme] | None` and
+`default_skill_security: list[dict[str, list[str]]] | None`, so the generated
+card can declare its schemes without a hand-written card (signature read in
+the installed 2.12.0 package with a2a-sdk 1.2.3, 2026-10-23). The 1.0 card
+shape, as a2a-sdk 1.2.3 serialises it (protobuf JSON, read the same day):
+`supportedInterfaces[]` entries carry `url`, `protocolBinding` and
+`protocolVersion` (no top-level `url` or `protocolVersion`);
+`securitySchemes` is a map from the author's scheme name to a wrapper that
+names the kind (`oauth2SecurityScheme`, `httpAuthSecurityScheme`,
+`apiKeySecurityScheme`, `openIdConnectSecurityScheme`, `mtlsSecurityScheme`);
+the requirement list is `securityRequirements[].schemes` mapping the scheme
+name to `{"list": [scopes]}`; `signatures` and `iconUrl` are optional. A
+complete example lives in [assets/agent-card-1.0.example.json](../assets/agent-card-1.0.example.json)
+beside the 0.3 template, and `agent_card_check.py` accepts both shapes.
+
 - `host`, `port` and `protocol` only shape the **advertised** RPC URL
   (`{protocol}://{host}:{port}{prefix}/`); nothing binds a socket. Serve with
   uvicorn on the same host and port or the card points somewhere unreachable
@@ -190,15 +207,96 @@ Consumer:
 - `use_legacy=False` between ADK peers; converters left default unless a
   test shows why.
 - `auth_scheme` or an interceptor supplies the header the card's
-  `securitySchemes` demand; no user token of yours is forwarded.
+  `securitySchemes` demand; no user token of yours is forwarded. Pin the
+  peer's origin as well: the a2a-sdk client takes the endpoint the card
+  declares and "never compares that host against the URL the card came
+  from", so a hostile or compromised card can aim your authenticated request
+  at a third-party host; agents-cli's A2A client rewrites every advertised
+  endpoint back onto the card's origin and attaches credentials per request
+  for that reason (google/agents-cli main, `src/google/agents/cli/run/_a2a_pinning.py`,
+  read 2026-10-22; vendor code, not executed). On ADK, `RemoteA2aAgent`'s own
+  same-origin check on RPC URLs (2.7.0) covers the card it fetched; a raw SDK
+  client in your code does not get it for free. The a2a-samples repository
+  (a2aproject/a2a-samples, HEAD 6603ba3 on 2026-10-22, quiet since August per
+  the memo, not read here) holds `sign_and_verify_agent_card`,
+  `headless_agent_auth` and `multitenancy` samples; pin a commit when citing
+  one.
 - Fake-server test covers completed, failed, rejected, input-required,
   auth-required, stream cut and HTTP 401/403/5xx.
 
 Producer:
 
+- Authenticate inbound calls yourself; `to_a2a` serves whatever the card
+  declares and verifies nothing. The recipe this skill owns for the boundary
+  (the token lifecycle on the caller's side belongs to
+  `adk-tool-auth-and-secrets`): a Starlette authentication middleware in
+  front of the `to_a2a` app verifies the bearer token with the pinned
+  library against the issuer's JWKS, checks `iss`, `aud` (the served
+  origin), `exp` and `nbf` with a small leeway, the scope the card's
+  requirement names and a subject; answers 401 with `WWW-Authenticate` for
+  a missing or invalid token, 403 for a valid token without the scope, and
+  503 when the verifier cannot reach its keys; leaves only the well-known
+  card unauthenticated; and sets `request.scope["user"]` to an
+  authenticated user whose name is the principal. That last step is how the
+  principal reaches ADK: a2a-sdk's HTTP routes build the call context's
+  user from `request.scope["user"]` (`server/routes/common.py`, 1.2.3) and
+  ADK 2.12.0's request converter takes the ADK user id from that user only
+  when it `is_authenticated`, otherwise ignores the claimed name once with a
+  warning and runs the call as `A2A_USER_<context_id>`
+  (`google/adk/a2a/converters/request_converter.py`, `_get_user_id`, read
+  2026-10-23), so sessions, `user:` state, artifacts and memory are scoped
+  to a verified principal or to the conversation, never to a name the caller
+  merely asserted.
+- The A2A project's TCK (a2aproject/a2a-tck v0.2.5, commit 5daf014;
+  Apache-2.0; `README.md`, `run_tck.py`, `tck/requirements/*.py`,
+  `scenarios/core_operations.feature`, `tck/transport/jsonrpc_client.py`,
+  read 2026-10-22; not run here, see below) is the acceptance check for the
+  card and versioning requirements of an exposed agent. Run it scoped,
+  against a local `to_a2a` instance, never against Agent Runtime or a
+  registered endpoint: `./run_tck.py --sut-host http://127.0.0.1:$PORT
+  --level must -- -k 'agent_card or versioning'`. It fetches the card from
+  `{sut-host}/.well-known/agent-card.json`, drives each interface the card's
+  `supportedInterfaces` declares, treats MUST as a hard failure, SHOULD as an
+  expected failure that does not block, MAY as skipped when the capability is
+  not declared, and writes `reports/compatibility.json`,
+  `compatibility.html`, `tck_report.html` and `junitreport.xml`. Most of its
+  core-operation scenarios drive a scripted system under test through
+  `messageId` prefixes (`tck-complete-task`, `tck-input-required`,
+  `tck-reject-task` and others), which a real agent does not honour, and its
+  JSON-RPC client sends only `A2A-Version` and `Content-Type`, with no
+  authentication header option, so an authenticated server fails
+  `AUTH-SERVER-002` by design; that is why the run is scoped and the
+  deferred requirement ids are listed in the evidence. The ids worth naming in a ticket are tabled under
+  [TCK ids for an exposed agent](#tck-ids-for-an-exposed-agent).
+  `agent_card_check.py` does not yet check signing, caching headers or
+  extended-card authentication; until it does, those three are manual items
+  beside its report. The TCK ships `run-tck`, `learn-requirement` and
+  `diagnose-failure` skills under `.agents/skills/` that a ticket may name as
+  companions. Because this programme's rules forbid executing code from a
+  downloaded repository and the TCK is not published to PyPI, it was not
+  run; on the pinned a2a-sdk, run the scoped command once and record the
+  exit code and the deferred ids before trusting the wording above.
 - Advertised URL equals the served URL; https for anything non-loopback.
 - Card describes capability only; tool docstrings reviewed; `securitySchemes`
   and `capabilities` set deliberately; `protocolVersion` present.
 - Persistent `task_store` and shared session service when more than one
   instance runs; `lifespan` disposes what it opens.
 - Approvals cannot be satisfied by inbound A2A content (test).
+
+## TCK ids for an exposed agent
+
+From a2aproject/a2a-tck v0.2.5 (commit 5daf014, read 2026-10-22; the kit
+was read, not run). "Real agent" means the check needs no scripted system
+under test; "authenticated" means the check still passes when the server
+requires a bearer token the kit does not send.
+
+| Id | Level | Checks | Real agent | Authenticated server |
+| --- | --- | --- | --- | --- |
+| `CARD-DISC-001` | MUST | Card served at `/.well-known/agent-card.json` | yes | yes (card is public) |
+| `CARD-SIGN-001`, `CARD-SIGN-002` | MUST | JCS canonicalisation before signing; `signatures` excluded from the signed content | yes, when the card is signed | yes |
+| `CARD-CACHE-001` to `CARD-CACHE-003` | SHOULD | `Cache-Control` and `ETag` on the card endpoint | yes | yes |
+| `CARD-EXT-001` | MUST | Extended card requires authentication | yes | yes |
+| `VER-SERVER-001` to `VER-SERVER-003` | MUST | `A2A-Version` handling; an empty header means 0.3 | yes | only if the kit's unauthenticated RPC is let through, so expect failure and keep the project's own test |
+| `AUTH-TLS-001` | MUST | Encrypted transport in production | deployment check | yes |
+| `AUTH-SERVER-002` | MUST | Server authenticates every request | yes | fails by design (the kit sends no credential); the project's own 401 test is the evidence |
+| core-operation scenarios | MUST/SHOULD | Scripted `messageId` prefixes | no | no |

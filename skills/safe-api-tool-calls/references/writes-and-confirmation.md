@@ -6,11 +6,13 @@ Use this workflow for refunds, orders, cancellations or other external mutations
 
 Inspect the actual provider operation, SDK retries and application call paths. Unknown write semantics mean **no automatic retries**, including hidden SDK retries. Enable replay only when the provider's contract protects this operation. Record key scope, retention, payload comparison, concurrent-request behaviour and supported status lookup. An HTTP method, timeout or chosen header name does not establish deduplication.
 
+An ADK graph `Workflow` adds a replay path of its own. From google-adk 2.9.0 a node that failed runs again from the top when the workflow resumes; the changelog says it outright: "a node that performs an external side effect and then fails will perform that side effect again on every resume" (CHANGELOG 2.9.0, 91573eb, read 2026-10-22). On 2.8.0 the failed node replayed as completed instead. Treat a node body that writes as a retry site: the same authorised operation, canonical payload and provider replay key apply inside it, and an uncertain outcome is reconciled before the body runs again. `adk-workflow-design` owns the node structure; this reference owns the key and the reconciliation.
+
 Preserve existing versions, interfaces and result schemas. Implement requested safeguards within the project's architecture; in a review, report missing protections with evidence.
 
 ## 2. Prepare one authorised operation
 
-Obtain the principal from authenticated application context. Check authority and current business preconditions. Confirmation records consent; it does not authenticate the caller or grant business permission.
+Obtain the principal from authenticated application context. Check authority and current business preconditions. Confirmation records consent; it does not authenticate the caller or grant business permission. Where the store or a downstream auditor must detect a tampered or fabricated write, sign the canonical payload with a key the agent process holds and the model never sees, and verify the signature where the write lands: Google's zero-trust blueprint does this with a local HMAC in its demo and names Cloud KMS as the production key holder, with a ledger audit that fails on an edited amount (GoogleCloudPlatform/generative-ai commit 3a716a8, `agents/adk/zero-trust-agents/README.md`, read 2026-10-22; vendor sample). The signature proves origin and integrity; the idempotency key and the operation record below still own replay and reconciliation.
 
 Use exact money where applicable: validate currency, positive finite amount, precision and limits with the project's decimal or minor-unit representation. Validate strings before conversion; reject excess precision instead of silently rounding. Adapt at the existing boundary and make any required public-interface migration explicit.
 
@@ -30,7 +32,7 @@ Validate provider success data at the [adapter boundary](reads-and-deadlines.md#
 
 On timeout, connection loss, exhaustion or a crash before saving the result, reconcile through the provider's supported lookup or protected same-operation replay. Recover abandoned pending records too. An expired deduplication window needs reconciliation, not a new key. Return an authorised recovery reference and honest uncertainty; never tell the user that an ambiguous refund definitely failed or invite a fresh refund.
 
-If the project has no ledger, keep its limited scope explicit. Reuse existing infrastructure if available; do not invent claims of durability. Permit only recovery justified by the provider contract, and leave cross-invocation or restart recovery as a concrete gap when outside the requested work. Unknown writes remain ineligible for automatic replay.
+If the project has no ledger, keep its limited scope explicit. Reuse existing infrastructure if available; do not invent claims of durability. A durable-execution engine around the agent (Temporal or DBOS through their ADK plugins) does not retire the key or the reconciliation: the engine checkpoints a step's result, so a crash after the provider accepted the write and before the checkpoint re-executes the step, and only the key makes that second execution a no-op at the provider. Permit only recovery justified by the provider contract, and leave cross-invocation or restart recovery as a concrete gap when outside the requested work. Unknown writes remain ineligible for automatic replay.
 
 ## 4. Enforce the execution boundary
 

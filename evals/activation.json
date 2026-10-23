@@ -455,6 +455,13 @@
       "prompt": "Our evaluation report says every case passed but I suspect some tool failures were ignored. Audit the result files and tell me what the real pass rate is.",
       "should_trigger": false,
       "rationale": "Auditing evaluation results produces the evidence; presenting it to stakeholders is a later step and a different skill."
+    },
+    {
+      "id": "frontend-tool-widgets-positive",
+      "skill": "adk-frontend-integration",
+      "prompt": "Our ADK shopping agent's tools render product cards and a comparison chart next to the reply, but the cards show up twice and a refresh after a preference change never reaches the browser. Fix the widget pipeline.",
+      "should_trigger": true,
+      "rationale": "Interface widgets rendered by tools are an agent-to-browser contract the frontend specialist owns, including the staging and emission rules behind duplicate or vanishing widgets."
     }
   ]
 }

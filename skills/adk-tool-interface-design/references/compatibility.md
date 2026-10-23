@@ -43,7 +43,7 @@ owner.
 | `skip_summarization` on `AgentTool` ended the turn with no text | #3881 fixed 2.4.0; scoped in 2.7.0 (#6230) | Assert the user-visible text |
 | Built-in tool with other tools: 400 "Multiple tools are supported only when they are all search tools" | Gemini 2.x behaviour reported by the community (dev.classmethod.jp, April 2026); also with `VertexAiRagRetrieval` (#514) | Isolate in an `AgentTool` or set `bypass_multi_tools_limit` |
 
-If the target pins a different version, read its own `tools/function_tool.py`,
+The 2.12.0 shapes a scripted-model Runner test needs (`BaseLlm.generate_content_async`, `InMemoryRunner`, `create_session`, `Runner.run_async`) are recorded in `adk-agent-evaluation`'s deterministic-tests reference, read in the installed package; use them when the SDK is absent and confirm on the first run. If the target pins a different version, read its own `tools/function_tool.py`,
 `tools/_function_tool_declarations.py`, `tools/_automatic_function_calling_util.py`
 and `features/_feature_registry.py` before quoting any rule above. Preserve the
 pin; propose an upgrade as a decision for the owner with the specific CHANGELOG

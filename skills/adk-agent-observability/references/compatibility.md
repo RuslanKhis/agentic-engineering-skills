@@ -51,8 +51,9 @@ For a new production deployment prefer google-adk 2.10.0 or later (span-retentio
 | agents-cli `google-agents-cli-observability` skill, `feedback-mechanism.md`, scaffold `telemetry.tf`, `service.tf` and `deploy/*.py` (v1.11.0, released 2026-10-20) | read 2026-10-22 from a local copy | vendor guidance; optional composition |
 | google/skills `skills/cloud/` observability, monitoring, trace and logging skills (Apache-2.0) | read 2026-10-21 | vendor guidance; routed to for dashboards, alert policies, queries, channels and sinks |
 | Langfuse evaluation and masking pages; Arize run-evals-on-traces | fetched 2026-10-07 | vendor guidance |
+| `openinference-instrumentation-google-adk` CHANGELOG (1.0.0 requires google-adk >= 2.10; 1.0.3 forwards workflow and node spans; 1.0.4 current) and opentelemetry-python-contrib `instrumentation-genai/README.md` (GenAI instrumentations moved to opentelemetry-python-genai; contrib copies security-patched only) | read 2026-10-22 | vendor guidance; version gates in [export paths](export-paths.md) |
 | Google SRE Workbook, Implementing SLOs | fetched 2026-10-07 | independent evidence |
-| google/adk-python issues #7311, #7162, #7112, #7024, #7017, #6915, #6692, #6465, #6361, #6328, #4829, #3845, #3181; openinference #3857, #3844, #3177; Arize community thread 2026-02-20 | status as of 2026-10-07 | community; symptoms to test for, not facts about the target |
+| google/adk-python issues #7311, #7162, #7112, #7024, #7017, #6915, #6692, #6465, #6361, #6328, #4829, #3845, #3181; openinference #3857, #3844 (closed by 1.0.3, 2026-10-08), #3177; Arize community thread 2026-02-20 | status as of 2026-10-07; openinference re-read 2026-10-22 | community; symptoms to test for, not facts about the target |
 
 ## Not verified here
 

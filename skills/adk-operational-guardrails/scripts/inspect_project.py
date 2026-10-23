@@ -55,7 +55,7 @@ def inspect(project, required=None):
         if not isinstance(value, str):
             warn("malformed_dependency_list")
             return
-        match = re.match(r"^\s*(google[-_]adk|google[-_]genai)\s*(.*)$", value, re.I)
+        match = re.match(r"^\s*(google[-_]adk|google[-_]genai)(?:\[[A-Za-z0-9_.,\- ]{0,80}\])?\s*(.*)$", value, re.I)
         if match:
             constraint(match[1].lower().replace("_", "-"), match[2])
         elif any(p in value.lower().replace("_", "-") for p in PACKAGES):

@@ -7,7 +7,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "02"
   compatibility: Python helpers tested on 3.11.4; see references/compatibility.md for exact ADK evidence and adaptation gates.
-  last-tested: "2026-09-16"
+  last-tested: "2026-10-22"
   last-reviewed: "2026-09-16"
 ---
 
@@ -18,7 +18,7 @@ Make the application decide whether another model call, tool action or expensive
 ## Inspect before choosing a mode
 
 1. Read project instructions, dependency declarations and locks, Python constraints, package-manager configuration and existing tests. Inspect import/startup side effects before executing project code or collecting tests. Record the selected interpreter and installed `google-adk`/`google-genai` versions. Keep pins unchanged. Use [compatibility](references/compatibility.md) before copying or adapting an ADK API.
-2. For a repeatable, read-only inventory, run the [inspector](scripts/inspect_project.py) with the target project's Python. From the installed skill directory, run `python scripts/inspect_project.py --project "$PROJECT_ROOT"`, setting `PROJECT_ROOT` to the target directory first. Inspect the reported files yourself; the helper does not prove safety or execute project code. Credentials are unnecessary for this step.
+2. For a repeatable, read-only inventory, run the [inspector](scripts/inspect_project.py) with the target project's Python when it is 3.11 or later, otherwise with any available 3.11+ interpreter for the helper alone (the `adk-engineer` rule), reporting which one ran. From the installed skill directory, run `python scripts/inspect_project.py --project "$PROJECT_ROOT"`, setting `PROJECT_ROOT` to the target directory first. Inspect the reported files yourself; the helper does not prove safety or execute project code. Credentials are unnecessary for this step.
 3. Trace each served path (CLI, web agent, API, worker) to its runner, registered tools, identity source, state stores and error handling. Record which controls actually wrap each path by following the call from the server to the wrapper. For example, a `budget_guard` module that only the CLI imports leaves the web path unguarded.
 4. Establish the units and scope: model calls, tool calls, workflow rounds, wall-clock seconds, tokens per invocation/session/user/tenant, and currency costs are different limits. Determine concurrency, restart requirements, external side effects and whether approval means permission or completed execution.
 
@@ -34,6 +34,7 @@ Modes compose within this one skill. Read only the references needed for the req
 | --- | --- | --- |
 | Agent repeats failed actions, exceeds rounds or hangs | [Runtime bounds](references/runtime-bounds.md) | Pre-execution limits, an overall deadline, static stop results and regressions proving tools did not execute |
 | Usage must accumulate across turns or instances | [Token budgets](references/token-budgets.md) | Honest local accounting or shared admission/settlement, chosen for the actual concurrency and durability requirement |
+| A business effect must accumulate across calls (money refunded against one order, quantity shipped, seats held) | [Token budgets](references/token-budgets.md), "Bound the business effect as well as the calls" | An aggregate keyed on the business object in the operation record, enforced where the write lands |
 | Risky tool actions need a human or can be retried after uncertainty | [Human review](references/human-review.md) | Trusted identity, explicit operation states, deduplication and an approval/execution boundary |
 | Spend should degrade or suspend AI features | [Cost controls](references/cost-controls.md) | Read-only assessment or an application control plan; cloud changes require separate approval |
 | Guarded work is moving to an API/worker or several instances | [Serving and lifecycle](references/serving-and-lifecycle.md) | Wire real entry points, shared admission, recovery and owned cleanup into the selected host |

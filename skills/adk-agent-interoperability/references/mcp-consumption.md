@@ -2,7 +2,20 @@
 
 Read this for mode (b). Statements are source-verified against google-adk
 2.8.0 (`tools/mcp_tool/mcp_toolset.py`, `mcp_session_manager.py`,
-`mcp_tool.py`, `session_context.py`) unless labelled otherwise. The threat
+`mcp_tool.py`, `session_context.py`) unless labelled otherwise; 2.8.0 is
+this toolkit's reference baseline, not your project's pin, and a 2.8.0
+statement holds on later versions unless [compatibility](compatibility.md)
+or a version-labelled sentence here says otherwise. On 2.12.0 the
+constructor keeps every parameter listed below and the revision the client
+speaks is chosen by a feature flag, not a parameter: `ADK_ENABLE_MCP_MODERN_PROTOCOL=1`
+(experimental, off by default, no effect on SDK 1.x) makes the session try
+the 2026-07-28 `server/discover` path first and fall back to `initialize`
+for older servers, with a one-time warning when the installed SDK has no
+era probe (`features/_feature_registry.py`, `tools/mcp_tool/session_context.py`,
+read 2026-10-23). A `header_provider` that raises is not caught in the
+header merge (`_get_headers`, 2.12.0), so the exception surfaces through the
+toolset's session call as the tool's error; failing closed there is the
+right default, and the test for it is a provider that raises. The threat
 model for server-supplied text, pinning by hash, token passthrough and SSRF
 belongs to `adk-agent-security`; this page is the client contract.
 
@@ -134,6 +147,63 @@ The 2026-07-28 specification makes `ttlMs` and `cacheScope` mandatory on
 `tools/list` results (normative). ADK 2.8.0 ignores them; the inventory
 records them (`list_result_ttl_ms`) so you can align the TTL with what the
 server states.
+
+## Authorization facts a consumer pins
+
+When the server is an OAuth resource server, four rules from the
+specification decide what the agent's OAuth client must do, whatever library
+implements the flow (modelcontextprotocol/modelcontextprotocol commit 80041ab, `docs/specification/2025-11-25/`, read 2026-10-22); (same repository, `docs/specification/2026-07-28/`, read 2026-10-22):
+
+- **Discovery.** Protected Resource Metadata follows RFC 9728, with the
+  `WWW-Authenticate` header optional and `.well-known` as the fallback
+  (SEP-985); authorization-server discovery adds OpenID Connect Discovery
+  1.0; incremental scope consent arrives through `WWW-Authenticate`
+  (SEP-835).
+- **Registration, in this priority:** a pre-registered client id; a Client
+  ID Metadata Document when the authorization server advertises
+  `client_id_metadata_document_supported` (the `client_id` is an HTTPS URL
+  with a path that serves a JSON document whose `client_id` matches the URL
+  exactly and lists `client_name` and `redirect_uris`; `private_key_jwt` is
+  allowed for token-endpoint authentication); Dynamic Client Registration
+  only as a fallback, deprecated in 2026-07-28 and requiring an
+  `application_type` (SEP-837) while it lasts. An agent that registers
+  dynamically today should plan the move to a hosted metadata document.
+- **Issuer binding.** Persisted client credentials are keyed by the issuer
+  identifier, never reused with a different authorization server, and
+  re-registered when the server changes (SEP-2352); a present `iss` in the
+  authorization response must match the recorded issuer before the code is
+  redeemed (RFC 9207, SEP-2468). Both are MUSTs on the client and belong in
+  the credential index that `adk-tool-auth-and-secrets` keeps.
+- **Enterprise sign-on and headless agents.** The MCP auth extensions
+  (modelcontextprotocol/ext-auth commit fb374c7, MIT, read 2026-10-22) define
+  Enterprise-Managed Authorization as stable: the client exchanges the
+  user's ID token at the identity provider for an identity-assertion grant
+  (RFC 8693 token exchange, `requested_token_type` ID-JAG, `audience` the
+  resource authorization server's issuer, `resource` the MCP server's
+  identifier) and presents it as an RFC 7523 JWT bearer grant to the
+  resource authorization server, which lets the enterprise see and police
+  every agent-to-server grant; and an OAuth client-credentials profile as a
+  draft (`private_key_jwt` or `client_secret_basic`, the server metadata
+  naming at least one) for agents with no user present. Prefer the stable
+  profile when the server's authorization server supports it; treat the
+  draft as vendor guidance to confirm against the current text. The wire
+  shape of the stable profile, for the implementer: at the identity
+  provider's token endpoint, `grant_type=urn:ietf:params:oauth:grant-type:token-exchange`,
+  `requested_token_type=urn:ietf:params:oauth:token-type:id-jag`,
+  `subject_token` the user's ID token (or refresh token) with the matching
+  `subject_token_type`, `audience` the resource authorization server's
+  issuer and `resource` the MCP server's identifier; the response's
+  `issued_token_type` is the ID-JAG, a JWT typed `oauth-id-jag+jwt`; at
+  the resource authorization server's token endpoint,
+  `grant_type=urn:ietf:params:oauth:grant-type:jwt-bearer` with the ID-JAG
+  as the assertion and the client authenticating with its registered
+  credentials or its metadata-document client id. The profile defines no
+  refresh-token handling, so the client re-exchanges rather than storing a
+  vendor refresh token; cache lifetime, single flight per principal and
+  failure classes belong to `adk-tool-auth-and-secrets`' lifecycle
+  reference. A headless client's metadata document still has to list
+  `redirect_uris` (the document's required fields); list one HTTPS URI on
+  your own host and record it as unused.
 
 ## Headers and credentials: the client contract
 

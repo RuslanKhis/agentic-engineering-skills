@@ -1,12 +1,12 @@
 # Compatibility and evidence boundaries
 
-Read this before relying on any version-dependent behaviour in this skill. The pinned reference is google-adk **2.8.0** (tag `v2.8.0`, released 2026-08-25), whose source was read on 2026-10-07. Later behaviour comes from the adk-python main branch at 2.11.0 (2026-10-01) and its CHANGELOG. Keep the target's pins; a version decision is a separate request.
+Read this before relying on any version-dependent behaviour in this skill. The pinned reference is google-adk **2.8.0** (tag `v2.8.0`, released 2026-08-25), whose source was read on 2026-10-07. Later behaviour comes from the adk-python main branch at 2.11.0 (2026-10-01) and its CHANGELOG; the 2.12.0 release (2026-10-13) and main commit ed76f94 (2026-10-21) were read on 2026-10-22. Keep the target's pins; a version decision is a separate request.
 
 ## Verified in 2.8.0 source
 
 | Surface | Behaviour | File |
 | --- | --- | --- |
-| `adk eval AGENT EVAL_SET...` | Options `--config_file_path`, `--print_detailed_results`, `--eval_storage_uri`; `eval_set.json:case_a,case_b` selects cases; auto-discovers `test_config.json` beside a single eval set file; prints per-set passed and failed counts and exits 0 whatever the counts (only missing dependencies raise `ClickException`); no `--num_runs` option | `cli/cli_tools_click.py` |
+| `adk eval AGENT EVAL_SET...` | Options `--config_file_path`, `--print_detailed_results`, `--eval_storage_uri`; `eval_set.json:case_a,case_b` selects cases; auto-discovers `test_config.json` beside a single eval set file; prints per-set passed and failed counts and exits 0 whatever the counts (only missing dependencies raise `ClickException`); no `--num_runs` option. Unchanged through tag v2.12.0; main commit c2ff634 (2026-10-15) exits 1 when any case failed or no eval set ran, still without `--num_runs` (read 2026-10-22) | `cli/cli_tools_click.py` |
 | `AgentEvaluator.evaluate` / `evaluate_eval_set` | `num_runs` default `NUM_RUNS = 2`; per metric, `statistics.mean(scores)` across runs is compared with the threshold; `output_file` writes one CSV row per metric per invocation (`eval_set_id, eval_id, metric_name, threshold, score, eval_status`, written with pandas) before `assert not failures`; `criteria=` dict is deprecated in favour of `eval_config`; `migrate_eval_data_to_new_schema` converts legacy `.test.json` | `evaluation/agent_evaluator.py` |
 | `EvalConfig.criteria` | Metric name to a bare float threshold or a criterion object (`LlmAsAJudgeCriterion`, `RubricsBasedCriterion`, `HallucinationsCriterion`, `ToolTrajectoryCriterion` with `match_type` `EXACT`, `IN_ORDER`, `ANY_ORDER`); defaults without a config `tool_trajectory_avg_score: 1.0`, `response_match_score: 0.8`; `custom_metrics` with `code_config` | `evaluation/eval_config.py`, `evaluation/eval_metrics.py` |
 | `JudgeModelOptions` | `judge_model` default `"gemini-2.5-flash"`, `num_samples` default 5, `parallelism_limit` default 1; the LLM-backed and audio user simulators also default to `gemini-2.5-flash` | `evaluation/eval_metrics.py` L84, `evaluation/simulation/llm_backed_user_simulator.py` L60 |
@@ -28,7 +28,8 @@ Read this before relying on any version-dependent behaviour in this skill. The p
 | 2.9.0 | 2026-09-10 | `FallbackModel` added (adk-model-and-output-contracts covers it); `ignore_args` on tool trajectory evaluation; LLM-as-judge calls parallelised; per-invocation token spend telemetry |
 | 2.10.0 | 2026-09-24 | Efficiency metrics `token_usage_v1`, `invocation_duration_v1`, `inference_call_count_v1`, `tool_call_count_v1`: informational, always on, never fail a case, a threshold on them is rejected (verified in main `eval_metrics.py` and adk-docs criteria page); `AgentEvaluator.evaluate` and `evaluate_eval_set` raise `ValueError` when no eval cases are evaluated; `num_samples=0` rejected at construction; `safety_v1` pinned to a specific metric version; missing conformance recordings raise a clear error |
 | 2.11.0 | 2026-10-01 | Conformance runs report replay and recording failures; Vertex multi-turn mapping fix |
-| main | 2026-10-07 | `JudgeModelOptions.judge_model` default still `"gemini-2.5-flash"` (main `eval_metrics.py` L113) |
+| 2.12.0 | 2026-10-13 | AFC disabled in all `LlmAsJudge` judge requests (cc339e0, #7146); `adk eval --print_detailed_results` output made readable; efficiency metrics reported for Dev UI evals; Agent Engine-compliant eval session ids; custom service accounts for `adk deploy agent_engine` (629e119); `adk eval` exit code unchanged |
+| main | 2026-10-21 (commit ed76f94) | `JudgeModelOptions.judge_model` default still `"gemini-2.5-flash"` (`eval_metrics.py` L113-114); c2ff634 (2026-10-15) makes `adk eval` exit 1 on failures or an empty run, in no tag yet |
 
 ## Vendor documentation state (dated)
 

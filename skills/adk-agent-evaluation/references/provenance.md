@@ -50,3 +50,15 @@ All source names in this table are within the origin's Chapter 7 directory.
 | Calibrate judges, retain holdouts, compare slices, minimise production evidence and reconcile unknown remote mutations | Clearly stated production principles in the chapter. The companion does not implement a complete rubric-calibration service, holdout programme, production monitoring system or remote-write reconciliation protocol. Validate these adaptations separately. |
 
 Do not import the example's fixture IDs, model/region choices, call counts, lexical thresholds or local storage lifetime as universal requirements. The durable lesson is to choose a meaningful boundary, preserve failed and incomplete evidence, and state whether validation used real services, substituted boundaries or inspection alone.
+
+## tau2-bench review — 22 October 2026
+
+Read sierra-research/tau2-bench at commit 05736c2 (MIT): `src/tau2/metrics/agent_metrics.py` (`pass_hat_k`, `is_successful`, infrastructure-error exclusion), `src/tau2/evaluator/AGENTS.md` and `docs/evaluation.md` (reward basis, reference-trajectory replay, multiplicative rewards, premature termination, missing criteria), `README.md` ("Comparing with v1.0.1"). Imported as method into [result-auditing.md](result-auditing.md), [evaluation-design.md](evaluation-design.md) and [compatibility.md](compatibility.md); no benchmark data, no code copied; nothing executed.
+
+## Inspect AI review — 22 October 2026
+
+Read UKGovernmentBEIS/inspect_ai at commit c2fc3d9 (MIT): `src/inspect_ai/scorer/_reducer/reducer.py`, `src/inspect_ai/scorer/_metrics/krippendorff.py`, `docs/agent-bridge.qmd`; the installed inspect-ai 0.3.283 package's `agent/_bridge/bridge.py` for the Google patch. Spiked the bridge on google-adk 2.12.0 with the mock model in a scratch environment outside the repository. Imported into [result-auditing.md](result-auditing.md), [evaluation-design.md](evaluation-design.md) and [provider-compatibility.md](provider-compatibility.md); nothing copied.
+
+## Promptfoo review — 22 October 2026
+
+Read promptfoo/promptfoo at commit 15bcb0d (MIT): `site/docs/guides/evaluate-google-adk.md`, `site/docs/usage/command-line.md`; promptfoo-action `README.md` (repeat, repeat-min-pass, fail-on-threshold, sharing). Spiked the exit codes with `npx promptfoo@0.124.1 eval` on the `echo` provider outside the repository (100 on a failing test, 0 under a cleared pass-rate threshold, 0 on all pass). Imported into [provider-compatibility.md](provider-compatibility.md); nothing copied.

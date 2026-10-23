@@ -15,7 +15,7 @@ Decide which signals an ADK agent emits, where they go, what the numbers mean an
 
 ## Inspect before choosing a mode
 
-1. Record the pinned `google-adk`, `opentelemetry-sdk`, exporter and any `openinference-instrumentation-google-adk` or `opentelemetry-instrumentation-google-genai` versions. Most behaviour below is for **2.8.0**; [compatibility](references/compatibility.md) labels what changed in 2.6 to 2.11 and what later releases fixed. Keep pins unchanged unless a version decision is requested.
+1. Record the pinned `google-adk`, `opentelemetry-sdk`, exporter and any `openinference-instrumentation-google-adk` or `opentelemetry-instrumentation-google-genai` versions (the first requires google-adk 2.10 or later from its 1.0.0; the second now ships from opentelemetry-python-genai; [export paths](references/export-paths.md)). Most behaviour below is for **2.8.0**; [compatibility](references/compatibility.md) labels what changed in 2.6 to 2.11 and what later releases fixed. Keep pins unchanged unless a version decision is requested.
 2. Identify the host: Agent Runtime (`GOOGLE_CLOUD_AGENT_ENGINE_ID` present at runtime), Cloud Run, GKE or local `adk web` / `adk api_server`. The host decides the exporter, the default telemetry schema version and the metric reader ([export paths](references/export-paths.md)).
 3. List every telemetry environment variable in deployment configuration and `.env` files: `GOOGLE_CLOUD_AGENT_ENGINE_ENABLE_TELEMETRY`, `ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS`, `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT`, `OTEL_SEMCONV_STABILITY_OPT_IN`, `ADK_EXPERIMENTAL_TELEMETRY`, `ADK_TELEMETRY_SCHEMA_VERSION_OPT_IN`, `ADK_TELEMETRY_IGNORE_RUN_CONFIG`, `OTEL_EXPORTER_OTLP_*`, `OTEL_SERVICE_NAME`, `OTEL_RESOURCE_ATTRIBUTES`. Record the effective value of each with its precedence ([signals and schema](references/signals-and-schema.md)).
 4. Find every provider setup: `maybe_set_otel_providers`, `get_gcp_exporters`, `--otel_to_cloud`, `GoogleADKInstrumentor().instrument()`, `TracerProvider(...)` or `set_tracer_provider` in application code, and every plugin on the `App` or `Runner`: `BigQueryAgentAnalyticsPlugin`, `LoggingPlugin`, `DebugLoggingPlugin`, `AutoTracingPlugin`. Note any `RunConfig(telemetry=TelemetryConfig(...))`.
@@ -64,7 +64,7 @@ Enabling `telemetry.googleapis.com`, Cloud Trace, Cloud Monitoring and Cloud Log
 
 Read [validation](references/validation.md). Three checks are observable without a cloud project:
 
-1. An in-memory exporter test that runs the real `Runner` with a scripted model and asserts exactly one `invoke_agent`, one `execute_tool` per tool call and one `generate_content` span per logical model call, with `gen_ai.conversation.id` set and content attributes absent under the chosen gate.
+1. An in-memory exporter test that runs the real `Runner` with a scripted model and asserts exactly one `invoke_agent`, one `execute_tool` per tool call and one `generate_content` span per logical model call (the names and counts as observed on the pinned version; 2.8.0 may emit one span per streamed chunk on some paths, see compatibility), with `gen_ai.conversation.id` set and content attributes absent under the chosen gate.
 2. `invocation_summary.py` over a saved session with a streamed call, asserting the input and output token totals equal the final chunk, not the sum of chunks.
 3. `events_to_eval_set.py --select tool_error --dry-run` over the same session, asserting the case count, the redaction counts and an empty `structural_problems` list.
 

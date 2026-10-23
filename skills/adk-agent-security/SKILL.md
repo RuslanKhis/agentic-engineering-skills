@@ -31,9 +31,13 @@ community report, source-verified).
 2. Identify the pinned `google-adk` version and read
    [compatibility](references/compatibility.md): 2.8.0 fences relayed
    sub-agent output, does not fence MCP tool descriptions (2.10.0), has no
-   `ToolCallIntegrityPlugin` (2.11.0), and sits above the adk web and forged
+   `ToolCallIntegrityPlugin` (2.11.0), predates the 2.12.0 fixes that keep
+   OAuth2 secrets off the serving endpoints and take the user id only from
+   an authenticated principal, and sits above the adk web and forged
    confirmation CVE ranges fixed by 2.7.0. Preserve the pin; propose an
-   upgrade as a decision with the CHANGELOG entries it brings.
+   upgrade as a decision with the CHANGELOG entries it brings, and treat
+   2.12.0 as the floor for an agent that serves several users over ADK's
+   HTTP endpoints.
 3. Run the read-only inventory from this skill's directory with an available
    Python 3.11+ interpreter:
 
@@ -69,8 +73,8 @@ are trusted operators, and what the deployment perimeter is.
 | (b) Injection-resistant structure | Read [injection patterns](references/injection-patterns.md): map action-selector, plan-then-execute, dual LLM, map-reduce and context minimisation onto `SequentialAgent`, a quarantined reader with `include_contents='none'` and no tools, `before_tool_callback` capability checks keyed on `tool_context.state`, and sub-agent output treated as data. |
 | (c) Tool and MCP supply chain | Read [tool supply chain](references/tool-supply-chain.md): allowlist with `tool_filter`, review AI-visible descriptions, pin definitions by hash, namespace with `tool_name_prefix`, Streamable HTTP over stdio in production, per-user `header_provider`, no token passthrough, SSRF and egress rules, unfenced own tool results and OpenAPI descriptions. |
 | (d) Agency and output handling | Read [agency and output](references/agency-and-output.md): tool tiering (read, write, irreversible), confirmation policy and its pitfalls, escaping and URL rules for rendered output, code-executor selection table, `BashToolPolicy` allowlists, identity and IAM conditions. |
-| (e) Adversarial suite | Read [adversarial testing](references/adversarial-testing.md) and seed from [adversarial cases](assets/adversarial-cases.json): deterministic scripted-model Runner assertions ("forbidden tool never called", "data never egressed"), optional promptfoo, garak or PyRIT campaign, Model Armor shadow evidence. |
-| (f) Security review | Use all references; report prioritised findings with `file:line`, the OWASP LLM or ASI identifier, the observable check that would show the fix, the evidence label and the owning skill. Write the review document first; when the request also says to carry the work out, then make the fixes it recommends, otherwise change nothing. |
+| (e) Adversarial suite | Read [adversarial testing](references/adversarial-testing.md) and seed from [adversarial cases](assets/adversarial-cases.json); from the other references only "Tier every tool" and "Confirmation as code" in agency-and-output and the gate in injection-patterns: deterministic scripted-model Runner assertions ("forbidden tool never called", "data never egressed"), optional promptfoo, garak or PyRIT campaign, Model Armor shadow evidence. |
+| (f) Security review | Use all references, skipping the code-execution section of agency-and-output when the inventory shows no executor or environment toolset; report prioritised findings with `file:line`, the OWASP LLM or ASI identifier, the observable check that would show the fix, the evidence label and the owning skill. Write the review document first; when the request also says to carry the work out, then make the fixes it recommends, otherwise change nothing. |
 
 A request may need several rows; keep them in one change set and one report.
 

@@ -202,7 +202,14 @@ framework sent, not the template ([Show Me The Prompt](https://hamel.dev/blog/po
 
 `adk optimize` with `GEPARootAgentPromptOptimizer` rewrites the root agent's
 instruction from evaluation results; it does not touch sub-agents and is
-experimental (adk-docs optimize page, read 2026-10-06, vendor guidance).
+experimental (adk-docs optimize page, read 2026-10-06, vendor guidance). Its
+`optimizer_model` defaults to `gemini-2.5-flash`
+(`optimization/gepa_root_agent_prompt_optimizer.py` and
+`simple_prompt_optimizer.py` at main commit ed76f94;
+`gepa_root_agent_optimizer.py` defaults to `gemini-3.5-flash`; read
+2026-10-22), a model retired on Vertex on 2026-10-20, so pin
+`optimizer_model` explicitly and record it with the candidate prompt as a
+release artefact (`adk-release-engineering`).
 Vertex AI Prompt Optimizer works on an exported instruction string with no
 ADK awareness. Both consume the development set and produce a candidate that
 goes through the same review checklist; run manual fixes first and one

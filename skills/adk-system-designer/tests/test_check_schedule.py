@@ -132,6 +132,16 @@ class ScheduleTests(unittest.TestCase):
             code, out, _ = self.run_check("--plan", str(plan), "--json")
             self.assertEqual(len(json.loads(out)["handoffs_without_hours"]), 2)
 
+    def test_list_values_accept_trailing_comments(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("check_schedule_under_test", SCRIPT)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        parse_scalar = module.parse_scalar
+        self.assertEqual(parse_scalar("[G03]   # cross-person mention"), ["G03"])
+        self.assertEqual(parse_scalar("[G01, G02] # two"), ["G01", "G02"])
+        self.assertEqual(parse_scalar("none   # or what"), "none")
+
     def test_prose_mentions_outside_the_schedule_are_listed_for_review(self):
         with tempfile.TemporaryDirectory() as root:
             plan = self.write_plan(root)

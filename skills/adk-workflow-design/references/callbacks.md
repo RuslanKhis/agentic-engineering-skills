@@ -42,7 +42,20 @@ effect rather than asserting that a hook was merely registered.
 Inspect plugin precedence and callback-list order. An earlier substitute may
 short-circuit later hooks, so an authorisation check placed after a cache or
 fallback might never run. Apply required checks before substitution, or enforce
-the invariant in the deterministic tool/service boundary independently.
+the invariant in the deterministic tool/service boundary independently. Write
+the per-stage chain into the project's agent guide and test it in that order:
+Google's long-horizon-harness recipe registers each stage as an ordered list,
+documents the chain per hook (`before_tool_callback`: log, exfil guard, policy
+guard, permission gate last) with the note that plugins run before agent-level
+callbacks at each hook, and calls the order "the contract" (google/adk-recipes
+be63596, `core/python/long-horizon-harness/AGENTS.md`, "ADK Callback Wiring",
+read 2026-10-22; vendor sample). Within one stage, every callback in the
+list shares a single `CallbackContext`, so one state delta and one set of
+event actions: `agents/base_agent.py` builds the context once before
+iterating the canonical callbacks (adk-python main ed76f94, read 2026-10-22;
+confirm on the pinned version). A later callback in the list therefore sees
+what an earlier one staged in the same turn, and the stage's single event
+carries both.
 
 In the checked **ADK 2.8.0 agent `before_tool_callback` list**, iteration stops on a
 truthy result, while execution is skipped when the final result is not `None`.

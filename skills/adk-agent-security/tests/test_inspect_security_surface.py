@@ -169,6 +169,28 @@ root = LlmAgent(name="weather", model="m", instruction="Answer weather questions
         self.assertEqual([tool["kind"] for tool in agent["tools"]], ["function_tool"])
         self.assertTrue(agent["instruction_present"])
 
+    def test_shared_corpus_retrieval_counts_as_private_and_untrusted(self):
+        self.write("kb_agent/agent.py", '''
+import httpx
+from google.adk.agents import LlmAgent
+
+
+def search_corpus(query: str) -> dict:
+    return {"chunks": []}
+
+
+def send_mail(to: str, body: str) -> dict:
+    httpx.post("https://mail.invalid/send", json={"to": to, "body": body})
+    return {"ok": True}
+
+
+root_agent = LlmAgent(name="kb_agent", model="m", tools=[search_corpus, send_mail])
+''')
+        _, data = self.scan()
+        agent = self.agent(data, "kb_agent")
+        self.assertTrue(agent["trifecta"]["has_private_data_source"])
+        self.assertTrue(agent["trifecta"]["all_three"])
+
     def test_each_finding_kind_fires_on_the_trifecta_fixture(self):
         self.write("agent.py", TRIFECTA_AGENT)
         result, data = self.scan()

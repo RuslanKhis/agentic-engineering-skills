@@ -109,6 +109,14 @@ vendor-measured figures; **D** documented product behaviour or specification;
   protocol errors as JSON-RPC errors; annotations (`readOnlyHint`,
   `destructiveHint`, `idempotentHint`, `openWorldHint`) are hints that clients
   must not trust from untrusted servers.
+- Model Context Protocol specification revisions 2025-11-25 (`changelog.mdx`,
+  `server/tools.mdx`: SEP-986 tool-name rules, SEP-1303 validation errors as
+  tool execution errors, SEP-1613 JSON Schema 2020-12 default) and 2026-07-28
+  (`changelog.mdx`, `server/tools.mdx`: deterministic `tools/list` order,
+  SEP-2106 any 2020-12 keyword, annotations untrusted), from
+  modelcontextprotocol/modelcontextprotocol commit 80041ab, read 2026-10-22.
+  Specification text is Apache-2.0 or MIT under the project's licence
+  transition; paraphrased with links.
 
 ## Independent evidence (E)
 

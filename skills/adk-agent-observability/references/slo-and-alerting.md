@@ -74,6 +74,9 @@ Agent and Model Evaluations reached GA on 2026-07-31 (Google Developers Blog). O
 
 ## Dashboards
 
+Key dashboards on `gen_ai.operation.name`, `gen_ai.agent.name` and `gen_ai.provider.name`, never on `gen_ai.system`, which the conventions removed and ADK's legacy attributes still emit ([signals and schema](signals-and-schema.md)).
+
+
 One page per agent: request rate and error ratio (`invoke_agent`), latency heatmap, tool error ratio by tool, model latency and errors by model, tokens per invocation, inference calls per invocation, and the quality score when a monitor exists. Add a telemetry-health tile (points per minute) so an export failure is visible on the same page. Keep the queries keyed on attributes observed in your export; the span and metric names are in development and change by ADK version ([compatibility](compatibility.md)). When the deliverable is the widget itself, write the query with the installed Google skill `cloud-monitoring-promql-query` or `cloud-monitoring-list-time-series-request`, then consult `cloud-monitoring-chart-generation` (from google/skills); if one is not installed, adk-engineer explains how to get it.
 
 Independent community project; not affiliated with or endorsed by Google.
