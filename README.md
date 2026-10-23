@@ -1890,6 +1890,28 @@ recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
 
+### Web-app baseline · 23 October 2026
+
+The designer now gives a proof of concept with its own web interface a
+baseline that others can continue: web defaults (a Vite and React app served
+by one FastAPI service), a house design system in Google's DESIGN.md format,
+named companion skills with pins written once into the project's `AGENTS.md`,
+and a web security baseline of 25 rules tagged with OWASP identifiers in six
+tiers. A new `adk-fastapi-backend` skill owns the HTTP application around the
+agent. Its recipe ran on google-adk 2.12.0 with FastAPI 0.141.1 (the highest
+that resolves beside it): 24 scratch-app tests and 8 runtime contracts passed,
+including one showing that ADK's own server lets an anonymous client create
+and list another user's sessions. The house theme lints clean and renders with
+no overflow and no axe violations at three widths in light and dark, where the
+stock shadcn theme shows three serious contrast violations. A designer trial
+and a paired engineer trial (with and without the `shadcn` companion) found
+seven gaps, now fixed. All **23 packages** pass validation and **729 tests**
+pass with **59 optional SDK checks skipped**. See the
+[proposal](docs/research/web-app-baseline-proposal-2026-10-22.md), the
+[design-system research](docs/research/house-design-system-2026-10-23.md),
+the [screenshots](docs/design/house-theme/README.md) and the
+[trial record](docs/testing/web-app-baseline-2026-10-23.md).
+
 ### MITRE ATLAS and the CoSAI Risk Map · 23 October 2026
 
 [ATLAS](https://github.com/mitre-atlas/atlas-data) 2026.09 (commit 3259f38)
