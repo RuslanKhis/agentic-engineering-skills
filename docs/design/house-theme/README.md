@@ -12,9 +12,11 @@ These images show the house theme from [`skills/adk-frontend-integration/assets/
 | `house-empty-state-{375,768,1280}-{light,dark}.png` | New-conversation screen inside the shell: serif greeting, the can-and-cannot line, the composer with its data line, and a 2 × 2 grid of suggestions |
 | `house-conversation-{375,768,1280}-{light,dark}.png` | Conversation screen inside the shell. Parts:<br>• sidebar with date-grouped history (9 seeded conversations), workspace slot and user (expanded at 1280, icon rail at 768, a closed sheet at 375)<br>• header with title, "Pilot" environment badge and side-panel toggle<br>• turn 1: folded steps ("Worked for 4 s · 3 steps · 1 failed · searched 42 contracts"), an answer-first reply with claim-level citation chips, a table in tabular figures, a "check before use" figure, an honest "I could not find…", "View all 4 sources", per-answer actions (Copy, Copy with sources, thumbs, Retry) and follow-up chips<br>• turn 2: a partial answer with the unbordered incomplete notice and Retry<br>• turn 3 (with the 150 ms entrance): running steps visible, the approval card with the email text open and keyboard focus on Approve, a streaming answer with a caret<br>• the floating two-row composer with Stop, the sources toggle and the data line<br>• at 1280 only: the resizable side panel open on Sources (`?panel=sources`) |
 | `before-after-1280-light.png` | The first version's conversation screen (left) against this one (right), both 1280 px light |
-| `comparison-1280-light.png` | Kept from the first version: the old conversation markup with the house theme on the left and shadcn 4.22.1's stock theme on the right. It still shows the token, font and focus differences, but not the current screens |
+| `comparison-1280-light.png` | Regenerated for this version: the conversation screen (1280 px, light, side panel open) in the house theme on the left, and the same markup on the right with shadcn 4.22.1's stock theme. The stock side uses the default `neutral` tokens, Geist and the unedited stock component files |
+| `brand-<slug>-conversation-1280-light.png`, `brand-<slug>-empty-1280-dark.png` | The four fictional demo brands from `skills/adk-frontend-integration/assets/design/brands/` (`kelderwick-bank`, `marrowby`, `veldmark-industrial`, `avenhale-health`), each applied with `brand_to_preview.py`. Each brand has its own workspace name, `.example` domain, user, greeting, history titles and suggestion cards. The conversation itself is the house procurement story for all four. Every screen says "Demo: fictional company" in the header and in the line under the composer |
+| `brands-overview.png` | The house conversation screen and the four brand conversation screens side by side at 35% |
 
-Images are 1× PNGs, reduced to 256 colours with Pillow 9.2.0 (median cut, no dither) after a visual check of text edges. Conversation images are as tall as the thread (2246–2972 px); the design-system images are full height (7103–10520 px). The 20 images total 3.6 MB.
+Images are 1× PNGs, reduced to 256 colours with Pillow 9.2.0 (median cut, no dither) after a visual check of text edges. Conversation images are as tall as the thread (2221–2972 px); the design-system images are full height (7103–10520 px). The 30 images total 4.8 MB.
 
 ## Versions
 
@@ -94,9 +96,39 @@ Axe counts are violating nodes by impact (critical / serious / moderate / minor)
 - **Reduced motion.** The new turn used the fade-only keyframes (`turn-fade`, 1 ms under the global rule) and no transform.
 - **Console errors.** None on any page.
 
+### Demo brands
+
+Each brand was built and rendered on its own (`JOBS="chat:light:1280,empty:dark:1280" PREFIX=brand-<slug> SKIP_EXTRA=1 node render.mjs …`), with the same axe tags and `target-size` switched on.
+
+| Brand | Image | Overflow | Axe | Axe incomplete | Focus | Fonts loaded |
+|---|---|---|---|---|---|---|
+| Kelderwick Bank | conversation 1280 light | none | 0 / 0 / 0 / 0 | color-contrast: 2 | 2 px outline, `oklch(0.5 0.12 350)` | Instrument Sans, Newsreader, JetBrains Mono |
+| Kelderwick Bank | empty 1280 dark | none | 0 / 0 / 0 / 0 | none | `oklch(0.74 0.1 350)` | Instrument Sans, Newsreader |
+| Marrowby | conversation 1280 light | none | 0 / 0 / 0 / 0 | color-contrast: 2 | `oklch(0.5 0.1 120)` | Figtree, Fraunces, JetBrains Mono |
+| Marrowby | empty 1280 dark | none | 0 / 0 / 0 / 0 | none | `oklch(0.76 0.105 120)` | Figtree, Fraunces |
+| Veldmark Industrial | conversation 1280 light | none | 0 / 0 / 0 / 0 | color-contrast: 2 | `oklch(0.5 0.082 192)` | Geologica, Source Serif 4, JetBrains Mono |
+| Veldmark Industrial | empty 1280 dark | none | 0 / 0 / 0 / 0 | none | `oklch(0.74 0.08 192)` | Geologica, Source Serif 4 |
+| Avenhale Health | conversation 1280 light | none | 0 / 0 / 0 / 0 | color-contrast: 2 | `oklch(0.5 0.16 266)` | Atkinson Hyperlegible Next, Literata, JetBrains Mono |
+| Avenhale Health | empty 1280 dark | none | 0 / 0 / 0 / 0 | none | `oklch(0.72 0.13 262)` | Atkinson Hyperlegible Next, Literata |
+
+The incomplete items are the same two as in the house render (the tab count over the tab underline, and side-panel text in its scroll region). No console errors. Avenhale's cobalt reads as blue, not violet: the light primary is #26449D, with green above red, and the dark step #7CA7F6 reads as cornflower blue.
+
+### House against stock
+
+The regenerated `comparison-1280-light.png` uses the current markup. The stock side keeps the pattern stylesheet (`house-patterns.css`: prose, composer, fade and entrance rules written in token names), so only the tokens, fonts and component files differ.
+
+| Render | Overflow | Axe (critical / serious / moderate / minor) | Focus on Approve | Fonts |
+|---|---|---|---|---|
+| House | none | 0 / 0 / 0 / 0 | 2 px solid outline, `oklch(0.5 0.1 250)`, 2 px offset | Inter, Source Serif 4, JetBrains Mono |
+| Stock shadcn 4.22.1 | none | **0 / 4 / 0 / 0** | no outline; a 3 px box-shadow ring in `oklab(0.708 0 0 / 0.5)` | Geist |
+
+- **Stock contrast failures.** All four serious nodes are stock `muted-foreground` (#737373) on `muted` (#F5F5F5) at 4.34:1 in the approval card's email preview: the "To" and "Subject" labels, "(one email each)" and the closing note. The house pair measures 6.1:1.
+- **What the stock side loses.** The house-only tokens do not exist there, so the "Pilot" and "Waiting for approval" badges and the incomplete-answer notice lose their tinted surfaces, and the check-before-use underline loses its warning colour. The brand mark draws in the stock near-black primary. Answers fall back to Geist, because the stock theme has no serif.
+- Axe also marked 6 colour-contrast items incomplete on the stock render.
+
 ## Applying a brand in the preview
 
-The preview reads one brand file, `src/brand/brand.json` (name, product, the reserved `.example` domain used for source hosts, accent-ramp colours, font stacks, control radius, logo file names). Beside it are `fonts.css` (the `@fontsource-variable` imports) and `logo.svg` and `mark.svg`, which are inlined so a mark drawn in `var(--primary)` follows light and dark mode. `applyBrand()` refuses any colour outside the DESIGN.md brand override, sets the `sidebar-primary*` and `sidebar-ring` followers, and accepts only 4 px or 8 px for the radius. The scratch converter `brand_to_preview.py <brands/slug> <preview/src/brand>` writes all four files from a `brand.yaml` and prints the font packages to install. It was tried once with Marrowby in a copy of the preview: Figtree and Fraunces loaded, the green ramp and 8 px controls applied, and the empty state had zero axe violations in light and dark. Those images are not in this folder.
+The preview reads one brand file, `src/brand/brand.json` (name, product, the reserved `.example` domain used for source hosts, accent-ramp colours, font stacks, control radius, logo file names). Beside it are `fonts.css` (the `@fontsource-variable` imports) and `logo.svg` and `mark.svg`, which are inlined so a mark drawn in `var(--primary)` follows light and dark mode. `applyBrand()` refuses any colour outside the DESIGN.md brand override, sets the `sidebar-primary*` and `sidebar-ring` followers, and accepts only 4 px or 8 px for the radius. The scratch converter `brand_to_preview.py <brands/slug> <preview/src/brand> [--content <file>.json]` writes these files from a `brand.yaml` and prints the font packages to install. It sets the domain from the brand's first word (`kelderwick.example`), copies `fictional: true` (which adds "Demo: fictional company" to the header and the line under the composer), and writes `content.json`: the sample user, history titles and suggestion cards. `{}` keeps the house sample. The four brand renders above came from this path: one copy of the preview with all seven brand font packages installed, the converter, then `npx vite build --outDir ../dist-<slug>` per brand.
 
 ## Not verified
 
@@ -114,5 +146,10 @@ The preview reads one brand file, `src/brand/brand.json` (name, product, the res
 - **Content.**
   - Tollmere, Brackwater Freight and the other names were checked only against the toolkit's own notes, not in a trademark search.
   - The data line ("europe-west2", not used for training) is fictional demo copy.
-- **Brands.** A brand was applied only in a scratch copy (Marrowby, empty state), not across all screens or all four brands.
+- **Brands.**
+  - Each brand was rendered only as the conversation screen at 1280 light and the empty state at 1280 dark: not at 375 or 768, not the design-system page, and not the other mode.
+  - The brand screens show the house procurement conversation, with Brackwater Freight and the same sources and email, inside the brand's own shell. Only the history titles, suggestions, user and greeting fit each industry.
+  - The "Demo: fictional company" note in the header is hidden below 768 px. On narrow screens only the line under the composer carries it, and that was not rendered.
+  - The brand images were judged by an agent at full size and in the 35% overview. No designer or client has looked at them.
+- **Stock comparison.** The stock side keeps the house pattern stylesheet and the house markup, including classes for house-only tokens. It shows what the tokens, fonts and component files change, not how a stock shadcn chat app would look.
 - **Quantised images.** The 256-colour images were checked by eye on a few crops only; contrast results come from the live page, not the images.
