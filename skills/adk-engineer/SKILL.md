@@ -32,7 +32,12 @@ on output quality starts with the core judgment measured on real inputs.
 
 When given a ticket, a plan goal or a pasted issue, read it first. If it names
 a `Primary skill` (or `primary_skill`) and supporting skills, use them;
-otherwise choose from the table below. Read its linked design and plan,
+otherwise choose from the table below. If it names companion skills, load
+each at the pin recorded in the project's `AGENTS.md` (or the plan's companion
+table before the first goal has written it); report a missing companion as
+setup, with its install line, and continue without claiming its guidance.
+Follow its design system for UI work. Treat its security rule IDs (`SB03`)
+like contracts. Read its linked design and plan,
 dependencies, acceptance cases and execution scope, and preserve settled
 choices; restart discovery only for a material new gap. For "the next ready
 goal", pick the first goal whose prerequisites are complete. On finishing, write
@@ -41,7 +46,8 @@ entry, one line for each design contract the goal cites (its ID, the tier
 reached (offline: no SDK, policy and tool functions on duck-typed inputs;
 local: the real Runner with a scripted model or a local backend; live: an
 authorised call; release: the promoted build), and the acceptance cases that
-showed it), with a numbered measurement record (`M<n>`: value, baseline,
+showed it), one line for each security rule it cites (ID, tier reached,
+acceptance cases), the companion skills loaded with their pins, with a numbered measurement record (`M<n>`: value, baseline,
 window, sample, method, owner, build) for every figure a pilot or production
 run produced and an incident record (`I<n>`) for every incident, so that
 `adk-presenter` can cite them, set the ticket's status with the template's
@@ -56,7 +62,8 @@ verification still owed (for example the SDK tests marked not run) or the new
 ticket the change uncovered, written so the user can paste it.
 
 If the project has `agents-cli-manifest.yaml`, the user asks to use Agents CLI,
-or another collection already supplies the development workflow, read
+another collection already supplies the development workflow, or a ticket
+names companion skills, read
 [working with other skill collections](references/composition.md). It explains
 how to preserve that workflow while selecting the ADK guidance for this task.
 
@@ -75,7 +82,8 @@ change crosses its boundary. Before any edit, tell the user in one line:
 | Runaway invocations, usage budgets or human approval of agent actions | `adk-operational-guardrails` |
 | Hosting choice, packaging or deployment on Google Cloud | `deploy-adk-on-google-cloud` |
 | Measured latency, cost, concurrency, startup or scaling problems; long sessions, context growth per turn or cache misses; a history trimming or summariser plugin, or a request rejected for a dangling function call | `optimise-adk-on-google-cloud` |
-| Browser interfaces, JSON APIs, AG-UI, CopilotKit, streaming contracts, or interface widgets that tools render beside the reply (A2UI cards, tables, charts) | `adk-frontend-integration` |
+| Browser interfaces and the agent's run and stream API: JSON or SSE contracts, AG-UI, CopilotKit, agent UI states and the interface's design system, or interface widgets that tools render beside the reply (A2UI cards, tables, charts) | `adk-frontend-integration` |
+| HTTP routes beyond the agent's run and stream API: domain data and migrations, the API contract or generated client, errors, CORS or headers in an ADK web application | `adk-fastapi-backend` |
 | Conversation state, cross-session memory, document retrieval or history | `adk-memory-architecture` |
 | Agent behaviour tests, evaluation datasets, replay or result auditing | `adk-agent-evaluation` |
 | Decisions or answers are wrong on a labelled set; error analysis, one change per iteration, model comparison | `adk-agent-evaluation` (quality iteration) |
