@@ -11,6 +11,10 @@ Read this when deploying, reviewing or adapting an ADK agent for Cloud Run. Appl
 - The tested app was discovered as the package `support_agent`, while its agent object was named `support_triage_agent`. Query `/list-apps` through authorised transport before constructing session URLs.
 - ADK's bundled UI is a development/testing interface. Keeping it private is appropriate for an operator walkthrough. A production frontend and an API-only serving configuration are separate adaptations requiring their own tests.
 
+ADK's generated API server authenticates no end user: `user_id` comes from the request path or body. Keep it behind an authenticating front (IAP, or the application's own verified-principal dependency in a gateway) or on internal ingress; a browser-facing application is usually its own FastAPI app with the Runner in process (`adk-fastapi-backend`, and [frontend hosting](frontend-hosting.md) for the topologies). The adk-docs Cloud Run example passes `"*"` as an allowed origin; that is for a demo, never production, where origins are an explicit list.
+
+Run one process per container: `fastapi run` or Uvicorn without `--workers` (and without `WEB_CONCURRENCY`), and scale with instances and concurrency instead. Under request-based billing (the default) an instance has CPU only while a request is open, so work the user must not lose after the response goes to Cloud Tasks, not FastAPI `BackgroundTasks` ([billing settings](https://docs.cloud.google.com/run/docs/configuring/billing-settings), read 2026-10-23).
+
 Done when the selected mode, app name, callable endpoints, runtime entrypoint and session backend are recorded.
 
 ### Implement the serving contract, not only the deploy command

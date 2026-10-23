@@ -46,6 +46,20 @@ The prefixes themselves (https://adk.dev/sessions/state/, read 22 October 2026):
 Protect a value before writing state, events, artefacts or queues; screening the later tool response does not undo an earlier write.
 For ADK, inspect `ToolContext.state`, callback state, `output_key` or explicit event deltas as applicable to the existing code.
 
+## Keep ADK's session tables apart from application tables
+
+`DatabaseSessionService` creates its own schema with SQLAlchemy's
+`metadata.create_all` on first use: `sessions`, `events`, `app_states`,
+`user_states` and `adk_internal_metadata` (google-adk 2.12.0,
+`sessions/schemas/v1.py`; the v0 schema lacks the last). ADK upgrades that
+schema itself with `adk migrate session --source_db_url ... --dest_db_url
+...`; application migrations (Alembic) never manage it. In a shared database
+an unfiltered Alembic autogenerate proposes dropping all five tables, so use a
+separate database or schema for application tables, or an `include_object`
+filter that excludes them, prefix application tables, and run application
+migrations as a job. `adk-fastapi-backend` has the filter and its tests
+(exercised 2026-10-23).
+
 ## Connect a relational session store with the runtime identity
 
 If the target uses ADK's `DatabaseSessionService` on Cloud SQL or AlloyDB for
