@@ -23,7 +23,7 @@ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 -->
-  <title id="kelderwick-bank-logo-title">Kelderwick Bank (fictional demo brand)</title>
+  <title id="kelderwick-bank-logo-title">Kelderwick Bank (fictional company)</title>
   <g transform="translate(0 2) scale(1.1667)" style="color: var(--primary, currentColor)" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M10 18v-7" />
     <path d="M11.119 2.205a2 2 0 0 1 1.762 0l7.84 3.846A.5.5 0 0 1 20.5 7h-17a.5.5 0 0 1-.22-.949z" />

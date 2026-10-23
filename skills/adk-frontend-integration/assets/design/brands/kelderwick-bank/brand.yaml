@@ -25,12 +25,12 @@ fonts:
   sans-package: "@fontsource-variable/instrument-sans@5.3.0"
   serif: Newsreader
   serif-package: "@fontsource-variable/newsreader@5.3.0"
-  serif-css: opsz.css
+  serif-css: wght.css  # house rule: wght, not opsz (a larger file for little gain at 17 px)
   mono: JetBrains Mono
   mono-package: "@fontsource-variable/jetbrains-mono@5.3.0"
 logo:
   logo: logo.svg
   mark: mark.svg
-  alt: "Kelderwick Bank (fictional demo brand)"
+  alt: "Kelderwick Bank (fictional company)"
 rounded:
   md: 4px

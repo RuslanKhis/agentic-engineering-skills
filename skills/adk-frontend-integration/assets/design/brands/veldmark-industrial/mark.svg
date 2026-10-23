@@ -23,7 +23,7 @@ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
 ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 -->
-  <title id="veldmark-industrial-mark-title">Veldmark Industrial (fictional demo brand)</title>
+  <title id="veldmark-industrial-mark-title">Veldmark Industrial (fictional company)</title>
   <g style="color: var(--primary, currentColor)" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
     <path fill="currentColor" stroke="none" d="M11.08 16 8.08 8H9.99L12.04 13.82L14.05 8H15.92L12.97 16Z" />

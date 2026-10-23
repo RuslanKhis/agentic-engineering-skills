@@ -17,15 +17,19 @@ primary as link text on every surface at 4.5:1, and ring, input edge and chart-1
 marks at 3:1 on the surfaces they sit on.
 
 Default output is a JSON report, including the CSS variables for :root and .dark,
-the @fontsource-variable imports and the radius setting to paste into the
-project's theme file (--format css prints only that block).
+the @fontsource-variable imports, and the font stacks and radius for a plain
+@theme block, to paste into the project's theme file (--format css prints only
+that block).
 
 Python 3.11+; standard library only. Read-only unless --out is given: then the
-merged DESIGN.md is written there, and only when every check passes. --lint also
-runs `npx -y @google/design.md@0.4.0 lint` on the merged file (network; never by
+merged DESIGN.md is written there (mode 0644), only when every check passes, and
+an existing file is replaced only with --force (keeping its mode). Symlinks and
+.env targets are always refused. --lint also runs `npx -y @google/design.md@0.4.0
+lint` on a temporary copy before anything is moved into place (network; never by
 default). --dry-run reports what would be written and never writes or runs npx.
-Exit codes: 0 every pair passes; 1 a pair, the gamut check or the lint fails;
-2 invalid input (including a key outside the override surface).
+Exit codes: 0 every check passes; 1 a contrast pair, the gamut check or the lint
+fails, or the lint could not run (the full report says why, and nothing is
+written); 2 invalid input (including a key outside the override surface).
 """
 
 from __future__ import annotations
@@ -134,19 +138,23 @@ def parse_brand(text: str) -> dict:
         if not match:
             raise InputError("brand_file_unparsed_line", f"line {number}")
         indent, key, value = len(match[1]), match[2], match[3]
+        quoted = False
         if value is not None:
             if value[:1] in "\"'":
                 closing = value.find(value[0], 1)
                 rest = value[closing + 1:].strip() if closing > 0 else "x"
                 if closing < 0 or (rest and not rest.startswith("#")):
                     raise InputError("brand_file_bad_quoting", f"line {number}")
-                value = value[1:closing]
+                value, quoted = value[1:closing], True
+            elif value.startswith("#"):
+                # YAML reads an unquoted # as a comment, so `primary: #712A50` would mean no value.
+                raise InputError("brand_file_unquoted_hash", f"line {number}")
             else:
                 value = re.sub(r"\s+#.*$", "", value)
                 if value[:1] in "[{&*!|>":
                     raise InputError("brand_file_unsupported_yaml", f"line {number}")
         if indent == 0:
-            if value is None or value == "":
+            if value is None or (value == "" and not quoted):
                 if key not in SURFACE or key == "brand":
                     raise InputError("key_not_in_override_surface", key)
                 if key in data:
@@ -158,7 +166,7 @@ def parse_brand(text: str) -> dict:
                 if key in data:
                     raise InputError("brand_file_duplicate_key", key)
                 data[key], section = value, None
-        elif indent == 2 and section is not None and value not in (None, ""):
+        elif indent == 2 and section is not None and (value or quoted):
             if key not in SURFACE[section]:
                 raise InputError("key_not_in_override_surface", f"{section}.{key}")
             if key in data[section]:
@@ -228,25 +236,44 @@ def house_fonts(body: str) -> dict:
 
 # --------------------------------------------------------------------------- colour maths
 
-def parse_colour(value: str) -> tuple[float, float, float]:
-    """Return linear-light sRGB (unclipped) for oklch(L C h) or #rrggbb."""
+_OKLCH = re.compile(r"oklch\(\s*([0-9]*\.?[0-9]+)(%?)\s+([0-9]*\.?[0-9]+)(%?)\s+([0-9]*\.?[0-9]+)(?:deg)?\s*\)", re.I)
+_HEX = re.compile(r"#([0-9a-f]{6})", re.I)
+
+
+def to_oklab(value: str) -> tuple[float, float, float]:
+    """OKLab (L, a, b) for oklch(L C h) (L and C may be percentages, h may carry deg) or #rrggbb."""
     value = value.strip()
-    match = re.fullmatch(r"oklch\(\s*([0-9.]+)(%?)\s+([0-9.]+)\s+([0-9.]+)(?:deg)?\s*\)", value, re.I)
+    match = _OKLCH.fullmatch(value)
     if match:
         lightness = float(match[1]) / (100 if match[2] else 1)
-        chroma, hue = float(match[3]), math.radians(float(match[4]))
-        a, b = chroma * math.cos(hue), chroma * math.sin(hue)
-        l_ = lightness + 0.3963377774 * a + 0.2158037573 * b
-        m_ = lightness - 0.1055613458 * a - 0.0638541728 * b
-        s_ = lightness - 0.0894841775 * a - 1.2914855480 * b
-        l, m, s = l_ ** 3, m_ ** 3, s_ ** 3
-        return (4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
-                -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
-                -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)
-    match = re.fullmatch(r"#([0-9a-f]{6})", value, re.I)
+        chroma = float(match[3]) * (0.4 / 100 if match[4] else 1)  # CSS: 100% chroma is 0.4
+        hue = math.radians(float(match[5]))
+        return lightness, chroma * math.cos(hue), chroma * math.sin(hue)
+    match = _HEX.fullmatch(value)
+    if match:
+        r, g, b = (_decode(int(match[1][i:i + 2], 16) / 255) for i in (0, 2, 4))
+        l = (0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b) ** (1 / 3)
+        m = (0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b) ** (1 / 3)
+        s = (0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b) ** (1 / 3)
+        return (0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+                1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+                0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s)
+    raise ValueError(value)
+
+
+def parse_colour(value: str) -> tuple[float, float, float]:
+    """Return linear-light sRGB (unclipped) for oklch(L C h) or #rrggbb."""
+    match = _HEX.fullmatch(value.strip())
     if match:
         return tuple(_decode(int(match[1][i:i + 2], 16) / 255) for i in (0, 2, 4))
-    raise ValueError(value)
+    lightness, a, b = to_oklab(value)
+    l_ = lightness + 0.3963377774 * a + 0.2158037573 * b
+    m_ = lightness - 0.1055613458 * a - 0.0638541728 * b
+    s_ = lightness - 0.0894841775 * a - 1.2914855480 * b
+    l, m, s = l_ ** 3, m_ ** 3, s_ ** 3
+    return (4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+            -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+            -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)
 
 
 def _encode(c: float) -> float:
@@ -280,14 +307,11 @@ def contrast(a: str, b: str) -> float:
 
 
 def oklab_distance(a: str, b: str) -> float | None:
-    def lab(value):
-        match = re.fullmatch(r"oklch\(\s*([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s*\)", value.strip())
-        if not match:
-            return None
-        lightness, chroma, hue = (float(x) for x in match.groups())
-        return lightness, chroma * math.cos(math.radians(hue)), chroma * math.sin(math.radians(hue))
-    pa, pb = lab(a), lab(b)
-    return None if pa is None or pb is None else math.dist(pa, pb)
+    """Euclidean OKLab distance, or None when either value is not a supported colour."""
+    try:
+        return math.dist(to_oklab(a), to_oklab(b))
+    except ValueError:
+        return None
 
 
 # --------------------------------------------------------------------------- merge and checks
@@ -349,10 +373,12 @@ def validate_brand(brand: dict, house_colors: dict, brand_dir: Path | None) -> d
         if brand_dir is None or not (brand_dir / relative).is_file() or (brand_dir / relative).is_symlink():
             raise InputError("brand_logo_file_missing", f"logo.{key}")
         resolved_logo[key] = relative.as_posix()
-    if resolved_logo and not logo.get("alt", "").strip():
+    # alt "" is allowed: a decorative logo beside the visible workspace name (inline it with aria-hidden="true").
+    if resolved_logo and "alt" not in logo:
         raise InputError("brand_logo_needs_alt", "logo.alt")
-    if logo.get("alt"):
-        resolved_logo["alt"] = logo["alt"]
+    if "alt" in logo:
+        resolved_logo["alt"] = logo["alt"].strip()
+        resolved_logo["decorative"] = not resolved_logo["alt"]
     return {"name": brand["name"].strip(), "fictional": fictional == "true", "colors": dict(colors),
             "fonts": dict(fonts), "rounded": dict(rounded), "logo": resolved_logo}
 
@@ -368,10 +394,12 @@ def contrast_checks(colors: dict, components: dict, overridden: set[str]) -> lis
         if not (set(fg_chain) | set(bg_chain)) & overridden:
             return
         key = (fg_chain[-1], bg_chain[-1])
-        try:
-            ratio = contrast(fg_value, bg_value)
-        except ValueError:
-            raise InputError("design_colour_unsupported", fg if fg_value == fg else bg) from None
+        for token, value in ((fg_chain[-1], fg_value), (bg_chain[-1], bg_value)):
+            try:
+                parse_colour(value)
+            except ValueError:
+                raise InputError("design_colour_unsupported", token) from None
+        ratio = contrast(fg_value, bg_value)
         current = pairs.get(key)
         sources = current["sources"] if current else []
         if source not in sources:
@@ -442,7 +470,7 @@ def css_block(brand: dict, colors: dict, house_colors: dict, fonts: dict, house_
     if radius:
         px = int(radius.removesuffix("px"))
         radius_vars = {"--radius": f"{px / 16:g}rem", "--radius-lg": radius}
-    lines = [f"/* {brand['name']}{' (fictional demo brand)' if brand['fictional'] else ''}: generated by "
+    lines = [f"/* {brand['name']}{' (fictional company)' if brand['fictional'] else ''}: generated by "
              "apply_brand.py. Replace the matching house values; keep every other house variable. */"]
     lines += imports + [""]
     for scope in (":root", ".dark"):
@@ -453,7 +481,7 @@ def css_block(brand: dict, colors: dict, house_colors: dict, fonts: dict, house_
         lines += [f"  {k}: {v};" for k, v in entries.items()]
         lines.append("}")
         lines.append("")
-    lines.append("@theme inline {")
+    lines.append("@theme {")
     lines += [f"  {k}: {v};" for k, v in stacks.items()]
     if radius_vars:
         lines.append(f"  --radius-lg: {radius}; /* rounded.md, controls; keep the other house radius pins */")
@@ -487,7 +515,7 @@ def merge(lines: list[str], end: int, index: dict, brand: dict, house_font: dict
         line = index["top"]["name"][1]
         out[line] = "name: " + json.dumps(f"{unquote(index['top']['name'][0])} with {brand['name']} brand")
     note = (f"> **Brand applied: {brand['name']}"
-            + (" (fictional demo brand).**" if brand["fictional"] else ".**")
+            + (" (fictional company).**" if brand["fictional"] else ".**")
             + " Generated by `apply_brand.py`. The accent ramp, font families and control radius in the front matter"
             " are the brand's and win over any house value quoted in the prose below; everything else is the house"
             " system unchanged.")
@@ -498,43 +526,65 @@ def merge(lines: list[str], end: int, index: dict, brand: dict, house_font: dict
     return "\n".join(out)
 
 
-def write_out(path: Path, text: str, design_path: Path) -> None:
+def check_out_target(path: Path, design_path: Path, force: bool) -> int | None:
+    """Refuse unsafe targets; return the mode to keep for a replaced file, or None for a new one."""
     if path.name.startswith(".env"):
         raise InputError("out_refused_env_file")
     if path.is_symlink():
         raise InputError("out_is_symlink")
-    if path.exists() and (not path.is_file() or path.resolve() == design_path.resolve()):
-        raise InputError("out_would_overwrite_source_or_non_file")
+    if path.exists():
+        if not path.is_file() or path.resolve() == design_path.resolve():
+            raise InputError("out_would_overwrite_source_or_non_file")
+        if not force:
+            raise InputError("out_exists_use_force")
     if not path.parent.is_dir():
         raise InputError("out_parent_missing")
+    return stat.S_IMODE(path.stat().st_mode) if path.exists() else None
+
+
+def stage(path: Path, text: str) -> Path:
+    """Write text to a temporary file beside path, so it can be linted and then moved into place."""
     fd, temp = tempfile.mkstemp(prefix=".apply_brand-", suffix=".md", dir=path.parent)
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as stream:
             stream.write(text)
-        os.replace(temp, path)
     except OSError:
         Path(temp).unlink(missing_ok=True)
+        raise InputError("out_write_failed") from None
+    return Path(temp)
+
+
+def publish(temp: Path, path: Path, mode: int | None) -> None:
+    try:
+        if path.is_symlink():  # re-check just before the move
+            raise OSError
+        os.chmod(temp, 0o644 if mode is None else mode)
+        os.replace(temp, path)
+    except OSError:
+        temp.unlink(missing_ok=True)
         raise InputError("out_write_failed") from None
 
 
 def run_lint(path: Path) -> dict:
+    """Run the pinned linter; a missing npx or unreadable output is a failed check, not invalid input."""
+    result = {"package": LINT_PACKAGE, "pass": False}
     npx = shutil.which("npx")
     if not npx:
-        raise InputError("npx_not_found")
+        return {**result, "error": "npx_not_found"}
     try:
         done = subprocess.run([npx, "-y", LINT_PACKAGE, "lint", str(path)], capture_output=True, text=True,
                               timeout=600, check=False)
     except (OSError, subprocess.TimeoutExpired):
-        raise InputError("lint_did_not_run") from None
+        return {**result, "error": "lint_did_not_run"}
     start = done.stdout.find("{")
     try:
         summary = json.loads(done.stdout[start:])["summary"] if start >= 0 else None
     except (ValueError, KeyError, TypeError):
         summary = None
-    if not isinstance(summary, dict):
-        raise InputError("lint_output_unreadable")
-    return {"package": LINT_PACKAGE, "exit_code": done.returncode, "summary": summary,
-            "pass": summary.get("errors", 1) == 0 and summary.get("warnings", 1) == 0}
+    if not isinstance(summary, dict) or not all(isinstance(summary.get(k), int) for k in ("errors", "warnings")):
+        return {**result, "exit_code": done.returncode, "error": "lint_output_unreadable"}
+    return {**result, "exit_code": done.returncode, "summary": summary,
+            "pass": summary["errors"] == 0 and summary["warnings"] == 0}
 
 
 def locate_brand(arg: str) -> tuple[Path, Path]:
@@ -558,6 +608,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--brand", required=True, help="brand.yaml path, brand directory, or shipped brand slug.")
     parser.add_argument("--design", type=Path, default=HOUSE_DESIGN, help="House DESIGN.md (default: this skill's).")
     parser.add_argument("--out", type=Path, help="Write the merged DESIGN.md here (only when every check passes).")
+    parser.add_argument("--force", action="store_true", help="Allow --out to replace an existing file (keeps its mode).")
     parser.add_argument("--format", choices=("json", "css"), default="json", help="json report (default) or css block only.")
     parser.add_argument("--lint", action="store_true", help=f"Also run npx -y {LINT_PACKAGE} lint (network).")
     parser.add_argument("--dry-run", action="store_true", help="Report only; never write or run npx.")
@@ -583,6 +634,7 @@ def main(argv: list[str] | None = None) -> int:
         pairs = contrast_checks(colors, index["components"], set(brand["colors"]))
         css, css_parts = css_block(brand, colors, house_colors, brand["fonts"], house_font)
         merged = merge(lines, end, index, brand, house_font)
+        keep_mode = check_out_target(args.out, args.design, args.force) if args.out else None
     except InputError as exc:
         return fail(exc)
 
@@ -591,20 +643,27 @@ def main(argv: list[str] | None = None) -> int:
     out_of_gamut = [g["token"] for g in gamut if not g["in_srgb_gamut"]]
     passed = not failing and not out_of_gamut
     written = lint = None
-    try:
-        if args.out and passed and not args.dry_run:
-            write_out(args.out, merged, args.design)
-            written = str(args.out)
-        if args.lint and passed and not args.dry_run:
-            if written:
-                lint = run_lint(args.out)
+    if passed and not args.dry_run and (args.out or args.lint):
+        temp = None
+        try:
+            if args.out:
+                temp = stage(args.out, merged)
+                if args.lint:
+                    lint = run_lint(temp)
+                if lint is None or lint["pass"]:
+                    publish(temp, args.out, keep_mode)
+                    temp = None
+                    written = str(args.out)
             else:
-                with tempfile.TemporaryDirectory(prefix="apply_brand-") as temp:
-                    target = Path(temp) / "DESIGN.md"
+                with tempfile.TemporaryDirectory(prefix="apply_brand-") as folder:
+                    target = Path(folder) / "DESIGN.md"
                     target.write_text(merged, encoding="utf-8")
                     lint = run_lint(target)
-    except InputError as exc:
-        return fail(exc)
+        except InputError as exc:
+            return fail(exc)
+        finally:
+            if temp is not None:
+                temp.unlink(missing_ok=True)
     status = "pass" if passed and (lint is None or lint["pass"]) else "fail"
 
     report = {
@@ -642,7 +701,7 @@ def main(argv: list[str] | None = None) -> int:
     for token in out_of_gamut:
         print(f"fail: {token} is outside the sRGB gamut", file=sys.stderr)
     if lint and not lint["pass"]:
-        print(f"fail: lint reported {lint['summary']}", file=sys.stderr)
+        print(f"fail: lint {lint.get('error') or lint.get('summary')}", file=sys.stderr)
     return 0 if status == "pass" else 1
 
 

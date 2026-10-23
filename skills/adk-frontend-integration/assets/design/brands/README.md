@@ -15,12 +15,18 @@ Each folder holds `brand.yaml` (the override), `logo.svg` (mark and wordmark) an
 
 ## Usage rule
 
-- **Label it.** Every demo built on a demo brand says "Demo: fictional company" in the footer or the about panel, and in any deck that presents it.
-- **Use `.example` domains only**, such as `kelderwick.example` or `support@marrowby.example`, and invented people. Never use the `.com` or `.co.uk`: some are registered by strangers. [RFC 2606](https://www.rfc-editor.org/rfc/rfc2606) reserves `.example` for this.
+- **Label it "Fictional company".** Every screen built on a demo brand says "Fictional company" where people will see it: in the header or the line under the composer, and in the about panel. Label screenshots, screen recordings and the slides that show them the same way. Keep the words "demo" and "test" out of the on-screen label, as the house badge does.
+- **Use reserved identifiers only.**
+  - Domains and email: `.example` names, such as `kelderwick.example` or `support@marrowby.example`. Never use the `.com` or `.co.uk`, some of which strangers have registered. [RFC 2606](https://www.rfc-editor.org/rfc/rfc2606) reserves `.example` for this.
+  - Email: send only to a local mail catcher (such as Mailpit or MailHog) that delivers nothing outside the machine, never through a real mail service.
+  - Phone numbers: Ofcom's ranges reserved for drama, such as 020 7946 0000 to 0999, 01632 960000 to 960999 and 07700 900000 to 900999.
+  - IP addresses: the documentation ranges 192.0.2.0/24, 198.51.100.0/24 and 203.0.113.0/24 ([RFC 5737](https://www.rfc-editor.org/rfc/rfc5737)) and 2001:db8::/32 ([RFC 3849](https://www.rfc-editor.org/rfc/rfc3849)).
+  - People: invented names, checked against the client's and our own staff lists and a quick web search so that no name belongs to a real employee or a public figure.
 - **Never imply endorsement.** Do not put a real client's or vendor's name, logo, colour or product beside a demo brand in a way that suggests a link, and never present a demo brand as a past or current client. Do not use vendors' sample companies (Contoso, Fabrikam, Northwind, Cymbal and the like) instead.
 - **Do not register, trade under, or build anything lasting on these names or logos.** They had only a quick collision check (web search and UK Companies House, 23 October 2026), not a trademark clearance. Ask legal before showing one at a public event or in marketing.
 - **Swap for the real brand as soon as you can.** When the client gives you its brand and confirms its font licence covers self-hosting on the web, write the client's own `brand.yaml` and apply it with the same helper. If a pair fails, adjust the client's step, never the floor.
 - **Avenhale Health:** never draw the mark as a red cross on white or white on red; the Red Cross emblem is protected.
+- **Public-sector demos have no demo brand.** A fictional agency is easily taken for a real government body. Use the house theme unchanged with a plainly fictional authority name, and no crest, coat of arms, flag or government typeface (such as GDS Transport). Public Sans is an acceptable interface font.
 
 ## Apply a brand
 
@@ -30,30 +36,42 @@ From the skill root (`skills/adk-frontend-integration`), with Python 3.11 or new
 # Read-only JSON report: every contrast pair, the CSS to paste, font imports, npm install line
 python scripts/apply_brand.py --brand kelderwick-bank
 
-# Only the paste-ready CSS block (:root, .dark, @fontsource-variable imports, @theme inline fonts and radius)
+# Only the paste-ready CSS block (:root, .dark, @fontsource-variable imports, and a plain @theme block for fonts and radius)
 python scripts/apply_brand.py --brand kelderwick-bank --format css
 
-# Write the merged DESIGN.md into the project (only when every check passes), then lint it (needs npx and network)
-python scripts/apply_brand.py --brand kelderwick-bank --out ../my-app/docs/design/DESIGN.md --lint
+# Lint the merged DESIGN.md, then write it into the project (needs npx and network); --force replaces an existing file
+python scripts/apply_brand.py --brand kelderwick-bank --out ../my-app/docs/design/DESIGN.md --lint --force
 ```
 
-`--brand` takes a shipped slug, a brand folder or a `brand.yaml` path. `--dry-run` reports what `--out` would write and never writes or runs npx. Exit codes: 0 every pair passes; 1 a contrast pair, the sRGB gamut check or the lint fails (the failing pair is named on stderr and in `checks.failing`); 2 invalid input, including any key outside the override surface (the key is named).
+`--brand` takes a shipped slug, a brand folder or a `brand.yaml` path.
+
+`--out` writes only when every check passes:
+- **With `--lint`,** the merged file is first written to a temporary file beside the target and linted there. It is moved into place only if the lint reports no errors and no warnings.
+- **Existing files** are replaced only with `--force`, keeping their mode. A new file gets mode 0644.
+- **Refused targets:** a symlink or a `.env` file, even with `--force`.
+
+`--dry-run` reports what `--out` would write and never writes or runs npx.
+
+Exit codes:
+- **0:** every check passes.
+- **1:** a contrast pair, the sRGB gamut check or the lint fails, or the lint could not run (`npx` missing or unreadable output). The full report is still printed, with the failing pair in `checks.failing` or the reason in `lint.error`, and nothing is written.
+- **2:** invalid input only, including any key outside the override surface (the key is named) and an unsafe or existing `--out` target.
 
 The helper recomputes WCAG 2.x contrast for every pair the override touches, against the house neutrals in the DESIGN.md it reads: every `components` pair at 4.5:1 (as the linter checks them), primary as link text on each surface at 4.5:1, and ring, the `input` edge and `chart-1` marks at 3:1 on the surfaces they sit on. It reads token and component names from the file, so tokens the house adds later are handled. Then paste the CSS block into the project's theme file over the matching house values, run `npm install` with the printed pinned packages, and put the logo in the header slot.
 
-The radius lines follow the house Tailwind mapping, in which `rounded.md` is Tailwind's `rounded-lg`: a 4 px or 8 px brand sets `--radius-lg` to that value and keeps the other house radius pins.
+The font stacks and the radius go in a plain `@theme` block, not `@theme inline`, as DESIGN.md asks, so a brand can override them at run time. The radius follows the house Tailwind mapping, in which `rounded.md` is Tailwind's `rounded-lg`: a 4 px or 8 px brand sets `--radius-lg` to that value and keeps the other house radius pins. 6 px is accepted and is the house value.
 
 ## Brand file format
 
-`brand.yaml` is a small YAML subset so the helper can parse it with the standard library: `key: value` lines, `#` comment lines, and one level of two-space nesting. Quote any value that starts with `@` or contains `#` or `:`. Flow mappings, lists, anchors and deeper nesting are refused.
+`brand.yaml` is a small YAML subset so the helper can parse it with the standard library: `key: value` lines, `#` comment lines, and one level of two-space nesting. Quote any value that starts with `@` or `#` or contains `:`; an unquoted value starting with `#` is refused, because YAML would read it as a comment. Flow mappings, lists, anchors and deeper nesting are refused.
 
 | Key | Allowed values |
 |---|---|
 | `name` | The brand name (required). |
 | `fictional` | `true` for a demo brand; `false` or absent for a real client. |
 | `colors.<token>` | Only `primary`, `primary-hover`, `primary-active`, `primary-foreground`, `accent`, `accent-foreground`, `ring`, `chart-1` and their `dark-` twins, each as `oklch(L C h)` or `#rrggbb`. Tokens left out keep the house value. |
-| `fonts.<role>`, `fonts.<role>-package`, `fonts.<role>-css` | Roles `sans`, `serif`, `mono`: the family name, a pinned `@fontsource-variable/<name>@x.y.z` package, and optionally the CSS file to import (`opsz.css`). A role left out keeps the house font. |
-| `logo.logo`, `logo.mark`, `logo.alt` | Paths relative to the brand folder (`.svg`, `.png` or `.webp`) and the alternative text. |
+| `fonts.<role>`, `fonts.<role>-package`, `fonts.<role>-css` | Roles `sans`, `serif`, `mono`: the family name, a pinned `@fontsource-variable/<name>@x.y.z` package, and optionally the CSS file to import (all four brands use `wght.css`). A role left out keeps the house font. |
+| `logo.logo`, `logo.mark`, `logo.alt` | Paths relative to the brand folder (`.svg`, `.png` or `.webp`) and the alternative text. `alt` is required with a logo; `alt: ""` marks it decorative. |
 | `rounded.md` | `4px`, `6px` or `8px`: the control radius. |
 
 ## Logos
@@ -62,7 +80,8 @@ Each logo is a Lucide icon followed by the brand name set in the brand's open fo
 
 - The mark is drawn in `var(--primary)` and the wordmark in `currentColor`. Inline the SVG (or import it as a component, for example with SVGR) and give the header `color: var(--foreground)`; both then follow light and dark mode. The files hold no fixed colours.
 - Loaded through `<img>`, the theme variables do not reach inside the file and it draws in black, which disappears on a dark background. For a favicon, export a copy of `mark.svg` with the brand's primary hex filled in.
-- Each file has a `<title>` "<Name> (fictional demo brand)" for its accessible name, and carries the Lucide ISC notice and the font credit in a comment.
+- Each file has a `<title>` "<Name> (fictional company)" for its accessible name, and carries the Lucide ISC notice and the font credit in a comment.
+- When the workspace name is written as text beside the logo, the logo adds nothing for a screen reader. Inline it with `aria-hidden="true"` (and set `alt: ""` in the brand file) so the name is not read twice.
 - Checked by rendering both files on the house light and dark backgrounds with `rsvg-convert`, not in a browser.
 
 ## Licences
@@ -73,15 +92,15 @@ Each logo is a Lucide icon followed by the brand name set in the brand's open fo
 | Newsreader, Fraunces, Geologica, Atkinson Hyperlegible Next (outlined in the wordmarks) | SIL Open Font License 1.1 | Copyright 2020 The Newsreader Project Authors; 2020 The Fraunces Project Authors; 2020 The Geologica Project Authors; 2020-2024 The Atkinson Hyperlegible Next Project Authors. The OFL FAQ allows fonts in logos and says the artwork is not itself under the OFL. None of these fonts declares a Reserved Font Name. |
 | Interface and heading fonts in `brand.yaml` (Instrument Sans, Newsreader, Figtree, Fraunces, Geologica, Source Serif 4, Atkinson Hyperlegible Next, Literata, JetBrains Mono) | SIL Open Font License 1.1 (npm `license: OFL-1.1`) | Self-host from `@fontsource-variable` at the pinned versions; never load from a font CDN. |
 
+**Serif files.** All four brands import the serif's `wght.css`, not `opsz.css`, following the house rule for Source Serif 4. No brand has a reason to differ. The latin `opsz` files are about twice the size: Newsreader 132 KB against 58 KB, Fraunces 67 KB against 37 KB and Literata 110 KB against 52 KB (5.3.0, measured 23 October 2026). Optical sizing would change only the 28 and 36 px headings.
+
 Never use Tabler's `brand-*` icons (real companies' logos), Remix Icon (its licence forbids logo use from 4.9.0), Logoipsum logos as they are, or any real company's logo.
 
 ## Checks recorded on 23 October 2026
 
-Run against the working copy of the house DESIGN.md on branch `demo-polish`, which already had another change in progress (new tokens, components and a 12 px `rounded.xl` step); the Brand override surface was unchanged.
-
-- **Helper tests:** `python -m unittest discover -s tests -p 'test_apply_brand.py'`: 13 tests, all passing.
-- **Contrast:** 44 pairs per brand, all passing. Every text pair is at least 4.73:1 (floor 4.5) and every 3:1 pair at least 3.11:1. As in the house, the tightest pair is the house `input` edge on the brand's `accent` fill.
-- **Lint:** each brand was applied with `--out` to a scratch copy and `npx -y @google/design.md@0.4.0 lint` reported 0 errors and 0 warnings for all four, with exit code 0. The one info finding was the token summary: 82 colours, 11 typography scales, 5 rounding levels, 13 spacing tokens and 94 components.
+- **Helper tests:** `python -m unittest discover -s tests -p 'test_apply_brand.py'`: 24 tests, all passing. They include known answers for the colour maths: pure red in OKLCH gives #FF0000, #767676 on white gives 4.54:1, and house primary on background gives DESIGN.md's 8.9:1.
+- **Contrast:** 43 pairs per brand, all passing. Every text pair is at least 4.73:1 (floor 4.5) and every 3:1 pair at least 3.11:1. As in the house, the tightest pair is the house `input` edge on the brand's `accent` fill.
+- **Lint:** each brand was applied with `--out --lint` to a scratch copy and `npx -y @google/design.md@0.4.0 lint` reported 0 errors and 0 warnings for all four, with exit code 0. The one info finding was the token summary: 82 colours, 11 typography scales, 5 rounding levels, 13 spacing tokens and 94 components.
 
 | Pair | Floor | Kelderwick | Marrowby | Veldmark | Avenhale |
 |---|---|---|---|---|---|
@@ -110,7 +129,7 @@ Run against the working copy of the house DESIGN.md on branch `demo-polish`, whi
 
 ## Watch items
 
-- **Avenhale is blue by the maintainer's decision**, replacing the heather first proposed in `docs/research/demo-brands-2026-10-23.md`. It is a cobalt at hue 266: more saturated (chroma 0.15 against 0.085) and cooler than the house ink blue at hue 250, and well clear of `info` at hue 220. Lighter azures (hue 232–244) were rejected: sRGB limits them to about 0.10 chroma at a lightness that carries white text, and they came within 0.05 of NHS blue (#005EB8) and of the bright azures (around #0079C8) common in UK health care. A fictional health insurer should not look like the NHS or a real insurer. The cobalt is 0.076 from NHS blue and 0.15 from #0079C8. Hue 266 is 11° short of indigo-500 (277) at three-quarters of its chroma; in a render it reads as cobalt, not violet. Its distance from the house primary (0.075) is the smallest of the four, similar to Veldmark's; the difference is mainly chroma and hue, so it is clearest side by side.
+- **Avenhale is blue by the maintainer's decision**, replacing the heather first proposed in the toolkit repository's `docs/research/demo-brands-2026-10-23.md` (not part of an installed skill). It is a cobalt at hue 266: more saturated (chroma 0.15 against 0.085) and cooler than the house ink blue at hue 250, and well clear of `info` at hue 220. Lighter azures (hue 232–244) were rejected: sRGB limits them to about 0.10 chroma at a lightness that carries white text, and they came within 0.05 of NHS blue (#005EB8) and of the bright azures (around #0079C8) common in UK health care. A fictional health insurer should not look like the NHS or a real insurer. The cobalt is 0.076 from NHS blue and 0.15 from #0079C8. Hue 266 is 11° short of indigo-500 (277) at three-quarters of its chroma; in a render it reads as cobalt, not violet. Its distance from the house primary (0.075) is the smallest of the four, similar to Veldmark's; the difference is mainly chroma and hue, so it is clearest side by side.
 - **Marrowby's moss sits nearest to `success`.** The house rule that status is always given in words and an icon covers this.
 - **Veldmark's dark primary is 0.043 from `dark-info`**, the same as the house's own primary, and its `chart-1` stays the house blue because a petrol series looked like the teal `chart-2`.
 - **Kelderwick's claret is nearest to `destructive`.** The house already keeps Deny as an outline button, so a claret Approve never sits beside a red Deny.
@@ -122,4 +141,5 @@ Run against the working copy of the house DESIGN.md on branch `demo-polish`, whi
 - Nobody has checked whether the four marks, as drawn, resemble a real company's logo.
 - The names had only a quick collision check; no trademark register was searched. Nothing here is legal advice.
 - Whether each `@fontsource-variable` version is at least two weeks old was not checked.
+- The Ofcom drama ranges and RFC address ranges above were written from memory of those documents, not re-read for this note.
 - NHS blue (#005EB8) was taken from memory of the NHS identity colours, not re-read for this note. Whether cobalt hue 266 reads as blue rather than violet is a judgement from one render.

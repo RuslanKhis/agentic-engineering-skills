@@ -1,8 +1,11 @@
 """Offline public-boundary tests for the brand override helper and the shipped demo brands."""
 
+import importlib.util
 import json
+import os
 from pathlib import Path
 import re
+import stat
 import subprocess
 import sys
 import tempfile
@@ -66,14 +69,26 @@ class ApplyBrandTests(unittest.TestCase):
         path.write_text(text, encoding="utf-8")
         return path
 
-    def run_cli(self, *args):
+    def run_cli(self, *args, env=None):
         result = subprocess.run([sys.executable, "-I", "-B", str(SCRIPT), *map(str, args)],
-                                capture_output=True, text=True, timeout=60, check=False, cwd=self.root)
+                                capture_output=True, text=True, timeout=60, check=False, cwd=self.root, env=env)
         return result.returncode, result.stdout, result.stderr
 
-    def report(self, *args):
-        code, out, err = self.run_cli(*args)
+    def report(self, *args, env=None):
+        code, out, err = self.run_cli(*args, env=env)
         return code, json.loads(out), err
+
+    def fake_npx(self, stdout):
+        """A stand-in npx on PATH that records the file it was asked to lint and prints `stdout`."""
+        folder = self.root / "bin"
+        folder.mkdir(exist_ok=True)
+        (folder / "out.txt").write_text(stdout + "\n", encoding="utf-8")
+        script = folder / "npx"
+        # Shell builtins only: PATH holds nothing but this folder.
+        script.write_text(f'#!/bin/sh\necho "$4" >> "{folder}/linted.txt"\n'
+                          f'while IFS= read -r line; do echo "$line"; done < "{folder}/out.txt"\n', encoding="utf-8")
+        script.chmod(0o755)
+        return {"PATH": str(folder)}
 
     def test_help_describes_interface_and_exit_codes(self):
         code, out, _ = self.run_cli("--help")
@@ -99,8 +114,9 @@ class ApplyBrandTests(unittest.TestCase):
                 self.assertEqual(kinds[("dark-primary-foreground", "dark-primary")], 4.5)
                 self.assertEqual(kinds[("input", "accent")], 3.0)
                 self.assertEqual(kinds[("dark-ring", "dark-accent")], 3.0)
-                self.assertEqual(set(data["overrides"]["logo"]), {"logo", "mark", "alt"})
-                self.assertIn("fictional demo brand", data["overrides"]["logo"]["alt"])
+                self.assertEqual(set(data["overrides"]["logo"]), {"logo", "mark", "alt", "decorative"})
+                self.assertFalse(data["overrides"]["logo"]["decorative"])
+                self.assertIn("(fictional company)", data["overrides"]["logo"]["alt"])
 
     def test_shipped_brand_files_use_only_the_override_surface_and_ship_logos(self):
         for slug in SHIPPED:
@@ -112,7 +128,7 @@ class ApplyBrandTests(unittest.TestCase):
                     svg = (folder / name).read_text(encoding="utf-8")
                     self.assertIn("ISC License", svg)
                     self.assertIn("lucide-static@1.61.0", svg)
-                    self.assertIn("(fictional demo brand)</title>", svg)
+                    self.assertIn("(fictional company)</title>", svg)
                     self.assertNotIn("<script", svg.lower())
                     self.assertNotRegex(svg, r"#[0-9A-Fa-f]{6}")  # theme colours only, never fixed fills
 
@@ -129,7 +145,12 @@ class ApplyBrandTests(unittest.TestCase):
         self.assertIn("--primary-foreground: oklch(0.20 0.03 350);", dark)
         self.assertNotIn("--background", css)
         self.assertIn('@import "@fontsource-variable/instrument-sans";', css)
-        self.assertIn('@import "@fontsource-variable/newsreader/opsz.css";', css)
+        self.assertIn('@import "@fontsource-variable/newsreader/wght.css";', css)
+        self.assertIn("\n@theme {\n", css)
+        self.assertNotIn("@theme inline", css)
+        theme = css.split("@theme {", 1)[1].split("}", 1)[0]
+        self.assertIn("--font-sans:", theme)
+        self.assertIn("--radius-lg: 4px;", theme)
         self.assertIn('--font-sans: "Instrument Sans Variable", ui-sans-serif, system-ui, sans-serif;', css)
         self.assertIn('--font-serif: "Newsreader Variable", Georgia', css)
         self.assertIn("--radius-lg: 4px;", css)
@@ -188,12 +209,79 @@ class ApplyBrandTests(unittest.TestCase):
         self.assertIn("    fontFamily: Fraunces", merged)
         self.assertNotIn("fontFamily: Inter", merged)
         self.assertRegex(merged, r"\nrounded:\n  sm: 4px\n  md: 8px\n")
-        self.assertIn("Brand applied: Marrowby (fictional demo brand)", merged)
+        self.assertIn("Brand applied: Marrowby (fictional company)", merged)
         self.assertEqual(merged.count("\n"), house_text.count("\n") + 2)
+
+    def test_out_new_file_is_0644(self):
+        out = self.root / "DESIGN.md"
+        code, _, err = self.report("--brand", "marrowby", "--out", out)
+        self.assertEqual(code, 0, err)
+        self.assertEqual(stat.S_IMODE(out.stat().st_mode), 0o644)
+        self.assertEqual([p.name for p in self.root.iterdir()], ["DESIGN.md"], "no temporary file left behind")
+
+    def test_out_refuses_an_existing_file_unless_force_and_keeps_its_mode(self):
+        out = self.write("DESIGN.md", "old\n")
+        out.chmod(0o600)
+        code, data, _ = self.report("--brand", "marrowby", "--out", out)
+        self.assertEqual((code, data["error"]), (2, "out_exists_use_force"))
+        self.assertEqual(out.read_text(encoding="utf-8"), "old\n")
+        code, data, err = self.report("--brand", "marrowby", "--out", out, "--force")
+        self.assertEqual(code, 0, err)
+        self.assertIn("Brand applied: Marrowby", out.read_text(encoding="utf-8"))
+        self.assertEqual(stat.S_IMODE(out.stat().st_mode), 0o600)
+
+    def test_out_refuses_symlinks_and_env_files_even_with_force(self):
+        target = self.write("real.md", "keep\n")
+        link = self.root / "link.md"
+        link.symlink_to(target)
+        dangling = self.root / "dangling.md"
+        dangling.symlink_to(self.root / "nowhere.md")
+        for path, error in ((link, "out_is_symlink"), (dangling, "out_is_symlink"),
+                            (self.root / ".env", "out_refused_env_file"), (self.root / ".env.local", "out_refused_env_file")):
+            with self.subTest(path=path.name):
+                code, data, _ = self.report("--brand", "marrowby", "--out", path, "--force")
+                self.assertEqual((code, data["error"]), (2, error))
+        self.assertEqual(target.read_text(encoding="utf-8"), "keep\n")
+        self.assertFalse((self.root / "nowhere.md").exists())
+        self.assertFalse((self.root / ".env").exists())
+
+    def test_lint_runs_on_a_temporary_copy_before_the_file_is_moved_into_place(self):
+        env = self.fake_npx('{"findings": [], "summary": {"errors": 0, "warnings": 0, "infos": 1}}')
+        out = self.root / "DESIGN.md"
+        code, data, err = self.report("--brand", "marrowby", "--out", out, "--lint", env=env)
+        self.assertEqual(code, 0, err)
+        self.assertTrue(data["lint"]["pass"])
+        self.assertEqual(data["written"], str(out))
+        linted = Path((self.root / "bin" / "linted.txt").read_text(encoding="utf-8").strip())
+        self.assertNotEqual(linted, out)
+        self.assertTrue(linted.name.startswith(".apply_brand-"))
+        self.assertFalse(linted.exists())
+
+    def test_lint_failures_exit_1_with_the_full_report_and_write_nothing(self):
+        cases = {
+            "warnings": ('{"summary": {"errors": 0, "warnings": 2, "infos": 1}}', None),
+            "unreadable": ("not json at all", "lint_output_unreadable"),
+            "missing": (None, "npx_not_found"),
+        }
+        for label, (stdout, error) in cases.items():
+            with self.subTest(label=label):
+                folder = self.root / label
+                folder.mkdir()
+                env = self.fake_npx(stdout) if stdout is not None else {"PATH": str(folder)}
+                out = folder / "DESIGN.md"
+                code, data, err = self.report("--brand", "marrowby", "--out", out, "--lint", env=env)
+                self.assertEqual(code, 1, err)
+                self.assertEqual(data["status"], "fail")
+                self.assertEqual(data["checks"]["failing"], [])
+                self.assertFalse(data["lint"]["pass"])
+                self.assertEqual(data["lint"].get("error"), error)
+                self.assertIsNone(data["written"])
+                self.assertEqual(list(folder.iterdir()), [])
+                self.assertIn("fail: lint", err)
 
     def test_out_refuses_to_overwrite_the_house_file(self):
         design = self.write("DESIGN.md", HOUSE.read_text(encoding="utf-8"))
-        code, data, _ = self.report("--brand", "marrowby", "--design", design, "--out", design)
+        code, data, _ = self.report("--brand", "marrowby", "--design", design, "--out", design, "--force")
         self.assertEqual(code, 2)
         self.assertEqual(data["error"], "out_would_overwrite_source_or_non_file")
         self.assertEqual(design.read_text(encoding="utf-8"), HOUSE.read_text(encoding="utf-8"))
@@ -230,6 +318,22 @@ class ApplyBrandTests(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertEqual(data["checks"]["out_of_srgb_gamut"], ["primary-hover"])
 
+    def test_empty_logo_alt_is_allowed_as_decorative(self):
+        folder = self.root / "deco"
+        folder.mkdir()
+        (folder / "logo.svg").write_text((BRANDS / "marrowby" / "logo.svg").read_text(encoding="utf-8"), encoding="utf-8")
+        brand = self.write("deco/brand.yaml", GOOD_BRAND + 'logo:\n  logo: logo.svg\n  alt: ""\n')
+        code, data, err = self.report("--brand", brand)
+        self.assertEqual(code, 0, err)
+        self.assertEqual(data["overrides"]["logo"], {"logo": "logo.svg", "alt": "", "decorative": True})
+
+    def test_unsupported_house_colour_names_the_token_that_failed(self):
+        text = HOUSE.read_text(encoding="utf-8").replace('  muted: "oklch(0.962 0.004 85)"', '  muted: "color(display-p3 1 1 1)"', 1)
+        self.assertIn("display-p3", text)
+        design = self.write("DESIGN.md", text)
+        code, data, _ = self.report("--brand", "marrowby", "--design", design)
+        self.assertEqual((code, data["error"], data["detail"]), (2, "design_colour_unsupported", "muted"))
+
     def test_invalid_brand_files_exit_2(self):
         cases = {
             "tab": ("name: X\ncolors:\n\tprimary: \"oklch(0.4 0.1 350)\"\n", "brand_file_tab_indent"),
@@ -244,6 +348,8 @@ class ApplyBrandTests(unittest.TestCase):
             "logo": ("name: X\nlogo:\n  logo: logo.svg\n  alt: X\n", "brand_logo_file_missing"),
             "escape": ("name: X\nlogo:\n  logo: ../logo.svg\n  alt: X\n", "brand_logo_path_invalid"),
             "dup": ("name: X\nname: Y\n", "brand_file_duplicate_key"),
+            "hash": ("name: X\ncolors:\n  primary: #712A50\n", "brand_file_unquoted_hash"),
+            "noalt": ("name: X\nlogo:\n  logo: logo.svg\n", "brand_logo_file_missing"),
         }
         for label, (text, error) in cases.items():
             with self.subTest(label=label):
@@ -256,6 +362,36 @@ class ApplyBrandTests(unittest.TestCase):
         code, _, err = self.run_cli("--nonsense", "sk-secret-value")
         self.assertEqual(code, 2)
         self.assertNotIn("sk-secret-value", err)
+
+
+class ColourMathsTests(unittest.TestCase):
+    """Known answers for the helper's own OKLCH -> sRGB -> WCAG maths."""
+
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location("apply_brand_under_test", SCRIPT)
+        cls.ab = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.ab)
+
+    def test_oklch_of_pure_red_is_ff0000(self):
+        hex_value = self.ab.hex_of("oklch(0.627955 0.257683 29.2339)")
+        channels = [int(hex_value[i:i + 2], 16) for i in (1, 3, 5)]
+        for got, want in zip(channels, (255, 0, 0)):
+            self.assertLessEqual(abs(got - want), 1, hex_value)
+
+    def test_wcag_contrast_of_767676_on_white(self):
+        self.assertAlmostEqual(self.ab.contrast("#767676", "#FFFFFF"), 4.54, places=2)
+
+    def test_house_table_value(self):
+        # DESIGN.md Colors table: "primary as link text on background" is 8.9 (light); foreground on background 17.3.
+        self.assertEqual(round(self.ab.contrast("oklch(0.40 0.085 250)", "oklch(0.988 0.003 85)"), 1), 8.9)
+        self.assertEqual(round(self.ab.contrast("oklch(0.205 0.006 85)", "oklch(0.988 0.003 85)"), 1), 17.3)
+
+    def test_oklab_distance_accepts_percent_deg_and_hex(self):
+        self.assertAlmostEqual(self.ab.oklab_distance("oklch(40% 0.085 250deg)", "oklch(0.40 0.085 250)"), 0, places=9)
+        self.assertAlmostEqual(self.ab.oklab_distance("oklch(0.5 25% 120)", "oklch(0.5 0.1 120)"), 0, places=9)
+        self.assertLess(self.ab.oklab_distance("#FF0000", "oklch(0.627955 0.257683 29.2339)"), 0.001)
+        self.assertIsNone(self.ab.oklab_distance("color(display-p3 1 0 0)", "#FF0000"))
 
 
 if __name__ == "__main__":
