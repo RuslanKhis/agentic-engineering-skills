@@ -47,8 +47,9 @@ reached (offline: no SDK, policy and tool functions on duck-typed inputs;
 local: the real Runner with a scripted model or a local backend; live: an
 authorised call; release: the promoted build), and the acceptance cases that
 showed it), one line for each security rule it cites (ID, tier reached,
-acceptance cases), the companion skills loaded with their pins, with a numbered measurement record (`M<n>`: value, baseline,
-window, sample, method, owner, build) for every figure a pilot or production
+acceptance cases), the companion skills loaded with their pins, with a
+numbered measurement record (`M<n>`: value, baseline, window, sample,
+method, owner, build) for every figure a pilot or production
 run produced and an incident record (`I<n>`) for every incident, so that
 `adk-presenter` can cite them, set the ticket's status with the template's
 vocabulary (`verified_local` when every acceptance case that can run offline

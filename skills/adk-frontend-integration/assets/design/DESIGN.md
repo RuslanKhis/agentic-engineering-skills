@@ -448,7 +448,7 @@ Three open families (SIL OFL 1.1), self-hosted from npm and bundled at build tim
 ## Layout
 
 - **Grid:** an 8-point rhythm with 4 px half-steps. Tailwind's `--spacing` stays `0.25rem`; use the steps 4, 8, 12, 16, 24, 32, 48 and 64 px (`spacing` tokens). Other values need a reason.
-- **Density:** comfortable — controls 32 px (`h-8`, the `base-nova` default), table rows 36 px, card padding 16 px. Compact — controls and rows 28 px, card padding 12 px, for data-dense screens only, switched per screen and never mixed in one view. No target below 24 px.
+- **Density:** comfortable — controls 32 px (`h-8`, the default of shadcn's Base UI `nova` style: `shadcn init -b base -p nova`), table rows 36 px, card padding 16 px. Compact — controls and rows 28 px, card padding 12 px, for data-dense screens only, switched per screen and never mixed in one view. No target below 24 px.
 - **Page:** content at most 1200 px wide; 16 px side gutter below 768 px, 24 px from 768 px, 32 px from 1280 px. No horizontal page scroll at 375 px; wide tables and code scroll inside their own container.
 - **Conversation column:** one centred column at most 768 px wide; answer prose at about 68ch. The composer is sticky at the bottom with `scroll-padding-bottom` equal to its height so focused items are never hidden behind it.
 
@@ -464,7 +464,7 @@ Depth comes from surface lightness and hairlines, not shadows.
 ## Shapes
 
 - **Radius steps:** 4 px (`rounded.sm`: badges, menu items, inline code, checkboxes), 6 px (`rounded.md`: buttons, inputs, selects, tabs) and 8 px (`rounded.lg`: cards, popovers, dialogs, message bubbles). `full` is for avatars and status dots only. Nothing else is rounder: no pill buttons.
-- **Tailwind mapping:** set `--radius: 0.375rem` and pin the steps in `@theme inline` instead of deriving them: `--radius-sm: 4px`, `--radius-md: 4px`, `--radius-lg: 6px`, `--radius-xl: 8px`, and `--radius-2xl`, `--radius-3xl`, `--radius-4xl` all `8px`, so shadcn's larger classes cannot exceed the scale. Give badges `rounded-sm`.
+- **Tailwind mapping:** set `--radius: 0.375rem` and pin the steps in `@theme inline` instead of deriving them: `--radius-sm: 4px`, `--radius-md: 4px`, `--radius-lg: 6px`, `--radius-xl: 8px`, and `--radius-2xl`, `--radius-3xl`, `--radius-4xl` all `8px`, so shadcn's larger classes cannot exceed the scale. The names do not line up: `rounded.md` (6 px) is Tailwind's `rounded-lg`, which `base-nova` buttons and inputs already use, and `rounded.lg` (8 px) is `rounded-xl`, which its cards use. Give badges `rounded-sm` (they ship as `rounded-4xl`).
 - **Lines:** 1 px hairlines. Focus is a 2 px solid `ring` outline with a 2 px offset, drawn with `outline` (it survives forced-colours mode), replacing shadcn's `ring-3 ring-ring/50` box-shadow. Implement it as an unlayered `:focus-visible` rule that also sets `--tw-ring-shadow: 0 0 #0000`, and remove `outline-ring/50` from the base layer.
 - **Icons:** Lucide, 16 px in controls, 1.5–2 px stroke, `currentColor`. No filled or multicolour icons.
 
@@ -508,6 +508,7 @@ Agent conversation patterns (build on shadcn's AI Elements patterns and `Trace`;
 - Do self-host fonts from `@fontsource-variable`; don't link a font CDN.
 - Do write sentence case; don't use title case, all caps labels or exclamation marks.
 - Don't leave shadcn defaults in the theme file (Geist, `--radius: 0.625rem`, the stock neutral values); run `scripts/check_theme.py` from this skill.
+- Don't keep the stock component classes that break these rules after `shadcn add`: `dark:` colour overrides, `/70`-style dimmed text (including `TraceDescription`), the `ring-ring/50` focus shadow in place of the 2 px outline, and the press `translate`. Seen in shadcn 4.22.1 components on 23 October 2026.
 
 ## Motion
 

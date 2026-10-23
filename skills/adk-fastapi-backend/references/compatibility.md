@@ -23,7 +23,7 @@ migrations beside `DatabaseSessionService`) and this skill's
 | firebase-admin | 7.7.0 |
 | google-auth | 2.62.0 |
 | httpx | 0.28.1; asgi-lifespan 2.1.0; pytest 9.1.1 |
-| `@hey-api/openapi-ts` | 0.99.0 with typescript 5.9.3 (its peer dependency) |
+| `@hey-api/openapi-ts` | 0.99.0 with typescript 5.9.3 (peer range `>=5.5.3 \|\| >=6.0.0 \|\| 6.0.1-rc`; through `npx` from a directory without its own `typescript` it picked TypeScript 7 and crashed in two engineer trials) |
 
 What ran: 24 scratch-app tests (fail-closed principal, Firebase error mapping
 with the verifier replaced, IAP unsigned headers refused, forged `user_id`,

@@ -212,6 +212,29 @@ class ScheduleTests(unittest.TestCase):
             self.assertEqual(result["security_coverage"]["cited"], ["SB01", "SB03"])
             self.assertEqual(sorted(result["security_coverage"]["not_covered_by_choice"]), ["SB11", "SB14"])
 
+    def test_only_lists_and_acceptance_items_cite_rules(self):
+        with tempfile.TemporaryDirectory() as root:
+            plan = self.write_plan(root)
+            plan.write_text(plan.read_text() + "\n### G02 Handover\nThe evidence lists SB01\u2013SB25; SB14: deferred.\n"
+                            "- [ ] A1 another user's record is not found (C2, `SB04`)\n")
+            design = Path(root) / "design.md"
+            design.write_text("| Rule | Component | Depth now | Proved by |\n| --- | --- | --- | --- |\n"
+                              "| `SB01` | /api | **Build** | G01/A1 |\n"
+                              "| SB04 | records | Minimal | G02/A1 |\n"
+                              "| SB14 | logging | **Build** | |\n"
+                              "| SB25 | edge | Build | |\n"
+                              "| SB07 | config | Tier 3 | G05/A2 |\n")
+            code, out, _ = self.run_check("--plan", str(plan), "--design", str(design), "--json")
+            result = json.loads(out)
+            self.assertEqual(code, 1)
+            problems = result["problems"]
+            self.assertEqual(len(problems), 4, problems)
+            self.assertIn("security rule SB01 (Build): no goal cites it", problems[0])
+            self.assertIn("security rule SB14 (Build): no goal cites it", problems[1])
+            self.assertIn("security rule SB25 (Build): no goal cites it", problems[2])
+            self.assertIn("security rule SB07: depth 'Tier 3' is not Build", problems[3])
+            self.assertEqual(result["security_coverage"]["cited"], ["SB04"])
+
     def test_design_without_security_table_skips_rule_coverage(self):
         with tempfile.TemporaryDirectory() as root:
             plan = self.write_plan(root)

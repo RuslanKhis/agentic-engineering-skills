@@ -11,10 +11,9 @@ Copy [the house DESIGN.md](../assets/design/DESIGN.md) to
 client brand overrides only the surface that file names. Map its tokens to the
 shadcn theme variables with the `shadcn` companion's DESIGN.md workflow; never
 ship shadcn's default theme, because the generic look comes from its default
-tokens. Lint with the CLI pinned exactly
-(`npx @google/design.md@0.4.0 lint docs/design/DESIGN.md`) and read its JSON
-findings: at 0.4.0 contrast failures arrive as warnings while the exit code
-stays 0, so the gate fails on any error and on any contrast warning.
+tokens. The DESIGN.md file itself states its lint gate (the CLI pinned
+exactly; fail on any error or warning, read from the JSON output, because at
+0.4.0 contrast failures arrive as warnings while the exit code stays 0).
 
 ## Gates by depth
 
@@ -33,7 +32,13 @@ conformance.
 
 `scripts/check_theme.py` reads the theme CSS that `components.json` names (or
 `--css PATH`) and exits 1 while shadcn's default token values or default font
-stacks remain. Its defaults are recorded from a pinned shadcn version; a newer
+stacks remain. So that `make check` works without the skill installed, copy it
+into the project (for example `frontend/scripts/`; it is MIT like this skill)
+and run it with Python 3.11 or later.
+
+After each `shadcn add`, read the `package.json` diff: in an engineer trial on
+23 October 2026, shadcn 4.22.1 added an unrelated `cn` package and imported
+`cn` from it instead of the local `@/lib/utils`. Its defaults are recorded from a pinned shadcn version; a newer
 shadcn may change them, so update the recorded set when the project's shadcn
 version moves.
 

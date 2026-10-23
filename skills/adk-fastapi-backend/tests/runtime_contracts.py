@@ -102,7 +102,7 @@ class AdkServerIsOpen(unittest.TestCase):
 
 
 class PrincipalAroundRunner(unittest.TestCase):
-    """A fail-closed dependency in front of an in-process Runner: rejected calls never reach the model."""
+    """Recipe check, not an SDK fact: the skill's fail-closed dependency keeps rejected calls from the real Runner."""
 
     def test_fail_closed_and_principal_scoped_sessions(self):
         model = ScriptedModel()
@@ -179,6 +179,8 @@ class FirebaseErrorOrder(unittest.TestCase):
 
 class OpenTelemetryCap(unittest.TestCase):
     def test_adk_caps_opentelemetry_below_what_fastapi_0_142_needs(self):
+        # Only ADK's side is asserted here; FastAPI 0.142.0's opentelemetry-api>=1.44.0 was read from PyPI
+        # metadata on 2026-10-23 and shown by uv refusing fastapi==0.161.1 beside google-adk==2.12.0.
         requirement = [r for r in metadata.requires("google-adk") if r.startswith("opentelemetry-api")]
         self.assertEqual(requirement, ["opentelemetry-api>=1.39,<=1.42.1"])
 

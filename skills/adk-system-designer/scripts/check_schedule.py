@@ -48,6 +48,8 @@ CONTRACT = re.compile(r"(?<![\w/-])C\d+(?![\w/-])")
 UNCOVERED_OK = re.compile(r"\b(?:gap|deferred)\s*:", re.IGNORECASE)
 RULE = re.compile(r"(?<![\w/-])SB\d+(?![\w/-])")
 RULE_SETTLED = re.compile(r"(?:\bn/a|\bdeferred)\s*:", re.IGNORECASE)
+ACCEPTANCE_ITEM = re.compile(r"(?m)^\s*(?:[-*]\s*)?(?:\[[ xX]\]\s*)?A\d+\b.*$")
+DEPTHS = re.compile(r"\s*(?:build|minimal|defer(?:red)?|n/?a)\b", re.IGNORECASE)
 
 
 class InputError(Exception):
@@ -316,14 +318,17 @@ def check_contracts(path, goals):
 
 
 def check_security(path, goals):
-    """Every rule at depth Build or Minimal is cited by a goal or marked n/a or deferred; goals cite known rules."""
+    """Every rule at depth Build or Minimal is cited by a goal or marked n/a or deferred; goals cite known rules.
+
+    A goal cites a rule through its security list or an acceptance item's parentheses, not through other prose.
+    """
     rules, header = {}, None
     for raw in path.read_text(encoding="utf-8").splitlines():
         line = raw.strip()
         if not line.startswith("|"):
             header = None
             continue
-        cells = [c.strip() for c in line.strip("|").split("|")]
+        cells = [re.sub(r"[`*]", "", c).strip() for c in line.strip("|").split("|")]
         if header is None:
             lowered = [c.lower() for c in cells]
             if lowered and lowered[0] == "rule" and any(c.startswith("depth") for c in lowered):
@@ -337,7 +342,11 @@ def check_security(path, goals):
         return [], {}
     cited = {}
     for goal in goals:
-        for rule in set(goal["security"]) | set(RULE.findall(goal.get("text", ""))):
+        # The security list, plus rule IDs an acceptance item cites in parentheses: "A3 ... (C2, SB03)".
+        # Other prose ("evidence lists SB01-SB25", "SB14: deferred") is not a citation.
+        items = ACCEPTANCE_ITEM.findall(goal.get("text", ""))
+        in_items = {r for item in items for group in re.findall(r"\(([^()]*)\)", item) for r in RULE.findall(group)}
+        for rule in set(goal["security"]) | in_items:
             cited.setdefault(rule, []).append(goal["goal"])
     problems = [f"{', '.join(sorted(cited[r]))} cites {r}, which is not in the design's web security baseline table"
                 for r in sorted(cited) if r not in rules]
@@ -345,7 +354,9 @@ def check_security(path, goals):
     for rule, (depth, status) in rules.items():
         if rule in cited:
             continue
-        if RULE_SETTLED.search(status):
+        if not DEPTHS.match(depth):
+            problems.append(f"security rule {rule}: depth {depth!r} is not Build, Minimal, Defer or n/a")
+        elif RULE_SETTLED.search(status):
             settled[rule] = status
         elif re.match(r"\s*(?:build|minimal)\b", depth, re.IGNORECASE):
             problems.append(f"security rule {rule} ({depth}): no goal cites it; add it to a goal's security list and "

@@ -36,12 +36,16 @@ compatibility has not been established.
 
 When changing a runtime recipe, use its compatibility reference and a separate
 environment with the recorded SDK versions. The default maintainer requirements
-do not install those SDKs. Two suites outside the normal discovery tier are:
+do not install those SDKs. Three suites outside the normal discovery tier are:
 
 ```bash
 python -m unittest discover -s skills/adk-workflow-design/tests -p test_runtime_contracts.py
 python -m unittest discover -s skills/adk-operational-guardrails/tests -p adk_boundary.py
+python -m unittest discover -s skills/adk-fastapi-backend/tests -p runtime_contracts.py
 ```
+
+The third records google-adk 2.12.0 and FastAPI 0.141.1 behaviour the backend
+recipe depends on; all eight passed on 23 October 2026.
 
 A third optional step scans the packages themselves for the skill risks a
 host's scanner would flag (prompt injection in instructions, suspicious

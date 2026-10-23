@@ -59,7 +59,7 @@ class InspectBackendTests(unittest.TestCase):
             self.assertEqual(report["project"]["resolved"], {"fastapi": "0.141.1", "google-adk": "2.12.0"})
             self.assertEqual(report["project"]["declared"]["fastapi"], {"pyproject.toml": ">=0.138"})
             available = {f["needs"]: f["available"] for f in report["fastapi_features"]}
-            self.assertEqual(available, {"0.135": True, "0.138": True, "0.142": False, "0.143": False})
+            self.assertEqual(available, {"0.135": True, "0.138": True, "0.139": True, "0.142": False, "0.143": False})
             self.assertTrue(any("opentelemetry-api<=1.42.1" in n for n in report["notes"]))
 
     def test_unknown_version_leaves_features_undecided(self):
@@ -106,6 +106,33 @@ class InspectBackendTests(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertNotIn(secret, out)
             self.assertEqual(json.loads(out)["project"]["findings"], [])
+
+    def test_large_lockfile_is_still_read(self):
+        with tempfile.TemporaryDirectory() as root:
+            filler = "".join(f'[[package]]\nname = "pkg{i}"\nversion = "1.0.{i}"\n' for i in range(12000))
+            self.project(root, {"uv.lock": LOCK.format(fastapi="0.141.1") + filler})
+            self.assertGreater((Path(root) / "uv.lock").stat().st_size, 262144)
+            code, out, _ = self.run_tool(root)
+            self.assertEqual(code, 0)
+            self.assertEqual(json.loads(out)["project"]["resolved"]["fastapi"], "0.141.1")
+
+    def test_docs_check_parses_the_call_and_needs_all_three_settings(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.project(root, {"a.py": "app = FastAPI(lifespan=make_lifespan(), docs_url=None, redoc_url=None, "
+                                        "openapi_url=None if deployed else '/openapi.json')\n",
+                                "b.py": "import fastapi\napp = fastapi.FastAPI(docs_url=None)\n",
+                                "c.py": "app = FastAPI(**settings.fastapi_kwargs)\n"})
+            findings = json.loads(self.run_tool(root)[1])["project"]["findings"]
+            self.assertEqual([(f["rule"], f["file"], f["line"]) for f in findings], [("docs_served", "b.py", 2)])
+            self.assertIn("openapi_url, redoc_url", findings[0]["check"])
+
+    def test_wildcard_origin_forms(self):
+        with tempfile.TemporaryDirectory() as root:
+            self.project(root, {"a.py": 'app.add_middleware(CORSMiddleware, allow_origins="*")\n',
+                                "b.py": 'app.add_middleware(CORSMiddleware, allow_origin_regex=".*")\n',
+                                "c.py": 'app.add_middleware(CORSMiddleware, allow_origins=["https://a.example"])\n'})
+            rules = {(f["rule"], f["file"]) for f in json.loads(self.run_tool(root)[1])["project"]["findings"]}
+            self.assertEqual(rules, {("wildcard_cors", "a.py"), ("wildcard_cors", "b.py")})
 
     def test_dry_run_is_identical_and_invalid_input_exits_2(self):
         with tempfile.TemporaryDirectory() as root:

@@ -1284,7 +1284,7 @@
         "adk-engineer",
         "adk-frontend-integration"
       ],
-      "context": "A designer ticket for the UI shell naming companion_skills [shadcn, frontend-design], security [SB10] and design_system docs/design/DESIGN.md; AGENTS.md records the pins; neither companion is installed.",
+      "context": "A designer ticket for the UI shell naming companion_skills [shadcn, react-router], security [SB10] and design_system docs/design/DESIGN.md; AGENTS.md records the pins; neither companion is installed.",
       "expected_primary": "adk-engineer",
       "assertions": [
         "Loads adk-frontend-integration as the ticket's primary skill and reads the composition row for companions.",

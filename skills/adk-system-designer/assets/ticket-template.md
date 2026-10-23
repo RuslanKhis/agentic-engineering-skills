@@ -69,8 +69,9 @@ provisioning (a judge run, a paid evaluation) is one more line with its cap.>
 - [ ] A3 <under condition> THE <app> SHALL NOT <forbidden effect> (C3, SB03)
 
 <An item that proves a floor or a version pin rather than a contract is
-tagged (floor). A security rule ID sits beside the contract it helps prove. A box is ticked when the item's verification ran at the
-stated tier.>
+tagged (floor). A security rule ID sits beside the contract it helps
+prove. A box is ticked when the item's verification ran at the stated
+tier.>
 
 Verification, automated: <runnable command with the expected exit code, on
 the project's pinned interpreter; offline, local or authorised live>.
@@ -99,8 +100,9 @@ its estimate. Leave empty when writing the ticket.>
 ```text
 /adk-engineer Carry out <path to this ticket>. Read its design and plan,
 use its primary and supporting skills and its companion skills at the pins
-in AGENTS.md, keep its constraints and security rules, run its verification locally,
-fill in the Evidence section and set status (verified_local when every
+in AGENTS.md, keep its constraints and security rules, run its
+verification locally, fill in the Evidence section and set status
+(verified_local when every
 acceptance case that can run offline has run here, in_progress with the owed
 run named when the SDK is absent, verified_live after the authorised run,
 done only when every acceptance item has fresh evidence and the owner

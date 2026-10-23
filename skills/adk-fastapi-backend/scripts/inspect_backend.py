@@ -20,6 +20,7 @@ if sys.version_info < (3, 11):
     raise SystemExit(2)
 
 import argparse
+import ast
 import json
 import os
 from pathlib import Path
@@ -34,6 +35,7 @@ PACKAGES = ("fastapi", "starlette", "pydantic", "google-adk", "ag-ui-adk", "sse-
 FEATURES = (
     ("EventSourceResponse (fastapi.sse), 15 s keep-alive pings", (0, 135)),
     ("app.frontend() for a built single-page app", (0, 138)),
+    ("app or router dependencies applied to frontend routes", (0, 139)),
     ("native OpenTelemetry instrumentation", (0, 142)),
     ("automatic exporter set-up only when FASTAPI_OTEL_AUTO_CONFIGURE=true", (0, 143)),
 )
@@ -43,7 +45,7 @@ RULES = (
      "ADK's own server routes are unauthenticated; keep them private or local only (SB05)."),
     ("adk_cli_server", ("ops",), r"\badk\s+(?:api_server|web)\b",
      "`adk api_server` or `adk web` in a run command; only loopback for a builder-only demo (SB05)."),
-    ("wildcard_cors", ("py", "ops"), r"allow_origins\s*=\s*\[\s*[\"']\*[\"']|--allow_origins[= ]+[\"']?\*",
+    ("wildcard_cors", ("py", "ops"), r"allow_origins\s*=\s*\[?\s*[\"']\*[\"']|allow_origin_regex\s*=\s*r?[\"']\.\*|--allow_origins[= ]+[\"']?\*",
      "A '*' origin; use same origin or an explicit allowlist (SB06)."),
     ("frontend_fallback", ("py",), r"\.frontend\s*\(",
      "app.frontend() answers unmatched browser GETs with index.html, under /api too; add an /api catch-all 404."),
@@ -61,8 +63,6 @@ RULES = (
      "user_id taken from request data; take it from the verified principal (SB03)."),
     ("agui_user_extractor", ("py",), r"\buser_id_extractor\s*=",
      "ag-ui-adk passes the client's RunAgentInput to this extractor; bind identity through dependencies= and request state."),
-    ("docs_served", ("py",), r"\bFastAPI\s*\((?![^)]*docs_url\s*=\s*None)",
-     "FastAPI() without docs_url=None; serve no docs or schema in a deployed build (SB07)."),
 )
 SIGNALS = (
     ("iap_assertion", r"x-goog-iap-jwt-assertion"),
@@ -80,7 +80,8 @@ EXCLUDED_DIRS = {".git", ".hg", ".venv", "venv", "env", "node_modules", "__pycac
 OPS_FILES = {"Dockerfile", "Procfile", "Makefile", "docker-compose.yml", "docker-compose.yaml",
              "cloudbuild.yaml", "service.yaml", "app.yaml", "justfile"}
 LIMITS = {"max_depth": 8, "max_entries": 5000, "max_files": 600, "max_file_bytes": 262144,
-          "max_total_bytes": 8388608}
+          "max_lock_bytes": 8388608,
+          "max_total_bytes": 16777216}
 REQUIREMENT = re.compile(r"^\s*([A-Za-z0-9][A-Za-z0-9_.-]*)(?:\[[^\]]*\])?\s*([^;#]*)")
 
 
@@ -119,15 +120,15 @@ def locked(text: str) -> dict[str, str]:
             if isinstance(p, dict) and normalise(str(p.get("name", ""))) in PACKAGES and "version" in p}
 
 
-def read_bounded(path: Path, counts: dict) -> str | None:
+def read_bounded(path: Path, counts: dict, limit: int) -> str | None:
     info = path.lstat()
-    if not stat.S_ISREG(info.st_mode) or info.st_size > LIMITS["max_file_bytes"]:
+    if not stat.S_ISREG(info.st_mode) or info.st_size > limit:
         return None
     if counts["bytes"] + info.st_size > LIMITS["max_total_bytes"]:
         raise OverflowError
     fd = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
     with os.fdopen(fd, "rb") as stream:
-        raw = stream.read(LIMITS["max_file_bytes"] + 1)
+        raw = stream.read(limit + 1)
     counts["bytes"] += len(raw)
     return raw.decode("utf-8", errors="replace")
 
@@ -192,7 +193,7 @@ def scan(root: Path) -> dict:
                 stack.clear()
                 break
             try:
-                text = read_bounded(path, counts)
+                text = read_bounded(path, counts, LIMITS["max_lock_bytes" if kind == "lock" else "max_file_bytes"])
             except OverflowError:
                 warnings.add("byte_limit_reached")
                 stack.clear()
@@ -223,12 +224,31 @@ def scan(root: Path) -> dict:
                     findings.append({"rule": rule, "file": rel, "line": line, "check": advice})
                     break
             if kind == "py":
+                findings += [dict(f, file=rel) for f in docs_findings(text)]
                 for name, pattern in SIGNALS:
                     if re.search(pattern, text, re.IGNORECASE):
                         signals.setdefault(name, []).append(rel)
     return {"declared": declared_versions, "resolved": resolved, "findings": findings,
             "signals": signals, "alembic_env_found": alembic_seen, "counts": counts,
             "limits": LIMITS, "warnings": sorted(warnings), "complete_within_scope": not warnings}
+
+
+def docs_findings(text: str) -> list[dict]:
+    """FastAPI(...) calls that do not set docs_url, redoc_url and openapi_url (parsed, never imported)."""
+    try:
+        tree = ast.parse(text)
+    except (SyntaxError, ValueError, RecursionError, MemoryError):
+        return []
+    found = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call):
+            name = node.func.attr if isinstance(node.func, ast.Attribute) else getattr(node.func, "id", "")
+            missing = sorted({"docs_url", "redoc_url", "openapi_url"} - {k.arg for k in node.keywords})
+            if name == "FastAPI" and missing and not any(k.arg is None for k in node.keywords):
+                found.append({"rule": "docs_served", "line": node.lineno,
+                              "check": f"FastAPI() leaves {', '.join(missing)} at the default; serve no docs or "
+                                       "schema in a deployed build (SB07)."})
+    return found
 
 
 def feature_matrix(fastapi_version: str | None) -> list[dict]:

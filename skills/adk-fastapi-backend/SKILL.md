@@ -13,8 +13,8 @@ metadata:
 Own the ordinary HTTP application around an ADK agent: the parts no other
 specialist owns, where ADK or Google Cloud changes the answer. This skill is
 thin by design. FastAPI idioms come from FastAPI's own bundled skill (the
-`fastapi` companion, installed with `uv sync && uvx library-skills`), which
-follows the project's locked FastAPI version. This skill decides identity,
+`fastapi` companion; its install line and pin live in the project's
+`AGENTS.md`), which follows the project's locked FastAPI version. This skill decides identity,
 ownership, data boundaries, the public contract and the process shape.
 
 | Concern | Owner |
@@ -48,10 +48,10 @@ mounted, `*` origins, several workers, unsigned IAP headers, a client-supplied
 pointer says where to read; it is not a verdict.
 
 Read [compatibility](references/compatibility.md) before relying on a
-version-gated feature. In short: `EventSourceResponse` needs FastAPI 0.135,
-`app.frontend()` 0.138, native OpenTelemetry 0.142; and google-adk 2.12.0 caps
-`opentelemetry-api` so that FastAPI resolves to 0.141.x beside it. Never
-upgrade or downgrade a pin silently; a version change is a recorded decision.
+version-gated feature (`EventSourceResponse`, `app.frontend()`, native
+OpenTelemetry): it has the gates and the google-adk 2.12.0 conflict that holds
+FastAPI below 0.142. Never upgrade or downgrade a pin silently; a version change
+is a recorded decision.
 
 ## 2. Choose the topology
 
@@ -130,6 +130,26 @@ As code, in the app factory:
 - an `/api/{path}` catch-all 404 when `app.frontend()` serves the SPA, because
   its fallback otherwise answers browser requests under `/api` with the HTML
   shell.
+
+When the component exists, also as code:
+
+- **Uploads (SB11):** allowlist type and size on the server (check the bytes,
+  not only the declared type), store files privately (a private bucket or
+  table, never the frontend directory), serve them only as downloads with
+  `Content-Disposition: attachment`, and pass their text to the agent as
+  untrusted data (`adk-agent-security`).
+- **Routes that fetch a URL (SB12):** apply `adk-agent-security`'s fetch rule
+  in the route: resolve the host, refuse private, loopback, link-local and
+  metadata addresses and redirects to them, HTTPS only, allowlist where the
+  product permits.
+- **Security logging (SB14, internal tool and above):** one structured line
+  per failed sign-in, denied access and approval decision, with principal,
+  route and request ID, and no prompts, replies or tokens
+  (`protect-adk-sensitive-data` sets what else may be logged).
+- **Supply chain and secrets (SB15, SB16):** committed lockfiles, exact pins
+  for pre-1.0 tools, and `make check` running `pip-audit` (or `uv`'s
+  equivalent), `npm audit --audit-level=high` and a secret scan with the
+  Firebase web API key allowlisted.
 
 ## 8. Run-time shape
 

@@ -360,7 +360,10 @@ grid. A ticket may add a one-line Constraints section of about 30 words.
 The compact form has no companion table: goals name companions only, and the
 first goal writes the table from web application defaults, with the pins it
 resolves, into the project's `AGENTS.md`.
-Estimates are in quarter hours. With one person, add them by hand; no schedule block or helper run. When several people share the work, add the schedule block anyway and run the helper: by hand, cross-person chains, loads and part sums go wrong (a two-developer trial on 23 October 2026 showed all three).
+Estimates are in quarter hours. With one person, add them by hand; no schedule
+block or helper run. When several people share the work, add the schedule
+block anyway and run the helper: by hand, cross-person chains, loads and part
+sums go wrong (a two-developer trial on 23 October 2026 showed all three).
 
 Failure tables, data-authority tables and observability sections appear only
 when the journey actually holds that risk, and then as two or three rows. A

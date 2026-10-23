@@ -15,8 +15,15 @@ client and its drift check.
   with no credentials and no network, which keeps provisioning out of import
   time. Commit `openapi.json`, so a breaking-change check has a reviewable base.
 - Generate the browser client with `@hey-api/openapi-ts` pinned exactly
-  (0.99.0 was used here; it is pre-1.0 and needs `typescript` installed as a
-  peer): `npx openapi-ts -i openapi.json -o src/client`. Commit `src/client/`.
+  (0.99.0 was used here; it is pre-1.0). Install it and `typescript` as exact
+  frontend dev dependencies and run it from the frontend package
+  (`npx openapi-ts -i ./openapi.json -o src/client`, or a `make client`
+  target): run through `npx` elsewhere, it resolved TypeScript 7 and crashed,
+  and a bare `backend/openapi.json` was read as a registry shorthand; prefix
+  local paths with `./` or `../`. Commit `src/client/`.
+- Its generated SSE helper retries by default. A run is not idempotent, so a
+  run-stream call passes `sseMaxRetryAttempts: 0` per call (the client-wide
+  config rejects it) and reconnects attach to the recorded run instead.
 - `make check` dumps, regenerates and runs `git diff --exit-code openapi.json
   frontend/src/client`. Two generations from one dump were identical in
   testing, so any diff is real drift.

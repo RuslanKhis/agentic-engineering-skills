@@ -17,7 +17,7 @@ mapping. Keep real FastAPI, Runner, session service and database.
 | Test | Expected result | Rule |
 | --- | --- | --- |
 | No verifier configured | Every `/api` route returns 401; health and SPA assets still load; no model call | SB01 |
-| Missing, expired, revoked, wrong-audience or malformed token | 401 with `WWW-Authenticate` | SB02 |
+| Missing, expired, wrong-audience or malformed token | 401 with `WWW-Authenticate` | SB02 |
 | Verifier outage (key fetch fails) | 503, no sign-in prompt | SB13 |
 | Unsigned IAP identity headers without the assertion | 401 | SB02 |
 | A body naming another `user_id` | The run happens in the caller's own scope; the other user has no new session | SB03 |
@@ -29,6 +29,11 @@ mapping. Keep real FastAPI, Runner, session service and database.
 | Deployed settings | `/docs`, `/redoc`, `/openapi.json` serve neither docs nor schema; `nosniff`, CSP with `frame-ancestors 'none'`, `Referrer-Policy` and HSTS present | SB07 |
 | Preflight from an unlisted origin | No `Access-Control-Allow-Origin` | SB06 |
 | Oversize body; over-long or unknown fields; malformed ID | 413 or 422 | SB09 |
+| Disallowed upload type or size; an uploaded HTML file | Rejected; never rendered from the app's origin | SB11 |
+| A fetch route given the metadata address or name, or a redirect to them | Refused before any request leaves | SB12 |
+| A denied request (internal tool and above) | One log line with principal, route and request ID; no message content | SB14 |
+| `make check` | Runs the Python and JavaScript audits and the secret scan | SB15, SB16 |
+| From MVP: a revoked token on a sensitive action (`check_revoked=True`) | 401 | SB20 |
 | From MVP: Schemathesis over the non-agent routes | No 5xx | SB09 |
 
 A passing local suite proves the application's boundaries, not IAP, Firebase
