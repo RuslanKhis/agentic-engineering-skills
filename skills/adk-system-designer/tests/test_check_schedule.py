@@ -145,6 +145,17 @@ class ScheduleTests(unittest.TestCase):
             code, out, _ = self.run_check("--plan", str(plan), "--json")
             self.assertEqual(len(json.loads(out)["handoffs_without_hours"]), 2)
 
+    def test_handoff_none_from_the_ticket_template_is_no_handoff(self):
+        with tempfile.TemporaryDirectory() as root:
+            tickets = Path(root)
+            (tickets / "a.md").write_text(TICKET.format(goal="G01", hands_on="1", review="1", total="2",
+                                                        owner="Ana", blocked="[]"))
+            ticket = TICKET.format(goal="G02", hands_on="1", review="1", total="2", owner="Ben", blocked="[G01]")
+            (tickets / "b.md").write_text(ticket.replace("  calendar_waits: none", "  handoff: none\n  calendar_waits: none"))
+            code, out, err = self.run_check("--tickets", str(tickets), "--json")
+            self.assertEqual(code, 0, err)
+            self.assertEqual(json.loads(out)["handoffs_without_hours"], ["G01 (Ana) -> G02 (Ben)"])
+
     def test_list_values_accept_trailing_comments(self):
         import importlib.util
         spec = importlib.util.spec_from_file_location("check_schedule_under_test", SCRIPT)

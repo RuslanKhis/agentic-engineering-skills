@@ -117,8 +117,8 @@ coding agent (hands-on plus review and verify, with calendar waits listed
 separately). Check phase 1 against the team's capacity with a reserve, and
 cut scope rather than the floor when it does not fit. Compute totals, loads
 and the finish range with `scripts/check_schedule.py` rather than by hand,
-except in the compact form, where quarter-hour estimates are added by hand
-and no schedule block is written. Show
+except in a one-person compact form, where quarter-hour estimates are added
+by hand and no schedule block is written. Show
 the user the cut line between what ships now and what comes later, and ask
 them to confirm or move it. Write the later phases into the same plan so the
 work can continue when the team has time, without a new design conversation.

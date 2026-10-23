@@ -137,7 +137,8 @@ def normalise(entry, where):
     if isinstance(settled, str):
         settled = [m.strip() for m in settled.split(",") if m.strip()]
     return {"goal": goal, "phase": str(entry.get("phase", "")).strip(), "total": total,
-            "handoff": str(entry.get("handoff", "")).strip(), "mentions_only": settled, "text": "",
+            "handoff": "" if str(entry.get("handoff", "")).strip().lower() in ("none", "-") else
+            str(entry.get("handoff", "")).strip(), "mentions_only": settled, "text": "",
             "hands_on": hands_on, "review": review, "owner": str(entry.get("owner", "")).strip(),
             "contracts": id_list(entry.get("contracts", [])), "security": id_list(entry.get("security", [])),
             "blocked_by": [b for b in blocked if b], "waits": str(waits).strip(), "wait_days": wait_days}
