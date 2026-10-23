@@ -76,6 +76,9 @@ answered, in one turn, and offer the default so a user can accept it in one word
 - Who uses or judges it and what will they read: a demo, predictions, a
   report, colleagues using it daily, external customers? (Default: the user,
   reading the design.)
+- Does it need its own web interface, who can reach its URL, and will other
+  developers continue it? (Default: `adk web` for the builder only; not
+  handed over.)
 - What data does it touch and what can it change? (Default: synthetic data,
   read only.)
 - Which reviews need a presentation, for whom, and when: a go-ahead before
@@ -293,6 +296,13 @@ the goal also names Google's product skill as `google/skills:<name>` in its
 supporting skills (the handoff lists them); the design records that need and
 never runs the recipe.
 
+When the design gives the agent its own web interface or an HTTP API, read
+[web application defaults](references/web-app-defaults.md) for the default
+stack, layout and companion skills, and record each deviation as a decision.
+Then read [the security baseline](references/security-baseline.md), list the
+components the design creates and record each rule's depth and status once in
+the design.
+
 Bring this detail into the conversation as choices become clear. Use a small
 interface sketch or pseudocode only when it resolves an integration question;
 keep unverified code labelled and preserve a design-only request. A feasibility
@@ -370,7 +380,10 @@ goal needs a stable ID, phase, estimate, the contracts it proves and decisions
 it implements (by ID), bounded changes and integration points, the resources
 it creates (each with idle cost, cleanup command and verification), a `Primary
 skill` and `Supporting skills` line, prerequisites, acceptance cases that cite
-those contracts, status, unresolved blockers and its own one-line run prompt.
+those contracts, status, unresolved blockers and its own one-line run prompt;
+a goal that creates or changes a web component also names its companion
+skills, the design system it follows and the security rule IDs its acceptance
+proves.
 
 A phase whose resources are not carried forward (a POC after its review, a
 pilot that stops, a disposable environment) ends with a **teardown goal**
@@ -390,7 +403,8 @@ stays the source of decisions.
 End the conversation with a short closing message in chat: where the documents
 were saved, the profile and the cut line (what phase 1 delivers in how many of
 the available hours, and what waits), the decisions still open, and the exact
-prompt for the next ready goal in a copyable block, for example:
+prompt for the next ready goal in a copyable block. For a web application,
+also say which security rules are deferred and what raises them. For example:
 
 ```text
 /adk-engineer Carry out G01 from docs/plans/<topic>.md.

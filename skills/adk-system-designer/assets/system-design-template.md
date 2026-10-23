@@ -107,6 +107,14 @@ cases that assert the forbidden action never runs. `adk-agent-security` owns
 the threat model; omit this block with a one-line reason for a read-only
 product with no untrusted input.
 
+#### Web security baseline
+
+Only when the design has a web interface or HTTP API. One row per rule from
+the designer's security baseline; this table is the rule's only status record.
+
+| Rule | Component | Depth now | Proved by (G/A), n/a: reason, or deferred: trigger |
+| --- | --- | --- | --- |
+
 ## Budgets and capacity
 
 Record workload assumptions, complete-request latency and first meaningful output,

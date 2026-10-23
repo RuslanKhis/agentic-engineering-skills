@@ -10,6 +10,9 @@ blocked_by: [<goal IDs this ticket waits for and open decisions; status is ready
 touches: [<paths this ticket expects to change; the implementer adds any it creates>]
 parallel_safe: <yes when no other ticket of this phase writes a path in touches and every goal in blocked_by is finished, else no>
 contracts: [<design contract IDs this ticket proves, e.g. C1, C3>]
+companion_skills: [<names, or empty>]
+security: [<SB IDs this ticket proves, or empty>]
+design_system: <path to DESIGN.md for UI tickets, or none>
 contract_deltas: [<none, or a contract ID and its one-line revision when this ticket narrows or widens one>]
 phase: <1, 2 or later>
 profile: <proof of concept / assignment / internal tool / MVP or pilot / production>
@@ -38,6 +41,18 @@ one line each.>
 - Depth: <build at this profile's depth; the floor kept; controls left for
   later goals, by ID>
 
+## Constraints
+
+<One line: the decisions this ticket must not change (identity source,
+transport, stack), by reference to AGENTS.md and the design. Omit when none.>
+
+## Reference patterns
+
+<Optional; omit when none. One entry per design studied elsewhere and
+implemented ADK-natively: source and pin; the pattern; the ADK-native
+mechanism used instead; the acceptance item it drives; the licence (study
+only, or copied with attribution).>
+
 ## Resources created
 
 <none, or one line per resource that charges while provisioned: resource and
@@ -51,10 +66,10 @@ provisioning (a judge run, a paid evaluation) is one more line with its cap.>
 
 - [ ] A1 WHEN <trigger> THE <app> SHALL <observable result> (C1)
 - [ ] A2 IF <failure> THEN THE <app> SHALL <recovery> (C3)
-- [ ] A3 <under condition> THE <app> SHALL NOT <forbidden effect> (C3)
+- [ ] A3 <under condition> THE <app> SHALL NOT <forbidden effect> (C3, SB03)
 
 <An item that proves a floor or a version pin rather than a contract is
-tagged (floor). A box is ticked when the item's verification ran at the
+tagged (floor). A security rule ID sits beside the contract it helps prove. A box is ticked when the item's verification ran at the
 stated tier.>
 
 Verification, automated: <runnable command with the expected exit code, on
@@ -68,7 +83,9 @@ reported as not run; the status is then in_progress with the owed run named.>
 <Filled in by the agent that carries the ticket out: files changed; for each
 acceptance item the command, its exit code and the commit SHA (or
 "uncommitted") with the worktree path; one line per contract (C3: evidenced,
-local, A2 and A3; a partial tier says which items ran where); a `Rulings:`
+local, A2 and A3; a partial tier says which items ran where); one line per
+security rule (SB03: evidenced, tier 1, A3); the companion skills loaded and
+their pins, or each missing one as setup owed; a `Rulings:`
 list of decisions the ticket did not settle (what, why, cost if wrong);
 controls deliberately deferred; the state of each resource created (absent,
 retained with reason, or unknown) with its cleanup command; measurement and
@@ -81,7 +98,8 @@ its estimate. Leave empty when writing the ticket.>
 
 ```text
 /adk-engineer Carry out <path to this ticket>. Read its design and plan,
-use its primary and supporting skills, run its verification locally,
+use its primary and supporting skills and its companion skills at the pins
+in AGENTS.md, keep its constraints and security rules, run its verification locally,
 fill in the Evidence section and set status (verified_local when every
 acceptance case that can run offline has run here, in_progress with the owed
 run named when the SDK is absent, verified_live after the authorised run,

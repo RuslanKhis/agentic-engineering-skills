@@ -19,10 +19,11 @@ in one word. Group the questions in one turn; they are the scope gate.
 | Who builds it: how many people, hours each per week, familiarity with ADK and GCP? Who runs it afterwards? | One developer, part time, new to ADK | Converts the deadline into person-hours and setup cost |
 | What spend is available for models and cloud? | Small personal allowance | Model tier, hosted services, evaluation repeats |
 | Who uses or judges it: the builder, a demo audience, employees, external customers? What will the judge read? | The user, reading the design | Identity, frontend, availability, documents |
+| Does it need its own web interface, who can reach its URL, and will other developers continue it? | `adk web` for the builder only; not handed over | Frontend depth, identity, the handover fundamentals in [web application defaults](web-app-defaults.md) and the [security baseline](security-baseline.md) tier |
 | What data does it touch (synthetic, internal, personal, regulated) and what can it change (nothing, drafts, reversible writes, money, messages to real people)? | Synthetic data, read only | Sets the floor and the security depth |
 | Which reviews need a presentation, for whom and when: before the proof of concept is built, after it to decide on production, after the production build? | All three, business audience, dates to confirm | Presentation goals at the phase boundaries and the decision waits the next phase depends on |
 
-The last row decides the risk, whatever label the user gives. A "POC" that
+The data row decides the risk, whatever label the user gives. A "POC" that
 sends email to real customers from a real inbox carries production risk;
 plan it as a POC with that risk removed (see the floor below), not as a POC
 that ignores it.
@@ -51,14 +52,16 @@ cheapest form that keeps the floor, usually a configuration line or a test.
 | Concern | POC | Internal tool | MVP or pilot | Production |
 | --- | --- | --- | --- | --- |
 | Core judgment end to end, measured | Build, on sample inputs with a handful of checked cases | Build, with a small regression set | Build, with an evaluation set | Build, with gated evaluation |
-| User identity and per-user data scope | Defer when single user and synthetic data | Build: existing SSO, users see their own records | Build | Build |
+| User identity and per-user data scope | Defer for a builder-only local demo. Minimal when reachable at a URL: managed sign-in with an allowlist, principal from the token (SB02) | Build: existing SSO, users see their own records | Build | Build |
 | Secrets and credentials | Minimal: environment or Secret Manager, never in code or prompts | Build: workload identity, least privilege | Build | Build, with rotation |
 | External writes and effects | Minimal: fake or staging targets, or a human sends | Build: confirmation for writes | Build: idempotent writes for money and orders | Build: full replay and reconciliation |
 | Sensitive data | Defer with synthetic or anonymised data; otherwise Minimal | Minimal: scoped access and no content in logs | Build | Build |
 | Prompt injection and agency | Minimal: break the untrusted-input-plus-write combination | Build: per-agent exposure check | Build | Build: threat model and adversarial suite |
 | Budgets and loop limits | Minimal: `max_llm_calls` and a spend cap | Minimal | Build: per-user allowance; a cost contract with a stop | Build: shared budgets and approval; the cost contract, labels and a cost review |
 | Memory and retrieval | Only what the journey needs; in-memory sessions | Build what the journey needs | Build | Build |
-| Frontend | `adk web` or the simplest page | A simple authenticated page or an existing tool | Build | Build |
+| Frontend | `adk web` on loopback for a builder-only demo. Otherwise Build: the baseline single-page app from web application defaults, one browser journey | Build | Build | Build |
+| API contract and typed client | Build when handed over: generated client and drift check | Build | Build, with a breaking-change check | Build, with a breaking-change gate |
+| Web security baseline | Tiers 1–2; also tier 3 when reachable at a URL or handed over | Tiers 1–4 | Tiers 1–5 | Tiers 1–6 |
 | Hosting | Local, or one Cloud Run service | Cloud Run behind IAP or the existing platform | Chosen host with a rollback | Chosen host with recovery and cleanup |
 | Observability | Defer: console logs | Minimal: structured logs and model cost | Build: traces and token cost | Build: SLOs and alerts |
 | Release engineering | Minimal: pinned model ID | Minimal: pinned versions and unit tests in CI | Build: evaluation in CI | Build: canary and joint rollback |
@@ -98,6 +101,9 @@ lowers the depth, never the floor.
   the user explicitly accepts that risk after hearing it in one sentence.
 - Real personal data enters a POC only when the user chose it, scoped to what
   the journey needs and kept out of logs.
+- Nothing reachable at a URL without sign-in: ADK's own server routes are
+  never exposed, and the application's routes fail closed when no verifier
+  is configured.
 - The model ID is pinned, so the demo behaves as it did yesterday.
 
 When a floor item conflicts with the request, propose the cheapest design that
@@ -197,8 +203,9 @@ Give each person's full focused hours per day; `--reserve` holds the same
 share back on the calendar as on the hours, so the reserve is not spent twice.
 
 With `--design` it also checks that every coverage-grid cell cites an
-acceptance item and that every contract in the design is cited by a goal or
-marked `gap:` or `deferred:`. It adds up the phase, compares every ticket with
+acceptance item, that every contract in the design is cited by a goal or
+marked `gap:` or `deferred:`, and that every security rule at Build or
+Minimal depth is cited by a goal or marked `n/a:` or `deferred:`. It adds up the phase, compares every ticket with
 the plan, and reports each
 person's load, the longest dependent chain and a finish range in working days
 that respects dependencies, one goal at a time per person and calendar waits
@@ -344,6 +351,12 @@ marking each section not applicable:
 If the user asks for tickets, each stays under about 120 words of body (front
 matter not counted): outcome, acceptance, an empty Evidence section and the
 run prompt, linking to the design for everything else.
+
+For a web application, section 4 gains one security line: the tiers applied,
+the rules marked `n/a` with a reason, and the deferred rules with triggers.
+Each phase 1 goal gains one line naming its companion skills and rule IDs.
+Allow about 250 more words: about 1,450 in total, or 1,850 with the failure
+grid. A ticket may add a one-line Constraints section of about 30 words.
 Estimates are in quarter hours, added by hand; no schedule block or helper run.
 
 Failure tables, data-authority tables and observability sections appear only

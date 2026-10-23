@@ -75,6 +75,15 @@ early, the goals are ordered so each completed one is still useful.
 Use actual inspected paths where available; label a greenfield layout as proposed.
 Explain ordinary application enforcement alongside framework/service choices.
 
+## Web stack and companion skills
+
+Only when the design has a web interface or HTTP API. Deviations from the
+designer's web application defaults link their decision. The first goal writes
+this table into the project's AGENTS.md; afterwards keep only the link.
+
+| Companion | Source and install | Pin | Load when | Scope notes |
+| --- | --- | --- | --- | --- |
+
 ## Goals and dependencies
 
 | ID and goal | Phase | Type: discovery / implementation / presentation | Human hours | Depends on | Primary skill | State / blocker |
@@ -115,9 +124,13 @@ reason and an owner.
 - **Supporting skills:** <only those this goal's boundaries need, each with its
   purpose; a Google product to provision or operate as `google/skills:<name>
   (purpose)`>
+- **Companion skills:** <names, or none>
+- **Design system:** <path to DESIGN.md for UI goals, or none>
+- **Security rules:** <SB IDs this goal proves, each cited by an acceptance
+  item, or none>
 - **Acceptance:** <numbered A1, A2 ...: observable success, important failure and
-  forbidden-effect cases, each naming the contract it proves (A2 → C3); grid
-  cells cite them as G01/A2>
+  forbidden-effect cases, each naming the contract and security rule it
+  proves (A2 → C3, SB03); grid cells cite them as G01/A2>
 - **Verification:** <public test boundary, runnable command if known, required
   fixtures; distinguish offline, local integration and authorized live/hosted evidence>
 - **Execution scope:** <what is already authorized; exact external prerequisites

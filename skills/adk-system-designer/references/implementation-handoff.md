@@ -29,6 +29,9 @@ These are starting points, not a stack to install in every application:
 | Persistent conversation or exact preferences | Assess `DatabaseSessionService` for ADK events; use application-owned profile records for exact user settings. Load a trusted user's profile at the invocation boundary. | Reuse the existing database where compatible; Cloud SQL is a candidate when a new managed PostgreSQL service is justified | `adk-memory-architecture` |
 | Context-window shaping | Decide what enters each model request: a stable instruction and tool prefix for caching, tool results bounded at the tool boundary, compaction or filtering of retained history, and an overflow rule per slice. Measure on captured requests, not configuration. | Provider caching minimums and billing | `optimise-adk-on-google-cloud` |
 | Browser replies and progress | Authenticated API around the Runner or remote runtime; custom JSON or AG-UI adapter; application-owned text, tool-result and completion schema connected to the existing UI. | Gateway hosting, streaming transport and session access | `adk-frontend-integration` |
+| HTTP API beyond the agent route | Domain routes under `/api` behind the shared verified-principal dependency; records filtered by owner; application tables and migrations kept apart from ADK's; the public OpenAPI contract and generated client; one error handler; CORS and headers; the single-process Cloud Run shape | Database for application data; Cloud Tasks for work that must outlive the response | `adk-fastapi-backend` |
+| Visual design and agent UI states | shadcn components themed from DESIGN.md tokens, starting from the house design system; agent events mapped to UI states; screenshot and accessibility checks at the profile's depth | None | `adk-frontend-integration`, with companions `shadcn` and, for a new visual direction, `frontend-design` |
+| Web security baseline | Rules from the [security baseline](security-baseline.md), recorded once in the design and cited in goals and acceptance | As each rule's owner needs | The rule's *Implemented by* skill |
 | Reliable external writes | Python tool/service adapter plus a durable operation record, canonical payload and provider-backed replay/reconciliation. An asynchronous path also needs durable dispatch ownership. | Existing transactional store and approved external API; durable worker only if required | `safe-api-tool-calls` |
 | Caller authority and delegated access | Verify caller/session ownership before invocation; supply trusted scope to tools; choose credentials in backend code and maintain connection lifecycle metadata. | Workload identity and Secret Manager or the existing credential store | `adk-tool-auth-and-secrets` |
 | Budgets and human review | Assess `RunConfig.max_llm_calls` plus application admission/reservations for shared allowances and transport attempts; durable approval and executor records for cross-request review. Check native confirmation compatibility before using it. | Shared control store and separately owned recovery/notification work | `adk-operational-guardrails` |
@@ -56,6 +59,12 @@ gets `adk-agent-observability` and `adk-release-engineering`. Name one primary
 skill and only the supporting skills the slice needs.
 Verify availability through the host catalogue or sibling packages; a missing
 skill is a setup prerequisite, not a claim that its guidance was applied.
+
+A goal that creates or changes a web component also names its companion
+skills, its design system and the security rule IDs it proves (see
+[web application defaults](web-app-defaults.md)). Companions install in the
+application project. A missing companion is a setup step, not a claim that its
+guidance was applied.
 
 ### Name the Google product skill a route needs
 
@@ -161,7 +170,8 @@ provider or deployment checks are pending.
 
 The default needs nothing else installed. Each goal in the plan carries its own
 run prompt, and `adk-engineer` reads the goal's `Primary skill` and
-`Supporting skills` lines, loads them and performs the authorized work:
+`Supporting skills` lines, loads them and performs the authorized work. It
+also reads a goal's companion skills, design system and security rules:
 
 ```text
 /adk-engineer Carry out G01 from docs/plans/<topic>.md.
