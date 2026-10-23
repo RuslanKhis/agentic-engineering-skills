@@ -1,0 +1,37 @@
+# Marrowby: a fictional grocery and home retailer (demo brand; see ../README.md).
+# Only the DESIGN.md Brand override surface. Read by scripts/apply_brand.py, which
+# accepts a YAML subset: `key: value` lines and one level of two-space nesting.
+# Fraunces has no tabular figures, so it sets prose only; tables stay in Figtree.
+name: Marrowby
+fictional: true
+colors:
+  primary: "oklch(0.42 0.08 120)"
+  primary-hover: "oklch(0.35 0.07 120)"
+  primary-active: "oklch(0.29 0.06 120)"
+  primary-foreground: "oklch(0.985 0.003 85)"
+  accent: "oklch(0.948 0.022 120)"
+  accent-foreground: "oklch(0.30 0.065 120)"
+  ring: "oklch(0.50 0.10 120)"
+  chart-1: "oklch(0.48 0.11 125)"
+  dark-primary: "oklch(0.80 0.095 120)"
+  dark-primary-hover: "oklch(0.86 0.075 120)"
+  dark-primary-active: "oklch(0.74 0.10 120)"
+  dark-primary-foreground: "oklch(0.20 0.03 120)"
+  dark-accent: "oklch(0.29 0.03 120)"
+  dark-accent-foreground: "oklch(0.91 0.03 120)"
+  dark-ring: "oklch(0.76 0.105 120)"
+  dark-chart-1: "oklch(0.76 0.12 118)"
+fonts:
+  sans: Figtree
+  sans-package: "@fontsource-variable/figtree@5.3.0"
+  serif: Fraunces
+  serif-package: "@fontsource-variable/fraunces@5.3.0"
+  serif-css: opsz.css
+  mono: JetBrains Mono
+  mono-package: "@fontsource-variable/jetbrains-mono@5.3.0"
+logo:
+  logo: logo.svg
+  mark: mark.svg
+  alt: "Marrowby (fictional demo brand)"
+rounded:
+  md: 8px

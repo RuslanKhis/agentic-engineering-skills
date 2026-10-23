@@ -1,0 +1,36 @@
+# Avenhale Health: a fictional health insurer (demo brand; see ../README.md).
+# Only the DESIGN.md Brand override surface. Read by scripts/apply_brand.py, which
+# accepts a YAML subset: `key: value` lines and one level of two-space nesting.
+# Cobalt, hue 266 (dark steps at 262): brighter and cooler than the house ink blue
+# (hue 250), clear of the info colour (hue 220) and of NHS blue. Keeps the house 6 px controls.
+name: Avenhale Health
+fictional: true
+colors:
+  primary: "oklch(0.42 0.15 266)"
+  primary-hover: "oklch(0.35 0.13 266)"
+  primary-active: "oklch(0.29 0.11 266)"
+  primary-foreground: "oklch(0.985 0.003 85)"
+  accent: "oklch(0.948 0.02 266)"
+  accent-foreground: "oklch(0.30 0.11 266)"
+  ring: "oklch(0.50 0.16 266)"
+  chart-1: "oklch(0.50 0.15 266)"
+  dark-primary: "oklch(0.73 0.125 262)"
+  dark-primary-hover: "oklch(0.79 0.10 262)"
+  dark-primary-active: "oklch(0.67 0.13 262)"
+  dark-primary-foreground: "oklch(0.20 0.04 262)"
+  dark-accent: "oklch(0.29 0.045 262)"
+  dark-accent-foreground: "oklch(0.91 0.03 262)"
+  dark-ring: "oklch(0.72 0.13 262)"
+  dark-chart-1: "oklch(0.72 0.13 262)"
+fonts:
+  sans: Atkinson Hyperlegible Next
+  sans-package: "@fontsource-variable/atkinson-hyperlegible-next@5.3.0"
+  serif: Literata
+  serif-package: "@fontsource-variable/literata@5.3.0"
+  serif-css: opsz.css
+  mono: JetBrains Mono
+  mono-package: "@fontsource-variable/jetbrains-mono@5.3.0"
+logo:
+  logo: logo.svg
+  mark: mark.svg
+  alt: "Avenhale Health (fictional demo brand)"
