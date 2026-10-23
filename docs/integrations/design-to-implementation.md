@@ -94,6 +94,35 @@ blockers. Keep cloud work outside this step.
 
 Use `$adk-engineer` in Codex. This route works with this toolkit alone.
 
+## Web applications: companions, design system and security rules
+
+When the design gives the agent its own web interface or an HTTP API, the
+designer reads its
+[web application defaults](../../skills/adk-system-designer/references/web-app-defaults.md)
+and [security baseline](../../skills/adk-system-designer/references/security-baseline.md).
+Three things then travel from the design to each goal, each written once:
+
+- **Security rules.** The design's *Web security baseline* table records every
+  rule (`SB01`–`SB25`) once: its depth now and the goal acceptance that proves
+  it, `n/a: <reason>` or `deferred: <trigger>`. A goal lists the IDs it proves
+  (`security: [SB01, SB03]`) and an acceptance item cites the rule beside the
+  contract: `A3 … (C2, SB03)`. `check_schedule.py --design` fails when a Build
+  or Minimal rule is cited by no goal.
+- **Companion skills.** The plan proposes a table of companions (FastAPI's
+  bundled skill, React Router, Vercel's React rules, shadcn, `frontend-design`,
+  `playwright-cli`) with install lines and pins. The first goal writes it into
+  the project's `AGENTS.md`; after that the plan links to it. Tickets name
+  companions only: `companion_skills: [shadcn]`.
+- **Design system.** UI goals point at `docs/design/DESIGN.md`, copied from the
+  house theme in `adk-frontend-integration` unless the client brings its own.
+
+`adk-engineer` loads a ticket's companions at the pins in `AGENTS.md`,
+reports a missing one as setup with its install line, keeps the ticket's
+constraints and rules, and writes one Evidence line per contract and per rule.
+`adk-fastapi-backend` owns the backend goals (the principal dependency, domain
+routes, migrations, the API contract), `adk-frontend-integration` the agent
+routes, UI states and theme, and `deploy-adk-on-google-cloud` the hosting.
+
 ## Continue with Matt Pocock's workflows
 
 Read the installed workflow instructions and project setup first. These are

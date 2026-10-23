@@ -1210,6 +1210,88 @@
         "Adds knowledge-update and abstention cases to the gold set structured by the five memory abilities, measured before and after.",
         "Keeps memory as an untrusted-input boundary with screening before write-back, and reports the live Memory Bank calls as not run."
       ]
+    },
+    {
+      "id": "web-backend-deploy-routes-to-deploy",
+      "prompt": "Deploy our ADK assistant's FastAPI backend and React app to Cloud Run behind IAP for the pilot group.",
+      "available_skills": [
+        "deploy-adk-on-google-cloud",
+        "adk-fastapi-backend",
+        "adk-frontend-integration"
+      ],
+      "context": "An ADK 2.12 web app built from the designer's web defaults: one FastAPI app with the Runner in process, /api behind a verified-principal dependency, the SPA served by app.frontend(); no cloud credentials in the session.",
+      "expected_primary": "deploy-adk-on-google-cloud",
+      "assertions": [
+        "Leads with deploy-adk-on-google-cloud and reads its frontend-hosting reference for topology A rather than restarting backend design.",
+        "Keeps one process per container with an explicit request timeout and concurrency, and no Firebase Hosting rewrite on run or stream paths.",
+        "Uses IAP's signed assertion with the Cloud Run audience form and treats the audience as a fact the first live run confirms.",
+        "Presents the exact project, region and commands for approval and reports the live deployment as not run."
+      ]
+    },
+    {
+      "id": "web-backend-stream-progress-routes-to-frontend",
+      "prompt": "Show each tool call as a line in the chat while the agent runs, and keep the partial answer if the run fails halfway.",
+      "available_skills": [
+        "adk-frontend-integration",
+        "adk-fastapi-backend"
+      ],
+      "context": "An ADK web app with a FastAPI backend and a Vite React SPA themed from docs/design/DESIGN.md; the agent route returns JSON today.",
+      "expected_primary": "adk-frontend-integration",
+      "assertions": [
+        "Leads with adk-frontend-integration and its agent-ui-states reference; adk-fastapi-backend is not the primary.",
+        "Maps tool start, result and error to one trace line each with status in words, and keeps the text when a run error follows it, marking the turn failed.",
+        "Reads the stream with fetch and a bearer token, never native EventSource, and does not send a user ID from the browser."
+      ]
+    },
+    {
+      "id": "web-backend-app-migrations-beside-adk-sessions",
+      "prompt": "We added a table for saved answers. Set up migrations; the agent's sessions already live in the same Postgres.",
+      "available_skills": [
+        "adk-fastapi-backend",
+        "adk-memory-architecture"
+      ],
+      "context": "An ADK 2.12 FastAPI app using DatabaseSessionService on Cloud SQL for PostgreSQL; no Alembic yet; tests run against SQLite locally.",
+      "expected_primary": "adk-fastapi-backend",
+      "assertions": [
+        "Excludes ADK's five session tables from Alembic with a separate schema or an include_object filter, and prefixes application tables.",
+        "Runs migrations as a job rather than at instance start, and leaves ADK's schema to adk migrate session.",
+        "Tests that alembic check is clean on a database that holds ADK's tables and that those tables are unchanged.",
+        "Filters saved answers by the verified principal and returns the unknown-ID 404 body for another user's record."
+      ]
+    },
+    {
+      "id": "designer-handed-over-web-poc",
+      "prompt": "Design an internal document-Q&A assistant with one write action (filing a ticket in our tracker). Two developers, about 30 hours. A client team will continue it, and the URL is shared with a pilot group.",
+      "available_skills": [
+        "adk-system-designer",
+        "adk-engineer",
+        "adk-fastapi-backend",
+        "adk-frontend-integration"
+      ],
+      "context": "A greenfield request in an empty repository; no cloud access; the user answers questions when asked.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Asks or records the scope question about a web interface, who can reach its URL and whether other developers continue it.",
+        "Reads web-app-defaults.md and security-baseline.md and applies tiers 1 to 3 for a handed-over POC reachable at a URL.",
+        "Records each SB rule once in the design, with n/a or deferred reasons, and lists companion skills once in the plan.",
+        "Writes goals whose acceptance items cite SB IDs beside contracts, and keeps the compact design near 1,450 words."
+      ]
+    },
+    {
+      "id": "engineer-ticket-with-missing-companion",
+      "prompt": "/adk-engineer Carry out docs/tickets/doc-assistant/G03.md.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-frontend-integration"
+      ],
+      "context": "A designer ticket for the UI shell naming companion_skills [shadcn, frontend-design], security [SB10] and design_system docs/design/DESIGN.md; AGENTS.md records the pins; neither companion is installed.",
+      "expected_primary": "adk-engineer",
+      "assertions": [
+        "Loads adk-frontend-integration as the ticket's primary skill and reads the composition row for companions.",
+        "Reports each missing companion as setup with its install line from AGENTS.md and does not claim its guidance was applied.",
+        "Themes from DESIGN.md starting from the house theme and runs the lint and theme checks.",
+        "Writes one Evidence line per contract and one for SB10 with its tier and acceptance cases."
+      ]
     }
   ]
 }

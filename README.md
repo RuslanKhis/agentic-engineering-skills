@@ -46,7 +46,7 @@ behaviour, or prepare a deployment.
 | **Changing an application you already have** | `/adk-engineer` | It names the specialist it is using, makes the change with local tests, and says what is still unverified |
 | **Presenting the work to decide the next step** | `/adk-presenter` | A slide outline with evidence under every claim, what to say, the questions to expect and a one-page decision memo, for a business or a technical audience, at proof-of-concept approval, production approval, results review, or as a public case study |
 
-All four lead to the same eighteen specialists. You never need to remember which
+All four lead to the same nineteen specialists. You never need to remember which
 one fits: the designer writes the specialist into every goal, and
 `adk-engineer` picks one for any ticket or request. You can also call a
 specialist directly when you already know the topic.
@@ -101,10 +101,10 @@ From your application's project directory, run:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*'
 ```
 
-Choose your coding agent when prompted. This installs **all twenty-two skills**
+Choose your coding agent when prompted. This installs **all twenty-three skills**
 for the current project: `adk-discovery`, `adk-system-designer`,
-`adk-engineer`, `adk-presenter`, the eleven chapter specialists and the seven
-cross-framework specialists.
+`adk-engineer`, `adk-presenter`, the eleven chapter specialists, the web
+backend specialist and the seven cross-framework specialists.
 Keep the quotes around `'*'` so your shell passes it unchanged.
 
 <details>
@@ -242,6 +242,13 @@ who will use or judge the result, and what data it touches. A five-hour demo,
 an internal tool for colleagues and a regulated production service get
 different designs: it says which concerns are built now, which stay minimal
 and which wait, and keeps a small safety floor even in a proof of concept.
+When the application has its own web interface, it also asks who can reach the
+URL and whether other developers will continue it. It then applies its web
+defaults (a Vite and React app served by one FastAPI service, styled from the
+house design system), names the companion skills each goal loads (FastAPI's
+own skill, shadcn, Vercel's React rules, Playwright) with their pins, and
+assigns its web security baseline: rules tagged with OWASP identifiers,
+recorded once in the design with what proves each one or what defers it.
 
 It saves `docs/architecture/<topic>.md` and `docs/plans/<topic>.md`, and ends
 with the prompt for the first goal. The plan is split into phases: phase 1
@@ -270,8 +277,10 @@ ticket files under docs/tickets/<topic>/.
 /adk-engineer Continue the next ready goal in docs/plans/<topic>.md.
 ```
 
-Each run names the specialist it applies, verifies the goal's acceptance cases
-locally, records the evidence in the plan or ticket, and ends with the prompt
+Each run names the specialist it applies, loads the goal's companion skills at
+the pins in the project's `AGENTS.md` (or says how to install a missing one),
+verifies the goal's acceptance cases locally, records the evidence in the plan
+or ticket, one line per contract and security rule, and ends with the prompt
 for the next one. Nothing is deployed or paid for without your approval.
 
 ### Journey C: win the decision
@@ -354,7 +363,7 @@ skill** in the catalogue below, and installation fixes under
 
 ## The Skills
 
-*The contents · A discovery skill, a system designer, one entry point, a presenter, eleven chapter specialists and seven cross-framework specialists.*
+*The contents · A discovery skill, a system designer, one entry point, a presenter, eleven chapter specialists, a web backend specialist and seven cross-framework specialists.*
 
 Choose a skill by the problem you need to solve. Each entry below explains
 when it helps, what to ask for, and the command that selects it. The numbered
@@ -371,7 +380,8 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 | Usage limits, repeated-tool protection or human approval | [adk-operational-guardrails](#adk-operational-guardrails) |
 | A hosting choice or deployment preparation | [deploy-adk-on-google-cloud](#deploy-adk-on-google-cloud) |
 | Faster replies and lower model usage | [optimise-adk-on-google-cloud](#optimise-adk-on-google-cloud) |
-| A browser interface, streaming or tool progress | [adk-frontend-integration](#adk-frontend-integration) |
+| A browser interface, streaming or tool progress, its design system and agent UI states | [adk-frontend-integration](#adk-frontend-integration) |
+| The web backend around the agent: sign-in check, own-record routes, migrations beside ADK's tables, API contract and typed client | [adk-fastapi-backend](#adk-fastapi-backend) |
 | Conversation history, memory or document retrieval | [adk-memory-architecture](#adk-memory-architecture) |
 | Repeatable tests and trustworthy evaluation results | [adk-agent-evaluation](#adk-agent-evaluation) |
 | Sensitive-data controls across prompts, tools and replies | [protect-adk-sensitive-data](#protect-adk-sensitive-data) |
@@ -809,8 +819,12 @@ and supplied traces, then propose changes with a measurement plan.
 Use this to connect an existing browser interface to an ADK agent through a
 JSON API or a streaming interface using AG-UI and CopilotKit. It helps define
 requests and responses, connect conversations to authenticated users, and
-display text, tool progress and failures correctly. Ask for a working
-integration, an interface design, or a repair to the conversation flow.
+display text, tool progress and failures correctly. It also sets up a new
+interface's look from a house design system (a restrained enterprise theme in
+Google's DESIGN.md format, never shadcn's default) and the agent's UI states:
+tool timeline, approvals, citations and a turn that fails after a partial
+answer. Ask for a working integration, an interface design, or a repair to the
+conversation flow.
 
 **Invoke:** Claude Code `/adk-frontend-integration` · Codex `$adk-frontend-integration`
 
@@ -835,6 +849,43 @@ versions and test one complete request through the browser.
 /adk-frontend-integration Our chat shows duplicate text when a final
 answer arrives, and errors after partial text look like success.
 Fix both cases and add tests for the actual event sequence.
+```
+
+</details>
+
+#### [adk-fastapi-backend](skills/adk-fastapi-backend/SKILL.md)
+
+*Build the ordinary web backend around the agent, safely.*
+
+Use this for the HTTP application around an ADK agent: where the Runner runs,
+one sign-in check that every `/api` route shares and that refuses requests
+when no verifier is configured, routes that only return the caller's own
+records, application tables and migrations kept apart from ADK's session
+tables, the public API contract and the typed client generated from it,
+errors, CORS, security headers and the single-process Cloud Run shape. FastAPI
+syntax comes from FastAPI's own skill; this one covers where ADK and Google
+Cloud change the answer, such as ADK's own server having no authentication.
+
+**Invoke:** Claude Code `/adk-fastapi-backend` · Codex `$adk-fastapi-backend`
+
+Gemini CLI / Antigravity: “Use the adk-fastapi-backend skill to…”
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-fastapi-backend Add endpoints so users can list and delete the
+documents they uploaded to our ADK assistant, with two-user tests.
+```
+
+```text
+/adk-fastapi-backend Set up Alembic migrations for our app tables; the
+agent's sessions already live in the same Postgres.
+```
+
+```text
+/adk-fastapi-backend Generate a typed TypeScript client for our React app
+from this backend and fail make check when it drifts.
 ```
 
 </details>
@@ -1359,6 +1410,18 @@ the card before we register it.
 
 The collections below are optional. Install them in the same project or user
 scope, then name the skills you want your coding agent to combine.
+
+For a web application, the designer also names **companion skills** that
+install into the application project rather than this toolkit: FastAPI's
+bundled skill, React Router's, Vercel's React rules, shadcn's, Anthropic's
+`frontend-design` for a new visual direction, and `playwright-cli`, with
+Impeccable, CopilotKit and aimock when a goal needs them. The first goal
+writes them with install lines and pins into the project's `AGENTS.md`. These
+skills decide identity, ownership, security rules and the stream contract; a
+companion decides library syntax for its pinned version; the project's
+DESIGN.md decides between UI companions. The
+[designer's web defaults](skills/adk-system-designer/references/web-app-defaults.md)
+list them.
 
 ### Using These with Google's Agents CLI
 

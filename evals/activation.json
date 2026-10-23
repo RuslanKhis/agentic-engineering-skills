@@ -504,6 +504,13 @@
       "prompt": "Build a FastAPI CRUD service for our inventory system.",
       "should_trigger": false,
       "rationale": "FastAPI work with no ADK agent is outside this toolkit; FastAPI's own skill covers it."
+    },
+    {
+      "id": "frontend-design-system-positive",
+      "skill": "adk-frontend-integration",
+      "prompt": "Set up the look of our new ADK assistant's web app: a design system for the shadcn components, and how the chat shows running tools, an approval before filing a ticket, and an error that arrives after part of the answer.",
+      "should_trigger": true,
+      "rationale": "Setting up an ADK interface's design system and its agent UI states (tool timeline, approval prompt, failed turn) is now in this skill's scope; an isolated styling tweak stays out."
     }
   ]
 }
