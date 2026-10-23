@@ -14,7 +14,7 @@ schema in [json-api.md](json-api.md) and [ag-ui.md](ag-ui.md) is the input.
 | Tool result, validated | `function_response` part that passes the result schema | `TOOL_CALL_RESULT` | The same line becomes "Ran <tool title>", collapsible to show the validated result |
 | Tool error or malformed result | `function_response` with an error status, or one that fails validation | `TOOL_CALL_RESULT` with an error payload | "Failed to run <tool title>", with a plain reason; never only a red colour |
 | A tool still running when the stream ends | no matching `function_response` | no `TOOL_CALL_RESULT` | "Failed to run…" (the run ended without it) |
-| Pending confirmation | `adk_request_confirmation` long-running call | the interrupt outcome or confirmation tool call (see [ag-ui.md](ag-ui.md)) | An approval prompt outside the trace: what the action does, what it affects, whether it can be undone, then Deny and Approve. Once answered it returns to the trace as a line: "Approved: <action>" or "Denied: <action>" |
+| Pending confirmation | `adk_request_confirmation` long-running call | the interrupt outcome or confirmation tool call (see [ag-ui.md](ag-ui.md)) | The approval card the house DESIGN.md describes, outside the trace; once answered it returns to the trace as a line |
 | Request sent, no event yet | — | — | The person's message is shown at once, a status line reads "Working…", Stop is enabled |
 | Text deltas | partial text parts | `TEXT_MESSAGE_CONTENT` | Buffered and rendered as prose with a subtle streaming indicator |
 | Stopped by the person | client abort | client abort | Keep the text, mark the turn "Stopped" in words, offer Retry only under the checkpoint rule, return focus to the composer |
@@ -39,7 +39,6 @@ Rules that follow from the mapping:
 - Enter sends, except during IME composition; Shift+Enter adds a line;
   Escape stops a run only when focus is in the conversation and no overlay is
   open.
-- An approval that arrives while the reader is scrolled up does not pull the
-  view down: show it on the jump-to-latest control and announce it.
-- Once a run finishes, fold its trace into one summary line ("Worked for 4 s ·
-  3 steps · 1 failed") that expands to the full trace.
+- Focus and scrolling when an approval arrives, and the folded summary of a
+  finished trace, follow the house DESIGN.md's approval-card and folded-steps
+  rules.

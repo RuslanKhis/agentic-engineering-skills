@@ -13,17 +13,17 @@ file owns the demo state and the images.
 | Item | Done when | Rough human hours |
 | --- | --- | --- |
 | Domain story | One persona, one fictional organisation, the business problem in the client's words and three to five capabilities they asked for, in `docs/demo/story.md`. | 1 |
-| Brand | The client's brand if its fonts are licensed for self-hosting; otherwise a demo brand from [the demo brands](../assets/design/brands/README.md), applied with `scripts/apply_brand.py` and labelled as a fictional company. | 0.5 |
+| Brand | The client's brand (with the house fonts unless its own are licensed for self-hosting); a demo brand from [the demo brands](../assets/design/brands/README.md) only when there is no client brand yet, applied with `scripts/apply_brand.py` and labelled as its README says. | 0.5 |
 | Seeded data | A seed script creates connected records with dates relative to the run date, the edge cases the script uses, and no lorem ipsum, "test" or "demo" strings. Hosts and emails use `.example` domains. `make demo-reset` re-seeds and clears conversations. | 2–4 |
 | Golden-path script | Three to five steps, each a prompt, the expected tool steps and the answer's key fact, including one approval and one honest "I cannot". The empty state's suggestions are the script's opening prompts. In `docs/demo/script.md`. | 1–2 |
 | Replay mode | The golden path is recorded once against the live, pinned model (aimock fixtures, as in the browser tests). `make demo-replay` runs the app with no model calls, and a header badge reads "Replay of <date>, build <x>". Re-record after any prompt or tool change. | 2–4 |
-| Stage latency | Status is visible within 1 second and every step is named; progress and Stop appear before 10 seconds. The live path is warmed and quota checked an hour before. If minimum instances are raised for the window, the resource ledger records it and it is set back afterwards. | 1 |
+| Stage latency | Stop is available from the moment of sending; a named step appears within 1 second, and no step is silent for more than 10 seconds. The live path is warmed and quota checked an hour before. If minimum instances are raised for the window, the resource ledger records it and it is set back afterwards. | 1 |
 | App shell | Header with logo and product name, conversation history with titles and "New conversation", a user menu with sign-out, and an environment badge ("Pilot"). The house DESIGN.md describes the shell. | 3–5 |
 | Polish basics | A page title per route, a favicon, 404 and error pages in house copy, and loading and empty states for history. | 1–2 |
 | About this assistant | Purpose; what it can and cannot do; its data sources (saying the data is fictional); the pinned model ID; what needs approval; where conversations are stored and for how long; known limits; a contact. | 1–2 |
 | Environment hygiene | A separate demo deployment and accounts, a clean browser profile with notifications off, and `make demo-reset` before each session. | 1 |
 | Activity log, when the agent acts (files, sends, changes) | A read-only list of tool calls and approvals (who, when, action, result) linked to its conversation. Users, not only IT, say seeing what an agent did raises their trust. | 3–5 |
-| A data line on screen | One line near the composer or header naming the sources the assistant uses and where data is kept, true for the demo. | 0.5 |
+| A data line on screen | The house DESIGN.md's data line, with values true for the demo deployment. | 0.5 |
 
 ## Should, when IT, risk or operations are in the room
 
@@ -52,8 +52,8 @@ someone clicks it.
 ## Honesty rules
 
 - Replay is always labelled, on screen and aloud, with its date and build.
-- A demo brand is always called a fictional company; it never implies a real
-  organisation's endorsement.
+- A demo brand is labelled as the demo brands README says and never implies a
+  real organisation's endorsement.
 - The one-pager and the About page say which data and integrations are
   simulated.
 - The hours above are estimates for directing and reviewing a coding agent,
@@ -61,7 +61,7 @@ someone clicks it.
 
 Sources (read 23 October 2026) and the reasoning behind each item are in the
 toolkit repository's `docs/research/demo-ready-poc-2026-10-23.md` and
-`docs/research/ai-ui-user-expectations-2026-10-23.md` (user and buyer surveys): Peter
-Cohan's demo principles, Nielsen's response-time limits, Microsoft HAX, Google
-PAIR, IBM Carbon for AI, the EU AI Act's transparency article and W3C's
-accessibility-statement guidance.
+`docs/research/ai-ui-user-expectations-2026-10-23.md` (user and buyer
+surveys): Peter Cohan's demo principles, Nielsen's response-time limits,
+Microsoft HAX, Google PAIR, IBM Carbon for AI, the EU AI Act's transparency
+article and W3C's accessibility-statement guidance.
