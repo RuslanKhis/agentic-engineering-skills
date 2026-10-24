@@ -85,7 +85,11 @@ and a service-account credential. Lessons that generalise:
   closing the class". Structure still decides what the receiving agent can do.
 - A2A inbound content arrives with `role=user`; do not derive authority from
   the role or author field (google/adk-python#6461, open). Accept approvals
-  only from the authenticated controlling user at the API layer.
+  only from the authenticated controlling user at the API layer. An
+  unauthenticated caller of a `to_a2a` agent runs as `A2A_USER_<context_id>`
+  on 2.12.0, and the task history it gets back carries tool arguments and
+  results; `adk-agent-interoperability`'s A2A contracts own the inbound
+  authentication that turns this into a real principal.
 
 ## 5. Deployment surface
 
@@ -151,7 +155,27 @@ invocation, a context-window budget and circuit breakers, which is
 `controlComponentIdentityProvenance` and `controlAgentObservability`. One
 caution: the Risk Map's `frameworks.yaml` pins `mitre-atlas@2026.09` as
 current, but its risk entries still map to `@5.0.1` technique ids, so take
-ATLAS ids from ATLAS, not from the map.
+ATLAS ids from ATLAS, not from the map. The OWASP MCP Top 10
+(github.com/OWASP/www-project-mcp-top-10, commit 165fe0f, 2026-07-29; ids
+MCP01:2025 to MCP10:2025, still beta) is the MCP-specific list; its licence
+files disagree (CC BY-SA in `LICENSE.md`, CC BY-NC-SA linked from the index),
+so this skill cites ids with a link and copies none of its text. MCP06's
+title differs between the repository and owasp.org, so cite the id, not the
+title. The checklist's companion line maps the ten ids. To pick an id for a
+finding, this skill's own sorting (open the linked entry to confirm):
+
+| Finding in this skill's terms | MCP id |
+| --- | --- |
+| A token or secret reaches a server, its logs or the model (passthrough, a key in arguments) | MCP01 |
+| A server or tool holds more permission than its task (a shared runtime identity, broad scopes) | MCP02 |
+| A tool definition carries hidden instructions or changed after review (rug pull) | MCP03 |
+| An unpinned or tampered server package or dependency | MCP04 |
+| Tool arguments reach a shell, an interpreter or a file path the model chose | MCP05 |
+| Content a tool returned redirects the agent's goal or plan | MCP06 |
+| Missing or weak authentication or authorisation between client and server | MCP07 |
+| No record of which tool calls ran, or which were withheld and why | MCP08 |
+| A server in use that nobody approved or registered | MCP09 |
+| Private context sent to a server, or to another user, beyond what the task needs | MCP10 |
 
 ## Completion
 

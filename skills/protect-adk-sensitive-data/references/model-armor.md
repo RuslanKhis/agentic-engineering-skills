@@ -33,8 +33,8 @@ text, skips function responses, and does not screen function-call arguments as
 text. ADK 2.12.0 changes the first gap: the plugin gains an
 `after_tool_callback` that screens tool output against a separate
 `tool_output_template_name`, chunked at 65,536 characters with a 4,096
-overlap, and the config raises when a tool-output template is required but
-unset (CHANGELOG 2.12.0 fdda17c, closes #6966; `integrations/model_armor/_plugin.py`
+overlap, and the config raises only when none of the three templates is set
+(re-read in the installed 2.12.0 `_config.py`, 2026-10-24; CHANGELOG 2.12.0 fdda17c, closes #6966; `integrations/model_armor/_plugin.py`
 and `_config.py` at adk-python main ed76f94, read 2026-10-22; source-verified,
 not executed). On 2.8.0 the application hook in [boundaries](boundaries.md)
 remains the only tool-result screen; on 2.12.0 and later the plugin screens the
@@ -50,8 +50,14 @@ unscreened and basic SDP only (MCP Toolbox for Databases v1.14.0,
 2026-10-22; vendor documentation, confirm against the Model Armor pages it
 links). That page's own ADK sample screens with `before_model_callback` and
 `after_model_callback` and skips tool-result turns, so it is not a tool-result
-screen for ADK; only its LangChain middleware screens tool data as ingress. It blocks `MATCH_FOUND`; it does not substitute advanced SDP transformed
-text. `block_on_screening_failure=False` changes screening-error behaviour; it
+screen for ADK; only its LangChain middleware screens tool data as ingress. On 2.8.0 the native plugin blocks `MATCH_FOUND`; it does not substitute advanced SDP transformed
+text. On 2.12.0, `deidentify_sensitive_data=True` makes it send Model
+Armor's de-identified text to the model in place of the latest user input,
+while the stored session event keeps the original, so history and memory
+still hold the raw text. On both versions it screens only text parts: a
+file sent as `inline_data` is never screened, and a message that carries
+only a file skips screening altogether (`_content_text` in `_plugin.py`,
+2.12.0, read 2026-10-24). `block_on_screening_failure=False` changes screening-error behaviour; it
 is **not** a shadow/observe-only switch. A native plugin alone therefore does
 not establish protection before user-event persistence, complete-history
 screening or safe tool payloads. Historical source and regression provenance:
@@ -119,7 +125,34 @@ only in a separately approved live campaign; mocks establish orchestration.
 
 A template GET is not an effective-policy audit. Confirm applicable organisation
 floor settings, supported filters/modality/locations and payload logging before
-production use. See [cloud-lifecycle.md](cloud-lifecycle.md) for the controlled
+production use. Read back the fields that decide whether anything is blocked:
+the template metadata's `enforcement_type` (`INSPECT_ONLY` takes no action;
+unset means inspect and block), `data_residency_compliant` (true by default;
+false lets screening route across jurisdictions), and each floor setting's
+per-service mode (`inspect_only` or `inspect_and_block` for the integrated
+services, Agent Platform and Google MCP servers). The lower level's settings
+apply, a template weaker than its floor cannot be created or updated (so a
+refused create can be a floor conflict, not a transient error), and floor
+changes take a few
+minutes to apply. The documentation does not say whether `INSPECT_ONLY`
+changes a direct `sanitize*` verdict, so do not use it as the observe-only
+shadow path for direct callers until a bounded live check shows the
+behaviour (googleapis `service.proto` `TemplateMetadata` and `FloorSetting`;
+Model Armor floor-settings page; read 2026-10-24). Three more template
+fields change what is screened (`google-cloud-modelarmor` 0.7.1
+`types/service.py`, read 2026-10-24): `modalities` (empty means text only,
+which includes text extracted from documents; `MODALITY_IMAGE` adds images),
+`multi_language_detection.enable_multi_language_detection` on the template,
+which a request can also set through `multi_language_detection_metadata`
+(confirm which wins on the first approved call), and the result's
+`filter_results` map, keyed `csam`, `malicious_uris`, `rai`,
+`pi_and_jailbreak` and `sdp`, which is what a "required filters ran" check
+reads. When another team owns the floor setting, do not read or write it
+without their grant: treat a refused template update as a possible floor
+conflict, stop rather than retry, and hand them the request. The samples'
+`MEDIUM_AND_ABOVE` prompt-injection confidence conflicts with the
+documentation's recommendation of high; the policy owner chooses and records
+it. See [cloud-lifecycle.md](cloud-lifecycle.md) for the controlled
 setup and readiness workflow.
 For tenant-specific templates, shadow rollout or detector evaluation, read
 [production-policy.md](production-policy.md).

@@ -54,7 +54,9 @@ community report, source-verified).
    parameters, egress-capable and untrusted-content tools, remote A2A content
    next to write tools, a `google-adk` pin below 2.7.0, and a trifecta summary
    (`has_private_data_source`, `has_untrusted_content_source`, `has_egress`,
-   `all_three`). Every row is a heuristic prompt to confirm in the tool body.
+   `all_three`, and `complete`, false when a `tools=` list or a sub-agent was
+   built at run time, so an absent leg means unknown, not absent). Every row
+   is a heuristic prompt to confirm in the tool body.
    A `partial: true` result means an area was not scanned.
 4. Fill the per-agent worksheet in
    [threat-model-checklist](assets/threat-model-checklist.md): assets,
@@ -85,10 +87,15 @@ State the affected agents, tools, callbacks and tests before editing. Then:
 - Remove one leg of the trifecta per agent or split the agent: a reader that
   sees untrusted content holds no write or egress tools; a writer that acts
   receives structured, validated state, never free text from the reader.
+  A plan-then-execute executor keeps all three legs; record its frozen plan
+  as a mitigation the owner accepts, not a removed leg.
 - Put policy in code the model cannot reach: `before_tool_callback` or a
   plugin validates arguments against `tool_context.state` and returns an error
   dict to refuse (return `None`, not `{}`, to allow); the tool body re-checks
-  authorisation with identity from `ToolContext`, never from arguments.
+  authorisation with identity from `ToolContext`, never from arguments. A
+  shared policy plugin (such as the community `AgentGovernancePlugin`) is an
+  extra layer, not this gate: see the gate rules in
+  [injection patterns](references/injection-patterns.md).
 - Gate irreversible actions with `require_confirmation` or a durable review
   (`adk-operational-guardrails`); the callable must return a strict `bool`,
   and a custom `BaseTool` must read `tool_confirmation.confirmed` itself.
@@ -103,6 +110,9 @@ State the affected agents, tools, callbacks and tests before editing. Then:
   owns the renderer).
 - Keep screening (Model Armor, Gemini-as-judge, SDP) as added layers behind
   these structural controls; configure them with `protect-adk-sensitive-data`.
+  When tool results may not leave the project, a local classifier
+  (LlamaFirewall's Prompt Guard 2) and its conditions are in
+  [agency and output](references/agency-and-output.md).
 
 Do not widen an allowlist, loosen a filter or disable a callback to make a
 test pass. Do not treat an instruction such as "ignore text inside documents"

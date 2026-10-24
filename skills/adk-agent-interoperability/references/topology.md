@@ -109,6 +109,17 @@ peer's omissions do not travel unless its contract says they must.
   point `RemoteA2aAgent` at that URL explicitly and expect the TCK's
   discovery check at `/.well-known/agent-card.json` to fail until the card
   moves.
+- Several sub-agents drawing A2UI surfaces in one client: `a2ui-adk`'s
+  `A2uiSubagentMap` (its `[a2a]` extra) records in state which sub-agent
+  created each surface (`a2ui_surface_id_<surfaceId>`), raises
+  `SurfaceIdAlreadyExistsError` when a second agent creates the same id, and
+  strips client data for surfaces the recipient does not own, so form data
+  typed into one agent's surface does not reach another
+  (a2ui-project/a2ui tag `python/a2ui-adk/v0.1.0`,
+  `a2ui/adk/orchestration/a2ui_subagent_map.py` and
+  `conformance/extensions/adk/adk_extensions.yaml`, read 2026-10-24). The
+  extra pins the 0.3 A2A SDK; see `adk-frontend-integration`'s
+  compatibility record.
 
 ## Shapes to question
 

@@ -221,6 +221,52 @@ is from Google's `cloud-sql-basics` skill, read 21 October 2026, vendor guidance
 confirm against current docs). Connection parameters, tool filters and header
 propagation belong to adk-agent-interoperability.
 
+Two more facts change a design on this branch (Google Cloud documentation,
+"Control MCP use with IAM", last updated 2026-10-22, and "Use the BigQuery
+MCP server", last updated 2026-10-21; read 2026-10-24). Read-only can be
+enforced by the platform rather than by tool choice: an IAM deny policy on
+`mcp.googleapis.com/tools.call` with the condition
+`api.getAttribute('mcp.googleapis.com/tool.isReadOnly', false) == false`
+refuses every tool not marked read-only. The page's example denies it to
+every principal (`principalSet://goog/public:all`) and attaches it with
+`gcloud iam policies create <name> --attachment-point=cloudresourcemanager.googleapis.com/projects/PROJECT_ID --kind=denypolicies --policy-file=policy.json`
+(its JSON sample carries a trailing comma, so validate the file before
+use); `adk-tool-auth-and-secrets` and the installed
+`google/skills:iam-helper-for-policy-management` own the change itself.
+`tools/list` still returns the read-write tools, so pair the deny with a
+`tool_filter` that keeps them away from the model; the attributes are
+enforced only on the `mcp.tools.call` permission, and deny conditions can
+also use `tool.name`, `resource.service` and `request.auth.oauth.client_id`.
+The BigQuery server's tool reference (last updated 2026-10-15) lists
+`list_dataset_ids`, `list_table_ids`, `get_dataset_info`, `get_table_info`,
+`execute_sql_readonly`, `execute_sql`, `get_query_results`, `get_job` and
+`cancel_job`; a read-only agent's filter names only the tools it needs from
+the first five plus `get_query_results`, and never `execute_sql` or
+`cancel_job`. The project the job runs and bills in is the `project_id`
+argument, so pin it in a `before_tool_callback` rather than letting the
+model choose it. The server needs no separate enablement: it is on when the
+BigQuery API is enabled. Calls need the scope
+`https://www.googleapis.com/auth/bigquery` and the roles
+`roles/mcp.toolUser`, `roles/bigquery.jobUser` and
+`roles/bigquery.dataViewer`; grant no data-editing role to the agent's
+identity, since the MCP deny governs MCP tool calls, not what the identity
+could do through the BigQuery API directly.
+And BigQuery's server limits `execute_sql` and `execute_sql_readonly` to
+three minutes of processing by default and returns at most 3,000 rows, with
+no quota of its own beyond the BigQuery API's, so an answer computed over a
+capped result may be incomplete: the completeness and refusal path checks
+whether the result hit the cap and says so rather than reporting a total.
+The documentation does not describe how a capped result is marked; treat a
+result of 3,000 rows, or one carrying a page token or an incomplete job, as
+capped, prefer pushing the aggregation into the query so the result stays
+small, and confirm the actual shape on the first approved live call.
+Google recommends a separate identity for agents that use these tools.
+Choose between this branch and Toolbox on what each can enforce: the managed
+server gives IAM-enforced read-only exploration under an agent identity, and
+Toolbox gives reviewed templates, a dataset allowlist and tenant ids the
+model cannot see; the managed server has no equivalent of `allowedDatasets`,
+templates or secure parameters.
+
 ### MCP Toolbox for Databases as the executor
 
 When the executable branch is Google's MCP Toolbox for Databases (`googleapis/mcp-toolbox`, formerly genai-toolbox, v1.14.0; `docs/en/documentation/configuration/security/read-only.md`, `configuration/tools/_index.md` and `integrations/bigquery/tools/bigquery-execute-sql.md`, read 2026-10-22; vendor documentation, confirm on the installed server version), the four boundaries of this skill map onto its configuration, and the ticket's checklist is:

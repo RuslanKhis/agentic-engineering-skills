@@ -12,6 +12,8 @@ The source baseline was Python 3.11, google-adk 2.8.0, google-genai 2.23.0, goog
 
 The MCP-specific rules in [oauth-lifecycle](oauth-lifecycle.md) (issuer-keyed registrations, `iss` validation, Enterprise-Managed Authorization) come from the Model Context Protocol specification revisions 2025-11-25 and 2026-07-28 (modelcontextprotocol/modelcontextprotocol commit 80041ab; `docs/specification/2026-07-28/changelog.mdx` and `basic/authorization/client-registration.mdx`) and from modelcontextprotocol/ext-auth commit fb374c7 (`specification/stable/enterprise-managed-authorization.mdx`, `specification/draft/oauth-client-credentials.mdx`), read 2026-10-22; the client-credentials profile is a draft.
 
+The backchannel-consent (CIBA) rule in [ADK continuations](adk-continuations.md) comes from a2aproject/a2a-samples commit 6603ba3 (`samples/python/agents/headless_agent_auth`, read 2026-10-24; Apache-2.0; the sample runs on Auth0 and pre-1.0 a2a-sdk types, so it was read as a pattern and its fail-open middleware and model-chosen user hint were not imported), the A2A specification §7.6.4 at main 98279d6, and google-adk 2.12.0, whose `google/adk/auth` has no CIBA support; nothing was run.
+
 This skill adapts Chapter 9 of *Agentic Engineering* and its MIT-licensed companion. The following optional source locators are relative to `chapter-09-security-and-secrets/` in the [companion repository](https://github.com/RuslanKhis/agentic-engineering-adk-gcp). They are provenance, not runtime dependencies; all actionable guidance is inside this skill.
 
 | Rule or lesson | Source/test | Evidence boundary |

@@ -70,8 +70,16 @@ def main():
                                 "capabilities": {"tools": {"listChanged": True}, "resources": {}},
                                 "serverInfo": {"name": "fake-stdio", "version": "0.1"}})
         elif method == "server/discover":
-            result(request_id, {"protocolVersions": ["2026-07-28"], "capabilities": {"tools": {}},
-                                "serverInfo": {"name": "fake-discover", "version": "0.1"}})
+            asked = (message.get("params", {}).get("_meta") or {}).get("io.modelcontextprotocol/protocolVersion")
+            if asked != "2026-07-28":  # as a modern-only server does: older probes are refused
+                write({"jsonrpc": "2.0", "id": request_id, "error": {
+                    "code": -32022, "message": "Unsupported protocol version",
+                    "data": {"supported": ["2026-07-28"], "requested": asked}}})
+                continue
+            result(request_id, {"supportedVersions": ["2026-07-28"], "capabilities": {"tools": {}},
+                                "cacheScope": "public", "ttlMs": 0, "resultType": "complete",
+                                "_meta": {"io.modelcontextprotocol/serverInfo":
+                                          {"name": "fake-discover", "version": "0.1"}}})
         elif method == "notifications/initialized":
             continue
         elif method == "tools/list":

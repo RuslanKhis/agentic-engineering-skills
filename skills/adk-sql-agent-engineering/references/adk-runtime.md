@@ -141,6 +141,11 @@ PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
   python -m pytest -q -p no:cacheprovider assets/test_adk_contract.py
 ```
 
+The probe asserts google-adk 2.8.0 and stops on any other version by design.
+On a newer pin, write the project's own test with a scripted `BaseLlm`
+subclass driving the real `Runner`; without pytest, `python -m unittest`
+runs the same `unittest.IsolatedAsyncioTestCase` tests.
+
 Do not install or change dependencies to make this command pass without the target's normal dependency decision. The asset requires ADK 2.8.0 and reports a failing version assertion for another version; adapt and evaluate another version deliberately. It is outside the standard-library helper test directory. It has no imports from the target application or companion repository.
 
 The asset blocks socket connection/DNS operations and ADC discovery, uses `AnonymousCredentials`, disables inherited Google/telemetry configuration within its test fixture, and replaces only the GenAI client's private `async_request` HTTP seam. Unexpected traffic fails locally. The seam is private and version-sensitive; a changed seam is a compatibility failure, not a reason to mock away serialisation. Run in a process without custom startup/exporter code; the guards protect probe execution, not arbitrary code executed before pytest starts. Both client interfaces are closed.

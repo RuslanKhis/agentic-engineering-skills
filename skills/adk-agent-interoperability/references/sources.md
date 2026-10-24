@@ -82,7 +82,28 @@ Entries marked "supplied by research" came from the coordinator's research on
   to PyPI; executing a downloaded repository is outside this review's
   rules). google/agents-cli main `src/google/agents/cli/run/_a2a_pinning.py`
   (origin pinning note), read 2026-10-22. a2aproject/a2a-samples HEAD
-  6603ba3, listed by name only.
+  6603ba3 (2026-08-04; Apache-2.0): `samples/python/agents/sign_and_verify_agent_card`,
+  `multitenancy` and `headless_agent_auth`, with the A2A specification §7.6.4
+  and §8.4 at main 98279d6 and tag v1.0.1, a2a-sdk 1.2.3 `a2a/utils/signing.py`,
+  `client/card_resolver.py` and `client/transports/tenant_decorator.py`, and
+  google-adk 2.12.0 `a2a/agent/_remote_a2a_agent.py` and
+  `a2a/utils/agent_to_a2a.py`. Read 2026-10-24; the signing behaviour was
+  probed offline against the installed a2a-sdk; no sample was run. Imported
+  into [a2a-contracts](a2a-contracts.md#signed-agent-cards) and the signature
+  rules of `agent_card_check.py`.
+- modelcontextprotocol/inspector commit 0cac110 (release 2.12.0; MIT moving
+  to Apache-2.0, docs CC BY 4.0): `clients/cli/README.md`,
+  `docs/secret-storage.md`, `docs/environment-variables.md`;
+  modelcontextprotocol/python-sdk commit 2af9e30 (MIT): `docs/run/legacy-clients.md`,
+  `docs/protocol-versions.md`, `docs/client/transports.md`,
+  `schema/2026-07-28.json`; PrefectHQ/fastmcp commit 37301f9 (Apache-2.0):
+  `docs/servers/testing.mdx`, `docs/getting-started/upgrading/from-fastmcp-3.mdx`,
+  `docs/servers/auth/oauth-proxy.mdx`, `docs/servers/storage-backends.mdx`.
+  Read 2026-10-24. Spikes, offline: the Inspector CLI 2.12.0 against a local
+  `MCPServer` on both eras (exit codes 0, 1 and 5; a manifest hash
+  cross-check), `to_mcp_server` continuity under both client modes with a
+  scripted model (re-run by the maintainer), and the inventory against a
+  modern-only server before and after its `server/discover` fix.
 - MCP python-sdk v2, `docs/whats-new.md` (v2.3.0 stable line): `FastMCP`
   renamed `MCPServer`, old import path removed, both revisions served from
   one app, `mcp>=1.28,<2` advice for unmigrated libraries. Read 2026-10-22.

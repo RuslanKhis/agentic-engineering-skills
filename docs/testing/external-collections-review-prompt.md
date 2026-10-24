@@ -168,6 +168,84 @@ The collections this repository references, with what it relies on them for:
   designer's templates; read 23 October 2026 at commits 0ac7ec6, d001185,
   2ce8aa1 and 5beb35b; see
   docs/research/companion-collections-comparison-2026-10-23.md).
+- a2aproject/a2a-samples (the signed-agent-card rules for consumer and
+  producer, the key-provider and uncovered-field cautions and the card
+  checker's signature codes in the interoperability skill, `tenant` as
+  routing, and CIBA as a broker-contract case in the tool-auth skill; read
+  24 October 2026 at commit 6603ba3, quiet since August; see
+  docs/research/a2a-samples-comparison-2026-10-24.md).
+- a2ui-project/a2ui, formerly google/A2UI (the three ADK routes to A2UI and
+  where each validates, the client's off-by-default catalogue check, the
+  package pins and the `a2a-sdk<0.4` conflict in the frontend skill, and
+  the sub-agent surface map in the interoperability skill; read 24 October
+  2026 at commit b817d02 and tag `python/a2ui-adk/v0.1.0`; see
+  docs/research/a2ui-comparison-2026-10-24.md).
+- microsoft/PyRIT (the cross-domain injection workflow with a deterministic
+  scorer in the security skill's live campaign, and `A2ATarget`'s release
+  status and seam settings in the interoperability skill; read 24 October
+  2026 at commit bc5a8bc, 1.1.0 introspected; see
+  docs/research/pyrit-comparison-2026-10-24.md).
+- modelcontextprotocol/ext-apps (what ADK does and does not do with MCP Apps
+  widgets, the capability and visibility gaps and the inventory's
+  `mcp_app_tool_not_for_model` finding in the interoperability skill, the
+  renderer contract in the frontend skill, and the companion skills routed
+  for exposed servers; read 24 October 2026 at commit 266a9e3, spec revision
+  2026-01-26; see docs/research/mcp-ext-apps-comparison-2026-10-24.md).
+- modelcontextprotocol/inspector, modelcontextprotocol/python-sdk and
+  PrefectHQ/fastmcp (the `to_mcp_server` continuity split by protocol era,
+  legacy sessions per process, in-process tests on both eras, the Inspector
+  CLI as a CI cross-check with its exit codes and storage isolation, the
+  modern-flag elicitation failure and the inventory's `server/discover` fix
+  in the interoperability skill, and FastMCP's audience and token-storage
+  rules in the tool-auth skill; read 24 October 2026 at commits 0cac110,
+  2af9e30 and 37301f9; see
+  docs/research/mcp-inspector-sdk-fastmcp-comparison-2026-10-24.md).
+- google/mcp and Google Cloud's MCP documentation (the two kinds of
+  Google-run remote MCP server and which IAM governs, in the
+  interoperability skill; the IAM read-only deny, BigQuery's time and row
+  caps and the managed-versus-Toolbox choice in the SQL skill; the
+  repository is cited only as a pointer, the official pages of 2026-10-21
+  and 2026-10-22 are the source; read 24 October 2026; see
+  docs/research/google-mcp-comparison-2026-10-24.md).
+- GoogleCloudPlatform/python-docs-samples `model_armor/` and `dlp/` (the
+  file-screening contract and its encoding canary, `update_mask` and
+  `request_id` on updates, and the effective-policy audit fields, in the
+  sensitive-data skill; read 24 October 2026 at commit 3db968f with the
+  Model Armor proto and documentation; see
+  docs/research/model-armor-dlp-samples-comparison-2026-10-24.md).
+- NVIDIA/garak and confident-ai/deepteam (garak's `function` generator over
+  the `Runner`, its exit codes and report-based CI gate, `agent_breaker`,
+  and deepteam's OWASP Agentic preset with its defaults, telemetry and
+  labels, in the security skill's live campaign; read 24 October 2026 at
+  commits d6a8be1 and 6306f0f, garak 0.17.1 spiked offline; see
+  docs/research/deepteam-garak-comparison-2026-10-24.md).
+- meta-llama/PurpleLlama `LlamaFirewall/` (Prompt Guard 2 as a local
+  tool-result screen with its window, event-loop and unknown-verdict
+  conditions in the security skill, and AlignmentCheck as a third-party data
+  sink in the sensitive-data skill; read 24 October 2026 at commit d934ea2;
+  the weights' licence is each project's decision; see
+  docs/research/llamafirewall-comparison-2026-10-24.md).
+- google-research/camel-prompt-injection (CaMeL as a pattern only: the
+  deny-by-default capability gate, provenance and readers rules per
+  consequential tool, the abstaining reader and error redaction for the
+  planner, with the limits of taint matching, in the security skill's
+  injection patterns; read 24 October 2026 at commit f083b6b, an
+  unmaintained research artifact, no code used; see
+  docs/research/camel-comparison-2026-10-24.md).
+- OWASP/www-project-mcp-top-10 and cosai-oasis/ws4-secure-design-agentic-systems
+  (MCP01 to MCP10 ids beside the LLM and ASI ids in the security skill's
+  threat model and checklist, cited by id with a link because the OWASP
+  licence is unclear; CoSAI's manifest pinning as a run-time `tool_filter`
+  predicate, stdio isolation and tool-tier credentials, paraphrased under
+  CC BY 4.0; read 24 October 2026 at commits 165fe0f and 855cb05; see
+  docs/research/owasp-mcp-cosai-ws4-comparison-2026-10-24.md).
+- microsoft/presidio, google/adk-python-community, microsoft/agent-governance-toolkit
+  and NVIDIA/NeMo-Guardrails (Presidio's analyzer as an offline leak oracle
+  over captured sinks, built without a run-time model download, in the
+  sensitive-data skill's validation; the community `AgentGovernancePlugin`'s
+  limits as an extra layer beside the security skill's gate; NeMo's rules
+  left out; read 24 October 2026 at commits 4f0e236, 396da17, 70a4ab8 and
+  189b85f; see docs/research/nemo-presidio-agt-comparison-2026-10-24.md).
 - google-gemini/gemini-cli and google-antigravity/antigravity-cli
   (skill discovery paths and invocation in
   docs/research/google-coding-agent-skills.md and docs/integrations/
@@ -234,10 +312,27 @@ keep their shape); write a dated note under docs/research/ (scope, method,
 drift corrected, imported, routed, left out, limits) and a dated record under
 docs/testing/ with one fresh-agent trial per changed journey on a synthetic
 project, its ease rating and the frictions fixed; add a dated entry under
-the README's "Compatibility & Checks". Leave changes uncommitted.
+the README's "Compatibility & Checks"; add or update the collection's
+row in docs/research/source-register.json (repository, commit read, date,
+licence as GitHub reports it, the note, the skills that cite it). Leave
+changes uncommitted.
 ```
 
 ## Notes for the person running it
+
+- Choose what to review with the freshness report first:
+  `GH_TOKEN=$(gh auth token) python3 scripts/check_source_freshness.py`. It
+  reads `docs/research/source-register.json`, asks GitHub (read only) about
+  each repository and prints its band (active, quiet or stale by days since
+  the last commit; the 30 and 365 day defaults are placeholders, set with
+  `--quiet-after-days` and `--stale-after-days`), its latest release and how
+  many commits landed since the commit this repository read. It exits 1 when a
+  source is archived, renamed, missing, relicensed, stale or no longer has the
+  pinned commit; 3 when a source could not be checked (network or rate limit);
+  2 for an invalid register; 0 otherwise. A large "since read" count or a new
+  release is the cue to run this prompt for that collection;
+  `--validate-only` checks the register without the network, and the
+  repository tests run it that way.
 
 - Give the agent a fresh clone or an extracted archive in its own empty
   directory and tell it the path; do not let it run anything from inside.

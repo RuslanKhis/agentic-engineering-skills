@@ -18,9 +18,9 @@ fake, so it can return exactly one condition per test.
 | Case | Fake returns | Assert on the agent side |
 | --- | --- | --- |
 | Normal | `tools/list` matching the committed manifest; `tools/call` with `content` and `structuredContent` | Declared tools equal the manifest (names, hashes); result reaches the model as sent |
-| Rug pull | A changed description or schema for one tool | `mcp_tool_inventory.py --diff` reports `rug_pull_signal`; the startup or test check fails |
+| Rug pull | A changed description or schema for one tool | `mcp_tool_inventory.py --diff --fail-on-diff` reports `rug_pull_signal` and exits 3; the startup or test check fails |
 | `isError` result | `{"isError": true, "content": [...]}` | Tool returns the error to the model without raising; parent does not retry a write |
-| Server down | Connection refused | `ConnectionError` surfaces as a tool error dict (graceful flag on); agent answers without the tool |
+| Server down | Connection refused | `ConnectionError` surfaces as a tool error dict (graceful flag on); agent answers without the tool. On 2.12.0 a stdio server that fails to start makes the toolset contribute no tools at all (the traceback is only logged), so the model sees no such tool; assert the agent's tool list as well as its answer (observed in an offline trial, 2026-10-24) |
 | Server restarted between calls | Fake restarts, old session invalid | Second call succeeds on your version, or you have documented the 2.8.0 limit ([mcp-consumption](mcp-consumption.md)) |
 | Slow tool | Sleep past `sse_read_timeout` | Call fails within the timeout; parent's invocation deadline still holds |
 | Reserved name or collision | Tool named `transfer_to_agent`; two fakes sharing `read_file` | Reserved tool skipped with a warning; prefixed names distinct |
@@ -84,6 +84,26 @@ Hand these to `adk-agent-evaluation` once the seam tests pass:
 
 - End-to-end eval cases that cross the boundary with the real peer in a
   staging environment (live tier, dated, pinned versions named).
+- A red-team campaign through an agent's A2A face, when `adk-agent-security`
+  plans one with PyRIT's `A2ATarget` (main branch only on 2026-10-24; see
+  that skill's live-campaign section). Its seam settings decide whether the
+  first request even arrives: the default `protocol_version` is `"0.3"`, so
+  set `"auto"` with `agent_card_path` when the card sits under a prefix, as
+  ADK's `/a2a/<name>/.well-known/agent-card.json` does; it sends one text
+  part per turn, keeps one `context_id` per PyRIT conversation, continues
+  `input-required` and `auth-required` tasks, and returns failed or rejected
+  tasks as error responses rather than exceptions. Pass an async token
+  provider as `auth_token` (it runs before every request, polls included)
+  for a refreshing Google ID token rather than its static API-key header.
+  It resubmits only after an explicit HTTP 429 and does not cancel a remote
+  task on a polling timeout, so a timed-out action must not be resubmitted
+  blindly (microsoft/PyRIT commit bc5a8bc, `doc/code/targets/0_prompt_targets.md`
+  and `pyrit/prompt_target/a2a_target.py`, read 2026-10-24). Until a release
+  carries the target, the A2A face can still be exercised offline in CI: the
+  `to_a2a` app's routes exist only after its startup hook has run, so enter
+  `app.router.lifespan_context(app)`, then reach it with
+  `httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url=...)`
+  passed to the a2a-sdk `ClientFactory`; no socket is opened.
 - Token and latency cost of the multi-agent shape against the single-agent
   baseline; the Anthropic figure of roughly 15 times chat tokens is a
   vendor-measured reference point, not your number.

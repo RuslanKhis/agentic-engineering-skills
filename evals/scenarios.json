@@ -479,6 +479,25 @@
       ]
     },
     {
+      "id": "sensitive-data-model-armor-file-attachments-and-template-update",
+      "prompt": "Customers can now attach PDFs and Word files to our ADK claims agent. Screen every attachment with Model Armor before the model sees it, and switch on multi-language detection in our existing input template without changing anything else in it. Write the code and offline tests; do not touch the cloud.",
+      "available_skills": [
+        "adk-engineer",
+        "protect-adk-sensitive-data",
+        "adk-memory-architecture",
+        "deploy-adk-on-google-cloud"
+      ],
+      "context": "Python ADK 2.12 agent with google-cloud-modelarmor 0.7.1 pinned, an input template in europe-west4, attachments up to 10 MB, an organisation floor setting managed by another team. No credentials or network in the session.",
+      "expected_primary": "protect-adk-sensitive-data",
+      "assertions": [
+        "Sends attachments as a ByteDataItem with an explicit byte_data_type mapped from validated content, and rejects unsupported types, files over 4 MB and files under 69 bytes before any call, mapping them to a withheld decision rather than allow.",
+        "Flags the base64 encoding of byte_data as unverified and proposes one approved live canary with a synthetic SDP finding that must return MATCH_FOUND, instead of trusting a benign NO_MATCH_FOUND.",
+        "Updates the template with an explicit update_mask naming only the multi-language field and a request_id, never a mask-less update, and reads the template back.",
+        "Reads the effective floor setting and enforcement_type rather than assuming the template is the whole policy, and notes a stricter floor can reject the update.",
+        "Uses the regional modelarmor endpoint matching the template location, adds offline tests with SDK-shaped doubles, and labels live behaviour as pending approval."
+      ]
+    },
+    {
       "id": "privacy-with-observability",
       "prompt": "Our ADK project still uploads full prompt content after we disabled content capture in traces. Inspect every enabled telemetry destination and prepare the smallest fix with synthetic local tests. Preserve useful timing and error metadata.",
       "available_skills": ["adk-engineer", "protect-adk-sensitive-data", "optimise-adk-on-google-cloud", "google-agents-cli-observability"],
@@ -890,6 +909,24 @@
       ]
     },
     {
+      "id": "frontend-a2ui-route-and-validation-declared",
+      "prompt": "Our ADK retail agent should show product cards and a comparison table in our React app using A2UI. Choose how the agent emits A2UI, make sure a component outside our catalog never renders silently, and tell me whether we can demo it in adk web. Later we expose the agent over A2A.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-frontend-integration",
+        "adk-agent-interoperability",
+        "adk-model-and-output-contracts"
+      ],
+      "context": "ADK 2.12.0 project pinning a2a-sdk[http-server]>=1.0,<2; the React client constructs @a2ui/web_core 0.14.0 MessageProcessor with no options; no a2ui packages installed; no network.",
+      "expected_primary": "adk-frontend-integration",
+      "assertions": [
+        "Names the three routes (staged render_ui_widget converters, a2ui-adk SendA2uiToClientToolset, AG-UI generate_a2ui), declares one, and states where catalogue validation runs on it.",
+        "Constructs the client MessageProcessor with a validationConfig such as STRICT_VALIDATION and reports VALIDATION_FAILED back, explaining that agent-side validate_payload is stateless per payload.",
+        "States that adk web in google-adk 2.12.0 does not render actions.render_ui_widgets, so the demo surface is the app.",
+        "Flags that a2ui-adk[a2a] pulls a2ui-a2a, which pins a2a-sdk below 0.4, against the project's 1.0 pin; changes no pins, installs nothing and reports tests not run as not run."
+      ]
+    },
+    {
       "id": "frontend-tool-widgets-staged-emission",
       "prompt": "Our shopping agent's A2UI widgets misbehave: two tools that stage the same widget id show the cards twice, a refresh callback that re-renders after a preference change reaches the browser as nothing, and 'show me those again' re-runs the search. Fix the widget pipeline; keep the tools' names and result shapes; offline tests only.",
       "available_skills": ["adk-engineer", "adk-frontend-integration", "adk-tool-interface-design", "adk-workflow-design"],
@@ -900,6 +937,23 @@
         "Explains the two ADK facts behind the bugs: the duplicate-id check is per call context, and a callback with no content and no state delta produces no event, so the per-widget emitted flag is written as the state delta.",
         "Answers 'show again' from the staged payload without recomputation and suppresses a byte-identical re-render.",
         "Keeps tool names and result shapes, writes Runner tests reported as not run without the SDK, and does not install or upgrade packages."
+      ]
+    },
+    {
+      "id": "sql-managed-bigquery-mcp-read-only-by-platform",
+      "prompt": "Point our ADK analytics agent at Google's managed BigQuery MCP server instead of running MCP Toolbox ourselves. Security says it must be impossible for the agent to write, whatever the model does. Tell us what to configure and what to test.",
+      "available_skills": [
+        "adk-sql-agent-engineering",
+        "adk-agent-interoperability",
+        "adk-tool-auth-and-secrets"
+      ],
+      "context": "An ADK 2.12 agent on Cloud Run with its own service account, McpToolset over streamable HTTP, answers that sometimes aggregate large tables, no network or credentials in the session.",
+      "expected_primary": "adk-sql-agent-engineering",
+      "assertions": [
+        "Puts the write ban outside the model: an IAM deny on mcp.googleapis.com/tools.call with the tool.isReadOnly condition for the agent's principal, plus tool_filter limited to the read-only tools, noting tools/list still advertises execute_sql.",
+        "Grants the agent identity roles/mcp.toolUser plus BigQuery job and data-viewer roles, and supplies the token through header_provider rather than a static header.",
+        "Names the three-minute processing cap and the 3,000-row result cap and adds a truncation check that refuses or narrows rather than reporting a partial aggregate as complete.",
+        "Keeps Toolbox as the choice when reviewed templates, dataset allowlists or model-invisible tenant binding are required, and cites the official supported-products page with its date rather than the google/mcp README."
       ]
     },
     {
@@ -1085,10 +1139,63 @@
       "context": "An ADK 2.12 project with a2a-sdk 1.x pinned, one root agent, to_a2a available, a partner that will call with an OAuth client-credentials token, no cloud credentials and no network in the session.",
       "expected_primary": "adk-agent-interoperability",
       "assertions": [
-        "Writes the card with securitySchemes and protocolVersion, runs agent_card_check.py on it, and lists signing, caching headers and extended-card authentication as manual checks the helper does not cover.",
+        "Writes the card with securitySchemes and protocolVersion, runs agent_card_check.py on it, and lists caching headers, extended-card authentication and cryptographic signature verification as manual checks the helper does not cover (it checks only a signed card's structure).",
         "Names the scoped TCK command against a local to_a2a instance as a planned verification with the requirement ids it proves and the ones deferred (authentication, scripted core operations), never pointing the TCK at Agent Runtime or a registered endpoint.",
         "States that the TCK sends no authentication header, so AUTH-SERVER-002 is verified by the project's own test, and records the run's exit code and reports as the evidence to attach.",
         "Keeps the pins, adds the origin-pinning rule for any raw SDK client that calls the peer, and leaves registration as separate, approved work."
+      ]
+    },
+    {
+      "id": "interoperability-exposed-agent-forgets-on-modern-clients",
+      "prompt": "We expose our ADK triage agent with to_mcp_server. Follow-up questions worked from our old host, but from the new MCP Python client every call forgets the previous one. Find out why, fix it, and add a CI check that would have caught it.",
+      "available_skills": [
+        "adk-agent-interoperability",
+        "adk-agent-evaluation",
+        "deploy-adk-on-google-cloud"
+      ],
+      "context": "An ADK 2.12 project with mcp 2.3.0, to_mcp_server over streamable HTTP on Cloud Run with two instances, a scripted model for tests, Node 22 on CI, no cloud credentials in the session.",
+      "expected_primary": "adk-agent-interoperability",
+      "assertions": [
+        "Explains that the new client negotiates 2026-07-28 by default, where every request stands alone, so to_mcp_server starts a new ADK session on each call, and that legacy-era continuity also breaks across instances without session affinity.",
+        "Chooses an explicit fix (a caller-bound, unguessable conversation handle passed as a tool argument on a hand-built server, or a documented legacy-mode requirement with affinity) and does not claim a server-side switch can disable an era.",
+        "Adds an in-process mcp.Client(server) test with a scripted model running the same two-turn exchange under the default mode and mode=\"legacy\", asserting the promised behaviour for each.",
+        "Adds a pinned Inspector CLI tools/list step with --format json under --protocol-era legacy and modern, with isolated storage, branching on exit codes rather than piping straight into jq."
+      ]
+    },
+    {
+      "id": "interoperability-mcp-app-widget-to-custom-frontend",
+      "prompt": "We connect our ADK agent to a partner MCP server whose chart tools ship MCP Apps UI. Nothing shows in our React app or in adk web. Make the charts render in our app and keep the model from calling the partner's UI-only refresh tool.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-agent-interoperability",
+        "adk-frontend-integration",
+        "adk-agent-security"
+      ],
+      "context": "google-adk 2.12.0 with McpToolset (no tool_filter) against a server whose get_chart tool has _meta.ui.resourceUri and whose refresh_chart has _meta.ui.visibility [\"app\"]; the server registers UI tools only when the client advertises io.modelcontextprotocol/ui. The React app reads ADK events over SSE. No network; nothing installed.",
+      "expected_primary": "adk-agent-interoperability",
+      "assertions": [
+        "Explains that ADK attaches UiWidget(provider=\"mcp\") with resource_uri, tool and tool_args but never fetches or renders the HTML, and that adk web 2.12.0 does not render render_ui_widgets.",
+        "Identifies that ADK does not advertise io.modelcontextprotocol/ui, so this server sends text-only tools, and records it as a finding or a server-side decision rather than patching ADK internals.",
+        "Adds a tool_filter that drops tools whose visibility lacks \"model\" and requires the backend to refuse view-initiated calls to tools whose visibility lacks \"app\".",
+        "Hands the renderer to adk-frontend-integration: backend resources/read, AppBridge with a null client and backend-routed handlers, a sandbox on a different origin and CSP from _meta.ui.csp; reports tests not run as not run."
+      ]
+    },
+    {
+      "id": "interoperability-verify-signed-agent-card",
+      "prompt": "A partner now signs the A2A agent card our ADK orchestrator calls by URL. Make our side refuse the card unless the signature checks out, and tell me what our card checker should flag.",
+      "available_skills": [
+        "adk-agent-interoperability",
+        "adk-agent-security",
+        "adk-tool-auth-and-secrets",
+        "deploy-adk-on-google-cloud"
+      ],
+      "context": "ADK 2.12.0 with a2a-sdk 1.2.3 pinned; RemoteA2aAgent(agent_card='https://partner.example/.well-known/agent-card.json'); the partner shared its JWKS URL and key ids out of band; no cloud credentials and no network in the session.",
+      "expected_primary": "adk-agent-interoperability",
+      "assertions": [
+        "States that RemoteA2aAgent does not verify signatures on a card it fetches by URL, resolves the card with get_agent_card(signature_verifier=create_signature_verifier(...)) and passes the AgentCard object, and re-applies the https and same-origin check ADK skips for a passed-in card.",
+        "Builds the key provider on the out-of-band key set, not on the card's jku; allows asymmetric algorithms only; raises a PyJWTError subclass for an unknown kid so rotation keeps working; and fails closed when verification fails.",
+        "Runs agent_card_check.py with --require-signature and --key-host and reads its findings (alg, kid, typ, jku origin, unprotected header, fields the signature does not cover), saying the helper does not verify the signature itself.",
+        "Treats a verified card's text as untrusted data for prompts and leaves bearer-token plumbing to adk-tool-auth-and-secrets."
       ]
     },
     {
@@ -1109,6 +1216,95 @@
       ]
     },
     {
+      "id": "security-red-team-a2a-exposed-agent-with-pyrit",
+      "prompt": "Our ADK claims agent is exposed over A2A on Cloud Run behind IAM. We want PyRIT to red-team it through A2A and to test whether a poisoned uploaded document makes it file a payout. Set it up.",
+      "available_skills": [
+        "adk-agent-security",
+        "adk-agent-interoperability",
+        "adk-agent-evaluation",
+        "adk-tool-auth-and-secrets"
+      ],
+      "context": "Python ADK 2.12.0, agent served with to_a2a under /a2a/claims, a2a-sdk 1.2.3. PyRIT 1.1.0 is the latest PyPI release. Tools: read_document, file_payout (require_confirmation), send_email. No model credentials in CI.",
+      "expected_primary": "adk-agent-security",
+      "assertions": [
+        "States that A2ATarget is not in PyRIT 1.1.0 and needs a later tagged release in its own environment; does not install from git main.",
+        "Configures the target with protocol_version auto and the prefixed agent_card_path, and authenticates with an async ID-token provider rather than a static API key.",
+        "Models the poisoned document as an XPIA workflow whose processing callback runs the Runner against fakes and returns the executed calls, scored by a substring scorer for the forbidden payout, keeping the scripted-model forbidden-call test as the offline grader.",
+        "Labels the live run as approved and paid, with model, date and attack success rate, and keeps a peer injecting into our own agent (ASI07) as a fake-peer test."
+      ]
+    },
+    {
+      "id": "security-garak-ci-gate-on-adk-runner",
+      "prompt": "Add garak to our CI so it attacks our ADK support agent itself, not just Gemini, and fails the build on findings. Someone also suggested deepteam's OWASP Agentic preset so the findings come out with ASI labels.",
+      "available_skills": [
+        "adk-agent-security",
+        "adk-agent-evaluation",
+        "adk-release-engineering"
+      ],
+      "context": "Python ADK 2.12.0 agent with read_ticket, issue_refund (require_confirmation) and send_email tools; scripted-model Runner tests exist. CI has no OpenAI or NIM keys; Gemini is available via Workload Identity only for approved live runs.",
+      "expected_primary": "adk-agent-security",
+      "assertions": [
+        "Wraps the Runner in a function returning a list of strings and writing a sidecar of executed tool effects, and invokes garak with --target_type function --target_name module#func and --spec, not the deprecated --model_type/--probes.",
+        "States that garak exits 0 even on hits and most errors and that its detectors read text only, and gates on the report.jsonl eval rows (fails or nones above 0), a present completion row, a fresh report prefix and the effects sidecar, collecting report and hitlog files from a set XDG_DATA_HOME.",
+        "Treats agent_breaker and deepteam as approved paid live campaigns needing a red-team and judge model, keeps the deterministic forbidden-call Runner tests as the CI gate, and maps OWASP IDs from the toolkit's table rather than garak tags.",
+        "For deepteam, sets both telemetry opt-out variables, replaces the gpt-4o-mini defaults with a pinned model, notes the sentry-sdk install gap in 1.0.10, and normalises ASI_0n labels to ASI0n without adopting deepteam's titles."
+      ]
+    },
+    {
+      "id": "sensitive-data-offline-pii-oracle-in-ci",
+      "prompt": "Our CI has no GCP credentials. Add an offline check that fails the build if any test run leaks personal data or credentials into model requests, session events, logs or tool calls, and tell us whether it can replace the SDP tests.",
+      "available_skills": [
+        "protect-adk-sensitive-data",
+        "adk-agent-evaluation",
+        "adk-release-engineering"
+      ],
+      "context": "Python ADK 2.12 agent with scripted-model Runner tests, network egress blocked in CI after dependency install, Python 3.12, SDP and Model Armor used in production.",
+      "expected_primary": "protect-adk-sensitive-data",
+      "assertions": [
+        "Keeps exact synthetic-canary sink assertions as the primary check and adds a pinned presidio-analyzer scan over every captured sink as a second, value-independent oracle.",
+        "Constructs the analyzer without a runtime model download (NoOpNlpEngine with pattern recognizers, or a pinned pre-installed spaCy wheel) so it runs with egress blocked.",
+        "Adds custom recognizers for the project's credential formats because Presidio ships none.",
+        "States that the oracle measures nothing about SDP or Model Armor accuracy, does not replace the SDP orchestration tests, and never enters the production path.",
+        "Runs it in the existing test framework and reports versions and results as fresh offline evidence."
+      ]
+    },
+    {
+      "id": "sensitive-data-local-tool-result-screen-llamafirewall",
+      "prompt": "Our documents cannot leave our project, so Model Armor on tool results is out. Add LlamaFirewall to screen what our tools return, add its alignment check too, and prove it works.",
+      "available_skills": [
+        "protect-adk-sensitive-data",
+        "adk-agent-security",
+        "adk-operational-guardrails",
+        "adk-agent-evaluation"
+      ],
+      "context": "Python ADK 2.12 agent on Cloud Run with fetch_url, read_contract and send_email tools, a scripted-model Runner harness, no Hugging Face token, no model access and no network in the session.",
+      "expected_primary": "adk-agent-security",
+      "assertions": [
+        "Places PromptGuard in after_tool_callback on the projected result, chunks it to the 512-token window rather than relying on the scanner's truncation, and loads the classifier once from pre-provisioned weights.",
+        "Calls scan_async or the scanner directly, and maps any non-SUCCESS status or unconfigured role to an unknown verdict that withholds the result.",
+        "Refuses to enable AlignmentCheck as shipped because it sends the full trace to Together AI under a static key, contradicting the stated residency requirement, and offers the before_tool_callback capability check instead.",
+        "Keeps the allow-list, confirmation and egress controls as the enforcement and runs the poisoned-tool case with screening on and off.",
+        "Flags the Prompt Guard 2 weights licence as needing an owner decision and leaves the live detector run pending."
+      ]
+    },
+    {
+      "id": "security-gate-default-deny-and-call-provenance",
+      "prompt": "We copied the CaMeL-style before_tool_callback from the security skill. A reviewer says an injected email can still make our agent delete a file or archive a thread. Is our gate really doing what CaMeL does, and what do we change?",
+      "available_skills": [
+        "adk-agent-security",
+        "adk-operational-guardrails",
+        "adk-tool-interface-design"
+      ],
+      "context": "An ADK 2.12 mail agent with search_mail, send_email, delete_file and a new archive_thread tool added last sprint; capability_gate from injection-patterns copied verbatim; no plan step; no network in the session.",
+      "expected_primary": "adk-agent-security",
+      "assertions": [
+        "Finds that the gate allows every tool outside EGRESS_TOOLS and everything when plan:allowed_tools is absent, and replaces it with an explicit read-only set plus one policy per write or egress tool, refusing unregistered tools such as archive_thread.",
+        "States that substring taint matching is an approximation a rewritten value evades and that it cannot see a call whose decision was steered by the email, so delete_file must be stopped by plan membership or structure, not argument taint.",
+        "Writes per-tool provenance rules (delete and share targets come from the user) and a readers rule for send_email, citing CaMeL as a pattern with a dated arXiv and repository link and no code dependency.",
+        "Adds scripted-model Runner tests where the model calls archive_thread and delete_file with an id taken from the email and the gate refuses both without mutation, and reports them as not run unless executed."
+      ]
+    },
+    {
       "id": "security-adopt-third-party-mcp-server-with-scan",
       "prompt": "Platform wants every third-party MCP server scanned with Snyk Agent Scan before we adopt it. Add the scan to our adoption checklist and CI without weakening what we already do.",
       "available_skills": [
@@ -1123,6 +1319,23 @@
         "Runs the scan only in an ephemeral container with --dangerously-run-mcp-servers after reviewing the server command, and never against a configuration holding production credentials.",
         "States what the scan uploads to Snyk (configurations, tool names and descriptions, skill content, secrets redacted) under Snyk's terms, offers inspect as the local no-upload mode, and gets the data-handling decision from the owner.",
         "Records that the scan was documented, not run, in the session and that its output schema is experimental."
+      ]
+    },
+    {
+      "id": "mcp-rug-pull-runtime-pin-and-mcp-ids",
+      "prompt": "Our agent uses a third-party remote MCP server and CI diffs its tool manifest. Security wants findings in OWASP MCP Top 10 terms and asks what happens if the server changes a tool description after we deploy. We also bundle a stdio PDF server in the same Cloud Run container.",
+      "available_skills": [
+        "adk-agent-security",
+        "adk-agent-interoperability",
+        "adk-tool-auth-and-secrets"
+      ],
+      "context": "ADK 2.12 agent; McpToolset over Streamable HTTP with a list tool_filter and tool_list_cache_ttl_seconds=None; committed mcp_tool_inventory manifest checked in CI; a second McpToolset uses StdioConnectionParams inside the agent container. No network in the session.",
+      "expected_primary": "adk-agent-security",
+      "assertions": [
+        "Explains that the CI diff misses a post-deploy definition change and that ADK re-lists on every get_tools without subscribing to list_changed, and proposes a predicate tool_filter that recomputes each tool's manifest hash and withholds mismatches, with a Runner test where the server double changes a description mid-session.",
+        "Says a matching hash proves the declared interface, not the server's behaviour.",
+        "Reports findings as MCP03:2025 beside LLM03 and ASI04 (and MCP05 or MCP09 for the bundled stdio server), cites MCP ids by id with a link, notes beta status and MCP06's title drift, and copies no OWASP text.",
+        "Treats the stdio server as holding the agent's identity and proposes a separate service with its own identity or a sandbox; reports tests as not run."
       ]
     },
     {

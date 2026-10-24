@@ -61,8 +61,13 @@ source-verified against google-adk 2.8.0 unless another version is named).
    step: ask the owner before the first connection to a server you did not
    start. `--command` runs the command you give it; use the exact command
    the agent uses. Exit 0 means inspected, 1 means a source failed
-   (`partial`), 2 means bad arguments. Findings whose `heuristic` is true are
-   reading prompts, never verdicts.
+   (`partial`), 2 means bad arguments; `agent_card_check.py --fail-on error`
+   (or `review`) also exits 3 when such a finding is reported, for CI.
+   Findings whose `heuristic` is true are reading prompts, never verdicts.
+   For a signed card, add
+   `--require-signature` and `--key-host <host serving the agreed key set>`;
+   the helper checks the signature's structure, not its validity
+   ([signed agent cards](references/a2a-contracts.md#signed-agent-cards)).
 
 Ask only what source and servers cannot settle: who operates each server or
 remote agent, what the SLA and failure budget of the remote call is, which
@@ -73,7 +78,7 @@ registry or platform must list the agent, and who the human controller is.
 | Mode | Decision and reference |
 | --- | --- |
 | (a) Tool-source selection | Read [selection](references/selection.md): FunctionTool versus OpenAPIToolset versus McpToolset versus MCP Toolbox for Databases versus Application Integration versus AgentTool-wrapped toolset, with the context-cost and determinism trade-offs and an observable check per row. |
-| (b) Consume an MCP server | Read [mcp-consumption](references/mcp-consumption.md): connection params and timeouts, synchronous definition for deployment, pooled sessions keyed by headers, `header_provider`, `tool_filter`, `tool_name_prefix`, `tool_list_cache_ttl_seconds`, `require_confirmation`, `close()`, the SDK 1.x contract versus the 2026-07-28 specification. |
+| (b) Consume an MCP server | Read [mcp-consumption](references/mcp-consumption.md): connection params and timeouts, synchronous definition for deployment, pooled sessions keyed by headers, `header_provider`, `tool_filter`, `tool_name_prefix`, `tool_list_cache_ttl_seconds`, `require_confirmation`, `close()`, the SDK 1.x contract versus the 2026-07-28 specification, and MCP Apps widgets (`_meta.ui`): what ADK attaches, and the capability and visibility duties it leaves to you. |
 | (c) Expose ADK as an MCP server | Read [mcp-exposure](references/mcp-exposure.md): `to_mcp_server` (one tool, one session per connection, stdio or streamable-http chosen by the caller) versus hand-built servers with `adk_to_mcp_tool_type`, and what the exposed description promises. |
 | (d) Topology decision | Read [topology](references/topology.md): one agent, in-process sub-agents or `AgentTool`, or a remote A2A agent; the vendor criteria and the independent evidence on when multi-agent helps and how it fails. |
 | (e) Consume a remote A2A agent | Read [a2a-contracts](references/a2a-contracts.md) and [remote-failures](references/remote-failures.md): `RemoteA2aAgent` card resolution and validation, task states including INPUT_REQUIRED, AUTH_REQUIRED and REJECTED, `a2a:` metadata keys, streaming, timeouts, failure as error events, and peer messages as data rather than user authority. |
@@ -90,7 +95,10 @@ you will write before editing. Then:
 
 - Define `McpToolset` and `RemoteA2aAgent` synchronously at module level in
   `agent.py`; deployment targets load the module without an event loop
-  (documented behaviour, ADK MCP deployment page). Choose the transport from
+  (documented behaviour, ADK MCP deployment page). The exception is a peer
+  whose signed card must be verified before use: that fetch is async, so
+  build that agent in a startup factory
+  ([signed agent cards](references/a2a-contracts.md#signed-agent-cards)). Choose the transport from
   the environment (`K_SERVICE` set means Cloud Run: Streamable HTTP; local
   means stdio) rather than editing code per environment.
 - Always pass `tool_filter` (a list of names or a predicate) and, with more

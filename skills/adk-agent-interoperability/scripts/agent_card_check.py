@@ -9,19 +9,27 @@ loopback host) and shares the origin the card was fetched from, that a
 non-loopback endpoint declares ``securitySchemes``, parses ``protocolVersion``
 and compares it with an optional ``--installed-a2a-sdk`` version, reports
 capabilities (streaming, push notifications, extensions, extended card) and
-flags long or instruction-like descriptions. Accepts the a2a-sdk 0.3 card
-shape (``url``, ``preferredTransport``) and the 1.0 shape
+flags long or instruction-like descriptions. For a signed card it checks the
+JWS structure the specification requires (``protected`` and ``signature``; an
+asymmetric ``alg``, ``kid`` and ``typ`` in the protected header; a ``jku`` on
+https at the card's origin or a ``--key-host``), flags unprotected header
+values and, on a 1.0 card, the fields an a2a-sdk 1.x verifier drops before
+checking, which the signature therefore does not cover. It does not verify the
+signature cryptographically. Accepts the a2a-sdk 0.3 card shape (``url``, ``preferredTransport``) and the 1.0 shape
 (``supportedInterfaces``), with camelCase or snake_case keys.
 
 Read-only: one GET per candidate path, no RPC call. Non-loopback hosts are
 refused unless ``--allow-remote`` is given. Exit 0 when a card was obtained and
 checked (findings are in the JSON), 1 when no card could be read, 2 for bad
-arguments.
+arguments, 3 when ``--fail-on`` is given and a finding at that level or above
+was reported (the JSON is still printed).
 """
 
 from __future__ import annotations
 
 import argparse
+import base64
+import binascii
 import ipaddress
 import json
 from pathlib import Path
@@ -39,6 +47,22 @@ SPEC_CORE_FIELDS = ("name", "description", "version", "capabilities", "skills",
 GEMINI_ENTERPRISE_FIELDS = ("protocolVersion", "name", "description", "url", "version",
                             "defaultInputModes", "defaultOutputModes", "capabilities", "skills")
 DESCRIPTION_LONG = 500
+# Field names an a2a-sdk 1.x verifier keeps: it parses the card into the proto
+# with ignore_unknown_fields=True before canonicalising, so any other field is
+# not covered by the signature (a2a-sdk 1.2.3 a2a.types descriptors and
+# a2a/utils/signing.py, read 2026-10-24).
+SIGNED_FIELDS = {
+    "": {"name", "description", "supportedInterfaces", "provider", "version", "documentationUrl",
+         "capabilities", "securitySchemes", "securityRequirements", "defaultInputModes",
+         "defaultOutputModes", "skills", "signatures", "iconUrl"},
+    "skills": {"id", "name", "description", "tags", "examples", "inputModes", "outputModes",
+               "securityRequirements"},
+    "capabilities": {"streaming", "pushNotifications", "extensions", "extendedAgentCard"},
+    "provider": {"url", "organization"},
+    "supportedInterfaces": {"url", "protocolBinding", "tenant", "protocolVersion"},
+}
+ASYMMETRIC_ALGS = {"RS256", "RS384", "RS512", "PS256", "PS384", "PS512",
+                   "ES256", "ES384", "ES512", "ES256K", "EdDSA"}
 VERSION_PATTERN = re.compile(r"^(\d+)\.(\d+)(?:\.(\d+))?")
 INSTRUCTION_PATTERNS = [
     (re.compile(r"\byou are (a|an|the)\b", re.I), "persona instruction"),
@@ -237,7 +261,107 @@ def text_findings(where: str, text: str, checks: list[dict]) -> None:
                            "message": f"{where} contains {label}: {match.group(0).strip()[:60]!r}; a card describes capability, it does not instruct the caller's model"})
 
 
-def check_card(card: dict, *, fetched_from: str | None, legacy_path: bool, installed_sdk: str | None) -> dict:
+def _decode_protected(value: str) -> dict | None:
+    try:
+        raw = base64.urlsafe_b64decode(value + "=" * (-len(value) % 4))
+        header = json.loads(raw.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError, binascii.Error):
+        return None
+    return header if isinstance(header, dict) else None
+
+
+def unsigned_fields(card: dict) -> list[str]:
+    paths = sorted(f for f in card if f not in SIGNED_FIELDS[""])
+    for key in ("skills", "supportedInterfaces"):
+        for index, item in enumerate(card.get(key) or []):
+            if isinstance(item, dict):
+                paths += [f"{key}[{index}].{f}" for f in sorted(item) if f not in SIGNED_FIELDS[key]]
+    for key in ("capabilities", "provider"):
+        if isinstance(card.get(key), dict):
+            paths += [f"{key}.{f}" for f in sorted(card[key]) if f not in SIGNED_FIELDS[key]]
+    return paths
+
+
+def signature_checks(card: dict, *, shape: str, fetched_from: str | None, key_hosts: list[str],
+                     require: bool, checks: list[dict]) -> list[str]:
+    """Structural JWS checks on card signatures; returns the algorithms seen."""
+    signatures = card.get("signatures")
+    if signatures is None:
+        if require:
+            checks.append({"code": "signature_missing", "level": "error", "heuristic": False,
+                           "message": "card carries no signatures and --require-signature was given"})
+        return []
+    if not isinstance(signatures, list) or not signatures:
+        checks.append({"code": "signatures_malformed", "level": "error", "heuristic": False,
+                       "message": "signatures must be a nonempty list of AgentCardSignature objects"})
+        return []
+    card_host = origin(fetched_from)[1] if fetched_from else None
+    allowed_hosts = {h.lower() for h in key_hosts} | ({card_host} if card_host else set())
+    algs = []
+    for index, sig in enumerate(signatures):
+        where = f"signatures[{index}]"
+        if not isinstance(sig, dict):
+            checks.append({"code": "signatures_malformed", "level": "error", "heuristic": False,
+                           "message": f"{where} is not an object"})
+            continue
+        missing = [f for f in ("protected", "signature") if not isinstance(sig.get(f), str) or not sig.get(f)]
+        if missing:
+            checks.append({"code": "signature_field_missing", "level": "error", "heuristic": False,
+                           "message": f"{where} has no {' or '.join(missing)}; both are required JWS components"})
+        if sig.get("header"):
+            checks.append({"code": "signature_unprotected_header", "level": "review", "heuristic": False,
+                           "message": f"{where}.header values are not integrity-protected; trust only what is in the protected header"})
+        if "protected" in missing:
+            continue
+        header = _decode_protected(sig["protected"])
+        if header is None:
+            checks.append({"code": "signature_protected_invalid", "level": "error", "heuristic": False,
+                           "message": f"{where}.protected is not base64url-encoded JSON"})
+            continue
+        alg = header.get("alg")
+        algs.append(alg if isinstance(alg, str) else None)
+        if not isinstance(alg, str) or not alg:
+            checks.append({"code": "signature_alg_missing", "level": "error", "heuristic": False,
+                           "message": f"{where} protected header has no alg (a2a-sdk's signer then defaults to HS256)"})
+        elif alg.lower() == "none" or alg.upper().startswith("HS"):
+            checks.append({"code": "signature_alg_not_asymmetric", "level": "error", "heuristic": False,
+                           "message": f"{where} uses {alg}; a card signature must use an asymmetric algorithm a verifier can pin"})
+        elif alg not in ASYMMETRIC_ALGS:
+            checks.append({"code": "signature_alg_unknown", "level": "review", "heuristic": False,
+                           "message": f"{where} uses {alg}; confirm the verifier's algorithm allowlist includes it"})
+        if not isinstance(header.get("kid"), str) or not header.get("kid"):
+            checks.append({"code": "signature_kid_missing", "level": "error", "heuristic": False,
+                           "message": f"{where} protected header has no kid, which the specification requires"})
+        if header.get("typ") != "JOSE":
+            checks.append({"code": "signature_typ_not_jose", "level": "review", "heuristic": False,
+                           "message": f"{where} protected header typ is {header.get('typ')!r}; the specification says it SHOULD be 'JOSE'"})
+        jku = header.get("jku")
+        if jku is not None:
+            scheme, host, _ = origin(jku) if isinstance(jku, str) else ("", "", None)
+            if scheme != "https":
+                checks.append({"code": "signature_jku_not_https", "level": "error", "heuristic": False,
+                               "message": f"{where} jku is not an https URL: {jku!r}"})
+            elif not allowed_hosts:
+                checks.append({"code": "signature_jku_unchecked", "level": "review", "heuristic": False,
+                               "message": f"{where} jku {jku} cannot be checked against an origin for a local file; pass --key-host"})
+            elif host not in allowed_hosts:
+                checks.append({"code": "signature_jku_off_origin", "level": "error", "heuristic": False,
+                               "message": f"{where} jku host {host} is neither the card's origin nor a --key-host"})
+            checks.append({"code": "signature_jku_present", "level": "info", "heuristic": False,
+                           "message": f"{where} names a jku; a verifier must take keys from a key set agreed out of band, never from the card it is verifying"})
+    if shape.startswith("a2a-1.0"):
+        uncovered = unsigned_fields(card)
+        if uncovered:
+            checks.append({"code": "signature_fields_uncovered", "level": "review", "heuristic": False,
+                           "message": "fields outside the a2a-sdk 1.x card schema are dropped before verification, so the signature does not cover them: " + ", ".join(uncovered)})
+    else:
+        checks.append({"code": "signature_shape_unchecked", "level": "review", "heuristic": False,
+                       "message": "signed card in the 0.3 shape; which fields the signature covers depends on the pinned a2a-sdk's verifier"})
+    return algs
+
+
+def check_card(card: dict, *, fetched_from: str | None, legacy_path: bool, installed_sdk: str | None,
+               key_hosts: list[str] | None = None, require_signature: bool = False) -> dict:
     checks: list[dict] = []
     shape = "unknown"
     if isinstance(card.get("supportedInterfaces"), list):
@@ -278,7 +402,10 @@ def check_card(card: dict, *, fetched_from: str | None, legacy_path: bool, insta
         if name == "url" and urls:
             message = "no top-level url; Gemini Enterprise registration reads url and supports A2A v0.3 cards (1.0 needs the compatibility packages)"
         elif name == "protocolVersion":
-            message = "no protocolVersion; ADK's AgentCardBuilder writes one, a hand-written agent.json must add it"
+            message = ("no top-level protocolVersion; this 1.0 card declares it per interface, but Gemini"
+                       " Enterprise registration reads the top-level field (0.3 card shape)"
+                       if card_protocol_version(card) else
+                       "no protocolVersion; ADK's AgentCardBuilder writes one, a hand-written agent.json must add it")
         else:
             message = f"Gemini Enterprise registration requires {name!r}"
         checks.append({"code": "gemini_enterprise_field_missing", "level": "review", "heuristic": False,
@@ -300,10 +427,10 @@ def check_card(card: dict, *, fetched_from: str | None, legacy_path: bool, insta
                            "message": f"RPC url ends with '/'; ADK's card builder strips it and registries have rejected trailing slashes: {url}"})
         if scheme != "https" and not loopback:
             checks.append({"code": "rpc_url_not_https", "level": "error", "heuristic": False,
-                           "message": f"RPC url uses plain http on a non-loopback host; RemoteA2aAgent 2.8.0 refuses it for a fetched card: {url}"})
+                           "message": f"RPC url uses plain http on a non-loopback host; RemoteA2aAgent (2.8.0 to 2.12.0) refuses it for a fetched card: {url}"})
         if source_origin and origin(url) != source_origin:
             checks.append({"code": "rpc_url_origin_mismatch", "level": "error", "heuristic": False,
-                           "message": f"RPC url origin differs from where the card was fetched ({fetched_from}); RemoteA2aAgent 2.8.0 refuses it: {url}"})
+                           "message": f"RPC url origin differs from where the card was fetched ({fetched_from}); RemoteA2aAgent (2.8.0 to 2.12.0) refuses it: {url}"})
 
     schemes = card.get("securitySchemes")
     requirements = card.get("security") or card.get("securityRequirements")
@@ -353,6 +480,9 @@ def check_card(card: dict, *, fetched_from: str | None, legacy_path: bool, insta
         checks.append({"code": "capabilities_not_object", "level": "error", "heuristic": False,
                        "message": "capabilities must be an object"})
 
+    signature_algs = signature_checks(card, shape=shape, fetched_from=fetched_from,
+                                      key_hosts=key_hosts or [], require=require_signature, checks=checks)
+
     description = card.get("description")
     if isinstance(description, str):
         text_findings("description", description, checks)
@@ -379,6 +509,8 @@ def check_card(card: dict, *, fetched_from: str | None, legacy_path: bool, insta
             "extended_card": bool(capabilities.get("extendedAgentCard")) or bool(card.get("supportsAuthenticatedExtendedCard")),
             "extensions": extension_uris, "adk_a2a_extension": adk_extension,
             "security_schemes": sorted(schemes.keys()) if has_schemes else [],
+            "signatures": len(card["signatures"]) if isinstance(card.get("signatures"), list) else 0,
+            "signature_algs": signature_algs,
             "skills": len(card["skills"]) if isinstance(card.get("skills"), list) else 0,
             "description_length": len(description) if isinstance(description, str) else None,
         },
@@ -402,6 +534,12 @@ def main(argv=None) -> int:
     parser.add_argument("--allow-remote", action="store_true", help="permit a non-loopback --url host")
     parser.add_argument("--installed-a2a-sdk", metavar="VERSION",
                         help="installed a2a-sdk version to compare with the card's protocolVersion")
+    parser.add_argument("--require-signature", action="store_true",
+                        help="report an unsigned card as an error")
+    parser.add_argument("--key-host", action="append", default=[], metavar="HOST",
+                        help="host besides the card's origin that may serve its jku key set (repeatable)")
+    parser.add_argument("--fail-on", choices=("error", "review"),
+                        help="exit 3 when a finding at this level or above is reported (for CI)")
     parser.add_argument("--timeout", type=positive, default=10.0, help="seconds per request (default: 10)")
     parser.add_argument("--max-bytes", type=int, default=1_000_000, help="maximum card size (default: 1000000)")
     args = parser.parse_args(argv)
@@ -437,7 +575,8 @@ def main(argv=None) -> int:
             fetched_from = None
         card = _normalise_card(raw)
         result.update(check_card(card, fetched_from=fetched_from, legacy_path=legacy,
-                                 installed_sdk=args.installed_a2a_sdk))
+                                 installed_sdk=args.installed_a2a_sdk, key_hosts=args.key_host,
+                                 require_signature=args.require_signature))
     except CardError as exc:
         result["partial"] = True
         result["error"] = str(exc)
@@ -450,11 +589,15 @@ def main(argv=None) -> int:
                         "by_code": {code: sum(1 for c in checks if c["code"] == code)
                                     for code in sorted({c["code"] for c in checks})}}
     result["notes"] = [
-        "Checks mirror RemoteA2aAgent 2.8.0 card validation (https or loopback, same origin) plus specification and registration requirements.",
+        "Checks mirror RemoteA2aAgent 2.8.0 to 2.12.0 card validation (https or loopback, same origin) plus specification and registration requirements.",
         "description_instruction_like, description_long and name_unusual are heuristics; the owner reads the text.",
+        "Signature checks are structural; verify the signature itself with a2a-sdk's create_signature_verifier against a key set agreed out of band.",
     ]
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 1 if result["partial"] else 0
+    if result["partial"]:
+        return 1
+    failing = {"error": ("error",), "review": ("error", "review")}.get(args.fail_on, ())
+    return 3 if any(result["counts"][{"error": "errors", "review": "review"}[level]] for level in failing) else 0
 
 
 if __name__ == "__main__":

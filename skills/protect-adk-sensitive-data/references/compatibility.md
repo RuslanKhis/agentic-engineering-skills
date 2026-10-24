@@ -102,6 +102,17 @@ its ADK sample does not screen tool results, and adk-python main ed76f94
 as version-conditional facts; nothing was executed and `last-tested` is
 unchanged.
 
+Read 24 October 2026: GoogleCloudPlatform/python-docs-samples at commit
+3db968f (`model_armor/snippets/` and `dlp/snippets/`; Apache-2.0; the
+samples pin `google-cloud-modelarmor` 0.2.8, older than this skill's pin),
+the Model Armor `service.proto` in googleapis, and four Model Armor
+documentation pages updated 2026-10-22. Imported: the file-screening
+contract and its encoding canary (production policy), `update_mask` and
+`request_id` (cloud lifecycle), and the enforcement and residency fields of
+an effective-policy audit (model-armor). Not imported: the DLP snippets'
+`locations/global`, printed responses, per-call clients and the live
+snippet tests. Nothing was executed and `last-tested` is unchanged.
+
 ## Licence and authorship
 
 The workflow and adapted controller lessons derive from Chapter 8 of *Agentic

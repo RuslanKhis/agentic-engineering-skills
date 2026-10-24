@@ -15,7 +15,8 @@ or markers (a labelled heuristic, never a verdict).
 Read-only toward the server: it never calls ``tools/call`` or reads a resource.
 Non-loopback URLs are refused unless ``--allow-remote`` is given. Exit 0 when
 every source was inspected, 1 when at least one source failed (``partial``),
-2 for bad arguments.
+2 for bad arguments, and, with ``--fail-on-diff``, 3 when the diff reports a
+rug-pull signal.
 """
 
 from __future__ import annotations
@@ -40,6 +41,9 @@ from urllib.parse import urlsplit
 
 CLIENT_INFO = {"name": "adk-agent-interoperability-inventory", "version": "1.0"}
 DEFAULT_PROTOCOL_VERSION = "2025-06-18"
+# server/discover exists only from this revision; probing it with an older
+# version is rejected (-32022), so the fallback always asks with at least this.
+DISCOVER_PROTOCOL_VERSION = "2026-07-28"
 PROTOCOL_META_PREFIX = "io.modelcontextprotocol/"
 RESERVED_ADK_TOOL_NAMES = {"adk_request_credential", "adk_request_confirmation",
                            "adk_request_input", "transfer_to_agent"}
@@ -348,11 +352,16 @@ class McpClient:
 
     def _discover(self) -> None:
         self.handshake = "server/discover"
+        self.negotiated_version = max(self.requested_version, DISCOVER_PROTOCOL_VERSION)
         result = self._result(self._call("server/discover"), "server/discover")
-        versions = result.get("protocolVersions") or result.get("supportedProtocolVersions") or []
+        # The 2026-07-28 schema names the list supportedVersions and carries the
+        # server's identity in _meta; the other spellings are kept for drafts.
+        versions = (result.get("supportedVersions") or result.get("protocolVersions")
+                    or result.get("supportedProtocolVersions") or [])
         if isinstance(versions, list) and versions:
             self.negotiated_version = str(sorted(str(v) for v in versions)[-1])
-        self.server_info = result.get("serverInfo")
+        meta = result.get("_meta") if isinstance(result.get("_meta"), dict) else {}
+        self.server_info = meta.get(PROTOCOL_META_PREFIX + "serverInfo") or result.get("serverInfo")
         self.server_capabilities = result.get("capabilities")
         if isinstance(self.transport, HttpTransport) and self.negotiated_version:
             self.transport.protocol_version = self.negotiated_version
@@ -388,6 +397,38 @@ def field(mapping: dict, *names, default=None):
     return default
 
 
+def mcp_app_meta(meta) -> tuple[str | None, list | None]:
+    """MCP Apps UI resource and visibility from a tool's _meta.
+
+    Reads the nested ``ui.resourceUri`` and the deprecated flat ``ui/resourceUri``
+    key, both honoured by ADK 2.12.0's McpTool; ``ui.visibility`` lists who may
+    call the tool ("model", "app"); absent means both.
+    """
+    if not isinstance(meta, dict):
+        return None, None
+    ui = meta.get("ui") if isinstance(meta.get("ui"), dict) else {}
+    uri = ui.get("resourceUri") if isinstance(ui.get("resourceUri"), str) else None
+    if uri is None and isinstance(meta.get("ui/resourceUri"), str):
+        uri = meta["ui/resourceUri"]
+    visibility = ui.get("visibility") if isinstance(ui.get("visibility"), list) else None
+    return uri, visibility
+
+
+MCP_APP_MIME_TYPE = "text/html;profile=mcp-app"
+
+
+def unreferenced_app_resources(target: str, tools: list[dict], resources: list[dict]) -> list[dict]:
+    """MCP App pages no listed tool points at: the trace of a server that gates its UI
+    tools on a client capability this client (and ADK 2.12.0) does not declare."""
+    referenced = {t.get("ui_resource_uri") for t in tools}
+    return [{"source": target, "tool": None, "code": "mcp_app_resource_unreferenced", "level": "review",
+             "heuristic": True,
+             "message": f"resource {r.get('uri')} is an MCP App page but no listed tool references it; the server "
+                        "may hide UI tools from clients that do not declare io.modelcontextprotocol/ui"}
+            for r in resources
+            if r.get("mime_type") == MCP_APP_MIME_TYPE and r.get("uri") not in referenced]
+
+
 def describe_tool(raw: dict) -> dict:
     name = raw.get("name")
     description = raw.get("description") or ""
@@ -395,6 +436,7 @@ def describe_tool(raw: dict) -> dict:
     output_schema = field(raw, "outputSchema", "output_schema")
     annotations = raw.get("annotations") if isinstance(raw.get("annotations"), dict) else {}
     meta = field(raw, "_meta", "meta", default=None)
+    ui_resource_uri, ui_visibility = mcp_app_meta(meta)
     return {
         "name": name if isinstance(name, str) else str(name),
         "title": raw.get("title") if isinstance(raw.get("title"), str) else None,
@@ -405,8 +447,8 @@ def describe_tool(raw: dict) -> dict:
         "has_output_schema": output_schema is not None,
         "annotations": {k: annotations[k] for k in sorted(annotations)},
         "has_meta": meta is not None,
-        "ui_resource_uri": (meta.get("ui", {}) or {}).get("resourceUri") if isinstance(meta, dict)
-        and isinstance(meta.get("ui"), dict) else None,
+        "ui_resource_uri": ui_resource_uri,
+        "ui_visibility": ui_visibility,
     }
 
 
@@ -470,6 +512,7 @@ def inspect_source(kind: str, target: str, args, headers: dict[str, str]) -> dic
                                                    "mime_type": field(raw, "mimeType", "mime_type")})
             except ProtocolError as exc:
                 entry["resources_error"] = str(exc)
+            findings.extend(unreferenced_app_resources(target, entry["tools"], entry["resources"]))
         entry["tools"].sort(key=lambda t: t["name"])
         entry["resources"].sort(key=lambda r: (str(r.get("name")), str(r.get("uri"))))
     except (TransportError, ProtocolError) as exc:
@@ -511,7 +554,15 @@ def tool_findings(source: str, raw: dict, tool: dict) -> list[dict]:
     if tool["ui_resource_uri"]:
         findings.append({"source": source, "tool": name, "code": "mcp_app_ui_resource", "level": "info",
                          "heuristic": False,
-                         "message": f"declares an MCP App UI resource {tool['ui_resource_uri']}; ADK 2.8.0 renders it as a UiWidget"})
+                         "message": f"declares an MCP App UI resource {tool['ui_resource_uri']}; ADK (1.27.0 to 2.12.0) "
+                                    "attaches it to the event as UiWidget(provider='mcp') but renders nothing; "
+                                    "the frontend owns the renderer"})
+    if tool["ui_visibility"] is not None and "model" not in tool["ui_visibility"]:
+        findings.append({"source": source, "tool": name, "code": "mcp_app_tool_not_for_model", "level": "review",
+                         "heuristic": False,
+                         "message": f"visibility {tool['ui_visibility']} excludes the model, but ADK 2.12.0 does not apply "
+                                    "visibility; drop it with tool_filter and refuse view-initiated calls the server "
+                                    "does not allow"})
     return findings
 
 
@@ -527,6 +578,10 @@ def build_manifest(sources: list[dict]) -> dict:
                           "input_schema_sha256": tool["input_schema_sha256"],
                           "output_schema_sha256": tool["output_schema_sha256"],
                           "annotations": tool["annotations"]}
+            # MCP Apps fields are pinned only when declared, so manifests of plain tools are unchanged.
+            for field in ("ui_resource_uri", "ui_visibility"):
+                if tool.get(field) is not None:
+                    tools[key][field] = tool[field]
     return {"manifest_version": 1, "tools": dict(sorted(tools.items()))}
 
 
@@ -551,7 +606,10 @@ def diff_manifests(prior: dict, current: dict) -> dict:
     changed = []
     for key in sorted(set(current_tools) & set(prior_tools)):
         before, after = prior_tools[key], current_tools[key]
-        fields = [f for f in ("description_sha256", "input_schema_sha256", "output_schema_sha256", "annotations")
+        # The MCP Apps fields count as definition: a vendor that drops a tool's UI or makes an
+        # app-only tool visible to the model has changed what the agent may do.
+        fields = [f for f in ("description_sha256", "input_schema_sha256", "output_schema_sha256", "annotations",
+                              "ui_resource_uri", "ui_visibility")
                   if before.get(f) != after.get(f)]
         if fields:
             changed.append({"tool": key, "fields": fields})
@@ -597,6 +655,8 @@ def main(argv=None) -> int:
                         help="HTTP header for every --url source (repeatable); values are not printed")
     parser.add_argument("--out", type=Path, metavar="MANIFEST", help="write the pinned manifest JSON here")
     parser.add_argument("--diff", type=Path, metavar="PRIOR_MANIFEST", help="compare against a prior manifest")
+    parser.add_argument("--fail-on-diff", action="store_true",
+                        help="exit 3 when --diff reports a rug-pull signal (for CI)")
     parser.add_argument("--allow-remote", action="store_true", help="permit non-loopback --url hosts")
     parser.add_argument("--timeout", type=positive, default=20.0, help="seconds per request (default: 20)")
     parser.add_argument("--max-bytes", type=int, default=4_000_000, help="maximum response size (default: 4000000)")
@@ -653,10 +713,14 @@ def main(argv=None) -> int:
         or (args.out is not None and manifest_written is None),
         "notes": ["Hashes are SHA-256 of canonical JSON; compare manifests across time to detect changed definitions.",
                   "description_imperative_phrase and description_long are heuristics; a clean result is not a clearance.",
-                  "ADK 2.8.0 pins mcp>=1.24,<2 (SDK 1.x); the initialize handshake is its contract. server/discover support here is best effort."],
+                  "ADK 2.8.0 pins mcp>=1.24,<2 and speaks the initialize handshake; 2.12.0 runs on mcp 2.x and speaks 2026-07-28 only with ADK_ENABLE_MCP_MODERN_PROTOCOL=1. A server that rejects initialize is listed through server/discover at 2026-07-28 (checked against an mcp 2.3.0 server on 2026-10-24)."],
     }
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 1 if result["partial"] else 0
+    if result["partial"]:
+        return 1
+    if args.fail_on_diff and result["diff"] is not None and result["diff"]["rug_pull_signal"]:
+        return 3
+    return 0
 
 
 if __name__ == "__main__":

@@ -139,7 +139,14 @@ On 2.12.0 the same signature carries two more keyword parameters,
 `security_schemes: dict[str, SecurityScheme] | None` and
 `default_skill_security: list[dict[str, list[str]]] | None`, so the generated
 card can declare its schemes without a hand-written card (signature read in
-the installed 2.12.0 package with a2a-sdk 1.2.3, 2026-10-23). The 1.0 card
+the installed 2.12.0 package with a2a-sdk 1.2.3, 2026-10-23).
+`default_skill_security` puts the requirement on each generated skill and
+leaves the card-level `securityRequirements` empty by design (so a tool can
+override it through `custom_metadata['security']`; `agent_card_builder.py`
+docstring); a caller or registry that reads only the card-level list sees no
+requirement, which `agent_card_check.py` reports as
+`security_requirements_missing`, so add a card-level requirement when you
+hand in or post-process the card. The 1.0 card
 shape, as a2a-sdk 1.2.3 serialises it (protobuf JSON, read the same day):
 `supportedInterfaces[]` entries carry `url`, `protocolBinding` and
 `protocolVersion` (no top-level `url` or `protocolVersion`);
@@ -152,7 +159,8 @@ complete example lives in [assets/agent-card-1.0.example.json](../assets/agent-c
 beside the 0.3 template, and `agent_card_check.py` accepts both shapes.
 
 - `host`, `port` and `protocol` only shape the **advertised** RPC URL
-  (`{protocol}://{host}:{port}{prefix}/`); nothing binds a socket. Serve with
+  (`{protocol}://{host}:{port}{prefix}`; 2.12.0 advertises it without a
+  trailing slash); nothing binds a socket. Serve with
   uvicorn on the same host and port or the card points somewhere unreachable
   (documented behaviour). For a public deployment pass the public https host
   and `protocol="https"`, or hand in your own card.
@@ -216,11 +224,9 @@ Consumer:
   for that reason (google/agents-cli main, `src/google/agents/cli/run/_a2a_pinning.py`,
   read 2026-10-22; vendor code, not executed). On ADK, `RemoteA2aAgent`'s own
   same-origin check on RPC URLs (2.7.0) covers the card it fetched; a raw SDK
-  client in your code does not get it for free. The a2a-samples repository
-  (a2aproject/a2a-samples, HEAD 6603ba3 on 2026-10-22, quiet since August per
-  the memo, not read here) holds `sign_and_verify_agent_card`,
-  `headless_agent_auth` and `multitenancy` samples; pin a commit when citing
-  one.
+  client in your code does not get it for free. When the peer signs its
+  card, follow [signed agent cards](#signed-agent-cards): passing a verified
+  card object to `RemoteA2aAgent` switches that origin check off.
 - Fake-server test covers completed, failed, rejected, input-required,
   auth-required, stream cut and HTTP 401/403/5xx.
 
@@ -268,8 +274,9 @@ Producer:
   `AUTH-SERVER-002` by design; that is why the run is scoped and the
   deferred requirement ids are listed in the evidence. The ids worth naming in a ticket are tabled under
   [TCK ids for an exposed agent](#tck-ids-for-an-exposed-agent).
-  `agent_card_check.py` does not yet check signing, caching headers or
-  extended-card authentication; until it does, those three are manual items
+  `agent_card_check.py` checks a signed card's structure
+  ([signed agent cards](#signed-agent-cards)) but not the signature itself,
+  caching headers or extended-card authentication; those stay manual items
   beside its report. The TCK ships `run-tck`, `learn-requirement` and
   `diagnose-failure` skills under `.agents/skills/` that a ticket may name as
   companions. Because this programme's rules forbid executing code from a
@@ -278,10 +285,115 @@ Producer:
   exit code and the deferred ids before trusting the wording above.
 - Advertised URL equals the served URL; https for anything non-loopback.
 - Card describes capability only; tool docstrings reviewed; `securitySchemes`
-  and `capabilities` set deliberately; `protocolVersion` present.
+  and `capabilities` set deliberately; `protocolVersion` present. A signed
+  card is signed once at startup ([signed agent cards](#signed-agent-cards)).
 - Persistent `task_store` and shared session service when more than one
   instance runs; `lifespan` disposes what it opens.
+- `tenant` on an interface is an opaque routing string (the specification's
+  `AgentInterface.tenant` defines no format or meaning), a2a-sdk 1.2.3's
+  client copies the card's value into every request
+  (`client/transports/tenant_decorator.py`), and ADK 2.12.0 does nothing
+  with it. Derive the tenant from the verified principal, never from the
+  request field. One task store per sub-path, the shape of the a2a-samples
+  `multitenancy` sample (which has no authentication), routes callers but
+  does not isolate callers who share a path.
 - Approvals cannot be satisfied by inbound A2A content (test).
+- `to_a2a` needs the `a2a` extra (`google-adk[a2a]`); without it the import
+  fails with `ModuleNotFoundError: a2a`. The task history the server returns
+  to the caller includes the agent's tool calls and their arguments, refused
+  ones too, and tool results such as document text, so decide what an
+  authenticated caller may see before exposing an agent that reads personal
+  data (observed on google-adk 2.12.0 in an offline trial, 2026-10-24).
+
+## Signed agent cards
+
+A2A 1.0 lets a producer sign its card with JWS (specification §8.4,
+a2aproject/A2A main 98279d6 and tag v1.0.1, read 2026-10-24). Each
+`signatures[]` entry has a base64url `protected` header and a `signature`,
+both required, and an optional unprotected `header`. The protected header
+must carry `alg` and `kid`, `typ` should be `JOSE`, and `jku` may point at a
+JWKS. The signed payload is the card without `signatures`, defaults removed,
+canonicalised with RFC 8785.
+
+Consumer, in this order:
+
+1. ADK 2.12.0 does not verify a signature on a card it fetches by URL:
+   `RemoteA2aAgent._resolve_agent_card_from_url` calls
+   `A2ACardResolver.get_agent_card` without a verifier. To require one,
+   resolve the card yourself with
+   `get_agent_card(signature_verifier=create_signature_verifier(key_provider, ["ES256"]))`
+   (`a2a.utils.signing`, needs `a2a-sdk[signing]`), let a failed check fail
+   the delegation, and pass the `AgentCard` object to `RemoteA2aAgent`. The
+   fetch is async, so this agent cannot be built at module level the way the
+   unsigned case is: build it in an async factory the server's startup awaits
+   (a Starlette or FastAPI `lifespan`, or `asyncio.run(build_agent())` before
+   serving), and keep the module-level rule for everything that needs no
+   fetch.
+2. A card passed in as an object skips ADK's https and same-origin check on
+   its RPC URLs ("a card passed in directly or read from a local file did not
+   come off the network here, so its target is left to the caller"). Before
+   constructing the agent, check that every `supportedInterfaces[].url` is
+   https on the origin the card came from; `agent_card_check.py`'s
+   `rpc_url_origin_mismatch` is the same rule. For defence in depth, give
+   the agent an HTTP client that refuses any other host:
+   `httpx.AsyncClient(event_hooks={"request": [guard]})`, where `guard`
+   raises when `request.url`'s scheme, host or port differ from the pinned
+   origin, passed as
+   `RemoteA2aAgent(..., a2a_client_factory=ClientFactory(ClientConfig(httpx_client=client)))`.
+3. The key provider is the trust anchor. Build it on a key set agreed out of
+   band (a pinned JWKS file or a configured key host), never on the `jku`
+   inside the card being verified. In an offline probe against a2a-sdk 1.2.3,
+   a card re-signed with an attacker key and an attacker `jku` verified with
+   a provider that follows `jku` and was rejected with a pinned one. Allow
+   asymmetric algorithms only. For an unknown `kid`, raise a subclass of
+   `jwt.PyJWTError`: the verifier moves to the next signature only on that
+   type, so any other exception aborts verification and breaks rotation
+   across several signatures. Rejecting expired or revoked keys is also the
+   provider's job (§8.4.3).
+4. a2a-sdk parses the card with `ignore_unknown_fields=True` before
+   canonicalising, so a field outside its schema (a 0.3 `security` list on a
+   1.0 card, a vendor field, an extra skill key) is not covered by the
+   signature; the probe verified a card with an added field. Take nothing
+   security-relevant from such fields; `agent_card_check.py` lists them as
+   `signature_fields_uncovered`. A verified card's text is still the peer's
+   text and stays data for your model.
+
+Producer:
+
+- a2a-sdk's signer (`create_agent_card_signer`) appends to the card it is
+  given, and the card route hands its shared card to `card_modifier` on every
+  request, so signing that card in place, as the a2a-samples sample does,
+  adds one signature per request (1, 2 and 3 over three requests in the
+  probe). Sign a copy. Set `alg` explicitly: without it the signer uses HS256
+  and fails with an EC key. `to_a2a` (2.12.0) has no card modifier and serves
+  a supplied card as it is, so on ADK sign once at startup and pass
+  `agent_card=`; rotating the key is a redeploy. Load the private key from
+  Secret Manager or Cloud KMS through the runtime identity; the sample
+  generates one at import, which is a demo shape. With Secret Manager, store
+  the PEM as the secret, read a pinned version number rather than `latest`
+  so a rotation is a reviewed deploy, load it with `cryptography`'s
+  `serialization.load_pem_private_key`, and publish the matching public key
+  (with its `kid`) in the key set partners pin.
+- Check the result with
+  `agent_card_check.py --file signed.json --key-host <jwks host> --require-signature`.
+  It reports a missing `protected` or `signature`, a missing or symmetric
+  `alg` (`none`, `HS*`), a missing `kid`, a `typ` other than `JOSE`, a `jku`
+  that is not https or sits off the card's origin and the `--key-host` list,
+  unprotected header values and uncovered fields. It does not verify the
+  signature; a test does that with a `create_signature_verifier` round trip
+  on a key you control. For a new service there is no "before" report: check
+  the generated card with `--file`, and use `--url` only where the card's
+  advertised origin is the origin you fetch from, since a local `to_a2a`
+  advertising its public https URL fails `rpc_url_origin_mismatch` by
+  design.
+
+Sources: a2aproject/a2a-samples at 6603ba3 (2026-08-04; Apache-2.0; quiet
+since August), `samples/python/agents/sign_and_verify_agent_card` (pins
+a2a-sdk 1.1.0), read 2026-10-24; a2a-sdk 1.2.3 `a2a/utils/signing.py` and
+`a2a/client/card_resolver.py`; google-adk 2.12.0
+`a2a/agent/_remote_a2a_agent.py` and `a2a/utils/agent_to_a2a.py`. The probe
+was two scratch scripts against the installed a2a-sdk; no sample code ran.
+The repository's CIBA sample is covered in `adk-tool-auth-and-secrets`.
 
 ## TCK ids for an exposed agent
 

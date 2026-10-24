@@ -1,6 +1,7 @@
 """Exercise the MCP inventory through its CLI against fake stdio and loopback HTTP servers."""
 
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+import importlib.util
 import json
 from pathlib import Path
 import shlex
@@ -32,6 +33,71 @@ def run(*args):
     payload = json.loads(completed.stdout) if completed.stdout.strip().startswith("{") else None
     return completed.returncode, payload, completed.stderr
 
+
+spec = importlib.util.spec_from_file_location("mcp_tool_inventory", SCRIPT)
+inventory = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(inventory)
+
+
+class McpAppMetaTests(unittest.TestCase):
+    def findings(self, raw):
+        tool = inventory.describe_tool(raw)
+        return tool, {f["code"] for f in inventory.tool_findings("s", raw, tool)}
+
+    def test_nested_and_flat_resource_keys_and_visibility(self):
+        base = {"name": "chart", "description": "Draws a chart.", "inputSchema": {"type": "object"}}
+        tool, codes = self.findings(dict(base, _meta={"ui": {"resourceUri": "ui://chart/view"}}))
+        self.assertEqual(tool["ui_resource_uri"], "ui://chart/view")
+        self.assertIsNone(tool["ui_visibility"])
+        self.assertIn("mcp_app_ui_resource", codes)
+        self.assertNotIn("mcp_app_tool_not_for_model", codes)
+        tool, _ = self.findings(dict(base, _meta={"ui/resourceUri": "ui://chart/flat"}))
+        self.assertEqual(tool["ui_resource_uri"], "ui://chart/flat")
+        tool, codes = self.findings(dict(base, name="refresh", _meta={"ui": {"visibility": ["app"]}}))
+        self.assertEqual(tool["ui_visibility"], ["app"])
+        self.assertIn("mcp_app_tool_not_for_model", codes)
+        _, codes = self.findings(dict(base, _meta={"ui": {"visibility": ["model", "app"]}}))
+        self.assertNotIn("mcp_app_tool_not_for_model", codes)
+        tool, codes = self.findings(base)
+        self.assertIsNone(tool["ui_resource_uri"])
+        self.assertFalse(codes & {"mcp_app_ui_resource", "mcp_app_tool_not_for_model"})
+
+
+class McpAppResourceAndDiffTests(unittest.TestCase):
+    def test_unreferenced_app_page_is_flagged(self):
+        tools = [{"name": "chart", "ui_resource_uri": "ui://chart/view"}]
+        resources = [{"uri": "ui://chart/view", "mime_type": "text/html;profile=mcp-app"},
+                     {"uri": "ui://orphan/view", "mime_type": "text/html;profile=mcp-app"},
+                     {"uri": "file:///readme", "mime_type": "text/plain"}]
+        found = inventory.unreferenced_app_resources("s", tools, resources)
+        self.assertEqual([f["code"] for f in found], ["mcp_app_resource_unreferenced"])
+        self.assertIn("ui://orphan/view", found[0]["message"])
+
+    def test_diff_flags_ui_metadata_changes(self):
+        base = {"description_sha256": "d", "input_schema_sha256": "i", "output_schema_sha256": None,
+                "annotations": {}, "ui_resource_uri": "ui://chart/view", "ui_visibility": ["app"]}
+        prior = {"tools": {"t::refresh": base}}
+        for changed in ({"ui_visibility": ["model", "app"]}, {"ui_resource_uri": None}):
+            with self.subTest(changed=changed):
+                diff = inventory.diff_manifests(prior, {"tools": {"t::refresh": dict(base, **changed)}})
+                self.assertTrue(diff["rug_pull_signal"])
+                self.assertEqual(diff["changed"][0]["fields"], list(changed))
+        self.assertFalse(inventory.diff_manifests(prior, {"tools": {"t::refresh": dict(base)}})["rug_pull_signal"])
+
+
+    def test_manifest_pins_ui_fields_only_when_declared(self):
+        common = {"description_sha256": "d", "input_schema_sha256": "i", "output_schema_sha256": None,
+                  "annotations": {}}
+        tools = [dict(common, name="chart", ui_resource_uri="ui://chart/view", ui_visibility=["app"]),
+                 dict(common, name="plain", ui_resource_uri=None, ui_visibility=None)]
+        manifest = inventory.build_manifest([{"status": "inspected", "target": "t", "tools": tools}])
+        self.assertEqual(manifest["tools"]["t::chart"]["ui_visibility"], ["app"])
+        self.assertEqual(manifest["tools"]["t::chart"]["ui_resource_uri"], "ui://chart/view")
+        self.assertNotIn("ui_resource_uri", manifest["tools"]["t::plain"])
+        shown = dict(tools[0], ui_visibility=["model", "app"])
+        later = inventory.build_manifest([{"status": "inspected", "target": "t", "tools": [shown, tools[1]]}])
+        self.assertEqual(inventory.diff_manifests(manifest, later)["changed"],
+                         [{"tool": "chart", "fields": ["ui_visibility"]}])
 
 class Handler(BaseHTTPRequestHandler):
     mode = "json"
@@ -140,6 +206,7 @@ class StdioTests(unittest.TestCase):
         source = payload["sources"][0]
         self.assertEqual(source["handshake"], "server/discover")
         self.assertEqual(source["protocol_version"], "2026-07-28")
+        self.assertEqual(source["server_info"], {"name": "fake-discover", "version": "0.1"})
         self.assertEqual(len(source["tools"]), 2)
 
     def test_server_initiated_request_is_refused_and_listing_continues(self):
@@ -196,6 +263,13 @@ class StdioTests(unittest.TestCase):
             self.assertIn("description_sha256", diff["changed"][0]["fields"])
             self.assertEqual(len(diff["added"]), 1)
             self.assertEqual(len(diff["removed"]), 1)
+            code, _, _ = run("--command", stdio_command("poisoned"), "--diff", str(manifest), "--no-resources",
+                             "--fail-on-diff")
+            self.assertEqual(code, 3)
+            code, _, _ = run("--command", stdio_command(), "--out", str(manifest), "--no-resources")
+            code, _, _ = run("--command", stdio_command(), "--diff", str(manifest), "--no-resources",
+                             "--fail-on-diff")
+            self.assertEqual(code, 0)
 
     def test_output_is_deterministic(self):
         _, first, _ = run("--command", stdio_command(), "--no-resources")

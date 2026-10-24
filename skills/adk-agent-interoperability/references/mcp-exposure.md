@@ -15,7 +15,8 @@ server.run(transport="stdio")             # or transport="streamable-http"
 
 What the source does:
 
-- Builds a `FastMCP` server (MCP SDK 1.x) and registers one tool named after
+- Builds a `FastMCP` server (on `mcp` 2.x ADK imports `MCPServer` under that
+  name) and registers one tool named after
   `name` or `agent.name`, with `description=agent.description or f"Run the
   {tool_name} agent."`, taking a single `request: str`, `structured_output=False`.
   The feature is gated behind `FeatureName.MCP_AGENT_SERVER` (experimental
@@ -27,7 +28,52 @@ What the source does:
 - Keeps one ADK session per MCP connection (`WeakKeyDictionary` keyed on the
   SDK's per-connection object; falls back to one session per request when the
   SDK gives no connection handle), so successive calls on one connection form
-  a conversation and separate clients never share one.
+  a conversation and separate clients never share one. That holds only on the
+  handshake revisions (2025-11-25 and earlier). On 2026-07-28 there is no
+  connection: the SDK builds a new connection object for every request, so
+  every call starts a fresh ADK session. Observed offline on google-adk
+  2.12.0 with `mcp` 2.3.0 and a scripted model that counts user turns:
+  `mcp.Client(server)` (default, negotiates 2026-07-28) got `user_turns=1`
+  on both calls, `mcp.Client(server, mode="legacy")` got 1 then 2. The
+  python-sdk and FastMCP 4 clients, the Inspector in `auto` or `modern` era
+  and ADK with `ADK_ENABLE_MCP_MODERN_PROTOCOL=1` all default to the modern
+  revision, and neither SDK can switch a revision off on the server ("no
+  `legacy=` option, no version allowlist"; modelcontextprotocol/python-sdk
+  commit 2af9e30, `docs/run/legacy-clients.md`, read 2026-10-24). A
+  multi-turn contract therefore needs a hand-built server that passes a
+  caller-bound conversation handle as a tool argument (see the 2026-07-28
+  notes below), or a documented requirement that hosts connect in legacy
+  mode, tested in both modes. The hand-built server wraps the whole agent,
+  not individual tools (Shape 2 below is the per-tool form). On `mcp` 2.3.0
+  the shape that held in an offline trial on both eras:
+
+  ```python
+  from mcp.server.mcpserver import MCPServer
+  from mcp.server.mcpserver.exceptions import ToolError
+  from mcp.server.auth.middleware.auth_context import get_access_token
+
+  server = MCPServer(name="triage_agent")
+
+  @server.tool(name="triage_agent", description=..., structured_output=True)
+  async def triage(request: str, conversation_id: str | None = None) -> TriageResult:
+      token = get_access_token()                  # None on stdio; the verified caller on HTTP
+      principal = f"{token.client_id}|{token.subject}" if token else LOCAL_PRINCIPAL
+      if conversation_id is None:                # new conversation: mint the handle here
+          session = await runner.session_service.create_session(app_name=..., user_id=principal)
+          conversation_id = secrets.token_urlsafe(32)
+          handles[conversation_id] = Handle(principal, session.id, expires_at=now() + TTL)
+      handle = handles.get(conversation_id)
+      if handle is None or handle.principal != principal or handle.expires_at <= now():
+          raise ToolError("conversation_id is unknown or expired; omit it to start a new one")
+      ...  # runner.run_async(user_id=principal, session_id=handle.session_id, ...)
+      return TriageResult(conversation_id=conversation_id, answer=answer)
+  ```
+
+  Raise `ToolError` for anything the caller must read: `MCPServer` replaces
+  the text of any other exception with a generic "Error executing tool"
+  message. Use one message for unknown, foreign and expired handles, and keep
+  the handle store somewhere every instance can read before running more
+  than one.
 - Streams intermediate (non-final) text as `ctx.report_progress` messages;
   returns the final response as MCP content blocks (text, image, audio, or an
   embedded resource for other inline data).
@@ -86,7 +132,13 @@ behaviour). Stateless mode means no `Mcp-Session-Id` continuity across
 instances, which matches the 2026-07-28 specification's direction (sessions
 removed) and means a `to_mcp_server` conversation-per-connection guarantee
 does not survive a scale event; use your own `Runner` with a shared session
-service if conversations must persist. Authentication at the edge
+service if conversations must persist. On the legacy revision the SDK keeps
+each `Mcp-Session-Id` in "a plain in-process `dict`", so a request that
+reaches another worker or instance gets `404 Session not found`: a
+multi-instance Cloud Run service serving legacy clients needs session
+affinity, or `stateless_http=True` and no promise of continuity; `event_store=`
+is stream resumability, not a session store (python-sdk
+`docs/run/legacy-clients.md`, as above). Authentication at the edge
 (`--no-allow-unauthenticated`, IAP, Agent Gateway egress policy on the
 consuming side) is `deploy-adk-on-google-cloud`'s and
 `adk-tool-auth-and-secrets`' concern; this page only insists the exposed
@@ -100,13 +152,29 @@ server declares what it requires.
 - A test client (stdlib JSON-RPC, as the inventory does) calls `initialize`,
   `tools/list` and one `tools/call` against the server started from the same
   entry point production uses, and asserts the content blocks and the
-  per-connection session behaviour you promise.
+  per-connection session behaviour you promise. With `mcp` 2.x the same
+  test runs in process with no port: `async with mcp.Client(server)` lands
+  on 2026-07-28 and `mcp.Client(server, mode="legacy")` forces the
+  handshake, so one scripted-model test can run the same two-turn exchange
+  under both and assert what you promise for each (python-sdk
+  `docs/client/transports.md` and `docs/protocol-versions.md`; FastMCP's
+  equivalent is `Client(transport=server)`, PrefectHQ/fastmcp commit
+  37301f9, `docs/servers/testing.mdx`).
 - The published description, name and schema are committed next to the
   server so a consumer's manifest diff has something to compare with. The
   helper lives in this skill, not in the project: copy
   `scripts/mcp_tool_inventory.py` into the project's tooling directory with
-  its header intact (MIT), or run it from a pinned checkout of this
-  collection in CI, and record which.
+  this skill's MIT `LICENSE` beside it (the script carries no header of its
+  own), or run it from a pinned commit of this collection in CI, and record
+  which. The inventory speaks `initialize` first and falls back to
+  `server/discover` only when a server refuses the handshake, so on a server
+  that serves both eras it checks the handshake era only; check the
+  2026-07-28 era with the Inspector's `--protocol-era modern` (validation).
+- Fake-server tests on the producer side, beside the consumer rows in
+  [evaluation across boundaries](evaluation-across-boundaries.md): a client
+  read timeout on a slow agent turn, an agent exception surfacing as
+  `isError: true` with a message the caller can act on, and a forged,
+  foreign or expired conversation handle refused.
 - Bind the address explicitly. `MCPServer.run(transport, **kwargs)` on `mcp`
   2.3.0 forwards keyword arguments to the transport runner, and
   `run_streamable_http_async(*, host="127.0.0.1", port=8000,
@@ -138,6 +206,15 @@ server declares what it requires.
   "SHOULD return tools from `tools/list` in a deterministic order" for client
   caching and prompt-cache hits, so sort the exposed tools and keep names
   stable across deploys; the inventory manifest diff enforces that.
+- When an exposed tool should show interface in an MCP Apps host (Claude,
+  ChatGPT, VS Code), the ticket names ext-apps' companion skills,
+  `add-app-to-server` for an existing server or `create-mcp-app` for a new
+  one: consult the installed skill; if it is not installed, adk-engineer
+  explains how to get it (they ship as the `mcp-apps` plugin of the
+  repository's plugin marketplace, are TypeScript-first and track the
+  ext-apps release, 2.0.3 on 2026-10-24). Keep a meaningful text `content`
+  result for hosts without UI ("Tools MUST return meaningful content array
+  even when UI is available"; modelcontextprotocol/ext-apps commit 266a9e3, `specification/2026-01-26/apps.mdx` (Stable), read 2026-10-24).
 - Run the official conformance suite against the local instance, pinned, and
   commit its baseline (the procedure and the observed results are in
   [validation](validation.md#6-protocol-conformance-local-pinned)):

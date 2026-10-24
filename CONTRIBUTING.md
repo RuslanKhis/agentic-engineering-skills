@@ -71,6 +71,7 @@ them. Attribute borrowed patterns and retain any required upstream licence.
 | Skill description or routing | Positive, near-miss and contextual cases in fresh sessions; distinguish selection from execution |
 | Implementation guidance | A representative task with an independent check of its output or effects |
 | SDK recipe | Exact tested versions and relevant runtime contract tests |
+| A fact read from an external repository | A dated citation with the commit, and its row in `docs/research/source-register.json` so `scripts/check_source_freshness.py` reports when it goes quiet, stale, archived or relicensed |
 | Combination with another collection | Which workflow led, which skills loaded and whether the task's scope was preserved |
 
 Use the [evaluation protocol](docs/testing/skill-quality.md) to compare old/new

@@ -20,6 +20,44 @@ not confuse local protection doubles with a fully offline application.
 
 Use synthetic canaries with explicit sink assertions. A test that merely checks
 the response says “blocked” can miss leaked history, logs or completed writes.
+Exact canaries miss PII the model invents or reformats; a second,
+value-independent check is Microsoft Presidio's analyzer run offline over every
+captured sink (model request, session events, logs, tool arguments). It is a
+test dependency only, added with the project's agreement, never a production
+one. Pin `presidio-analyzer` (2.2.364 on PyPI on 2026-10-24, MIT, Python 3.10 to
+3.14); it still installs spaCy (3.8.16 resolved on 2026-10-25) whichever engine
+you choose. Construct it with `NoOpNlpEngine`, a
+`RecognizerRegistry(supported_languages=["en"])` and
+`load_predefined_recognizers(nlp_engine=...)`, or with a pre-installed pinned
+spaCy model wheel: the default engine calls `spacy.cli.download` for
+`en_core_web_lg` at run time, which fails in a no-egress harness or, worse,
+succeeds in one that should have had none. The pattern-only route still reaches
+the network: the email recognizer validates matches with `tldextract`, which
+fetches the Public Suffix List on first use, so set
+`TLDEXTRACT_PUBLIC_SUFFIX_LIST_URLS` to an empty string before importing
+Presidio and it uses its bundled snapshot (tldextract 5.4.0). That validation
+also rejects reserved domains, so canary emails under `.test`, `.invalid` or
+`.internal`, and internal-only domains, are invisible to Presidio; leave them to
+the exact-canary check, or use `example.com`. Without a spaCy model there is no
+person-name detection, phone numbers without context words score 0.4 (below a
+0.5 threshold), and some well-formed but invalid numbers are rejected by design,
+so set the threshold deliberately and keep names in the canary list. No
+recognizer ships for credentials, so add a `PatternRecognizer` per secret format
+you hold. Capture the sinks by wrapping `BaseLlm.generate_content_async`, the
+session service's `append_event` (on the class you use: `InMemorySessionService`
+calls its parent, so wrapping both records events twice), `BaseTool.run_async`
+and a logging handler, and report location, field and entity type, never the
+matched value; pytest's "Captured log" section prints log records on failure, so
+run with `--show-capture=no` or the report itself leaks. Prove it bites with a
+deliberate leak per sink that must fail. It is a test oracle only: a Presidio
+hit or miss says nothing about Sensitive Data Protection's accuracy, it does not
+replace the SDP orchestration tests (block on a forbidden finding, hold on
+empty, truncated or malformed results, timeouts), and Presidio never sits in the
+production path (microsoft/presidio commit 4f0e236,
+`presidio-analyzer/presidio_analyzer/nlp_engine/spacy_nlp_engine.py`,
+`conf/no_op.yaml` and `predefined_recognizers/generic/email_recognizer.py`, read
+2026-10-24; tldextract and the scores read in the installed packages and
+exercised offline on 2026-10-25).
 Run real pinned ADK callbacks through its runner with a scripted model when the
 change depends on callback timing. For tool side effects, use an injected sink
 whose call count and arguments are asserted. Denied/incomplete cases must leave
@@ -35,7 +73,7 @@ Using the selected existing Python interpreter and resolved skill path:
 python /path/to/skill/scripts/inspect_project.py --help
 python /path/to/skill/scripts/inspect_project.py /path/to/package --dry-run
 python /path/to/skill/scripts/inspect_project.py /path/to/package
-python -m unittest discover -s /path/to/skill/tests -v
+python -B -m unittest discover -s /path/to/skill/tests -v
 ```
 
 The inspector is read-only in both modes. An exit-zero inventory is not a

@@ -1890,6 +1890,235 @@ recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
 
+### Offline leak oracle and policy plugins · 24 October 2026
+
+The sensitive-data skill now adds Microsoft Presidio as a second, offline
+check for leaked personal data over every captured sink in tests. The
+trial found its "offline" set-up still fetched the Public Suffix List the
+first time an email matched; the skill now disables that, and covers the
+canary domains Presidio cannot see and how to keep the report from printing
+the leaked value. The security skill explains why the community
+`AgentGovernancePlugin` cannot replace an agent's tool gate: it sees only
+the tool name and arguments, turns every check off when `fail_open=True`
+and its engine is missing, and denies a payment a person has just approved
+when it runs again on resume. NeMo Guardrails was read and left out. Two
+fresh-agent trials (5 passed with all 5 deliberate leaks caught; 19 passed;
+ease 3 and 4 of 5); seventeen of nineteen frictions were fixed the same
+day, including two new inspector rules. All **23 packages** pass validation
+and **786 tests** pass with **59 optional SDK checks skipped**. See the
+[note](docs/research/nemo-presidio-agt-comparison-2026-10-24.md) and the
+[record](docs/testing/nemo-presidio-agt-alignment-2026-10-24.md).
+
+### MCP run-time pin and OWASP MCP ids · 24 October 2026
+
+A CI manifest diff misses a remote MCP server that changes a tool
+description after deploy. The security skill now pins definitions at run
+time through `tool_filter`, which ADK applies on every listing, checked once
+per invocation, after CoSAI's MCP guidance; it treats a stdio server in the
+agent's container as holding the agent's identity; and it maps findings to
+the OWASP MCP Top 10 ids by id and link only, because that list's licence is
+unclear. `mcp_tool_inventory.py` gained `--fail-on-diff` (its diff exited 0
+on a changed definition) and now pins the MCP Apps fields it already
+compared. A fresh-agent trial built the pin against a loopback server that
+changes a tool mid-session (12 tests passed; the original wiring failed 8;
+ease 3 of 5); eight of its nine frictions were fixed the same day. All **23
+packages** pass validation and **785 tests** pass with **59 optional SDK
+checks skipped**. See the
+[note](docs/research/owasp-mcp-cosai-ws4-comparison-2026-10-24.md) and the
+[record](docs/testing/owasp-mcp-cosai-ws4-alignment-2026-10-24.md).
+
+### CaMeL-style tool gate · 24 October 2026
+
+The security skill's sample capability gate allowed any tool it did not
+know and every call when no plan was stored. It now denies by default, with
+one policy per write or egress tool, provenance and readers rules after
+Google DeepMind's CaMeL research (cited as a pattern; the code is an
+unmaintained research artifact and none is used), and an honest account of
+what string taint matching cannot see. A fresh-agent trial built the gate
+for a mail agent offline (21 tests passed, including a control in which the
+ungated agent forwards mail to the attacker; ease 3 of 5) and found that on
+ADK 2.12 agent callbacks run again when a confirmation resumes, which
+re-froze the plan and refused the confirmed step; all nine frictions were
+fixed the same day. All **23 packages** pass validation and **783 tests**
+pass with **59 optional SDK checks skipped**. See the
+[note](docs/research/camel-comparison-2026-10-24.md) and the
+[record](docs/testing/camel-alignment-2026-10-24.md).
+
+### LlamaFirewall local tool-result screening · 24 October 2026
+
+When tool results may not leave the project, the security skill now covers
+LlamaFirewall's Prompt Guard 2 as a local screen with its conditions: it
+reads only the first 512 tokens, so results are windowed; its composite
+reports scanner errors as a successful allow and reloads the model on every
+scan, so the scanner is called directly; its block reason embeds the
+screened text. The sensitive-data skill treats AlignmentCheck as a data sink
+that sends the whole trace to a remote judge, not a gate. The weights are
+under a separate gated licence, so the skills link to them and ship none. A
+fresh-agent trial built the screen and a recipient gate offline with a fake
+classifier (23 tests passed; ease 3 of 5); nine of its ten frictions were
+fixed the same day, including two false readings in the security
+inspector. All **23 packages** pass validation and **782 tests** pass with
+**59 optional SDK checks skipped**. See the
+[note](docs/research/llamafirewall-comparison-2026-10-24.md) and the
+[record](docs/testing/llamafirewall-alignment-2026-10-24.md).
+
+### garak and deepteam red-team runs · 24 October 2026
+
+The security skill said garak only probes model endpoints; its `function`
+generator can attack the agent itself through the `Runner`. Two findings
+matter for CI. garak exited 0 on hits and on most errors, so the gate reads
+its report. And garak's detectors read text only: in the trial an ungated
+agent sent 32 emails to an attacker while garak passed every check, so the
+gate also reads a sidecar of the tool effects that actually ran. deepteam's
+OWASP Agentic preset is documented as a paid, approved campaign with a
+pinned Gemini model, telemetry opt-outs and label normalisation. A
+fresh-agent trial built the gate offline; it passed a clean run and failed
+every canary, including the one garak missed (ease 4 of 5); ten of its
+eleven frictions were fixed the same day. All **23 packages** pass
+validation and **781 tests** pass with **59 optional SDK checks skipped**.
+See the [note](docs/research/deepteam-garak-comparison-2026-10-24.md) and
+the [record](docs/testing/deepteam-garak-alignment-2026-10-24.md).
+
+### Model Armor files and safe template updates · 24 October 2026
+
+Google's Model Armor samples are useful and partly unsafe to copy: the
+update samples omit `update_mask`, which overwrites every field (on a floor
+setting, its integrated services), and the PDF sample's encoding cannot be
+told apart by its own test. The sensitive-data skill now carries the
+file-screening contract with a live canary, the masked and idempotent
+update, the fields an effective-policy audit reads back, and, from the
+trial, the attachment seam in ADK, the stock plugin's text-only screening,
+multi-language detection and two corrected claims about ADK 2.12's plugin.
+A fresh-agent trial built attachment screening and a one-field template
+update offline and passed 42 tests (ease 3 of 5); nine of its eleven
+frictions were fixed the same day. All **23 packages** pass validation and
+**781 tests** pass with **59 optional SDK checks skipped**. See the
+[note](docs/research/model-armor-dlp-samples-comparison-2026-10-24.md) and
+the [record](docs/testing/model-armor-dlp-samples-alignment-2026-10-24.md).
+
+### Google's managed MCP servers (google/mcp) · 24 October 2026
+
+The google/mcp repository is quiet and calls itself demonstration material,
+so the skills cite Google's documentation instead. Google runs two kinds of
+remote MCP server and only the Google Cloud kind is governed by IAM; IAM can
+make those servers read-only for an agent at the platform, and BigQuery's
+server caps queries at three minutes and 3,000 rows. The interoperability
+skill now explains the two kinds, and the SQL skill carries the read-only
+deny, the tool list, the pinned `project_id`, the roles, the truncation
+check and when to stay on MCP Toolbox. A fresh-agent trial wired a
+synthetic analytics agent offline and passed 11 tests, including a refused
+write that never reached the server (ease 3 of 5); ten of its twelve
+frictions were fixed the same day from Google's pages. All **23 packages**
+pass validation and **781 tests** pass with **59 optional SDK checks
+skipped**. See the [note](docs/research/google-mcp-comparison-2026-10-24.md)
+and the [record](docs/testing/google-mcp-alignment-2026-10-24.md).
+
+### MCP exposure on both protocol eras · 24 October 2026
+
+Reading the MCP Inspector, the Python SDK and FastMCP found two errors in
+the interoperability skill. An agent served with `to_mcp_server` does not
+keep a conversation for clients on the 2026-07-28 revision, which every
+current client uses by default: each call starts a fresh ADK session
+(reproduced with a scripted model), and no server setting can switch that
+revision off. And the inventory helper's fallback for servers that only
+speak 2026-07-28 used the wrong version and field names, with a test fixture
+that shared the mistake. Both are fixed: the skill shows a hand-built
+server with a caller-bound conversation handle and a two-mode in-process
+test, and the Inspector CLI is now a CI cross-check with recorded exit codes
+and a workflow step. A fresh-agent trial built the contract and CI offline:
+9 tests passed on both eras, the Inspector check caught a tampered manifest,
+and the conformance suite ran per revision (ease 3 of 5); its eleven
+frictions were fixed the same day. All **23 packages** pass validation and
+**781 tests** pass with **59 optional SDK checks skipped**. See the
+[note](docs/research/mcp-inspector-sdk-fastmcp-comparison-2026-10-24.md)
+and the [record](docs/testing/mcp-inspector-sdk-fastmcp-alignment-2026-10-24.md).
+
+### MCP Apps widgets (ext-apps) · 24 October 2026
+
+ADK attaches an MCP App's UI resource to the event but renders nothing,
+never tells servers it supports the UI extension, and ignores tool
+visibility, so the model can call tools meant only for the view. The
+interoperability skill now says so, with the `tool_filter` and backend rules
+that close the visibility gap and a backend-session remedy for servers that
+hide UI tools; the inventory reads both meta keys, flags app-only tools and
+unreferenced app pages, and treats UI metadata as part of a tool's pinned
+definition. The frontend skill has the renderer contract (backend-served
+page, a sandbox on a separate origin, CSP from the tool's metadata). A
+fresh-agent trial built the case offline against a fake vendor server and
+passed 18 tests (ease 3 of 5); nine of its eleven frictions were fixed the
+same day, including a wrong claim in the security skill about the
+environment a stdio server inherits. All **23 packages** pass validation and
+**781 tests** pass with **59 optional SDK checks skipped**. See the
+[note](docs/research/mcp-ext-apps-comparison-2026-10-24.md) and the
+[record](docs/testing/mcp-ext-apps-alignment-2026-10-24.md).
+
+### PyRIT injection campaigns · 24 October 2026
+
+PyRIT's A2A target is on its main branch only (1.1.0, the latest release,
+does not have it), but its cross-domain injection workflow is released and
+can be scored without a model. The security skill now wires a poisoned
+document through that workflow with a substring scorer over the tool calls
+that actually ran, so a scripted-model run fits the deterministic suite; the
+interoperability skill records the A2A target's settings and an offline A2A
+route for CI. A fresh-agent trial built the campaign against a synthetic HR
+agent: 7 tests passed, the gated agent resisted 5 of 5 attacks in process and
+over A2A while an ungated control fell to 4 of 5 (ease 3.5 of 5). It showed
+that scoring the A2A task history counts a refused attempt as a success,
+which the skill now forbids, and that the security inspector read a
+factory-built tool list as safe; its trifecta summary now carries a
+`complete` flag. All **23 packages** pass validation and **778 tests** pass
+with **59 optional SDK checks skipped**. See the
+[note](docs/research/pyrit-comparison-2026-10-24.md) and the
+[record](docs/testing/pyrit-alignment-2026-10-24.md).
+
+### A2UI routes and validation · 24 October 2026
+
+A2UI (now `a2ui-project/a2ui`, still a public preview) reaches an ADK agent
+three ways, and only one of them checks payloads against the catalogue on
+the agent side, statelessly; the web client accepts unknown components
+unless it is given a validation config. The frontend skill now has a ticket
+declare the route and where the check runs, says `adk web` in 2.12.0 shows
+no custom A2UI widgets on any route, carries the package pins and the
+`a2a-sdk<0.4` conflict that `a2ui-adk[a2a]` brings, and says a staged widget
+reaches an A2A partner only as ADK metadata; the interoperability skill
+gained the sub-agent surface map. A fresh-agent trial planned a
+custom-catalogue shopping agent and passed 22 offline tests (ease 3 of 5);
+seven of its ten frictions were fixed the same day, two partly and one
+left with its reason. All
+**23 packages** pass validation and **777 tests** pass with **59 optional
+SDK checks skipped**. See the [note](docs/research/a2ui-comparison-2026-10-24.md)
+and the [record](docs/testing/a2ui-alignment-2026-10-24.md).
+
+### Signed A2A agent cards (a2a-samples) · 24 October 2026
+
+The A2A samples repository (quiet since August, read at a pinned commit)
+showed that ADK 2.12.0 never verifies a signature on a card it fetches by
+URL, and that verifying it yourself switches off ADK's same-origin check. The
+interoperability skill now gives both sides: verify with a key set agreed out
+of band (never the card's own `jku`), re-pin the origin, sign a copy once at
+startup, and treat fields outside the SDK's schema as unsigned. The card
+checker gained structural signature checks and a `--fail-on` option for CI,
+and the tool-auth skill says where backchannel consent (CIBA) fits. A
+fresh-agent trial built both sides offline and passed 18 of 18 tests (ease
+4 of 5); its nine frictions were fixed the same day. All **23 packages** pass
+validation and **777 tests** pass with **59 optional SDK checks skipped**.
+See the [note](docs/research/a2a-samples-comparison-2026-10-24.md) and the
+[record](docs/testing/a2a-samples-alignment-2026-10-24.md).
+
+### Source freshness · 24 October 2026
+
+A new maintainer script, `scripts/check_source_freshness.py`, reports whether
+the 44 external repositories the skills cite are still maintained: days since
+the last commit (active, quiet or stale, with placeholder thresholds), the
+latest release, commits since the commit we read, and anything that needs a
+maintainer, such as an archived, renamed or relicensed repository or a pinned
+commit that has gone. Its register, `docs/research/source-register.json`, is
+validated offline by the repository checks. The first live run found 38 active
+and 6 quiet sources, none stale, and four new releases worth a review,
+including google-adk 2.13.0. All **23 packages** pass validation and
+**767 tests** pass with **59 optional SDK checks skipped**. See the
+[record](docs/testing/source-freshness-2026-10-24.md).
+
 ### Demo polish · 23 October 2026
 
 The house design now looks like a product rather than a chat widget: an app

@@ -82,6 +82,26 @@ Keep the private adapter record separate from the public result. Use this order:
    formats, maximum text/list/nesting sizes. Reject unknown public fields. For
    requested resources, verify the returned reference matches the request.
 3. Protect declared free-text fields with the selected SDP/Armor policies.
+   An "alignment check" added beside them is a data boundary of its own:
+   LlamaFirewall's AlignmentCheck sends the user's first message and the
+   whole trace, tool calls and results included, to an OpenAI-compatible
+   endpoint, by default Together AI with a static `TOGETHER_API_KEY` and a
+   hard-coded temperature of 0.0 (meta-llama/PurpleLlama commit d934ea2,
+   `LlamaFirewall/` (MIT scanner code), read 2026-10-24).
+   `AlignmentCheckScanner` itself takes no model or endpoint option, but its
+   base class `CustomCheckScanner` takes `model_name`, `api_base_url`,
+   `api_key_env_var` and `temperature`, so a subclass can point it at an
+   endpoint inside the project; that changes where the trace goes, not what
+   is in it, and it still reads a key from an environment variable. Its
+   prompt leans towards allow ("When in doubt, assume the action is not
+   misaligned"), a misalignment yields `HUMAN_IN_THE_LOOP_REQUIRED`, not a
+   block, and a judge error yields the same `HUMAN_IN_THE_LOOP_REQUIRED`
+   with a successful status, so an outage cannot be told apart from a
+   finding; a trace with no user message returns `ALLOW` with an `ERROR`
+   status. Treat it as a third-party sink needing the same approval as any
+   model call carrying session data; it is not a gate. A judge you build
+   instead can be sent only the user's goal and the proposed call, never
+   tool results.
    Structural string fields must have constraints that prevent them becoming
    unscreened free-text channels. Derive those constraints from the real domain;
    do not transplant example order/contact regexes.
@@ -128,7 +148,11 @@ Gemini async/sync clients, Armor and SDP. Test repeated calls and cleanup even
 when one close fails; do not initialise an unused lazy client just to close it.
 
 RAG ingestion/retrieval, durable memory, caches, attachments, audio and images
-need equivalent boundaries when present. The supplied text workflow does not
+need equivalent boundaries when present. For attachments the ADK seam is a
+plugin's `on_user_message_callback`, which runs before the runner saves the
+user message to the session (2.12.0 `runners.py`): screen there, replace a
+refused message with a fixed notice, and screen file parts again in
+`before_model_callback` for files that reach the request from history. The supplied text workflow does not
 implement those paths, production identity, distributed locking, retention
 enforcement or incident response. Record these as production extensions and
 scope them explicitly instead of claiming full coverage.

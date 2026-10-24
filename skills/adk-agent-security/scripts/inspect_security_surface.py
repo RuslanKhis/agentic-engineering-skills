@@ -58,7 +58,7 @@ IDENTITY_NAMES = {"user_id", "tenant_id", "email", "user_email", "customer_id", 
 WRITE_VERBS = {"create", "update", "delete", "send", "post", "pay", "refund", "execute",
                "transfer", "remove", "write", "publish", "approve", "cancel", "purchase",
                "charge", "submit", "upload", "modify", "patch", "grant", "revoke", "deploy",
-               "drop", "insert", "notify", "share", "forward", "schedule", "book"}
+               "drop", "insert", "notify", "share", "forward", "schedule", "book", "archive"}
 EGRESS_VERBS = {"send", "post", "upload", "publish", "notify", "share", "forward",
                 "webhook", "fetch", "download", "browse", "http", "request", "crawl", "scrape",
                 "visit", "open", "get", "call", "message"}
@@ -80,7 +80,8 @@ PRIVATE_TOKENS = {"customer", "customers", "account", "accounts", "order", "orde
                   "bigquery", "crm", "hr", "ticket", "tickets", "memory", "session", "history",
                   "file", "files", "document", "documents", "notes", "vault", "key", "keys",
                   "token", "tokens", "balance", "transactions", "transaction", "internal",
-                  "private", "confidential", "corpus", "knowledge", "kb"}
+                  "private", "confidential", "corpus", "knowledge", "kb", "contract",
+                  "contracts"}
 BUILTIN_TOOLS = {
     "google_search": {"untrusted"}, "GoogleSearchTool": {"untrusted"},
     "enterprise_web_search": {"untrusted"}, "EnterpriseWebSearchTool": {"untrusted"},
@@ -253,6 +254,8 @@ class FunctionFacts:
         for node in self.body_nodes():
             if isinstance(node, ast.Call):
                 name = dotted(node.func, self.aliases)
+                if name.startswith("urllib.parse."):
+                    continue  # parsing a URL sends nothing
                 if name.startswith(NETWORK_PREFIXES) or name in {"urlopen", "urllib.request.urlopen"}:
                     yield name
 
@@ -268,6 +271,9 @@ class FunctionFacts:
         network = sorted(set(self.network_calls()))
         egress_params = sorted(params & EGRESS_PARAMS)
         egress_verbs = sorted(name_tokens & EGRESS_VERBS)
+        leading = (self.name or "").lower().replace("-", "_").split("_")[0]
+        if leading in {"email", "mail", "sms"}:  # "email_vendor": a send named by its channel
+            egress_verbs = sorted(set(egress_verbs) | {leading})
         if network or egress_params or egress_verbs:
             flags.add("egress")
             details["egress_evidence"] = {"network_calls": network, "parameters": egress_params,
@@ -372,6 +378,16 @@ class Collector(ast.NodeVisitor):
             elif plugins is not None:
                 self.plugins.append({"name": "<dynamic>", "path": self.path, "line": node.lineno,
                                      "runner": name})
+        elif name == "AgentGovernancePlugin":
+            # Community policy plugin: fail_open=True turns every check off when its engine is missing,
+            # and without strict=True an unparsable policy file is skipped.
+            unsafe = [label for label, bad in (("fail_open=True", is_true(keyword(node, "fail_open"))),
+                                               ("strict not True", not is_true(keyword(node, "strict"))))
+                      if bad]
+            if unsafe:
+                self.observe(node.lineno, name, "governance_plugin_settings",
+                             ", ".join(unsafe) + "; keep fail_open=False, set strict=True and a deny default, "
+                             "and keep the agent's own gate")
         elif name in BASH_POLICY_CLASSES:
             prefixes = keyword(node, "allowed_command_prefixes")
             if prefixes is None:
@@ -445,6 +461,7 @@ class Inventory:
                        "heuristic": "name, parameter and call-based classification; confirm every row by reading the tool body",
                        "adk_pins": [], "agents": [], "plugins": [], "findings": [], "counts": {}, "issues": []}
         self.seen = 0
+        self.prefix_flagged = set()
         self.stopped = False
         self.collectors = []
 
@@ -663,7 +680,8 @@ class Inventory:
             entry["flags"].add("code_execution")
         if not raw["tools_literal"]:
             self.finding(raw["path"], raw["line"], subject, "tools_not_literal",
-                         "tools= is not a list literal; inventory the runtime list by hand")
+                         "tools= is not a list literal; inventory the runtime list by hand "
+                         "(this agent's trifecta summary is incomplete, so an absent leg is unknown, not absent)")
         for element in raw["tool_elements"]:
             self.describe_tool(collector, raw, entry, element, gated_by_callback)
         entry["flags"] = sorted(entry["flags"])
@@ -840,6 +858,19 @@ class Inventory:
         if filter_kind == "absent":
             self.finding(path, line, subject, "mcp_unfiltered",
                          "McpToolset without tool_filter exposes every server tool; allowlist by name")
+        elif filter_kind == "predicate":
+            # A callable admits names this scan cannot see, so write and egress legs are unknown, not absent.
+            entry["toolset_names_unknown"] = True
+            self.finding(path, line, subject, "mcp_filter_predicate_review",
+                         "tool_filter is not a literal list (a callable or a variable); list the names it admits "
+                         "by hand and review them for write and egress (this agent's trifecta summary is incomplete)")
+        mcp_toolsets = [t for t in entry["toolsets"] if t["kind"] == "mcp_toolset"]
+        if (len(mcp_toolsets) > 1 and not all(t["tool_name_prefix"] for t in mcp_toolsets)
+                and id(entry) not in self.prefix_flagged):
+            self.prefix_flagged.add(id(entry))
+            self.finding(path, line, subject, "mcp_toolsets_without_prefix",
+                         "more than one McpToolset on this agent and not every one sets tool_name_prefix; "
+                         "two servers can shadow each other's tool names")
         if transport in STDIO_PARAMS:
             self.finding(path, line, subject, "mcp_stdio_transport",
                          f"{transport} spawns a local process with the agent's own identity and environment")
@@ -863,12 +894,17 @@ class Inventory:
         visited = visited if visited is not None else set()
         own = set(entry["flags"])
         combined, sources = set(own), {"own": sorted(own), "sub_agents": {}}
+        complete = bool(entry.get("tools_literal", True)) and not entry.get("toolset_names_unknown")
         visited.add(id(entry))
         for sub in entry["sub_agents"]:
             target = by_var.get(sub["variable"])
-            if target is None or id(target) in visited:
+            if target is None:
+                complete = False
+                continue
+            if id(target) in visited:
                 continue
             nested = self.trifecta(target, by_var, visited)
+            complete = complete and nested["complete"]
             sources["sub_agents"][sub["variable"]] = nested["sources"]["own"]
             combined |= {flag for flag, present in (("private", nested["has_private_data_source"]),
                                                      ("untrusted", nested["has_untrusted_content_source"]),
@@ -878,7 +914,10 @@ class Inventory:
                    "has_egress": "egress" in combined,
                    "has_code_execution": "code_execution" in combined,
                    "has_remote_agent_content": "remote" in combined,
-                   "sources": sources}
+                   "sources": sources,
+                   # False when a tools= list or a sub-agent could not be resolved statically:
+                   # absent legs then mean "not seen", not "not present".
+                   "complete": complete}
         summary["all_three"] = summary["has_private_data_source"] and summary["has_untrusted_content_source"] and summary["has_egress"]
         return summary
 

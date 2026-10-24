@@ -11,7 +11,7 @@ Read only when workload identity, application credentials, Secret Manager or an 
 | Application-wide external API | Provider credential from a protected store; workload IAM governs retrieval |
 | User-owned external data | Delegated credential; also read [OAuth lifecycle](oauth-lifecycle.md) |
 
-Keep deployer, gateway and tool-runtime permissions separate when they are separate principals. Avoid service-account private keys as a Secret Manager bootstrap mechanism. Preserve the target's backend and model choice; a Gemini API key does not establish permissions for Secret Manager or a delegated provider.
+Keep deployer, gateway and tool-runtime permissions separate when they are separate principals. Within one runtime, select the credential by the tool's tier in trusted code (`adk-agent-security` owns the tier table): read-only tools hold read-only credentials, reversible tools resource-scoped write credentials, and commit tools the narrowest write credential, so a bypassed tool's credential still limits the damage (CoSAI MCP tool-design runbook, cosai-oasis/ws4-secure-design-agentic-systems commit 855cb05, CC BY 4.0, read 2026-10-24). Avoid service-account private keys as a Secret Manager bootstrap mechanism. Preserve the target's backend and model choice; a Gemini API key does not establish permissions for Secret Manager or a delegated provider.
 
 ## Inspect without revealing credentials
 

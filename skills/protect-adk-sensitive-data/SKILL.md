@@ -69,6 +69,8 @@ the gateway, and an audit request authorises inspection and recommendations.
 4. For tool-bearing agents, apply [boundaries.md](references/boundaries.md):
    protect generated arguments before persistence and again before execution;
    project and validate tool results; authorise every resource inside its tool.
+   A third-party "alignment check" over the trace is a data sink, not a gate
+   (step 3 there).
 5. Buffer the public answer, classify blocked/error events before final text,
    and screen the complete answer before release. Share this gate across JSON
    and SSE. Emit no raw deltas, tool payloads or internal metadata.
@@ -107,7 +109,7 @@ behavioural canary showing blocked data never reaches a model, persisted event,
 log or side effect. For callback changes use the actual pinned ADK runner with
 an injected model and provider doubles, not just direct callback calls.
 
-Run `python -m unittest discover -s /path/to/skill/tests -v` to check the bundled
+Run `python -B -m unittest discover -s /path/to/skill/tests -v` to check the bundled
 resources when adapting them. The optional SDK adapter tests require the target's
 existing DLP SDK; report skips explicitly. These tests make no provider calls. A local
 protection fake alone does **not** make an ADK application offline: replace the

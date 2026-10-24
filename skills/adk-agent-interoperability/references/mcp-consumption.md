@@ -237,6 +237,31 @@ present (`_get_mtls_transport`, `_RefreshableAsyncCredentials`); 2.9.0 and
 f9f4a39, 5a018c9). Set `GOOGLE_API_USE_CLIENT_CERTIFICATE=false` on 2.8.0
 when the MCP host is not Google's and you do not want ADC offered to it.
 
+## Google's managed remote MCP servers
+
+Google runs two kinds, and only one is governed by IAM (Google Cloud
+documentation, MCP overview and supported products, last updated
+2026-10-22, read 2026-10-24). Google Cloud MCP servers (BigQuery at
+`https://bigquery.googleapis.com/mcp`, Cloud SQL at
+`https://sqladmin.googleapis.com/mcp` and many more; some are regional, such
+as `https://apihub.REGION.rep.googleapis.com/mcp`) support MCP
+2026-07-28, need `roles/mcp.toolUser` (permission `mcp.tools.call`) beside
+the data roles, and can be restricted with IAM allow and deny conditions
+(`adk-sql-agent-engineering` carries the read-only deny). A deny stops the
+call, not the listing: `tools/list` still advertises the write tools, so
+pair it with a `tool_filter`. Authenticate with a `header_provider` that
+mints the runtime identity's OAuth token per request (the BigQuery server
+asks for the `https://www.googleapis.com/auth/bigquery` scope); `tools/list`
+itself needs no authentication on that server. Google's other
+remote MCP servers (Maps Grounding Lite at
+`https://mapstools.googleapis.com/mcp`, Developer Knowledge, the Workspace
+servers in Developer Preview and others) "don't require" that role, and
+"you also can't use IAM policies or permissions to control access to" them,
+so for those the agent's `tool_filter` and egress policy are the only gates
+on which tools it may call. Take the list from the supported-products page
+with its date, not from the google/mcp repository, which calls itself
+demonstration material and lists a fraction of the servers.
+
 ## Google-hosted MCP servers on API Gateway
 
 API Gateway can serve an OpenAPI 3.x REST API as a stateless remote MCP
@@ -299,8 +324,46 @@ they are not installed, adk-engineer explains how to get them.
   requests (SDK 1.x behaviour). The 2026-07-28 revision deprecates Sampling
   and replaces server-initiated requests with Multi Round-Trip Requests
   (`resultType: "input_required"`); see [compatibility](compatibility.md).
-- MCP App UI resources (`_meta.ui.resourceUri`) are rendered as a
-  `UiWidget` after the call; `adk-frontend-integration` owns the renderer.
+  With `ADK_ENABLE_MCP_MODERN_PROTOCOL=1` the connection is 2026-07-28, so a
+  tool on an `mcp` 2.x or FastMCP 4 server that calls `ctx.elicit()` fails
+  ("elicitation via server-initiated requests is unavailable on 2026-07-28
+  connections") and `elicitation_callback` is never reached; a server meant
+  for both revisions returns `input_required` instead (PrefectHQ/fastmcp
+  commit 37301f9, `docs/getting-started/upgrading/from-fastmcp-3.mdx`;
+  python-sdk `docs/run/legacy-clients.md`; read 2026-10-24).
+- MCP Apps (the `io.modelcontextprotocol/ui` extension; modelcontextprotocol/ext-apps commit 266a9e3, `specification/2026-01-26/apps.mdx` (Stable), read 2026-10-24). After a
+  call to a tool whose `_meta.ui.resourceUri`, or the deprecated
+  flat `_meta["ui/resourceUri"]`, starts with `ui://`, `McpTool` adds
+  `UiWidget(id=<function call id>, provider="mcp", payload={"resource_uri",
+  "tool", "tool_args"})` to the event's `actions.render_ui_widgets`; the
+  model still gets the ordinary tool result. ADK 2.12.0 attaches the widget
+  even when the result has `isError: true`, so the renderer drops those; the
+  payload's `tool` is ADK's dump of the MCP tool, whose metadata came through
+  as `meta` rather than `_meta` in an offline trial, so read both. ADK never fetches or renders
+  the HTML, and the `adk web` bundled with 2.12.0 does not show these
+  widgets, so a UI needs a renderer ticket in `adk-frontend-integration`
+  (google-adk 2.12.0 `tools/mcp_tool/mcp_tool.py`; the feature dates from
+  1.27.0). Two host duties the extension assigns are not done by ADK 2.12.0.
+  It does not advertise the extension: `session_context.py` builds
+  `ClientSession` without the `extensions=` argument that `mcp` 2.3.0
+  accepts, and servers "SHOULD check client capabilities before registering
+  UI-enabled tools", so a server that does gives ADK text-only tools; run
+  the inventory against the server before planning UI, where
+  `mcp_app_resource_unreferenced` (an MCP App page that no listed tool points
+  at) is the trace of such gating. The remedies are the vendor's (list UI
+  tools regardless) or a backend MCP session of your own that declares the
+  extension (`{"io.modelcontextprotocol/ui": {"mimeTypes":
+  ["text/html;profile=mcp-app"]}}` in the client's `extensions`) and serves
+  the view, which the frontend's renderer needs anyway; ADK's own session
+  stays text-only. The manifest diff counts `ui_resource_uri` and
+  `ui_visibility` as definition, so a vendor that drops a tool's UI or makes
+  an app-only tool visible to the model raises `rug_pull_signal`.
+  And it does not apply `_meta.ui.visibility`: `McpTool.visibility` exists
+  but nothing reads it, while the extension says a host "MUST NOT include
+  tools in the agent's tool list when their visibility does not include
+  `"model"`". Drop app-only tools with `tool_filter` (the inventory flags
+  them as `mcp_app_tool_not_for_model`), and have the backend refuse a
+  view-initiated call to a tool whose visibility lacks `"app"`.
 
 ## Debugging what crossed the wire
 

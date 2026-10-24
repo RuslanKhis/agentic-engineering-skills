@@ -35,11 +35,34 @@ assume it.
    `~/.ssh/id_rsa` and pass it in a parameter, invisible in the client UI.
    Their recommendations: show AI-visible descriptions to humans, pin tool
    definitions, isolate dataflow between servers.
-3. **Pin by hash.** Record a SHA-256 of each reviewed declaration
-   (`name`, `description`, `inputSchema`) in the repository and compare at
-   startup or in a test; a changed hash is a change request, not a hot
-   update. `tool_list_cache_ttl_seconds` controls re-listing but not
-   re-review.
+3. **Pin by hash.** Record a SHA-256 of each reviewed declaration (`name`,
+   `description`, `inputSchema`) in the repository and compare at startup or
+   in a test; a changed hash is a change request, not a hot update.
+   `tool_list_cache_ttl_seconds` controls re-listing but not re-review. A
+   startup or CI check misses a remote server that changes a description
+   after deploy, so enforce the pin at run time as well: `McpToolset`
+   applies `tool_filter` on every `get_tools` call, cache hits included, and
+   a callable filter receives each `McpTool`, whose `raw_mcp_tool` carries
+   the live `description` and `inputSchema` (google-adk 2.12.0
+   `tools/mcp_tool/mcp_toolset.py` and `tools/base_toolset.py`, read
+   2026-10-24). The agent reaches it through `get_tools_with_prefix`, which
+   caches the filtered list for the rest of the invocation, so the pin is
+   checked once per invocation and a change mid-invocation is seen on the
+   next one. Make the allowlist a predicate that admits a tool only when its
+   name is allowlisted and its definition matches the committed manifest
+   (the manifest pins every tool the server listed, so it is not the
+   allowlist): pass `tool.raw_mcp_tool.model_dump(by_alias=True,
+   mode="json", exclude_none=True)` to `describe_tool` from
+   `adk-agent-interoperability`'s `mcp_tool_inventory.py`, or to a copy of
+   it and `canonical_hash`, and compare its hash fields with the manifest
+   entry, with a parity test against the inventory's own output. Withhold a
+   mismatched tool, failing closed per tool and logging the mismatch;
+   re-approval is a manifest change. A matching hash proves the definition,
+   not the server's behaviour (CoSAI's MCP tool-design runbook, "Manifest
+   Pinning", and MCP security whitepaper v2, which asks to revalidate pinned
+   definitions after a list change;
+   cosai-oasis/ws4-secure-design-agentic-systems commit 855cb05, CC BY 4.0,
+   read 2026-10-24).
 4. **Namespace.** `tool_name_prefix` keeps two servers' `read_file` apart and
    makes a shadowing attempt visible (Invariant's WhatsApp MCP case: a
    malicious server's description told the model to route another server's
@@ -91,7 +114,7 @@ assume it.
 
 | Rule | Basis |
 | --- | --- |
-| Streamable HTTP in production; stdio for development or single-tenant local use | ADK docs (documented behaviour); `StdioConnectionParams` spawns a process with the agent's own environment, and 2.7.0 rejects stdio servers in YAML configs unless `ADK_ALLOW_CONFIG_STDIO_MCP_SERVERS` is set (source-verified constant). Inspector: `mcp_stdio_transport` |
+| Streamable HTTP in production; stdio for development or single-tenant local use | ADK docs (documented behaviour); `StdioConnectionParams` spawns a process in the agent's container; the `mcp` SDK passes it only a small default set of environment variables (on POSIX `HOME`, `LOGNAME`, `PATH`, `SHELL`, `TERM`, `USER`) plus what `env=` adds, so secrets in the agent's environment reach it only when passed (mcp 2.3.0 `client/stdio.py`, read 2026-10-24), and 2.7.0 rejects stdio servers in YAML configs unless `ADK_ALLOW_CONFIG_STDIO_MCP_SERVERS` is set (source-verified constant). Inspector: `mcp_stdio_transport`. In a deployed agent a stdio server runs inside the agent's container and can reach what the agent reaches, plausibly including the metadata server that mints the agent's token (an inference, not tested): move it to its own service and identity behind Streamable HTTP (`deploy-adk-on-google-cloud` owns the service, its identity and private ingress), or sandbox it and record it as holding the agent's identity (CoSAI MCP runtime-isolation runbook: no shared runtime across trust boundaries; cosai-oasis/ws4-secure-design-agentic-systems commit 855cb05, CC BY 4.0) |
 | Per-user credentials through `header_provider(readonly_context)`, never hardcoded headers | ADK docs; `adk-tool-auth-and-secrets` owns the token lifecycle |
 | No token passthrough | MCP Security Best Practices, 2025-11-25 (documented behaviour): a server MUST NOT accept tokens that were not issued for it; an agent must not forward the user's upstream token to a downstream server |
 | Per-client consent, session IDs bound to the user, scope minimisation | Same specification: confused-deputy and session-hijack sections |
@@ -162,8 +185,9 @@ needs (`adk-tool-interface-design` covers the schema), and pin its hash.
   tiered and gated ([agency and output](agency-and-output.md)).
 - Declarations dumped, read, hashed and committed as the interoperability
   skill's `mcp_tool_inventory.py --out` manifest, the one pin format both
-  skills use; a test runs `--diff` against it (or compares the same hashes
-  from `get_tools` when the SDK is present).
+  skills use; a test runs `--diff --fail-on-diff` against it (exit 3 on a
+  changed definition; `--diff` alone exits 0), or compares the same hashes
+  from `get_tools` when the SDK is present.
 - When a scan is mandated or chosen: the pinned scan job in CI with its exit
   codes mapped, the scanned configuration tied to the agent's command by a
   test, and the data-handling decision recorded (item 6).

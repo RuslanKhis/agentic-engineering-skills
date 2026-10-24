@@ -191,6 +191,95 @@ root_agent = LlmAgent(name="kb_agent", model="m", tools=[search_corpus, send_mai
         self.assertTrue(agent["trifecta"]["has_private_data_source"])
         self.assertTrue(agent["trifecta"]["all_three"])
 
+    def test_contract_reader_is_private_and_url_parsing_is_not_egress(self):
+        self.write("contracts/agent.py", '''
+from urllib.parse import urlsplit
+import httpx
+from google.adk.agents import LlmAgent
+
+
+def read_contract(contract_id: str) -> dict:
+    return {"text": ""}
+
+
+def normalise_reference(raw: str) -> dict:
+    return {"host": urlsplit(raw).hostname}
+
+
+def send_email(to: str, body: str) -> dict:
+    httpx.post("https://mail.invalid/send", json={"to": to, "body": body})
+    return {"ok": True}
+
+
+parser = LlmAgent(name="parser", model="m", tools=[normalise_reference])
+root_agent = LlmAgent(name="contracts", model="m", tools=[read_contract, send_email])
+''')
+        _, data = self.scan()
+        self.assertTrue(self.agent(data, "contracts")["trifecta"]["has_private_data_source"])
+        self.assertFalse(self.agent(data, "parser")["trifecta"]["has_egress"])
+
+    def test_archive_tool_without_gate_is_a_write_finding(self):
+        self.write("mail/agent.py", '''
+from google.adk.agents import LlmAgent
+
+
+def archive_thread(thread_id: str) -> dict:
+    return {"status": "success"}
+
+
+root_agent = LlmAgent(name="mail", model="m", tools=[archive_thread])
+''')
+        _, data = self.scan()
+        self.assertEqual([item["subject"] for item in self.findings(data, "write_tool_without_gate")],
+                         ["archive_thread"])
+
+    def test_predicate_filter_and_unprefixed_toolsets_are_review_rows(self):
+        self.write("support/agent.py", '''
+from google.adk.agents import LlmAgent
+from google.adk.tools.mcp_tool import McpToolset, StdioConnectionParams, StreamableHTTPConnectionParams
+
+
+def pinned(tool, readonly_context=None):
+    return True
+
+
+vendor = McpToolset(connection_params=StreamableHTTPConnectionParams(url="https://vendor.invalid/mcp"),
+                    tool_filter=pinned, tool_name_prefix="vendor")
+pdf = McpToolset(connection_params=StdioConnectionParams(server_params=None), tool_filter=["extract_text"])
+root_agent = LlmAgent(name="support", model="m", tools=[vendor, pdf])
+''')
+        _, data = self.scan()
+        self.assertEqual(len(self.findings(data, "mcp_filter_predicate_review")), 1)
+        self.assertEqual(len(self.findings(data, "mcp_toolsets_without_prefix")), 1)
+        self.assertFalse(self.agent(data, "support")["trifecta"]["complete"])
+
+    def test_channel_named_sender_is_egress_and_governance_settings_are_checked(self):
+        self.write("finance/agent.py", '''
+from google.adk.agents import LlmAgent
+from google.adk.apps import App
+from google.adk_community.plugins import AgentGovernancePlugin
+
+
+def email_vendor(vendor_id: str, body: str) -> dict:
+    return {"status": "success"}
+
+
+def read_email(folder: str) -> dict:
+    return {"status": "success"}
+
+
+root_agent = LlmAgent(name="finance", model="m", tools=[email_vendor, read_email])
+app = App(name="finance", root_agent=root_agent,
+          plugins=[AgentGovernancePlugin(policy_directory="policies", fail_open=True)])
+''')
+        _, data = self.scan()
+        tools = {tool["name"]: tool for tool in self.agent(data, "finance")["tools"]}
+        self.assertIn("egress", tools["email_vendor"]["flags"])
+        self.assertNotIn("egress", tools["read_email"]["flags"])
+        [finding] = self.findings(data, "governance_plugin_settings")
+        self.assertIn("fail_open=True", finding["detail"])
+        self.assertIn("strict not True", finding["detail"])
+
     def test_each_finding_kind_fires_on_the_trifecta_fixture(self):
         self.write("agent.py", TRIFECTA_AGENT)
         result, data = self.scan()
@@ -320,6 +409,19 @@ root = LlmAgent(name="root", model="m", tools=build_tools(), sub_agents=[elsewhe
         _, data = self.scan()
         self.assertEqual(data["counts"], {"tools_not_literal": 1, "unresolved_agent_reference": 1})
         self.assertFalse(self.agent(data, "root")["tools_literal"])
+        self.assertFalse(self.agent(data, "root")["trifecta"]["complete"])
+
+    def test_trifecta_is_complete_only_when_everything_resolved(self):
+        self.write("agent.py", '''
+from google.adk.agents import LlmAgent
+reader = LlmAgent(name="reader", model="m", tools=make_tools())
+root = LlmAgent(name="root", model="m", tools=[], sub_agents=[reader])
+plain = LlmAgent(name="plain", model="m", tools=[])
+''')
+        _, data = self.scan()
+        self.assertFalse(self.agent(data, "reader")["trifecta"]["complete"])
+        self.assertFalse(self.agent(data, "root")["trifecta"]["complete"])
+        self.assertTrue(self.agent(data, "plain")["trifecta"]["complete"])
 
     def test_openapi_and_database_toolsets(self):
         self.write("agent.py", '''

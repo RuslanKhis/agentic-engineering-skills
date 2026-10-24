@@ -1,5 +1,6 @@
 """Exercise the agent card validator through its CLI with fixture cards and a loopback server."""
 
+import base64
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 from pathlib import Path
@@ -247,6 +248,120 @@ class ServerCardTests(unittest.TestCase):
         with CardServer({"/.well-known/agent-card.json": (200, b"<html></html>")}) as server:
             code, payload, _ = run("--url", server.base)
             self.assertEqual(code, 1)
+
+
+def protected(**header):
+    return base64.urlsafe_b64encode(json.dumps(header).encode()).decode().rstrip("=")
+
+
+SIGNED_10 = dict(VALID_10, securityRequirements=[{"schemes": {"oidc": {"list": []}}}], signatures=[{
+    "protected": protected(alg="ES256", typ="JOSE", kid="card-2026-10",
+                           jku="https://keys.example.com/a2a/jwks.json"),
+    "signature": "c2lnbmF0dXJl"}])
+del SIGNED_10["security"]
+
+
+class SignatureTests(unittest.TestCase):
+    def check(self, card, *args):
+        with tempfile.TemporaryDirectory() as tmp:
+            code, payload, stderr = run("--file", write_card(tmp, card), *args)
+        self.assertEqual(code, 0, stderr)
+        return payload
+
+    def with_signature(self, **fields):
+        return dict(SIGNED_10, signatures=[dict(SIGNED_10["signatures"][0], **fields)])
+
+    def test_well_formed_signature_has_no_errors(self):
+        payload = self.check(SIGNED_10, "--key-host", "keys.example.com", "--require-signature")
+        self.assertEqual(payload["counts"]["errors"], 0, payload["checks"])
+        self.assertEqual(payload["summary"]["signatures"], 1)
+        self.assertEqual(payload["summary"]["signature_algs"], ["ES256"])
+        self.assertEqual(codes(payload).get("signature_jku_present"), 1)
+        self.assertNotIn("signature_fields_uncovered", codes(payload))
+
+    def test_jku_from_a_file_needs_a_key_host(self):
+        self.assertEqual(codes(self.check(SIGNED_10)).get("signature_jku_unchecked"), 1)
+        payload = self.check(SIGNED_10, "--key-host", "other.example.com")
+        self.assertEqual(codes(payload).get("signature_jku_off_origin"), 1)
+        insecure = self.with_signature(protected=protected(alg="ES256", typ="JOSE", kid="k",
+                                                           jku="http://keys.example.com/jwks.json"))
+        self.assertEqual(codes(self.check(insecure)).get("signature_jku_not_https"), 1)
+
+    def test_unsigned_card_is_an_error_only_when_required(self):
+        self.assertNotIn("signature_missing", codes(self.check(VALID_10)))
+        self.assertEqual(codes(self.check(VALID_10, "--require-signature")).get("signature_missing"), 1)
+
+    def test_weak_or_incomplete_protected_headers(self):
+        cases = {
+            "signature_alg_not_asymmetric": protected(alg="HS256", typ="JOSE", kid="k"),
+            "signature_alg_missing": protected(typ="JOSE", kid="k"),
+            "signature_kid_missing": protected(alg="ES256", typ="JOSE"),
+            "signature_protected_invalid": "not base64 json",
+        }
+        for code, value in cases.items():
+            with self.subTest(code=code):
+                payload = self.check(self.with_signature(protected=value))
+                self.assertEqual(codes(payload).get(code), 1, payload["checks"])
+                self.assertGreater(payload["counts"]["errors"], 0)
+        payload = self.check(self.with_signature(protected=protected(alg="none", kid="k")))
+        self.assertEqual(codes(payload).get("signature_alg_not_asymmetric"), 1)
+        self.assertEqual(codes(payload).get("signature_typ_not_jose"), 1)
+
+    def test_missing_components_and_unprotected_header(self):
+        payload = self.check(dict(SIGNED_10, signatures=[{"protected": SIGNED_10["signatures"][0]["protected"],
+                                                          "header": {"kid": "swapped"}}]))
+        self.assertEqual(codes(payload).get("signature_field_missing"), 1)
+        self.assertEqual(codes(payload).get("signature_unprotected_header"), 1)
+        self.assertEqual(codes(self.check(dict(SIGNED_10, signatures=[]))).get("signatures_malformed"), 1)
+
+    def test_fields_outside_the_sdk_schema_are_not_covered(self):
+        card = dict(SIGNED_10, security=[{"oidc": []}], xRoutingHint="internal",
+                    skills=[dict(VALID_10["skills"][0], priority="high")])
+        payload = self.check(card, "--key-host", "keys.example.com")
+        message = next(c["message"] for c in payload["checks"] if c["code"] == "signature_fields_uncovered")
+        for path in ("security", "xRoutingHint", "skills[0].priority"):
+            self.assertIn(path, message)
+
+    def test_signed_03_card_defers_coverage_to_the_pinned_sdk(self):
+        payload = self.check(dict(VALID_03, signatures=SIGNED_10["signatures"]), "--key-host", "keys.example.com")
+        self.assertEqual(codes(payload).get("signature_shape_unchecked"), 1)
+
+    def test_fetched_card_accepts_a_jku_on_its_own_origin(self):
+        with CardServer({}) as server:
+            card = dict(SIGNED_10, supportedInterfaces=[{"url": f"{server.base}/a2a", "protocolBinding": "JSONRPC",
+                                                         "protocolVersion": "1.0"}],
+                        signatures=[{"protected": protected(alg="ES256", typ="JOSE", kid="k",
+                                                            jku="https://127.0.0.1/jwks.json"),
+                                     "signature": "c2ln"}])
+            server.handler.routes["/.well-known/agent-card.json"] = (200, card)
+            code, payload, _ = run("--url", server.base)
+        self.assertEqual(code, 0)
+        self.assertNotIn("signature_jku_off_origin", codes(payload))
+        self.assertNotIn("signature_jku_unchecked", codes(payload))
+
+
+class FailOnTests(unittest.TestCase):
+    def test_fail_on_turns_findings_into_exit_3(self):
+        bad = dict(VALID_03, url="http://agents.example.com/a2a")
+        with tempfile.TemporaryDirectory() as tmp:
+            path = write_card(tmp, bad)
+            self.assertEqual(run("--file", path)[0], 0)
+            code, payload, _ = run("--file", path, "--fail-on", "error")
+            self.assertEqual(code, 3)
+            self.assertGreater(payload["counts"]["errors"], 0)
+            clean = write_card(tmp, VALID_03, "clean.json")
+            self.assertEqual(run("--file", clean, "--fail-on", "error")[0], 0)
+            reviewed = write_card(tmp, dict(VALID_03, skills=[]), "review.json")
+            self.assertEqual(run("--file", reviewed, "--fail-on", "error")[0], 0)
+            self.assertEqual(run("--file", reviewed, "--fail-on", "review")[0], 3)
+        self.assertEqual(run("--file", "x.json", "--fail-on", "warning")[0], 2)
+
+    def test_10_card_protocol_version_message_names_the_interface(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            _, payload, _ = run("--file", write_card(tmp, VALID_10))
+        message = next(c["message"] for c in payload["checks"]
+                       if c["code"] == "gemini_enterprise_field_missing" and "protocolVersion" in c["message"])
+        self.assertIn("per interface", message)
 
 
 class ArgumentTests(unittest.TestCase):

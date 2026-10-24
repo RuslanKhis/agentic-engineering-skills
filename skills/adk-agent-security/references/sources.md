@@ -116,12 +116,30 @@ Entries marked "not re-fetched" were supplied by the coordinator's research on
   ("Safety" and "Multi-turn Safety" measure harmlessness, not injection
   resistance or forbidden tool calls). Read 2026-10-07.
 
+- OWASP MCP Top 10, github.com/OWASP/www-project-mcp-top-10 at commit
+  165fe0f (2026-07-29; beta, "v0.1", 2025 ids): `index.md` and the MCP01 to
+  MCP10 headings. Licence unclear (CC BY-SA and CC BY-NC-SA both stated), so
+  ids and a link only. Read 2026-10-24.
+- CoSAI Workstream 4, github.com/cosai-oasis/ws4-secure-design-agentic-systems
+  at commit 855cb05 (2026-10-15; CC BY 4.0, approved papers also under an
+  OASIS notice): the MCP security whitepaper v2.0 (2026-08-12) and the MCP
+  tool-design and runtime-isolation runbooks. Paraphrased with attribution
+  into [tool supply chain](tool-supply-chain.md) (run-time pin, stdio
+  isolation); the tool-tier credential rule went to `adk-tool-auth-and-secrets`.
+  Read 2026-10-24.
+
 ## Independent evidence (peer-reviewed or benchmark)
 
 - Debenedetti et al., "Defeating Prompt Injections by Design" (CaMeL), Google
   DeepMind et al., arXiv 2503.18813, v1 2025-03, v2 2025-06. Privileged and
   quarantined LLM split, capability tags enforced at tool call; 77% versus 84%
-  task success on AgentDojo with provable security. Not re-fetched.
+  task success on AgentDojo with provable security. Abstract re-read
+  2026-10-24 (v1 2025-03-24, v2 2025-06-24). Code:
+  github.com/google-research/camel-prompt-injection, commit f083b6b
+  (2025-06-20, Apache-2.0), an unmaintained research artifact; its policy
+  engine, capabilities and reader were read for the deny-by-default, readers
+  and abstain rules in [injection patterns](injection-patterns.md); no code
+  was used.
 - Beurer-Kellner et al., "Design Patterns for Securing LLM Agents against
   Prompt Injections", arXiv 2506.08837, June 2025. Action-selector,
   plan-then-execute, map-reduce, dual LLM, code-then-execute,
@@ -187,9 +205,30 @@ Entries marked "not re-fetched" were supplied by the coordinator's research on
   (in-process Python provider, `trajectory:tool-used`, `tool-args-match`,
   `tool-sequence` assertions; updated 2026-10-06) and red-team plugins
   https://promptfoo.dev/docs/red-team/plugins/indirect-prompt-injection .
-  NVIDIA garak (model endpoints) and Microsoft PyRIT (orchestrated attack
+  NVIDIA garak (model endpoints; superseded below) and Microsoft PyRIT (orchestrated attack
   generation; the repository is github.com/microsoft/PyRIT, formerly
   Azure/PyRIT, confirmed 2026-10-22). Read 2026-10-07.
+- microsoft/PyRIT at commit bc5a8bc (2026-10-23; MIT; main is 1.2.0.dev0,
+  latest release 1.1.0 of 2026-09-04): `pyrit/executor/workflow/xpia.py`,
+  `pyrit/prompt_target/a2a_target.py` (added 2026-09-30, after 1.1.0),
+  `doc/code/targets/0_prompt_targets.md`, `doc/code/executor/5_workflow.py`,
+  `pyproject.toml`. Read 2026-10-24; 1.1.0 installed from PyPI into a
+  scratch environment and introspected (the XPIA classes and
+  `SubStringScorer` present, `A2ATarget` absent); no attack was run. The
+  separate Azure/PyRIT repository is archived. Imported into the live
+  campaign in [adversarial testing](adversarial-testing.md).
+
+- NVIDIA/garak at commit d6a8be1 (2026-10-23; Apache-2.0; release 0.17.1 of
+  2026-10-16) and confident-ai/deepteam at commit 6306f0f (2026-10-23;
+  Apache-2.0; PyPI 1.0.10 of 2026-10-16): garak's `generators/function.py`,
+  `cli.py`, `command.py`, `evaluators/base.py`, `probes/agent_breaker.py`,
+  `detectors/agent_breaker.py`; deepteam's
+  `frameworks/owasp_top_10_agentic/`, `red_team.py`,
+  `red_teamer/red_teamer.py`, `telemetry.py`. Read 2026-10-24. garak 0.17.1
+  ran offline against `test.Blank` and a scratch function (exit codes,
+  report rows); deepteam 1.0.10 was introspected and called once without a
+  key, which it refused before any request. Imported into the live campaign
+  in [adversarial testing](adversarial-testing.md).
 
 - ethz-spylab/agentdojo v0.1.35 (commit 089ed46, 2026-06-02; MIT): `src/agentdojo/default_suites/v1/{banking,slack,travel,workspace}/injection_tasks.py`, `attacks/important_instructions_attacks.py`, `agent_pipeline/base_pipeline_element.py`, `data/suites/banking/injection_vectors.yaml`, `README.md`. Read 2026-10-22; goal classes paraphrased into `assets/adversarial-cases.json` cases a11 to a14; no data or code copied; not executed.
 

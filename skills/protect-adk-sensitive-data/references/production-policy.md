@@ -153,6 +153,25 @@ model receives. Allow only supported decoding/normalisation, bound expansion
 and processing, and prevent reinterpretation after the verdict. File screening
 does not by itself produce a de-identified file. Verify current modality support
 and test the target's extraction path; the companion implements text only.
+For files sent to Model Armor itself, the request carries
+`DataItem(byte_item=ByteDataItem(byte_data_type=..., byte_data=...))` to
+`sanitize_user_prompt`; the type is required because the service does not
+detect it, files are limited to 4 MB and very small files (under 69 bytes)
+are rejected. The type is one of `PLAINTEXT_UTF8`, `PDF`, `WORD_DOCUMENT`,
+`EXCEL_DOCUMENT`, `POWERPOINT_DOCUMENT`, `TXT`, `CSV` and `IMAGE`
+(`google-cloud-modelarmor` 0.7.1): map it from the file's checked leading
+bytes, not from the client's declared type, and refuse anything that does
+not map. File screening returns a verdict, not a redacted file, so an SDP
+match on a file is a block even where text would be de-identified. Google's Python sample and documentation base64-encode the
+bytes before putting them in the `bytes` field while the Go sample does not,
+and the sample's only test sends a benign file and asserts `NO_MATCH_FOUND`,
+which passes either way. Before trusting either form, run one approved live
+canary: a synthetic document carrying a Sensitive Data Protection finding
+that must return `MATCH_FOUND`. A silent `NO_MATCH_FOUND` on a wrongly
+encoded file would otherwise read as allow
+(GoogleCloudPlatform/python-docs-samples commit 3db968f,
+`model_armor/snippets/screen_pdf_file.py`; googleapis `service.proto`
+`ByteDataItem`; Model Armor overview page; read 2026-10-24).
 
 ## Choose transformation and recovery capability by purpose
 

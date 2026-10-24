@@ -14,9 +14,11 @@ python "$SKILL_DIR/scripts/agent_card_check.py" --url http://localhost:8001/a2a/
 ```
 
 Expect: `diff.rug_pull_signal` false unless the change was a reviewed
-definition update; `tool_name_collision` empty; `reserved_adk_tool_name`
+definition update (the diff alone exits 0 whatever it finds; in CI add
+`--fail-on-diff` so a signal exits 3); `tool_name_collision` empty; `reserved_adk_tool_name`
 empty; every `description_imperative_phrase` read and either explained or
-escalated to `adk-agent-security`; card `counts.errors` zero and
+escalated to `adk-agent-security`; card `counts.errors` zero (in CI, run the
+card check with `--fail-on error` so the step exits 3 instead of 0) and
 `gemini_enterprise.missing` empty when registering there. Commit the
 manifest; a test compares the live list with it. Exit 1 (`partial`) means a
 source was unreachable and must be explained.
@@ -118,6 +120,13 @@ it on 2026-10-22 against a `to_mcp_server` instance on google-adk 2.12.0 with
   tolerated. All three exit paths were observed. Keep one baseline per
   revision, each entry with a comment naming the fixture it depends on, and
   prefer per-check entries so the other checks in a scenario stay enforced.
+  Once `--expected-failures` is given, checks that end in WARNING (the
+  SHOULD-level ones) also count as unexpected failures although the summary
+  line shows none failed, so they need baseline entries too; their check ids
+  are in the per-scenario `checks.json` written under `-o <dir>`, not in the
+  console output. On a hand-built server in an offline trial
+  (2026-10-24, alpha.12) the two `server-stateless` ids above were half of
+  what the 2026-07-28 baseline needed.
 
 For an exposed A2A agent the counterpart is the A2A TCK, scoped to the card
 and versioning requirements against a local `to_a2a` instance; the command,
@@ -136,10 +145,49 @@ model-chosen recipient, read-only where possible); this skill's exposure
 reference and checklist carry the rest of the producer's obligations. The same server answered this skill's `mcp_tool_inventory.py` over
 the `initialize` handshake at protocol 2025-06-18 (one tool, exit 0), so the
 inventory manifest and the conformance baseline can sit side by side in the
-repository. The Inspector CLI (`@modelcontextprotocol/inspector`, 2.12.0 on
-npm on 2026-10-22; `--method tools/list`) is an independent manual
-cross-check of the same manifest; where it stores OAuth tokens was not
-verified here.
+repository. The Inspector CLI is an independent client that can gate CI on
+the same manifest: `npx -y @modelcontextprotocol/inspector@2.12.0 --cli
+<server command> --method tools/list --format json` prints
+`{"result":{"tools":[...]}}`; hash each tool's description and input schema
+the way the inventory does and compare with the committed manifest. Its
+default `--protocol-era` is `legacy`, so run it twice, with `--protocol-era
+legacy` and `--protocol-era modern`. Branch on its exit code rather than
+piping straight into `jq`: 0 success, 1 usage or unexpected error (a stdio
+server that exits or dies mid-call lands here, not on 4), 3 authentication
+required, 4 unreachable, 5 a tool returned `isError` or was not found, 6
+`--strict` found an error-severity schema portability problem; on any
+non-zero exit the last stderr line is a JSON error envelope. In CI keep its
+storage out of the developer's: `MCP_INSPECTOR_SECRET_STORE=memory`,
+`MCP_STORAGE_DIR`, `MCP_INSPECTOR_OAUTH_STATE_PATH`, `MCP_CATALOG_PATH`
+(the server catalogue, by default `~/.mcp-inspector/mcp.json`) and
+`MCP_CLIENT_CONFIG_PATH` set to scratch paths, `--stored-auth-only`, and a
+workload-identity token passed with `--header`; outside a keychain it otherwise writes tokens, client secrets
+and stdio `-e` values to `~/.mcp-inspector/secrets.json`, unencrypted
+unless given a key. Environment variables exported in the shell did not
+reach a stdio child; pass them with `-e`, and pass `--cwd` when the server
+is started as a module. The Inspector does not print which era it
+negotiated, and each stdio invocation starts a fresh server process, so a
+multi-turn check through it needs the server on HTTP. In GitHub Actions the
+step is:
+
+```yaml
+- run: |
+    set +e
+    npx -y "@modelcontextprotocol/inspector@2.12.0" --cli -q "$(command -v python)" -m my_server \
+      --cwd "$GITHUB_WORKSPACE" --method tools/list --format json \
+      --protocol-era "${{ matrix.era }}" > inspector.json 2> inspector.err
+    code=$?; set -e
+    if [ "$code" -ne 0 ]; then tail -n 1 inspector.err; exit "$code"; fi
+```
+
+with `matrix.era: [legacy, modern]` and the storage variables above in
+`$GITHUB_ENV`, followed by the hash comparison against the committed
+manifest. (modelcontextprotocol/inspector
+commit 0cac110, `clients/cli/README.md`, `docs/secret-storage.md`,
+`docs/environment-variables.md`, read 2026-10-24; exit codes 0, 1 and 5,
+both eras and a hash cross-check that caught a tampered manifest were
+observed offline on 2.12.0 against a local `MCPServer`; 3, 4 and 6 were
+read, not provoked.)
 
 ## Completion report
 

@@ -172,7 +172,20 @@ For any setup helper you generate:
    resource on each invocation. Preserve partial state after failure so recovery
    can finish or clean up safely.
 5. Bound retries and total time. On an uncertain create/side-effect response,
-   reconcile by identity/idempotency key before retrying. Count actual RPC
+   reconcile by identity/idempotency key before retrying. For Model Armor,
+   pass `request_id` on template create, update and delete (the service
+   remembers it for 60 minutes) and always pass an `update_mask` naming only
+   the reconciled fields, as dotted proto field paths (for example
+   `template_metadata.multi_language_detection.enable_multi_language_detection`;
+   confirm on the first approved update that the service accepts a nested
+   path): without one, a template or floor-setting update
+   "will overwrite all fields", which on a floor setting silently drops its
+   integrated services and its Agent Platform and MCP enforcement blocks.
+   Google's update samples omit the mask, so do not copy them as written;
+   read the resource back after every update (googleapis `service.proto`
+   `UpdateTemplateRequest` and `UpdateFloorSettingRequest`; python-docs-samples
+   3db968f `update_template.py` and the `update_*_floor_settings.py` samples;
+   read 2026-10-24). Count actual RPC
    attempts where possible: one CLI command may paginate or retry internally.
 
 Switching projects requires fresh target-bound state; do not reuse old resource
