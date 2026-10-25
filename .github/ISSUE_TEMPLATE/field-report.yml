@@ -26,6 +26,7 @@ body:
         - adk-engineer
         - adk-fastapi-backend
         - adk-frontend-integration
+        - adk-governance-pack
         - adk-memory-architecture
         - adk-model-and-output-contracts
         - adk-operational-guardrails
@@ -38,6 +39,7 @@ body:
         - adk-workflow-design
         - deploy-adk-on-google-cloud
         - optimise-adk-on-google-cloud
+        - practice-profile
         - protect-adk-sensitive-data
         - safe-api-tool-calls
     validations:

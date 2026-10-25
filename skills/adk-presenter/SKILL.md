@@ -54,7 +54,10 @@ acceptance cases marked not run, the build each result came from, and the
 measurement records `M1`, `M2` and incident records `I1`, `I2` that a pilot
 or production run adds, each with value, baseline, window, sample, method,
 owner and build), tickets and their Evidence sections, and any evaluation
-report, cost record or incident log the plan links. When a later report
+report, cost record or incident log the plan links, and the governance
+pack (`docs/governance/<topic>/`) when one exists: its system card for
+limits and oversight, its classification memo and open counsel questions
+for the risk slide. When a later report
 contradicts the plan's calendar or a recorded figure, ask which is right and
 record the change in the plan's change table before drafting; when the
 record lacks a measurement record for a figure the user reports, write it

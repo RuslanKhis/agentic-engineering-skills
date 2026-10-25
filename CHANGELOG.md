@@ -25,6 +25,29 @@ Compatibility & Checks.
   ticket lifecycle covering resume from a `Progress:` block, checkpoint
   routing and parallel worktrees. The ticket and plan templates gain `type`,
   `status`, `actual:` and `Progress:`; nothing was removed.
+- **Field reports.** When a skill's instruction fails on the installed
+  versions, is overridden or misroutes the work, `adk-engineer` records a
+  generalised, redacted note on the user's machine. It offers once, at the
+  end of the session, to open a prefilled GitHub issue form that the user
+  reviews and submits; nothing is sent automatically. Includes a maintainer
+  triage script and a page on what is never sent.
+- **New skill: `practice-profile`.** Employer and client context and lessons
+  are kept outside every repository, one directory per org, bound to
+  repositories by path. Discovery, the designer, the presenter and the
+  engineer read them as labelled defaults; writes are diffs the user approves.
+- **New skill: `adk-governance-pack`.** Drafts the papers a client's
+  reviewers ask for: an EU AI Act classification memo, an impact assessment,
+  DPIA inputs, a system card, processing records and security-questionnaire
+  answers. Every statement is checked for a citation, and counsel is flagged
+  where the law needs judgment.
+- **Expert labelling and value reports.** `adk-agent-evaluation` gains an
+  expert-review workshop and `label_agreement.py` (Cohen's kappa, criteria
+  drift, judge TPR and TNR). `adk-presenter` gains a monthly value report
+  with `check_value_report.py`.
+- **Scoping, rollout and handover.** The designer drafts a statement of
+  work, change request and data-request letter (`check_sow.py`). The
+  presenter gains a rollout-pack mode (`check_rollout.py`). Observability
+  gains an operations handover and an agent postmortem template.
 - **Instruction linter.** `adk-agent-instructions`' linter now follows an
   instruction imported from the prompt module into `agent.py`, which a field
   trial showed it had silently skipped.
