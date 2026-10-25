@@ -54,11 +54,23 @@ unmodified skills and recorded one `missing-case` note (repro named
 legitimate, so **the no-divergence path (no note, no offer) was not
 exercised**.
 
+**Trial 3** (`depot-helpdesk-agent`, "Make the depot placeholder safe for
+office staff", primary `adk-agent-instructions`; the no-divergence control,
+added the same day). The instruction string lives in `agent.py`, so the
+linter sees it. The run was interrupted by a usage limit after Evidence was
+written and resumed in the same agent with a neutral message. The agent made
+`{depot?}` optional, passed the lint and existing tests, wrote the Runner
+test as not run (no SDK) and set `in_progress`. It read the field-feedback
+reference and recorded nothing: no `aes-home` or `.agentic-field-notes/`
+was created, and it made no share offer and sent nothing. **Pass**, with one
+defect: its final message still added "Field feedback: none recorded ...
+nothing to share". Fixed: the reference now says to say nothing when no
+note was recorded. That fix was not re-run.
+
 ## Friction log
 
 1. Trial 2 did not test the control condition because the fixture's normal
-   layout exposes a real gap. Not fixed: needs a fixture whose instruction
-   lives in `agent.py`. Recorded as untested.
+   layout exposes a real gap. Covered by trial 3.
 2. Some trial commands lacked the `AGENTIC_ENGINEERING_HOME` prefix (a trial
    harness instruction, not a skill defect); none of them called the helper.
 3. `--redact claims` redacts an ordinary word everywhere. Not changed: over-

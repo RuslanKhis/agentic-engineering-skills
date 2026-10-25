@@ -1913,7 +1913,9 @@ recorded three notes, none containing the client folder name, path or GCP
 project, and asked once at the end; nothing was sent. Besides the drift
 planted for the first trial, both agents independently reported a real gap:
 the instruction linter does not follow an instruction imported from another
-module. All **23 packages** pass validation and **812 tests** pass with **59
+module. A third, control trial with no divergence recorded no note and
+made no offer; its one stray "nothing to share" line is now ruled out.
+All **23 packages** pass validation and **812 tests** pass with **59
 optional SDK checks skipped**. See the
 [note](docs/research/field-feedback-2026-10-25.md), the
 [record](docs/testing/field-feedback-2026-10-25.md) and

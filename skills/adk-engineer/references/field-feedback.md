@@ -100,5 +100,7 @@ the user the exact text it prints, and ask one question with three answers:
 2. Keep it local: `mark --state local-only`. Nothing else happens.
 3. Not now: `mark --state declined`; do not ask about these notes again.
 
-If the user declines or does not answer, drop the subject. Never count an
+When the session recorded no note, say nothing about field feedback, not
+even that there is nothing to share. If the user declines or does not
+answer, drop the subject. Never count an
 earlier session's yes as consent for a new note.
