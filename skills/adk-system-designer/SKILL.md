@@ -96,6 +96,11 @@ When the user overrides one of these defaults and `adk-engineer` is installed,
 record it as an `overridden-default` field note (its field-feedback reference);
 offer to share only when the helper reports the same override recorded before.
 
+If the engineer keeps a practice profile, offer its org defaults in place of
+these defaults, labelled with their source, as
+[practice profile](references/practice-profile.md) describes; accepted values
+go into the scope-gate or assumed-answers table with that label.
+
 Read [delivery profiles](references/delivery-profiles.md) to turn the answers
 into a profile (proof of concept, quality-judged assignment, internal tool, MVP
 or pilot, production), the depth of each concern, the floor kept at every
@@ -427,6 +432,8 @@ also say which security rules are deferred and what raises them. For example:
 The user should never have to work out what to type next. When the next
 ready goal is a presentation, the prompt names `adk-presenter` and the plan
 path instead.
+With a practice profile, offer its harvest ([practice profile](references/practice-profile.md), step 5)
+after the prompt.
 
 `adk-engineer` carries out a goal or ticket with its named specialist without
 restarting architecture discovery. When a ticket's evidence needs a design

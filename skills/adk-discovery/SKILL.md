@@ -44,6 +44,10 @@ assume. Then say which mode this is, in one line the user can correct:
   sponsor is judged on and the processes that move them, and find the
   opportunities; say early that the answer may not be AI.
 
+If the engineer keeps a practice profile, read
+[practice profile](references/practice-profile.md) before the first question;
+it pre-fills the business context and scope-gate rows as labelled org defaults.
+
 Open with that mode's opener from
 [the discovery conversation](references/discovery-interview.md): the
 abandonment question for a rough area, the KPI question for no use case. Ask
@@ -160,5 +164,7 @@ Say that the deck is redrafted from the design and plan once they exist, so
 the user can choose to design first. Local discovery work authorises no cloud operations,
 no purchases of data and no contact with the user's customers; it reads what
 the user supplies and public pages, and cites them with dates.
+
+With a practice profile, offer its harvest ([practice profile](references/practice-profile.md), step 5).
 
 Independent community project; not affiliated with or endorsed by Google.

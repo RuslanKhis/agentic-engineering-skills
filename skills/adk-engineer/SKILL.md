@@ -89,6 +89,9 @@ how to preserve that workflow while selecting the ADK guidance for this task.
 Choose one primary skill from the table. Add another only when the requested
 change crosses its boundary. Before any edit, tell the user in one line:
 "Specialist: <name>, because <reason>", plus any supporting skills.
+If the engineer keeps a practice profile, read
+[practice profile](references/practice-profile.md) next and apply the org's
+lessons tagged with that specialist and its stack conventions.
 
 | Request concerns | Specialist skill |
 | --- | --- |
@@ -115,6 +118,7 @@ change crosses its boundary. Before any edit, tell the user in one line:
 | Tool identity, credentials, Secret Manager or delegated OAuth | `adk-tool-auth-and-secrets` |
 | Natural-language SQL agents, schema retrieval or controlled query execution | `adk-sql-agent-engineering` |
 | A presentation, deck, narrative, questions to expect or decision memo for a proof-of-concept approval, a production decision, a results review, or a public case study | `adk-presenter` |
+| Setting up, binding, updating or reviewing the engineer's own practice profile: employer or client context and lessons carried across projects, kept outside the repository (not an agent's memory) | `practice-profile` |
 
 Use `adk-system-designer` for the system-design conversation. `adk-discovery`
 comes before it when the use case is not yet chosen or the business outcome is
@@ -271,3 +275,4 @@ set and one measurement, and hand the measured comparison to
 Finish with the requested explanation or the change made, validation actually
 performed, and any unresolved decision or unverified behaviour. Naming a
 specialist is the start of the work, not its completion.
+With a practice profile, offer its harvest ([practice profile](references/practice-profile.md), step 5).
