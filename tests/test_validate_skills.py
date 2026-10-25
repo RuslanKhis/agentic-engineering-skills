@@ -287,5 +287,53 @@ class PackageValidationTests(unittest.TestCase):
         self.assert_error("repository skill directories must not be symlinks")
 
 
+
+class SharedReferenceTests(unittest.TestCase):
+    """Packages installed separately carry identical copies of a shared reference."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        for name in ("practice-profile", "adk-discovery", "adk-presenter"):
+            package = self.root / "skills" / name
+            (package / "agents").mkdir(parents=True)
+            (package / "references").mkdir()
+            (package / "SKILL.md").write_text(
+                f"---\nname: {name}\ndescription: Help with {name} when asked.\nlicense: MIT\n---\n\n"
+                "Read [the profile rules](references/practice-profile.md).\n", encoding="utf-8")
+            (package / "LICENSE").write_text("MIT License\n", encoding="utf-8")
+            (package / "agents" / "openai.yaml").write_text(
+                "interface:\n  display_name: Sample\n  short_description: Build and check a sample feature\n"
+                f"  default_prompt: Use ${name} now.\n", encoding="utf-8")
+            (package / "references" / "practice-profile.md").write_text("# Rules\n", encoding="utf-8")
+
+    def errors(self):
+        return validate_repository(self.root).errors
+
+    def test_identical_copies_pass(self):
+        self.assertEqual([], self.errors())
+
+    def test_a_changed_copy_fails(self):
+        (self.root / "skills" / "adk-presenter" / "references" / "practice-profile.md").write_text(
+            "# Rules\nlocal edit\n", encoding="utf-8")
+        errors = self.errors()
+        self.assertTrue(any("adk-presenter" in e and "differs from practice-profile" in e for e in errors), errors)
+
+    def test_a_missing_copy_fails(self):
+        package = self.root / "skills" / "adk-discovery"
+        (package / "SKILL.md").write_text(
+            "---\nname: adk-discovery\ndescription: Help when asked.\nlicense: MIT\n---\n\nNo link.\n",
+            encoding="utf-8")
+        (package / "references" / "practice-profile.md").rename(package / "references" / "other.md")
+        errors = self.errors()
+        self.assertTrue(any("missing copy of practice-profile" in e for e in errors), errors)
+
+    def test_without_the_source_package_nothing_is_required(self):
+        (self.root / "skills" / "practice-profile").rename(self.root / "elsewhere")
+        (self.root / "skills" / "adk-presenter" / "references" / "practice-profile.md").write_text(
+            "# Different\n", encoding="utf-8")
+        self.assertEqual([], self.errors())
+
 if __name__ == "__main__":
     unittest.main()

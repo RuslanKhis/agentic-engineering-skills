@@ -58,6 +58,10 @@ names, use those. Write down what the record does not contain (no baseline,
 cases not run, cost not measured, no build tag on a result, no demo) before
 drafting; those gaps become slides, not omissions.
 
+If the engineer keeps a practice profile, read
+[practice profile](references/practice-profile.md) for the org's audience and
+presentation style; numbers still come only from the record.
+
 Then settle three things in one line each, asking only for what the request
 and the record do not say:
 
@@ -167,5 +171,6 @@ and how each is shown on a slide, the decision sentence, and the prompt for
 the next step: the plan's next goal after the decision, or
 `/adk-presenter` for the other audience. When the evidence does not support
 the decision the user wants to ask for, say so before the deck does.
+With a practice profile, offer its harvest ([practice profile](references/practice-profile.md), step 5).
 
 Independent community project; not affiliated with or endorsed by Google.

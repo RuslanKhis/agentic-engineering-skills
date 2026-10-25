@@ -511,6 +511,27 @@
       "prompt": "Set up the look of our new ADK assistant's web app: a design system for the shadcn components, and how the chat shows running tools, an approval before filing a ticket, and an error that arrives after part of the answer.",
       "should_trigger": true,
       "rationale": "Setting up an ADK interface's design system and its agent UI states (tool timeline, approval prompt, failed turn) is now in this skill's scope; an isolated styling tweak stays out."
+    },
+    {
+      "id": "practice-profile-positive",
+      "skill": "practice-profile",
+      "prompt": "I build ADK proofs of concept for three clients and keep retyping each client's region, approval rules and who signs off. Set up something outside the repos so the discovery and design skills already know Acme's defaults next time, and bind this repo to Acme.",
+      "should_trigger": true,
+      "rationale": "Carrying the engineer's client context across projects, outside the repository, with a repository-to-org binding, is the practice profile's init and bind. In Codex the package disallows implicit invocation, so there it needs $practice-profile."
+    },
+    {
+      "id": "practice-profile-agent-memory-near-miss",
+      "skill": "practice-profile",
+      "prompt": "Add memory to my ADK agent so it remembers each customer's preferences between sessions.",
+      "should_trigger": false,
+      "rationale": "Cross-session memory inside an ADK agent belongs to adk-memory-architecture; the practice profile is the engineer's own context, not the agent's."
+    },
+    {
+      "id": "practice-profile-host-memory-near-miss",
+      "skill": "practice-profile",
+      "prompt": "Add a rule to my ~/.claude/CLAUDE.md that I always want British spelling in every project.",
+      "should_trigger": false,
+      "rationale": "A host-wide preference for every project is an ordinary edit of the host's global instruction file; the practice profile holds per-org context read at specific steps."
     }
   ]
 }

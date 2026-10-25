@@ -1,0 +1,6 @@
+interface:
+  display_name: "Practice Profile"
+  short_description: "Carry employer and client context across projects"
+  default_prompt: "Use $practice-profile to set up my practice profile: interview me briefly with recommended answers I can accept in a word, create the files outside this repository, and bind this repository to the right org."
+policy:
+  allow_implicit_invocation: false

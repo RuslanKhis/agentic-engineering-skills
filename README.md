@@ -101,10 +101,11 @@ From your application's project directory, run:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*'
 ```
 
-Choose your coding agent when prompted. This installs **all twenty-three skills**
+Choose your coding agent when prompted. This installs **all twenty-four skills**
 for the current project: `adk-discovery`, `adk-system-designer`,
 `adk-engineer`, `adk-presenter`, the eleven chapter specialists, the web
-backend specialist and the seven cross-framework specialists.
+backend specialist, the seven cross-framework specialists and the optional
+`practice-profile`.
 Keep the quotes around `'*'` so your shell passes it unchanged.
 
 <details>
@@ -206,6 +207,10 @@ No separate setup command is needed for this toolkit. The skills inspect the
 project's existing code and configuration when they run. Their descriptions also
 allow a supporting coding agent to select them from a natural-language request;
 an explicit command makes your intended skill clear.
+
+Optionally, `/practice-profile` keeps your employer's and clients' context
+outside your repositories so later projects start from it; without it,
+nothing changes.
 
 </details>
 
@@ -363,7 +368,7 @@ skill** in the catalogue below, and installation fixes under
 
 ## The Skills
 
-*The contents · A discovery skill, a system designer, one entry point, a presenter, eleven chapter specialists, a web backend specialist and seven cross-framework specialists.*
+*The contents · A discovery skill, a system designer, one entry point, a presenter, eleven chapter specialists, a web backend specialist, seven cross-framework specialists and an optional practice profile.*
 
 Choose a skill by the problem you need to solve. Each entry below explains
 when it helps, what to ask for, and the command that selects it. The numbered
@@ -375,6 +380,7 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 | A system-design conversation and architecture before implementation | [adk-system-designer](#adk-system-designer) |
 | Help choosing an approach or combining concerns | [adk-engineer](#adk-engineer) |
 | A presentation for a proof-of-concept approval, a production decision, a results review or a public case study | [adk-presenter](#adk-presenter) |
+| Your employer's and clients' context and lessons, kept outside every repository and offered as defaults in the next project | [practice-profile](#practice-profile) |
 | Sequential steps, parallel work or bounded loops | [adk-workflow-design](#adk-workflow-design) |
 | Reliable API calls and protection against duplicate actions | [safe-api-tool-calls](#safe-api-tool-calls) |
 | Usage limits, repeated-tool protection or human approval | [adk-operational-guardrails](#adk-operational-guardrails) |
@@ -616,6 +622,46 @@ questions each will ask. Two acceptance cases were never run; say so.
 results in docs/plans/ads.md. Draft the final results presentation and a
 public case study, and list the approvals and numbers we need before
 sharing it with our Google Cloud account team.
+```
+
+</details>
+
+### [practice-profile](skills/practice-profile/SKILL.md)
+
+*Across projects · Stop retyping each client's context.*
+
+Use this when you build for an employer or several clients and keep
+re-explaining the same things: what the business is judged on, who decides,
+how long a proof of concept usually gets, the region and stack, the security
+floor, how decks should look, and what the last project taught you. It keeps
+them as short Markdown files outside every repository
+(`~/.agentic-engineering`, or `$AGENTIC_ENGINEERING_HOME`), one directory per
+org, and binds each repository to one org by its path, so one client's facts
+never reach another client's project. Discovery and the designer then offer
+the org's values as defaults you accept in a word, labelled with where they
+came from; the presenter takes the audience and style, never numbers; and
+`adk-engineer` applies the lessons tagged with the specialist it chose. It
+writes only a diff you approve, built from what you said or the project
+recorded, never from documents it read, and refuses secrets and personal
+data. It deliberately avoids your coding agent's global memory files, which
+load in every project. Without a profile, every skill behaves as before.
+
+**Invoke:** Claude Code `/practice-profile` · Codex `$practice-profile`
+
+Gemini CLI / Antigravity: "Use the practice-profile skill to…"
+
+<details>
+<summary>Two practical examples</summary>
+
+```text
+/practice-profile Set up my practice profile. I work for clients; this repo
+is for Acme Retail: europe-west2, Terraform, two-week proofs of concept with
+one developer, and a human approves anything sent to a customer. Bind this
+repo to Acme.
+```
+
+```text
+/practice-profile Review Acme's profile: what is stale, and what should go?
 ```
 
 </details>
@@ -1889,6 +1935,26 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Practice profile across projects · 25 October 2026
+
+A new `practice-profile` skill keeps the engineer's employer and client
+context (business and KPIs, who decides, delivery defaults, stack, security
+floor, presentation style) and lessons as short Markdown outside every
+repository, one directory per org, bound to repositories by path. Discovery
+and the designer offer its values as labelled defaults, the presenter takes
+audience and style only, and `adk-engineer` applies lessons tagged with the
+chosen specialist. Host-wide memory files were rejected after reading each
+host's documentation: they load in every project, so one client's facts
+would reach another's. Writes are a diff the user approves, never drawn from
+ingested documents. In fresh-agent trials the designer labelled every
+profile default and the org floor raised its design, a canary in an unbound
+org never surfaced, and a "remember this" line planted in a handbook
+produced no profile entry; ten frictions were fixed the same day. All
+**24 packages** pass validation and **811 tests** pass with **59 optional
+SDK checks skipped**. See the
+[note](docs/research/practice-profile-2026-10-25.md) and the
+[record](docs/testing/practice-profile-2026-10-25.md).
 
 ### Durable engines that keep ADK's guardrails · 25 October 2026
 

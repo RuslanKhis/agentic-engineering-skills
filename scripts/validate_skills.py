@@ -266,6 +266,39 @@ def validate_package(package: Path, report: Report) -> None:
                 report.error(path, f"Python syntax check failed: {exc}")
 
 
+# A reference several packages must carry identically, because each package is
+# installed on its own. The first package named holds the source copy; the check
+# applies only when that package exists in the repository.
+SHARED_REFERENCES = {
+    "references/practice-profile.md": (
+        "practice-profile", "adk-discovery", "adk-system-designer", "adk-presenter", "adk-engineer",
+    ),
+}
+
+
+def check_shared_references(skills: Path, report: Report) -> None:
+    for relative, packages in SHARED_REFERENCES.items():
+        source = skills / packages[0] / relative
+        if not (skills / packages[0]).is_dir():
+            continue
+        try:
+            expected = source.read_bytes()
+        except OSError as exc:
+            report.error(source, f"shared reference is missing: {exc}")
+            continue
+        for name in packages[1:]:
+            copy = skills / name / relative
+            if not (skills / name).is_dir():
+                continue
+            try:
+                identical = copy.read_bytes() == expected
+            except OSError:
+                report.error(copy, f"missing copy of {packages[0]}/{relative}")
+                continue
+            if not identical:
+                report.error(copy, f"differs from {packages[0]}/{relative}; copy it byte for byte")
+
+
 def validate_repository(root: Path) -> Report:
     report = Report()
     skills = root / "skills"
@@ -280,6 +313,7 @@ def validate_repository(root: Path) -> Report:
             report.error(package, "repository skill directories must not be symlinks")
             continue
         validate_package(package, report)
+    check_shared_references(skills, report)
     return report
 
 
