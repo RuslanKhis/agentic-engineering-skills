@@ -285,7 +285,7 @@ idempotent tools (a caller exists, no wait outlives a request); a durable-execut
 engine (Temporal or DBOS, each with an ADK integration, when a run must survive a
 crash with no caller or wait days for a human; the engine's version is pinned,
 secrets stay out of its history, its replay tests join the suite); or neither,
-with the gap named. The kill-after-the-write test in `adk-workflow-design`'s
+with the gap named. Restate and Dapr (through `diagrid`) are catalogue options only with the conditions in `adk-workflow-design`'s runtime reference: Restate's plugin silences later model guards and the call limit, and `diagrid` re-implements the agent loop without ADK's callbacks; the Restate server's licence permits internal production, `diagrid`'s size-limited licence needs an owner decision, and neither ships ADK replay tests. The kill-after-the-write test in `adk-workflow-design`'s
 runtime reference is the acceptance check for all three, because an engine
 checkpoints a step's result and a crash between the provider's acceptance and the
 checkpoint re-executes the step.

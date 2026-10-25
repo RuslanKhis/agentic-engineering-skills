@@ -4,7 +4,7 @@ Read this when implementing or diagnosing the ADK boundary. The graph and callba
 
 ## Connect typed data, routing and final messages
 
-ADK 2.8 accepts Agents and Python functions in `Workflow.edges`. A typed parameter named `node_input` receives the preceding node's output. Return `Event(output=...)` to pass data, `Event(route=..., output=...)` to choose a mapped destination, and `Event(message=...)` to emit final presentation. These are different responsibilities; a router's JSON is not the database answer.
+ADK 2.8 accepts Agents and Python functions in `Workflow.edges`. A typed parameter named `node_input` receives the preceding node's output. Return `Event(output=...)` to pass data, `Event(route=..., output=...)` to choose a mapped destination, and `Event(message=...)` to emit final presentation. These are different responsibilities; a router's JSON is not the database answer. The same `Event(route=..., output=...)` and `Event(message=...)` shapes, run through `InMemoryRunner(node=...)`, worked unchanged on 2.12.0 in an offline scripted-model trial (2026-10-25).
 
 The following is the verified graph pattern. Names such as `router`, `collect_context` and `execute_candidate` are application dependencies, not hidden SDK functions. The probe supplies runnable definitions for its synthetic equivalent.
 
@@ -86,7 +86,7 @@ parsed_physical_tables <= trusted_request.authorized_tables
 parsed_physical_tables <= collected_scope.retrieved_physical_tables
 ```
 
-Choose a tested host-to-node injection mechanism in the target application. A request-specific workflow factory or explicit invocation dependency may fit; do not treat arbitrary session/model state as authorisation automatically. Keep each invocation's scope separate, restore temporary context in `finally`, and avoid mutable caller scope on shared Agent objects or process-wide environment variables. Give the author only the metadata needed for its task; the authorisation record itself need not become prompt content.
+Choose a tested host-to-node injection mechanism in the target application. A request-specific workflow factory or explicit invocation dependency may fit; on 2.12.0 a function node's context also exposes the triggering message as `ctx.user_content` and the run as `ctx.invocation_id` (observed in an offline scripted-model trial, 2026-10-25), which identify the request but carry no authenticated scope; do not treat arbitrary session/model state as authorisation automatically. Keep each invocation's scope separate, restore temporary context in `finally`, and avoid mutable caller scope on shared Agent objects or process-wide environment variables. Give the author only the metadata needed for its task; the authorisation record itself need not become prompt content.
 
 Test two interleaved callers, tampered copied intent, a candidate choosing another globally approved domain, an authorised-but-unretrieved table, and a permission change between requests. Bind reviewed templates to caller policy too. These tests establish only the controls actually implemented; the companion's executor currently checks the domain named by the candidate rather than independently binding it to the router and collected schemas.
 

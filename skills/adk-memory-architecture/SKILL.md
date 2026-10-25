@@ -58,6 +58,7 @@ Load only the relevant reference; combine modes when the requirement needs it.
 | --- | --- | --- |
 | Current conversation, working state, continuation or completed-response retry | [Sessions and state](references/sessions-state.md) | Owner-qualified history and explicit persistence/replay contract |
 | Approved policies, manuals or other versioned reference evidence | [Governed RAG](references/rag.md) | Approved release, entitled sources and evidence-supported answer |
+| A vendor or custom `BaseMemoryService` (Mem0, graphiti, an in-house store) | [Memory Bank](references/memory-bank.md), step 5 of the write-back sequence and erasure step 1: failure kept apart from empty, matching scopes, a current-only read, and what deletion leaves behind | A write-then-read test under one scope, a failed provider that is visible, and an erasure check against the backend's history as well as its search |
 | Useful low-risk facts across sessions; consent, correction or forgetting | [Memory Bank](references/memory-bank.md) | Scoped, eligible, expiring claims; accepted, completed and retrievable are separate |
 | Dated structured records and analytical history | [BigQuery](references/bigquery.md) | Narrow parameterised reads with trusted scope and an honest freshness contract |
 

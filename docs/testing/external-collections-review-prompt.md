@@ -246,6 +246,69 @@ The collections this repository references, with what it relies on them for:
   limits as an extra layer beside the security skill's gate; NeMo's rules
   left out; read 24 October 2026 at commits 4f0e236, 396da17, 70a4ab8 and
   189b85f; see docs/research/nemo-presidio-agt-comparison-2026-10-24.md).
+- Canner/WrenAI (the semantic map as reviewed files, a CI check that fails
+  on incomplete relationships, a live-schema comparison, and the read-only
+  policy run fail-closed on SQL expanded from the map, in the SQL skill;
+  read 25 October 2026 at commit 86fcca2; code Apache-2.0, docs CC BY 4.0,
+  `legacy/v1` AGPL-3.0, so nothing copied; see
+  docs/research/wrenai-comparison-2026-10-25.md).
+- bird-bench/mini_dev and xlang-ai/Spider2 (what BIRD's EX, Soft-F1 and
+  R-VES compute and why the public oracle stays the gate; Spider 2.0-Lite's
+  205-task BigQuery slice as a bounded, keyless capability probe, in the
+  SQL skill's acceptance reference; read 25 October 2026 at commits abd11b6
+  and cafb867; BIRD is CC BY-SA, so link only; see
+  docs/research/bird-spider2-comparison-2026-10-25.md).
+- StonyBrookNLP/appworld and eval-sys/mcpmark (a whole-fixture diff with
+  named ignores, a do-nothing control, the scenario score across variants,
+  and exact MCP server versions per live run, in the evaluation skill; read
+  25 October 2026 at commits 42b5bcf and cd45b7f; AppWorld's encrypted
+  bundles never opened; see
+  docs/research/appworld-mcpmark-comparison-2026-10-25.md).
+- strands-agents/harness-sdk and strands-agents/evals (steering read and
+  left out; a single-fault matrix with a no-fault twin from ADK's
+  Environment Simulation fields and resilience scored by checks, in the
+  evaluation skill; read 25 October 2026 at commits beae278 and f6b894f; no
+  code used; see docs/research/strands-comparison-2026-10-25.md).
+- harbor-framework/harbor and SWE-bench/SWE-bench (`fail_to_pass` and
+  `pass_to_pass` with a stricter grading rule, base-commit and
+  reference-fix runs before a case is accepted, in the evaluation skill; a
+  `pass_to_pass` ticket field and base-commit evidence in the system
+  designer; read 25 October 2026 at commits 6099b8c and 02e7a74; see
+  docs/research/harbor-swebench-comparison-2026-10-25.md).
+- anthropics/claude-cookbooks and openai/openai-cookbook (missed- and
+  over-escalation rates and escalation rules in code, in the evaluation and
+  guardrails skills; the sliding context filter against the explicit cache,
+  the summariser's tool-payload cut and a compaction survival probe, in the
+  optimisation skill; read 25 October 2026 at commits bfe50e5 and 8495326;
+  see docs/research/cookbooks-comparison-2026-10-25.md).
+- mem0ai/mem0, getzep/graphiti and Unstructured-IO/unstructured (failed
+  versus empty recall, the preload path's swallowed error, current-only
+  reads, erasure residue and telemetry, and unstructured's per-document
+  strategy, in the memory skill; read 25 October 2026 at commits 2c81af3,
+  8ce6d63 and c74e6c4; see
+  docs/research/mem0-graphiti-unstructured-comparison-2026-10-25.md).
+- BerriAI/litellm and BerriAI/lens (the reasoning double count on
+  `LiteLlm`, the `AgentTool` session gap, four offline cost cases and the
+  "unknown, not partial" reconciliation rule in the observability skill,
+  with a flag in `invocation_summary.py`; `attempts` as `num_retries` in the
+  model-contracts skill; read 25 October 2026 at commits 5603724 and
+  e320cab; nothing under `enterprise/` opened; see
+  docs/research/litellm-comparison-2026-10-25.md).
+- confident-ai/deepeval, mlflow/mlflow and comet-ml/opik (how MLflow's ADK
+  scorers record errors, "not evaluated" and content-gated arguments, and
+  deepeval's offline-only use, in the evaluation skill; in-house trace
+  storage and telemetry switches, and `force_flush` meaning drained, not
+  delivered, in the observability skill; read 25 October 2026 at commits
+  5410e38, 77f1aff and 763a2ec; see
+  docs/research/deepeval-mlflow-opik-comparison-2026-10-25.md).
+- restatedev/sdk-python, restatedev/restate, restatedev/restate-google-adk-example
+  and diagridio/python-ai (what each engine makes durable and breaks on ADK
+  2.12, and their licences, in the workflow skill; a plugin that answers the
+  model step silencing later guards, and awakeables as a wait rather than a
+  review record, in the guardrails skill; the engines as conditioned
+  options in the system designer; read 25 October 2026 at commits 37953b6,
+  4b2fb2c, b306b86 and cbd4f90; see
+  docs/research/restate-dapr-comparison-2026-10-25.md).
 - google-gemini/gemini-cli and google-antigravity/antigravity-cli
   (skill discovery paths and invocation in
   docs/research/google-coding-agent-skills.md and docs/integrations/

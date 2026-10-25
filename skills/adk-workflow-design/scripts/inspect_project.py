@@ -347,6 +347,13 @@ def inspect(
             "exact-adk-match" if matches else "reconciliation-required"
         )
         if not matches:
+            # Say which condition failed, so exit 3 is actionable.
+            if not specs:
+                output["compatibility_reason"] = "no google-adk declaration found in the inspected manifests"
+            elif installed["google-adk"] != required_adk:
+                output["compatibility_reason"] = "installed google-adk differs from the required version"
+            else:
+                output["compatibility_reason"] = "a google-adk declaration is not an exact pin of the required version"
             return output, 3
     return output, 0
 

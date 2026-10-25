@@ -1890,6 +1890,182 @@ recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
 
+### Durable engines that keep ADK's guardrails · 25 October 2026
+
+Restate's ADK plugin journals model calls, but because it answers the model
+step itself ADK then skips the agent's model callbacks, every after-model
+callback and `max_llm_calls`, and ADK's confirmation resume fails under
+it; tools are durable only when their bodies opt in. Dapr's `diagrid`
+integration re-implements the agent loop and drops callbacks, plugins,
+state and confirmation, under a licence free only for small organisations.
+The workflow and guardrails skills now describe both with these
+conditions, show how to keep budgets and approvals under Restate, and
+treat its awakeable approvals as a durable wait whose id works as a
+credential. The kill-after-the-write test, cited but never defined, is now
+defined in the API-call skill. A fresh-agent trial asserted each breakage
+and built an adapted design that keeps every guardrail (27 tests passed;
+ease 3 of 5); nine of its eleven frictions were fixed the same day. All
+**23 packages** pass validation and **787 tests** pass with **59 optional
+SDK checks skipped**. See the
+[note](docs/research/restate-dapr-comparison-2026-10-25.md) and the
+[record](docs/testing/restate-dapr-alignment-2026-10-25.md).
+
+### Third-party evaluation scorers and in-house traces · 25 October 2026
+
+MLflow's ADK scorers, read and then run locally against ADK 2.12, record
+results that look like agent failures but are not: trajectory checks over
+traces never match because tool names are read from span names, parallel
+calls produce a span that errors, a judge failure arrives as "no", and the
+hallucination scorer tells its judge the agent has no tools. The evaluation
+skill now says to feed scorers from the ADK session and call ADK's own
+evaluators for grounded answers. deepeval's ADK hook only exports to its
+vendor; its metrics can run offline. The observability skill lists the
+switches that keep MLflow and Opik traces and telemetry in-house, and
+corrects one rule: OpenTelemetry's `force_flush` returns `True` even after
+a failed export. The fresh-agent trial corrected three statements written
+from reading alone (8 tests passed with no egress; ease 3 of 5); nine of
+its eleven frictions were fixed the same day. All **23 packages** pass
+validation and **787 tests** pass with **59 optional SDK checks skipped**.
+See the [note](docs/research/deepeval-mlflow-opik-comparison-2026-10-25.md)
+and the [record](docs/testing/deepeval-mlflow-opik-alignment-2026-10-25.md).
+
+### Cost accounting that matches the invoice · 25 October 2026
+
+From LiteLLM's captured ADK traces, checked against ADK 2.12: on `LiteLlm`
+routes ADK counts reasoning tokens twice, an `AgentTool` child's calls are
+missing from the saved parent session, and `retry_options.attempts`
+becomes LiteLLM's `num_retries`, which means something else. The trial
+also found that ADK 2.12 writes the same usage on two spans, so summing
+every span doubles output. The observability skill now covers all four,
+adds offline cost cases and reports a trace's cost as unknown rather than
+a partial sum when a call cannot be reconciled; `invocation_summary.py`
+detects the double count from the token arithmetic and prices those calls
+correctly. In the trial the session-based cost was about a third of the
+gateway's (8 tests passed; ease 4 of 5); eight of nine frictions were fixed
+the same day. All **23 packages** pass validation and **787 tests** pass
+with **59 optional SDK checks skipped**. See the
+[note](docs/research/litellm-comparison-2026-10-25.md) and the
+[record](docs/testing/litellm-alignment-2026-10-25.md).
+
+### Vendor memory services that fail silently · 25 October 2026
+
+Mem0's published ADK memory service returns no memories on any error or a
+missing key, and writes and reads its app id under different fields, so
+recall is empty either way; ADK's own `PreloadMemoryTool` also turns a
+failed search into "no memories". The memory skill now requires a vendor
+service to report failure, match write and read scopes, read current facts
+only (Mem0 and graphiti keep superseded facts by default), and check
+erasure against the backend's history, with each library's telemetry
+switched off. The inspector no longer reports a custom memory service as
+Memory Bank. A fresh-agent trial fixed a vendor-style adapter offline (11
+tests passed; the original failed 9; ease 3 of 5); seven of its ten
+frictions were fixed the same day. All **23 packages** pass validation and
+**786 tests** pass with **59 optional SDK checks skipped**. See the
+[note](docs/research/mem0-graphiti-unstructured-comparison-2026-10-25.md)
+and the [record](docs/testing/mem0-graphiti-unstructured-alignment-2026-10-25.md).
+
+### Escalation calibration and cache-safe context trimming · 25 October 2026
+
+Two ideas from the Claude and OpenAI cookbooks, restated for ADK. Escalation
+is now measured as a pair, missed escalations as the gate and
+over-escalation as the usefulness measure, on cases with a reviewed
+expected lane; fixed escalation rules live in code, including a route
+before the model. In the trial the code rules alone sent 20% of claims to
+review, so a 10% target was unreachable without dropping required
+escalations. On context, ADK's built-in sliding filter moves the prompt
+prefix every turn so an explicit cache never forms, and on ADK 2.12
+`LoadArtifactsTool` puts its artifact list in the system instruction, which
+also breaks the cache; the trial lost the customer's order id from turn 4
+until the id moved into state. Two trials (28 and 10 tests passed; ease 3
+and 3 of 5); eighteen of twenty-four frictions were fixed the same day,
+and the guardrails inspector now recognises `before_agent_callback`. All
+**23 packages** pass validation and **786 tests** pass with **59 optional
+SDK checks skipped**. See the
+[note](docs/research/cookbooks-comparison-2026-10-25.md) and the
+[record](docs/testing/cookbooks-alignment-2026-10-25.md).
+
+### Incident regressions with two test lists · 25 October 2026
+
+A regression now names the tests that reproduce the defect
+(`fail_to_pass`) and the neighbouring tests the fix could break
+(`pass_to_pass`), and resolves only when both lists fully pass, with a
+skipped neighbour counted as NOT RUN rather than kept, which is stricter
+than SWE-bench. A case is accepted only after a run on the base commit and
+a run with a reference fix, after Harbor's oracle and do-nothing agents.
+The system designer's ticket template gains a `pass_to_pass` field and
+base-commit evidence. In the fresh-agent trial the merged "fix" stopped the
+double refund but let one customer refund another's order; the case stayed
+red and a reference fix proved the test sound (ease 3 of 5); nine of its
+eleven frictions were fixed the same day. All **23 packages** pass
+validation and **786 tests** pass with **59 optional SDK checks skipped**.
+See the [note](docs/research/harbor-swebench-comparison-2026-10-25.md) and
+the [record](docs/testing/harbor-swebench-alignment-2026-10-25.md).
+
+### Tool fault matrix and resilience checks · 25 October 2026
+
+The evaluation skill now builds a single-fault matrix for each
+consequential tool (error, slow, empty, corrupted) from ADK's own
+Environment Simulation fields, runs each beside a no-fault twin, checks
+the fault actually fired, and scores honesty, partial completion and retry
+discipline with checks rather than a judge. After Strands' chaos testing,
+whose judges pass a case in which the fault never fired. Strands' steering
+was read and left out; it adds nothing the skills lack. A fresh-agent trial
+built the suite offline without waiting on the 40-second delay (33 tests
+passed; 6 of 6 deliberate breaks caught; ease 4 of 5); eleven of its twelve
+frictions were fixed the same day. All **23 packages** pass validation and
+**786 tests** pass with **59 optional SDK checks skipped**. See the
+[note](docs/research/strands-comparison-2026-10-25.md) and the
+[record](docs/testing/strands-alignment-2026-10-25.md).
+
+### Collateral damage and a do-nothing control · 25 October 2026
+
+The evaluation skill graded an end state by hashing "the relevant tables",
+so an agent that also edited another table passed. After AppWorld it now
+diffs the whole fixture at table, record and field level with named
+ignores, keeps the effective-mutation comparison beside it, and runs a
+do-nothing scripted model through every case so a vacuous case shows up.
+Live runs record each MCP server's exact version or digest, after MCPMark
+declared its unpinned scores not comparable. In the fresh-agent trial the
+old check passed 4 of 5 bad agents and the new grader failed all 5; one
+was caught only by the whole-store diff (29 tests passed; ease 3 of 5); all
+eleven frictions were fixed the same day. All **23 packages** pass
+validation and **786 tests** pass with **59 optional SDK checks skipped**.
+See the [note](docs/research/appworld-mcpmark-comparison-2026-10-25.md) and
+the [record](docs/testing/appworld-mcpmark-alignment-2026-10-25.md).
+
+### SQL benchmark metrics and Spider 2.0 · 25 October 2026
+
+The SQL skill now explains what BIRD's metrics compute before anyone
+reports them: its execution accuracy is set equality, so a reversed
+ranking or a duplicated row passes, and Soft-F1 gives partial credit for a
+wrong value. The skill's own oracle stays the gate. Spider 2.0-Lite is
+described as a capability probe, 205 BigQuery tasks with a deliberately
+loose comparison, run only as an approved, capped campaign under a keyless
+identity and scored offline. Its upstream set-up uses an Owner key and
+unbounded queries. BIRD is linked only, because of its share-alike licence.
+A fresh-agent trial built the gate and the probe offline (22 tests passed;
+5 of 5 negative controls failed as required; ease 4 of 5); seven of its
+eight frictions were fixed the same day. All **23 packages** pass
+validation and **786 tests** pass with **59 optional SDK checks skipped**.
+See the [note](docs/research/bird-spider2-comparison-2026-10-25.md) and the
+[record](docs/testing/bird-spider2-alignment-2026-10-25.md).
+
+### SQL semantic map as reviewed files · 25 October 2026
+
+The SQL skill now covers keeping the semantic map in reviewed files, in a
+layout like WrenAI's, with a CI check that fails on an incomplete or
+unsafe definition, a drift comparison against the live schema and a
+scheduled duplicate-key check. Any SQL stored in the map is checked again,
+fail-closed, after it is expanded into the query. In the fresh-agent trial
+WrenAI's own validator caught 2 of 17 broken definitions (5 with
+`--strict`), so it can sit beside the gate but not replace it. Saved
+few-shot examples are now reviewed candidates, not auto-approved. The trial
+passed 48 tests (ease 3 of 5); ten of its eleven frictions were fixed the
+same day. All **23 packages** pass validation and **786 tests** pass with
+**59 optional SDK checks skipped**. See the
+[note](docs/research/wrenai-comparison-2026-10-25.md) and the
+[record](docs/testing/wrenai-alignment-2026-10-25.md).
+
 ### Offline leak oracle and policy plugins · 24 October 2026
 
 The sensitive-data skill now adds Microsoft Presidio as a second, offline

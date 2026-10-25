@@ -44,7 +44,7 @@ These are starting points, not a stack to install in every application:
 | Telemetry, SLOs and production-to-evaluation hand-off | One telemetry provider owner per process; content-capture gates set deliberately with the sensitive-data policy; usage counted once per logical model call; good/total SLIs from measured baselines with error-budget alerts; trace, invocation and session identifiers preserved at every hop; sampled production sessions redacted into evaluation cases. | Trace, monitoring, logging and analytics sinks with their own access and retention | `adk-agent-observability` |
 | Release lifecycle, pinning, CI gates, canary and rollback | One release unit (image or revision, prompt version, model and judge IDs, tool schema hash, eval-set hash, secret versions) recorded in a manifest; a deterministic evaluation gate that fails by exit code; model retirement handled as a planned re-baseline; staged traffic with the previous revision kept ready. | CI runner; traffic split and revision retention on the chosen host | `adk-release-engineering` |
 
-Every implementation goal includes relevant local regression checks. Add
+Every implementation goal includes relevant local regression checks, including the earlier acceptance items named in the ticket's `pass_to_pass` list. Add
 `adk-agent-evaluation` when agent behavior or evaluation design is a substantial
 part of that goal, and `optimise-adk-on-google-cloud` for measured performance
 work. Choose supporting skills from the boundaries a goal touches: a goal that

@@ -72,7 +72,7 @@ resumable step carries the idempotency key and reconciliation from
 that loop and survives a worker crash or a wait of days; it does not remove
 the key, because every engine checkpoints a step's result, and a crash after
 the provider accepted the write but before the checkpoint re-executes the
-step. Two engines publish ADK integrations with tests worth copying:
+step. Four engines publish ADK integrations, the first two with tests worth copying and the last two with conditions:
 
 - **Temporal** (`temporalio-google-adk` 0.0.1 on PyPI, 2026-10-07,
   pre-release; temporalio/ai-integrations commit bb179c3, MIT,
@@ -109,6 +109,65 @@ step. Two engines publish ADK integrations with tests worth copying:
   tool body ran once (`call_count == 1`), and its failure test records that
   ADK does not recover from a tool exception on its own; the exception
   propagates and the step's retry policy decides.
+- **Restate** (restatedev/sdk-python commit 37953b6, MIT,
+  `python/restate/ext/adk/`, read and probed offline with stand-ins 2026-10-25,
+  identical on google-adk 2.12.0 and 2.13.0). `RestatePlugin` journals each
+  model call as one `ctx.run_typed("call LLM")` step, calling the model with
+  `stream=False` and keeping the first response, so token streaming is lost; a
+  tool is durable only when its body wraps the work in
+  `restate_object_context().run_typed`, not because the plugin is installed
+  (adk.dev's Restate page says every tool execution is journaled, which the
+  source does not do). Parallel function calls run one at a time in the order
+  emitted, and a tool error cancels the rest of the batch. Sessions live in
+  Virtual Object state through `RestateSessionService`, whose `get_session`
+  returns an empty session for an unknown id rather than none, and compaction
+  needs `RestateEventSummarizer`. It accepts only an `LlmAgent` root: a
+  composite `BaseAgent` root fails terminally, while a 2.x `Workflow` with an
+  `LlmAgent` node runs. Because the plugin answers `before_model_callback`
+  itself, ADK then skips the agent's before-model callbacks, the before-model
+  callbacks of plugins listed after it, every after-model callback (of the agent
+  and of all plugins, including those listed before it), the agent-name billing
+  label and `RunConfig.max_llm_calls` (see `adk-operational-guardrails`' runtime
+  bounds); with the plugin installed, `max_llm_calls=1` let two model calls
+  through. Account usage in a guard plugin listed before it, admitting each call
+  in `before_model_callback` and recording usage in `on_event_callback` by
+  assigning a new `event.actions` value or `state_delta` (the Runner merges only
+  fields set on the event it returns, so an in-place mutation is lost);
+  admission before the call still delivers the response that crosses the budget,
+  so block that response's tool calls in `before_tool_callback`. Approving an
+  ADK confirmation on the next call failed with a non-terminal error, which
+  Restate retries, and the effect never ran: the plugin's tool-ordering gate is
+  kept per invocation and has no entry for the resumed call. Replace the
+  confirmation with an operation the tool only submits, ending the turn, and a
+  separate durable workflow keyed by that operation that waits for the decision
+  and lets code check the reviewer, payload, expiry and preconditions before the
+  journaled write with its idempotency key. The server is under the Business
+  Source License 1.1 with a grant that permits production use running your own
+  services (restatedev/restate commit 4b2fb2c, `LICENSE`). Packages:
+  `restate-sdk` (1.1.0 resolved on 2026-10-25). An offline stand-in for the
+  Restate context must subclass `ServerInvocationContext` and give each Virtual
+  Object call a fresh journal; the plugin reads the context from a private
+  context variable, so pin the SDK the stand-in was written against.
+- **Dapr through `diagrid`** (diagridio/python-ai commit cbd4f90,
+  `diagrid/agent/adk/`, read and probed offline 2026-10-25) is a
+  re-implementation, not ADK: it copies the agent's name, model, plain-text
+  instruction and tool declarations, then runs its own loop calling the model
+  client directly, with each model call and tool call as a workflow activity and
+  the message list in the Dapr state store. Callbacks, plugins, session state,
+  `{state}` templating, instruction providers, `output_schema`, sub-agents,
+  toolsets and confirmation are all lost, so a confirmation-gated tool can never
+  be approved; a plain function tool fails at set-up. A tool exception becomes
+  text sent to the model, so the activity never fails and its retry policy never
+  applies, and the exception text reaches the model and history. The default
+  workflow id gets a random suffix, so a client that retries starts a second
+  run; pass a stable `workflow_id`. Building the runner sends one usage event to
+  Scarf unless `DO_NOT_TRACK=1`, `SCARF_NO_ANALYTICS=1` or
+  `DIAGRID_NO_ANALYTICS=1` is set. Its licence is a modified Business Source
+  License whose free production use is limited to organisations under 60
+  full-time staff and US$15 million annual revenue, so adopting it is an owner
+  decision. The `diagrid` package (0.5.3 resolved on 2026-10-25) installs the
+  Dapr SDK, its workflow extension and a CLI, and calls the model client
+  directly, so a scripted `BaseLlm` cannot stand in for the model.
 
 The same decision has two neighbours that name the other half: the review
 record that outlives a process (`adk-operational-guardrails`, human review,

@@ -144,6 +144,24 @@ class InspectChecks(unittest.TestCase):
         self.assertIn("model_error_codes", second["flags"])
         self.assertNotIn(SECRET, json.dumps(report))
 
+    def test_reasoning_already_inside_completion_is_flagged(self):
+        # LiteLlm-style: completion 47 already includes 25 reasoning tokens, total = prompt + completion.
+        events = [event("inv-1", "user", [{"text": "hi"}], 1.0),
+                  event("inv-1", "agent", [{"text": "ok"}], 2.0, modelVersion="model-a",
+                        usageMetadata=usage(10, 47, thoughts=25, total=57)),
+                  # Gemini-style: candidates exclude thoughts, total = prompt + candidates + thoughts.
+                  event("inv-2", "user", [{"text": "hi"}], 3.0),
+                  event("inv-2", "agent", [{"text": "ok"}], 4.0, modelVersion="model-a",
+                        usageMetadata=usage(10, 22, thoughts=25, total=57))]
+        report = summary.inspect_events(events)
+        self.assertIn("reasoning_counted_twice_on_1_calls", report["invocations"][0]["flags"])
+        self.assertFalse([f for f in report["invocations"][1]["flags"] if f.startswith("reasoning_")])
+        # Both calls billed 47 output tokens: the flagged one is priced from candidates alone.
+        prices = summary.load_prices(json.dumps({"currency": "SYNTH", "per_million": {
+            "model-a": {"input": 0.0, "output": 1_000_000.0}}}).encode())
+        priced = summary.inspect_events(events, prices)
+        self.assertEqual([row["estimated_cost"]["amount"] for row in priced["invocations"]], [47.0, 47.0])
+
     def test_prices_apply_per_model_with_default_and_cached_rates(self):
         report = summary.inspect_events(clean_session()["events"], summary.load_prices(json.dumps(PRICES).encode()))
         first, second = report["invocations"]

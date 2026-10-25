@@ -87,6 +87,44 @@ rows (cases times repeat), refuses error rows and missing assertion types,
 and maps to the four outcomes; `check_eval_results.py` reads ADK's CSV, not
 Promptfoo's JSON.
 
+MLflow's ADK scorers wrap ADK's own evaluators and change what a result means
+(mlflow/mlflow commit 77f1aff, Apache-2.0, `mlflow/genai/scorers/google_adk/`,
+read 2026-10-25; experimental; exercised offline on 2026-10-25 with mlflow
+3.17.2 and google-adk 2.12.0 against a local server). Read from traces,
+`ToolTrajectory` fails honest runs: it takes each tool name from the span name
+(`execute_tool get_order`, not `get_order`), so names never match even with
+content capture on; tool arguments are `"{}"` when capture is off; and parallel
+calls produce a merged span (`(merged tools)`, arguments `"N/A"`) that raises a
+validation error and leaves a row with no value. Supply `actual_tool_calls` from
+the ADK session events instead, joining trace to session on
+`gen_ai.conversation.id`. On mlflow 3.17.2 with ADK 2.12.0 the scorer also needs
+an explicit `threshold` to construct. A missing ADK score is coerced to 0.0 and
+"no", so ADK's "not evaluated" reads as a failure; an exception raised by the
+scorer is a row with an error and no value (NOT RUN), but a judge call that
+fails inside ADK's evaluator (no credentials, an unknown judge id, content
+removed by capture settings) comes back as "no" with 0.0, indistinguishable from
+a real fail. Its `Hallucination` scorer passes neither tool names nor tool
+results, so the judge is told the agent has no tools and grades a relayed answer
+as unsupported; for tool-grounded answers call ADK's `HallucinationsV1Evaluator`
+directly with the session's invocations and app details, mapping not-evaluated
+to NOT RUN. Pin the judge (the default is `gemini-2.5-flash` with five samples),
+and install `google-adk[eval]` for `ResponseMatch` and `Safety`.
+
+deepeval (4.3.1, confident-ai/deepeval commit 5410e38, Apache-2.0, read and
+spiked offline 2026-10-25) is usable with ADK only for its metrics:
+`instrument_google_adk()` is an exporter to Confident AI's service with no local
+sink, raises without `CONFIDENT_API_KEY`, tries its own usage telemetry first
+unless `DEEPEVAL_TELEMETRY_OPT_OUT` is set, and replaced ADK's native
+`execute_tool` and `generate_content` spans in the spike. `import deepeval`
+loads `.env` files from the working directory unless
+`DEEPEVAL_DISABLE_DOTENV=1`, so a key in a project `.env` turns uploads on. Its
+metrics run offline only with an explicitly supplied model
+(`ToolCorrectnessMetric` builds an OpenAI client unless given one), on cases
+built from session events, and its tool-correctness metric scores an extra call
+as a pass unless `should_exact_match=True`; keep a separate forbidden-call
+assertion. The ADK hook also needs `openinference-instrumentation-google-adk`
+installed.
+
 ## Budget a representative remote canary
 
 When remote evidence is needed, include the actual generated schemas and media

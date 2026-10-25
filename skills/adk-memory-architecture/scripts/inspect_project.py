@@ -33,7 +33,9 @@ SIGNALS = {
         "retrieveContexts", "retrieve_contexts", "VertexAiRagRetrieval",
         "vertex_rag_service", "rag_corpora",
     ),
-    "memory_bank": ("MemoryService", "generate_memories", "MemoryBank"),
+    "memory_bank": ("VertexAiMemoryBankService", "generate_memories", "MemoryBank"),
+    # A project subclassing BaseMemoryService runs a vendor or custom backend, not Memory Bank.
+    "custom_memory_service": ("BaseMemoryService",),
     "bigquery": ("bigquery", "QueryJobConfig"),
 }
 LIMIT_FILES = 2000

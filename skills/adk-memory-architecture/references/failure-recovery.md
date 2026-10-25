@@ -20,6 +20,7 @@ public diagnostics; use an allowlist of stage/status/code and safe fingerprints.
 | Project lookup denied after a login/project change | Selected account, ADC override/quota project, explicit target and permission | UI selection or billing linkage must have fixed CLI access |
 | Accepted create followed by immediate not-found | Recorded operation and exact owned resource path; bounded read reconciliation | Create failed, so allocate another resource/name |
 | Operator RAG works, application has no passages | Runtime permission, release/manifest mapping and safe stage diagnostics | Empty result means the corpus contains no relevant policy |
+| Memory recall returns nothing after a provider or adapter change | The adapter's exception handling and key presence (after a key rotation, whether the new secret reached the workload: `adk-tool-auth-and-secrets`), whether write and read use the same scope fields, and whether recall runs through `PreloadMemoryTool` (which logs a failed search as a warning and continues with no memories) | Empty means the user has no memories |
 | Setup retrieval gets a transient server error | Case fingerprint, persisted attempts and completed cases | Re-run setup/import/full smoke with a fresh budget |
 | Final answer or tool result is blocked | Failing protection stage and whether a side effect already has a handle | No answer means no memory write occurred |
 | Probe execution succeeds but result is missing | Exact execution, fixed log time window and pagination | Submit another probe to recover ambiguous evidence |

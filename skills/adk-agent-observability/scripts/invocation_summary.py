@@ -338,6 +338,13 @@ def add_usage(tokens, counts):
     tokens["reported_total"] += counts["total"] or 0
 
 
+def reasoning_inside_candidates(usage):
+    """True when candidates plus thoughts exceed the reported total minus the prompt (LiteLlm routes)."""
+    return (usage is not None and (usage["thoughts"] or 0) > 0 and usage["total"] is not None
+            and usage["prompt"] is not None
+            and (usage["candidates"] or 0) + usage["thoughts"] > usage["total"] - usage["prompt"])
+
+
 def build_row(invocation, record, prices):
     flags = []
     if record["usage_unknown_calls"]:
@@ -354,6 +361,12 @@ def build_row(invocation, record, prices):
         flags.append("model_error_codes")
     if record["pending_call_ids"]:
         flags.append("orphan_function_calls")
+    # ADK's LiteLlm adapter stores completion_tokens as candidates and reasoning as thoughts, then
+    # adds them; where the provider's completion already includes reasoning, candidates + thoughts
+    # exceeds the reported total minus the prompt, and output is counted twice.
+    double_counted = sum(1 for usage, _, _ in record["calls"] if reasoning_inside_candidates(usage))
+    if double_counted:
+        flags.append("reasoning_counted_twice_on_%d_calls" % double_counted)
     cost = None
     if prices is not None:
         amount, unpriced, cost_flags = 0.0, 0, set()
@@ -361,9 +374,10 @@ def build_row(invocation, record, prices):
             if usage is None:
                 unpriced += 1
                 continue
+            # Where candidates already include reasoning, the billed output is candidates alone.
+            output = (usage["candidates"] or 0) + (0 if reasoning_inside_candidates(usage) else usage["thoughts"] or 0)
             call_totals = {"input": (usage["prompt"] or 0) + (usage["tool_use"] or 0),
-                           "output": (usage["candidates"] or 0) + (usage["thoughts"] or 0),
-                           "cached": usage["cached"] or 0}
+                           "output": output, "cached": usage["cached"] or 0}
             value, flag = price_call(prices, model, call_totals)
             if flag:
                 cost_flags.add(flag)

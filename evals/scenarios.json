@@ -87,6 +87,25 @@
       ]
     },
     {
+      "id": "workflow-engine-restate-or-dapr-keeps-adk-contract",
+      "prompt": "We want our ADK refund agent to survive worker crashes and wait days for a manager. Ops prefers Restate or our existing Dapr on GKE over Temporal. Pick one, wire it, and tell us what to test before we trust it.",
+      "available_skills": [
+        "adk-workflow-design",
+        "adk-operational-guardrails",
+        "safe-api-tool-calls",
+        "adk-system-designer"
+      ],
+      "context": "ADK 2.12 App: SequentialAgent(intake LlmAgent, refund LlmAgent); before_model and after_model callbacks enforce a token budget; RunConfig max_llm_calls=8; refund tool uses FunctionTool(require_confirmation=True) and a payments API with idempotency keys; state templating {user:tier} in the instruction; company of 4,000 staff; no network in the session.",
+      "expected_primary": "adk-workflow-design",
+      "assertions": [
+        "States that RestatePlugin journals model calls only, that tool bodies need run_typed, and that a SequentialAgent root fails terminally, so the composite must become an LlmAgent or a Workflow graph.",
+        "Shows that the plugin short-circuits model callbacks, so the budget callbacks and max_llm_calls stop running, and moves the guards before the plugin or into the tool path with a test that counts their firings.",
+        "Replaces ADK confirmation with a code-enforced, authenticated review record (not a model-read awakeable result), and notes that an exclusive Virtual Object key queues other calls during the wait.",
+        "Explains that the Dapr diagrid runner re-implements the loop and drops callbacks, state templating, sub-agents and confirmation, and that its BSL size gate needs an owner licence decision.",
+        "Keeps the idempotency key inside the durable step and pins the engine and server versions."
+      ]
+    },
+    {
       "id": "workflow-realistic-checkpoint-storage-preflight",
       "prompt": "Our response validates natively but fails saving its checkpoint. Repair storage fit without losing evidence, using our existing ADK and storage interfaces. No paid calls.",
       "available_skills": ["adk-workflow-design", "adk-agent-evaluation"],
@@ -111,6 +130,76 @@
         "Invalidates the old review after the writer revision and binds review-only repair to the exact unchanged current draft/frame/invocation/images.",
         "Retains unresolved findings and permits another rejection without pressuring the model to pass.",
         "Demonstrates acceptance of a faithful correction while retaining failing originals and labelled scripted-model evidence."
+      ]
+    },
+    {
+      "id": "evaluation-collateral-damage-no-op-control",
+      "prompt": "Our expense agent's pytest graders check the expense row was filed, but in staging it also changed the approver's profile and every test stayed green. One case even passes when I stub the model to do nothing. Fix the grading, and tell us what to record for the nightly live run against our filesystem and GitHub MCP servers.",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-agent-interoperability",
+        "adk-release-engineering"
+      ],
+      "context": "ADK 2.12 agent with a scripted-model Runner harness, a SQLite fixture of 14 tables reset per test, McpToolset launched as `npx -y @modelcontextprotocol/server-filesystem` (no version) and a GitHub server Docker image by tag, an eval set of 30 cases, no model access in the session.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Diffs the start and end fixture across all tables and asserts the changed set equals the case's expected set, with any ignored bookkeeping table named and justified, rather than hashing only the tables the case is about.",
+        "Drills into expected tables at record and field level, ignoring volatile fields such as timestamps per assertion instead of dropping the table, and keeps the effective-mutation comparison because an add-then-delete detour nets out of a diff.",
+        "Runs a do-nothing scripted model through every case's graders and requires each action case to have at least one assertion that run fails; notes that collateral-damage assertions pass a no-op by construction.",
+        "Records exact MCP server versions (package@version, image digest) in the live-run plan, treats a server change as a new baseline, and reports model-dependent checks as not run."
+      ]
+    },
+    {
+      "id": "evaluation-tool-fault-matrix-and-resilience",
+      "prompt": "Our ADK travel agent breaks badly when the flight API is flaky. Add tests where tools time out, return empty or garbage results, or error, and tell us how to score whether the agent recovers and is honest about it.",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-operational-guardrails",
+        "safe-api-tool-calls",
+        "adk-agent-instructions"
+      ],
+      "context": "Python ADK 2.12.0. Tools: search_flights, book_flight (write, idempotency key), send_confirmation. Scripted-model Runner harness exists; one Environment Simulation 503 test. Live Gemini runs need approval.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Builds one fault per tool per case with a no-fault twin, using InjectionConfig injected_error, injected_latency_seconds, and a non-empty injected_response for empty and corrupted (sentinel) results.",
+        "Asserts each fault actually fired before scoring, noting that an unconfigured tool name or unmatched match_args lets the real tool run.",
+        "Scores honesty (sentinel not repeated, no false success), end-state completion with zero forbidden effects, and retry discipline by error class from the trajectory, with usage compared to the twin.",
+        "Keeps any LLM judge pinned and secondary, treats a fault-free trace as NOT RUN rather than a neutral pass, and labels live runs as needing approval."
+      ]
+    },
+    {
+      "id": "evaluation-incident-regression-fail-to-pass",
+      "prompt": "Last week our refund agent issued two refunds when a customer said 'yes' twice. We merged a fix. Turn this into a regression case CI keeps, and tell us exactly when the case counts as passing.",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-system-designer",
+        "adk-release-engineering"
+      ],
+      "context": "An ADK 2.12 refund agent with issue_refund and lookup_order tools, an in-memory backend fixture, scripted-model Runner tests for eligible refund and foreign-order denial, the fix merged as one commit on top of a known base commit, no model access in the session.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Writes a scripted-model Runner test that drives two confirmations and asserts exactly one stored refund, and lists it under fail_to_pass with the existing eligible-refund and foreign-order-denial tests under pass_to_pass.",
+        "Requires two recorded runs before accepting the case: on the base commit the fail_to_pass test fails and the pass_to_pass tests pass; with the fix every listed test passes.",
+        "States the grading rule: resolved only when fail_to_pass is non-empty and every test in both lists passed; a skipped or missing fail_to_pass test fails the case and a skipped pass_to_pass test makes it NOT RUN, with no partial credit.",
+        "Records base_ref, reference_fix and both lists in the case metadata and reports any test it wrote but did not execute as not run."
+      ]
+    },
+    {
+      "id": "evaluation-self-hosted-harnesses-mlflow-deepeval-opik",
+      "prompt": "Compliance says no agent data may leave our GCP project. Data science wants deepeval's ADK integration for agent metrics, MLflow's Google ADK scorers for nightly scoring and Opik for traces. Tell us what we can use, how to configure it, and how the nightly job should record MLflow's results.",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-agent-observability",
+        "adk-release-engineering",
+        "protect-adk-sensitive-data"
+      ],
+      "context": "An ADK 2.12 agent with content capture off in production, no Confident AI or Comet account, Vertex AI under a service account, no model calls allowed in this session.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Rejects deepeval's instrument_google_adk because it requires CONFIDENT_API_KEY and exports to Confident AI, and sets DEEPEVAL_TELEMETRY_OPT_OUT and DEEPEVAL_DISABLE_DOTENV for any offline deepeval metric, passing an explicit pinned model.",
+        "Records an MLflow Feedback with error as NOT RUN, does not treat score 0.0/no from a judge scorer as a confirmed failure without ADK's eval status, and feeds actual_tool_calls from session events because tool_call_args are '{}' with content capture off.",
+        "Points Opik at a self-hosted server with OPIK_URL_OVERRIDE and turns off OPIK_SENTRY_ENABLE, OPIK_ANALYTICS_ENABLE and the server usage report; sets MLFLOW_DISABLE_TELEMETRY and uses a SQL backend for MLflow OTLP ingestion.",
+        "Pins the judge model instead of MLflow's gemini-2.5-flash default, uses Vertex identity rather than a Gemini API key, and keeps scripted-model Runner tests and adk eval as primary evidence."
       ]
     },
     {
@@ -437,6 +526,23 @@
       ]
     },
     {
+      "id": "memory-third-party-service-silent-empty-and-supersede",
+      "prompt": "Our ADK agent uses Mem0 through the Mem0MemoryService from Mem0's ADK guide. Users say it 'forgot everything', it mentions both old and new addresses after people move, and one user asked to be forgotten. Fix the memory layer and prove it.",
+      "available_skills": [
+        "adk-memory-architecture",
+        "safe-api-tool-calls",
+        "adk-agent-observability"
+      ],
+      "context": "ADK 2.12 agent; mem0ai 2.2.1 MemoryClient; the guide's adapter copied verbatim; no network or Mem0 key in the session.",
+      "expected_primary": "adk-memory-architecture",
+      "assertions": [
+        "Identifies that search_memory and add_session_to_memory swallow every exception and a missing key returns empty, and makes provider failure observable and distinct from no memories, with a test for each.",
+        "Finds the app_id scope mismatch (written as metadata, read as an entity filter) and adds a write-then-read test under one scope.",
+        "Applies a current-only read in code (latest_only=True) and adds a knowledge-update gold case at the adapter boundary.",
+        "Erases with delete_linked or a user-scoped delete, disables telemetry that would export the user_id, and reports live Mem0 calls as not run."
+      ]
+    },
+    {
       "id": "memory-ingestion-scan-detection",
       "prompt": "Qualify this document pack before we call the model. Some pages are scans and some are drawings. Produce the ingestion report and the per-page route.",
       "available_skills": ["adk-memory-architecture", "adk-agent-evaluation"],
@@ -562,6 +668,26 @@
         "Proposes a structural change (quarantined reader without tools, capability checks in before_tool_callback keyed on state, confirmation on refund and send) rather than relying on Model Armor, and explains that an agent's own tool results are not fenced by ADK 2.8.0.",
         "Adds deterministic scripted-model tests from the adversarial seed set asserting the forbidden tools are never called and no egress happens when a tool result carries instructions.",
         "Maps each finding to an OWASP identifier with the owning skill, and leaves PII redaction policy with protect-adk-sensitive-data and approval mechanics with adk-operational-guardrails."
+      ]
+    },
+    {
+      "id": "observability-cost-reconciliation-agenttool-litellm",
+      "prompt": "Our ADK cost dashboard and invocation_summary.py say a research turn costs far less than the invoice, yet output tokens look higher than the provider reports. What is wrong and which cost tests should we add?",
+      "available_skills": [
+        "adk-agent-observability",
+        "optimise-adk-on-google-cloud",
+        "adk-operational-guardrails",
+        "adk-model-and-output-contracts",
+        "adk-tool-interface-design"
+      ],
+      "context": "google-adk 2.12.0 root LlmAgent with two AgentTool sub-agents; models via LiteLlm to an OpenAI-style reasoning model; HttpOptions retry_options attempts=2; cost computed from saved parent sessions; no network in the session.",
+      "expected_primary": "adk-agent-observability",
+      "assertions": [
+        "States that AgentTool runs the sub-agent in a separate in-memory session, so the saved parent session omits the sub-agent's usage, and recommends aggregating by trace or switching to mode='single_turn'",
+        "States that on LiteLlm completion_tokens already include reasoning while ADK adds thoughts again, so output tokens are overstated",
+        "States that retried attempts and failed-but-billed calls are invisible to ADK usage and must be reconciled against gateway or billing records, reporting unknown rather than zero or a partial sum",
+        "Notes that retry_options.attempts becomes LiteLLM num_retries and the attempt count must be measured",
+        "Proposes offline scripted-model tests and quotes no price from memory"
       ]
     },
     {
@@ -954,6 +1080,42 @@
         "Grants the agent identity roles/mcp.toolUser plus BigQuery job and data-viewer roles, and supplies the token through header_provider rather than a static header.",
         "Names the three-minute processing cap and the 3,000-row result cap and adds a truncation check that refuses or narrows rather than reporting a partial aggregate as complete.",
         "Keeps Toolbox as the choice when reviewed templates, dataset allowlists or model-invisible tenant binding are required, and cites the official supported-products page with its date rather than the google/mcp README."
+      ]
+    },
+    {
+      "id": "sql-semantic-map-reviewed-files",
+      "prompt": "Our ADK analytics agent keeps its semantic domains in a Python dict. Move them to reviewed YAML files like WrenAI's MDL, run `wren context validate` in CI, and let the agent save every successful query as an example for next time.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-sql-agent-engineering",
+        "adk-release-engineering",
+        "adk-memory-architecture"
+      ],
+      "context": "ADK SQL agent: router, Python metadata collector reading BigQuery INFORMATION_SCHEMA for selected tables, tool-free author, sqlglot execution check on the author's candidate. One domain has a derived table defined by a SQL string that the collector expands into the candidate. A relationship entry lacks a cardinality. wrenai not installed; no network.",
+      "expected_primary": "adk-sql-agent-engineering",
+      "assertions": [
+        "Defines files with physical identity, exposed columns with types, primary key and relationships with cardinality and equality condition, and makes the CI check fail (not warn) on a missing cardinality or condition, unknown table or column, or missing key, without adding wrenai or copying its docs.",
+        "States that an offline file check proves neither live-schema agreement nor key uniqueness, and adds a comparison against retrieved schemas plus a duplicate-key fixture; a mismatch is a metadata failure with zero author and query calls.",
+        "Runs the parser policy on the expanded SQL that reaches BigQuery, fails closed on parse errors, and adds a fixture whose derived-table definition contains a write with zero jobs submitted.",
+        "Declines auto-saving successful queries as approved examples: records an approver and keeps unreviewed pairs out of the author's context, or routes them through the trace-to-template review."
+      ]
+    },
+    {
+      "id": "sql-acceptance-metric-names-and-spider2-bigquery-probe",
+      "prompt": "Leadership wants our BigQuery NL2SQL agent to report 'execution accuracy like BIRD' and a Spider 2.0 score before launch. Set up the acceptance metrics and tell us whether and how to run Spider 2.0-Lite.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-sql-agent-engineering",
+        "adk-agent-evaluation",
+        "adk-release-engineering"
+      ],
+      "context": "An ADK agent with reviewed templates and a generated-query route, a public-response oracle with a 200-to-700 negative control, and a draft harness that gates on set-equality EX and plans to run Spider2's evaluate.py with a downloaded Owner service-account key. No network, no credentials; google-adk not installed.",
+      "expected_primary": "adk-sql-agent-engineering",
+      "assertions": [
+        "Keeps the public oracle (exact values, cardinality, ranking order, failing negative control) as the gate and reports EX only under BIRD's named set-equality definition, stating that it ignores row order and duplicate rows.",
+        "Treats Soft-F1 as a diagnostic, not a gate (the wrong row in the 200-to-700 control still earns half credit), and does not compute R-VES on BigQuery, recording bytes billed or slot milliseconds instead.",
+        "Scopes Spider 2.0-Lite to the bq/ga task ids counted from spider2-lite.jsonl at a pinned commit, reports correct over that slice, and labels it a capability probe because its comparison ignores row alignment, allows extra columns and treats NULL as 0.",
+        "Rejects the Owner key and the upstream evaluator as executor, routes the agent's SQL through the bounded executor (dry run, maximum_bytes_billed, labels, quota) in an isolated project under explicit approval, scores saved results offline, marks the live run NOT RUN, and links BIRD without vendoring it."
       ]
     },
     {
@@ -1371,6 +1533,23 @@
         "Keeps the idempotency key and reconciliation inside the durable step because an engine checkpoints results and a crash between the provider's acceptance and the checkpoint re-executes the step.",
         "Writes the kill-after-the-write test in both positions (after the tool returns; after the provider double accepted) and the negative control on plain resume, with the engine's replay test added to the suite and reported as not run without the SDKs.",
         "Pins the engine version, records the decision and its evidence in the design, and treats the approval gate as code."
+      ]
+    },
+    {
+      "id": "guardrails-escalation-two-sided-calibration",
+      "prompt": "Our expense agent sends 60% of claims to the finance review queue and reviewers have started bulk-approving it. Product wants escalations under 10%. Lower the rate.",
+      "available_skills": [
+        "adk-operational-guardrails",
+        "adk-agent-evaluation",
+        "adk-agent-observability"
+      ],
+      "context": "An ADK 2.12 agent with decide and escalate tools; the travel and over-500 rules exist only in the instruction; a production escalation-rate dashboard; no labelled cases; no model access in the session.",
+      "expected_primary": "adk-operational-guardrails",
+      "assertions": [
+        "Moves the deterministic must-escalate rules out of the instruction into a require_confirmation callable or before_tool_callback, and proves with a scripted-model Runner test that the model cannot bypass them.",
+        "Builds labelled cases with a reviewed expected lane and reports missed-escalation and over-escalation rates separately, refusing to tune against the raw escalation rate alone.",
+        "Treats missed escalations as the gate and over-escalation as the usefulness target, and keeps the dashboard rate as a drift signal only.",
+        "Reports live-model rates as not run."
       ]
     },
     {

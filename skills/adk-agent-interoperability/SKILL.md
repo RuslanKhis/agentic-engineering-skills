@@ -52,7 +52,7 @@ source-verified against google-adk 2.8.0 unless another version is named).
    tool or send a message), stdlib only, loopback by default:
 
    ```bash
-   python "$SKILL_DIR/scripts/mcp_tool_inventory.py" --command "npx -y @modelcontextprotocol/server-filesystem ./data" --out mcp-manifest.json
+   python "$SKILL_DIR/scripts/mcp_tool_inventory.py" --command "npx -y @modelcontextprotocol/server-filesystem@<exact version> ./data" --out mcp-manifest.json
    python "$SKILL_DIR/scripts/mcp_tool_inventory.py" --url http://127.0.0.1:8080/mcp --diff mcp-manifest.json
    python "$SKILL_DIR/scripts/agent_card_check.py" --url http://localhost:8001/a2a/check_prime_agent --installed-a2a-sdk 0.3.9
    ```

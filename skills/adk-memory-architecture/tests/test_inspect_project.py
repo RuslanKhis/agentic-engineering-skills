@@ -39,6 +39,20 @@ def test_reads_signals_without_executing_or_echoing_source(tmp_path):
     assert report["compatibility"] == "adk_baseline_matches_other_contracts_unchecked"
 
 
+def test_vendor_memory_service_is_not_reported_as_memory_bank(tmp_path):
+    (tmp_path / "memory.py").write_text(
+        "from google.adk.memory import BaseMemoryService\n"
+        "class Mem0MemoryService(BaseMemoryService):\n    pass\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "bank.py").write_text(
+        "from google.adk.memory import VertexAiMemoryBankService\n", encoding="utf-8"
+    )
+    report, _ = inspector.inspect_project(tmp_path)
+    assert report["signals"]["custom_memory_service"] == ["memory.py"]
+    assert report["signals"]["memory_bank"] == ["bank.py"]
+
+
 def test_credential_files_and_external_symlinks_are_not_read(tmp_path):
     outside = tmp_path / "outside"
     outside.mkdir()

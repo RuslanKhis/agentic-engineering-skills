@@ -14,6 +14,7 @@ companion_skills: [<names, or empty>]
 security: [<SB IDs this ticket proves, or empty>]
 design_system: <path to DESIGN.md for UI tickets, or none>
 contract_deltas: [<none, or a contract ID and its one-line revision when this ticket narrows or widens one>]
+pass_to_pass: [<earlier tickets' acceptance items, as G01/A2, whose tests this ticket must keep passing: those whose touches or contracts overlap this ticket's, or empty; with no earlier tickets, the existing test ids instead; these are the evaluation skill's pass_to_pass tests>]
 phase: <1, 2 or later>
 profile: <proof of concept / assignment / internal tool / MVP or pilot / production>
 estimate:                # human hours, agent-assisted
@@ -82,7 +83,10 @@ reported as not run; the status is then in_progress with the owed run named.>
 ## Evidence
 
 <Filled in by the agent that carries the ticket out: files changed; for each
-acceptance item the command, its exit code and the commit SHA (or
+acceptance item the command, its exit code on the base commit (the commit
+before the change, or for an incident the commit that had the defect; it must
+fail there, since an item whose test already passes proves nothing) and after the change,
+each `pass_to_pass` item's command and exit code after the change, and the commit SHA (or
 "uncommitted") with the worktree path; one line per contract (C3: evidenced,
 local, A2 and A3; a partial tier says which items ran where); one line per
 security rule (SB03: evidenced, tier 1, A3); the companion skills loaded and

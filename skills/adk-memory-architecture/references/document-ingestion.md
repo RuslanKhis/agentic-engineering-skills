@@ -45,7 +45,13 @@ inventory from the extractor the project already uses.
 ## Route scanned and low-density pages
 
 Classify by the text the extractor returned, not by the file's claim to be
-text-based:
+text-based. An extractor's own routing is not this classification:
+unstructured's `auto` strategy decides once per document, so one page with any
+text sends the whole PDF down the text-only path, and `hi_res` falls back to a
+weaker strategy with only a log warning when optional packages are missing;
+record the strategy that actually ran (Unstructured-IO/unstructured commit
+c74e6c4, Apache-2.0, `unstructured/partition/pdf.py` and `strategies.py`, read
+2026-10-25):
 
 | Observation | Class | Route |
 | --- | --- | --- |

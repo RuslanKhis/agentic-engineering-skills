@@ -59,7 +59,7 @@ This is a **PRODUCTION PRINCIPLE**, not an automated companion feature. Use it w
 3. Convert the query into reviewed SQL with typed bound values and a versioned template contract. Parameterise all required user-derived values; keep execution policy and billing/output limits.
 4. Compare exact results with an independent oracle on adversarial fixtures and representative permitted data. Check join policy independently of totals.
 5. Add router counterexamples: extra filters, negation, new metric, changed period or unsupported cohort must clarify or take another route. Verify the template path skips author/schema calls and preserves final output semantics.
-6. Roll out under the project's release process and observe correctness/refusal/routing metrics. Retire or revise the template when source schema or business meaning changes. A previously successful model trace is a candidate for review, not automatic approval.
+6. Roll out under the project's release process and observe correctness/refusal/routing metrics. Retire or revise the template when source schema or business meaning changes. A previously successful model trace is a candidate for review, not automatic approval. The same holds for few-shot examples saved from traffic: application code (never a tool the model can call) writes a pending candidate without parameter values or user identity, a reviewer promotes it with their name recorded, the policy check reruns on it, and the author sees only promoted examples for the current domain; auto-saved examples let one user's request, or an injected value, steer later users' queries. `adk-agent-instructions`' exemplars reference covers how examples enter a prompt.
 
 ## Preserve what a result proves
 

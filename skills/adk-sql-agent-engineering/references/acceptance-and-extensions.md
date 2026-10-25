@@ -30,6 +30,30 @@ Freeze explicit equivalent metric aliases; retain exact finite numeric checks an
 reject conflicting aliases. Assert ranking order independently. Use an LLM judge
 for presentation quality if useful, alongside deterministic numerical checks.
 
+When a stakeholder asks for "BIRD-style accuracy", name the definitions before
+reporting them, because they are looser than this oracle (bird-bench/mini_dev commit
+abd11b6, `evaluation/evaluation_ex.py`, `evaluation_f1.py` and `evaluation_ves.py`,
+read 2026-10-25; the benchmark is CC BY-SA 4.0, so link it and never vendor its data
+or text). EX scores 1 when the set of result rows equals the gold set: row order and
+duplicate rows are ignored, so a reversed top-two ranking and a duplicated row both
+pass. Soft-F1 drops duplicate rows, then pairs the i-th predicted row with the i-th
+gold row; within a pair each predicted value found anywhere in the gold row counts
+as a match and each value on only one side counts against it, all divided by the
+gold row's column count; an unpaired row counts as wholly missing or extra;
+precision, recall and F1 follow from the summed counts, and two empty results score
+1. Because it pairs by position it penalises a reversed ranking, and because it
+gives partial credit a row whose customer key matches but whose total is wrong (the
+200-to-700 negative control below) still earns half. R-VES applies only when EX
+holds: it averages the gold-to-predicted run-time ratio over 100 timed runs after
+dropping outliers beyond three standard deviations, maps it to a reward of 1.25
+(ratio of 2 or more), 1 (1 or more), 0.75 (0.5 or more), 0.5 (0.25 or more) or 0.25
+(below), and reports the mean of the square-rooted reward times 100, so it can
+exceed 100. Keep this section's oracle as the gate, report EX only under that name
+and definition, treat Soft-F1 as a diagnostic, and do not compute R-VES on BigQuery:
+a hundred runs per case multiply bytes billed and time cache and slot contention,
+not the query; record `total_bytes_billed` or `total_slot_ms` instead ([execution
+safety](execution-safety.md)).
+
 Add a negative control through the same public path: change a seeded customer total
 from its expected 200 to 700 while leaving route, status and job evidence successful.
 The acceptance test must fail. Also remove a requested total while retaining its
@@ -44,6 +68,32 @@ remained recorded. A replacement paid sample is not an adjudication of the origi
 **Completion criterion:** the known-correct response passes, the deliberate wrong
 answer fails, and the report separates numerical correctness, execution policy and
 public-response correctness.
+
+**Public benchmark probe (Spider 2.0-Lite).** It is the public set with BigQuery
+tasks: 205 of its 547 tasks run on BigQuery (180 `bq` and 25 `ga` ids; the README's
+table says 214) (xlang-ai/Spider2 commit cafb867, MIT,
+`spider2-lite/spider2-lite.jsonl` and `evaluation_suite/evaluate.py`, read
+2026-10-25). Its comparison is loose by design: each gold column, or the columns a
+task lists by index, must equal some predicted column, extra columns are allowed,
+NULL counts as 0, numbers match within an absolute 0.01, a task with several gold
+files (`_a`, `_b`) passes on any one of them, and all 205 BigQuery tasks ignore
+order by sorting each column separately, so rows are never aligned. Its evaluator
+routes ids beginning `bq` or `ga` to BigQuery, scores unsupported ids 0 and prints a
+score over 547; report correct out of 205 at a named commit, and do not use the
+README's 214 or the 547 for a BigQuery-only run. Treat it as a capability probe for
+generated SQL on BigQuery's dialect and wide public schemas, never as acceptance for
+the target's metrics, grain or ranking, and note that its gold answers have been
+public since 2024-12-24. The upstream set-up runs every query without a dry run,
+byte ceiling or labels on up to 20 threads, under a service account given the Owner
+role and a downloaded key, against TB-scale public datasets billed to the caller's
+project. Run it only as an approved, bounded campaign in an isolated project: the
+agent's own executor submits the queries with its dry run, ceiling, labels and
+quota, under a keyless identity holding `roles/bigquery.jobUser` on the campaign
+project; write the per-query ceiling, total byte budget, task count and concurrency
+into the approval and stop at the budget; save the results and score them offline;
+report the score as indicative. If a key was already created by following the
+upstream guide, delete it and record that as a credential clean-up
+(`adk-tool-auth-and-secrets`).
 
 ## 2. Climb the framework-to-user acceptance ladder
 

@@ -20,7 +20,10 @@ before reusing them on another release.
 ## Trace how ADK composes one request
 
 In ADK 2.8.0 the request processors build an `LlmRequest` in this order (D,
-`flows/llm_flows/instructions.py` and `contents.py`):
+`flows/llm_flows/instructions.py` and `contents.py`; on 2.12.0 those paths are
+shims and the code is in `flows/llm_flows/prompt/_instructions.py`,
+`flows/llm_flows/context/_contents.py` and `flows/llm_flows/context/_cache.py`,
+read 2026-10-25):
 
 1. **System instruction.** The deprecated `global_instruction`, then
    `static_instruction`, then `instruction` are appended to
@@ -54,7 +57,11 @@ Observable check: capture the outgoing `LlmRequest` with a deterministic
 `before_model_callback(callback_context, llm_request)` that records a deep
 copy and returns `None`. Assert where a synthetic marker lands: system
 instruction, prefix content, history or the final user content. A model's
-answer does not show composition.
+answer does not show composition. A scripted `BaseLlm` never reaches the
+explicit cache: `GeminiContextCacheManager` runs inside
+`Gemini.generate_content_async` (2.12.0 `models/google_llm.py`), so test cache
+reuse offline with the real `Gemini` class over a fake client that records
+cache creation and the requests it receives.
 
 ## Split the budget and measure each slice
 
@@ -86,7 +93,10 @@ approvals, authoritative locators).
   worse than at the start or end (E). ADK's default composition already ends
   with the latest user batch; a `before_model_callback` that appends retrieved
   text after it reverses this. Check: the final `Content` in the captured
-  request is the user's current message or the current function response.
+  request is the user's current message or, when the model is continuing a
+  tool turn, the labelled dynamic instruction placed after the function
+  response (step 3 above); a scripted model that waits for a function response
+  in the last position will loop.
 - **Shorter inputs score higher on the same task.** Chroma's Context Rot report
   evaluated 18 models and found performance degrades with input length even on
   simple tasks, distractors hurt more as length grows, and needles with low
@@ -98,9 +108,12 @@ approvals, authoritative locators).
   objective near the end of context to counter drift in long tasks (V,
   production anecdote). In ADK the dynamic instruction sits before the latest
   user batch, so a goal placed in `instruction` or a `{plan}` state key is
-  re-read each call without copying it into history. Check: the goal text
-  appears once per request, in the dynamic position, and the summariser prompt
-  preserves it across compaction.
+  re-read each call without copying it into history. The same carries an
+  authoritative locator (an order or case id): trusted tool code writes it to
+  state once verified, and the instruction reads it as `{order_id?}`, so it
+  survives both a context filter and a summary that drops it. Check: the goal
+  text appears once per request, in the dynamic position, and the summariser
+  prompt preserves it across compaction.
 - **Keep instructions at the right altitude.** Anthropic's context-engineering
   guidance favours a minimal set of high-signal instructions and canonical
   examples over exhaustive rules (V). Check: instruction bytes per request are
@@ -186,7 +199,9 @@ full payload as an artifact when the context offers `save_artifact`, and
 returns `{"status": "success", "preview": ..., "artifact": name, "version": n,
 "truncated": True}`. It leaves small results and non-dict results untouched and
 preserves an explicit failure status rather than relabelling it. Adapt its
-limits to the target's result contract.
+limits to the target's result contract: its 20,000-byte default never fires on
+records of a few thousand characters, so derive the limit from the tool slice
+of the budget measured above, not from the default.
 
 Check: after one oversized call, the stored `function_response` holds the
 bounded dict, `context_budget.py --max-result-bytes` flags nothing, and the
@@ -196,7 +211,21 @@ Two lighter alternatives exist. `ContextFilterPlugin(num_invocations_to_keep=,
 custom_filter=, remove_amount=)` in `plugins/context_filter_plugin.py` (2.8.0
 D; absent from the docs site) trims request contents without a summariser; it
 changes what the model sees, not what storage holds, so test open tool pairs
-across the cut. The adk-recipes long-horizon harness (ADK 2.5.x per its README stack table, read 2026-10-22) prunes old
+across the cut. Once the request holds `num_invocations_to_keep + remove_amount`
+invocations it cuts to the last `num_invocations_to_keep` on every turn, so the
+window slides by one invocation per turn and `remove_amount` only delays the
+first cut; on any exception it logs and sends the request unfiltered
+(google-adk 2.12.0 `plugins/context_filter_plugin.py`, read 2026-10-25). The
+explicit cache's fingerprint covers the system instruction, tools and the
+first N contents (`models/gemini_context_cache_manager.py`), so with
+`ContextCacheConfig` a sliding window moves the prefix every turn and an
+explicit cache should never form. Prefer token-threshold compaction, which
+moves the prefix once per compaction, or a custom filter that cuts in large,
+infrequent steps, and check that `cached_content_token_count` stays above zero
+for four or more invocations after the cut begins; clearing invalidates a
+cached prefix, so clear enough to be worth it (anthropics/claude-cookbooks
+commit bfe50e5, MIT, `tool_use/context_engineering/context_engineering_tools.ipynb`,
+read 2026-10-25; another vendor's guidance, restated for ADK). The adk-recipes long-horizon harness (ADK 2.5.x per its README stack table, read 2026-10-22) prunes old
 large tool-result bodies behind `LHA_PRUNE_TOOL_OUTPUTS`, saves large outputs to
 GCS artifacts and caps memory prefetch so a changing prefetch does not
 invalidate the cached prefix each turn (V, sample repository, not inspected
@@ -220,7 +249,14 @@ and `CallbackContext`):
   the Runner has no artifact service; `InMemoryArtifactService` serves tests
   and `GcsArtifactService` production.
 - `LoadArtifactsTool` (`load_artifacts_tool`) lists artifact names in the
-  request and loads content on demand, which is the just-in-time identifier
+  request and loads content on demand. On 2.12.0 it adds that list as a
+  tool-contributed dynamic instruction, which lands in the system instruction
+  unless the experimental `DYNAMIC_INSTRUCTION_ROUTING` feature is on (off by
+  default; `flows/llm_flows/prompt/_dynamic_instructions.py`,
+  `features/_feature_registry.py`, read 2026-10-25). The explicit cache's
+  fingerprint covers the system instruction, so with `ContextCacheConfig`
+  every new artifact recreates the cache, and artifact names become cached
+  prompt text: keep customer identifiers out of them. It which is the just-in-time identifier
   pattern Anthropic describes (V) and the file-system-as-context pattern Manus
   reports (V).
 
@@ -328,6 +364,10 @@ Facts read from 2.8.0 `apps/compaction.py` and `apps/_configs.py` (D):
   compaction boundary.
 - The trigger is `prompt_token_count >= token_threshold`; a large new input is
   not rejected (see `tests/test_runtime_token_compaction.py`).
+  `prompt_token_count` includes cached tokens, so set the threshold above the
+  static prefix plus the working margin, or compaction fires on every turn.
+  On 2.12.0 import `EventsCompactionConfig` from `google.adk.apps.app`;
+  `google.adk.apps` exports only `App` and `ResumabilityConfig`.
 - `event_retention_size` counts events and the split moves earlier to keep a
   function call with its response.
 - The sliding window counts new invocations since the last compaction end
@@ -382,11 +422,26 @@ Facts read from 2.8.0 `apps/compaction.py` and `apps/_configs.py` (D):
   `LlmEventSummarizer` prompt must keep the `{conversation_history}`
   placeholder (https://adk.dev/context/compaction/, read 22 October 2026, D).
   The 32k threshold is an example, not a measurement.
+- `LlmEventSummarizer` cuts each tool argument and response to 2,000
+  characters before summarising, so a fact that must outlive compaction
+  belongs in the model's own text, in state or in a named artifact, not past
+  character 2,000 of a tool response. Its default template asks the
+  summariser to state the user's language and list the exact tool names; a
+  custom `prompt_template` replaces the default wholesale, so restate both
+  (google-adk 2.12.0 `apps/llm_event_summarizer.py`, read 2026-10-25).
 
 Check: with a small `token_threshold`, observe the summariser input, the stored
 compaction event and the next captured request separately; original events
 stay in storage. The [context budget helper](../scripts/context_budget.py)
-lists compaction events and the raw events each span covers.
+lists compaction events and the raw events each span covers. Then probe what
+survives: plant an ID, a figure, a user correction and the current goal,
+force two compactions (each summary is seeded from the previous one, so
+distortion compounds), assert each probe by exact match in
+`compacted_content`, and measure next-turn correctness on a fixed set. The
+probe needs a live summariser call, so it is NOT RUN without a model (after
+the transcript-replay and token-pressure checks in openai/openai-cookbook
+commit 8495326, MIT, `examples/agents_sdk/session_memory.ipynb`, read
+2026-10-25; another vendor's guidance, restated for ADK).
 
 ## Observe token usage per call
 

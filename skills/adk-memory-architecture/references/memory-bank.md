@@ -115,6 +115,14 @@ read 2026-10-23), so labels and topics travel on `add_events_to_memory`
 without a raw client. The gold set that proves the update and abstention
 behaviour is structured by the five memory abilities in
 [retrieval strategy](retrieval-strategy.md#measure-recall-on-a-gold-set-before-drafting).
+On other backends "newest wins" needs a current-only read in code: Mem0's
+open-source SDK keeps contradictory facts side by side, its Platform marks a
+superseded fact but still returns it unless `latest_only=True`, and
+graphiti's `search()` applies no validity filter by default, so filter on
+`invalid_at` and `expired_at` being empty (getzep/graphiti commit 8ce6d63,
+Apache-2.0, `graphiti_core/search/search_filters.py`; mem0 commit 2c81af3,
+`mem0/client/types.py`; both read 2026-10-25). Run the knowledge-update gold
+case against the adapter itself.
 Two rules from the security skill apply on the write side: events from an
 invocation that read untrusted content (a fetched page, an inbound email, a
 search result) are not written back except through the quarantined reader
@@ -150,7 +158,26 @@ call), `custom_metadata` (the dict passed as `RunConfig.custom_metadata`),
    indeterminate write is reconciled by `search_memory` before any
    resubmission, and the callback never raises into the user's turn.
 5. Recall is filtered in code after `search_memory`: foreign scope, topic,
-   tombstone, expiry and size, because the provider returns what it has.
+   tombstone, expiry and size, because the provider returns what it has. A
+   custom or vendor `BaseMemoryService` raises, or returns a typed
+   unavailable outcome, when the provider fails, never an empty list: Mem0's
+   published ADK service prints every exception and returns no memories, and
+   writes its app id as metadata but reads it as a scope filter, which its
+   own documentation says matches nothing; pass `app_id` as an entity field
+   on `add` and read it inside the `filters` object, the same fields on both
+   sides (mem0ai/mem0 commit 2c81af3, Apache-2.0,
+   `docs/integrations/google-ai-adk.mdx` and
+   `docs/platform/features/entity-scoped-memory.mdx`, read 2026-10-25). On
+   2.12.0 `PreloadMemoryTool` itself catches a failed `search_memory`, logs a
+   warning and continues the turn without memories, while `LoadMemoryTool`
+   lets the error through (installed package, `tools/preload_memory_tool.py`
+   and `load_memory_tool.py`, read 2026-10-25). Record recall failures as an
+   event or metric in the service, where the preload path cannot hide them,
+   and decide what the model is told: use `LoadMemoryTool`, whose failure
+   reaches the agent as a tool error, or an instruction provider that calls
+   `search_memory` itself and states that memory is unavailable; do not
+   subclass `PreloadMemoryTool`, which needs private ADK calls. A
+   write-then-read test under one scope proves the scope fields agree.
 6. `BaseMemoryService` has no delete method in 2.8.0 nor in 2.12.0 (installed
    package, read 2026-10-23: `add_session_to_memory`, `add_events_to_memory`,
    `add_memory`, `search_memory` only), so forgetting
@@ -296,7 +323,7 @@ drift. Revision-enabled correction/erasure remains additional production work.
 
 ## Coordinate erasure with writes and replay
 
-1. Inventory the subject's active data and derivatives: profile, sessions, memories, run responses and any enabled analytics, documents or evaluation stores.
+1. Inventory the subject's active data and derivatives: profile, sessions, memories, run responses and any enabled analytics, documents or evaluation stores. Other backends keep more than their search shows. On the hosted Mem0 Platform (`MemoryClient`), deleting one memory lets the fact it replaced come back unless `delete_linked=True`, and `delete_all(user_id=...)` or `delete_users(user_id=...)` is the per-user call. In the open-source library (`Memory`), `delete_all(user_id=...)` removes the memories but the deleted text stays in its history table, and recent raw messages per session stay in a messages table that only `reset()`, which wipes every user, clears; erasure there needs the tables purged for that user by the operator, recorded as such; graphiti's `remove_episode` keeps raw episode text by default (`store_raw_episode_content=True`) and does not restore facts the removed episode invalidated, and neither has an equivalent of Memory Bank's `target_revision_id`. All three libraries send usage telemetry by default, and Mem0's erasure event carries the user id being erased; turn it off with `MEM0_TELEMETRY=False`, `GRAPHITI_TELEMETRY_ENABLED=false` and `DO_NOT_TRACK` (mem0 commit 2c81af3, graphiti commit 8ce6d63, unstructured commit c74e6c4, read 2026-10-25).
 2. Define the implemented erasure scope and exclusions. Shared authoritative records require their own policy; an `ALL` label does not prove universal deletion.
 3. Authenticate the owner and choose when new activity becomes blocked. Inspect the actual state mutation, not only a pending status response.
 4. If immediate blocking at acceptance is required, establish the owner block atomically with acceptance; a worker-stage block is a narrower guarantee.

@@ -47,7 +47,7 @@ class InspectorTests(unittest.TestCase):
 
     def test_dry_run_equivalence_and_no_writes_or_project_execution(self):
         self.write("pyproject.toml", '[project]\nrequires-python = ">=3.11"\ndependencies = ["google-adk==2.8.0", "google-genai>=1.0,<2"]\n')
-        self.write("agent.py", 'raise RuntimeError("MUST NOT EXECUTE")\n# SafeAgentRuntime usage_metadata\n')
+        self.write("agent.py", 'raise RuntimeError("MUST NOT EXECUTE")\n# SafeAgentRuntime usage_metadata before_agent_callback\n')
         self.write("uv.lock", "DO NOT PARSE THE LOCK CONTENT")
         before = {str(p.relative_to(self.root)): p.read_bytes() for p in self.root.rglob("*") if p.is_file()}
         normal = self.run_cli("--project", str(self.root))
@@ -60,6 +60,7 @@ class InspectorTests(unittest.TestCase):
         self.assertEqual(report["declared"]["python"], [">=3.11"])
         self.assertIn("uv.lock", report["config_files"])
         self.assertEqual(report["guardrail_identifiers"]["usage_metadata"]["occurrences"], 1)
+        self.assertEqual(report["guardrail_identifiers"]["before_agent_callback"]["occurrences"], 1)
         after = {str(p.relative_to(self.root)): p.read_bytes() for p in self.root.rglob("*") if p.is_file()}
         self.assertEqual(after, before)
 

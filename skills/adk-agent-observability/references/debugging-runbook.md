@@ -28,7 +28,7 @@ Timings on the span are the measurement; `usage` on the `generate_content` span 
 ## 3. From the trace to the session
 
 - `gen_ai.conversation.id` is the ADK session id. Fetch the session from the session service the deployment uses (`SESSION_SERVICE_URI`, Agent Runtime sessions API, the database). Agent Runtime does not log Sessions or Memory Bank operations (vendor), so the session service is the only record of the events.
-- Export the session to JSON (an object with `events`, or the events array) and run the helpers. `invocation_summary.py` shows, per invocation, how many logical model calls happened, which tools failed, where the wall time went (`longest_steps`) and whether usage was missing; its `invocation_id` matches the span attribute.
+- Export the session to JSON (an object with `events`, or the events array; `session.model_dump_json(exclude_none=True)` gives the first form) and run the helpers. `invocation_summary.py` shows, per invocation, how many logical model calls happened, which tools failed, where the wall time went (`longest_steps`) and whether usage was missing; its `invocation_id` matches the span attribute.
 - BigQuery rows for the same `invocation_id` add `ttft_ms`, `finish_reason`, `tool_origin` and the sanitised error text; correlate on `trace_id` when `enable_otel_correlation` or the ambient span was present.
 - Logs: query `trace="projects/{project}/traces/{trace_id}"` in Cloud Logging for application and ADK log records; `google_adk.*` logger names identify the module. On Agent Runtime, stdout is in `reasoning_engine_stdout`; on Cloud Run the request record and the container output are separate log ids ([export paths](export-paths.md)).
 

@@ -71,3 +71,11 @@ None.
 
 Read, not run; the rules were taken from the maintainers' own contract
 document and code on one day.
+
+## Correction, 25 October 2026
+
+"The end-state hash already fails an extra mutation" was true only inside
+the hashed tables: the skill hashed "the relevant tables", so a mutation
+elsewhere passed. The evaluation skill now diffs the whole fixture with a
+named ignore list, after AppWorld
+([comparison](appworld-mcpmark-comparison-2026-10-25.md)).

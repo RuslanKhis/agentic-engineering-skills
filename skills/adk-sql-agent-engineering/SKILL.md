@@ -52,7 +52,8 @@ Load deeper guidance only for the work at hand:
 
 | Work | Read next |
 | --- | --- |
-| Define metrics, joins, values or selected context | [Semantic contracts](references/semantic-contracts.md) |
+| Define metrics, joins, values or selected context | [Semantic contracts](references/semantic-contracts.md); for a semantic map kept in reviewed files and its CI check, [implementation](references/implementation.md#semantic-domains-and-lazy-context) |
+| Save successful queries as templates or few-shot examples | [Troubleshooting](references/troubleshooting.md), step 6 of turning a trace into a reviewed template |
 | Wire ADK models, callbacks, events or credentials | [ADK runtime](references/adk-runtime.md); its bundled offline contract asset preserves the real framework and SDK |
 | Provision, resume or clean up BigQuery/Vertex resources | [Lifecycle runbook](references/lifecycle-runbook.md); the tested serving surface was local ADK Web, not a deployed cloud frontend |
 | Investigate a wrong answer, refusal, SDK failure or misleading PASS | [Troubleshooting](references/troubleshooting.md) |
