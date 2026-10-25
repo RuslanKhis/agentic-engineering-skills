@@ -8,7 +8,10 @@ description: >-
   that needs someone's decision (approval to build a proof of concept, a
   proof-of-concept review with a production decision, a final results
   review) or for a public case study to share with Google or the wider
-  world, in a business version and a technical version. Do not activate to
+  world, in a business version and a technical version; and after launch
+  for the monthly one-page value report to the sponsor (outcome against
+  baseline, cost per outcome, incidents, a stop, continue or scale call).
+  Do not activate to
   change the application, run evaluations, or audit results (adk-agent-evaluation),
   nor to choose the use case (adk-discovery) or design the system
   (adk-system-designer).
@@ -64,7 +67,12 @@ and the record do not say:
 - **Stage:** `poc-approval` (before the build), `production-approval` (the
   proof-of-concept review that decides on production), `final-results`
   (after production), or `case-study` (public, after measured results and
-  approvals). A proof of concept with only a demo and no measurement is
+  approvals), or `value-report` (monthly after launch: one page for the
+  sponsor, not a deck; read [value report](references/value-report.md),
+  write it from the [template](assets/value-report-template.md) and check
+  it with `scripts/check_value_report.py`; the audience is the sponsor,
+  there are no minutes, and the storyline, deck and rehearsal sections
+  below do not apply). A proof of concept with only a demo and no measurement is
   presented as an approval case with hypotheses, not as results.
 - **Audience:** `business` (funds, extends, builds, stops; reads the summary,
   the result against criteria, cost, risk, the ask), `technical` (hosts,

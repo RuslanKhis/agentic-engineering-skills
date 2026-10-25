@@ -511,6 +511,34 @@
       "prompt": "Set up the look of our new ADK assistant's web app: a design system for the shadcn components, and how the chat shows running tools, an approval before filing a ticket, and an error that arrives after part of the answer.",
       "should_trigger": true,
       "rationale": "Setting up an ADK interface's design system and its agent UI states (tool timeline, approval prompt, failed turn) is now in this skill's scope; an isolated styling tweak stays out."
+    },
+    {
+      "id": "evaluation-expert-labelling-positive",
+      "skill": "adk-agent-evaluation",
+      "prompt": "We need our underwriters to label about a hundred of the claims agent's answers so we have a gold set and can trust an LLM judge. How should we run the session, and how do we check whether the two underwriters agree?",
+      "should_trigger": true,
+      "rationale": "Planning a subject-matter-expert labelling session, inter-rater agreement and judge calibration on their labels is the expert-review mode of this skill."
+    },
+    {
+      "id": "evaluation-expert-labelling-near-miss",
+      "skill": "adk-agent-evaluation",
+      "prompt": "Set up an annotation project in Label Studio for our image classifier's training data, with three annotators per image.",
+      "should_trigger": false,
+      "rationale": "Training-data annotation for a non-agent image model is not ADK agent evaluation."
+    },
+    {
+      "id": "presenter-value-report-positive",
+      "skill": "adk-presenter",
+      "prompt": "The claims agent has been live since August. Write this month's one-page value report for our sponsor from the plan's measurement and incident records, and say whether we should stop, continue or scale.",
+      "should_trigger": true,
+      "rationale": "The monthly post-launch value report with a stop, continue or scale call is the presenter's value-report stage."
+    },
+    {
+      "id": "presenter-value-report-near-miss",
+      "skill": "adk-presenter",
+      "prompt": "Build a Looker Studio dashboard of the agent's daily token spend and latency from our BigQuery traces.",
+      "should_trigger": false,
+      "rationale": "A telemetry dashboard is observability work (adk-agent-observability), not a sponsor report built from recorded measurements."
     }
   ]
 }

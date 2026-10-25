@@ -114,6 +114,10 @@ Exit 0 means every slide cites evidence or says why not, and the stage's
 coverage is complete. Exit 1 lists what to fix. Warnings do not fail the
 check; read them anyway.
 
+The monthly `value-report` stage is a one-page report, not a deck; it has
+its own [template](value-report-template.md) and check,
+`scripts/check_value_report.py`.
+
 Beside the outline in the same folder, one per stage:
 `decision-memo-<stage>.md` (the one-page pre-read and, after the meeting,
 the record) and `pre-wiring-<stage>.md` (who was briefed before the meeting,

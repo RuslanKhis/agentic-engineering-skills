@@ -140,7 +140,11 @@ reason and an owner.
   results and limitations, with one line per contract: C3 evidenced, local, A2.
   A pilot or production run adds numbered measurement records (M1: value,
   baseline, window, sample, method, owner, build) and incident records (I1:
-  date, severity, effect, response, fix), which presentations cite by ID>
+  date, severity, effect, response, fix), which presentations cite by ID;
+  one record per line, fields separated by semicolons, dates in ISO form
+  (`M3: metric <name>; value <v>; baseline <b>; window 2026-09-01 to
+  2026-09-30; ...`; an I record ends `status open` or `status closed
+  <date>`), the shape the presenter's value-report check reads>
 - **Run this goal:** `/adk-engineer Carry out <goal ID> from <plan path>. Read <design
   path>, use the goal's primary and supporting skills, verify its acceptance cases
   locally and record evidence here.`
