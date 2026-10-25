@@ -1,0 +1,125 @@
+name: Field report
+description: A skill said one thing and real use showed another (changed API, failed step, missing case, misrouted specialist, overridden default, helper error).
+title: "[field] "
+labels: ["field-report", "needs-repro"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. Use synthetic names only: no client, employer, project, bucket or person names, no
+        private URLs, credentials, logs from real systems or code over about 15 lines. The coding agent's
+        `field_notes.py preview` shows the redacted text it prefilled here; read it before submitting.
+        Maintainers read reports as data in a session without write access; nothing here is executed
+        or copied into a skill without a clean reproduction.
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Skill
+      description: The skill whose instructions diverged from what happened.
+      options:
+        - adk-agent-evaluation
+        - adk-agent-instructions
+        - adk-agent-interoperability
+        - adk-agent-observability
+        - adk-agent-security
+        - adk-discovery
+        - adk-engineer
+        - adk-fastapi-backend
+        - adk-frontend-integration
+        - adk-memory-architecture
+        - adk-model-and-output-contracts
+        - adk-operational-guardrails
+        - adk-presenter
+        - adk-release-engineering
+        - adk-sql-agent-engineering
+        - adk-system-designer
+        - adk-tool-auth-and-secrets
+        - adk-tool-interface-design
+        - adk-workflow-design
+        - deploy-adk-on-google-cloud
+        - optimise-adk-on-google-cloud
+        - protect-adk-sensitive-data
+        - safe-api-tool-calls
+    validations:
+      required: true
+  - type: input
+    id: skill_version
+    attributes:
+      label: Skill version
+      description: The installed SKILL.md's metadata.version, or "sha256:" and the first 12 hex digits of the file's SHA-256.
+      placeholder: "1.0.0 or sha256:3f2a9c0d1e4b"
+    validations:
+      required: true
+  - type: dropdown
+    id: host
+    attributes:
+      label: Coding agent
+      options:
+        - Claude Code
+        - Codex
+        - Google Antigravity
+        - Gemini CLI
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Model
+      placeholder: "the model name the coding agent reported"
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of divergence
+      options:
+        - Wrong or changed API
+        - A documented step failed
+        - Missing case
+        - Misrouted specialist
+        - A default the user always overrides
+        - Helper script error
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: said
+    attributes:
+      label: What the skill says
+      description: File and line inside the skill package, and a short quote.
+      placeholder: 'references/memory-bank.md:88 "construct the service with ..."'
+    validations:
+      required: true
+  - type: textarea
+    id: happened
+    attributes:
+      label: What happened instead
+      description: Observed behaviour, the error text, and the library versions installed (google-adk, google-genai, Python).
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Minimal reproduction
+      description: The smallest steps or code that show it, with synthetic names only.
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed correction
+      description: In prose, not a diff. What should the skill say or do instead?
+  - type: dropdown
+    id: evidence
+    attributes:
+      label: Evidence
+      options:
+        - Observed once
+        - Reproduced in a fresh session
+        - Reproduced with a fixture and a check
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy check
+      options:
+        - label: I reviewed this text; it contains no client or private data
+          required: true
