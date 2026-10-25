@@ -7,6 +7,10 @@ the phase total against capacity, ticket and plan mismatches, the longest
 dependent chain, each person's load and a finish estimate in working days that
 respects dependencies, one person doing one goal at a time, and calendar waits.
 
+When the schedule records goal types (``type: implementation | journey |
+presentation | teardown | discovery``), a presentation goal that comes after
+built work must also come after a journey goal.
+
 It also lists, for review without failing, goal IDs a goal's prose names that
 are neither before nor after it, and outside approvals with no matching wait.
 With ``--design`` it checks that every coverage-grid cell cites an existing
@@ -143,7 +147,8 @@ def normalise(entry, where):
             str(entry.get("handoff", "")).strip(), "mentions_only": settled, "text": "",
             "hands_on": hands_on, "review": review, "owner": str(entry.get("owner", "")).strip(),
             "contracts": id_list(entry.get("contracts", [])), "security": id_list(entry.get("security", [])),
-            "blocked_by": [b for b in blocked if b], "waits": str(waits).strip(), "wait_days": wait_days}
+            "blocked_by": [b for b in blocked if b], "waits": str(waits).strip(), "wait_days": wait_days,
+            "type": str(entry.get("type", "")).strip().lower(), "status": str(entry.get("status", "")).strip().lower()}
 
 
 def read_plan(path):
@@ -363,6 +368,34 @@ def check_security(path, goals):
                             "acceptance, or write 'n/a: <reason>' or 'deferred: <trigger>' in its last cell")
     summary = {"rules": len(rules), "cited": sorted(r for r in rules if r in cited), "not_covered_by_choice": settled}
     return problems, summary
+
+
+def check_journey(goals):
+    """A presentation goal that presents built work waits for a journey goal that checks the whole path.
+
+    Applies only when the schedule records goal types. A presentation goal with no implementation goal
+    before it (the approval to start) needs none.
+    """
+    by_id = {g["goal"]: g for g in goals}
+    if not any(g["type"] for g in goals):
+        return []
+    problems = []
+    for goal in goals:
+        if goal["type"] != "presentation":
+            continue
+        seen, stack = set(), list(goal["blocked_by"])
+        while stack:
+            node = stack.pop()
+            if node in seen or node not in by_id:
+                continue
+            seen.add(node)
+            stack.extend(by_id[node]["blocked_by"])
+        types = {by_id[n]["type"] for n in seen}
+        if "implementation" in types and "journey" not in types:
+            problems.append(f"{goal['goal']} presents built work but no journey goal comes before it; add a goal "
+                            "of type journey (primary skill adk-agent-evaluation) that runs the design's journey "
+                            "end to end and every pass_to_pass test, and make the presentation depend on it")
+    return problems
 
 
 def hours_per_day(people, default):
@@ -585,12 +618,14 @@ def main(argv=None):
                 goal["mentions_only"] = sorted(set(goal["mentions_only"]) | set(ticket["mentions_only"]))
                 goal["contracts"] = sorted(set(goal["contracts"]) | set(ticket["contracts"]))
                 goal["security"] = sorted(set(goal["security"]) | set(ticket["security"]))
+                goal["type"] = goal["type"] or ticket["type"]
         goals = plan_goals or ticket_goals
         if not 0.0 <= args.reserve < 1.0:
             raise InputError("--reserve is a share between 0 and 1, e.g. 0.25")
         result = analyse(goals, args.phase, args.capacity, args.days, args.person, args.hours_per_day,
                          args.reserve)
         result["problems"] += mismatches
+        result["problems"] += check_journey(goals)
         if args.design:
             result["problems"] += check_grid(args.design, goals)
             contract_problems, coverage = check_contracts(args.design, goals)

@@ -1,0 +1,5 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "agentic-engineering",
+  "description": "Discovery, system design, a router and the ADK specialists that carry out each goal, for Google ADK applications on Google Cloud"
+}

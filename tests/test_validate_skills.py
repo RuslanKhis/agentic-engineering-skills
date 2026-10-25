@@ -286,6 +286,43 @@ class PackageValidationTests(unittest.TestCase):
         (self.root / "skills" / "broken-skill").symlink_to("missing-package", target_is_directory=True)
         self.assert_error("repository skill directories must not be symlinks")
 
+    def add_second_package(self, metadata):
+        other = self.root / "skills" / "other-skill"
+        (other / "agents").mkdir(parents=True, exist_ok=True)
+        (other / "SKILL.md").write_text(
+            f"---\nname: other-skill\ndescription: Help with another feature.\n{metadata}---\n\nBody.\n",
+            encoding="utf-8")
+        (other / "LICENSE").write_text("MIT License\n", encoding="utf-8")
+        (other / "agents" / "openai.yaml").write_text(
+            self.interface.replace("Sample Skill", "Other Skill").replace("$sample-skill", "$other-skill"),
+            encoding="utf-8")
+
+    def test_release_versions_must_agree_across_packages_and_manifests(self):
+        self.add_second_package("metadata:\n  version: '1.0'\n")
+        self.assertEqual([], self.errors())
+        self.add_second_package("metadata:\n  version: '2.0'\n")
+        self.assert_error("carry different versions")
+        self.add_second_package("metadata:\n  author: A maintainer\n")
+        self.assert_error("missing metadata.version")
+        self.add_second_package("metadata:\n  version: '1.0'\n")
+        (self.root / ".claude-plugin").mkdir()
+        (self.root / ".claude-plugin" / "plugin.json").write_text('{"name": "s", "version": "0.9"}', encoding="utf-8")
+        self.assert_error("carry different versions")
+        (self.root / ".claude-plugin" / "plugin.json").write_text('{"name": "s", "version": "1.0"}', encoding="utf-8")
+        (self.root / "gemini-extension.json").write_text('{"name": "s"}', encoding="utf-8")
+        self.assert_error("gemini-extension.json: missing metadata.version")
+
+    def test_marketplace_entry_must_not_repeat_the_version(self):
+        (self.root / ".claude-plugin").mkdir()
+        (self.root / ".claude-plugin" / "marketplace.json").write_text(
+            '{"name": "m", "plugins": [{"name": "s", "source": "./", "version": "1.0"}]}', encoding="utf-8")
+        self.assert_error("sets version")
+
+    def test_collection_without_versions_is_not_required_to_have_one(self):
+        self.frontmatter = "name: sample-skill\ndescription: Help build a sample feature.\n"
+        self.write_skill()
+        self.assertEqual([], self.errors())
+
 
 if __name__ == "__main__":
     unittest.main()

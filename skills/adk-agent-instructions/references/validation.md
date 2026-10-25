@@ -52,8 +52,11 @@ The linter reads source with `ast` and text files; it does not import the
 project, so it cannot see instructions built at runtime, state keys written
 by code, or tool names created by toolsets. It resolves module-level string
 constants, `textwrap.dedent`/`inspect.cleandoc` wrappers and `.format` or
-f-string literal parts within one file; cross-file references are reported as
-`instruction_unresolved_reference`. Its phrasing heuristics (shouting
+f-string literal parts within one file, and follows one `from <module> import
+NAME` to a string constant in another project file (the `prompt.py` imported
+into `agent.py` layout; the record's `instruction_from` names that file). Any
+other cross-file reference is reported as `instruction_unresolved_reference`;
+lint that text with `--prompt-file` before reporting no templating findings. Its phrasing heuristics (shouting
 density, prohibitions, contradictions, tool-name mentions) are regular
 expressions for a reviewer to confirm. For a prompt file the tool list is
 unknown, so backticked names are listed under `tools_mentioned` instead of

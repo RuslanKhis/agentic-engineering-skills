@@ -511,6 +511,20 @@
       "prompt": "Set up the look of our new ADK assistant's web app: a design system for the shadcn components, and how the chat shows running tools, an approval before filing a ticket, and an error that arrives after part of the answer.",
       "should_trigger": true,
       "rationale": "Setting up an ADK interface's design system and its agent UI states (tool timeline, approval prompt, failed turn) is now in this skill's scope; an isolated styling tweak stays out."
+    },
+    {
+      "id": "designer-checkpoint-positive",
+      "skill": "adk-system-designer",
+      "prompt": "We're four tickets into the support assistant build. Checkpoint docs/plans/support.md: one ticket changed what forgetting a preference means and we're running over the hours.",
+      "should_trigger": true,
+      "rationale": "Folding ticket evidence (a contract change, an overrun) back into the design and plan is the designer's checkpoint mode."
+    },
+    {
+      "id": "designer-next-ticket-near-miss",
+      "skill": "adk-system-designer",
+      "prompt": "Carry out the next ready ticket in docs/tickets/support/.",
+      "should_trigger": false,
+      "rationale": "Executing a ticket belongs to adk-engineer; the designer is only brought back when the ticket's evidence needs a decision."
     }
   ]
 }

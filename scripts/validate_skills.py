@@ -2,7 +2,8 @@
 """Check distributable skill packages offline without executing bundled code.
 
 Agent Skills frontmatter rules: https://agentskills.io/specification
-LICENSE and agents/openai.yaml are this repository's additional conventions.
+LICENSE and agents/openai.yaml are this repository's additional conventions, as is one
+metadata.version shared by every package and versioned plugin manifest.
 Markdown links are resolved relative to the Markdown file that contains them.
 This checks packaging, not instruction quality, routing, or runtime correctness.
 """
@@ -10,6 +11,7 @@ This checks packaging, not instruction quality, routing, or runtime correctness.
 from __future__ import annotations
 
 import argparse
+import json
 from dataclasses import dataclass, field
 import os
 from pathlib import Path
@@ -233,6 +235,65 @@ def package_files(package: Path, report: Report):
                 yield path
 
 
+def skill_version(entrypoint: Path) -> str | None:
+    """metadata.version of a SKILL.md, or None; parse errors are reported elsewhere."""
+    try:
+        text = entrypoint.read_text(encoding="utf-8")
+    except (OSError, UnicodeError):
+        return None
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return None
+    end = next((i for i in range(1, len(lines)) if lines[i].strip() == "---"), None)
+    if end is None:
+        return None
+    try:
+        data = yaml.load("\n".join(lines[1:end]), Loader=UniqueKeyLoader)
+    except yaml.YAMLError:
+        return None
+    metadata = data.get("metadata") if isinstance(data, dict) else None
+    version = metadata.get("version") if isinstance(metadata, dict) else None
+    return version if isinstance(version, str) else None
+
+
+def check_release_versions(root: Path, packages: list[Path], report: Report) -> None:
+    """Once any package carries metadata.version, every package and versioned manifest carries the same one.
+
+    A mixed set is what a stale install looks like to a user, so the published collection never has one.
+    """
+    found = {package / "SKILL.md": skill_version(package / "SKILL.md") for package in packages}
+    for name in (".claude-plugin/plugin.json", "gemini-extension.json"):
+        path = root / name
+        if path.is_file():
+            try:
+                value = json.loads(path.read_text(encoding="utf-8")).get("version")
+            except (OSError, UnicodeError, ValueError, AttributeError) as exc:
+                report.error(path, f"cannot read manifest version: {exc}")
+                continue
+            found[path] = value if isinstance(value, str) else None
+    present = {v for v in found.values() if v}
+    if not present:
+        return
+    if len(present) > 1:
+        report.error(root, "skills and manifests carry different versions: "
+                     + ", ".join(sorted(present)) + "; run scripts/release.py stamp <version>")
+    for path, value in found.items():
+        if not value:
+            report.error(path, "missing metadata.version (the other packages carry one); "
+                         "run scripts/release.py stamp <version>")
+    marketplace = root / ".claude-plugin" / "marketplace.json"
+    if marketplace.is_file():
+        try:
+            entries = json.loads(marketplace.read_text(encoding="utf-8")).get("plugins", [])
+        except (OSError, UnicodeError, ValueError, AttributeError) as exc:
+            report.error(marketplace, f"cannot read marketplace: {exc}")
+            return
+        for entry in entries if isinstance(entries, list) else []:
+            if isinstance(entry, dict) and "version" in entry:
+                report.error(marketplace, f"plugin entry {entry.get('name')!r} sets version; keep it only in "
+                             "plugin.json so the two cannot disagree")
+
+
 def validate_package(package: Path, report: Report) -> None:
     stats = PackageStats(package.name)
     report.packages.append(stats)
@@ -280,6 +341,7 @@ def validate_repository(root: Path) -> Report:
             report.error(package, "repository skill directories must not be symlinks")
             continue
         validate_package(package, report)
+    check_release_versions(root, [p for p in packages if not p.is_symlink()], report)
     return report
 
 

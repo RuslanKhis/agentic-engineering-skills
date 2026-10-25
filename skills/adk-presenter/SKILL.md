@@ -18,6 +18,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "cross-cutting"
   sources-reviewed: "2026-10-15"
+  version: "2026.10.25"
 ---
 
 # ADK presenter

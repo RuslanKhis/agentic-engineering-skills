@@ -450,6 +450,29 @@ Needs the legal review before go-live.
             code, _, err = self.run_check("--plan", str(Path(root) / "missing.md"))
             self.assertEqual(code, 2)
 
+    def test_presentation_of_built_work_waits_for_a_journey_goal(self):
+        plan = ("```yaml\n"
+                "- goal: G00\n  phase: 1\n  type: presentation\n  total: 2\n  blocked_by: []\n"
+                "- goal: G01\n  phase: 1\n  type: implementation\n  total: 2\n  blocked_by: [G00]\n"
+                "- goal: G02\n  phase: 1\n  type: {middle}\n  total: 1\n  blocked_by: [G01]\n"
+                "- goal: G03\n  phase: 1\n  type: presentation\n  total: 2\n  blocked_by: [G02]\n"
+                "```\n")
+        with tempfile.TemporaryDirectory() as root:
+            path = Path(root) / "plan.md"
+            path.write_text(plan.format(middle="implementation"))
+            code, out, _ = self.run_check("--plan", str(path), "--json")
+            problems = json.loads(out)["problems"]
+            self.assertEqual(code, 1)
+            self.assertEqual(1, len(problems), problems)  # G00, the approval to start, needs no journey goal
+            self.assertIn("G03 presents built work but no journey goal comes before it", problems[0])
+            path.write_text(plan.format(middle="journey"))
+            code, out, _ = self.run_check("--plan", str(path), "--json")
+            self.assertEqual(code, 0, out)
+            path.write_text(plan.format(middle="implementation").replace("  type: presentation\n", "")
+                            .replace("  type: implementation\n", ""))
+            code, out, _ = self.run_check("--plan", str(path), "--json")
+            self.assertEqual(code, 0, out)  # plans without types are not judged by the rule
+
 
 if __name__ == "__main__":
     unittest.main()

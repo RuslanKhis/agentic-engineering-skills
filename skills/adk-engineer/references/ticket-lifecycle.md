@@ -1,0 +1,79 @@
+# The ticket lifecycle
+
+Read when carrying out a goal from a plan that has ticket files, when a ticket's
+Evidence starts with a `Progress:` block, or when the user runs several tickets
+at once. A plan's tickets are worked on across many sessions; this keeps each
+session small while the plan, not the session, holds the big picture.
+
+## Start or resume
+
+1. Read the ticket, its design and plan, as the main instructions say.
+2. If Evidence starts with a `Progress:` block, this is a resume. Read the
+   block, then `git status` and `git log` in the worktree it names, confirm
+   the files it lists as uncommitted are present, and rerun its re-verify
+   commands before writing anything new. Continue from its next step; do not
+   redo finished acceptance items unless their checks now fail.
+3. Confirm every goal in `blocked_by` is finished (`verified_local`,
+   `verified_live` or `done`). If one is not, stop and say which, rather than
+   building on unfinished work.
+4. Run the `pass_to_pass` tests once before changing anything, so a later
+   failure can be told apart from one that was already there.
+
+## Stop before the acceptance cases pass
+
+Context, time or a missing decision can end a session early. Before the last
+reply, write at the head of the Evidence section:
+
+```text
+Progress:
+  - done: A1 (local, python -m unittest tests.test_prefs), A2
+  - in hand: A3, the forget route returns 204 but the cache keeps the value
+  - next: clear the session-state copy in profile_loader.py, then rerun A3
+  - uncommitted: app/profile.py, tests/test_prefs.py (worktree ../wt-G01)
+  - re-verify: python -m unittest tests.test_prefs
+```
+
+Leave the status `in_progress`. End with the resume prompt:
+`/adk-engineer Resume <ticket path> from its Progress block.` Remove the block
+when the ticket completes.
+
+## Finish
+
+1. Write the Evidence as the main instructions say, including `actual:` with
+   the human hours the person reports. Ask once if they have not said; write
+   `not reported` rather than guessing.
+2. For each contract this ticket evidenced, update its Evidence cell in the
+   design's contracts table from `planned: …` to `evidenced: <tier>,
+   <goal>/<acceptance>`. That cell is evidence, not a decision; change
+   nothing else in the design.
+3. Record a contract the work had to narrow or widen in the ticket's
+   `contract_deltas`, and each ruling the design left open in `Rulings:`
+   (what, why, cost if wrong). Do not edit the contract yourself; the designer
+   takes it in at a checkpoint.
+4. If the designer skill is installed, run its `scripts/plan_status.py` with
+   the plan, ticket directory and design (resolve the script from the sibling
+   `../adk-system-designer/` directory). Its last line is the next prompt.
+   When it prints CHECKPOINT lines, end with that checkpoint prompt and the
+   items it lists, not with the next ticket: the remaining tickets may rest on
+   a contract that has just changed. Otherwise end with the next ready ticket,
+   or the resume prompt for an interrupted one.
+
+## Run tickets in parallel
+
+Only tickets that `plan_status.py` lists together under "Can run in parallel"
+qualify: all their blockers are finished and their `touches` do not overlap.
+
+1. Create one worktree per ticket from the same base commit, on a branch named
+   after the goal: `git worktree add ../wt-G03 -b G03 <base>`.
+2. Run each ticket in its own session in its own worktree. Each writes only
+   its own ticket file and the paths in its `touches`; a session that finds it
+   must write another ticket's path stops, sets `parallel_safe: no` in its
+   ticket and says so.
+3. Merge finished branches one at a time in dependency order, then by goal ID.
+   After each merge, rerun every `pass_to_pass` test of the merged tickets
+   before merging the next; a failure is fixed on that branch, not on the
+   merged result.
+4. Run `plan_status.py` after the last merge and follow its next prompt.
+
+The person decides when to merge and commits; the sessions leave their changes
+uncommitted unless asked otherwise.

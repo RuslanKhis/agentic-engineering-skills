@@ -8,6 +8,7 @@ metadata:
   source-chapter: "7"
   last-tested: "2026-09-16"
   compatibility: See references/compatibility.md for exact tested versions and limits
+  version: "2026.10.25"
 ---
 
 # ADK agent evaluation

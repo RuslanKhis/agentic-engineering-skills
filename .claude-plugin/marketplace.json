@@ -1,0 +1,15 @@
+{
+  "name": "agentic-engineering-skills",
+  "description": "Skills for building Google ADK agent applications on Google Cloud, from discovery to production",
+  "owner": {
+    "name": "Ruslan Khissamiyev",
+    "url": "https://github.com/RuslanKhis"
+  },
+  "plugins": [
+    {
+      "name": "agentic-engineering",
+      "source": "./",
+      "description": "Discovery, system design, a router and the ADK specialists that carry out each goal"
+    }
+  ]
+}

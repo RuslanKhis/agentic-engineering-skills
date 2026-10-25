@@ -12,6 +12,7 @@ license: MIT
 metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
+  version: "2026.10.25"
 ---
 
 # ADK system designer
@@ -372,7 +373,10 @@ goal of phase 1 and depends on nothing but the design; the proof-of-concept
 review goal closes phase 1's build, followed by the teardown goal when its
 resources are not carried forward; the results review goal closes the production
 phase and is followed by an optional case-study goal when the result may be
-shared. Its acceptance is that
+shared. Each review of built work waits for a **journey goal** (type journey,
+`Primary skill: adk-agent-evaluation`, Playwright as companion for a web
+interface) that runs the design's journey end to end and every `pass_to_pass`
+test; tickets that pass one at a time do not show the whole path works. Its acceptance is that
 the outline passes the presenter's deck check and every claim cites evidence
 recorded in this plan; the goal cannot complete before the goals whose
 evidence it presents. Each
@@ -398,7 +402,13 @@ Separate discovery questions from ready implementation; an unknown cloud guarant
 not block independent local work. When the user wants tickets, write one file
 per goal of the phase from the [ticket template](assets/ticket-template.md) under
 `docs/tickets/<topic>/`, with sibling dependencies in `blocked_by`; the plan
-stays the source of decisions.
+stays the source of decisions. Then run `scripts/check_tickets.py --tickets
+docs/tickets/<topic>` from the project root and fix every error before
+handing over: it catches unfilled placeholders, contract and rule IDs the
+design lacks, acceptance items that prove nothing, skills that are not
+installed, broken `pass_to_pass` references and `parallel_safe` tickets that
+write the same file, and warns when one ticket names more skills and
+references than its session should load.
 
 End the conversation with a short closing message in chat: where the documents
 were saved, the profile and the cut line (what phase 1 delivers in how many of
@@ -415,7 +425,8 @@ ready goal is a presentation, the prompt names `adk-presenter` and the plan
 path instead.
 
 `adk-engineer` carries out a goal or ticket with its named specialist without
-restarting architecture discovery. If the user has chosen another planning
+restarting architecture discovery. When a ticket's evidence needs a design
+decision, it sends the user back here with a checkpoint prompt. If the user has chosen another planning
 workflow (for example Matt Pocock's skills), the handoff reference explains how
 to adapt the plan to it; otherwise skip that section.
 
@@ -425,5 +436,35 @@ cloud commands merely because an architecture names them. Local design work does
 not authorize deployments, IAM changes, paid tests, migrations or deletion.
 For separately requested external work, make targets and effects concrete and
 reuse authorization already given for that scope.
+
+## Checkpoint a plan in progress
+
+A checkpoint folds what the build learned back into the design, so the
+remaining tickets still serve the contracts. Run it when asked
+("Checkpoint <plan>"), when `adk-engineer` ends with that prompt, or before
+a review goal. Start with `scripts/plan_status.py --plan <plan> --tickets
+<dir> --design <design> --capacity <phase hours>`; its CHECKPOINT lines are
+the agenda, and each item is settled with the user:
+
+- **Contract delta:** revise the contract's row in place, keep its ID, add
+  `(revised <goal>, <date>): <change>`, and update the decisions, tickets,
+  acceptance items and `pass_to_pass` lists that cite it.
+- **Ruling:** accept it as a numbered decision or reject it, and mark the
+  ruling line in the ticket `settled: D<n>` or `rejected: <reason>`.
+- **Overrun or a phase that no longer fits:** re-estimate the unfinished
+  tickets from the evidence, rerun `check_schedule.py`, and move the cut line
+  with the user rather than cutting the floor.
+- **Blocked ticket or orphaned contract:** name what unblocks it, or give the
+  contract a goal, or record `gap:` or `deferred:` with its trigger.
+
+Update stale design Evidence cells to `evidenced: <tier>, <goal/acceptance>`,
+add the changes to the plan's change table, refresh **Resume here**, rerun
+`check_tickets.py`, and end with the next prompt `plan_status.py` prints.
+Preserve accepted decisions the agenda does not touch. Before a review goal,
+`plan_status.py --phase <n> --gate` must pass: every phase goal finished,
+every contract it cites evidenced or recorded as a gap or deferral, rulings
+settled, deltas applied and every resource's state known. For a stakeholder
+update between reviews, `--weekly --since <date>` drafts the status and RAID
+log from the same records.
 
 Independent community project; not affiliated with or endorsed by Google.

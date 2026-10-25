@@ -148,6 +148,30 @@ class LintTests(unittest.TestCase):
         self.assertIn("fstring_instruction", self.codes(f))
         self.assertEqual(f["placeholders"]["unresolved"], ["name"])
 
+    def test_instruction_imported_from_a_project_module_is_linted(self):
+        # The ADK layout: the prompt module holds the text, agent.py imports it. Field trial, 25 Oct 2026.
+        self.write("pkg/__init__.py", "")
+        self.write("pkg/prompts.py", 'INSTRUCTION = "Help {user_name}. Tier {tier}."\n'
+                   'DESCRIPTION = "Triages insurance claims for policy holders by tier and urgency"\n')
+        self.write("pkg/agent.py", 'from google.adk.agents import LlmAgent\n'
+                   'from pkg.prompts import INSTRUCTION, DESCRIPTION as DESC\n'
+                   'from .prompts import INSTRUCTION as RELATIVE\n'
+                   'from google.adk.prompts import NOT_IN_PROJECT\n'
+                   'a = LlmAgent(name="a", instruction=INSTRUCTION, description=DESC)\n'
+                   'b = LlmAgent(name="b", instruction=RELATIVE)\n'
+                   'c = LlmAgent(name="c", instruction=NOT_IN_PROJECT)\n')
+        _, data = self.scan("--state-keys", "user_name")
+        for name in ("a", "b"):
+            agent = self.agent(data, name)
+            self.assertEqual(agent["instruction_kind"], "string")
+            self.assertEqual(agent["instruction_from"], "pkg/prompts.py")
+            self.assertEqual(agent["placeholders"]["unresolved"], ["tier"])
+            self.assertIn("unresolved_placeholder", self.codes(agent))
+        self.assertEqual(self.agent(data, "a")["description_kind"], "string")
+        c = self.agent(data, "c")
+        self.assertEqual(self.codes(c), {"instruction_unresolved_reference"})
+        self.assertIsNone(c["instruction_from"])
+
     def test_deprecated_global_static_and_mode(self):
         self.write("agent.py", 'from google.adk.agents import LlmAgent\n'
                    'root = LlmAgent(name="root", instruction="Route {topic?} work.", static_instruction="Persona.",\n'

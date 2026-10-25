@@ -91,3 +91,21 @@ remaining limitations. Update public examples when a command or scope changes.
 Run `git diff --check`. Keep personal environments, credentials and raw customer
 data out of the contribution. Publishing a result as “better” requires a
 comparable baseline; passing one smoke example establishes only that example.
+
+## Release a version
+
+Releases are dated (`YYYY.MM.DD`, `.N` for a second one that day) and carry the
+same `metadata.version` in every skill and versioned plugin manifest; the
+package check fails when they differ.
+
+```bash
+.venv/bin/python scripts/release.py prepare        # stamp today's version, add a CHANGELOG section
+# edit the CHANGELOG section into readable notes, run scripts/check_repo.py, commit
+.venv/bin/python scripts/release.py tag            # tag v<version>, move the local stable branch
+```
+
+`tag` refuses a dirty worktree, mixed versions or a missing CHANGELOG section,
+and never pushes; it prints `git push origin v<version>` and the `stable`
+branch push for you to run. Plugin installs follow `stable`, so moving it is
+what publishes a release to them. Check the manifests with
+`claude plugin validate .` when they change.

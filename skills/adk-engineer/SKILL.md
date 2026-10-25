@@ -10,6 +10,7 @@ license: MIT
 metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
+  version: "2026.10.25"
 ---
 
 # ADK engineer
@@ -51,13 +52,21 @@ acceptance cases), the companion skills loaded with their pins, with a
 numbered measurement record (`M<n>`: value, baseline, window, sample,
 method, owner, build) for every figure a pilot or production
 run produced and an incident record (`I<n>`) for every incident, so that
-`adk-presenter` can cite them, set the ticket's status with the template's
+`adk-presenter` can cite them, an `actual:` line with the human hours the
+person reports (or `not reported`), set the ticket's status with the template's
 vocabulary (`verified_local` when every acceptance case that can run offline
 has run here; `in_progress` with the owed run named in Evidence when the
 SDK-tier cases are written but the SDK is absent in this session; `verified_live`
 after the authorised run; `done` when the owner accepts; `blocked` only for a
 decision or dependency outside the ticket), and end with the run prompt for the next
-ready goal or ticket.
+ready goal or ticket. For a plan with tickets, read
+[the ticket lifecycle](references/ticket-lifecycle.md) before starting and
+before finishing: it covers resuming from a `Progress:` block, updating the
+design's Evidence cells, running the designer's `plan_status.py`, and ending
+with the designer's checkpoint prompt instead of the next ticket when a
+contract delta, an open ruling, an overrun, a blocked ticket or an orphaned
+contract needs a decision. When the session must stop before the acceptance
+cases pass, write the `Progress:` block first.
 When there is none, end instead with the prompt for the most useful follow-up: the
 verification still owed (for example the SDK tests marked not run) or the new
 ticket the change uncovered, written so the user can paste it.
@@ -116,6 +125,13 @@ entry, check the sibling directory `../<specialist-name>/SKILL.md` relative to
 this installed skill directory. Resolve the specialist's references, scripts
 and assets relative to its own directory, even when the installer uses symlinks.
 Load only the references needed for the selected mode.
+
+Once per session, compare this skill's `metadata.version` with the loaded
+specialist's. If they differ, say in one line that an older copy is shadowing
+part of the installation and give the update command from
+[keeping the skills current](references/updates.md). The same reference says how to tell
+the user, in one line, that a newer release is published. Never run an update
+yourself, and never let this check delay or block the work.
 
 The installer does not automatically install dependencies for this entry skill.
 If a selected specialist is unavailable, name the missing skill and show:

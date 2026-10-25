@@ -8,6 +8,7 @@ metadata:
   source-chapter: "4"
   source-part: "1,2,3"
   last-tested: "2026-09-16"
+  version: "2026.10.25"
 ---
 
 # Optimise ADK on Google Cloud

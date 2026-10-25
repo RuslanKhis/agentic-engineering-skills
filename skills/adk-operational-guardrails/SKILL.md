@@ -9,6 +9,7 @@ metadata:
   compatibility: Python helpers tested on 3.11.4; see references/compatibility.md for exact ADK evidence and adaptation gates.
   last-tested: "2026-10-22"
   last-reviewed: "2026-09-16"
+  version: "2026.10.25"
 ---
 
 # ADK operational guardrails

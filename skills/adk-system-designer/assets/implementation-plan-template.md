@@ -60,11 +60,15 @@ designer's `scripts/check_schedule.py` reads it; tickets copy it):
   contracts: [C1, C3]    # design contracts this goal's acceptance proves
   security: [SB01, SB05] # web security rules this goal's acceptance proves, if any
   mentions_only: []      # IDs (or wait) the prose names without depending on them
+  type: implementation   # implementation | journey | presentation | teardown | discovery
+  status: planned        # when no ticket exists; a ticket's status replaces it
 ```
 
 Longest dependent chain and finish range: <from the schedule check, with the
 command and date it was run>. Record effort in each goal's
-evidence and move the cut line when phase 1 runs over. If time may run out
+evidence (`actual:` hours) and move the cut line when phase 1 runs over; the
+designer's `scripts/plan_status.py` adds the hours spent to the hours remaining
+and says when the phase no longer fits. If time may run out
 early, the goals are ordered so each completed one is still useful.
 
 ## Implementation map
@@ -96,7 +100,11 @@ goals coarse when an unresolved decision could change their scope. A
 presentation goal sits at each phase boundary that needs someone's decision
 (`Primary skill: adk-presenter`, one per audience); it depends on the goals
 whose evidence it presents, and the decision date is a calendar wait that the
-next phase's goals depend on. A phase whose resources are not carried
+next phase's goals depend on. Before each presentation goal that presents
+built work sits a journey goal (type journey, `Primary skill:
+adk-agent-evaluation`, with Playwright as companion for a web interface) that
+runs the design's journey end to end and every `pass_to_pass` test; passing
+tickets one at a time does not show that the whole path works. A phase whose resources are not carried
 forward ends with a teardown goal (`Primary skill:
 deploy-adk-on-google-cloud`) that runs every cleanup command recorded under
 **Resources created**, checks dependants and retention, and reads the billing
@@ -147,7 +155,9 @@ reason and an owner.
 
 Repeat for currently actionable goals. When tickets are written, the ticket is
 the goal's home: keep only the goals table here, with a link to each ticket,
-instead of these entries. Discovery goals state the question,
+instead of these entries. Status and evidence are then written only in tickets
+(parallel sessions would otherwise collide on this file); `plan_status.py`
+reads them back for the current view. Discovery goals state the question,
 bounded investigation, expected decision/evidence and what it unblocks.
 Fill every field with real values; the designer knows the goal ID, skills and
 acceptance cases when it writes the plan. To hand goals to a tracker or to
@@ -189,6 +199,9 @@ Include destination, project conventions and applicable skills; link an existing
 map if present. Preserve accepted decisions. This section does not create tickets.
 
 ## Resume here
+
+Refreshed at each checkpoint; between checkpoints `scripts/plan_status.py`
+prints the current next prompt from the tickets' actual statuses.
 
 - **Next goal:** <ID and readable name, and why it is ready>
 - **Read first:** <canonical design, plan/spec, relevant project instructions>

@@ -16,6 +16,7 @@ design_system: <path to DESIGN.md for UI tickets, or none>
 contract_deltas: [<none, or a contract ID and its one-line revision when this ticket narrows or widens one>]
 pass_to_pass: [<earlier tickets' acceptance items, as G01/A2, whose tests this ticket must keep passing: those whose touches or contracts overlap this ticket's, or empty; with no earlier tickets, the existing test ids instead; these are the evaluation skill's pass_to_pass tests>]
 phase: <1, 2 or later>
+type: <implementation | journey | presentation | teardown | discovery>
 profile: <proof of concept / assignment / internal tool / MVP or pilot / production>
 estimate:                # human hours, agent-assisted
   hands_on: <range, e.g. 1-2>
@@ -97,7 +98,12 @@ retained with reason, or unknown) with its cleanup command; measurement and
 incident records as the plan template defines them (M1, I1); what remains
 unverified; the human review and verification still owed (hours, and what to
 check); steps only a person can do; and whether the work proved larger than
-its estimate. Leave empty when writing the ticket.>
+its estimate, with `actual: <human hours spent, as the person reports them, or
+not reported>` on its own line. While the ticket is unfinished at the end of a
+session, a `Progress:` block heads this section: acceptance items done, the item
+in hand, the next step, uncommitted files and the worktree, and the commands
+that re-verify what is done; it is removed when the ticket completes. Leave
+empty when writing the ticket.>
 
 ## Run this ticket
 
@@ -110,5 +116,6 @@ verification locally, fill in the Evidence section and set status
 acceptance case that can run offline has run here, in_progress with the owed
 run named when the SDK is absent, verified_live after the authorised run,
 done only when every acceptance item has fresh evidence and the owner
-accepts). Leave changes uncommitted.
+accepts). If Evidence starts with a Progress block, resume from it. Leave
+changes uncommitted.
 ```

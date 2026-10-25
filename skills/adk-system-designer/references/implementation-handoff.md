@@ -184,7 +184,12 @@ under `docs/tickets/<topic>/`. Each ticket ends with its own run prompt, and the
 agent that carries it out fills in its Evidence section.
 Write one ticket per goal of the phase, not only for the first: `blocked_by`
 carries the sibling goals it waits for, and `status: ready` means nothing
-outside the phase blocks it. One lead method runs a ticket: `adk-engineer` in
+outside the phase blocks it. `touches` lists the paths a ticket expects to
+write, so tickets whose lists do not overlap can run at the same time, each in
+its own worktree; `plan_status.py` names those groups from actual statuses and
+`adk-engineer`'s ticket lifecycle reference gives the worktree and merge
+procedure. Statuses and evidence live in the tickets, never in a shared plan
+table that every parallel session would edit. One lead method runs a ticket: `adk-engineer` in
 this session, or an installed alternative such as Superpowers'
 subagent-driven-development, which replaces it rather than joining it;
 companions such as an installed `wizard` skill take the steps only a person

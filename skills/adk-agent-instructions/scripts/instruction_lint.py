@@ -178,6 +178,7 @@ class AgentCalls(ast.NodeVisitor):
 
     def __init__(self):
         self.aliases = {}
+        self.imports = {}
         self.constants = {}
         self.functions = set()
         self.entries = []
@@ -200,6 +201,7 @@ class AgentCalls(ast.NodeVisitor):
     def visit_ImportFrom(self, node):
         for item in node.names:
             self.aliases[item.asname or item.name] = f"{node.module or ''}.{item.name}"
+            self.imports[item.asname or item.name] = (node.module or "", item.name, node.level)
 
     def visit_Module(self, node):
         for statement in node.body:
@@ -247,6 +249,8 @@ class AgentCalls(ast.NodeVisitor):
             return None, "provider"
         if isinstance(node, ast.Name) and node.id in self.functions:
             return None, "provider"
+        if isinstance(node, ast.Name) and node.id in self.imports:
+            return self.imports[node.id], "imported"
         return None, "unresolved_reference"
 
     def visit_Assign(self, node):
@@ -354,6 +358,43 @@ class Lint:
             return None
         return raw.decode("utf-8-sig")
 
+    def imported_constant(self, path, reference):
+        """Follow one ``from <module> import NAME`` to a string constant in a project file, without importing it.
+
+        Covers the ADK layout where ``prompt.py`` holds the instruction and ``agent.py`` imports it.
+        """
+        module, name, level = reference
+        root = Path(self.args.project).resolve()
+        parts = module.split(".") if module else []
+        if level:
+            base = path.parent
+            for _ in range(level - 1):
+                base = base.parent
+            bases = [base]
+        else:
+            bases = [root, root / "src"]
+        for base in bases:
+            stem = base.joinpath(*parts) if parts else base
+            for candidate in (stem.with_suffix(".py") if parts else None, stem / "__init__.py"):
+                if candidate is None or not candidate.is_file() or candidate.is_symlink():
+                    continue
+                try:
+                    candidate.resolve().relative_to(root)
+                except ValueError:
+                    continue
+                relative = candidate.resolve().relative_to(root).as_posix()
+                try:
+                    content = self.read(candidate, relative)
+                    if content is None:
+                        return None
+                    visitor = AgentCalls()
+                    visitor.visit(ast.parse(content))
+                except (OSError, UnicodeError, SyntaxError, ValueError, TypeError, AttributeError, RecursionError):
+                    return None
+                literal = visitor.constants.get(name)
+                return (literal[0], literal[1], relative) if literal else None
+        return None
+
     def inspect_python(self, path, relative):
         try:
             content = self.read(path, relative)
@@ -371,6 +412,14 @@ class Lint:
         entries = visitor.entries
         for entry in entries:
             entry["name"] = entry["name"] or entry["variable"] or f"agent@{entry['line']}"
+            entry["imported_from"] = None
+            for key in ("instruction", "description"):
+                value, kind = entry[key]
+                if kind == "imported":
+                    found = self.imported_constant(Path(path), value)
+                    entry[key] = (found[0], found[1]) if found else (None, "unresolved_reference")
+                    if found and key == "instruction":
+                        entry["imported_from"] = found[2]
         by_var = {e["variable"]: e for e in entries if e["variable"]}
         by_line = {e["line"]: e for e in entries}
 
@@ -393,6 +442,7 @@ class Lint:
                       "variable": entry["variable"], "mode": entry["mode"],
                       "include_contents": entry["include_contents"],
                       "instruction_kind": entry["instruction"][1], "description_kind": entry["description"][1],
+                      "instruction_from": entry["imported_from"],
                       "tools": tool_names if entry["tools"] is not None else None,
                       "sub_agents": child_names if entry["sub_agents"] is not None else None,
                       "findings": []}

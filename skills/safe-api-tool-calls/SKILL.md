@@ -7,6 +7,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "01"
   last-tested: "2026-09-16"
+  version: "2026.10.25"
 ---
 
 # Safe API tool calls

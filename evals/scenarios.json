@@ -1684,6 +1684,134 @@
         "Themes from DESIGN.md starting from the house theme and runs the lint and theme checks.",
         "Writes one Evidence line per contract and one for SB10 with its tier and acceptance cases."
       ]
+    },
+    {
+      "id": "engineer-ends-with-checkpoint-after-contract-delta",
+      "prompt": "/adk-engineer Carry out docs/tickets/support/G01.md.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-system-designer",
+        "adk-memory-architecture",
+        "adk-tool-auth-and-secrets"
+      ],
+      "context": "A five-ticket proof of concept (save and forget a language preference, streamed replies, a journey check, a review presentation). Implementing G01 shows that forgetting must also clear a cached copy in session state, which the design's C2 does not say, and that forget should be a soft delete kept 30 days. The person says the work took about six hours against an estimate of 2-3. ADK is not installed.",
+      "expected_primary": "adk-engineer",
+      "assertions": [
+        "Records the narrowed C2 in the ticket's contract_deltas and the soft-delete choice under Rulings with why and the cost if wrong, without editing the contract in the design itself.",
+        "Writes actual: 6 h in Evidence and updates the design's Evidence cells only for the contracts it evidenced.",
+        "Runs the designer's plan_status.py (or says it could not) and ends with the /adk-system-designer Checkpoint prompt listing the delta and the ruling (and the phase fit if the overrun pushes it past capacity), not with the prompt for G02."
+      ]
+    },
+    {
+      "id": "engineer-resumes-from-progress-block",
+      "prompt": "/adk-engineer Continue the next ready goal in docs/plans/support.md.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-frontend-integration",
+        "adk-system-designer"
+      ],
+      "context": "Tickets under docs/tickets/support/. G02 (streamed replies) is in_progress and its Evidence starts with a Progress block: A1 done with its re-verify command, A2 in hand, uncommitted app/stream.py in worktree ../wt-G02. G03 is ready with no blockers left.",
+      "expected_primary": "adk-engineer",
+      "assertions": [
+        "Chooses to resume G02 from its Progress block rather than starting G03.",
+        "Checks git status in the named worktree and reruns the block's re-verify command before writing new code.",
+        "Does not redo A1 unless its check now fails, and removes the Progress block when G02 completes or rewrites it if the session stops again."
+      ]
+    },
+    {
+      "id": "engineer-writes-progress-block-when-stopping",
+      "prompt": "/adk-engineer Carry out docs/tickets/support/G02.md. I have to leave in ten minutes, so stop cleanly when you need to.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-frontend-integration"
+      ],
+      "context": "G02 has three acceptance items; only the first can be finished in the time. The project has a unittest suite and a git worktree.",
+      "expected_primary": "adk-engineer",
+      "assertions": [
+        "Writes a Progress block at the head of Evidence naming the finished items with their checks, the item in hand, the next step, uncommitted files with the worktree, and the re-verify commands.",
+        "Leaves status in_progress rather than verified_local.",
+        "Ends with the prompt /adk-engineer Resume docs/tickets/support/G02.md from its Progress block."
+      ]
+    },
+    {
+      "id": "designer-checkpoint-settles-the-agenda",
+      "prompt": "/adk-system-designer Checkpoint docs/plans/support.md. G01 changed what forgetting means and ran over.",
+      "available_skills": [
+        "adk-system-designer",
+        "adk-engineer",
+        "adk-memory-architecture"
+      ],
+      "context": "Design, plan and tickets as in the plan-in-progress fixture: G01 verified_local with a contract delta on C2, an open soft-delete ruling, actual 6 h against 2-3 h; phase capacity 10 h.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Runs plan_status.py and treats its CHECKPOINT lines as the agenda, settling each with the user.",
+        "Revises C2 in place keeping its ID with a revised G01 note, and updates the tickets, acceptance items and pass_to_pass lists that cite C2.",
+        "Turns the ruling into a numbered decision or rejects it and marks the ruling line settled or rejected.",
+        "Re-estimates the unfinished tickets, reruns check_schedule.py, proposes moving the cut line without cutting the floor, updates the change table and Resume here, and ends with the next prompt."
+      ]
+    },
+    {
+      "id": "designer-tickets-get-journey-goal-and-lint",
+      "prompt": "/adk-system-designer Turn the ready goals in docs/plans/claims.md into ticket files under docs/tickets/claims/.",
+      "available_skills": [
+        "adk-system-designer",
+        "adk-engineer",
+        "adk-agent-evaluation",
+        "adk-presenter"
+      ],
+      "context": "A pilot plan with four implementation goals and a production-approval presentation goal that depends on them directly; no journey goal exists. The schedule block records goal types.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Adds a journey goal of type journey with primary skill adk-agent-evaluation before the presentation goal and makes the presentation depend on it, so check_schedule.py passes.",
+        "Writes one ticket per goal including type, touches and pass_to_pass, and runs check_tickets.py from the project root.",
+        "Fixes every check_tickets.py error before handing over and reports any warnings it leaves, such as a companion without a pin."
+      ]
+    },
+    {
+      "id": "engineer-parallel-tickets-with-overlapping-touches",
+      "prompt": "Run G02 and G03 in parallel so we finish faster.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-system-designer",
+        "adk-frontend-integration"
+      ],
+      "context": "Both tickets are ready; G02 touches web/src/chat/ and G03 touches web/src/chat/Message.tsx, and both say parallel_safe: yes.",
+      "expected_primary": "adk-engineer",
+      "assertions": [
+        "Runs plan_status.py or compares touches and says the two tickets both write web/src/chat/Message.tsx, so they are not safe to run in parallel.",
+        "Proposes running them one after the other (or splitting the shared file into its own ticket) and corrects parallel_safe.",
+        "Describes the worktree-per-ticket and merge-with-pass_to_pass procedure for tickets that do qualify, without committing or merging on the person's behalf."
+      ]
+    },
+    {
+      "id": "engineer-notices-mixed-skill-versions",
+      "prompt": "/adk-engineer Add a confirmation step before the agent files a refund.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-operational-guardrails"
+      ],
+      "context": "The project-level adk-engineer carries metadata.version 2026.10.25; the loaded adk-operational-guardrails comes from an older user-level install with metadata.version 2026.10.09. The session has no network access.",
+      "expected_primary": "adk-operational-guardrails",
+      "assertions": [
+        "Says in one line that the installation is mixed, names both versions and gives npx skills@latest update -g and -p with a reminder to restart the session.",
+        "Does not run any update command itself and does not try to fetch the published version without network access.",
+        "Carries on with the confirmation work using the loaded specialist."
+      ]
+    },
+    {
+      "id": "designer-weekly-status-from-plan-evidence",
+      "prompt": "/adk-system-designer Draft this week's status update for the sponsor from docs/plans/support.md and the tickets.",
+      "available_skills": [
+        "adk-system-designer",
+        "adk-presenter"
+      ],
+      "context": "The plan-in-progress fixture with a git history; the last update went out on 2026-10-18.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Runs plan_status.py --weekly --since 2026-10-18 rather than restating figures by hand.",
+        "Reports hours spent, remaining and projected against capacity, the next ready goals, and a RAID log with the overrun as an issue and the outside decision as a dependency.",
+        "Adds no figure that is not in the plan or tickets and keeps assumptions labelled."
+      ]
     }
   ]
 }

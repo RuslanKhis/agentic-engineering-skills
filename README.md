@@ -148,6 +148,18 @@ Antigravity's app, IDE and CLI document different global directories. Use the
 project commands above or follow the [global directory guidance](docs/integrations/google-coding-agents.md#installation-scope)
 for your client; the tested Skills CLI's `-g` destination differs from those paths.
 
+To install a specific release rather than the latest commit, add its tag
+(listed in the [changelog](CHANGELOG.md)) after the repository name:
+
+```bash
+npx skills@latest add RuslanKhis/agentic-engineering-skills#v2026.10.25 --skill '*'
+```
+
+**Prefer updates that arrive on their own?** Claude Code and Gemini CLI can
+install the collection as a plugin that follows tagged releases instead (see
+[updating](#updating-and-troubleshooting)). Use one route per coding agent,
+not both, or every skill appears twice.
+
 If you already know the topic, install that specialist on its own:
 
 ```bash
@@ -282,6 +294,24 @@ the pins in the project's `AGENTS.md` (or says how to install a missing one),
 verifies the goal's acceptance cases locally, records the evidence in the plan
 or ticket, one line per contract and security rule, and ends with the prompt
 for the next one. Nothing is deployed or paid for without your approval.
+
+**Keep the big picture between tickets.** After each ticket the engineer runs
+the designer's plan check, which reads every ticket's evidence back into the
+plan: which promises are proven, which no remaining ticket will prove, what a
+ticket changed or left for a decision, and whether the phase still fits the
+hours. When something needs a decision, the next prompt is a checkpoint rather
+than the next ticket:
+
+```text
+/adk-system-designer Checkpoint docs/plans/<topic>.md.
+```
+
+A ticket interrupted part way leaves a `Progress:` block, and the next session
+resumes from it. Tickets whose files do not overlap can run in parallel, each in
+its own worktree. Before each review, a journey goal checks the whole path end
+to end, and the plan check's phase gate must pass. For a weekly update to your
+sponsor, ask the designer for a status update; it drafts one, with a risk and
+issue log, from the same records.
 
 ### Journey C: win the decision
 
@@ -1831,6 +1861,29 @@ measurement.
 
 *Keep the installed skills current and find them when you need them.*
 
+The collection is released as dated versions (`2026.10.25`, or
+`2026.10.25.1` for a second release that day). Every skill carries the
+version in its `metadata.version`, each release is tagged `v<version>` and
+listed in the [changelog](CHANGELOG.md), and the `stable` branch always points
+at the latest release. When you use `adk-engineer`, it tells you in one line if
+your installed skills come from different releases, or if a newer one is
+published, with the command to update. It never updates anything itself.
+
+**Plugin installs that follow releases.** Plugin installs receive releases,
+not every commit to `main`:
+
+| Coding agent | Install | Updates |
+| --- | --- | --- |
+| Claude Code | `/plugin marketplace add RuslanKhis/agentic-engineering-skills#stable`, then `/plugin install agentic-engineering@agentic-engineering-skills` | Turn on **Enable auto-update** for the marketplace under `/plugin` → Marketplaces, or run `/plugin marketplace update agentic-engineering-skills`; restart the session afterwards |
+| Gemini CLI | `gemini extensions install https://github.com/RuslanKhis/agentic-engineering-skills --ref stable --auto-update` | Automatic with `--auto-update`, or `gemini extensions update agentic-engineering` |
+| Antigravity app | Install the plugin from `https://github.com/RuslanKhis/agentic-engineering-skills` | The app updates installed plugins itself |
+
+In Claude Code a plugin's skills carry its name as a prefix:
+`/agentic-engineering:adk-engineer` rather than `/adk-engineer`. The prompts in
+this README work after you add that prefix. Codex and the Antigravity CLI have
+no documented automatic update for plugins, so on those use the Skills CLI and
+the commands below. Pin a release tag if you want to choose when to move.
+
 The [Skills CLI](https://github.com/vercel-labs/skills/blob/main/src/cli.ts)
 can update installed skills. Choose the scope you used for installation:
 
@@ -1856,7 +1909,8 @@ older ones stay stale. This was observed on 9 October 2026 with Claude Code
 2.1.294. Run `npx skills@latest update -g`, or remove the global copies, then
 restart; a running session keeps the skill list it started with. To check what
 a session actually loaded, ask it to quote the first words of `adk-engineer`'s
-description: the current version begins "Help design, build, change or review". If the entry
+description: the current version begins "Help design, build, change or review", and its
+`metadata.version` names the release. If the entry
 skill reports a missing specialist, rerun the full-toolkit installation or
 install the named specialist. If `npx` fails before showing the installer,
 check `node --version` against the prerequisite above.
@@ -1889,6 +1943,51 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Plan health between tickets · 25 October 2026
+
+A build of many tickets now reports back to its design while it runs. The
+designer's `plan_status.py` reads each ticket's evidence back into the plan:
+- which contracts are evidenced, which are still planned and which nothing
+  left will prove;
+- contract deltas and rulings waiting for a decision;
+- ready, interrupted and parallel-safe tickets;
+- hours spent and remaining against capacity.
+
+It also has a phase-exit gate (`--gate`) and a weekly status update with a
+RAID log (`--weekly`). `check_tickets.py` lints tickets after they are written,
+and `check_schedule.py` requires a journey goal before a review of built work.
+The designer gained a checkpoint mode. The engineer gained a ticket lifecycle:
+resume from a `Progress:` block, end with the checkpoint prompt when a
+decision is waiting, and run tickets in parallel worktrees.
+
+Three fresh-agent trials passed:
+- An interrupted ticket was resumed, finished and routed to a checkpoint.
+- A checkpoint revised a contract in place, settled a ruling and offered
+  cut-line options computed by the scripts.
+- Tickets were written from a plan with no journey goal; the agent added one,
+  and the lint passed with 0 errors.
+
+The checkpoint trial found that a finished ticket's overrun kept triggering
+checkpoints after one had been held; it now counts through the phase fit
+instead. The same work fixed the instruction linter, which skipped an
+instruction imported from `prompt.py` into `agent.py`, the gap two
+field-feedback trials reported. [Testing record](docs/testing/release-and-plan-health-2026-10-25.md).
+
+### Releases and plugin installs · 25 October 2026
+
+Every skill carries `metadata.version` (first release `2026.10.25`), and the
+package check fails when skills or manifests disagree. `scripts/release.py`
+stamps a version, writes the [changelog](CHANGELOG.md), tags the release and
+moves `stable`; it never pushes.
+
+`claude plugin validate .` passes, including `--strict`, on Claude Code
+2.1.306. Installed into a throwaway configuration, the plugin listed all 23
+skills at that version. The Gemini CLI and Antigravity manifests follow their
+documented schemas but were not installed, because neither CLI is on the test
+machine. Codex's plugin format is ambiguous in its documentation, so Codex
+keeps the Skills CLI with a pinned tag. The plugin commands work once the
+first tag and `stable` are pushed. [Testing record](docs/testing/release-and-plan-health-2026-10-25.md).
 
 ### Durable engines that keep ADK's guardrails · 25 October 2026
 

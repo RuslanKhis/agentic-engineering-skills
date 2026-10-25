@@ -13,7 +13,8 @@ constant, imported into `agent.py`. Google's samples use this layout, with
 headed sections and numbered steps (adk-recipes `contrib/python/*/prompt.py`,
 read 2026-10-06, vendor sample). It keeps the prompt in Python, so a
 `FunctionTool` rename shows up in `grep`, and the linter reads constants
-assigned at module level.
+assigned at module level, including one that `agent.py` imports from the
+prompt module.
 
 **Prompt tree:** text files the linter and non-Python reviewers can read:
 

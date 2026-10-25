@@ -7,6 +7,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "3"
   last-tested: "2026-09-16"
+  version: "2026.10.25"
 ---
 
 # Deploy ADK on Google Cloud
