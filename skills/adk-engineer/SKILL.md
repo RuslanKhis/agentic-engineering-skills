@@ -99,6 +99,7 @@ change crosses its boundary. Before any edit, tell the user in one line:
 | Tool identity, credentials, Secret Manager or delegated OAuth | `adk-tool-auth-and-secrets` |
 | Natural-language SQL agents, schema retrieval or controlled query execution | `adk-sql-agent-engineering` |
 | A presentation, deck, narrative, questions to expect or decision memo for a proof-of-concept approval, a production decision, a results review, or a public case study | `adk-presenter` |
+| Papers for a client's legal, privacy or security reviewers: EU AI Act classification, AI impact assessment, DPIA inputs, system card, records of processing, security questionnaire answers | `adk-governance-pack` |
 
 Use `adk-system-designer` for the system-design conversation. `adk-discovery`
 comes before it when the use case is not yet chosen or the business outcome is

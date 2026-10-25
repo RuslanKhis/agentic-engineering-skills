@@ -44,9 +44,10 @@ behaviour, or prepare a deployment.
 | **Not sure where AI fits, or which use case comes first** | `/adk-discovery` | A short discovery conversation, a ranked list of opportunities with the technology each needs (agent, LLM, classical ML, rules or a process change), the first use case with its outcome measure and baseline, and the exact prompt for the designer |
 | **Starting a new ADK application** | `/adk-system-designer` | A short design conversation, then an architecture document, a goal plan, and the exact prompt for the first goal |
 | **Changing an application you already have** | `/adk-engineer` | It names the specialist it is using, makes the change with local tests, and says what is still unverified |
+| **Answering a client's legal, privacy or security reviewers** | `/adk-governance-pack` | Draft papers built from the design and plan: an EU AI Act classification memo, DPIA inputs, an impact assessment, a system card, processing records and security questionnaire answers, each statement citing its evidence or flagged for counsel |
 | **Presenting the work to decide the next step** | `/adk-presenter` | A slide outline with evidence under every claim, what to say, the questions to expect and a one-page decision memo, for a business or a technical audience, at proof-of-concept approval, production approval, results review, or as a public case study |
 
-All four lead to the same nineteen specialists. You never need to remember which
+Discovery, design, engineering and presentation all lead to the same nineteen specialists; the governance pack drafts from what they record. You never need to remember which
 one fits: the designer writes the specialist into every goal, and
 `adk-engineer` picks one for any ticket or request. You can also call a
 specialist directly when you already know the topic.
@@ -101,9 +102,9 @@ From your application's project directory, run:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*'
 ```
 
-Choose your coding agent when prompted. This installs **all twenty-three skills**
+Choose your coding agent when prompted. This installs **all twenty-four skills**
 for the current project: `adk-discovery`, `adk-system-designer`,
-`adk-engineer`, `adk-presenter`, the eleven chapter specialists, the web
+`adk-engineer`, `adk-presenter`, `adk-governance-pack`, the eleven chapter specialists, the web
 backend specialist and the seven cross-framework specialists.
 Keep the quotes around `'*'` so your shell passes it unchanged.
 
@@ -363,7 +364,7 @@ skill** in the catalogue below, and installation fixes under
 
 ## The Skills
 
-*The contents · A discovery skill, a system designer, one entry point, a presenter, eleven chapter specialists, a web backend specialist and seven cross-framework specialists.*
+*The contents · A discovery skill, a system designer, one entry point, a presenter, a governance pack, eleven chapter specialists, a web backend specialist and seven cross-framework specialists.*
 
 Choose a skill by the problem you need to solve. Each entry below explains
 when it helps, what to ask for, and the command that selects it. The numbered
@@ -375,6 +376,7 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 | A system-design conversation and architecture before implementation | [adk-system-designer](#adk-system-designer) |
 | Help choosing an approach or combining concerns | [adk-engineer](#adk-engineer) |
 | A presentation for a proof-of-concept approval, a production decision, a results review or a public case study | [adk-presenter](#adk-presenter) |
+| Draft papers for a client's counsel, DPO or CISO: EU AI Act classification, impact assessment, DPIA inputs, system card, processing records, security questionnaire | [adk-governance-pack](#adk-governance-pack) |
 | Sequential steps, parallel work or bounded loops | [adk-workflow-design](#adk-workflow-design) |
 | Reliable API calls and protection against duplicate actions | [safe-api-tool-calls](#safe-api-tool-calls) |
 | Usage limits, repeated-tool protection or human approval | [adk-operational-guardrails](#adk-operational-guardrails) |
@@ -616,6 +618,53 @@ questions each will ask. Two acceptance cases were never run; say so.
 results in docs/plans/ads.md. Draft the final results presentation and a
 public case study, and list the approvals and numbers we need before
 sharing it with our Google Cloud account team.
+```
+
+</details>
+
+### [adk-governance-pack](skills/adk-governance-pack/SKILL.md)
+
+*Before production · Draft what the client's reviewers sign.*
+
+Use this when a client's counsel, data protection officer or security team
+asks for papers before a pilot or production decision. It reads the
+discovery brief, the design and the plan's evidence and drafts an EU AI Act
+classification memo (prohibited practices, Annex III high-risk areas such as
+hiring or credit, Article 50 transparency, and who is provider and who
+deployer when an agency builds for a client), an AI impact assessment along
+ISO/IEC 42005 mapped to the NIST AI RMF and its generative AI profile, a GDPR
+DPIA input pack, a system card citing measured results, records-of-processing
+rows and a security questionnaire answer bank. Every statement cites a
+contract, decision or evidence ID, or is marked as an assumption or a
+question for counsel; these are drafts, not legal advice. A proof of concept
+gets a one-page note; a pilot or production service gets the full pack. A
+helper fails a draft with an uncited statement, an invented ID, a legal date
+without the day it was checked, or an Annex III fact without a counsel flag.
+The designer plans it as a goal before the production decision.
+
+**Invoke:** Claude Code `/adk-governance-pack` · Codex `$adk-governance-pack`
+
+Gemini CLI / Antigravity: "Use the adk-governance-pack skill to…"
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-governance-pack The client's counsel and DPO want the governance papers
+for the CV-screening assistant before the pilot decision. Draft them from
+docs/discovery/hiring.md, docs/architecture/hiring.md and docs/plans/hiring.md.
+```
+
+```text
+/adk-governance-pack Their CISO sent a vendor security questionnaire about
+our policy assistant. Draft the answer bank and a system card from what the
+design and plan record, and mark what is only planned.
+```
+
+```text
+/adk-governance-pack We are about to start a two-week proof of concept on
+real customer emails. Write the one-page classification note and data-flow
+summary for the client's privacy team.
 ```
 
 </details>
@@ -1889,6 +1938,26 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Governance papers for a client's reviewers · 25 October 2026
+
+A new skill, `adk-governance-pack`, drafts what a client's counsel, DPO and
+CISO ask for before a pilot or production decision: an EU AI Act
+classification memo, an impact assessment along ISO/IEC 42005 mapped to the
+NIST AI RMF, DPIA inputs, a system card, records-of-processing rows and
+security questionnaire answers, each statement citing a contract, decision
+or evidence ID or flagged for counsel. The AI Act facts were read in the
+Official Journal, including the Digital Omnibus, Regulation (EU) 2026/1744:
+Annex III obligations from 2 December 2027, Article 50 unchanged from 2
+August 2026, and Article 4 narrowed rather than dropped. The designer now
+plans a governance goal before the production decision. Two fresh-agent
+trials (a CV-ranking pilot and an internal policy assistant) classified
+both correctly, surfaced a below-threshold bias measurement and an already
+retired pinned model, and passed the new checker; all fifteen frictions
+were fixed the same day. All **24 packages** pass validation and **807
+tests** pass with **60 optional SDK checks skipped**. See the
+[note](docs/research/governance-pack-2026-10-25.md) and the
+[record](docs/testing/governance-pack-2026-10-25.md).
 
 ### Durable engines that keep ADK's guardrails · 25 October 2026
 

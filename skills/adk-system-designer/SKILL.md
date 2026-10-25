@@ -394,6 +394,19 @@ its acceptance is absent-or-retained-with-owner per resource, as
 [delivery profiles](references/delivery-profiles.md#split-the-plan-into-phases)
 describes. At MVP and above, the same resources are instead owned by a cost
 contract and a decommission item in the Later list.
+
+When the scope gate records personal data, decisions about people (hiring,
+credit, education, access to services) or a regulated domain, or the
+profile is MVP, pilot or production, add a **governance goal**, type
+governance, `Primary skill: adk-governance-pack`, placed before the
+production-approval presentation goal, which depends on it. It drafts the
+papers the client's counsel, DPO and security reviewers sign (AI Act
+classification, DPIA inputs, impact assessment, system card, processing
+records, questionnaire answers), sized by that skill to the profile; a
+proof of concept on real personal data gets its one-page note inside
+phase 1 instead. Its acceptance is the skill's checker passing on the
+drafts; the DPIA sign-off and legal review are calendar waits (`W<n>`)
+requested when the drafts go out, and the production goals depend on them.
 Separate discovery questions from ready implementation; an unknown cloud guarantee need
 not block independent local work. When the user wants tickets, write one file
 per goal of the phase from the [ticket template](assets/ticket-template.md) under

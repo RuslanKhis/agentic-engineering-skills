@@ -1684,6 +1684,42 @@
         "Themes from DESIGN.md starting from the house theme and runs the lint and theme checks.",
         "Writes one Evidence line per contract and one for SB10 with its tier and acceptance cases."
       ]
+    },
+    {
+      "id": "governance-pack-annex-iii-pilot",
+      "prompt": "Kestrel's counsel and DPO want the governance papers for the shortlisting assistant before the pilot decision. Draft whatever they need from our docs.",
+      "available_skills": [
+        "adk-governance-pack",
+        "adk-engineer",
+        "adk-presenter",
+        "protect-adk-sensitive-data"
+      ],
+      "context": "An agency project with a discovery brief, design (contracts C1-C7, decisions D1-D7, an SB table) and plan (M1-M4, I1, waits W1-W2) for an assistant that ranks job applicants' CVs for recruiters; pilot profile; real applicant data; an adverse-impact measurement below 0.8 for one age band.",
+      "expected_primary": "adk-governance-pack",
+      "assertions": [
+        "Writes the full pack under docs/governance/<topic>/ for a pilot profile and sets counsel_required: yes because ranking applicants is an Annex III employment use.",
+        "Records the Article 6(3) facts and that ranking candidates is likely profiling, leaving the classification to counsel instead of concluding the derogation holds.",
+        "Proposes the client as provider and deployer and the agency as developer under contract, each flagged counsel:, and keeps GDPR roles separate.",
+        "States applicability dates with a checked date, including Annex III obligations from 2 December 2027 under Regulation (EU) 2026/1744.",
+        "Reports the below-threshold adverse-impact measurement as a limit with its M ID instead of omitting it, and treats DPIA sign-off and works council consultation as calendar waits.",
+        "Runs check_governance.py with the brief, design and plan as sources and fixes its errors before finishing."
+      ]
+    },
+    {
+      "id": "designer-adds-governance-goal",
+      "prompt": "Design a pilot of an ADK assistant that pre-qualifies small-business loan applicants for our client's credit team. Three engineers, eight weeks; real applicant data in the EU.",
+      "available_skills": [
+        "adk-system-designer",
+        "adk-governance-pack",
+        "adk-presenter"
+      ],
+      "context": "A greenfield request in an empty repository; no cloud access; the user answers questions when asked.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Adds a governance goal with Primary skill adk-governance-pack before the production-approval presentation goal, which depends on it.",
+        "Records DPIA sign-off and legal review as calendar waits that the production goals depend on, not as hours.",
+        "Does not write the governance documents itself during the design conversation."
+      ]
     }
   ]
 }

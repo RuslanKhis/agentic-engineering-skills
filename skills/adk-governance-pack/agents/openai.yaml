@@ -1,0 +1,4 @@
+interface:
+  display_name: "ADK Governance Pack"
+  short_description: "Draft AI Act, DPIA and security review papers"
+  default_prompt: "Use $adk-governance-pack to draft the governance pack for docs/architecture/<topic>.md: the EU AI Act classification memo, DPIA input pack, impact assessment, system card, records-of-processing rows and security questionnaire answers, each citing the design and plan evidence and flagging what counsel must decide."

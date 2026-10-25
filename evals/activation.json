@@ -511,6 +511,48 @@
       "prompt": "Set up the look of our new ADK assistant's web app: a design system for the shadcn components, and how the chat shows running tools, an approval before filing a ticket, and an error that arrives after part of the answer.",
       "should_trigger": true,
       "rationale": "Setting up an ADK interface's design system and its agent UI states (tool timeline, approval prompt, failed turn) is now in this skill's scope; an isolated styling tweak stays out."
+    },
+    {
+      "id": "governance-pack-positive",
+      "skill": "adk-governance-pack",
+      "prompt": "Our client's DPO and legal team want the EU AI Act classification and the DPIA inputs for the CV-screening agent we designed before they approve the pilot. Draft them from docs/architecture/cv-screening.md and the plan's evidence.",
+      "should_trigger": true,
+      "rationale": "Drafting the AI Act classification and DPIA inputs from the design and plan evidence for a client's reviewers is this skill's deliverable."
+    },
+    {
+      "id": "governance-pack-questionnaire-positive",
+      "skill": "adk-governance-pack",
+      "prompt": "The client's CISO sent a vendor security questionnaire and asked for a system card for our ADK policy assistant. Answer it from what the design and plan actually record, and say what is only planned.",
+      "should_trigger": true,
+      "rationale": "A security-questionnaire answer bank and system card drawn from the design's contracts, security baseline and evidence belong to the governance pack."
+    },
+    {
+      "id": "governance-pack-redact-logs-near-miss",
+      "skill": "adk-governance-pack",
+      "prompt": "Redact PII from our agent's logs before they reach Cloud Logging.",
+      "should_trigger": false,
+      "rationale": "Implementing a sensitive-data control in the agent is protect-adk-sensitive-data's work; the governance pack only cites such controls."
+    },
+    {
+      "id": "governance-pack-threat-model-near-miss",
+      "skill": "adk-governance-pack",
+      "prompt": "Threat-model our ADK agent that reads customer emails and can issue refunds, and add an adversarial test suite before the security review.",
+      "should_trigger": false,
+      "rationale": "Threat modelling and adversarial tests are adk-agent-security; the governance pack drafts reviewers' papers from their results."
+    },
+    {
+      "id": "governance-pack-release-gate-near-miss",
+      "skill": "adk-governance-pack",
+      "prompt": "Add a gate to CI so a prompt or model change cannot be released if the evaluation score drops.",
+      "should_trigger": false,
+      "rationale": "Release gates belong to adk-release-engineering, even though governance reviewers may later ask about them."
+    },
+    {
+      "id": "sensitive-data-logs-not-governance-positive",
+      "skill": "protect-adk-sensitive-data",
+      "prompt": "Redact PII from our agent's logs before they reach Cloud Logging.",
+      "should_trigger": true,
+      "rationale": "Keeping personal data out of logs is a sensitive-data boundary this skill implements; the word privacy does not make it a governance paper."
     }
   ]
 }
