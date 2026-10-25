@@ -156,7 +156,8 @@ def resolve_references(text: str) -> list[str]:
     found: list[str] = []
     for label, pattern in REFERENCE_PATTERNS:
         for match in pattern.finditer(text):
-            found.append(f"{label} {re.sub(r'\s+', '', match.group(1)).upper() if label == 'Policy' else match.group(1)}")
+            value = re.sub(r"\s+", "", match.group(1)).upper() if label == "Policy" else match.group(1)
+            found.append(f"{label} {value}")
     for match in SPD_PATTERN.finditer(text):
         found.append(re.sub(r"\s+", " ", match.group(1)))
     return list(dict.fromkeys(found))
