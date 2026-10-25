@@ -572,6 +572,16 @@ The usual artifacts are `docs/architecture/<topic>.md` and
 design document. See the [copyable design-to-tickets walkthrough](#from-design-to-working-tickets)
 and [guide to continuing the work](docs/integrations/design-to-implementation.md).
 
+For agency and consultancy work it also turns the brief, design and plan
+into a statement of work, a change request and the letter asking the client
+for data and access: deliverables mapped to plan goals, acceptance criteria
+written as measured rates on agreed cases (never "the agent answers
+correctly"), dated client dependencies, fees from the schedule check's
+hours at the rate you supply, run cost from the cost ledger, and an AI-terms
+checklist built on the EU model contractual clauses for AI procurement. A
+helper fails the SOW when its hours, goals, dates or thresholds disagree
+with the plan.
+
 **Invoke:** Claude Code `/adk-system-designer` · Codex `$adk-system-designer`
 
 Gemini CLI / Antigravity: “Use the adk-system-designer skill to…”
@@ -632,6 +642,16 @@ continue or scale call; a second helper fails a figure that cites no
 measurement or incident record, a missing baseline, a stale measurement
 window, an assumption presented as measured, a cost per outcome without
 both its parts, and an unreported incident.
+
+At go-live it also writes the rollout pack for the people who will use the
+agent and their managers: a user guide and quick-reference card whose every
+"it will" and "it won't" cites the design contract behind it, a training
+plan, rollout messages for the sponsor, middle managers and frontline
+users, the AI disclosure text (EU AI Act Article 50, applying since 2
+August 2026), adoption metrics with "active user" defined and a
+counter-metric, a "report a problem" route mapped onto the observability
+skill's feedback record, and a hypercare exit test with numeric
+thresholds. A second helper checks the pack's structure and citations.
 
 **Invoke:** Claude Code `/adk-presenter` · Codex `$adk-presenter`
 
@@ -1369,6 +1389,12 @@ GKE, Agent Runtime, OTLP third parties), BigQuery Agent Analytics, feedback
 capture, debugging from an alert to a trace to a session, and turning
 production traces into redacted evaluation cases. Two helpers summarise
 invocations from a saved session and convert sessions into an ADK eval set.
+When the agent passes to a client's IT team it writes the operations
+handover (support tiers with a one-accountable RACI, alert ownership,
+access transfer, runbook entries, owners for model retirement, evaluation
+refresh and cost review) and a blameless postmortem template that adds
+affected users, harm, the client's notification decision and the
+regression case to the incident note.
 Content-redaction policy stays with
 [protect-adk-sensitive-data](#protect-adk-sensitive-data).
 
@@ -2116,6 +2142,28 @@ packages** pass validation and **826 tests** pass with **59 optional SDK
 checks skipped**. See the
 [note](docs/research/expert-review-and-value-report-2026-10-25.md) and the
 [record](docs/testing/expert-review-and-value-report-2026-10-25.md).
+
+### Statements of work, rollout packs and operations handover · 25 October 2026
+
+Three business documents an agency writes around every build now come from
+the artefacts the skills already keep. The designer turns the brief, design
+and plan into a statement of work, change request and data-request letter;
+`check_sow.py` reads the plan through the schedule check's own parser and
+fails when deliverables, hours, fees at the user's rate, dated client
+dependencies or measurable acceptance thresholds disagree with it. The
+presenter gains a rollout mode: user guide and card citing the contracts,
+training, messages per audience, AI disclosure (EU AI Act Article 50,
+applying since 2 August 2026, read on the consolidated text), adoption
+metrics and a hypercare exit test, checked by `check_rollout.py`. The
+observability skill gains an operations handover and a blameless agent
+postmortem that extends its incident note. Three fresh-agent trials on a
+synthetic claims project (ease 4 of 5 each) produced a SOW and a rollout
+pack that passed their checks and a handover that found the pinned model
+retiring mid-pilot; most of their 28 frictions were fixed the same day.
+No new package: all **23 packages** pass validation and **813 tests**
+pass with **60 skipped** (59 optional SDK checks, one pytest skip). See the
+[note](docs/research/engagement-rollout-handover-2026-10-25.md) and the
+[record](docs/testing/engagement-rollout-handover-2026-10-25.md).
 
 ### Durable engines that keep ADK's guardrails · 25 October 2026
 

@@ -6,8 +6,9 @@ description: >-
   implementation. Use for a new application design, a substantial redesign,
   or a cross-cutting architecture review, including scoping a proof of
   concept, internal tool or MVP to the time and people available and planning
-  what ships first and what follows. For a focused memory, workflow,
-  frontend or deployment change, use that specialist directly.
+  what ships first and what follows, and turning the design and plan into a
+  client proposal, statement of work or change request. For a focused memory,
+  workflow, frontend or deployment change, use that specialist directly.
 license: MIT
 metadata:
   author: Ruslan Khissamiyev
@@ -91,6 +92,9 @@ answered, in one turn, and offer the default so a user can accept it in one word
   brief's decision calendar answers this. Each review becomes a presentation
   goal at that phase boundary, owned by `adk-presenter`, and a ticket when
   tickets are written.
+- Is it built for a client under a contract, needing a proposal or statement
+  of work? (Default: no.) When yes, the statement of work is a goal written
+  from this design and plan.
 
 When the user overrides one of these defaults and `adk-engineer` is installed,
 record it as an `overridden-default` field note (its field-feedback reference);
@@ -350,6 +354,12 @@ version and list every failure row, grid cell, test, acceptance case, wait
 and floor item you removed or weakened, each with its reason, in the plan's
 change table. Nothing of these leaves silently.
 
+When the user asks for a proposal, statement of work, change request or the
+letter requesting client data and access, read
+[engagement scoping](references/engagement-scoping.md): it builds them from the
+brief, design and plan, and `scripts/check_sow.py` checks them against the
+schedule block.
+
 Keep the design and build plan in the project's existing document convention.
 When none exists, use `docs/architecture/<topic>.md` and, for a multi-goal effort,
 `docs/plans/<topic>.md`. In the compact form the design file holds the plan
@@ -385,7 +395,15 @@ phase and is followed by an optional case-study goal when the result may be
 shared. Each review of built work waits for a **journey goal** (type journey,
 `Primary skill: adk-agent-evaluation`, Playwright as companion for a web
 interface) that runs the design's journey end to end and every `pass_to_pass`
-test; tickets that pass one at a time do not show the whole path works. Its acceptance is that
+test; tickets that pass one at a time do not show the whole path works. For a
+client engagement, a **statement of work goal**
+(`Primary skill: adk-system-designer`, read
+[engagement scoping](references/engagement-scoping.md)) precedes or accompanies
+the approval presentation, and its signature is a calendar wait on the build;
+when people other than the builders will use or run the result, a **rollout
+goal** (`adk-presenter`, rollout pack) and an **operations handover goal**
+(`adk-agent-observability`) come before production go-live and the results
+review. A presentation goal's acceptance is that
 the outline passes the presenter's deck check and every claim cites evidence
 recorded in this plan; the goal cannot complete before the goals whose
 evidence it presents. Each

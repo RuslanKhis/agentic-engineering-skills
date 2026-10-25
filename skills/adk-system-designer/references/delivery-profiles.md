@@ -167,6 +167,9 @@ plus review. Label them as assumptions and adjust to the project:
 | First Cloud Run deployment with a service account and secrets | 3–6 |
 | Evaluation gate in CI | 3–6 |
 | Stakeholder presentation for one audience: outline from plan evidence, narrative, questions, one rehearsal (`adk-presenter`) | 3–6, plus the review date as a wait |
+| Statement of work from the brief, design and plan, checked with `check_sow.py` (engagement scoping) | 2–4, plus signature as a wait |
+| Rollout pack: user guide, card, training plan, messages, adoption metrics (`adk-presenter`) | 4–8, plus training sessions held |
+| Operations handover document and postmortem template (`adk-agent-observability`) | 4–8, plus the access-transfer wait |
 
 For a team new to ADK, multiply by about 1.5. State the multiplier once in
 the plan and apply it to every implementation goal, hands-on and review

@@ -8,9 +8,11 @@ description: >-
   that needs someone's decision (approval to build a proof of concept, a
   proof-of-concept review with a production decision, a final results
   review) or for a public case study to share with Google or the wider
-  world, in a business version and a technical version; and after launch
-  for the monthly one-page value report to the sponsor (outcome against
-  baseline, cost per outcome, incidents, a stop, continue or scale call).
+  world, in a business version and a technical version. Also writes the
+  go-live rollout pack (user guide from the contracts, training, messages,
+  AI disclosure, adoption metrics, hypercare exit) and the monthly value
+  report to the sponsor (outcome against baseline, cost per outcome, a stop,
+  continue or scale call).
   Do not activate to
   change the application, run evaluations, or audit results (adk-agent-evaluation),
   nor to choose the use case (adk-discovery) or design the system
@@ -172,6 +174,24 @@ call-outs, charts from recorded data with the baseline drawn, `Notes:` as
 speaker notes, `Evidence:` kept out of the audience's view, and two
 renderings (projected and leave-behind); otherwise hand the outline and that
 reference's checklist to whoever owns the company template.
+
+## Rollout pack at go-live
+
+When the request is the rollout pack, a user guide, training, launch
+messages, AI disclosure text or adoption measures, read the record as above
+(the stage and audience lines do not apply), then read
+[rollout and adoption](references/rollout-and-adoption.md) instead of the
+storyline and deck references, and write from the
+[rollout pack template](assets/rollout-pack-template.md) to
+`docs/rollout/<topic>/rollout-pack.md`. Every statement of what the agent
+will or will not do cites the contract that enforces it, any claim of how
+well it works cites a measurement record, and "report a problem" writes the
+feedback record that `adk-agent-observability` defines. Check it with
+`python3 "$SKILL_DIR/scripts/check_rollout.py" --pack <path> --design <design path>`;
+the pack is not ready until the check passes. Finish with where the pack is,
+the check's result, the assumptions and gaps table's open items with who
+settles each, and the prompt for the next goal (often the operations
+handover).
 
 ## Finish
 

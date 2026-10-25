@@ -119,13 +119,17 @@ lessons tagged with that specialist and its stack conventions.
 | Natural-language SQL agents, schema retrieval or controlled query execution | `adk-sql-agent-engineering` |
 | A presentation, deck, narrative, questions to expect or decision memo for a proof-of-concept approval, a production decision, a results review, or a public case study | `adk-presenter` |
 | Setting up, binding, updating or reviewing the engineer's own practice profile: employer or client context and lessons carried across projects, kept outside the repository (not an agent's memory) | `practice-profile` |
+| A client proposal, statement of work, change request or data-and-access request letter built from the design and plan | `adk-system-designer` (engagement scoping) |
+| A go-live rollout pack: user guide, quick-reference card, training plan, rollout messages, AI disclosure text, adoption metrics, hypercare exit test | `adk-presenter` (rollout pack) |
+| Handing an agent's operation to a client's IT team (support tiers, RACI, alert ownership, access transfer) or a blameless postmortem for an agent incident | `adk-agent-observability` (handover) |
 
 Use `adk-system-designer` for the system-design conversation. `adk-discovery`
 comes before it when the use case is not yet chosen or the business outcome is
 unnamed; it ends with the designer's prompt. `adk-presenter` turns a plan's
 recorded evidence into stakeholder material and never implements; a goal whose
 primary skill is `adk-presenter` produces documents under `docs/presentations/`,
-not code, and completes when its outline passes the deck check. A focused feature
+not code, and completes when its outline passes the deck check (a rollout pack:
+when it passes the rollout check). A focused feature
 design or code fix stays with its topic specialist; it does not need a new
 architecture interview. Preserve the user's requested design-only scope and
 already agreed architecture when handing work between skills.
