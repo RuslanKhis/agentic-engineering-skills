@@ -65,3 +65,11 @@ google/adk-python issues #7311 (`AuthCredential` fields in tool-call span attrib
 Sibling skills are cited by name: protect-adk-sensitive-data (content policy and capture baseline in `references/implementation-recipes.md`), optimise-adk-on-google-cloud (`references/gke-serving.md`, `assets/session_observation.py`), adk-agent-evaluation (`references/execution-evidence.md` usage-counting rule, evaluation design), deploy-adk-on-google-cloud (first deployment), adk-operational-guardrails (budgets and loop limits), adk-model-and-output-contracts (finish reasons, failover), adk-frontend-integration and adk-tool-auth-and-secrets (feedback endpoint and identity). Google's `google-agents-cli-observability` skill is an optional composition per `docs/integrations/agents-cli.md`.
 
 | promptfoo/promptfoo commit 15bcb0d, `site/docs/guides/evaluate-google-adk.md` | read 2026-10-22 | Native-span assertion shapes in [trace to evaluation](trace-to-evaluation.md); not executed |
+
+## Operations handover and incident review
+
+| URL | Date | Used for |
+| --- | --- | --- |
+| https://sre.google/sre-book/launch-checklist/ | read 2026-10-25 (book © 2017) | Handover readiness: monitoring the monitoring, alert management, release process, external dependencies, standard procedures |
+| https://sre.google/sre-book/postmortem-culture/ and https://sre.google/sre-book/example-postmortem/ | read 2026-10-25 (book © 2017) | Postmortem triggers, blameless review, review before sharing, section order of the template |
+| https://ico.org.uk/for-organisations/report-a-breach/personal-data-breach/personal-data-breaches-a-guide/ | read 2026-10-25 (undated; some ICO pages under review after the Data (Use and Access) Act) | The notification decision in the postmortem template |

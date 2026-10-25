@@ -102,6 +102,9 @@ deploy-adk-on-google-cloud`) that runs every cleanup command recorded under
 **Resources created**, checks dependants and retention, and reads the billing
 report; its acceptance lists each resource as absent, or retained with a
 reason and an owner.
+For a client engagement, a statement of work goal precedes or accompanies
+the approval presentation (its signature a wait on the build); rollout and
+operations handover goals precede production go-live and the results review.
 
 ### G01 — <first useful behavior or precise decision>
 

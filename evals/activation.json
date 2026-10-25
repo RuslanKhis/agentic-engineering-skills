@@ -511,6 +511,55 @@
       "prompt": "Set up the look of our new ADK assistant's web app: a design system for the shadcn components, and how the chat shows running tools, an approval before filing a ticket, and an error that arrives after part of the answer.",
       "should_trigger": true,
       "rationale": "Setting up an ADK interface's design system and its agent UI states (tool timeline, approval prompt, failed turn) is now in this skill's scope; an isolated styling tweak stays out."
+    },
+    {
+      "id": "designer-sow-positive",
+      "skill": "adk-system-designer",
+      "prompt": "Draft the statement of work for the client from our discovery brief, design and plan; our rate is £95 an hour.",
+      "should_trigger": true,
+      "rationale": "Turning the design and plan into a statement of work, with deliverables mapped to goals and hours from the schedule check, is the designer's engagement scoping."
+    },
+    {
+      "id": "designer-change-request-positive",
+      "skill": "adk-system-designer",
+      "prompt": "The client now wants a second channel. Write the change request against our signed SOW and say which goals and estimates change.",
+      "should_trigger": true,
+      "rationale": "A change request cites the contracts, goals and estimates it changes from an updated plan; engagement scoping owns it."
+    },
+    {
+      "id": "designer-sow-commercial-near-miss",
+      "skill": "adk-system-designer",
+      "prompt": "Negotiate our agency's standard master services agreement and payment terms with procurement.",
+      "should_trigger": false,
+      "rationale": "General contract negotiation with no ADK design or plan behind it is outside the toolkit; the SOW reference lists AI terms for counsel, it does not negotiate."
+    },
+    {
+      "id": "presenter-rollout-positive",
+      "skill": "adk-presenter",
+      "prompt": "We go live with the claims assistant in two weeks. Prepare the rollout pack: user guide, training, messages for managers and staff, and how we measure adoption.",
+      "should_trigger": true,
+      "rationale": "The go-live rollout pack written from the design's contracts and the plan's evidence is the presenter's rollout mode."
+    },
+    {
+      "id": "presenter-rollout-ui-near-miss",
+      "skill": "adk-presenter",
+      "prompt": "Add an AI disclosure banner and a report-a-problem button to the chat UI of our ADK agent.",
+      "should_trigger": false,
+      "rationale": "Implementing interface components belongs to adk-frontend-integration (and the feedback endpoint to adk-agent-observability); the presenter writes the disclosure text, not the UI."
+    },
+    {
+      "id": "observability-handover-positive",
+      "skill": "adk-agent-observability",
+      "prompt": "Hand over our ADK agent to the client's IT team: support tiers, who owns which alert, moving IAM and secrets to them, and a postmortem template for agent incidents.",
+      "should_trigger": true,
+      "rationale": "Operations handover and the blameless agent postmortem extend the incident note this skill owns."
+    },
+    {
+      "id": "observability-handover-deploy-near-miss",
+      "skill": "adk-agent-observability",
+      "prompt": "Move our ADK agent's Cloud Run service into the client's GCP project and redeploy it there.",
+      "should_trigger": false,
+      "rationale": "Redeploying into another project is deployment work for deploy-adk-on-google-cloud; the handover decides who owns what, not how it is redeployed."
     }
   ]
 }

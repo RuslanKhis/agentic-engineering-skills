@@ -42,6 +42,7 @@ Timings on the span are the measurement; `usage` on the `generate_content` span 
 ## 5. Close the loop
 
 - Record in the incident note: alert, trace id, invocation id, root cause category (model, tool, dependency, infrastructure, telemetry), fix, and the regression case id.
+- When the incident meets an agreed postmortem trigger (user harm, an unapproved outside action, data exposure, a sustained quality drop), extend the note into a blameless review with [operations handover](operations-handover.md#agent-incident-review-blameless-postmortem) and the postmortem template.
 - If the alert did not fire or fired late, adjust the SLI or the burn-rate window ([SLO and alerting](slo-and-alerting.md)); if the trace lacked a needed attribute, add it under the experimental gate or as a custom span and note the version dependency ([compatibility](compatibility.md)).
 - If the trace contained content it should not have, hand the finding to protect-adk-sensitive-data; set `ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS=false` and `ADK_TELEMETRY_IGNORE_RUN_CONFIG=1` as the immediate mitigation (issue #7311 describes `AuthCredential` fields in `gcp.vertex.agent.tool_call_args`, community, open at 2026-10-07).
 

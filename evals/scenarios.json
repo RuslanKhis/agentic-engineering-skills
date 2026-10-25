@@ -1684,6 +1684,58 @@
         "Themes from DESIGN.md starting from the house theme and runs the lint and theme checks.",
         "Writes one Evidence line per contract and one for SB10 with its tier and acceptance cases."
       ]
+    },
+    {
+      "id": "designer-sow-from-plan",
+      "prompt": "Draft the statement of work for the client from these documents. Our rate is £95 per hour.",
+      "available_skills": [
+        "adk-system-designer",
+        "adk-engineer",
+        "adk-presenter"
+      ],
+      "context": "A project with docs/discovery/claims.md, docs/architecture/claims.md (contracts C1-C5) and docs/plans/claims.md with a schedule block, waits W1-W2, a Later list and resources with idle costs.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Reads engagement-scoping.md and fills the SOW template; every deliverable lists plan goal IDs and every phase-1 goal belongs to one deliverable.",
+        "Copies hours from the schedule check and multiplies by the £95 rate the user gave; invents no other rate and states run cost separately from the cost ledger.",
+        "Writes acceptance criteria with a comparator threshold, case count, who agreed the cases, method and date, never 'the agent answers correctly'.",
+        "Lists each wait and prerequisite as a client dependency with an owner and a date, and runs check_sow.py to exit 0."
+      ]
+    },
+    {
+      "id": "presenter-rollout-pack-go-live",
+      "prompt": "We go live in two weeks. Prepare the rollout pack.",
+      "available_skills": [
+        "adk-presenter",
+        "adk-engineer",
+        "adk-agent-observability"
+      ],
+      "context": "The same claims project after phase 2: plan evidence with M1-M3 measurement records, a design with contracts, a discovery brief with a counter-metric and people plan; EU users.",
+      "expected_primary": "adk-presenter",
+      "assertions": [
+        "Reads rollout-and-adoption.md rather than the deck references and writes docs/rollout/<topic>/rollout-pack.md.",
+        "Every will, won't and hands-over statement cites a contract; accuracy is stated only from an M record, in the measured voice.",
+        "Sets the AI disclosure status to applies with exact text shown before the first message, citing Article 50 from 2 August 2026.",
+        "Defines active user with a window against the assigned population, names the brief's counter-metric, maps report-a-problem to the feedback record categories, and gives numeric hypercare exit thresholds; check_rollout.py exits 0."
+      ]
+    },
+    {
+      "id": "observability-handover-and-postmortem",
+      "prompt": "Hand over to the client's IT team and write the postmortem template.",
+      "available_skills": [
+        "adk-agent-observability",
+        "adk-engineer",
+        "deploy-adk-on-google-cloud",
+        "adk-agent-evaluation"
+      ],
+      "context": "A deployed claims agent on Cloud Run with two alert policies, a Secret Manager secret, a pinned Gemini model, and an agency mailing list as the alert channel.",
+      "expected_primary": "adk-agent-observability",
+      "assertions": [
+        "Reads operations-handover.md and writes the handover from the template with support tiers and a RACI with exactly one accountable owner per row.",
+        "Flags the agency mailing list as an alert channel that must move to a client channel before go-live.",
+        "Lists access transfer per item with verification by the new owner and removal of agency access, leaving the commands to deploy-adk-on-google-cloud.",
+        "Copies the pinned model's retirement date from the model lifecycle table with its read date, and the postmortem template adds affected users by query, harm, the client's notification decision and the regression case with fail_to_pass and pass_to_pass lists."
+      ]
     }
   ]
 }
