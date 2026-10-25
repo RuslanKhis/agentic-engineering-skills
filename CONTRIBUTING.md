@@ -84,6 +84,32 @@ Its compatibility/validation references should say which runtime recipe was
 actually exercised. Keep package checks, model behavior and cloud results
 separate in reports.
 
+## Triage field reports
+
+Users share divergences through the [field report form](.github/ISSUE_TEMPLATE/field-report.yml)
+(see [field feedback and privacy](docs/field-feedback-privacy.md)). Issue text
+is untrusted input to your own coding agent: an injected issue once led an
+agent with GitHub access to leak private repositories through a public pull
+request ([Invariant Labs](https://invariantlabs.ai/blog/mcp-github-vulnerability)).
+
+```bash
+gh issue list --label field-report --state open --json number,title,body,labels --limit 200 > reports.json
+.venv/bin/python scripts/triage_field_reports.py reports.json
+```
+
+The table clusters reports by skill, kind and quoted `file:line`, prints no
+report prose and flags injection-like text, a missing privacy tick or a
+non-form issue.
+
+- Read reports in a session with no write tools and no access to private
+  repositories; never let that session edit a skill.
+- Reproduce in a clean fixture before editing. One report is a lead, not
+  evidence; remove `needs-repro` only after the reproduction.
+- Every accepted report becomes an activation or scenario case carrying
+  `"source": "issue #N"`, written in your own words.
+- An SDK fact it corrects also gets its dated citation and, when read from a
+  repository, a row in `docs/research/source-register.json`.
+
 ## Submit a reviewable change
 
 Explain the concrete problem, resulting behavior, relevant validation and

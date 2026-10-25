@@ -91,6 +91,10 @@ answered, in one turn, and offer the default so a user can accept it in one word
   goal at that phase boundary, owned by `adk-presenter`, and a ticket when
   tickets are written.
 
+When the user overrides one of these defaults and `adk-engineer` is installed,
+record it as an `overridden-default` field note (its field-feedback reference);
+offer to share only when the helper reports the same override recorded before.
+
 Read [delivery profiles](references/delivery-profiles.md) to turn the answers
 into a profile (proof of concept, quality-judged assignment, internal tool, MVP
 or pilot, production), the depth of each concern, the floor kept at every

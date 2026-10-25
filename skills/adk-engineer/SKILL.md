@@ -62,6 +62,13 @@ When there is none, end instead with the prompt for the most useful follow-up: t
 verification still owed (for example the SDK tests marked not run) or the new
 ticket the change uncovered, written so the user can paste it.
 
+When a specialist's instruction failed on the installed versions, the user
+overrode it, or its routing had to be redirected, record a generalised field
+note as [field feedback](references/field-feedback.md) describes; nothing is
+sent. At the end of the session, if this session recorded a pending note and
+`AES_FIELD_NOTES` is not `quiet` or `off`, offer once to share it through a
+prefilled issue form that the user reviews and submits.
+
 If the project has `agents-cli-manifest.yaml`, the user asks to use Agents CLI,
 another collection already supplies the development workflow, or a ticket
 names companion skills, read

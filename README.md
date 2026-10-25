@@ -1876,6 +1876,16 @@ skill before it is available through the GitHub install command.
 
 </details>
 
+### When a skill is wrong in your project
+
+If a skill's instruction fails on your installed versions or keeps steering
+you somewhere you override, `adk-engineer` records a short, redacted field
+note on your machine and, at the end of the session, may ask once whether to
+share it. Sharing opens a prefilled
+[field report](https://github.com/RuslanKhis/agentic-engineering-skills/issues/new?template=field-report.yml)
+form that you read and submit yourself; nothing is sent automatically.
+`AES_FIELD_NOTES=off` turns it off. [What is never sent](docs/field-feedback-privacy.md).
+
 <p align="center">
   <img src="docs/editorial/section-break.svg" alt="" width="240">
 </p>
@@ -1889,6 +1899,25 @@ The specialists inspect your project's installed SDK versions before applying a
 recipe; their references record compatibility, validation evidence and practical
 limits. There is no single application environment to install at this
 repository's root.
+
+### Field reports from real use · 25 October 2026
+
+When a skill's instruction fails on the installed versions, is overridden or
+misroutes the work, `adk-engineer` now records a generalised, redacted note
+on the user's machine and offers once, at the end of the session, to open a
+prefilled GitHub issue form that the user reviews and submits; nothing is
+sent automatically and `AES_FIELD_NOTES=off` disables it. A maintainer
+triage script clusters reports without printing their prose. In two
+fresh-agent trials both tickets finished `verified_local`; the agents
+recorded three notes, none containing the client folder name, path or GCP
+project, and asked once at the end; nothing was sent. Besides the drift
+planted for the first trial, both agents independently reported a real gap:
+the instruction linter does not follow an instruction imported from another
+module. All **23 packages** pass validation and **812 tests** pass with **59
+optional SDK checks skipped**. See the
+[note](docs/research/field-feedback-2026-10-25.md), the
+[record](docs/testing/field-feedback-2026-10-25.md) and
+[what is never sent](docs/field-feedback-privacy.md).
 
 ### Durable engines that keep ADK's guardrails · 25 October 2026
 
