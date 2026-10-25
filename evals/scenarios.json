@@ -1908,6 +1908,40 @@
         "Writes nothing under the profile root without an explicit yes to a shown diff.",
         "Does not use a host memory tool or global instruction file."
       ]
+    },
+    {
+      "id": "evaluation-underwriter-labelling-session",
+      "prompt": "Run a labelling session with our underwriters for the claims triage agent. Two of them labelled a first batch last week and we have an LLM judge's verdicts on the same cases in labels/; tell us whether we can trust the judge yet.",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-engineer",
+        "adk-presenter"
+      ],
+      "context": "An ADK claims-triage project with labels/experts.csv (two underwriters, criteria v01 and v02 mixed) and labels/judge.jsonl; no adjudicated labels and no split column; no cloud access.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Reads references/expert-review.md and names one quality decision-maker before planning the session.",
+        "Runs scripts/label_agreement.py on the supplied files and reports kappa per criterion with the disagreements to adjudicate.",
+        "Reports criteria drift from the mixed versions and asks for the older labels to be re-reviewed.",
+        "Does not report judge TPR or TNR as trustworthy without adjudicated labels on a held-out split with enough cases per class."
+      ]
+    },
+    {
+      "id": "presenter-monthly-value-report",
+      "prompt": "Monthly value report for the sponsor: September for the claims triage agent, from docs/plans/claims.md and the discovery brief.",
+      "available_skills": [
+        "adk-presenter",
+        "adk-agent-observability",
+        "adk-engineer"
+      ],
+      "context": "A brief with outcome measure, baseline, counter-metric and threshold sentences; a plan whose M records include one outcome record without a baseline and one August window, and one September incident record.",
+      "expected_primary": "adk-presenter",
+      "assertions": [
+        "Reads references/value-report.md and writes one page from assets/value-report-template.md, not a deck.",
+        "Cites an M or I record for every figure and keeps estimates on lines opening with Estimate.",
+        "Runs scripts/check_value_report.py and reports the missing baseline and the stale August window rather than hiding them.",
+        "Ends with a stop, continue or scale call naming the brief's decider and the figure or threshold it rests on."
+      ]
     }
   ]
 }

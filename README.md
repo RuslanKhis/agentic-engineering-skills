@@ -624,7 +624,14 @@ one claim, one visual, the baseline drawn, a caption with sample and method.
 A helper checks the outline: a number without a source, a slide without
 evidence, or a missing stage topic fails the check; hype words, over-long
 titles or bodies, and notes that overrun the minutes are warned. The
-designer plans these presentations as goals at each phase boundary.
+designer plans these presentations as goals at each phase boundary. After
+launch it writes the sponsor's monthly one-page value report: outcome
+against the discovery baseline, counter-metric, adoption, cost per outcome
+against the estimate, incidents and thresholds fired, ending in a stop,
+continue or scale call; a second helper fails a figure that cites no
+measurement or incident record, a missing baseline, a stale measurement
+window, an assumption presented as measured, a cost per outcome without
+both its parts, and an unreported incident.
 
 **Invoke:** Claude Code `/adk-presenter` · Codex `$adk-presenter`
 
@@ -1014,7 +1021,11 @@ with offline tests for consent denial and cross-user access.
 Use this to catch regressions in tool selection, arguments, action order,
 stored effects and final answers. It helps write repeatable tests with a
 scripted model, prepare evaluation cases for a real model, or audit a report
-whose passing scores may hide missing checks. The output is a test strategy,
+whose passing scores may hide missing checks. When the labels must come
+from subject-matter experts, it plans the labelling session, the failure
+taxonomy and the versioned criteria, and its helper reports Cohen's kappa
+between two experts, the disagreements to adjudicate, criteria drift, and a
+judge's true-positive and true-negative rates on a held-out split. The output is a test strategy,
 executable tests, evaluation assets or evidence-backed findings.
 
 **Invoke:** Claude Code `/adk-agent-evaluation` · Codex `$adk-agent-evaluation`
@@ -2085,6 +2096,26 @@ produced no profile entry; ten frictions were fixed the same day. All
 SDK checks skipped**. See the
 [note](docs/research/practice-profile-2026-10-25.md) and the
 [record](docs/testing/practice-profile-2026-10-25.md).
+
+### Expert labelling and the monthly value report · 25 October 2026
+
+The evaluation skill now covers labels that do not exist yet: one quality
+decision-maker, a session with subject-matter experts that reads about 100
+traces until no new failure mode appears, versioned binary criteria with
+older labels re-reviewed as the criteria drift, and a gold set with its
+provenance. Its new helper reports Cohen's kappa between two experts, the
+disagreements to adjudicate and criteria drift, and scores a judge by
+true-positive and true-negative rates on a held-out split, refusing below
+30 cases per class. The presenter gains a `value-report` stage: one page a
+month for the sponsor, ending in a stop, continue or scale call, whose
+helper fails any figure without a measurement or incident record, a
+missing baseline, a stale window, an assumption presented as measured and
+an unreported incident. Two fresh-agent trials met all eight scenario
+assertions; their seventeen frictions were fixed the same day. All **23
+packages** pass validation and **826 tests** pass with **59 optional SDK
+checks skipped**. See the
+[note](docs/research/expert-review-and-value-report-2026-10-25.md) and the
+[record](docs/testing/expert-review-and-value-report-2026-10-25.md).
 
 ### Durable engines that keep ADK's guardrails · 25 October 2026
 

@@ -114,6 +114,14 @@ incidents, cost actuals and the handover.
 11. "Adoption and the workflow as it runs now" (`adoption`)
 12. "Next work and the decisions it needs" (`next`, `ask`)
 
+## Value report (monthly, after launch)
+
+Not a deck: one page per month for the sponsor, in the
+[value-report template](../assets/value-report-template.md), checked by
+`scripts/check_value_report.py`; see [value report](value-report.md). Its
+`M` and `I` records are the series the final-results outcome, cost and
+incident slides draw, so cite the same records there.
+
 ## Case study (public)
 
 Read the [case-study reference](case-study.md) and use its template. The

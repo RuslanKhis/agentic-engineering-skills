@@ -172,7 +172,8 @@ For a team new to ADK, multiply by about 1.5. State the multiplier once in
 the plan and apply it to every implementation goal, hands-on and review
 alike, rather than to some; presentation, labelling and stakeholder goals
 are not ADK work and keep their own estimates. For a team new to GCP, add a day for the first project, billing, IAM
-and deployment, on the first goal that needs them. A range whose high end is more than twice its low end hides an
+and deployment, on the first goal that needs them.
+When subject-matter experts supply the labels, the labelling goal's primary skill is `adk-agent-evaluation` and its expert-review reference: name the quality decision-maker, put the experts' hours and session date in the goal (the date as a calendar wait), and accept on a versioned criteria file, a gold set with provenance and an agreement report. A range whose high end is more than twice its low end hides an
 unresolved question: make that question a short discovery goal.
 
 Keep the numbers consistent. The plan's goal entry is the only source of each
