@@ -23,6 +23,7 @@ State what the model contributes and what ordinary code controls.
 | Money | <model and cloud allowance; reserve for the deliverable> |
 | Users or judge, and what they read | <builder, demo audience, colleagues, customers; demo, predictions, report, running service> |
 | Data touched and effects allowed | <synthetic / internal / personal / regulated; read only, drafts, writes, money, messages> |
+| Portability or lock-in concern | no / yes: <who raised it; what must stay movable: cloud, agent framework, model, named components; targets named> |
 | Delivery profile | proof of concept / assignment / internal tool / MVP or pilot / production, and why |
 
 Depth per concern the journey touches (build now, minimal, defer):
