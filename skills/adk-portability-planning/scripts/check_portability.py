@@ -15,33 +15,41 @@ template. The checker judges form, not the architecture. Errors (exit 1):
 - a component classification row whose Class is not ``shared logic``,
   ``replaceable adapter``, ``provider-specific by choice`` or ``expensive
   dependency``, or whose Why is empty;
-- the Dimensions section omits cloud, framework, model, service or
-  deployment, or says "not a concern" without a reason; a target cloud or a
-  listed framework that its alternatives section never names;
+- the Dimensions table lacks a row (matched on its first cell) for Cloud,
+  Agent framework (or Framework), Model, Service or Deployment, or a row
+  says "not a concern" without a reason; a target cloud or a listed
+  framework that its alternatives section never names;
 - a Sources row without an http(s) URL or a valid read date, or dated after
   ``--today``; a Sources table with no rows;
 - a Relative effort row whose effort is not small, medium, large, very large
   or unknown, or whose Drivers cell is empty;
-- a currency figure outside the Sources section, or a duration estimate
-  (hours, days, weeks, months, sprints, person-days) in a section where
+- a currency figure outside the Sources section, or, in a section where
   estimates are made (summary, strategy, phased outline, relative effort,
-  optional recommendations), on a line that cites no ``M<n>`` record and does
+  optional recommendations), a duration ("3 weeks", "3-week", "about three
+  weeks", "a couple of months", years, quarters, fortnights, sprints,
+  person-days) or a date ("Q3 2027", "March 2027", "2027-03"), whose segment
+  (a table cell, or a sentence split on ". ", "; " or ": ", with an
+  "assumption:" label kept with its clause) cites no ``M<n>`` record and does
   not say "assumption"; a provider limit such as "8-hour sessions" elsewhere
   is a fact with its source, not an estimate;
-- an overpromise ("fully portable", "seamless migration", "drop-in
-  replacement", "zero lock-in", "100% portable", "completely cloud-agnostic",
-  "no lock-in") on a line without a negation (not, never, n't, cannot, no
-  longer);
+- an overpromise ("fully portable", "seamless migration", "seamless switch",
+  "drop-in replacement", "zero lock-in", "no vendor lock-in", "100%
+  portable", "cloud-agnostic") without a negation (not, never, n't, cannot,
+  isn't, won't, no longer) within the four words before it; quoted text and
+  ``>`` blockquotes are not read, so a stakeholder's words can be quoted;
 - a fenced code block tagged hcl, terraform, tf or bicep, or holding a
-  Terraform resource, a Kubernetes manifest (``apiVersion:`` with ``kind:``)
-  or an IAM policy (``"Statement"``);
+  Terraform resource, a Bicep resource, a CloudFormation template, a
+  Kubernetes manifest (``apiVersion:`` with ``kind:``), an IAM policy
+  (``"Statement"``) or a cloud CLI command (aws, az, gcloud, kubectl,
+  terraform, eksctl, helm);
 - an optional recommendation without Rationale, Acceptance criteria and
   Specialist, or naming a specialist that is not an installed sibling skill;
 - an unfilled ``<placeholder>`` outside code spans.
 
-Warnings (exit 0): a read date or ``sources_checked`` older than 180 days, an
-expensive dependency with no exit path, an item needing re-evaluation sized
-small, a framework the reference does not cover, a template guidance comment
+Warnings (exit 0): a read date or ``sources_checked`` older than 90 days
+(the references' re-check interval), an expensive dependency with no exit
+path, a design decision (D ID) no classification row cites, an item needing
+re-evaluation sized small, a framework the reference does not cover, a template guidance comment
 left in, and IDs left unchecked because neither ``--design`` nor ``--plan``
 was given. Exit status 2 when an input cannot be read or has no front matter.
 """
@@ -80,10 +88,15 @@ EFFORT = re.compile(r"^(?:very large|small|medium|large|unknown)\b")
 DIMENSIONS = ("cloud", "framework", "model", "service", "deployment")
 TARGETS = {"aws": "AWS", "azure": "Azure"}
 # Frameworks the agent-frameworks reference covers, with the name the section must use.
-FRAMEWORKS = {"langgraph": "LangGraph", "openai-agents": "OpenAI Agents", "openai-agents-sdk": "OpenAI Agents",
-              "microsoft-agent-framework": "Agent Framework", "maf": "Agent Framework",
-              "pydantic-ai": "Pydantic AI", "strands": "Strands", "strands-agents": "Strands"}
-MAX_AGE_DAYS = 180
+PYDANTIC = ("Pydantic AI", "PydanticAI")
+FRAMEWORKS = {"langgraph": ("LangGraph",), "openai-agents": ("OpenAI Agents",), "openai-agents-sdk": ("OpenAI Agents",),
+              "microsoft-agent-framework": ("Agent Framework",), "maf": ("Agent Framework",),
+              "pydantic-ai": PYDANTIC, "pydanticai": PYDANTIC, "strands": ("Strands",),
+              "strands-agents": ("Strands",)}
+# Dimension rows, matched on the table's first cell.
+DIMENSION_ROWS = (("Cloud", "cloud"), ("Agent framework", "agent framework|framework"), ("Model", "model"),
+                  ("Service", "service"), ("Deployment", "deployment"))
+MAX_AGE_DAYS = 90   # the references' re-check interval
 
 ISO = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 ID = re.compile(r"(?<![\w/.-])([RCDGM]\d+)(?![\w-])")
@@ -98,18 +111,35 @@ PLACEHOLDER = re.compile(r"<(?!!--)(?!/?(?:br|sub|sup|b|i|em|strong|code|details
                          r"(?!https?:)[A-Za-z][^<>\n]{0,200}>", re.IGNORECASE)
 CURRENCY = re.compile(r"[$€£]\s?\d|\b(?:USD|EUR|GBP|AUD)\s?\d|\d[\d,.]*\s?(?:k|m)?\s?(?:USD|EUR|GBP|AUD)\b"
                       r"|\b\d[\d,.]*\s?(?:dollars|euros|pounds)\b", re.IGNORECASE)
-DURATION = re.compile(r"\b\d+(?:\.\d+)?(?:\s*(?:-|–|to)\s*\d+(?:\.\d+)?)?\s*"
-                      r"(?:(?:person|man|engineer|developer|dev)[- ]?)?(?:(?:working|business|calendar)\s+)?"
-                      r"(?:hours?|hrs?|days?|weeks?|wks?|months?|sprints?)\b|\b\d+(?:\.\d+)?h\b",
-                      re.IGNORECASE)
+UNIT = (r"(?:(?:person|man|engineer|developer|dev)[- ]?)?(?:(?:working|business|calendar)\s+)?"
+        r"(?:hours?|hrs?|days?|weeks?|wks?|months?|sprints?|years?|yrs?|quarters?|fortnights?)\b")
+NUMBER_WORD = r"(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|a couple of|a few)"
+DURATION = re.compile(rf"\b\d+(?:\.\d+)?(?:\s*(?:-|–|to)\s*\d+(?:\.\d+)?)?[\s-]*{UNIT}"
+                      rf"|\b{NUMBER_WORD}(?:\s*(?:-|–|to|or)\s*{NUMBER_WORD})?[\s-]+{UNIT}"
+                      r"|\b\d+(?:\.\d+)?h\b", re.IGNORECASE)
+MONTH = (r"(?:January|February|March|April|May|June|July|August|September|October|November|December"
+         r"|Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.?")
+DATE_ESTIMATE = re.compile(rf"\bQ[1-4]\s?20\d\d\b|\b{MONTH}\s+20\d\d\b|\b20\d\d-\d\d\b")
+# A dated source or read date is provenance, not a schedule.
+PROVENANCE = re.compile(r"\bsource:|\b(?:read|checked|as of)(?: on)?\s+20\d\d-", re.IGNORECASE)
+# "assumption:" or "M2:" labels the clause after the colon, so the two stay one segment.
+LABEL = re.compile(r"(?:\bassumptions?|(?<![\w/.-])M\d+)\s*:$", re.IGNORECASE)
 ASSUMPTION = re.compile(r"assumption", re.IGNORECASE)
-OVERPROMISE = re.compile(r"fully[- ]portable|seamless(?:ly)?[- ]migrat\w*|drop[- ]in[- ]replacements?|zero[- ]lock[- ]in"
-                         r"|100\s?%\s?portable|completely[- ]cloud[- ]agnostic|\bno[- ]lock[- ]in", re.IGNORECASE)
+OVERPROMISE = re.compile(r"fully[- ]portable|seamless(?:ly)?[- ](?:migrat|switch|move|swap)\w*|drop[- ]in[- ]replacements?"
+                         r"|zero[- ]lock[- ]in|100\s?%\s?portable|(?:completely[- ])?cloud[- ]agnostic"
+                         r"|\bno[- ](?:vendor[- ])?lock[- ]in", re.IGNORECASE)
+NEAR_NEGATION = re.compile(r"^(?:not|never|cannot|isn['’]t|won['’]t|\w+n['’]t)$", re.IGNORECASE)
+NEGATION_WINDOW = 4
+QUOTED = re.compile(r'"[^"\n]*"|“[^”\n]*”')
+EMAIL = re.compile(r"<[^\s<>@]+@[^\s<>@]+\.[^\s<>@]+>")
 NEGATION = re.compile(r"\b(?:not|never|cannot|no longer)\b|n['’]t\b", re.IGNORECASE)
 FORBIDDEN_TAGS = {"hcl", "terraform", "tf", "bicep"}
 FORBIDDEN_CONTENT = (
     (re.compile(r'resource\s+"(?:aws_|azurerm_|google_)'), "a Terraform resource"),
     (re.compile(r'"Statement"'), "an IAM policy document"),
+    (re.compile(r"AWSTemplateFormatVersion|Type:\s*AWS::"), "a CloudFormation template"),
+    (re.compile(r"(?m)^\s*resource \w+ '"), "a Bicep resource"),
+    (re.compile(r"(?m)^\s*\$?\s*(?:aws|az|gcloud|kubectl|terraform|eksctl|helm)\s"), "a cloud CLI command"),
 )
 K8S = (re.compile(r"(?m)^\s*apiVersion\s*:"), re.compile(r"(?m)^\s*kind\s*:"))
 EMPTY_CELL = {"", "-", "—", "–", "none", "n/a", "tbd"}
@@ -235,6 +265,29 @@ def meaningful(lines: list[tuple[int, str]]) -> bool:
     return bool(text.strip())
 
 
+def segments(raw: str) -> list[str]:
+    """Table cells, each split into sentences on ". ", "; " and ": "; a label keeps its clause."""
+    line = raw.strip()
+    parts = line.strip("|").split("|") if line.startswith("|") else [line]
+    result: list[str] = []
+    for part in parts:
+        merged: list[str] = []
+        for piece in re.split(r"(?<=[.;:])\s+", part):
+            if merged and LABEL.search(merged[-1].rstrip()):
+                merged[-1] += " " + piece
+            else:
+                merged.append(piece)
+        result.extend(merged)
+    return result
+
+
+def negated(prefix: str) -> bool:
+    """A negation among the last few words before an overpromise."""
+    words = re.findall(r"[\w'’]+", prefix)[-NEGATION_WINDOW:]
+    return any(NEAR_NEGATION.match(w) for w in words) or bool(
+        re.search(r"\bno longer\b", " ".join(words), re.IGNORECASE))
+
+
 def check_front_matter(meta, today, errors, warnings) -> dict:
     for field in FIELDS:
         if field not in meta:
@@ -335,22 +388,28 @@ def check_classification(lines, errors, warnings) -> dict[str, int]:
 
 
 def check_dimensions(lines, errors) -> None:
-    text = text_of(lines).lower()
-    for dimension in DIMENSIONS:
-        if dimension not in text:
-            errors.append(f"## Dimensions: {dimension} is not assessed; assess it or write "
-                          f"'not a concern: <reason>'")
-    for number, raw in lines:
-        for match in re.finditer(r"not a concern", raw, re.IGNORECASE):
-            rest = re.split(r"\|", raw[match.end():], maxsplit=1)[0]
-            if not re.sub(r"[\s:;,.—–*_-]", "", rest):
-                errors.append(f"line {number}: 'not a concern' needs a reason")
+    _, rows = table_rows(lines)
+    seen: set[str] = set()
+    for number, cells in rows:
+        first = re.sub(r"\s+", " ", cell(cells, 0).lower()).strip(" .:")
+        name = next((n for n, labels in DIMENSION_ROWS if re.match(rf"(?:{labels})s?\b", first)), None)
+        if name:
+            seen.add(name)
+        assessment = cell(cells, 1)
+        if assessment.lower() in EMPTY_CELL:
+            errors.append(f"line {number}: dimension {cell(cells, 0) or '(unnamed)'} has no assessment")
+        concern = re.match(r"not a concern\b(.*)", assessment, re.IGNORECASE)
+        if concern and not re.sub(r"[\s:;,.—–*_-]", "", concern.group(1)):
+            errors.append(f"line {number}: 'not a concern' needs a reason")
+    for name, _ in DIMENSION_ROWS:
+        if name not in seen:
+            errors.append(f"## Dimensions: no row for {name}; assess it or write 'not a concern: <reason>'")
 
 
 def check_names(lines, names: dict[str, str], section: str, errors) -> None:
     text = text_of(lines).lower()
-    for key, display in names.items():
-        if display.lower() not in text:
+    for key, displays in names.items():
+        if not any(d.lower() in text for d in displays):
             errors.append(f"## {section}: {key} is listed in the front matter but not assessed here")
 
 
@@ -412,7 +471,7 @@ def check_recommendations(lines, installed: set[str], errors) -> None:
             blocks.append((number, heading.group(1).strip(), []))
         elif blocks:
             blocks[-1][2].append((number, raw))
-    if not blocks and re.match(r"^\W*none\b", body[0][1].strip(), re.IGNORECASE):
+    if not blocks and re.match(r"^\W*(?:none|no recommendations)\b", body[0][1].strip(), re.IGNORECASE):
         return
     if not blocks:
         errors.append("## Optional recommendations for the current build: write 'None' or one ### block per "
@@ -454,11 +513,11 @@ def check(path: Path, design: Path | None, plan: Path | None, skills_dir: Path, 
     if "dimensions" in found:
         check_dimensions(found["dimensions"], errors)
     if "cloud alternatives" in found:
-        check_names(found["cloud alternatives"], {t: TARGETS[t] for t in front["targets"] if t in TARGETS},
+        check_names(found["cloud alternatives"], {t: (TARGETS[t],) for t in front["targets"] if t in TARGETS},
                     "Cloud alternatives", errors)
     if "agent framework alternatives" in found:
         check_names(found["agent framework alternatives"],
-                    {f: FRAMEWORKS.get(f, f) for f in front["frameworks"]}, "Agent framework alternatives", errors)
+                    {f: FRAMEWORKS.get(f, (f,)) for f in front["frameworks"]}, "Agent framework alternatives", errors)
     if "sources" in found:
         check_sources(found["sources"], today, errors, warnings)
     if "relative effort" in found:
@@ -472,26 +531,33 @@ def check(path: Path, design: Path | None, plan: Path | None, skills_dir: Path, 
     if front["goal"] and re.fullmatch(r"G\d+", front["goal"]):
         cited[front["goal"]] = meta["goal"][1]
     for value, number in meta.values():
-        for placeholder in PLACEHOLDER.findall(CODE_SPAN.sub("", value)):
+        for placeholder in PLACEHOLDER.findall(EMAIL.sub("", CODE_SPAN.sub("", value))):
             errors.append(f"line {number}: unfilled placeholder {placeholder}")
     for heading, _, lines in sections:
         in_sources = heading.lower() == "sources"
         estimates = heading.lower() in ESTIMATE_SECTIONS
         for number, raw in lines:
             prose = CODE_SPAN.sub("", raw)
-            for placeholder in PLACEHOLDER.findall(prose):
+            for placeholder in PLACEHOLDER.findall(EMAIL.sub("", prose)):
                 errors.append(f"line {number}: unfilled placeholder {placeholder}")
             for ident in ID.findall(URL.sub("", prose)):
                 if ident not in NOT_IDS:
                     cited.setdefault(ident, number)
-            figure = CURRENCY.search(raw) or (DURATION.search(raw) if estimates else None)
-            measured = any(m not in NOT_IDS for m in M_ID.findall(raw))
-            if not in_sources and figure and not measured and not ASSUMPTION.search(raw):
-                figure = figure.group(0)
-                errors.append(f"line {number}: figure {figure!r} needs a plan measurement (M<n>) on the same line "
-                              "or the word 'assumption'")
-            for match in OVERPROMISE.finditer(raw):
-                if not NEGATION.search(raw):
+            if not in_sources:
+                for segment in segments(raw):
+                    figure = CURRENCY.search(segment)
+                    if not figure and estimates:
+                        figure = DURATION.search(segment) or (
+                            None if PROVENANCE.search(segment) else DATE_ESTIMATE.search(segment))
+                    measured = any(m not in NOT_IDS for m in M_ID.findall(segment))
+                    if figure and not measured and not ASSUMPTION.search(segment):
+                        errors.append(f"line {number}: figure {figure.group(0)!r} needs a plan measurement (M<n>) "
+                                      "or the word 'assumption' in the same cell or sentence")
+            if raw.lstrip().startswith(">"):
+                continue
+            unquoted = QUOTED.sub('""', raw)
+            for match in OVERPROMISE.finditer(unquoted):
+                if not negated(unquoted[:match.start()]):
                     errors.append(f"line {number}: overpromise {match.group(0)!r}; state the remaining "
                                   "provider-specific dependencies instead")
     for number, info, content in fences:
@@ -521,6 +587,13 @@ def check(path: Path, design: Path | None, plan: Path | None, skills_dir: Path, 
         for ident, number in sorted(cited.items(), key=lambda item: item[1]):
             if ident not in known:
                 errors.append(f"line {number}: cites {ident}, which neither the design nor the plan contains")
+    if design is not None and design.is_file() and "component classification" in found:
+        _, rows = table_rows(found["component classification"])
+        classified = {i for _, cells in rows for i in ID.findall(" ".join(cells))}
+        decisions = {i for i in ID.findall(read(design)) if i.startswith("D")}
+        for ident in sorted(decisions - classified, key=lambda i: int(i[1:])):
+            warnings.append(f"{ident} is cited by no Component classification row; classify it or say in "
+                            "Baseline architecture why it is out of scope")
 
     summary = {"file": str(path), "ok": not errors, "targets": front["targets"], "frameworks": front["frameworks"],
                "classes": counts, "errors": errors, "warnings": warnings}

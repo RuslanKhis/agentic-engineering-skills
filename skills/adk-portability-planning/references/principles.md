@@ -94,19 +94,19 @@ facts in the row: the seam in "Exit path", the class from the switch.
 
 | ADK component | Usual class | Why; port or exit path |
 | --- | --- | --- |
-| Tool function bodies | Shared logic | Pass SDK clients in rather than creating them in the body; `FunctionTool` is ADK's seam. Gemini-tuned docstrings still need re-evaluation on another model. |
-| Postgres records (Cloud SQL, AlloyDB) | Replaceable adapter | Standard SQL behind a repository module; the Cloud SQL connector and IAM database auth are configuration. Data moves by dump and restore, sized by volume. AlloyDB-only extensions push it to class 3. |
-| ADK sessions | Adapter in code; data cost varies | `BaseSessionService` is abstract (`create_session`, `get_session`, `list_sessions`, `delete_session`, checked on 1.26.0). `DatabaseSessionService` runs on Postgres, MySQL or SQLite. `VertexAiSessionService` history lives in Agent Platform; its export path is `unverified`. |
-| Memory Bank | Expensive | `BaseMemoryService` seam exists, but Google generates the memories. Another store extracts different ones: regenerate, re-evaluate or discard them, and carry consent and erasure records across. |
-| RAG corpus (RAG Engine, Agent Search) | Expensive | Source documents move; the index and embeddings do not. Re-chunk, re-embed, re-run retrieval evaluation. |
-| BigQuery SQL | Class 3 with a few reviewed templates; expensive with volume, BigQuery ML or Agent Analytics | GoogleSQL dialect, dataset IAM, bytes-billed cost guards. Drivers: template count, data volume, egress. |
-| Gemini grounding (`google_search`) | Expensive | "Only compatible with Gemini 2 models", used by itself on its agent, and Search suggestions must be displayed (adk.dev). A replacement search tool returns different results under different terms. |
-| The model | Cheap seam, expensive switch | Connectors (native Claude and OpenAI, LiteLLM, Ollama, vLLM) exist. Google's own migration guide asks for code, model-performance and load regression tests even between Gemini versions. |
-| IAM and workload identity | Provider-specific by choice | Do not wrap it. The exit re-maps principals and roles and repeats the security review: the policy facet. |
-| OTel telemetry | Adapter by standard | OTel SDK with an OTLP exporter set in configuration. Cloud Trace dashboards, alerts and BigQuery Agent Analytics are class 3 and get rebuilt. |
-| Evaluation sets | Shared asset; baselines expensive | Cases kept as data move. Scores belong to a model and judge pair, so a move means re-baselining; a judge on Gemini is a dependency of its own. |
-| MCP and A2A boundaries | Adapter by protocol | Interoperability through open specifications; server-side auth stays provider-specific. |
-| Hosting | Cloud Run or GKE class 3; Agent Runtime expensive | A container image rehosts. Agent Runtime's managed sessions, memory and runtime features do not. |
+| Tool function bodies | shared logic | Pass SDK clients in rather than creating them in the body; `FunctionTool` is ADK's seam. Gemini-tuned docstrings still need re-evaluation on another model. |
+| Postgres records (Cloud SQL, AlloyDB) | replaceable adapter | Standard SQL behind a repository module; the Cloud SQL connector and IAM database auth are configuration. Data moves by dump and restore, sized by volume. AlloyDB-only extensions push it to class 3. |
+| ADK sessions | replaceable adapter; data cost varies by service | `BaseSessionService` is abstract (`create_session`, `get_session`, `list_sessions`, `delete_session`, checked on 1.26.0). `DatabaseSessionService` runs on Postgres, MySQL or SQLite. `VertexAiSessionService` history lives in Agent Platform; its export path is `unverified`. |
+| Memory Bank | expensive dependency | `BaseMemoryService` seam exists, but Google generates the memories. Another store extracts different ones: regenerate, re-evaluate or discard them, and carry consent and erasure records across. |
+| RAG corpus (RAG Engine, Agent Search) | expensive dependency | Source documents move; the index and embeddings do not. Re-chunk, re-embed, re-run retrieval evaluation. |
+| BigQuery SQL | provider-specific by choice; expensive dependency with volume, BigQuery ML or Agent Analytics | GoogleSQL dialect, dataset IAM, bytes-billed cost guards. Drivers: template count, data volume, egress. |
+| Gemini grounding (`google_search`) | expensive dependency | "Only compatible with Gemini 2 models", used by itself on its agent, and Search suggestions must be displayed (adk.dev). A replacement search tool returns different results under different terms. |
+| The model | expensive dependency; cheap seam, expensive switch | Connectors (native Claude and OpenAI, LiteLLM, Ollama, vLLM) exist. Google's own migration guide asks for code, model-performance and load regression tests even between Gemini versions. |
+| IAM and workload identity | provider-specific by choice | Do not wrap it. The exit re-maps principals and roles and repeats the security review: the policy facet. |
+| OTel telemetry | replaceable adapter; by standard | OTel SDK with an OTLP exporter set in configuration. Cloud Trace dashboards, alerts and BigQuery Agent Analytics are class 3 and get rebuilt. |
+| Evaluation sets | shared logic; the cases move, baselines are re-run | Cases kept as data move. Scores belong to a model and judge pair, so a move means re-baselining; a judge on Gemini is a dependency of its own. |
+| MCP and A2A boundaries | replaceable adapter; by protocol | Interoperability through open specifications; server-side auth stays provider-specific. |
+| Hosting | provider-specific by choice; Cloud Run or GKE (Agent Runtime is an expensive dependency) | A container image rehosts. Agent Runtime's managed sessions, memory and runtime features do not. |
 
 ## When an abstraction pays
 

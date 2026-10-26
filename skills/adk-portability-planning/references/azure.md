@@ -33,7 +33,7 @@ Ratings: straightforward, moderate, expensive.
 | Object storage: Cloud Storage | Blob Storage | GA | Signed URLs become SAS tokens or RBAC | ADK ships `GcsArtifactService`; no Azure artifact service, so a custom `BaseArtifactService` over Blob | straightforward (data) / moderate (ADK artifacts) |
 | Retrieval: RAG Engine, Agent Search, vector search | Azure AI Search; Foundry IQ knowledge bases on top (partly GA); Foundry file search; pgvector or Cosmos DB vectors | Mixed | Foundry IQ's GA scope depends on the Search REST API version; portal preview only. File search through a toolbox in a hosted agent has no user isolation: the project shares the vector stores | ADK's Vertex AI RAG and Search tools are lost; re-chunk, re-embed with a new model, re-evaluate retrieval | expensive |
 | Async work: Cloud Tasks, Pub/Sub | Service Bus queues and topics; Event Grid; Storage queues; Durable Functions | GA | Service Bus is pull with long polling, duplicate detection, sessions for FIFO, dead-lettering; Storage queues cap messages at 64 KB and can reorder; Durable Functions replays orchestrators from history | Push to an HTTP target becomes a consumer or Functions trigger; idempotency design carries, delivery wiring does not | moderate |
-| Observability: Cloud Logging, Trace, Monitoring with OTel | Azure Monitor and Application Insights via the Microsoft OpenTelemetry Distro (`microsoft-opentelemetry`); Foundry tracing | GA for prompt and hosted agents; workflow and external agents preview | Exports to Azure Monitor, any OTLP endpoint or Agent 365; Foundry uses the OTel GenAI conventions, themselves at Development status | ADK spans travel; dashboards, alerts, log queries and BigQuery Agent Analytics rebuilt; Foundry views of ADK spans `unverified` | moderate |
+| Observability: Cloud Logging, Trace, Monitoring with OTel | Azure Monitor and Application Insights via the Microsoft OpenTelemetry Distro (`microsoft-opentelemetry`); Foundry tracing | Azure Monitor GA; Foundry tracing for prompt and hosted agents reported GA on one page and preview in a Microsoft post (`unverified`); workflow and external agents preview | Exports to Azure Monitor, any OTLP endpoint or Agent 365; Foundry uses the OTel GenAI conventions, themselves at Development status | ADK spans travel; dashboards, alerts, log queries and BigQuery Agent Analytics rebuilt; Foundry views of ADK spans `unverified` | moderate |
 | Safety: Model Armor, Sensitive Data Protection | Azure AI Content Safety (Prompt Shields GA, groundedness preview); Foundry guardrails; Azure Language PII; Purview DSPM for AI | Mixed | Content filters default-on for serverless deployments only through the Azure OpenAI SDK and v1 APIs; other paths need explicit Content Safety calls; Purview needs user-context Entra tokens | Detectors, thresholds and redaction templates do not map one to one; re-run adversarial and PII suites | moderate |
 | CI and registry | GitHub Actions or Azure DevOps; Azure Container Registry | GA | Hosted agents pull from ACR; Foundry projects created before 25 June 2026 need the registry's public endpoint | Deploy steps, registry paths and CI federation to Entra (not read, `unverified`) | straightforward |
 
@@ -41,14 +41,16 @@ Ratings: straightforward, moderate, expensive.
 
 ADK says an agent can be deployed to "any environment that supports
 container images", so Container Apps or AKS can host an unchanged ADK
-FastAPI app. ADK's LiteLLM connector (`litellm>=1.84`; the ADK docs warn
-about the compromised LiteLLM releases 1.82.7 and 1.82.8) takes
+FastAPI app. ADK's LiteLLM connector takes
 `provider/model` strings. LiteLLM's Azure provider uses
 `azure/<deployment-name>` and accepts Entra tokens through
 `azure_ad_token_provider` from `DefaultAzureCredential`, so keyless calls from
 a managed identity look feasible. ADK's docs do not mention Azure OpenAI or
 Foundry, so this path is `unverified` end to end; tool calling, streaming and
-structured output need their own test. ADK 2.13.0 also ships
+structured output need their own test. ADK 2.13.0 pins
+`litellm>=1.84,<1.106.3` ("1.107.0 was a compromised release; raise only
+after checking the new release is clean"), and the ADK docs also warn about
+the compromised releases 1.82.7 and 1.82.8: keep the cap. ADK 2.13.0 also ships
 `AzureOpenAIResponsesLlm` in `google.adk.integrations.openai` (see
 [agent frameworks](agent-frameworks.md#model-portability-within-adk)).
 
@@ -120,8 +122,8 @@ Runtime and Memory Bank pull towards ADK on GCP. Treat "move the cloud" and
 - Purview DSPM coverage of Foundry agents (pages conflict).
 - Whether Azure Language's synthetic-replacement redaction is GA (pages
   conflict).
-- The exact date of Agent Framework 1.0 (see the frameworks reference for
-  the PyPI date); Agent ID licensing outside Agent 365.
+- Foundry tracing status for hosted agents (GA or preview; sources conflict).
+- Agent ID licensing outside Agent 365.
 - Azure AI Search billing shape (provisioned tiers), not read.
 
 ## Sources
@@ -155,7 +157,8 @@ summary, not a full read.
 | Azure Monitor OpenTelemetry | https://learn.microsoft.com/en-us/azure/azure-monitor/app/opentelemetry-enable |
 | Content Safety; Language PII (search summary) | https://learn.microsoft.com/en-us/azure/ai-services/content-safety/overview ; https://learn.microsoft.com/en-us/azure/ai-services/language-service/whats-new |
 | Purview and Foundry (search summary) | https://learn.microsoft.com/en-us/purview/ai-azure-foundry ; https://learn.microsoft.com/en-us/azure/defender-for-cloud/ai-onboarding |
-| Agent Framework overview; 1.0 post (search summary) | https://learn.microsoft.com/en-us/agent-framework/overview/ ; https://devblogs.microsoft.com/agent-framework/microsoft-agent-framework-version-1-0/ |
+| Agent Framework overview; 1.0 GA (devblog 2026-04-03; PyPI `agent-framework-core` 1.0.0 uploaded 2026-04-02) | https://learn.microsoft.com/en-us/agent-framework/overview/ ; https://devblogs.microsoft.com/agent-framework/microsoft-agent-framework-version-1-0/ ; https://pypi.org/pypi/agent-framework-core/1.0.0/json |
 | ADK deploy, models, LiteLLM, sessions, memory, artifacts, Google Search | https://adk.dev/deploy/ ; https://adk.dev/agents/models/ ; https://adk.dev/agents/models/litellm/ ; https://adk.dev/sessions/session/ ; https://adk.dev/sessions/memory/ ; https://adk.dev/artifacts/ ; https://adk.dev/integrations/google-search/ |
 | LiteLLM Azure provider | https://docs.litellm.ai/docs/providers/azure/ |
+| ADK 2.13.0 LiteLLM pin and comment | https://raw.githubusercontent.com/google/adk-python/v2.13.0/pyproject.toml |
 | BigQuery pricing models (search summary) | https://cloud.google.com/bigquery/pricing ; https://cloud.google.com/bigquery/docs/editions-intro |

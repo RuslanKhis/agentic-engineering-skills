@@ -2271,7 +2271,7 @@
         "The baseline design is still GCP and Google ADK; the concern changes no hosting, framework or model decision.",
         "Records the concern, who raised it and AWS as the named target in the design's scope-gate table row \"Portability or lock-in concern\".",
         "Adds one goal of type portability with Primary skill: adk-portability-planning and blocked_by: [], and no build goal depends on it.",
-        "Writes its ticket with acceptance items tagged (deliverable) that cite docs/architecture/<topic>.md and docs/plans/<topic>.md, and lists docs/portability/<topic>.md in touches.",
+        "Writes its ticket with type portability and acceptance items tagged (deliverable), its design and plan fields and verification command naming docs/architecture/<topic>.md and docs/plans/<topic>.md, and docs/portability/<topic>.md in touches.",
         "Does not write the portability assessment itself during the design conversation.",
         "Adds no adapters, abstraction layers or portability work to any other goal."
       ]
@@ -2294,7 +2294,7 @@
         "Classifies each component as shared logic, a replaceable adapter, provider-specific by choice or an expensive dependency, citing the design's IDs.",
         "Assesses cloud, agent framework, model, service and deployment portability separately, each assessed or marked not a concern with a reason.",
         "Compares the AWS and Azure alternatives and a small set of agent frameworks, with ADK first, citing official sources with their read dates.",
-        "Gives relative effort as small, medium or large with stated drivers, and invents no hours, prices or dates.",
+        "Gives relative effort as small, medium, large, very large or unknown with stated drivers, sizing by the largest driver, and invents no hours, prices or dates.",
         "Runs check_portability.py with --design and --plan and fixes its errors before finishing.",
         "Leaves the design and every other goal unchanged and writes no application code, Terraform, IAM policy or Kubernetes manifest."
       ]

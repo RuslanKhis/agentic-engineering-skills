@@ -18,7 +18,7 @@ status: draft
 - **Recommendation:** keep the GCP and ADK build as designed and hold an exit plan. Nothing in the concern needs a second provider now: the CTO asked what a later move would cost, not for the assistant to run on two clouds.
 - **Google-specific on purpose:** Gemini with `output_schema` (D2), RAG Engine retrieval (D4), IAP with Workspace sign-in (D7), Model Armor (D9) and Cloud Trace dashboards (D8). Each was chosen for its value, and none is wrapped in a home-made interface.
 - **Boundaries kept:** the ones ADK and the design already have: `DatabaseSessionService` on standard PostgreSQL (D3), the claims client passed into the write tool (D5), and OpenTelemetry instrumentation (D8). One cheap improvement is proposed below, pending a designer checkpoint.
-- **What a move would involve:** a model change with a full re-baseline of the evaluation set (M1), because Gemini is not offered on Bedrock and was not found in the Foundry catalogue; re-chunking and re-embedding the policy corpus with retrieval re-evaluated; re-mapping identity and access; and rebuilding dashboards and safety screening. The containers, Postgres data and tool code move with little change. A move is not cheap, and the assessment does not claim the assistant is fully portable.
+- **What a move would involve:** a model change with a full re-baseline of the evaluation set (M1), because Gemini is not offered on Bedrock and was not found in the Foundry catalogue; re-chunking and re-embedding the policy corpus with retrieval re-evaluated; re-mapping identity and access; and rebuilding dashboards and safety screening. The containers, Postgres data and tool code move with little change. A move is not cheap, and the assistant is not fully portable.
 
 ## Concern and scope
 
@@ -171,7 +171,8 @@ None of these is a ticket until a designer checkpoint approves it.
 | Claim or topic | URL | Read on |
 | --- | --- | --- |
 | Gemini not offered on Bedrock (Gemma only) | https://docs.aws.amazon.com/bedrock/latest/userguide/model-cards.html | 2026-10-26 |
-| AgentCore Runtime runs ADK; ARM64 contract | https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/using-any-agent-framework.html | 2026-10-26 |
+| AgentCore Runtime runs ADK | https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/using-any-agent-framework.html | 2026-10-26 |
+| AgentCore Runtime ARM64 container contract | https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-service-contract.html | 2026-10-26 |
 | Bedrock Knowledge Bases vector stores | https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup.html | 2026-10-26 |
 | Foundry Models catalogue | https://learn.microsoft.com/en-us/azure/foundry/concepts/foundry-models-overview | 2026-10-26 |
 | Foundry hosted agents | https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/hosted-agents | 2026-10-26 |

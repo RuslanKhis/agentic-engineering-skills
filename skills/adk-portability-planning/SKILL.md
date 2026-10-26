@@ -64,7 +64,7 @@ the discovery brief, when it exists, for stakeholders and their calendar.
 When code exists, inspect it for the provider dependencies it actually has:
 
 ```bash
-grep -rnE "from google\.cloud|import vertexai|VertexAi[A-Za-z]+|GcsArtifactService|google_search|bigquery|firestore|LiteLlm" --include=*.py .
+grep -rnE "from google\.cloud|import vertexai|from vertexai|from google import genai|google\.genai|google\.adk\.tools\.(vertex|google_search)|VertexAi[A-Za-z]+|GcsArtifactService|google_search|bigquery|firestore|LiteLlm" --include=*.py .
 ```
 
 Mark each baseline fact `inspected` or `design-only`. A design that says
@@ -143,8 +143,9 @@ ranking).
 Recommend the least work that answers the concern, usually: keep the build,
 hold the exit plan, name the trigger that would reopen it. State the
 trade-offs and why multicloud now is or is not justified. The checker rejects
-"fully portable", "drop-in replacement" and similar phrases unless the line
-negates them.
+"fully portable", "drop-in replacement", "cloud-agnostic" and similar phrases
+unless a negation comes just before them; quote a stakeholder's own words in
+quotation marks.
 
 ## Phased outline
 
@@ -161,8 +162,8 @@ One row per item: `small`, `medium`, `large`, `very large` or `unknown`
 assumptions. Size by the largest driver, not the sum. Any item needing
 re-evaluation (model, framework, retrieval) is at least medium. Show
 contractual, compliance or client re-approval as a separate schedule risk.
-Write hours, days or money only when a plan record supports them (`M2`) or
-the line says `assumption`.
+Write durations, dates or money only when a plan record (`M2`) or the word
+`assumption` sits in the same cell or sentence.
 
 ## Optional recommendations
 

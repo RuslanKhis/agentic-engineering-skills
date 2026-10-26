@@ -46,7 +46,10 @@ ADK's model docs list a `LiteLlm` connector but no ADK page mentions
 Bedrock. LiteLLM's docs cover `bedrock/` and `bedrock/converse/` routes, tool
 calling and `response_format` (emulated for some models with a forced tool
 call). **ADK on Bedrock through `LiteLlm` is plausible but not documented by
-ADK and not tested (`unverified`).** Known `LiteLlm` issues: reasoning tokens
+ADK and not tested (`unverified`).** ADK 2.13.0 pins
+`litellm>=1.84,<1.106.3` ("1.107.0 was a compromised release; raise only
+after checking the new release is clean"), and the ADK docs warn about the
+compromised 1.82.7 and 1.82.8 releases: keep the cap. Known `LiteLlm` issues: reasoning tokens
 counted twice and a changed `num_retries` meaning.
 
 What ADK loses or must replace on AWS:
@@ -164,4 +167,5 @@ summary, not a full read of the page.
 | Agent Runtime quickstart | https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/runtime/quickstart-adk |
 | Agent Platform context cache (search summary) | https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/context-cache/context-cache-overview |
 | LiteLLM Bedrock provider | https://docs.litellm.ai/docs/providers/bedrock |
+| ADK 2.13.0 LiteLLM pin and comment | https://raw.githubusercontent.com/google/adk-python/v2.13.0/pyproject.toml |
 | Strands model providers | https://strandsagents.com/latest/documentation/docs/user-guide/concepts/model-providers/ |

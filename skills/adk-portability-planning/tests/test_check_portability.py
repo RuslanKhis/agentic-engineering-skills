@@ -163,7 +163,7 @@ class Classification(unittest.TestCase):
         text = replace("| Deployment | Not a concern: one Cloud Run container with no Agent Runtime features, so the "
                        "deployment rehosts as a container. |", "| Rollout | Not a concern: |")
         result = run(text)
-        self.assertIn("## Dimensions: deployment is not assessed", result.stdout)
+        self.assertIn("## Dimensions: no row for Deployment", result.stdout)
         self.assertIn("'not a concern' needs a reason", result.stdout)
 
 
@@ -211,7 +211,7 @@ class Citations(unittest.TestCase):
         result = run(replace("| https://adk.dev/sessions/session/ | 2026-10-26 |",
                              "| https://adk.dev/sessions/session/ | 2026-01-05 |"))
         self.assertEqual(result.returncode, 0, result.stdout)
-        self.assertIn("over 180 days old", result.stdout)
+        self.assertIn("over 90 days old", result.stdout)
 
 
 class Figures(unittest.TestCase):
@@ -345,6 +345,166 @@ class Unreadable(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertIn("no front matter", result.stderr)
 
+
+STRATEGY = "Keep the current build and record this exit plan;"
+
+
+class ReviewEstimates(unittest.TestCase):
+    """Review findings: estimates hide in hyphens, words, dates and other cells."""
+
+    def assert_figure(self, text, figure):
+        result = run(replace(STRATEGY, f"Keep the current build and record this exit plan, {text};"))
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn(f"figure {figure!r}", result.stdout)
+
+    def test_hyphenated_units(self):
+        self.assert_figure("after a 3-week spike", "3-week")
+        self.assert_figure("with a 2-week window", "2-week")
+
+    def test_years_quarters_fortnights(self):
+        self.assert_figure("over 2 years", "2 years")
+        self.assert_figure("within 1 quarter", "1 quarter")
+        self.assert_figure("in 3 fortnights", "3 fortnights")
+
+    def test_number_words(self):
+        self.assert_figure("in about three weeks", "three weeks")
+        self.assert_figure("after a couple of months", "a couple of months")
+        self.assert_figure("in a few sprints", "a few sprints")
+        self.assert_figure("a twelve-month programme", "twelve-month")
+
+    def test_invented_dates_in_estimate_sections(self):
+        self.assert_figure("cutting over in Q3 2027", "Q3 2027")
+        self.assert_figure("cutting over by March 2027", "March 2027")
+        self.assert_figure("cutting over by 2027-03", "2027-03")
+
+    def test_dates_outside_estimate_sections_pass(self):
+        text = replace("- Identity (D7, C3):", "- The EU Data Act applies from January 2027. Identity (D7, C3):")
+        self.assertEqual(run(text).returncode, 0, run(text).stdout)
+
+    def test_assumption_in_another_cell_does_not_clear_a_figure(self):
+        result = run(replace("| Rehost container and sessions | small | One adapter contract test; dump and restore |",
+                             "| Rehost container and sessions | small | One adapter contract test taking 3 weeks |"))
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("figure '3 weeks'", result.stdout)
+
+    def test_assumption_in_another_sentence_does_not_clear_a_figure(self):
+        self.assert_figure("which takes 6 weeks. The rest is an assumption", "6 weeks")
+
+    def test_assumption_label_covers_its_clause(self):
+        text = replace(STRATEGY, "Keep the current build and record this exit plan (assumption: a 6-week move);")
+        self.assertEqual(run(text).returncode, 0, run(text).stdout)
+
+
+class ReviewOverpromise(unittest.TestCase):
+    def test_negation_must_be_near(self):
+        result = run(replace("Running on two clouds now",
+                             "This is not what we expect, but the design is fully portable. Running on two clouds now"))
+        self.assertIn("overpromise 'fully portable'", result.stdout)
+
+    def test_more_negations(self):
+        for text in ("Bedrock won't be a drop-in replacement", "Bedrock isn't a drop-in replacement"):
+            with self.subTest(text=text):
+                self.assertEqual(run(replace("Running on two clouds now", text + "; running on two clouds now"))
+                                 .returncode, 0)
+
+    def test_new_phrases(self):
+        for phrase in ("no vendor lock-in", "a cloud-agnostic design", "a seamless switch", "seamlessly move"):
+            with self.subTest(phrase=phrase):
+                result = run(replace("Running on two clouds now", f"It gives {phrase}; running on two clouds now"))
+                self.assertIn("overpromise", result.stdout)
+
+    def test_not_cloud_agnostic_passes(self):
+        text = replace("Running on two clouds now", "The design is not cloud-agnostic; running on two clouds now")
+        self.assertEqual(run(text).returncode, 0, run(text).stdout)
+
+    def test_quoted_stakeholder_words_pass(self):
+        straight = replace("Running on two clouds now", 'The board asked for "zero lock-in"; running on two clouds now')
+        self.assertEqual(run(straight).returncode, 0, run(straight).stdout)
+        curly = replace("Running on two clouds now", "The board asked for \u201cno vendor lock-in\u201d; running on two clouds now")
+        self.assertEqual(run(curly).returncode, 0, run(curly).stdout)
+        quote = replace("## Concern and scope\n", "## Concern and scope\n\n> Can we have zero lock-in?\n")
+        self.assertEqual(run(quote).returncode, 0, run(quote).stdout)
+
+
+class ReviewDimensions(unittest.TestCase):
+    def test_dimension_needs_its_own_row(self):
+        text = replace("| Deployment | Not a concern: one Cloud Run container with no Agent Runtime features, so the "
+                       "deployment rehosts as a container. |",
+                       "| Rollout | Assessed: the deployment rehosts as a container. |")
+        result = run(text)
+        self.assertEqual(result.returncode, 1, result.stdout)
+        self.assertIn("## Dimensions: no row for Deployment", result.stdout)
+
+    def test_framework_row_label_accepted(self):
+        text = replace("| Agent framework | Assessed:", "| Framework | Assessed:")
+        self.assertEqual(run(text).returncode, 0, run(text).stdout)
+
+    def test_not_a_concern_cell_needs_reason(self):
+        line = next(l for l in ASSESSMENT.splitlines() if l.startswith("| Deployment |"))
+        result = run(replace(line, "| Deployment | Not a concern |"))
+        self.assertIn("'not a concern' needs a reason", result.stdout)
+
+
+class ReviewCoverage(unittest.TestCase):
+    def test_uncited_design_decision_warns(self):
+        design = DESIGN.replace("## Open decisions", "| D10 | C1 | Weekly export | Audit | — | Export test |\n\n## Open decisions")
+        result = run(ASSESSMENT, design=design)
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertIn("D10 is cited by no Component classification row", result.stdout)
+        self.assertNotIn("D9 is cited by no", result.stdout)
+
+
+class ReviewCommands(unittest.TestCase):
+    def fence(self, block):
+        return run(replace("## Open questions\n", "## Open questions\n\n" + block + "\n"))
+
+    def test_cloudformation(self):
+        result = self.fence("```yaml\nAWSTemplateFormatVersion: '2010-09-09'\nResources: {}\n```\n")
+        self.assertIn("CloudFormation", result.stdout)
+        result = self.fence("```yaml\nResources:\n  Q:\n    Type: AWS::SQS::Queue\n```\n")
+        self.assertIn("CloudFormation", result.stdout)
+
+    def test_untagged_bicep(self):
+        result = self.fence("```\nresource app 'Microsoft.App/containerApps@2024-03-01' = {}\n```\n")
+        self.assertIn("Bicep", result.stdout)
+
+    def test_cloud_cli_commands(self):
+        for command in ("aws ecs create-service --cluster triage", "$ az containerapp up -n triage",
+                        "gcloud run deploy triage", "kubectl apply -f app.yaml", "terraform apply",
+                        "eksctl create cluster", "helm install triage ./chart"):
+            with self.subTest(command=command):
+                result = self.fence(f"```bash\n{command}\n```\n")
+                self.assertEqual(result.returncode, 1, result.stdout)
+                self.assertIn("cloud CLI command", result.stdout)
+
+    def test_ordinary_block_passes(self):
+        self.assertEqual(self.fence("```text\nclassify -> retrieve -> draft\n```\n").returncode, 0)
+
+
+class ReviewFalsePositives(unittest.TestCase):
+    def test_no_recommendations_sentence(self):
+        start = ASSESSMENT.index("None of these is a ticket")
+        end = ASSESSMENT.index("## Open questions")
+        result = run(ASSESSMENT[:start] + "No recommendations.\n\n" + ASSESSMENT[end:])
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+    def test_pydanticai_alias(self):
+        text = replace("frameworks: [langgraph, microsoft-agent-framework, pydantic-ai]",
+                       "frameworks: [langgraph, microsoft-agent-framework, pydanticai]")
+        text = text.replace("| Pydantic AI |\n", "| PydanticAI |\n", 1)
+        result = run(text)
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertNotIn("not in the reference", result.stdout)
+
+    def test_email_is_not_a_placeholder(self):
+        text = replace("(CTO; it decides whether", "(CTO, <cto@insurer.example>; it decides whether")
+        self.assertEqual(run(text).returncode, 0, run(text).stdout)
+
+    def test_ninety_day_freshness(self):
+        result = run(replace("| https://adk.dev/sessions/session/ | 2026-10-26 |",
+                             "| https://adk.dev/sessions/session/ | 2026-07-20 |"))
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertIn("over 90 days old", result.stdout)
 
 if __name__ == "__main__":
     unittest.main()

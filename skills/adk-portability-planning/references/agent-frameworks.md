@@ -16,9 +16,9 @@ Framework ship weekly or faster.
 | --- | --- | --- | --- | --- | --- |
 | Google ADK (baseline) | `google-adk` | 2.13.0, 2026-10-23 | Apache-2.0 | GA since 1.0.0 (2025-05-20); 2.0.0 on 2026-05-19 | The primary build |
 | LangGraph | `langgraph` (+ `langchain` for `create_agent`) | 1.2.17, 2026-10-24 | MIT; the Agent Server runtime (`langgraph-api`) is Elastic-2.0 | GA since 1.0.0 (2025-10-17) | Most direct graph-and-checkpoint alternative; managed hosting via LangSmith on GCP or AWS |
-| OpenAI Agents SDK | `openai-agents` | 0.24.0, 2026-10-15 | MIT | 0.x: minor versions may break public APIs | Handoff-centred, OpenAI-first; strongest durable-engine coverage |
+| OpenAI Agents SDK | `openai-agents` | 0.24.0, 2026-10-15 | MIT | 0.x: minor versions may break public APIs | Handoff-centred, OpenAI-first; strongest third-party durable-engine coverage (a Stable Temporal plugin) |
 | Microsoft Agent Framework (MAF) | `agent-framework` | 1.23.0, 2026-10-22 | MIT | Core GA 1.0.0 on 2026-04-02; many connectors beta | Azure counterpart; successor to Semantic Kernel and AutoGen |
-| Pydantic AI | `pydantic-ai` | 2.61.0, 2026-10-24 | MIT | GA; V2 since 2026-06-23; V1 gets security fixes for at least six months | Provider-neutral plain Python; most durable-engine integrations |
+| Pydantic AI | `pydantic-ai` | 2.61.0, 2026-10-24 | MIT | GA; V2 since 2026-06-23; V1 gets security fixes for at least six months | Provider-neutral plain Python; first-party durable-engine integrations (Temporal, DBOS, Prefect, Restate, Airflow) |
 | AWS Strands Agents (short row) | `strands-agents` | 1.62.0, 2026-10-21 | Apache-2.0 | GA since 1.0.0 (2025-07-15) | Answers "could this run on AWS"; no new feature shape |
 
 **Why these.** LangGraph, the OpenAI Agents SDK, MAF and Pydantic AI cover
@@ -132,9 +132,11 @@ Checked against the `google-adk` 2.13.0 source and adk-docs `cc53b6c`:
   `thinking_level`; use `AnthropicGenerateContentConfig.effort`.
 - **`LiteLlm`.** `openai/`, `azure/`, `anthropic/`, `bedrock/`, `vertex_ai/`,
   `ollama_chat/`, `mistral/` and similar strings route to `LiteLlm`. ADK
-  requires `litellm>=1.84`, and 2.13.0 caps it below 1.106.3. **The adk-docs
-  page carries an advisory about the compromised LiteLLM 1.82.7 and 1.82.8
-  releases (2026-03-24): pin and verify the package.** Known accounting gaps:
+  2.13.0's `pyproject.toml` pins `litellm>=1.84,<1.106.3`, commented "1.107.0
+  was a compromised release; raise only after checking the new release is
+  clean". **The adk-docs page also carries an advisory about the compromised
+  LiteLLM 1.82.7 and 1.82.8 releases (2026-03-24): keep the cap, pin and
+  verify the package.** Known accounting gaps:
   reasoning tokens counted twice, a changed `num_retries` meaning.
 - **Local models.** Ollama (`ollama_chat/…`, never `ollama/…`) and vLLM
   (`hosted_vllm/…`) run through `LiteLlm` with tool calling enabled on the
@@ -174,6 +176,7 @@ All read 2026-10-26.
 | Topic | URL (pin) |
 | --- | --- |
 | ADK source | https://github.com/google/adk-python (tag v2.13.0, `d68ca85`) |
+| ADK 2.13.0 LiteLLM pin and comment | https://raw.githubusercontent.com/google/adk-python/v2.13.0/pyproject.toml |
 | ADK docs | https://github.com/google/adk-docs (`cc53b6c`); published at https://adk.dev/agents/models/ |
 | LangChain and LangGraph docs | https://github.com/langchain-ai/docs (`4506df5`) |
 | LangGraph release | https://github.com/langchain-ai/langgraph (1.2.17, `4c52e12`) |
