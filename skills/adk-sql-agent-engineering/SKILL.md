@@ -7,7 +7,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "10"
   last-tested: "2026-09-16"
-  version: "2026.10.26.2"
+  version: "2026.10.26.3"
 ---
 
 # ADK SQL agent engineering

@@ -3,9 +3,9 @@
 One section per tagged release, newest first. Pin a release with
 `npx skills@latest add RuslanKhis/agentic-engineering-skills#v<version> --skill '*'`.
 
-## Unreleased
+## 2026.10.26.3 · 26 October 2026
 
-Changes since v2026.10.26.2, to fold into the next release:
+Changes since v2026.10.26.2:
 
 - **New skill: `adk-portability-planning`.** The toolkit still builds
   production Google ADK applications on GCP, and that stays the primary

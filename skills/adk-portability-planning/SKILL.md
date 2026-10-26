@@ -20,7 +20,7 @@ metadata:
   source-book: "Agentic Engineering"
   source-chapter: "cross-cutting"
   sources-reviewed: "2026-10-26"
-  version: "2026.10.26.2"
+  version: "2026.10.26.3"
 ---
 
 # ADK portability planning

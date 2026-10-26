@@ -13,7 +13,7 @@ license: MIT
 metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
-  version: "2026.10.26.2"
+  version: "2026.10.26.3"
 ---
 
 # ADK system designer
