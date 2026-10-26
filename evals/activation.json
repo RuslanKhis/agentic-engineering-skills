@@ -548,6 +548,27 @@
       "rationale": "A host-wide preference for every project is an ordinary edit of the host's global instruction file; the practice profile holds per-org context read at specific steps."
     },
     {
+      "id": "practice-profile-import-positive",
+      "skill": "practice-profile",
+      "prompt": "Import our strategy and AI policy Markdown files from docs/client/ into my client profile for Acme, so I don't have to type it all in again for the next project.",
+      "should_trigger": true,
+      "rationale": "Bringing company documents the user names into the engineer's cross-project org profile, confirmed line by line, is the practice profile's import action. In Codex it needs $practice-profile."
+    },
+    {
+      "id": "practice-profile-knowledge-base-near-miss",
+      "skill": "practice-profile",
+      "prompt": "Load these policy documents into my agent's knowledge base so it can answer staff questions about them.",
+      "should_trigger": false,
+      "rationale": "Retrieval over documents inside an ADK agent belongs to adk-memory-architecture; the practice profile holds the engineer's own org context."
+    },
+    {
+      "id": "practice-profile-summarise-near-miss",
+      "skill": "practice-profile",
+      "prompt": "Summarise this strategy document for me in five bullet points.",
+      "should_trigger": false,
+      "rationale": "A one-off summary needs no skill; nothing is carried across projects or written to a profile."
+    },
+    {
       "id": "evaluation-expert-labelling-positive",
       "skill": "adk-agent-evaluation",
       "prompt": "We need our underwriters to label about a hundred of the claims agent's answers so we have a gold set and can trust an LLM judge. How should we run the session, and how do we check whether the two underwriters agree?",

@@ -118,7 +118,7 @@ lessons tagged with that specialist and its stack conventions.
 | Tool identity, credentials, Secret Manager or delegated OAuth | `adk-tool-auth-and-secrets` |
 | Natural-language SQL agents, schema retrieval or controlled query execution | `adk-sql-agent-engineering` |
 | A presentation, deck, narrative, questions to expect or decision memo for a proof-of-concept approval, a production decision, a results review, or a public case study | `adk-presenter` |
-| Setting up, binding, updating or reviewing the engineer's own practice profile: employer or client context and lessons carried across projects, kept outside the repository (not an agent's memory) | `practice-profile` |
+| Setting up (by interview or by importing company Markdown the user names), binding, updating, reviewing or exporting the engineer's own practice profile: employer or client context and lessons carried across projects, kept outside the repository (not an agent's memory) | `practice-profile` |
 | A client proposal, statement of work, change request or data-and-access request letter built from the design and plan | `adk-system-designer` (engagement scoping) |
 | A go-live rollout pack: user guide, quick-reference card, training plan, rollout messages, AI disclosure text, adoption metrics, hypercare exit test | `adk-presenter` (rollout pack) |
 | Handing an agent's operation to a client's IT team (support tiers, RACI, alert ownership, access transfer) or a blameless postmortem for an agent incident | `adk-agent-observability` (handover) |
