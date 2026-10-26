@@ -15,7 +15,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "6"
   last-tested: "2026-09-16"
-  version: "2026.10.26.1"
+  version: "2026.10.26.2"
 ---
 
 # ADK memory architecture

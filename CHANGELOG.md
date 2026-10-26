@@ -3,9 +3,9 @@
 One section per tagged release, newest first. Pin a release with
 `npx skills@latest add RuslanKhis/agentic-engineering-skills#v<version> --skill '*'`.
 
-## Unreleased
+## 2026.10.26.2 · 26 October 2026
 
-Changes since v2026.10.26.1, to fold into the next release:
+Changes since v2026.10.26.1:
 
 - **Governance pack: drafting aid, reviewer sign-off and law freshness.**
   Every `adk-governance-pack` template opens with a banner saying the draft
