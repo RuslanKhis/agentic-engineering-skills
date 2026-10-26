@@ -47,7 +47,7 @@ behaviour, or prepare a deployment.
 | **Answering a client's legal, privacy or security reviewers** | `/adk-governance-pack` | A screen of which Australian, US, EU and UK privacy and AI laws apply, then draft papers built from the design and plan: a regulatory memo (with the EU AI Act classification where the EU applies), privacy impact inputs serving as PIA, DPIA or US risk assessment, transfer facts, an impact assessment, a system card, processing records and security questionnaire answers, each statement citing its evidence or flagged for counsel |
 | **Presenting the work to decide the next step** | `/adk-presenter` | A slide outline with evidence under every claim, what to say, the questions to expect and a one-page decision memo, for a business or a technical audience, at proof-of-concept approval, production approval, results review, or as a public case study |
 
-Discovery, design, engineering and presentation all lead to the same nineteen specialists; the governance pack drafts from what they record. You never need to remember which
+Discovery, design, engineering and presentation all lead to the same nineteen specialists; the governance pack drafts from what they record, and the optional portability planner assesses an accepted design for lock-in without changing it. You never need to remember which
 one fits: the designer writes the specialist into every goal, and
 `adk-engineer` picks one for any ticket or request. You can also call a
 specialist directly when you already know the topic.
@@ -102,9 +102,10 @@ From your application's project directory, run:
 npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*'
 ```
 
-Choose your coding agent when prompted. This installs **all twenty-five skills**
+Choose your coding agent when prompted. This installs **all twenty-six skills**
 for the current project: `adk-discovery`, `adk-system-designer`,
-`adk-engineer`, `adk-presenter`, `adk-governance-pack`, the eleven chapter specialists,
+`adk-engineer`, `adk-presenter`, `adk-governance-pack`, the optional
+`adk-portability-planning`, the eleven chapter specialists,
 the web backend specialist, the seven cross-framework specialists and the optional
 `practice-profile`.
 Keep the quotes around `'*'` so your shell passes it unchanged.
@@ -277,6 +278,27 @@ supporting specialists, an estimate of the human hours it needs when working
 with a coding agent (hands-on time plus reviewing and verifying the change,
 with waits such as security reviews listed separately), and its own run prompt.
 
+**If someone worries about lock-in.** Among its first questions the designer
+asks once whether vendor lock-in or future portability is a concern. The
+default is no, and answering no adds nothing. Suppose you answer:
+
+```text
+Yes. Our CTO worries about lock-in: the parent company may standardise on AWS.
+```
+
+The designer still designs on GCP with Google ADK. It records the concern in
+the design's scope-gate table and adds one goal to the plan, for example G07
+(type portability, `Primary skill: adk-portability-planning`), which depends
+only on the design and blocks no build goal, with its ticket
+`docs/tickets/<topic>/G07.md`. When you reach it:
+
+```text
+/adk-engineer Carry out docs/tickets/<topic>/G07.md.
+```
+
+That produces a separate document, `docs/portability/<topic>.md`, and no
+code, while G01 onward build the GCP application unchanged.
+
 **2. Optionally turn goals into tickets.** One file per goal, for a tracker or
 for parallel sessions:
 
@@ -399,7 +421,7 @@ skill** in the catalogue below, and installation fixes under
 
 ## The Skills
 
-*The contents · A discovery skill, a system designer, one entry point, a presenter, a governance pack, eleven chapter specialists, a web backend specialist, seven cross-framework specialists and an optional practice profile.*
+*The contents · A discovery skill, a system designer, one entry point, a presenter, a governance pack, a portability planner, eleven chapter specialists, a web backend specialist, seven cross-framework specialists and an optional practice profile.*
 
 Choose a skill by the problem you need to solve. Each entry below explains
 when it helps, what to ask for, and the command that selects it. The numbered
@@ -413,6 +435,7 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 | A presentation for a proof-of-concept approval, a production decision, a results review or a public case study | [adk-presenter](#adk-presenter) |
 | Your employer's and clients' context and lessons, kept outside every repository and offered as defaults in the next project | [practice-profile](#practice-profile) |
 | Draft papers for a client's counsel, DPO or CISO: which of Australian, US, EU and UK law applies, regulatory memo with the EU AI Act classification, impact assessment, PIA or DPIA inputs, transfer facts, system card, processing records, security questionnaire | [adk-governance-pack](#adk-governance-pack) |
+| A separate lock-in and portability plan for an accepted GCP and ADK design: AWS and Azure alternatives, other agent frameworks, replacement boundaries, migration risks | [adk-portability-planning](#adk-portability-planning) |
 | Sequential steps, parallel work or bounded loops | [adk-workflow-design](#adk-workflow-design) |
 | Reliable API calls and protection against duplicate actions | [safe-api-tool-calls](#safe-api-tool-calls) |
 | Usage limits, repeated-tool protection or human approval | [adk-operational-guardrails](#adk-operational-guardrails) |
@@ -800,6 +823,62 @@ design and plan record, and mark what is only planned.
 real customer emails for a UK client, and our Sydney team will read the
 traces. Write the one-page note and data-flow summary for the client's
 privacy team.
+```
+
+</details>
+
+### [adk-portability-planning](skills/adk-portability-planning/SKILL.md)
+
+*Optional · Answer a lock-in question without changing the build.*
+
+Use this when stakeholders worry about vendor lock-in for an accepted design:
+the parent company may standardise on AWS or Azure, a platform team wants an
+exit plan, or someone asks what replacing ADK with another agent framework
+would take. This toolkit builds production Google ADK applications on GCP,
+and that stays the primary build; portability planning is optional, and the
+designer plans it as a goal only when you say yes to its one lock-in
+question. It reads the design and plan, then classifies each component as
+shared logic, a replaceable adapter, provider-specific by choice or an
+expensive dependency, citing the design's IDs. It assesses cloud, agent
+framework, model, service and deployment portability separately, compares
+the AWS and Azure equivalents and a small set of other agent frameworks with
+official sources and the dates they were read, and names the boundaries
+worth keeping, what each costs now, the feature differences and the
+migration risks. It ends with a recommended strategy and a phased outline
+whose relative effort (small, medium or large) states its drivers rather
+than inventing hours or prices. It writes one document,
+`docs/portability/<topic>.md`, and a helper fails it for a missing section,
+an invented ID, a source without a read date, an unsupported figure, a
+promise such as "fully portable" or infrastructure code. It does not build a
+second application, write Terraform, IAM policies or Kubernetes manifests,
+change the GCP design or its goals, or recommend running on several clouds
+by default; changes to the current build appear only as optional
+recommendations for a designer checkpoint.
+
+**Invoke:** Claude Code `/adk-portability-planning` · Codex `$adk-portability-planning`
+
+Gemini CLI / Antigravity: "Use the adk-portability-planning skill to…"
+
+<details>
+<summary>Three practical examples</summary>
+
+```text
+/adk-portability-planning Our CTO worries we'll be locked into Google because
+the parent company may standardise on AWS. Using docs/architecture/claims.md
+and docs/plans/claims.md, write up what a move would involve. Don't change
+the GCP build.
+```
+
+```text
+/adk-portability-planning The platform team asks which parts of the support
+assistant's design are Google-specific on purpose and which boundaries are
+worth keeping now. Include what replacing ADK with LangGraph would take.
+```
+
+```text
+/adk-portability-planning Procurement wants an exit plan for the policy
+assistant before a three-year Google Cloud commitment, with Azure as the
+alternative. The agent framework is not a concern; say why in the plan.
 ```
 
 </details>
@@ -2399,6 +2478,28 @@ for [Australia](docs/research/au-ai-privacy-law-2026-10-26.md), the
 [EU](docs/research/eu-ai-privacy-law-2026-10-26.md) and the
 [UK](docs/research/uk-ai-privacy-law-2026-10-26.md), and the
 [record](docs/testing/governance-jurisdictions-2026-10-26.md).
+
+### Portability planning for a GCP and ADK design · 26 October 2026
+
+This toolkit builds production Google ADK applications on GCP, and that
+stays the primary path. A new optional skill, `adk-portability-planning`,
+answers a stakeholder's lock-in question in a separate document,
+`docs/portability/<topic>.md`: which components of the accepted design are
+shared logic, replaceable adapters, provider-specific by choice or expensive
+dependencies; cloud, framework, model, service and deployment portability
+assessed separately; AWS and Azure alternatives and a small framework
+comparison with dated sources; the boundaries worth keeping; migration
+risks; and relative effort with its drivers, never invented hours or prices.
+It changes no code and no design. The designer asks once whether lock-in is
+a concern (default no); only a yes adds a portability goal and its ticket,
+which block no build goal. <TRIALS> All **<PACKAGES> packages** pass
+validation and **<TESTS> tests** pass with **<SKIPPED> optional SDK checks
+skipped**. See the research notes on
+[AWS](docs/research/portability-aws-2026-10-26.md),
+[Azure](docs/research/portability-azure-2026-10-26.md),
+[agent frameworks](docs/research/portability-agent-frameworks-2026-10-26.md)
+and [design principles](docs/research/portability-design-principles-2026-10-26.md),
+and the [record](docs/testing/portability-planning-2026-10-26.md).
 
 ### Durable engines that keep ADK's guardrails · 25 October 2026
 

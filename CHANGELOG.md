@@ -3,6 +3,23 @@
 One section per tagged release, newest first. Pin a release with
 `npx skills@latest add RuslanKhis/agentic-engineering-skills#v<version> --skill '*'`.
 
+## Unreleased
+
+- **New skill: `adk-portability-planning`.** The toolkit still builds
+  production Google ADK applications on GCP, and that stays the primary
+  build. The new optional skill answers a stakeholder's lock-in question in
+  a separate document, `docs/portability/<topic>.md`: it classifies the
+  accepted design's components, assesses cloud, agent framework, model,
+  service and deployment portability separately, compares AWS, Azure and a
+  small set of other frameworks with dated sources, and gives relative
+  effort with its drivers. `check_portability.py` checks it; the skill
+  changes no code and no design. The designer asks once whether lock-in is
+  a concern (default no, and no changes nothing); a yes adds a portability
+  goal, depending only on the design and blocking no build goal, and its
+  ticket. `check_tickets.py` accepts a `(deliverable)` tag on the
+  acceptance items of presentation, governance and portability tickets,
+  and `adk-engineer` routes lock-in and exit-plan requests to the skill.
+
 ## 2026.10.26.1 · 26 October 2026
 
 Changes since v2026.10.26:

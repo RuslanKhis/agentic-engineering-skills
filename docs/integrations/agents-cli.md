@@ -34,7 +34,7 @@ npx skills@latest add RuslanKhis/agentic-engineering-skills --skill '*' -a claud
 
 For Codex, replace `-a claude-code` with `-a codex` on both commands. Keep the
 quotes around `'*'`. The normal project installation makes seven Google skills
-and the twenty-two skills of this toolkit available. Restart the coding-agent
+and the twenty-six skills of this toolkit available. Restart the coding-agent
 session if they do not appear. Google's README offers the Skills CLI route as
 `npx skills add google/agents-cli` (the same seven skills) and names both
 Claude Code and Codex.
