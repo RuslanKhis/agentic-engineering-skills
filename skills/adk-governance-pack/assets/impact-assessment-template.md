@@ -3,10 +3,11 @@ document: impact-assessment
 system: <system name>
 version: <build or design revision assessed>
 status: draft
+jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
 trigger: <why this assessment now: design, production decision, significant change>
-sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<topic>.md, classification-memo.md>
+sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<topic>.md, regulatory-memo.md>
 ---
 
 # AI system impact assessment: <system name>
@@ -15,11 +16,14 @@ Structured along the topics of ISO/IEC 42005:2025 and mapped to NIST AI RMF
 1.0 and NIST AI 600-1. Draft for <client>'s risk owner; scores are
 provisional until they set them. Not legal advice.
 
+<!-- The last four sections are optional: keep each one whose condition
+holds and delete the rest, with this comment. -->
+
 ## Scope and intended use
 
 - **System and functions:** <what it does; what the model decides; what code decides> (<C/D IDs>).
 - **Intended use:** <workflow and users> (<R IDs>); **unintended or foreseeable misuse:** <uses> (<C/SB IDs or assumption:>).
-- **Organisation's role:** <provider / deployer / both; agency's role> (classification memo, <D ID or counsel:>).
+- **Organisation's role:** <provider / deployer / both; agency's role> (regulatory memo, <D ID or counsel:>).
 - **Lifecycle stage and trigger:** <stage; why now> (<goal ID>).
 
 ## Interested parties
@@ -59,21 +63,55 @@ provisional until they set them. Not legal advice.
 | Function | Content in this assessment | Evidence |
 | --- | --- | --- |
 | Govern | <roles, acceptance, literacy> | <IDs> |
-| Map | <scope, parties, classification> | <IDs> |
+| Map | <scope, parties, regimes and classification> | <IDs> |
 | Measure | <evaluations and what is unmeasured> | <M IDs, reports> |
 | Manage | <measures, incidents, monitoring> | <C/SB/I IDs> |
 
-| NIST AI 600-1 risk | Applies? | Measure | Evidence |
+| NIST AI 600-1 risk | Applies? | Measure and suggested actions performed | Evidence |
 | --- | --- | --- | --- |
-| Confabulation | <yes / n/a: reason> | <measure> | <IDs> |
+| Confabulation | <yes / n/a: reason> | <measure; action IDs such as MS-2.5-001> | <IDs> |
 | Data privacy | <yes / n/a: reason> | <measure> | <IDs> |
 | Harmful bias or homogenisation | <yes / n/a: reason> | <measure> | <IDs> |
 | Human-AI configuration | <yes / n/a: reason> | <measure> | <IDs> |
-| Information security | <yes / n/a: reason> | <measure> | <IDs> |
+| Information security | <yes / n/a: reason> | <measure; red-team results> | <IDs> |
 | Value chain and component integration | <yes / n/a: reason> | <measure> | <IDs> |
 | <each remaining risk of the twelve> | <yes / n/a: reason> | <measure> | <IDs> |
 
 ## Monitoring and review
 
 - <measure watched in operation, owner and threshold> (<C/M IDs>).
-- **Review triggers:** model change, new user group or data, incident, change in law (<D/G IDs>).
+- **Review triggers:** model change, new user group or data, incident, change in law or regulator guidance (<D/G IDs>).
+
+## Adverse impact and equality (if the system ranks, scores or decides about people)
+
+| Group or characteristic | Selection or outcome rate | Ratio to the highest group | Test and sample | Proxies removed | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| <group> | <rate> | <ratio> | <test, n, window> | <postcode, name, age signals> | <M ID or gap:> |
+
+- **Less discriminatory alternatives considered and accessibility route:** <what and why> (<D IDs>; counsel: <is any disparity justified?>).
+
+## Australia: Guidance for AI Adoption mapping
+
+| Practice | Content in this assessment | Evidence |
+| --- | --- | --- |
+| 1 Decide who is accountable | <owners across client, agency and model provider> | <IDs> |
+| 2 Understand impacts and plan accordingly | <impacts, contestability> | <H IDs> |
+| 3 Measure and manage risks | <measures> | <C/M IDs> |
+
+## Australia: DTA AI impact assessment inputs (Commonwealth clients)
+
+- **Threshold (DTA tool sections 1 to 4):** <use case, inherent risk facts> (<IDs>; counsel: <in scope under Appendix C?>).
+- **Use-case owner, assessing and approving officers:** <names or roles> (source: <who>, <YYYY-MM-DD> / gap:).
+- **Transparency statement inputs:** <usage pattern and domain, public interaction without human review, monitoring> (system-card.md; <IDs>).
+- **Agentic AI addendum (AGT.1 to AGT.8):** <memory scope, bounded workflows and approvals, typed tools, adversarial evaluation, monitoring, kill switch, decommissioning> (<C/SB IDs>).
+
+## EU: FRIA crosswalk (AI Act Article 27, if required)
+
+| Article 27(1) | Pack section | Evidence |
+| --- | --- | --- |
+| (a) deployer's processes using the system | Scope and intended use; privacy-impact-input-pack.md Processing description | <IDs> |
+| (b) period and frequency of use | privacy-impact-input-pack.md Processing description | <IDs> |
+| (c) categories of persons and groups affected | Interested parties | <IDs> |
+| (d) specific risks of harm | Impacts; privacy-impact-input-pack.md Risks and measures | <IDs> |
+| (e) human oversight measures | system-card.md Human oversight | <IDs> |
+| (f) measures if risks materialise, governance, complaints | Measures; Residual risk and decision | <IDs; counsel: required under Article 27?> |

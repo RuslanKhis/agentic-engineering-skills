@@ -30,7 +30,7 @@ the NIST AI Risk Management Framework so either kind of reviewer can read it.
 
 | Template section | What goes in it | Where the record holds it |
 | --- | --- | --- |
-| Scope and intended use | System description, functions, intended and unintended uses, the organisation's role, the lifecycle stage and the trigger for this assessment | Brief §4; design purpose and contracts; classification memo |
+| Scope and intended use | System description, functions, intended and unintended uses, the organisation's role, the lifecycle stage and the trigger for this assessment | Brief §4; design purpose and contracts; regulatory memo |
 | Interested parties | People affected directly and indirectly, including vulnerable groups and people who never use the system (applicants, customers named in records) | Brief stakeholders and harms |
 | System information | Data (sources, quality, provenance), model and algorithm (pinned model, what code decides), deployment environment | Design data and authority table, D-IDs, model lifecycle row |
 | Impacts | Actual and reasonably foreseeable benefits and harms per party, with likelihood and severity | Brief harms and cost of a wrong answer; M and I records; failure review |
@@ -47,8 +47,8 @@ production-approval goal, a model migration, a new market).
 
 | Function | What the pack shows | Evidence to cite |
 | --- | --- | --- |
-| Govern | Roles and accountability (provider, deployer, owner), policies the system follows, who accepts residual risk, AI literacy measures | Classification memo roles; design owners; accepted risks |
-| Map | Context, intended purpose, affected parties, categorisation (AI Act), benefits and costs, limits of knowledge | Impact assessment scope and parties; brief §1 and §4 |
+| Govern | Roles and accountability (provider, deployer, owner), policies the system follows, who accepts residual risk, AI literacy measures | Regulatory memo roles; design owners; accepted risks |
+| Map | Context, intended purpose, affected parties, regimes and categorisation (jurisdiction screen; AI Act where the EU is in scope), benefits and costs, limits of knowledge | Impact assessment scope and parties; regulatory memo; brief §1 and §4 |
 | Measure | Evaluation methods and results, bias and robustness tests, what is not yet measured | M records, evaluation reports, acceptance cases by G/A ID |
 | Manage | Controls, incident response, monitoring, decommissioning, third-party (model provider) risk | C and SB evidence; I records; release and rollback decisions |
 
@@ -61,7 +61,7 @@ Mark each risk applicable or `n/a:` with a reason; cite the measure.
 | CBRN information or capabilities | Open-ended assistants | Model provider safety filters; scope instruction; usually n/a for narrow tools |
 | Confabulation | Answers about policy, eligibility, facts on a person | Grounding with citation contracts; refusal path; evaluation on gold cases |
 | Dangerous, violent or hateful content | Public chat | Content screening (Model Armor) at release |
-| Data privacy | Personal data in prompts, memory, logs, training | Sensitive-data controls; retention contracts; DPIA input pack |
+| Data privacy | Personal data in prompts, memory, logs, training | Sensitive-data controls; retention contracts; privacy impact input pack |
 | Environmental impacts | Large volumes, large models | Model choice and token budgets; usually noted, not measured |
 | Harmful bias or homogenisation | Decisions about people, ranking, scoring | Adverse-impact measurement; removed proxies; human review |
 | Human-AI configuration | Over-reliance, automation bias, unclear disclosure | Disclosure contract; review points; reviewer sampling |
@@ -70,6 +70,51 @@ Mark each risk applicable or `n/a:` with a reason; cite the measure.
 | Intellectual property | Generated content, retrieved third-party text | Source licensing; citation; provider indemnity terms |
 | Obscene, degrading or abusive content | Image or open text generation | Screening; usually n/a for text tools on internal data |
 | Value chain and component integration | Model provider, MCP servers, retrieval sources | Pinned model and lifecycle date; MCP allowlist; sub-processor list |
+
+## Regime additions
+
+Keep each optional section of the template whose condition holds, and add
+the rows the regime asks for. Sources read 26 October 2026 (see
+[Australia](australia.md), [United States](united-states.md),
+[United Kingdom](united-kingdom.md) and [EU AI Act](eu-ai-act.md)).
+
+- **Adverse impact and equality** (any regime, when the system ranks,
+  scores or decides about people): selection or outcome rates by group,
+  the ratio to the highest group, the statistical test and sample, proxies
+  removed (postcode, name, age signals, language), less discriminatory
+  alternatives and the accessibility route. NYC Local Law 144, California's
+  FEHA regulations (anti-bias testing is evidence for or against a claim),
+  Title VII, the UK Equality Act and Australian anti-discrimination law all
+  turn on it, and it is the input to a client's bias audit or, for a UK
+  public body, its equality impact assessment. A measured disparity is
+  reported with its M ID, never omitted; whether it is justified is
+  `counsel:`.
+- **NIST AI 600-1 actions** (`us`, and Texas residents in particular):
+  Texas TRAIGA gives no liability for a violation found through red-teaming
+  or an internal review substantially complying with the Generative AI
+  Profile (§552.105(e)). Record the suggested-action IDs actually performed
+  and the red-team results; cite AI 600-1 as the most recent version with
+  its date.
+- **Australia: Guidance for AI Adoption mapping** (`au`, private clients):
+  the National AI Centre's six practices, voluntary, published 21 October
+  2025. Map at least practices 1 to 3 (decide who is accountable;
+  understand impacts and plan accordingly; measure and manage risks).
+  Clause 3.1.3 names "data sheets, model cards, or system cards", which the
+  system card answers, and clause 2.2 covers contestability.
+- **Australia: DTA AI impact assessment inputs** (`au`, non-corporate
+  Commonwealth entity): the threshold facts for sections 1 to 4 of the DTA
+  tool, the use-case owner and the assessing and approving officers, the
+  transparency statement inputs and an AGT.1 to AGT.8 conformance list. The
+  agency's officers complete the assessment, due for in-scope use cases by
+  15 December 2026 (checked 2026-10-26).
+- **EU: FRIA crosswalk** (`eu`, Article 27 deployer): Article 27(1)(a) to
+  (f) mapped to pack sections, so the FRIA can cross-reference the DPIA as
+  Article 27(4) allows.
+- **UK rows:** Consumer Duty outcomes for FCA-authorised clients; the ICO's
+  ten agentic risks live in the input pack's risk table.
+- **Consumer claims** (`au` and `uk` consumer-facing agents): refund,
+  guarantee and retention flows reviewed against the Australian Consumer Law
+  and the CMA's AI-agent guidance.
 
 ## Judgement the drafter leaves open
 

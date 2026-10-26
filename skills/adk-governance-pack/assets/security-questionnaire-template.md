@@ -3,6 +3,7 @@ document: security-questionnaire
 system: <system name>
 version: <build the answers describe>
 status: draft
+jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
 sources: <docs/architecture/<topic>.md (contracts, SB table), docs/plans/<topic>.md>
@@ -21,7 +22,8 @@ or `n/a:` with its ID.
 
 | Area | Typical question | Answer | Status | Evidence |
 | --- | --- | --- | --- | --- |
-| Hosting and region | Where is data stored and processed? | <services and regions> | <status> | <D IDs> |
+| Hosting and region | Where is data stored and processed? | <services and regions; the model's processing region> | <status> | <D IDs> |
+| Overseas access | Who can access our data from outside our country, and under what transfer mechanism? | <consultancy staff and their country; support and abuse review; SCCs, IDTA or APP 8 facts> | <status> | <D IDs, transfer-assessment.md or gap:> |
 | Identity and access | How are users authenticated and authorised? | <sign-in, principal from token, per-user scope> | <status> | <SB02, SB03, SB04, C IDs> |
 | Encryption | Is data encrypted in transit and at rest? | <provider default or CMEK> | <status> | <D ID, source:> |
 | Secrets | How are credentials managed? | <Secret Manager, workload identity, scan> | <status> | <SB16, C IDs> |
@@ -35,7 +37,7 @@ or `n/a:` with its ID.
 | Human oversight | Who reviews or approves outputs and actions? | <approval points> | <status> | <SB18, C IDs> |
 | Vulnerability management | Dependency audits, scans, penetration test? | <audits in CI, ZAP, pen test> | <status> | <SB15, SB21, SB24> |
 | Secure development | Code review, CI gates, release and rollback? | <gates and rollback unit> | <status> | <D/G IDs> |
-| Incident response | How are incidents detected, reported and handled? | <alerts, owner, notification window> | <status> | <D/G IDs, I IDs> |
+| Incident response | How are incidents detected, reported and handled? | <alerts, owner; notification clocks that apply in the regimes in scope: agency to client without undue delay; GDPR or UK GDPR 72 hours to the authority; Australian eligible data breach assessed within 30 days and notified as soon as practicable; APRA CPS 234 72 hours; GLBA Safeguards 30 days; NIS2 24 and 72 hours if the client is in scope; CRA 24 and 72 hours if a product; AI Act Art 73 if high-risk> | <status> | <D/G IDs, I IDs> |
 | Deletion | How is data deleted at end of contract or on request? | <erasure path and period> | <status> | <C/D IDs> |
 | Availability and recovery | What are the availability target and recovery plan? | <SLO, backup, restore test> | <status> | <C/D IDs> |
 | Certifications | Which certifications apply? | <the cloud provider's, cited; the application's own, if any> | <status> | <source:> |

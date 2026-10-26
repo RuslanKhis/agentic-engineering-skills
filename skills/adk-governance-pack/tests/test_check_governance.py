@@ -11,11 +11,12 @@ import unittest
 
 SKILL = Path(__file__).resolve().parents[1]
 SCRIPT = SKILL / "scripts" / "check_governance.py"
-TODAY = "2026-10-25"
+TODAY = "2026-10-26"
 
 POC_NOTE = """---
 document: poc-note
 system: Policy Q&A assistant
+jurisdictions: [au, eu]
 counsel_required: no
 sources: docs/discovery/policy.md, docs/architecture/policy.md
 ---
@@ -25,6 +26,10 @@ sources: docs/discovery/policy.md, docs/architecture/policy.md
 ## Classification
 
 - Employees ask questions about internal policies and receive answers grounded in the policy library (C1, D2).
+- Australia: in scope, because consultancy staff in Sydney support the service (D3).
+- United States: n/a: no US client, staff or customers.
+- EU: in scope, because the client employs staff in the Netherlands (D3).
+- United Kingdom: n/a: no UK establishment or staff.
 - Article 50(1) of Regulation (EU) 2024/1689 applies from 2 August 2026 (checked 2026-10-20): users are told they are talking to an AI system (C4).
 - No prohibited practice applies; counsel: confirm before the production decision.
 
@@ -49,8 +54,60 @@ DESIGN = """# System design: policy assistant
 | C2 | Employees see only their own records |
 | C4 | The chat discloses it is an AI system |
 | D2 | Vertex AI Search over the policy library |
-| D3 | europe-west4 hosting |
+| D3 | europe-west4 hosting; support from Sydney |
 | SB14 | No content in logs |
+"""
+
+SCREEN = """## Jurisdiction screen
+
+| Regime | In scope | Trigger facts | Reason |
+| --- | --- | --- | --- |
+| Australia | yes | Consultancy staff in Sydney (D3) | The consultancy's own handling; counsel: Privacy Act reach |
+| United States | no | No US data subjects (D3) | n/a: no US client or people |
+| EU | no | No EU people (D3) | n/a: Australian staff only |
+| United Kingdom | no | No UK people (D3) | n/a: no UK establishment |
+"""
+
+AU_MEMO = """---
+document: regulatory-memo
+jurisdictions: [au]
+counsel_required: pending
+---
+
+# Regulatory memo: HR assistant
+
+## Summary
+
+- Australia only (D3).
+
+""" + SCREEN + """
+## System and intended purpose
+
+- Answers HR policy questions for staff (C1).
+
+## Roles
+
+- counsel: the client is an APP entity; the employee records exemption does not cover the consultancy (D3).
+
+## Australia: Privacy Act and APPs
+
+- APP 8 facts: model processing in Sydney (D3).
+
+## Australia: Automated decisions (APP 1.7)
+
+- n/a: no decision about a person (C1).
+
+## Australia: Sector, state and government AI policy
+
+- n/a: private client, no sector regulator (D2).
+
+## Applicable dates
+
+- APP 1.7 applies from 10 December 2026 (checked 2026-10-26).
+
+## Questions for counsel
+
+- counsel: is prompt logging computer surveillance (D3)?
 """
 
 
@@ -64,9 +121,13 @@ def run(*args, files=None):
             path.write_text(text, encoding="utf-8")
             paths[name] = str(path)
         argv = [paths.get(a[1:], a) if a.startswith("@") else a for a in args]
-        result = subprocess.run([sys.executable, str(SCRIPT), "--today", TODAY, *argv],
+        result = subprocess.run([sys.executable, "-I", str(SCRIPT), "--today", TODAY, *argv],
                                 capture_output=True, text=True)
         return result
+
+
+def with_line(draft, line):
+    return draft.replace("The question text is not written to logs (SB14).", line)
 
 
 class CheckGovernance(unittest.TestCase):
@@ -74,18 +135,17 @@ class CheckGovernance(unittest.TestCase):
         result = run("@note.md", "--source", "@design.md", files={"note.md": POC_NOTE, "design.md": DESIGN})
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("ok", result.stdout)
+        self.assertIn("jurisdictions: au, eu", result.stdout)
 
     def test_uncited_statement_fails(self):
-        draft = POC_NOTE.replace("The question text is not written to logs (SB14).",
-                                 "The question text is not written to logs.")
+        draft = with_line(POC_NOTE, "The question text is not written to logs.")
         result = run("@note.md", files={"note.md": draft})
         self.assertEqual(result.returncode, 1)
         self.assertIn("cites no ID", result.stdout)
 
     def test_markers_and_dated_sources_count_as_citations(self):
-        draft = POC_NOTE.replace("The question text is not written to logs (SB14).",
-                                 "assumption: the question text is not logged.\n\n"
-                                 "Google Cloud does not train on prompts (source: Google Cloud docs, 2026-10-25).")
+        draft = with_line(POC_NOTE, "assumption: the question text is not logged.\n\n"
+                                    "Google Cloud does not train on prompts (source: Google Cloud docs, 2026-10-25).")
         result = run("@note.md", files={"note.md": draft})
         self.assertEqual(result.returncode, 0, result.stdout)
 
@@ -93,19 +153,92 @@ class CheckGovernance(unittest.TestCase):
         draft = POC_NOTE.split("## Data flow summary")[0] + "## Data flow summary\n\n## Questions for counsel\n\n- counsel: x\n"
         result = run("@note.md", files={"note.md": draft})
         self.assertIn("empty section: ## Data flow summary", result.stdout)
-        memo = "---\ndocument: classification-memo\ncounsel_required: pending\n---\n\n## Summary\n\n- n/a: draft\n"
+        memo = "---\ndocument: regulatory-memo\njurisdictions: [eu]\ncounsel_required: pending\n---\n\n## Summary\n\n- n/a: draft\n"
         result = run("@memo.md", files={"memo.md": memo})
         self.assertIn("missing section: ## Roles", result.stdout)
+        self.assertIn("missing section: ## EU: High-risk classification", result.stdout)
+        self.assertNotIn("Australia: Privacy Act", result.stdout)
         self.assertEqual(result.returncode, 1)
+
+    def test_required_sections_follow_jurisdictions(self):
+        result = run("@memo.md", files={"memo.md": AU_MEMO})
+        self.assertEqual(result.returncode, 0, result.stdout)
+        with_us = AU_MEMO.replace("jurisdictions: [au]", "jurisdictions: [au, us]")
+        result = run("@memo.md", files={"memo.md": with_us})
+        self.assertIn("missing section: ## United States: Preemption status and FTC claims", result.stdout)
+        self.assertNotIn("EU: Prohibited practices", result.stdout)
+
+    def test_regime_section_without_its_jurisdiction_fails(self):
+        draft = AU_MEMO.replace("## Applicable dates", "## EU: Other regimes\n\n- n/a: no EU users (D3).\n\n## Applicable dates")
+        result = run("@memo.md", files={"memo.md": draft})
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("belongs to EU, which jurisdictions does not list", result.stdout)
+
+    def test_missing_empty_unknown_and_unordered_jurisdictions_fail(self):
+        missing = POC_NOTE.replace("jurisdictions: [au, eu]\n", "")
+        self.assertIn("jurisdictions is missing or empty", run("@n.md", files={"n.md": missing}).stdout)
+        empty = POC_NOTE.replace("jurisdictions: [au, eu]", "jurisdictions: []")
+        result = run("@n.md", files={"n.md": empty})
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("jurisdictions is missing or empty", result.stdout)
+        unknown = POC_NOTE.replace("jurisdictions: [au, eu]", "jurisdictions: [au, nz]")
+        self.assertIn("unknown jurisdiction nz", run("@n.md", files={"n.md": unknown}).stdout)
+        unordered = POC_NOTE.replace("jurisdictions: [au, eu]", "jurisdictions: [eu, au]")
+        self.assertIn("order au, us, eu, uk", run("@n.md", files={"n.md": unordered}).stdout)
+        bare = POC_NOTE.replace("jurisdictions: [au, eu]", "jurisdictions: au, eu")
+        self.assertEqual(run("@n.md", files={"n.md": bare}).returncode, 0)
+
+    def test_screen_must_name_every_regime(self):
+        draft = AU_MEMO.replace("| United Kingdom | no | No UK people (D3) | n/a: no UK establishment |\n", "")
+        result = run("@memo.md", files={"memo.md": draft})
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("names no row for United Kingdom", result.stdout)
+        note = POC_NOTE.replace("- United States: n/a: no US client, staff or customers.\n", "")
+        self.assertIn("names no row for United States", run("@n.md", files={"n.md": note}).stdout)
+
+    def test_records_and_transfer_annex_need_gdpr_regime(self):
+        records = ("---\ndocument: processing-records\njurisdictions: [au, us]\ncounsel_required: pending\n---\n\n"
+                   "## Processing activities\n\n- n/a: no rows (D3).\n")
+        result = run("@r.md", files={"r.md": records})
+        self.assertIn("applies under GDPR or UK GDPR only", result.stdout)
+        self.assertEqual(run("@r.md", files={"r.md": records.replace("[au, us]", "[au, uk]")}).returncode, 0)
+
+    def test_legacy_document_types_still_read(self):
+        memo = AU_MEMO.replace("document: regulatory-memo", "document: classification-memo")
+        result = run("--json", "@memo.md", files={"memo.md": memo})
+        self.assertEqual(json.loads(result.stdout)[0]["document"], "regulatory-memo")
+        pack = "---\ndocument: dpia-input-pack\njurisdictions: [eu]\ncounsel_required: pending\n---\n"
+        self.assertIn("missing section: ## EU: Legal basis", run("@p.md", files={"p.md": pack}).stdout)
 
     def test_annex_iii_trigger_forces_counsel(self):
         draft = POC_NOTE.replace("Employees ask questions about internal policies",
                                  "Recruiters rank candidates by CV")
         result = run("@note.md", files={"note.md": draft})
         self.assertEqual(result.returncode, 1)
-        self.assertIn("Annex III trigger (employment", result.stdout)
+        self.assertIn("counsel trigger (employment", result.stdout)
         fixed = draft.replace("counsel_required: no", "counsel_required: yes")
         self.assertEqual(run("@note.md", files={"note.md": fixed}).returncode, 0)
+
+    def test_other_regime_triggers_force_counsel(self):
+        cases = {
+            "children": "The tutor app is directed at children aged 8 to 12 (C1).",
+            "biometrics": "Callers are verified by voiceprint before account changes (C1).",
+            "public-body clients": "The client is a non-corporate Commonwealth entity (D2).",
+            "housing": "The agent supports tenant screening for property managers (C1).",
+            "automated decisions": "Refunds under $50 are a solely automated decision (C1).",
+            "health care": "Summaries feed treatment decisions in the clinic (C1).",
+        }
+        for area, line in cases.items():
+            result = run("--json", "@note.md", files={"note.md": with_line(POC_NOTE, line)})
+            data = json.loads(result.stdout)[0]
+            self.assertIn(area, data["counsel_triggers"], line)
+            self.assertEqual(result.returncode, 1, line)
+
+    def test_negated_trigger_phrases_do_not_fire(self):
+        for line in ("n/a: the service is not likely to be accessed by children (C1).",
+                     "No solely automated decisions are made; a person approves each refund (C1)."):
+            result = run("--json", "@note.md", files={"note.md": with_line(POC_NOTE, line)})
+            self.assertEqual(json.loads(result.stdout)[0]["counsel_triggers"], [], line)
 
     def test_trigger_in_source_file_forces_counsel(self):
         brief = "# Discovery brief\nThe assistant screens job applicants before interviews.\n"
@@ -117,6 +250,7 @@ class CheckGovernance(unittest.TestCase):
     def test_out_of_scope_section_is_not_scanned_for_triggers(self):
         card = """---
 document: system-card
+jurisdictions: [au]
 counsel_required: no
 ---
 
@@ -140,6 +274,14 @@ counsel_required: no
 
 - HR reviews flagged answers weekly (D2).
 
+## Automated-decision disclosure
+
+- n/a: no output decides or feeds a decision about a person (C1).
+
+## AI disclosure and hand-off
+
+- The chat says it is an AI at the start and on request (C4).
+
 ## Data
 
 - Policy passages only (D2).
@@ -151,9 +293,14 @@ counsel_required: no
         result = run("@card.md", files={"card.md": card})
         self.assertEqual(result.returncode, 0, result.stdout)
 
+    def test_screening_sections_are_not_scanned_for_triggers(self):
+        memo = AU_MEMO.replace("| Australia | yes | Consultancy staff in Sydney (D3) |",
+                               "| Australia | yes | Consultancy staff in Sydney (D3); no children, biometrics or hiring |")
+        result = run("--json", "@memo.md", files={"memo.md": memo})
+        self.assertEqual(json.loads(result.stdout)[0]["counsel_triggers"], [], result.stdout)
+
     def test_word_migration_and_model_performance_do_not_trigger(self):
-        draft = POC_NOTE.replace("The question text is not written to logs (SB14).",
-                                 "Database migration and model performance evaluation run in CI (D3).")
+        draft = with_line(POC_NOTE, "Database migration and model performance evaluation run in CI (D3).")
         self.assertEqual(run("@note.md", files={"note.md": draft}).returncode, 0)
 
     def test_legal_date_needs_checked_note(self):
@@ -161,6 +308,25 @@ counsel_required: no
         result = run("@note.md", files={"note.md": draft})
         self.assertEqual(result.returncode, 1)
         self.assertIn("legal applicability date", result.stdout)
+
+    def test_australian_us_and_uk_references_need_checked_dates(self):
+        lines = (
+            "APP 1.7 applies from 10 December 2026 (C1).",
+            "The Privacy Act s 26WH assessment applies since 22 February 2018 (C1).",
+            "CPPA ADMT duties apply from January 1, 2027 (C1).",
+            "Colorado SB 26-189 takes effect for decisions from 1 January 2027 (C1).",
+            "UK GDPR Articles 22A to 22D are in force since 5 February 2026 (C1).",
+            "The DUAA complaints duty commenced on 19 June 2026 (C1).",
+        )
+        for line in lines:
+            result = run("@note.md", files={"note.md": with_line(POC_NOTE, line)})
+            self.assertIn("legal applicability date", result.stdout, line)
+            fixed = line.replace(" (C1).", " (checked 2026-10-26; C1).")
+            self.assertEqual(run("@note.md", files={"note.md": with_line(POC_NOTE, fixed)}).returncode, 0, fixed)
+
+    def test_possessive_before_a_number_is_not_a_section_reference(self):
+        line = "The client's 2 workshops run from 3 November 2026 onwards (C1)."
+        self.assertEqual(run("@note.md", files={"note.md": with_line(POC_NOTE, line)}).returncode, 0)
 
     def test_future_and_stale_checked_dates(self):
         future = POC_NOTE.replace("checked 2026-10-20", "checked 2027-01-01")
@@ -176,7 +342,7 @@ counsel_required: no
         self.assertIn("cites C9, which no source file contains", result.stdout)
 
     def test_placeholder_fails(self):
-        draft = POC_NOTE.replace("Policy Q&A assistant\ncounsel", "<system>\ncounsel")
+        draft = POC_NOTE.replace("Policy Q&A assistant\njurisdictions", "<system>\njurisdictions")
         draft = draft.replace("(SB14).", "(SB14). Owner: <name>.")
         result = run("@note.md", files={"note.md": draft})
         self.assertIn("unfilled placeholder <name>", result.stdout)
@@ -193,6 +359,7 @@ counsel_required: no
         result = run("--json", "@pack/note.md", files={"pack/note.md": POC_NOTE})
         data = json.loads(result.stdout)
         self.assertEqual(data[0]["document"], "poc-note")
+        self.assertEqual(data[0]["jurisdictions"], ["au", "eu"])
         self.assertEqual(data[0]["errors"], [])
 
     def test_filled_templates_need_no_extra_citations(self):
@@ -200,6 +367,7 @@ counsel_required: no
         for template in sorted((SKILL / "assets").glob("*-template.md")):
             text = template.read_text(encoding="utf-8")
             text = re.sub(r"counsel_required: .*", "counsel_required: yes", text)
+            text = re.sub(r"jurisdictions: .*", "jurisdictions: [au, us, eu, uk]", text)
             previous = None
             while previous != text:
                 previous, text = text, re.sub(r"<[A-Za-z][^<>\n]*>", "C1", text)
@@ -209,16 +377,14 @@ counsel_required: no
     def test_iso_project_dates_and_read_dates_are_not_applicability_dates(self):
         line = ("- counsel: Article 22 applies to rejections from the pilot on 2026-12-01; "
                 "the GDPR text was read 2 March 2026 (C1).")
-        draft = POC_NOTE.replace("The question text is not written to logs (SB14).", line)
-        self.assertEqual(run("@note.md", files={"note.md": draft}).returncode, 0)
+        self.assertEqual(run("@note.md", files={"note.md": with_line(POC_NOTE, line)}).returncode, 0)
 
     def test_bare_marker_does_not_count(self):
-        draft = POC_NOTE.replace("The question text is not written to logs (SB14).", "Logs are kept for a period the design does not record anywhere. gap:")
+        draft = with_line(POC_NOTE, "Logs are kept for a period the design does not record anywhere. gap:")
         self.assertIn("cites no ID", run("@note.md", files={"note.md": draft}).stdout)
 
     def test_omitted_baseline_rule_may_be_named_as_gap(self):
-        draft = POC_NOTE.replace("The question text is not written to logs (SB14).",
-                                 "gap: no penetration test (SB24 is not in the design's table).")
+        draft = with_line(POC_NOTE, "gap: no penetration test (SB24 is not in the design's table).")
         result = run("@note.md", "--source", "@design.md", files={"note.md": draft, "design.md": DESIGN})
         self.assertEqual(result.returncode, 0, result.stdout)
 
@@ -226,13 +392,13 @@ counsel_required: no
         memo_row = "\n## Transparency obligations (Article 50)\n\n- 50(3) emotion recognition or biometric categorisation: n/a: none.\n"
         draft = POC_NOTE.replace("## Questions for counsel", memo_row + "\n## Questions for counsel")
         result = run("--json", "@note.md", files={"note.md": draft})
-        self.assertEqual(json.loads(result.stdout)[0]["annex_iii_areas"], [])
+        self.assertEqual(json.loads(result.stdout)[0]["counsel_triggers"], [])
 
     def test_templates_fail_until_filled(self):
         templates = sorted((SKILL / "assets").glob("*-template.md"))
-        self.assertEqual(len(templates), 7)
+        self.assertEqual(len(templates), 8)
         for template in templates:
-            result = subprocess.run([sys.executable, str(SCRIPT), "--today", TODAY, str(template)],
+            result = subprocess.run([sys.executable, "-I", str(SCRIPT), "--today", TODAY, str(template)],
                                     capture_output=True, text=True)
             self.assertEqual(result.returncode, 1, f"{template.name}: {result.stdout}{result.stderr}")
             self.assertIn("placeholder", result.stdout, template.name)
