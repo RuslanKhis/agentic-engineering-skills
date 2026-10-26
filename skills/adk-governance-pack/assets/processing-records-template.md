@@ -2,7 +2,7 @@
 document: processing-records
 system: <system name>
 status: draft
-jurisdictions: [<codes in scope; must include eu or uk>]
+jurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca; must include eu or uk>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
 for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
@@ -23,6 +23,8 @@ merges them. One row per purpose, not per component. Not legal advice.
 Australia has no Article 30 register: for Australian personal information
 the privacy impact input pack's "Australia: Inventory and notice inputs"
 section does this job and feeds the APP privacy policy and collection notice.
+New Zealand, Singapore and Canada have none either; their input pack
+sections do the same job.
 
 ## Processing activities
 

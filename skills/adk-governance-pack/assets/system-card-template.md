@@ -3,7 +3,7 @@ document: system-card
 system: <system name>
 version: <build or release the card describes>
 status: draft
-jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
+jurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
 for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
@@ -63,6 +63,8 @@ Not yet measured: <measure>, measured by <goal ID> (<gap:>).
 - **Meaningful information about the logic:** <features used and how the output is used; the explanation the design can produce on request> (<C/D IDs>).
 - **Human review, representations and contest:** <route and owner> (<C IDs or gap:>).
 - **Opt-out or appeal, where offered:** <route, or n/a: none required by the regimes in scope> (<C ID or counsel:>).
+- **Quebec s 12.1 notice and review (Canada), if a decision is made by the system alone:** <when the person is told; the information used, reasons and principal factors given on request; the correction right; the staff member who receives observations> (<C IDs or counsel:>).
+- **Government client facts:** <NSW AIAF or DTA transparency, appeal and non-AI alternative; New Zealand Algorithm Charter contact point, appeal channel and role of humans for signatories; Canadian federal notice and explanation under the Directive; or n/a: private client> (<C IDs; agency:>).
 
 ## AI disclosure and hand-off
 
@@ -70,6 +72,8 @@ Not yet measured: <measure>, measured by <goal ID> (<gap:>).
 - **Hand-off to a person:** <route, hours, and the measured time to connect> (<C ID, M ID or gap:>).
 - **Persona, memory of the user or relationship features:** <none, or what; the disclosure cadence and self-harm protocol if present> (<C/D IDs>).
 - **Public claims about the system:** <each capability or accuracy claim the client will make and the M record behind it> (<M IDs or gap:>).
+- **Singapore chatbot info card inputs (external chat agents):** <what it can and cannot do; how reliable and safe it is; how user data is handled; how to report issues; the first-use statement; card version and date> (<C/M IDs>).
+- **Ontario job-posting disclosure, if the agent screens, assesses or selects applicants:** <the posting wording> (<C ID or n/a:>).
 
 ## Data
 

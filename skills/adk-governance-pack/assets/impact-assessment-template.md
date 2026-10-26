@@ -3,7 +3,7 @@ document: impact-assessment
 system: <system name>
 version: <build or design revision assessed>
 status: draft
-jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
+jurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
 for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
@@ -22,8 +22,8 @@ Structured along the topics of ISO/IEC 42005:2025 and mapped to NIST AI RMF
 1.0 and NIST AI 600-1. Draft for <client>'s risk owner; scores are
 provisional until they set them. Not legal advice.
 
-<!-- The last four sections are optional: keep each one whose condition
-holds and delete the rest, with this comment. -->
+<!-- The sections after "Monitoring and review" are optional: keep each one
+whose condition holds and delete the rest, with this comment. -->
 
 ## Scope and intended use
 
@@ -110,6 +110,33 @@ holds and delete the rest, with this comment. -->
 - **Use-case owner, assessing and approving officers:** <names or roles> (source: <who>, <YYYY-MM-DD> / gap:).
 - **Transparency statement inputs:** <usage pattern and domain, public interaction without human review, monitoring> (system-card.md; <IDs>).
 - **Agentic AI addendum (AGT.1 to AGT.8):** <memory scope, bounded workflows and approvals, typed tools, adversarial evaluation, monitoring, kill switch, decommissioning> (<C/SB IDs>).
+- **Draft form answers:** <the DTA tool, transparency statement and register answers, or the NSW AIAF registration and assessment answers, for the agency's officers> (government-form-answers-<form>.md; agency: <who completes and approves>).
+
+## New Zealand: Responsible AI Guidance mapping and Māori impact
+
+| Item | Content in this assessment | Evidence |
+| --- | --- | --- |
+| MBIE Responsible AI Guidance (private clients): inventory, PIA at design, security and jurisdictional risk, transparency | <content> | <IDs> |
+| Algorithm Charter (signatory agencies): likelihood and impact rating, role of humans, contact point, appeal channel | <content, or n/a: not a signatory> | <IDs; agency:> |
+| Māori impact and engagement: data about Māori, noa or tapu classification, offshore storage rationale, engagement owner | <content> | <IDs or gap:> |
+| Senior leadership approval (OPC expectation) | <who and when> | <source: or gap:> |
+
+## Singapore: Agentic MGF mapping
+
+| Dimension (Model AI Governance Framework for Agentic AI v1.5) | Content in this assessment | Evidence |
+| --- | --- | --- |
+| 1 Assess and bound the risks up front (error tolerance, sensitive data and memory, external systems, write actions, reversibility, autonomy) | <content> | <D/C IDs> |
+| 2 Make humans meaningfully accountable (value-chain roles, approval checkpoints, override rate and review time) | <content> | <C IDs, M IDs> |
+| 3 Technical controls and processes (change management on model updates, pre-deployment testing, gradual roll-out) | <content> | <C/SB/G IDs> |
+| 4 End-user responsibility (disclosure at the point of interaction, range of actions, escalation contacts) | <content> | <C IDs> |
+
+- **Financial clients:** <MAS materiality inputs (impact, complexity, reliance), FEAT fairness definition and metrics, kill switch, independent review; or n/a: not MAS-regulated> (<IDs>).
+
+## Canada: AIA inputs (federal clients)
+
+- **Administrative decision and impact level:** <whether the output makes or informs an administrative decision; the proposed level as the department will score it> (<C IDs>; counsel: <decision?>; agency: <level and approver>).
+- **Appendix C requirements as waits:** <peer review, notice, human involvement, explanation, approval to operate> (<W IDs or gap:>).
+- **Ontario human rights checklist:** <the OHRC Human Rights AI Impact Assessment questions for an agent that screens or ranks people, or n/a:> (<M IDs>).
 
 ## EU: FRIA crosswalk (AI Act Article 27, if required)
 

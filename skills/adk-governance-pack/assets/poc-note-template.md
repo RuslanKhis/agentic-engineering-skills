@@ -2,7 +2,7 @@
 document: poc-note
 system: <system name>
 status: draft
-jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
+jurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
 for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
@@ -26,6 +26,10 @@ advice; it says what the full pack must settle before production.
 - **United States:** <in scope and why, or n/a: why not> (<IDs or gap:>).
 - **EU:** <in scope and why, or n/a: why not; if in scope: Article 5 none identified, Annex III area or none, Article 50 disclosure> (<IDs or counsel:>).
 - **United Kingdom:** <in scope and why, or n/a: why not> (<IDs or gap:>).
+- **New Zealand:** <in scope and why, or n/a: why not> (<IDs or gap:>).
+- **Singapore:** <in scope and why, or n/a: why not> (<IDs or gap:>).
+- **Canada:** <in scope and why, including Quebec, or n/a: why not> (<IDs or gap:>).
+- **Government client:** <Commonwealth or NSW agency, with the official form the agency completes even for a POC; or n/a: private client> (<source: or agency:>).
 - **Roles:** <client and agency roles in each regime in scope> (<D ID or counsel:>).
 - **Decisions about people:** <none, or what the output feeds and who decides> (<C IDs or counsel:>).
 - **Data in the proof of concept:** <synthetic / anonymised / real personal data, scoped how; where staff access it from> (<floor item or D ID>).
