@@ -3,8 +3,10 @@ document: system-card
 system: <system name>
 version: <build or release the card describes>
 status: draft
+jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
+for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
 sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<topic>.md, evaluation reports>
 ---
 
@@ -18,7 +20,7 @@ a dated source, or is marked `assumption:` or `counsel:`.
 
 - **Purpose:** <what the system does, for whom, in which workflow> (<R/C IDs>).
 - **Users:** <roles and number; internal / external> (<path §n or source: who, date>).
-- **Deployer and provider:** <who puts it into service under whose name> (<classification memo or D ID>).
+- **Deployer and provider:** <who puts it into service under whose name> (<regulatory memo or D ID>).
 - **Decisions it informs:** <what a person decides with its output; what it may change itself> (<C IDs>).
 
 ## Out-of-scope use
@@ -42,16 +44,34 @@ Not yet measured: <measure>, measured by <goal ID> (<gap:>).
 
 ## Human oversight
 
-- <where a person reviews, approves or can override; share of outputs reviewed> (<C/SB ID>).
+- <where a person reviews, approves or can override; share of outputs reviewed; override rate> (<C/SB ID, M ID>).
 - <how a user contests or corrects an output, and who owns corrections> (<C/D ID>).
 - <how the system is stopped or rolled back, and by whom> (<D/G ID>).
 
+## Automated-decision disclosure
+
+<!-- Facts for the client's privacy policy, notices and explanations; write n/a: with the reason when no output decides, or feeds a decision about, a person. Delete this comment. -->
+
+- **Kinds of personal information used:** <kinds, in plain language> (<C/D IDs>).
+- **Decisions made solely by the system:** <kinds, or none> (<C IDs>).
+- **Decisions where the system does something substantially and directly related:** <kinds: ranks, scores, recommends, drafts> (<C IDs>).
+- **Meaningful information about the logic:** <features used and how the output is used; the explanation the design can produce on request> (<C/D IDs>).
+- **Human review, representations and contest:** <route and owner> (<C IDs or gap:>).
+- **Opt-out or appeal, where offered:** <route, or n/a: none required by the regimes in scope> (<C ID or counsel:>).
+
+## AI disclosure and hand-off
+
+- **Disclosure that the user is talking to an AI:** <when and how; how it answers "are you a human?"; on whose behalf an acting agent says it acts> (<C ID with its test>).
+- **Hand-off to a person:** <route, hours, and the measured time to connect> (<C ID, M ID or gap:>).
+- **Persona, memory of the user or relationship features:** <none, or what; the disclosure cadence and self-harm protocol if present> (<C/D IDs>).
+- **Public claims about the system:** <each capability or accuracy claim the client will make and the M record behind it> (<M IDs or gap:>).
+
 ## Data
 
-- <data the system reads and stores; personal data categories> (<DPIA input pack or D ID>).
+- <data the system reads and stores; personal data categories> (<privacy impact input pack or D ID>).
 - <screening and retention controls> (<C/SB ID>).
 
 ## Contact
 
 - **Owner:** <role and contact> (source: <who confirmed>, <YYYY-MM-DD>).
-- **Report a problem:** <channel> (source: <who confirmed>, <YYYY-MM-DD>).
+- **Report a problem or make a privacy complaint:** <channel> (source: <who confirmed>, <YYYY-MM-DD>).

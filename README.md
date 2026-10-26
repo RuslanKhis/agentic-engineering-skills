@@ -44,7 +44,7 @@ behaviour, or prepare a deployment.
 | **Not sure where AI fits, or which use case comes first** | `/adk-discovery` | A short discovery conversation, a ranked list of opportunities with the technology each needs (agent, LLM, classical ML, rules or a process change), the first use case with its outcome measure and baseline, and the exact prompt for the designer |
 | **Starting a new ADK application** | `/adk-system-designer` | A short design conversation, then an architecture document, a goal plan, and the exact prompt for the first goal |
 | **Changing an application you already have** | `/adk-engineer` | It names the specialist it is using, makes the change with local tests, and says what is still unverified |
-| **Answering a client's legal, privacy or security reviewers** | `/adk-governance-pack` | Draft papers built from the design and plan: an EU AI Act classification memo, DPIA inputs, an impact assessment, a system card, processing records and security questionnaire answers, each statement citing its evidence or flagged for counsel |
+| **Answering a client's legal, privacy or security reviewers** | `/adk-governance-pack` | A screen of which Australian, US, EU and UK privacy and AI laws apply, then draft papers built from the design and plan: a regulatory memo (with the EU AI Act classification where the EU applies), privacy impact inputs serving as PIA, DPIA or US risk assessment, transfer facts, an impact assessment, a system card, processing records and security questionnaire answers, each statement citing its evidence or flagged for counsel |
 | **Presenting the work to decide the next step** | `/adk-presenter` | A slide outline with evidence under every claim, what to say, the questions to expect and a one-page decision memo, for a business or a technical audience, at proof-of-concept approval, production approval, results review, or as a public case study |
 
 Discovery, design, engineering and presentation all lead to the same nineteen specialists; the governance pack drafts from what they record. You never need to remember which
@@ -412,7 +412,7 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 | Help choosing an approach or combining concerns | [adk-engineer](#adk-engineer) |
 | A presentation for a proof-of-concept approval, a production decision, a results review or a public case study | [adk-presenter](#adk-presenter) |
 | Your employer's and clients' context and lessons, kept outside every repository and offered as defaults in the next project | [practice-profile](#practice-profile) |
-| Draft papers for a client's counsel, DPO or CISO: EU AI Act classification, impact assessment, DPIA inputs, system card, processing records, security questionnaire | [adk-governance-pack](#adk-governance-pack) |
+| Draft papers for a client's counsel, DPO or CISO: which of Australian, US, EU and UK law applies, regulatory memo with the EU AI Act classification, impact assessment, PIA or DPIA inputs, transfer facts, system card, processing records, security questionnaire | [adk-governance-pack](#adk-governance-pack) |
 | Sequential steps, parallel work or bounded loops | [adk-workflow-design](#adk-workflow-design) |
 | Reliable API calls and protection against duplicate actions | [safe-api-tool-calls](#safe-api-tool-calls) |
 | Usage limits, repeated-tool protection or human approval | [adk-operational-guardrails](#adk-operational-guardrails) |
@@ -748,19 +748,33 @@ questions they don't answer.
 
 Use this when a client's counsel, data protection officer or security team
 asks for papers before a pilot or production decision. It reads the
-discovery brief, the design and the plan's evidence and drafts an EU AI Act
-classification memo (prohibited practices, Annex III high-risk areas such as
-hiring or credit, Article 50 transparency, and who is provider and who
-deployer when an agency builds for a client), an AI impact assessment along
-ISO/IEC 42005 mapped to the NIST AI RMF and its generative AI profile, a GDPR
-DPIA input pack, a system card citing measured results, records-of-processing
-rows and a security questionnaire answer bank. Every statement cites a
-contract, decision or evidence ID, or is marked as an assumption or a
-question for counsel; these are drafts, not legal advice. A proof of concept
-gets a one-page note; a pilot or production service gets the full pack. A
-helper fails a draft with an uncited statement, an invented ID, a legal date
-without the day it was checked, or an Annex III fact without a counsel flag.
-The designer plans it as a goal before the production decision.
+discovery brief, the design and the plan's evidence and first screens which
+regimes apply, always in the order Australia, United States, EU, UK: where
+the client is, where the people whose data it handles are, where the data is
+processed (including the agency's own staff in Australia), the client type,
+the sector and whether outputs feed decisions about people. An unknown fact
+keeps a regime in scope. It then drafts a regulatory memo: the full EU AI Act
+classification where the EU applies (prohibited practices, Annex III
+high-risk areas such as hiring or credit, Article 50 transparency, provider
+and deployer roles) and, for Australia, the US and the UK, which have no AI
+Act, a screen of the laws that do apply (the Privacy Act and APP 1.7
+automated-decision transparency; California's CPPA rules, Colorado, NYC Local
+Law 144, state privacy and sector laws; UK GDPR as amended by the Data (Use
+and Access) Act 2025, the Equality Act and the FCA). Alongside it come an AI
+impact assessment along ISO/IEC 42005 mapped to the NIST AI RMF, a privacy
+impact input pack that serves as the Australian PIA, the EU or UK DPIA and
+the US risk assessment, a transfer assessment annex for EU and UK data the
+agency reaches from Australia, a system card with an automated-decision
+disclosure block, records-of-processing rows under GDPR or UK GDPR and a
+security questionnaire answer bank. Every statement cites a contract,
+decision or evidence ID, or is marked as an assumption or a question for
+counsel; these are drafts, not legal advice. A proof of concept gets a
+one-page note; a pilot or production service gets the full pack. A helper
+fails a draft with no jurisdictions, a section for a regime not in scope, an
+uncited statement, an invented ID, a legal date without the day it was
+checked, or a high-stakes fact (hiring, credit, housing, insurance, health,
+children, biometrics, a government client) without a counsel flag. The
+designer plans it as a goal before the production decision.
 
 **Invoke:** Claude Code `/adk-governance-pack` · Codex `$adk-governance-pack`
 
@@ -783,8 +797,9 @@ design and plan record, and mark what is only planned.
 
 ```text
 /adk-governance-pack We are about to start a two-week proof of concept on
-real customer emails. Write the one-page classification note and data-flow
-summary for the client's privacy team.
+real customer emails for a UK client, and our Sydney team will read the
+traces. Write the one-page note and data-flow summary for the client's
+privacy team.
 ```
 
 </details>
@@ -2356,6 +2371,34 @@ pass validation and **947 tests** pass with **59 optional SDK checks
 skipped**. See the
 [note](docs/research/spec-tools-comparison-2026-10-26.md) and the
 [record](docs/testing/spec-tools-alignment-2026-10-26.md).
+
+### Governance papers for Australian, US, EU and UK law · 26 October 2026
+
+The governance pack assumed the EU AI Act and GDPR everywhere. It now
+screens jurisdictions before drafting, always in the order Australia, United
+States, EU, UK, from where the client, the people and the processing are
+(including the agency's own staff in Australia), and keeps a regime in scope
+while a fact is unknown. Every draft records `jurisdictions:` and the
+checker fails a missing list or a section for a regime not in scope. The
+classification memo becomes a regulatory memo: the EU AI Act classification
+where the EU applies, and for Australia, the US and the UK, which have no AI
+Act, a screen of the laws that do (the Privacy Act and APP 1.7 from 10
+December 2026; California's CPPA rules, Colorado, NYC Local Law 144 and
+federal sector laws; UK GDPR as amended by the Data (Use and Access) Act
+2025). The DPIA input pack now serves as the Australian PIA and the US risk
+assessment too, a transfer annex covers EU and UK data reached from
+Australia, and the EU reference carries the Article 50 guidelines, Article
+25(4), SCHUFA and Dun & Bradstreet. Three fresh-agent trials (an Australian
+HR assistant, a UK bank chatbot, a US hiring screener) picked the right
+regimes in the right order, set counsel flags where they belonged and
+passed the checker (ease 4, 3 and 4 of 5); all 22 frictions were fixed or
+recorded the same day. All **25 packages** pass validation and **966
+tests** pass with **59 optional SDK checks skipped**. See the research notes
+for [Australia](docs/research/au-ai-privacy-law-2026-10-26.md), the
+[United States](docs/research/us-ai-privacy-law-2026-10-26.md), the
+[EU](docs/research/eu-ai-privacy-law-2026-10-26.md) and the
+[UK](docs/research/uk-ai-privacy-law-2026-10-26.md), and the
+[record](docs/testing/governance-jurisdictions-2026-10-26.md).
 
 ### Durable engines that keep ADK's guardrails · 25 October 2026
 

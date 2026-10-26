@@ -2182,6 +2182,62 @@
         "Records DPIA sign-off and legal review as calendar waits that the production goals depend on, not as hours.",
         "Does not write the governance documents itself during the design conversation."
       ]
+    },
+    {
+      "id": "governance-pack-au-hr-internal",
+      "prompt": "Wattle & Co's Privacy Officer and Head of Security want the governance papers for the staff HR assistant before the pilot. Draft what they need from our docs.",
+      "available_skills": [
+        "adk-governance-pack",
+        "adk-engineer",
+        "protect-adk-sensitive-data"
+      ],
+      "context": "An Australian agency's project record for an Australian retailer's internal HR assistant: 4,800 staff in NSW, Victoria and Queensland; Workday leave, roster and attendance reads; managers can summarise a team member's attendance before a performance conversation; Gemini pinned in australia-southeast1; prompts logged for 30 days; error bodies sent to a US-region error tracker; agency engineers in Sydney read logs; masking missed union and medical phrases; pilot profile.",
+      "expected_primary": "adk-governance-pack",
+      "assertions": [
+        "Screens jurisdictions before drafting and records jurisdictions: [au] in every draft, with a reason in the screen table for leaving out the United States, the EU and the UK; the US error tracker is treated as an APP 8 overseas disclosure fact, not a reason to bring US law in.",
+        "Writes no EU AI Act or GDPR sections and no records of processing; the privacy impact input pack uses the APPs (no lawful-basis test) and an inventory and notice section instead.",
+        "States that the client's employee records exemption does not cover the consultancy and flags the consultancy's APP entity status as counsel.",
+        "Treats the manager attendance summary as a possible APP 1.7 decision from 10 December 2026 with its checked date, does not treat human review as an exemption, and sets counsel_required: yes.",
+        "Names the NSW workplace surveillance notice for prompt logging as a calendar wait and the union consultation as a wait.",
+        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing."
+      ]
+    },
+    {
+      "id": "governance-pack-uk-bank-chatbot",
+      "prompt": "Thamesbridge's two DPOs and their CISO want the governance papers for the customer service assistant before the pilot. Draft what they need from our docs.",
+      "available_skills": [
+        "adk-governance-pack",
+        "adk-engineer",
+        "adk-presenter"
+      ],
+      "context": "An Australian agency built a customer-service chatbot for a UK bank with an Irish subsidiary serving EU customers; it reads balances and transactions, freezes cards on confirmation and explains declined overdraft decisions from the bank's decision engine; hosting in London and Belgium; agency engineers in Sydney support it for six months with access to logs, traces and pseudonymised transcripts; pilot profile.",
+      "expected_primary": "adk-governance-pack",
+      "assertions": [
+        "Records jurisdictions: [au, eu, uk] in that order, with Australia in scope for the consultancy's own handling and the United States left out with a reason.",
+        "Writes a transfer assessment annex with rows for EU and UK personal data accessed from Australia (SCCs and a transfer impact assessment; IDTA or Addendum and the data protection test), leaving the conclusions to counsel.",
+        "Uses UK GDPR Articles 22A to 22D and names the Information Commission in the UK sections, and GDPR Article 22 with SCHUFA in the EU sections, for the overdraft explanation.",
+        "Covers Article 50(1) disclosure including on whose behalf the agent acts, and the FCA Consumer Duty and CMA guidance as UK screens.",
+        "Sets counsel_required: yes because the agent explains credit decisions, and runs check_governance.py until every draft passes."
+      ]
+    },
+    {
+      "id": "governance-pack-us-hiring-screener",
+      "prompt": "Redwood Freight's General Counsel wants the governance papers for the applicant screener before the California pilot, and wants to know whether we can use it in New York City. Draft what they need from our docs.",
+      "available_skills": [
+        "adk-governance-pack",
+        "adk-engineer",
+        "adk-agent-evaluation"
+      ],
+      "context": "An Australian agency built a resume screener for a California-headquartered client with warehouses in California and New York City; it scores and ranks applicants and marks some 'not recommended', which recruiters usually reject in bulk; an age impact ratio of 0.74 in the backtest; agency engineers in Sydney read an evaluation set of real past applications; pilot profile.",
+      "expected_primary": "adk-governance-pack",
+      "assertions": [
+        "Records jurisdictions: [au, us], with Australia for the consultancy's own handling and the EU and the UK left out with reasons.",
+        "Screens the CPPA risk assessment and ADMT rules with the three-part human review facts, the FEHA automated-decision regulations, Title VII and ADA, and NYC Local Law 144 with its independent bias audit and 10-business-day notice named as the client's documents.",
+        "Reports the 0.74 impact ratio and the 6% recruiter review rate with their M IDs as limits and questions for counsel, not as compliance.",
+        "Fills the input pack's assessment approval section with the go/no-go decision and the approver as gaps until the client names them.",
+        "Sets counsel_required: yes on every draft and leaves the New York City answer to counsel with the facts it needs.",
+        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing."
+      ]
     }
   ]
 }

@@ -434,8 +434,9 @@ credit, education, access to services) or a regulated domain, or the
 profile is MVP, pilot or production, add a **governance goal**, type
 governance, `Primary skill: adk-governance-pack`, placed before the
 production-approval presentation goal, which depends on it. It drafts the
-papers the client's counsel, DPO and security reviewers sign (AI Act
-classification, DPIA inputs, impact assessment, system card, processing
+papers the client's counsel, DPO and security reviewers sign (a
+jurisdiction screen across Australian, US, EU and UK law, a regulatory
+memo, privacy impact inputs, impact assessment, system card, processing
 records, questionnaire answers), sized by that skill to the profile; a
 proof of concept on real personal data gets its one-page note inside
 phase 1 instead. Its acceptance is the skill's checker passing on the

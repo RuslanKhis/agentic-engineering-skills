@@ -4,6 +4,13 @@ Read when writing the system card or the questionnaire answer bank. Both
 describe one build to outsiders, so both use the plan's evidence vocabulary
 and nothing warmer.
 
+Sources: the status vocabulary is this toolkit's own. The legal duties
+named below were read on 26 October 2026 at the sources listed in
+[Australia](australia.md), [United States](united-states.md),
+[EU AI Act](eu-ai-act.md), [privacy and records](privacy-and-records.md) and
+[United Kingdom](united-kingdom.md); cite those references' dates, not this
+file.
+
 ## Status words
 
 Every capability or control is one of:
@@ -36,6 +43,34 @@ named in its front matter; a later build needs a new pass.
   person sees (an M record when measured), how someone contests an output,
   and who can stop the system.
 - **Contact** is confirmed by the client; cite who confirmed it and when.
+  In the UK it also names the route for data protection complaints (DPA
+  2018 s 164A).
+- **Automated-decision disclosure** is the plain-language information the
+  client's privacy policy, notices and explanations draw on. One block
+  serves every regime in scope: the APP 1.8 entries (kinds of personal
+  information, decisions made solely by the program, decisions it does
+  something substantially and directly related to; from 10 December 2026,
+  checked 2026-10-26), which the OAIC expects vendors to supply as "clear,
+  high-level information"; GDPR Articles 13(2)(f), 14(2)(g) and 15(1)(h)
+  meaningful information about the logic and the explanation the design can
+  produce, and the Article 22(3) human intervention route; UK Article 22C
+  information, representations, human intervention and contest; and the
+  facts for California's ADMT pre-use notice (purpose, logic, opt-out or
+  appeal, alternative process) and Colorado's adverse-outcome explanation.
+  The card supplies facts; the client writes the notices. Write `n/a:` with
+  the reason when no output decides or feeds a decision about a person.
+- **AI disclosure and hand-off** records when and how the agent says it is
+  an AI, how it answers "are you a human?", and, for an agent acting for
+  someone, on whose behalf (EU AI Act Article 50(1) and the Commission's
+  July 2026 guidelines; Utah on request; California AB 1609 for large
+  businesses from 1 January 2027, checked 2026-10-26, with a good-faith
+  connection to a human within 15 minutes; the OAIC's recommendation; the
+  CMA's AI-agent guidance). Record the hand-off route and its measured time
+  as an M record. A persona, memory of the user or relationship features can
+  bring companion chatbot laws in: record the disclosure cadence and the
+  self-harm protocol. Every public capability or accuracy claim the client
+  will make cites an M record (FTC Section 5; Australian Consumer Law ss 18
+  and 29).
 
 `adk-presenter` may cite the system card in a technical or production
 deck; keep its figures identical to the plan's M records so the two never
@@ -52,13 +87,28 @@ bank from the design's contracts and security baseline, then paste.
 | Identity and access | SB01–SB04, SB20 and the identity contracts |
 | Secrets | SB16 and credential decisions |
 | Logging and retention | SB14, retention contracts, observability decisions |
-| Model provider data use and sub-processors | The DPIA input pack's provider section (one home; cite it) |
+| Model provider data use and sub-processors | The privacy impact input pack's provider section (one home; cite it) |
 | Prompt injection and agency | SB17, SB18, the security-posture table, the adversarial suite's results |
 | Output handling | SB10 |
 | Abuse and cost | SB19, SB25, the cost contract |
 | Vulnerability management | SB15, SB21, SB22–SB24 |
 | Sensitive data | `protect-adk-sensitive-data` evidence with measured detector coverage |
 | Certifications | The cloud provider's own reports, cited with a date; the application has none unless the client certified it |
+| Overseas access | The input pack's recipients table and the transfer assessment annex |
+| Incident notification | The clocks of the regimes in scope (below), and the contract flow-down from the agency to the client |
+| AI security baseline | For UK clients who ask, the DSIT Code of Practice for the Cyber Security of AI mapped principle by principle to SB and C IDs |
+
+Incident notification clocks to list, only for the regimes in scope (read
+26 October 2026; see the regime references): the agency notifies the client
+without undue delay under its contract; GDPR and UK GDPR, 72 hours to the
+authority; Australia, an eligible data breach assessed within 30 days and
+notified to the OAIC and individuals as soon as practicable, APRA CPS 234
+material incidents within 72 hours, and a ransomware payment reported within
+72 hours under the Cyber Security Act 2024; United States, the GLBA
+Safeguards Rule's 30-day FTC notice for financial institutions; EU NIS2 24
+and 72 hours when the client is in scope, the Cyber Resilience Act 24 and
+72 hours when a product is made available on the market, and AI Act Article
+73 for high-risk providers. Which entity notifies is `counsel:`.
 
 Cite a certification from the provider's compliance page or the report the
 client holds, with the date; when neither can be read, the answer is a
