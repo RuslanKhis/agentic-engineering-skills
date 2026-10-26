@@ -69,7 +69,7 @@ saw components switch to importing `cn` from it instead of the local
   (`rehype-raw`) and allows every link, image and protocol by default: pass
   `skipHtml`, replace `rehypePlugins` without the raw plugin, and set its
   harden prefixes to the SB10 allowlist.
-- No edit or regenerate without a server checkpoint to resume from.
+- No edit or regenerate without a server checkpoint to resume from. Showing the buttons is not rewinding: the gateway calls `Runner.rewind_async(user_id=, session_id=, rewind_before_invocation_id=)` (google-adk 2.12.0; `adk api_server` has no rewind route) before running the edited message, and a scripted-model test asserts the removed turn is absent from the next model request. Three facts shape the gateway (2.12.0 `runners.py` and `sessions/_rewind_utils.py`, read 2026-10-26): `rewind_async` loads the session through `_get_or_create_session`, so check ownership before calling it; it only appends a rewind marker event, so stored history keeps the discarded turns and a history endpoint must apply the markers itself; and it undoes no side effect, so refuse a rewind past a completed write rather than let the user re-issue it. In assistant-ui the buttons appear only when `getCheckpointId` is supplied, a regenerate arrives as an empty text part (re-send the user text stored on the server), and a null checkpoint sends the edit as a new message, leaving the server's history and the screen out of step.
 - Never wait for network idle in a browser test of a streaming page; wait for
   the visible state instead.
 

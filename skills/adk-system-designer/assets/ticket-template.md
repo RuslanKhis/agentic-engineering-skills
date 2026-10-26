@@ -13,7 +13,7 @@ contracts: [<design contract IDs this ticket proves, e.g. C1, C3>]
 companion_skills: [<names, or empty>]
 security: [<SB IDs this ticket proves, or empty>]
 design_system: <path to DESIGN.md for UI tickets, or none>
-contract_deltas: [<none, or a contract ID and its one-line revision when this ticket narrows or widens one>]
+contract_deltas: [<none, or a contract ID and its one-line revision when this ticket narrows, widens or withdraws one; a withdrawal needs a SHALL NOT acceptance item tagged with that ID>]
 pass_to_pass: [<earlier tickets' acceptance items, as G01/A2, whose tests this ticket must keep passing: those whose touches or contracts overlap this ticket's, or empty; with no earlier tickets, the existing test ids instead; these are the evaluation skill's pass_to_pass tests>]
 phase: <1, 2 or later>
 type: <implementation | journey | presentation | teardown | discovery>
@@ -77,7 +77,7 @@ tier.>
 
 Verification, automated: <runnable command with the expected exit code, on
 the project's pinned interpreter; offline, local or authorised live>.
-Verification, manual: <none, or the person and what they check>.
+Verification, manual: <none, or the person and what they check>. The agent never ticks a manual item; its Evidence line reads `manual: <check> — confirmed by <person>, <date>` in that person's words, or `owed`.
 <When the SDK is absent in the session, the SDK-tier cases are written and
 reported as not run; the status is then in_progress with the owed run named.>
 

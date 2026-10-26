@@ -56,6 +56,16 @@ part of `check_repo.py`, and it was documented from the tool's README and CLI
 reference on 23 October 2026, not run here; its output schema is declared
 experimental, so only the exit code (1 when risks or failures remain) is read.
 
+A fourth optional step cross-checks the packages against the Agent Skills
+reference validator. The published wheel (`skills-ref` 0.1.1 on PyPI) installs
+a command named `agentskills`, not `skills-ref`: run `agentskills validate
+skills/<name>` in an ephemeral environment (exit 0 valid, 1 errors). The npm
+package of the same name is an unrelated port. All 25 packages passed it on 26
+October 2026 (agentskills/agentskills commit 69ef37e, Apache-2.0; the upstream
+README calls the library a demonstration). `validate_skills.py` mirrors its
+three stricter rules, so CI does not depend on it: no `---` inside the
+frontmatter, no inline `{...}` or `[...]` YAML and no anchors or aliases.
+
 Read their source and prerequisites first. Installing compatible SDKs also
 enables optional optimization/auth checks. A skipped contract is not a passing
 contract. Live evaluations remain separately scoped work. “Offline” here names
@@ -83,6 +93,23 @@ Use explicit `/skill-name` or `$skill-name` separately to test execution after
 invocation. An explicit-invocation pass says nothing about natural discovery.
 The current corpus is a small starting set; add paraphrases and held-out
 requests when a real misrouting appears.
+
+One run per case does not measure activation. Run each query three times in
+fresh sessions and score its trigger rate: a positive passes at 0.5 or above, a
+negative below 0.5. Mark each activation case `"split": "train"` or `"split":
+"held-out"`. When a description is revised to fix misses, revise against the
+training cases only and choose the version by its held-out pass rate, which may
+not be the last version written; keep it under 1,024 characters, since
+descriptions grow during this work, and keep its "Do not activate for"
+exclusions, which an optimisation for triggering tends to erode. Three
+descriptions are already within 20 characters of the limit
+(adk-agent-interoperability, adk-agent-security, adk-presenter); to make room,
+cut wording that restates the coverage list before any exclusion, never an
+exclusion (the Agent Skills description guide and anthropics/skills
+`skill-creator`'s optimisation loop, agentskills commit 69ef37e and
+anthropics/skills commit dbd4588, read 2026-10-26; the guide is CC BY 4.0 and
+paraphrased here; the automated loop itself needs Claude Code and live model
+calls and is not used).
 
 ## Test composition and scope
 
@@ -117,6 +144,15 @@ skill-enabled smoke tests, not paired proof of improvement.
    collection in that session; omitting an explicit command alone is insufficient.
 3. Keep the executing agent separate from the acceptance grader. Retain outputs
    and transcripts for each condition, including failures and incomplete runs.
+   Blind the grader: label the two conditions A and B at random per task,
+   write the mapping to a `blind_mapping.json` before grading, remove session
+   reports and tool folders that name the condition, score the pre-registered
+   assertions per pair first and a holistic preference second, and allow
+   ties. An assertion that passes in both conditions shows nothing about the
+   skill; report it as non-discriminating (anthropics/skills commit dbd4588,
+   `skills/skill-creator/agents/analyzer.md`, Apache-2.0, read 2026-10-26; its
+   comparator writes its rubric after reading both outputs, which this
+   procedure does not adopt).
 4. Repeat according to a plan chosen before examining scores. Keep held-out
    cases out of the improvement loop. Start small and expand where findings
    warrant it; there is no required universal number of trials.

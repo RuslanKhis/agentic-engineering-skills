@@ -67,11 +67,13 @@ class PackageValidationTests(unittest.TestCase):
         self.write_interface()
         self.assertEqual([], self.errors())
 
-    def test_yaml_flow_and_block_scalars_are_parsed(self):
+    def test_yaml_block_scalars_and_block_mappings_are_parsed(self):
+        # Inline {...} mappings are valid YAML but the Agent Skills reference parser rejects them;
+        # see test_frontmatter_forms_the_reference_parser_rejects.
         self.frontmatter = (
             "name: sample-skill\n"
             "description: >-\n  Build a useful feature\n  when requested.\n"
-            "metadata: {version: '1', author: Maintainer}\n"
+            "metadata:\n  version: '1'\n  author: Maintainer\n"
         )
         self.write_skill()
         self.assertEqual([], self.errors())
@@ -132,6 +134,18 @@ class PackageValidationTests(unittest.TestCase):
                 self.frontmatter = f"name: sample-skill\ndescription: Build a feature.\nmetadata: {metadata}\n"
                 self.write_skill()
                 self.assert_error("metadata must map string keys to string values")
+
+    def test_frontmatter_forms_the_reference_parser_rejects(self):
+        cases = (
+            ("description: Build a feature --- then more.\n", "contains '---'"),
+            ("description: Build a feature.\nmetadata: {owner: team}\n", "inline {...} or [...]"),
+            ("description: &d Build a feature.\nmetadata:\n  summary: *d\n", "anchors or aliases"),
+        )
+        for extra, message in cases:
+            with self.subTest(message=message):
+                self.frontmatter = "name: sample-skill\n" + extra
+                self.write_skill()
+                self.assert_error(message)
 
     def test_required_bundled_files_must_exist(self):
         for relative in ("LICENSE", "SKILL.md", "agents/openai.yaml"):

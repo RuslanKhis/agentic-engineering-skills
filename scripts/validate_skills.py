@@ -110,7 +110,20 @@ def check_frontmatter(text: str, path: Path, package: Path,
     body = "".join(lines[end + 1:])
     if not body.strip():
         report.error(path, "skill instructions are empty")
-    data = load_mapping("".join(lines[1:end]), path, report)
+    frontmatter = "".join(lines[1:end])
+    # The Agent Skills reference parser (agentskills/agentskills skills-ref, strictyaml) splits on the
+    # first "---" anywhere and rejects flow collections, anchors and aliases; hosts may parse the same way.
+    if "---" in frontmatter:
+        report.error(path, "frontmatter contains '---', which the reference parser reads as its closing delimiter")
+    try:
+        tokens = {type(token).__name__ for token in yaml.scan(frontmatter)}
+    except yaml.YAMLError:
+        tokens = set()
+    if tokens & {"FlowMappingStartToken", "FlowSequenceStartToken"}:
+        report.error(path, "frontmatter uses inline {...} or [...] YAML, which the reference parser rejects")
+    if tokens & {"AnchorToken", "AliasToken"}:
+        report.error(path, "frontmatter uses YAML anchors or aliases, which the reference parser rejects")
+    data = load_mapping(frontmatter, path, report)
     if data is None:
         return body
     allowed = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}

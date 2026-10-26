@@ -280,6 +280,69 @@ app = App(name="finance", root_agent=root_agent,
         self.assertIn("fail_open=True", finding["detail"])
         self.assertIn("strict not True", finding["detail"])
 
+    def test_workflow_graph_is_named_and_marks_the_run_partial(self):
+        self.write("report/agent.py", '''
+import subprocess
+from google.adk import Workflow
+from google.adk.agents import LlmAgent
+
+writer = LlmAgent(name="writer", model="m")
+
+
+def deploy_report(node_input: str) -> str:
+    subprocess.run(["gsutil", "cp", "r.txt", "gs://bucket"])
+    return node_input
+
+
+root_agent = Workflow(name="weekly_report", edges=[("START", writer), (writer, deploy_report)])
+''')
+        result = self.run_cli()
+        self.assertEqual(1, result.returncode, result.stderr)
+        data = json.loads(result.stdout)
+        self.assertTrue(data["partial"])
+        [finding] = self.findings(data, "workflow_graph_unread")
+        self.assertIn("deploy_report", finding["detail"])
+        # Compared with itself: no capability change, still partial, and the unread path is named.
+        base_path = Path(self.temp.name) / "workflow-base.json"
+        base_path.write_text(result.stdout)
+        again = self.run_cli("--compare", str(base_path))
+        self.assertEqual(1, again.returncode)
+        self.assertEqual([], json.loads(again.stdout)["capability_changes"])
+        self.assertEqual(["report/agent.py"], json.loads(again.stdout)["unread_paths"])
+
+    def test_compare_lists_capability_changes_against_a_base_run(self):
+        base_source = '''
+from google.adk.agents import LlmAgent
+from google.adk.tools import FunctionTool
+
+
+def check(tool, args, tool_context):
+    return None
+
+
+def refund_order(order_id: str) -> dict:
+    return {"status": "success"}
+
+
+root_agent = LlmAgent(name="refunds", model="m", before_tool_callback=check,
+                      tools=[FunctionTool(refund_order, require_confirmation=True)])
+'''
+        self.write("refunds/agent.py", base_source)
+        base = self.run_cli()
+        self.assertEqual(0, base.returncode, base.stderr)
+        base_path = Path(self.temp.name) / "base.json"
+        base_path.write_text(base.stdout)
+        same = self.run_cli("--compare", str(base_path))
+        self.assertEqual(0, same.returncode, same.stdout)
+        self.write("refunds/agent.py", base_source.replace(", require_confirmation=True", "")
+                   .replace(" before_tool_callback=check,", ""))
+        head = self.run_cli("--compare", str(base_path))
+        self.assertEqual(3, head.returncode, head.stderr)
+        changes = [c["change"] for c in json.loads(head.stdout)["capability_changes"]]
+        self.assertIn("gate changed on refund_order", changes)
+        self.assertIn("callbacks changed", changes)
+        self.assertTrue(any(c.startswith("write_tool_without_gate rose") for c in changes), changes)
+
     def test_each_finding_kind_fires_on_the_trifecta_fixture(self):
         self.write("agent.py", TRIFECTA_AGENT)
         result, data = self.scan()

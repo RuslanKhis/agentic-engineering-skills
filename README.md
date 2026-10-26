@@ -2231,6 +2231,82 @@ tests** pass with **60 optional SDK checks skipped**. See the
 [note](docs/research/governance-pack-2026-10-25.md) and the
 [record](docs/testing/governance-pack-2026-10-25.md).
 
+### assistant-ui in front of a Python ADK agent · 26 October 2026
+
+assistant-ui's ADK package reaches a Python agent only through a gateway
+route the team writes, and its stock stream forwards raw ADK events to the
+browser: thought parts, every state key and raw error text. The frontend
+skill now covers that route: server-allocated session ids, a filtered
+stream and history, inbound part and approval validation, edit and
+regenerate through `Runner.rewind_async` (which checks no ownership and
+undoes no side effect), the AG-UI approval payload that otherwise counts a
+missing decision as approval, and Assistant Cloud kept off for client data.
+The fresh-agent trial built the gateway offline and refused every hostile
+request before any model call (41 tests passed; ease 3 of 5); it found that
+ADK 2.12 rejects the approval-plus-text message the package sends, which
+the gateway now splits. Eight of nine frictions were fixed the same day.
+All **25 packages** pass validation and **951 tests** pass with **59
+optional SDK checks skipped**. See the
+[note](docs/research/assistant-ui-comparison-2026-10-26.md) and the
+[record](docs/testing/assistant-ui-alignment-2026-10-26.md).
+
+### A capability gate for coding-agent pull requests · 26 October 2026
+
+agents-shipgate was proposed as a cheap merge gate; it is not one. Its
+binding diff exits 0 whatever it finds and missed a removed confirmation, a
+removed callback and a widened MCP filter, and its `verify` command failed
+even a README-only pull request. The security inspector already reads
+those controls, so it gained `--compare BASE_JSON`: run on a pull request's
+base and head, it lists what each agent can now do differently and exits 3,
+and the CI steps run it from the base commit so a change cannot rewrite its
+judge. The inspector also stopped reporting a project with an ADK 2.x
+`Workflow` as complete; it names the graph's nodes and lists them as
+unread. In the fresh-agent trial the gate caught every planted change and
+passed an unrelated one (ease 3 of 5); six of eight frictions were fixed
+the same day. All **25 packages** pass validation and **951 tests** pass
+with **59 optional SDK checks skipped**. See the
+[note](docs/research/agents-shipgate-comparison-2026-10-26.md) and the
+[record](docs/testing/agents-shipgate-alignment-2026-10-26.md).
+
+### Skill validation against the Agent Skills reference · 26 October 2026
+
+All 25 skills pass the Agent Skills reference validator (the published
+wheel's command is `agentskills`, not the `skills-ref` the specification
+names). Its parser is stricter than ours in three ways, a `---` inside
+frontmatter, inline YAML collections and anchors, so `validate_skills.py`
+now rejects them too. From skill-creator, activation is measured as a
+trigger rate over repeated runs with train and held-out cases, and the
+existing blind A/B practice is written down with a mapping file written
+before grading. The fresh-agent maintainer trial changed a description on
+a copy and, with no model access, recorded it as an unmeasured candidate
+rather than an improvement (ease 3 of 5); nine of eleven frictions were
+fixed in the contributing guide and checks the same day. All **25
+packages** pass validation and **951 tests** pass with **59 optional SDK
+checks skipped**. See the
+[note](docs/research/skill-creator-agentskills-comparison-2026-10-26.md)
+and the [record](docs/testing/skill-creator-agentskills-alignment-2026-10-26.md).
+
+### A phase gate that reads the code · 26 October 2026
+
+The system designer's phase gate read only the tickets, so a phase whose
+records said finished could close while the code disagreed. After spec-kit's
+`converge` and OpenSpec's `verify`, it now closes in four steps: the
+records gate; the same gate with `--base <commit>`, which fails on any file
+changed since the phase began that no ticket's `touches` names; a
+fresh-context read-only review with a new plan-versus-code prompt, grading
+gaps CRITICAL, WARNING or SUGGESTION; and the findings on the agenda. A
+withdrawn contract must be proved gone by a `SHALL NOT` item, a manual
+check needs a named person and date, and the gate no longer requires the
+review goal it precedes. 12-factor-agents was read and not linked: the
+skills already state its rules more precisely. In the fresh-agent trial
+the records said finished, the plain report said nothing was wrong, and
+the gate and review together caught all four planted defects (ease 3 of
+5); seven of ten frictions were fixed the same day. All **25 packages**
+pass validation and **947 tests** pass with **59 optional SDK checks
+skipped**. See the
+[note](docs/research/spec-tools-comparison-2026-10-26.md) and the
+[record](docs/testing/spec-tools-alignment-2026-10-26.md).
+
 ### Durable engines that keep ADK's guardrails · 25 October 2026
 
 Restate's ADK plugin journals model calls, but because it answers the model

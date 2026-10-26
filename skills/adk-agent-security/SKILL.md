@@ -58,7 +58,11 @@ community report, source-verified).
    `all_three`, and `complete`, false when a `tools=` list or a sub-agent was
    built at run time, so an absent leg means unknown, not absent). Every row
    is a heuristic prompt to confirm in the tool body.
-   A `partial: true` result means an area was not scanned.
+   A `partial: true` result means an area was not scanned. It does not read
+   ADK 2.x `Workflow` graphs: it names their nodes (`workflow_graph_unread`)
+   and marks the run partial, so review each function node's effects by
+   hand. For a pull request, `--compare` against the base commit's run lists
+   what each agent can now do differently ([validation](references/validation.md)).
 4. Fill the per-agent worksheet in
    [threat-model-checklist](assets/threat-model-checklist.md): assets,
    untrusted inputs, consequential actions, egress paths, identity source,

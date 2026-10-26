@@ -23,6 +23,7 @@ RULE_ID = re.compile(r"(?<![\w/-])SB\d+(?![\w/-])")
 EVIDENCE_LINE = re.compile(r"(?<![\w/-])((?:C|SB)\d+)\s*:?\s*(evidenced|partially evidenced|partial|not evidenced|"
                            r"unproven|not run)\b[,;\s]*([^,;\n]*)", re.IGNORECASE)
 ACTUAL = re.compile(r"(?mi)^\s*[-*]?\s*\**actual\**\s*:\s*(.+?)\s*$")
+MANUAL_LINE = re.compile(r"(?mi)^\s*[-*]?\s*\**manual\**\s*:\s*(.+?)\s*$")
 RESOURCE = re.compile(r"(?mi)^\s*[-*]?\s*([^:\n]+?):\s*(absent|retained|unknown)\b[^\n]*;\s*cleanup\s*:")
 SETTLED = re.compile(r"\bsettled\s*:|→\s*D\d+|->\s*D\d+|\brejected\s*:", re.IGNORECASE)
 
@@ -138,7 +139,8 @@ def read_evidence(text: str) -> dict:
     rulings = [r for r in label_block(text, "Rulings") if r.lower() not in ("none", "-")]
     progress = label_block(text, "Progress")
     resources = [{"name": m.group(1).strip(), "state": m.group(2).lower()} for m in RESOURCE.finditer(text)]
-    return {"lines": lines, "actual": actual, "actual_reported": bool(actual_match),
+    manual = [m.group(1).strip() for m in MANUAL_LINE.finditer(text)]
+    return {"lines": lines, "actual": actual, "actual_reported": bool(actual_match), "manual": manual,
             "rulings": rulings, "open_rulings": [r for r in rulings if not SETTLED.search(r)],
             "progress": progress, "resources": resources}
 

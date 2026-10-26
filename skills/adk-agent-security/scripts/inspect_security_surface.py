@@ -10,7 +10,15 @@ unauthenticated-exposure hints. Classifies each tool as a private-data source,
 an untrusted-content source or an egress path by name, parameter and call
 heuristics, then reports a per-agent "lethal trifecta" summary. Never imports
 or executes the inspected project. Findings are review prompts for a human
-threat model, not a security verdict.
+threat model, not a security verdict. An ADK 2.x `Workflow` graph is not
+read: its nodes are named and the run is partial. With `--compare BASE_JSON`
+(an earlier run, such as a pull request's base commit) it lists, per agent,
+tools added or removed, changed gates, callbacks, toolsets, sub-agents and
+executors, and rising guard findings.
+
+Exit status: 0 complete, 1 partial, 2 bad arguments, 3 with --compare when
+any capability changed (3 takes precedence over 1; `unread_paths` then lists
+what was not read, for the gate to check against the changed files).
 """
 
 import argparse
@@ -309,6 +317,7 @@ class Collector(ast.NodeVisitor):
         self.remote_vars = {}
         self.plugins = []
         self.observations = []
+        self.workflows = []
         self.class_depth = 0
 
     def observe(self, line, subject, kind, detail):
@@ -365,6 +374,13 @@ class Collector(ast.NodeVisitor):
 
     def visit_Call(self, node):
         name = call_name(node)
+        if name == "Workflow":
+            # ADK 2.x graph: function nodes are capabilities that are not tools, and this scan does not
+            # read the graph, so the project is reported partial with the nodes named for hand review.
+            edges = keyword(node, "edges")
+            nodes = sorted({n.id for n in ast.walk(edges) if isinstance(n, ast.Name) and n.id != "START"}) \
+                if edges is not None else []
+            self.workflows.append((node.lineno, nodes))
         if name in AGENT_CLASSES:
             self.agents.append(self.agent_entry(node, name))
         elif name in RUNNER_CLASSES:
@@ -606,6 +622,11 @@ class Inventory:
             param_vars.update(collector.param_vars)
             remote_vars.update(collector.remote_vars)
             self.result["plugins"].extend(collector.plugins)
+            for line, nodes in collector.workflows:
+                self.issue(collector.path, f"Workflow graph at line {line} is not read; review its nodes by hand")
+                self.finding(collector.path, line, "Workflow", "workflow_graph_unread",
+                             "function and agent nodes in this graph are not inventoried: " + (", ".join(nodes) or
+                             "edges not a literal"))
             for line, subject, kind, detail in collector.observations:
                 self.finding(collector.path, line, subject, kind, detail)
         self.functions, self.agent_vars, self.toolset_vars = functions, agent_vars, toolset_vars
@@ -922,6 +943,54 @@ class Inventory:
         return summary
 
 
+GUARD_COUNTS = ("write_tool_without_gate", "mcp_unfiltered", "trifecta_present", "egress_capable_tool",
+                "workflow_graph_unread")
+
+
+def agent_signature(agent):
+    """What an agent can do and what guards it, in comparable form."""
+    return {
+        "tools": {t.get("name"): sorted(t.get("gate") or []) for t in agent.get("tools", [])},
+        "callbacks": sorted(agent.get("callbacks") or []),
+        "toolsets": sorted(json.dumps({k: t.get(k) for k in ("kind", "tool_filter", "allowed_tools",
+                                                             "require_confirmation", "transport")}, sort_keys=True)
+                           for t in agent.get("toolsets", [])),
+        "sub_agents": sorted(str(s.get("name") or s.get("variable")) for s in agent.get("sub_agents", [])),
+        "code_executor": agent.get("code_executor"),
+    }
+
+
+def capability_changes(base, head):
+    """Differences in tools, gates, callbacks, toolsets, sub-agents and executors, and rising guard findings."""
+    changes = []
+    before = {a.get("name"): agent_signature(a) for a in base.get("agents", [])}
+    after = {a.get("name"): agent_signature(a) for a in head.get("agents", [])}
+    for name in sorted(set(before) | set(after), key=str):
+        if name not in before:
+            changes.append({"agent": name, "change": "agent added"})
+            continue
+        if name not in after:
+            changes.append({"agent": name, "change": "agent removed"})
+            continue
+        old, new = before[name], after[name]
+        for tool in sorted(set(old["tools"]) | set(new["tools"]), key=str):
+            if tool not in old["tools"]:
+                changes.append({"agent": name, "change": f"tool added: {tool}", "gate": new["tools"][tool]})
+            elif tool not in new["tools"]:
+                changes.append({"agent": name, "change": f"tool removed: {tool}"})
+            elif old["tools"][tool] != new["tools"][tool]:
+                changes.append({"agent": name, "change": f"gate changed on {tool}",
+                                "before": old["tools"][tool], "after": new["tools"][tool]})
+        for key in ("callbacks", "toolsets", "sub_agents", "code_executor"):
+            if old[key] != new[key]:
+                changes.append({"agent": name, "change": f"{key} changed", "before": old[key], "after": new[key]})
+    for kind in GUARD_COUNTS:
+        was, now = base.get("counts", {}).get(kind, 0), head.get("counts", {}).get(kind, 0)
+        if now > was:
+            changes.append({"agent": "*", "change": f"{kind} rose from {was} to {now}"})
+    return changes
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -934,6 +1003,9 @@ def main():
                         help="stop at this total directory-entry count, including exclusions (default: 10000)")
     parser.add_argument("--max-bytes", type=positive, default=262144, help="maximum bytes read per file (default: 262144)")
     parser.add_argument("--max-depth", type=positive, default=8, help="maximum subdirectory depth (default: 8)")
+    parser.add_argument("--compare", metavar="BASE_JSON",
+                        help="an earlier run's JSON (e.g. the base commit of a pull request); list what each agent can "
+                             "now do differently and exit 3 when anything changed")
     args = parser.parse_args()
     root = Path(args.project)
     try:
@@ -946,7 +1018,17 @@ def main():
     inventory = Inventory(args)
     inventory.walk(root)
     inventory.analyse()
+    if args.compare:
+        try:
+            base = json.loads(Path(args.compare).read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            parser.error(f"--compare: cannot read {args.compare}: {exc}")
+        inventory.result["capability_changes"] = capability_changes(base, inventory.result)
+        # Paths this run could not read; a gate checks them against the pull request's changed files.
+        inventory.result["unread_paths"] = sorted({i["path"] for i in inventory.result["issues"]})
     print(json.dumps(inventory.result, indent=2, sort_keys=True))
+    if inventory.result.get("capability_changes"):
+        return 3
     return 1 if inventory.result["partial"] else 0
 
 

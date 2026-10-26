@@ -44,8 +44,8 @@
     {"id": "superpowers", "repo": "obra/superpowers", "pinned": "2ce8aa1", "read": "2026-10-23", "licence": "MIT", "note": "docs/research/companion-collections-comparison-2026-10-23.md", "used_by": []},
     {"id": "gemini-cli", "repo": "google-gemini/gemini-cli", "pinned": null, "read": "2026-09-16", "licence": "Apache-2.0", "note": "docs/research/google-coding-agent-skills.md", "used_by": []},
     {"id": "antigravity-cli", "repo": "google-antigravity/antigravity-cli", "pinned": null, "read": "2026-09-16", "licence": "none", "note": "docs/research/google-coding-agent-skills.md", "used_by": []},
-    {"id": "anthropics-skills", "repo": "anthropics/skills", "pinned": null, "read": "2026-09-15", "licence": "none", "note": "docs/research/skill-quality-practices.md", "used_by": ["adk-system-designer"]},
-    {"id": "agentskills", "repo": "agentskills/agentskills", "pinned": null, "read": "2026-09-15", "licence": "Apache-2.0", "note": "docs/research/skill-quality-practices.md", "used_by": []},
+    {"id": "anthropics-skills", "repo": "anthropics/skills", "pinned": "dbd4588", "read": "2026-10-26", "licence": "none", "note": "docs/research/skill-creator-agentskills-comparison-2026-10-26.md", "used_by": ["adk-system-designer"]},
+    {"id": "agentskills", "repo": "agentskills/agentskills", "pinned": "69ef37e", "read": "2026-10-26", "licence": "Apache-2.0", "note": "docs/research/skill-creator-agentskills-comparison-2026-10-26.md", "used_by": []},
     {"id": "a2a-samples", "repo": "a2aproject/a2a-samples", "pinned": "6603ba3", "read": "2026-10-24", "licence": "Apache-2.0", "note": "docs/research/a2a-samples-comparison-2026-10-24.md", "used_by": ["adk-agent-interoperability", "adk-tool-auth-and-secrets"]},
     {"id": "a2ui", "repo": "a2ui-project/a2ui", "pinned": "b817d02", "read": "2026-10-24", "licence": "Apache-2.0", "note": "docs/research/a2ui-comparison-2026-10-24.md", "used_by": ["adk-agent-interoperability", "adk-frontend-integration"]},
     {"id": "pyrit", "repo": "microsoft/PyRIT", "pinned": "bc5a8bc", "read": "2026-10-24", "licence": "MIT", "note": "docs/research/pyrit-comparison-2026-10-24.md", "used_by": ["adk-agent-interoperability", "adk-agent-security"]},
@@ -87,6 +87,13 @@
     {"id": "restate-sdk-python", "repo": "restatedev/sdk-python", "pinned": "37953b6", "read": "2026-10-25", "licence": "MIT", "note": "docs/research/restate-dapr-comparison-2026-10-25.md", "used_by": ["adk-workflow-design"]},
     {"id": "restate-server", "repo": "restatedev/restate", "pinned": "4b2fb2c", "read": "2026-10-25", "licence": "NOASSERTION", "note": "docs/research/restate-dapr-comparison-2026-10-25.md", "used_by": ["adk-operational-guardrails", "adk-workflow-design"]},
     {"id": "restate-adk-example", "repo": "restatedev/restate-google-adk-example", "pinned": "b306b86", "read": "2026-10-25", "licence": "none", "note": "docs/research/restate-dapr-comparison-2026-10-25.md", "used_by": ["adk-operational-guardrails"]},
-    {"id": "diagrid-python-ai", "repo": "diagridio/python-ai", "pinned": "cbd4f90", "read": "2026-10-25", "licence": "NOASSERTION", "note": "docs/research/restate-dapr-comparison-2026-10-25.md", "used_by": ["adk-workflow-design"]}
+    {"id": "diagrid-python-ai", "repo": "diagridio/python-ai", "pinned": "cbd4f90", "read": "2026-10-25", "licence": "NOASSERTION", "note": "docs/research/restate-dapr-comparison-2026-10-25.md", "used_by": ["adk-workflow-design"]},
+    {"id": "12-factor-agents", "repo": "humanlayer/12-factor-agents", "pinned": "d20c728", "read": "2026-10-26", "licence": "NOASSERTION", "note": "docs/research/12-factor-agents-comparison-2026-10-26.md", "used_by": []},
+    {"id": "spec-kit", "repo": "github/spec-kit", "pinned": "67e0f72", "read": "2026-10-26", "licence": "MIT", "note": "docs/research/spec-tools-comparison-2026-10-26.md", "used_by": ["adk-system-designer"]},
+    {"id": "openspec", "repo": "Fission-AI/OpenSpec", "pinned": "6d04a1b", "read": "2026-10-26", "licence": "MIT", "note": "docs/research/spec-tools-comparison-2026-10-26.md", "used_by": ["adk-system-designer"]},
+    {"id": "conductor", "repo": "gemini-cli-extensions/conductor", "pinned": "6e8f9a8", "read": "2026-10-26", "licence": "Apache-2.0", "note": "docs/research/spec-tools-comparison-2026-10-26.md", "used_by": ["adk-system-designer"]},
+    {"id": "humanlayer", "repo": "humanlayer/humanlayer", "pinned": "77c7fe9", "read": "2026-10-26", "licence": "Apache-2.0", "note": "docs/research/spec-tools-comparison-2026-10-26.md", "used_by": ["adk-engineer"]},
+    {"id": "agents-shipgate", "repo": "ThreeMoonsLab/agents-shipgate", "pinned": "b980d4a", "read": "2026-10-26", "licence": "Apache-2.0", "note": "docs/research/agents-shipgate-comparison-2026-10-26.md", "used_by": ["adk-release-engineering"]},
+    {"id": "assistant-ui", "repo": "assistant-ui/assistant-ui", "pinned": "86040b7", "read": "2026-10-26", "licence": "MIT", "note": "docs/research/assistant-ui-comparison-2026-10-26.md", "used_by": ["adk-frontend-integration"]}
   ]
 }

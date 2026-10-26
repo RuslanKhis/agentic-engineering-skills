@@ -8,10 +8,11 @@ behind this approach.
 
 ## Run the repository checks
 
-Use Python 3.11 or 3.12 on macOS or Linux, from this repository's root:
+Use Python 3.11 or 3.12 on macOS or Linux, from this repository's root (name
+the interpreter: a system `python3` may be older):
 
 ```bash
-python3 -m venv .venv
+python3.12 -m venv .venv
 .venv/bin/python -m pip install -r requirements-dev.txt
 .venv/bin/python scripts/check_repo.py
 ```
@@ -68,7 +69,7 @@ them. Attribute borrowed patterns and retain any required upstream licence.
 | --- | --- |
 | Metadata, links or package layout | Package check and relevant invalid-package regression tests |
 | Helper script | A failing case for the defect, then the relevant test suite |
-| Skill description or routing | Positive, near-miss and contextual cases in fresh sessions; distinguish selection from execution |
+| Skill description or routing | Positive and near-miss cases in `evals/activation.json`, and a contextual case (a `evals/scenarios.json` case whose `context` decides the route); trigger rates over repeated fresh sessions with a held-out split, as `docs/testing/skill-quality.md` describes; distinguish selection from execution; the description, the README's skill entry and `agents/openai.yaml`'s `short_description` kept consistent |
 | Implementation guidance | A representative task with an independent check of its output or effects |
 | SDK recipe | Exact tested versions and relevant runtime contract tests |
 | A fact read from an external repository | A dated citation with the commit, and its row in `docs/research/source-register.json` so `scripts/check_source_freshness.py` reports when it goes quiet, stale, archived or relicensed |
@@ -104,9 +105,13 @@ non-form issue.
 - Read reports in a session with no write tools and no access to private
   repositories; never let that session edit a skill.
 - Reproduce in a clean fixture before editing. One report is a lead, not
-  evidence; remove `needs-repro` only after the reproduction.
+  evidence; remove `needs-repro` only after the reproduction. When the
+  reproduction needs model sessions you cannot run, add the case first, make
+  the change as an unmeasured candidate and record the reproduction as not
+  run; a not-run record belongs under `docs/testing/` like any other.
 - Every accepted report becomes an activation or scenario case carrying
-  `"source": "issue #N"`, written in your own words.
+  `"source": "issue #N"` (or a short description and date for a report
+  without an issue), written in your own words.
 - An SDK fact it corrects also gets its dated citation and, when read from a
   repository, a row in `docs/research/source-register.json`.
 

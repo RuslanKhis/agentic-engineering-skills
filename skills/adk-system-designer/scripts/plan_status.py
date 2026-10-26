@@ -18,8 +18,14 @@ each ticket session wrote afterwards (status, Evidence contract lines,
 - the prompt to paste next: the designer's checkpoint when something above
   needs a decision, otherwise the next ticket.
 
-``--gate`` turns the report into a phase-exit check. ``--weekly`` prints a
-status update and RAID log for stakeholders instead.
+``--gate`` turns the report into a phase-exit check. With ``--base <commit>``
+(the commit the phase started from) it also lists files changed since then
+that no ticket of the phase names in ``touches``: work nobody asked for, or a
+ticket whose scope was never recorded. A diff that cannot be read fails the
+gate as not verified rather than passing. This is the mechanical half of the
+plan-versus-code review in the designer's checkpoint reference; whether the
+code still does what each evidenced contract says is the reviewer's half.
+``--weekly`` prints a status update and RAID log for stakeholders instead.
 Exit status: 0 healthy (or gate passed), 1 checkpoint needed (or gate failed),
 2 when the input cannot be read.
 """
@@ -238,6 +244,9 @@ def gate(result: dict, goals: list[dict], phase: str) -> list[str]:
     reasons = []
     phase_goals = [g for g in goals if in_phase(g, phase)]
     for goal in phase_goals:
+        # The gate runs before the review goal, and teardown follows the review.
+        if goal["type"] in ("presentation", "teardown"):
+            continue
         if goal["status"] not in FINISHED:
             reasons.append(f"{goal['goal']} is {goal['status'] or 'without a status'}")
     types = {g["type"] for g in phase_goals}
@@ -247,10 +256,51 @@ def gate(result: dict, goals: list[dict], phase: str) -> list[str]:
         for ident in cov.get("phase_cited", []):
             if ident not in cov["evidenced"] and ident not in cov["settled"]:
                 reasons.append(f"{label} {ident} is neither evidenced nor recorded as gap, deferred or n/a")
+    for goal in phase_goals:
+        for delta in goal.get("deltas") or []:
+            if "withdraw" not in delta.lower():
+                continue
+            for ident in CONTRACT_ID.findall(delta):
+                items = (goal.get("acceptance") or {}).values()
+                if not any("SHALL NOT" in item["text"] and ident in item["text"] for item in items):
+                    reasons.append(f"{goal['goal']} withdraws {ident} without a SHALL NOT acceptance item tagged {ident}")
+        for line in (goal.get("evidence") or {}).get("manual", []):
+            if re.search(r"confirmed by [^,]+,\s*\d{4}-\d{2}-\d{2}", line, re.IGNORECASE):
+                continue
+            state = "owed" if re.search(r"\bowed\b", line, re.IGNORECASE) else "not confirmed by a named person and date"
+            reasons.append(f"{goal['goal']} manual check {state}: {line}")
     reasons += [f"open ruling: {r}" for r in result["open_rulings"]]
     reasons += [f"contract delta not in the design: {d}" for d in result["pending_deltas"]]
     reasons += [f"resource state unknown: {r}" for r in result["unknown_resources"]]
     return reasons
+
+
+def unrequested_changes(base: str, goals: list[dict], phase: str, own: list[Path]) -> tuple[list[str], str | None]:
+    """Files changed since ``base`` that no phase ticket's ``touches`` covers, or a reason the diff is unreadable."""
+    try:
+        top = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True, timeout=30)
+        diff = subprocess.run(["git", "diff", "--name-only", f"{base}..HEAD"], capture_output=True, text=True,
+                              timeout=30, cwd=top.stdout.strip() or None)
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return [], f"git could not be run ({exc.__class__.__name__})"
+    if top.returncode != 0 or diff.returncode != 0:
+        return [], (diff.stderr or top.stderr).strip().splitlines()[0] if (diff.stderr or top.stderr).strip() \
+            else "git returned an error"
+    root = Path(top.stdout.strip())
+    # The plan, design and ticket files change as the work is recorded; they are not unrequested work.
+    skip = []
+    for path in own:
+        try:
+            skip.append(str(path.resolve().relative_to(root.resolve())))
+        except ValueError:
+            continue
+    touched = [t for g in goals if in_phase(g, phase) for t in g.get("touches") or []]
+    found = []
+    for name in (line.strip() for line in diff.stdout.splitlines()):
+        if not name or touches_overlap([name], skip) or touches_overlap([name], touched):
+            continue
+        found.append(name)
+    return sorted(found), None
 
 
 def next_prompt(result: dict, plan: Path | None, tickets: Path | None) -> str:
@@ -267,7 +317,9 @@ def next_prompt(result: dict, plan: Path | None, tickets: Path | None) -> str:
         return f"/adk-engineer Carry out {where}." if where else f"/adk-engineer Carry out {goal} from {source}."
     if not result["waiting"]:
         return f"Every goal of phase {result['phase']} is finished; run this script with --gate before its review."
-    return "Nothing is ready; the waiting goals and what they wait for are listed above."
+    return ("Nothing is ready; the waiting goals and what they wait for are listed above. If only the review "
+            "goal remains, run this script with --gate --base <the phase's start commit> and the "
+            "plan-versus-code review before it.")
 
 
 def changed_since(paths: list[Path], since: str) -> list[str]:
@@ -369,6 +421,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--phase", default="1", help="phase to report; empty for every goal")
     parser.add_argument("--capacity", type=float, help="hours available for the phase after the reserve")
     parser.add_argument("--gate", action="store_true", help="exit 0 only when the phase can be called complete")
+    parser.add_argument("--base", help="with --gate: the commit the phase started from; changes since then "
+                                       "outside every ticket's touches fail the gate")
     parser.add_argument("--weekly", action="store_true", help="print a stakeholder status update and RAID log")
     parser.add_argument("--since", help="with --weekly: a date (YYYY-MM-DD) or commit for 'finished since'")
     parser.add_argument("--json", action="store_true")
@@ -391,6 +445,12 @@ def main(argv: list[str] | None = None) -> int:
     result["next"] = prompt
     if args.gate:
         reasons = gate(result, goals, args.phase)
+        if args.base:
+            own = [p for p in (args.plan, args.tickets, args.design) if p]
+            changed, error = unrequested_changes(args.base, goals, args.phase, own)
+            if error:
+                reasons.append(f"plan-versus-code diff not verified: {error}")
+            reasons += [f"changed since {args.base} but in no ticket's touches: {name}" for name in changed]
         result["gate"] = {"passed": not reasons, "reasons": reasons}
         if args.json:
             print(json.dumps(result, indent=1, default=str))

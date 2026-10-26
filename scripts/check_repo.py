@@ -58,6 +58,8 @@ def validate_cases(root: Path) -> list[str]:
                     coverage[skill].add(trigger)
                 if not isinstance(case.get("rationale"), str) or not case["rationale"].strip():
                     errors.append(f"{cid}: rationale must be nonempty text")
+                if "split" in case and case["split"] not in ("train", "held-out"):
+                    errors.append(f"{cid}: split must be \"train\" or \"held-out\" when present")
             else:
                 primary = case.get("expected_primary")
                 if "expected_primary" not in case or (primary is not None and

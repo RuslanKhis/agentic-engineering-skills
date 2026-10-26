@@ -473,6 +473,25 @@
       ]
     },
     {
+      "id": "skill-description-optimisation-out-of-scope",
+      "prompt": "We forked these skills. adk-agent-security keeps loading when people ask for unit tests of a FastAPI auth route. Tighten its description and prove the new one is better.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-agent-security",
+        "adk-agent-evaluation",
+        "adk-fastapi-backend"
+      ],
+      "context": "A copy of this repository with evals/activation.json; no model credentials for batch runs; the user answers questions.",
+      "expected_primary": null,
+      "assertions": [
+        "Does not treat this as ADK agent work: neither adk-agent-evaluation nor adk-agent-security leads the change.",
+        "Keeps the description at or under 1024 characters and keeps its existing 'Do not activate for' exclusions.",
+        "Adds the FastAPI auth unit-test request as a near-miss negative in evals/activation.json before editing the description.",
+        "Proposes held-out cases and repeated runs per query with a trigger-rate threshold, and does not claim improvement without running them.",
+        "Runs or names scripts/validate_skills.py for the package check."
+      ]
+    },
+    {
       "id": "out-of-scope-marketing-edit",
       "prompt": "Fix the spelling of 'recieve' in the marketing page and leave everything else unchanged.",
       "available_skills": ["adk-engineer", "adk-workflow-design", "adk-frontend-integration", "deploy-adk-on-google-cloud", "optimise-adk-on-google-cloud"],
@@ -704,6 +723,26 @@
       ]
     },
     {
+      "id": "release-coding-agent-capability-diff-gate",
+      "prompt": "Coding agents now open most PRs on our ADK support agent. Add a CI check that blocks a PR which changes what the production agent can do unless a human approves it. Someone suggested agents-shipgate diff --application; is that enough?",
+      "available_skills": [
+        "adk-release-engineering",
+        "adk-agent-security",
+        "adk-agent-interoperability",
+        "adk-agent-evaluation",
+        "deploy-adk-on-google-cloud"
+      ],
+      "context": "google-adk 2.12.0; root LlmAgent with FunctionTool(refund_order, require_confirmation=True), a before_tool_callback capability check, one McpToolset with tool_filter, two sub-agents, and a new Workflow-based reporting agent; GitHub Actions; no network in the session.",
+      "expected_primary": "adk-release-engineering",
+      "assertions": [
+        "States that agents-shipgate 1.2.0 diff --application exits 0 whatever it finds and is advisory, so a gate must parse comparison_status and rows from --json and treat exit 2 as NOT RUN",
+        "States that it does not compare require_confirmation, callbacks or McpToolset tool_filter, so a compared result with no rows is not evidence that capability is unchanged",
+        "Gates on inspect_security_surface.py run on the base tree and then on the head with --compare, which exits 3 and lists capability_changes (changed gates, callbacks, toolsets, sub-agents, tools, rising guard counts); requires a review label for that merge.",
+        "States that a Workflow graph's function nodes are not read by either tool: the inspector names them, marks the run partial, and they need hand review.",
+        "Keeps the MCP definition pin (mcp_tool_inventory.py --diff --fail-on-diff) as a separate check from the binding diff"
+      ]
+    },
+    {
       "id": "release-model-retirement-and-ci-gate",
       "prompt": "Our Gemini model retires in three weeks and our GitHub Actions only run unit tests. Plan the model upgrade and add an eval gate that blocks regressions without being flaky.",
       "available_skills": ["adk-release-engineering", "adk-agent-evaluation", "adk-model-and-output-contracts", "deploy-adk-on-google-cloud"],
@@ -929,6 +968,24 @@
       ]
     },
     {
+      "id": "designer-phase-gate-plan-versus-code",
+      "prompt": "/adk-system-designer Phase 1 is finished. Check docs/plans/support.md before the review: does the code actually do what the tickets say?",
+      "available_skills": [
+        "adk-system-designer",
+        "adk-engineer",
+        "adk-memory-architecture"
+      ],
+      "context": "Plan, design and tickets from the plan-in-progress fixture with every phase-1 ticket verified_local; plan_status.py --gate passes on the records. In the code, the merge of G03 reintroduced the session-state cache that G01's evidence says C2 removed; app/tools/export.py changed but is in no ticket's touches; G02's contract_deltas withdraws C5 (bulk delete) yet bulk_delete is still in the agent's tools list; G02's manual OAuth consent item is ticked with no confirmation. Local reading only; no edits to code.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Runs plan_status.py --gate with --base set to the phase's start commit, and does not treat a pass as proof the code does what the contracts say, because the gate reads records and the diff's paths, not behaviour.",
+        "Runs a read-only plan-versus-code pass that edits no code and ticks no box, and reports C2 as a CRITICAL contradiction with file evidence.",
+        "Reports bulk_delete still being bound after C5 was withdrawn as CRITICAL, and asks for a SHALL NOT acceptance item.",
+        "Lists app/tools/export.py as changed outside every ticket's touches (the --base gate reports it) and puts it on the agenda as unrequested work.",
+        "Flags the ticked manual OAuth item as owed until a named person confirms, and puts every finding on the checkpoint agenda rather than calling the phase complete."
+      ]
+    },
+    {
       "id": "designer-names-google-product-skills",
       "prompt": "Design a production ADK application on Cloud Run that answers warranty questions from our product database and files a return request on confirmation. Two developers, six weeks, real customer data. Design only, then write the goal plan.",
       "available_skills": ["adk-system-designer", "adk-engineer", "deploy-adk-on-google-cloud", "adk-agent-observability", "adk-tool-auth-and-secrets", "finding-google-skills"],
@@ -1032,6 +1089,24 @@
         "Adds what the recipe lacks: consent per topic, correction and erasure by label or revision, and a test that a memory-service failure is observable rather than an empty result.",
         "Treats written memory as an untrusted-input boundary (content scan before write) and keeps exact user settings in a profile record, not semantic memory.",
         "Writes scripted-model Runner tests for cross-user denial and forgetting, reported as not run without the SDK, and does not change the google-adk pin."
+      ]
+    },
+    {
+      "id": "frontend-assistant-ui-adk-python-gateway",
+      "prompt": "We want assistant-ui instead of CopilotKit for our Python ADK support agent, with approvals for refunds and an edit button on user messages. Wire it up.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-frontend-integration",
+        "adk-operational-guardrails",
+        "adk-fastapi-backend"
+      ],
+      "context": "google-adk 2.12.0 FastAPI app with IAP-verified principal; refund tool uses require_confirmation; Vite React SPA; candidate @assistant-ui/react-google-adk 0.0.40. Offline; nothing installed.",
+      "expected_primary": "adk-frontend-integration",
+      "assertions": [
+        "Uses a FastAPI route speaking assistant-ui's proxy contract (or the AG-UI route with emit_interrupt_outcome=True), never direct mode against adk api_server, with user_id from the verified principal and session creation through useAdkRuntime create or an owned check.",
+        "Filters the ADK event stream and session history: drops thought parts, unapproved state keys and raw error text, keeping fixed error copy.",
+        "Accepts only allowlisted inbound parts, accepts adk_request_confirmation responses only for a pending call of that session, and handles an approval sent in the same request as new text.",
+        "Enables edit only with Runner.rewind_async before the new message, with a scripted-model test that the removed turn is absent."
       ]
     },
     {

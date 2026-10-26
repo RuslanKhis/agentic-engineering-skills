@@ -20,6 +20,38 @@ scanned; inspect it by hand. The output names identifiers and flags only, so
 it can be attached to a review. `adk_pins` must show
 `at_or_above_cve_floor`, or the report says why not.
 
+When a coding agent writes a pull request, gate what the production agent can
+do: run the inspector on the base commit's tree, save its JSON, then run it on
+the head with `--compare base.json`. It exits 3 and lists `capability_changes`
+when any agent gained or lost a tool, a gate changed on a tool
+(`require_confirmation` removed, a callback dropped), a toolset's filter,
+confirmation or transport changed, a sub-agent or code executor changed, or a
+guard finding count rose (`write_tool_without_gate`, `mcp_unfiltered`,
+`trifecta_present`, `egress_capable_tool`, `workflow_graph_unread`); require a
+human review label for that merge. Exit 3 takes precedence over 1. Exit 1 means
+no listed change but an area the inspector could not read, named in
+`unread_paths`: a `Workflow` graph, whose function nodes it names but does not
+read, is always unread, so block only when one of the pull request's changed
+files is in `unread_paths`, otherwise every pull request in a project with a
+`Workflow` would fail. Run the inspector and the gate script from the base
+commit (`git show <base>:path`), never the pull request's own copy, so the
+change cannot rewrite its judge; vendor the skill under `.agents/skills/`,
+which the inspector skips; let only a code owner apply the review label; and
+expect the pull request that adds the gate to report NOT RUN, since its base
+has no inspector.
+
+```bash
+git show "$BASE":.agents/skills/adk-agent-security/scripts/inspect_security_surface.py > /tmp/inspect.py
+git worktree add -q /tmp/base "$BASE"
+python /tmp/inspect.py --project /tmp/base > base.json || true
+python /tmp/inspect.py --project . --compare base.json > head.json; status=$?
+changed=$(git diff --name-only "$BASE"...HEAD)
+if [ $status -eq 3 ]; then exit 1                     # capability changed: needs the review label
+elif [ $status -eq 1 ]; then
+  python -c 'import json,sys; u=set(json.load(open("head.json"))["unread_paths"]); sys.exit(1 if u & set(sys.argv[1:]) else 0)' $changed
+elif [ $status -ne 0 ]; then exit 2; fi               # NOT RUN
+```
+
 Tool references resolve by name, module attribute (`tools.fn`) or import
 (`from .tools import fn`, `from pkg import tools as t`) to the definition in the
 scanned file of that module; anything else is `unresolved_tool_reference`, is

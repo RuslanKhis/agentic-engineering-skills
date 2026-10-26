@@ -67,6 +67,18 @@ class CheckRepoTests(unittest.TestCase):
                 self.save(root)
                 self.assertTrue(checker.validate_cases(root))
 
+    def test_activation_split_is_train_or_held_out(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root)
+            self.activation["cases"][0]["split"] = "held-out"
+            self.activation["cases"][1]["split"] = "train"
+            self.save(root)
+            self.assertEqual(checker.validate_cases(root), [])
+            self.activation["cases"][0]["split"] = "holdout"
+            self.save(root)
+            self.assertTrue(any("split must be" in e for e in checker.validate_cases(root)))
+
     def test_duplicate_ids_and_json_keys_are_rejected(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

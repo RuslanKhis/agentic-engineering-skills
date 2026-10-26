@@ -67,7 +67,14 @@ confirm on the installed version):
   the run with `UNKNOWN_INTERRUPT`; a rejection changes nothing. The flag is
   off by default precisely because `@ag-ui/client` 1.0 refuses the next run
   until reported interrupts are answered by `resume`, which breaks a
-  tool-message frontend.
+  tool-message frontend. assistant-ui's AG-UI adapter answers only through
+  `resume` and auto-cancels pending calls on a new message, so it needs the
+  flag on. A `resolved` entry whose payload is not a boolean, a `confirmed`
+  object or `{"approved": bool}` (a null payload included) becomes
+  `confirmed: true` in the middleware (ag-ui-protocol/ag-ui commit 85a427d on
+  main, `_resume_entry_content`, read 2026-10-26; confirm on the installed
+  release): custom approval UIs send `{"approved": bool}`, and a test proves
+  any other payload does not approve.
 
 A ticket declares which contract the frontend uses; a test with the flag on
 sends a tool-message answer and asserts `INTERRUPT_RESUME_REQUIRED`, and a

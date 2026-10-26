@@ -13,6 +13,7 @@ These versions identify the companion implementation and prior evidence reopened
 | Other resolved Python packages | FastAPI 0.141.1, Pydantic 2.13.5, HTTPX 0.28.1, google-auth 2.58.0, Uvicorn 0.52.4, pytest 9.1.1 |
 | Manual browser | React/React DOM 18.3.1, Vite 6.4.3, TypeScript 5.7.3; declared Node ≥18.18 |
 | Copilot browser/BFF | `@copilotkit/react-core` and `@copilotkit/runtime` 1.69.0, `@ag-ui/client` 0.0.57, Next 15.5.24, React/React DOM 19.2.1, Zod 3.25.76, TypeScript 5.7.3; declared Node ≥22.12 |
+| assistant-ui | `@assistant-ui/react-google-adk` 0.0.40 read, not run, against a Python gateway tested offline on google-adk 2.12.0 (2026-10-26); its `assistant-cloud` dependency is unpinned (`*`) |
 | Historical frontend execution | Node 24.19.0, npm 10.7.0, macOS |
 
 The companion pins the five Python integration packages exactly; other Python requirements use bounded ranges. Its resolved versions are evidence snapshots, not a complete reproducible Python lock. Frontend lockfiles pin the resolved npm graphs. Preserve the target's own lockfile and existing override rationale. Matching a few direct versions does not prove the full environment matches.

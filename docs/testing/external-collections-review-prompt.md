@@ -309,6 +309,36 @@ The collections this repository references, with what it relies on them for:
   options in the system designer; read 25 October 2026 at commits 37953b6,
   4b2fb2c, b306b86 and cbd4f90; see
   docs/research/restate-dapr-comparison-2026-10-25.md).
+- humanlayer/12-factor-agents (factors 5, 6, 8 and 9 read and not linked:
+  covered more precisely or contradicting the receipts rule; content CC
+  BY-SA; read 26 October 2026 at commit d20c728; see
+  docs/research/12-factor-agents-comparison-2026-10-26.md).
+- github/spec-kit, Fission-AI/OpenSpec, gemini-cli-extensions/conductor and
+  humanlayer/humanlayer (a phase gate that reads the code: a base-commit diff
+  against `touches` in `plan_status.py` and a graded read-only review; a
+  withdrawn contract proved absent; manual items confirmed by a named
+  person; in the system designer and engineer; read 26 October 2026 at
+  commits 67e0f72, 6d04a1b, 6e8f9a8 and 77c7fe9; see
+  docs/research/spec-tools-comparison-2026-10-26.md).
+- agentskills/agentskills and anthropics/skills `skill-creator` (the
+  reference validator's three stricter rules mirrored in
+  `validate_skills.py`, the real `agentskills` command, activation as a
+  trigger rate with a held-out split, and blind A/B rules, in the toolkit's
+  own checks and `docs/testing/skill-quality.md`; read 26 October 2026 at
+  commits 69ef37e and dbd4588; anthropics/skills licences are per skill and
+  several are proprietary, so nothing copied; see
+  docs/research/skill-creator-agentskills-comparison-2026-10-26.md).
+- ThreeMoonsLab/agents-shipgate (an advisory binding diff only, since it
+  exits 0 whatever it finds and misses confirmation, callbacks and MCP
+  filters; the pull-request capability gate as the security inspector's
+  `--compare`; the inspector's `Workflow` limit; in the release and security
+  skills; read and spiked 26 October 2026 at commit b980d4a, 1.2.0 on PyPI;
+  see docs/research/agents-shipgate-comparison-2026-10-26.md).
+- assistant-ui/assistant-ui (the Python route for an ADK agent, filtering
+  raw ADK events, inbound and batched approval validation, rewind for edit,
+  the AG-UI approval payload, and Assistant Cloud as a data boundary, in the
+  frontend skill; read 26 October 2026 at commit 86040b7; see
+  docs/research/assistant-ui-comparison-2026-10-26.md).
 - google-gemini/gemini-cli and google-antigravity/antigravity-cli
   (skill discovery paths and invocation in
   docs/research/google-coding-agent-skills.md and docs/integrations/

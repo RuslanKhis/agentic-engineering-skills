@@ -101,9 +101,11 @@ class PlanInProgress(Fixture):
         code, result = self.status("--gate")
         self.assertEqual(1, code)
         reasons = "\n".join(result["gate"]["reasons"])
-        for expected in ("G02 is in_progress", "G05 is without a status", "contract C3 is neither evidenced",
+        for expected in ("G02 is in_progress", "contract C3 is neither evidenced",
                          "open ruling", "contract delta not in the design"):
             self.assertIn(expected, reasons)
+        # The gate runs before the review (presentation) goal, so G05 is not a reason.
+        self.assertNotIn("G05", reasons)
         self.edit(self.design, "before the next session | user", "before the next session (revised G01) | user")
         self.edit(self.tickets / "G01.md", "retention breach)", "retention breach) settled: D6")
         for goal, contract in (("G02", "C3"), ("G03", "C5"), ("G04", "C3")):
@@ -116,6 +118,48 @@ class PlanInProgress(Fixture):
         self.edit(self.plan, "  type: presentation\n", "  type: presentation\n  status: done\n")
         code, result = self.status("--gate")
         self.assertEqual(0, code, result["gate"]["reasons"])
+
+    def test_gate_with_base_lists_changes_no_ticket_touches(self):
+        def git(*args):
+            proc = subprocess.run(["git", *args], cwd=self.root, capture_output=True, text=True)
+            self.assertEqual(0, proc.returncode, proc.stderr)
+            return proc.stdout.strip()
+        git("init", "-q")
+        git("-c", "user.email=t@example.com", "-c", "user.name=t", "commit", "-q", "--allow-empty", "-m", "base")
+        base = git("rev-parse", "HEAD")
+        for name in ("app/profile.py", "web/src/chat/Reply.tsx", "app/billing.py"):
+            (self.root / name).parent.mkdir(parents=True, exist_ok=True)
+            (self.root / name).write_text("# change\n", encoding="utf-8")
+        self.edit(self.tickets / "G01.md", "status:", "status:")
+        git("add", "-A")
+        git("-c", "user.email=t@example.com", "-c", "user.name=t", "commit", "-q", "-m", "phase work")
+        code, result = self.status("--gate", "--base", base)
+        self.assertEqual(1, code)
+        unrequested = [r for r in result["gate"]["reasons"] if "in no ticket's touches" in r]
+        # app/profile.py and web/src/chat/ are in touches; the plan, design and tickets are the record itself.
+        self.assertEqual(1, len(unrequested), unrequested)
+        self.assertTrue(unrequested[0].endswith("app/billing.py"))
+        code, result = self.status("--gate", "--base", "no-such-commit")
+        self.assertTrue(any("not verified" in r for r in result["gate"]["reasons"]))
+
+    def test_gate_checks_withdrawals_and_manual_confirmations(self):
+        path = self.tickets / "G01.md"
+        text = path.read_text(encoding="utf-8")
+        text = text.replace("contract_deltas:", "contract_deltas: [withdraws C4: no bulk deletion]\nold_contract_deltas:", 1)
+        text = text.replace("## Evidence", "## Evidence\n\n- manual: OAuth consent screen checked — confirmed\n", 1)
+        path.write_text(text, encoding="utf-8")
+        code, result = self.status("--gate")
+        reasons = "\n".join(result["gate"]["reasons"])
+        self.assertIn("G01 withdraws C4 without a SHALL NOT acceptance item tagged C4", reasons)
+        self.assertIn("G01 manual check not confirmed by a named person and date", reasons)
+        text = path.read_text(encoding="utf-8").replace(
+            "— confirmed\n", "— confirmed by Dana Lee, 2026-10-26\n")
+        text = text.replace("## Acceptance", "## Acceptance\n\n- [x] A9 (C4) THE agent SHALL NOT bind bulk_delete.\n", 1)
+        path.write_text(text, encoding="utf-8")
+        code, result = self.status("--gate")
+        reasons = "\n".join(result["gate"]["reasons"])
+        self.assertNotIn("without a SHALL NOT", reasons)
+        self.assertNotIn("manual check", reasons)
 
     def test_weekly_update_has_effort_next_and_raid(self):
         code, out, err = self.run_script("plan_status.py", "--plan", str(self.plan), "--tickets", str(self.tickets),

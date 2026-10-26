@@ -41,7 +41,11 @@ when the ticket completes.
 
 1. Write the Evidence as the main instructions say, including `actual:` with
    the human hours the person reports. Ask once if they have not said; write
-   `not reported` rather than guessing.
+   `not reported` rather than guessing. A manual verification item is
+   recorded as `manual: <check> — confirmed by <person>, <date>` only when
+   that person says they did it, otherwise `owed`; never tick it for them
+   (humanlayer/humanlayer commit 77c7fe9, `.claude/commands/implement_plan.md`,
+   Apache-2.0, read 2026-10-26).
 2. For each contract this ticket evidenced, update its Evidence cell in the
    design's contracts table from `planned: …` to `evidenced: <tier>,
    <goal>/<acceptance>`. That cell is evidence, not a decision; change
