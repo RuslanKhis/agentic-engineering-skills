@@ -8,8 +8,9 @@ dependent chain, each person's load and a finish estimate in working days that
 respects dependencies, one person doing one goal at a time, and calendar waits.
 
 When the schedule records goal types (``type: implementation | journey |
-presentation | teardown | discovery``), a presentation goal that comes after
-built work must also come after a journey goal.
+presentation | teardown | discovery | governance | portability``), a
+presentation goal that comes after built work must also come after a journey
+goal; a governance or portability goal is a document, not built work.
 
 It also lists, for review without failing, goal IDs a goal's prose names that
 are neither before nor after it, and outside approvals with no matching wait.
