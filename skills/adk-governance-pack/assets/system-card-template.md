@@ -3,7 +3,7 @@ document: system-card
 system: <system name>
 version: <build or release the card describes>
 status: draft
-jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
+jurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
 for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
@@ -11,6 +11,11 @@ sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<t
 ---
 
 # System card: <system name>
+
+> **Drafting aid output, not legal advice.** Prepared to support the
+> reviewer named in `for:`, never to replace the client's lawyer. It is not
+> reviewed until that reviewer records a decision in Review and sign-off at
+> the end; counsel decides every legal conclusion in it.
 
 Draft for <client> reviewers. It describes the build named above and nothing
 later. Not legal advice. Every statement cites a design, plan or evidence ID,
@@ -58,6 +63,8 @@ Not yet measured: <measure>, measured by <goal ID> (<gap:>).
 - **Meaningful information about the logic:** <features used and how the output is used; the explanation the design can produce on request> (<C/D IDs>).
 - **Human review, representations and contest:** <route and owner> (<C IDs or gap:>).
 - **Opt-out or appeal, where offered:** <route, or n/a: none required by the regimes in scope> (<C ID or counsel:>).
+- **Quebec s 12.1 notice and review (Canada), if a decision is made by the system alone:** <when the person is told; the information used, reasons and principal factors given on request; the correction right; the staff member who receives observations> (<C IDs or counsel:>).
+- **Government client facts:** <NSW AIAF or DTA transparency, appeal and non-AI alternative; New Zealand Algorithm Charter contact point, appeal channel and role of humans for signatories; Canadian federal notice and explanation under the Directive; or n/a: private client> (<C IDs; agency:>).
 
 ## AI disclosure and hand-off
 
@@ -65,6 +72,8 @@ Not yet measured: <measure>, measured by <goal ID> (<gap:>).
 - **Hand-off to a person:** <route, hours, and the measured time to connect> (<C ID, M ID or gap:>).
 - **Persona, memory of the user or relationship features:** <none, or what; the disclosure cadence and self-harm protocol if present> (<C/D IDs>).
 - **Public claims about the system:** <each capability or accuracy claim the client will make and the M record behind it> (<M IDs or gap:>).
+- **Singapore chatbot info card inputs (external chat agents):** <what it can and cannot do; how reliable and safe it is; how user data is handled; how to report issues; the first-use statement; card version and date> (<C/M IDs>).
+- **Ontario job-posting disclosure, if the agent screens, assesses or selects applicants:** <the posting wording> (<C ID or n/a:>).
 
 ## Data
 
@@ -75,3 +84,13 @@ Not yet measured: <measure>, measured by <goal ID> (<gap:>).
 
 - **Owner:** <role and contact> (source: <who confirmed>, <YYYY-MM-DD>).
 - **Report a problem or make a privacy complaint:** <channel> (source: <who confirmed>, <YYYY-MM-DD>).
+
+## Review and sign-off
+
+<!-- Only the reviewer fills Decision and Date. Leave both `pending` while
+status is draft; the reviewer sets status: reviewed when they sign. One row
+per reviewer: the role from `for:` first, then any other reviewer. -->
+
+| Reviewer (role) | Scope reviewed | Decision | Date |
+| --- | --- | --- | --- |
+| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |

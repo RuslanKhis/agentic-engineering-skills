@@ -1,5 +1,7 @@
 # System card and security questionnaire
 
+<!-- verified: 2026-10-26; re-check every 180 days -->
+
 Read when writing the system card or the questionnaire answer bank. Both
 describe one build to outsiders, so both use the plan's evidence vocabulary
 and nothing warmer.
@@ -108,7 +110,24 @@ material incidents within 72 hours, and a ransomware payment reported within
 Safeguards Rule's 30-day FTC notice for financial institutions; EU NIS2 24
 and 72 hours when the client is in scope, the Cyber Resilience Act 24 and
 72 hours when a product is made available on the market, and AI Act Article
-73 for high-risk providers. Which entity notifies is `counsel:`.
+73 for high-risk providers. For a NSW agency, the agency contains an
+eligible data breach immediately, assesses it within 30 days and notifies
+the Privacy Commissioner immediately (PPIP Act Part 6A), cyber incidents go
+to Cyber Security NSW within 24 hours of detection and classification, and
+ICTA asks the supplier for immediate notice then details within 48 hours.
+New Zealand: the Privacy Commissioner as soon as practicable (the OPC asks
+for 72 hours). Singapore: the data intermediary tells the client without
+undue delay, and the client notifies the PDPC within 3 calendar days of
+determining a breach notifiable; MAS-regulated clients notify MAS within 1
+hour. Canada: PIPEDA as soon as feasible, with a 24-month record of every
+breach; Quebec, the CAI and an incident register; Alberta, without
+unreasonable delay; BC, none. Which entity notifies is `counsel:`.
+
+For government clients, the questionnaire's "Government security policy"
+row names the policy the system is measured against: the NSW Cyber Security
+Policy (Essential Eight Maturity Level One baseline) for NSW agencies, the
+agency's ISM and PSPF direction for Commonwealth agencies, NZISM
+certification and accreditation for the New Zealand public service.
 
 Cite a certification from the provider's compliance page or the report the
 client holds, with the date; when neither can be read, the answer is a

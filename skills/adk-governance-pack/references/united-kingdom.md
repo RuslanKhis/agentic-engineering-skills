@@ -1,5 +1,7 @@
 # United Kingdom
 
+<!-- verified: 2026-10-26; re-check every 180 days -->
+
 Read when the [jurisdiction screen](jurisdiction-screen.md) puts `uk` in
 scope. The UK has no AI Act, so the UK sections of the regulatory memo assign
 no risk tier. They screen UK GDPR as amended by the Data (Use and Access) Act

@@ -1,5 +1,7 @@
 # Privacy assessments, transfers and records
 
+<!-- verified: 2026-10-25; re-check every 180 days -->
+
 Read when writing the privacy impact input pack, the records-of-processing
 rows or the transfer assessment annex. One input pack serves every regime the
 [jurisdiction screen](jurisdiction-screen.md) found in scope: the Australian
@@ -48,6 +50,14 @@ the EU Omnibus caveat does not apply to it.
 | United States | CPPA risk assessment (California) and state data protection assessments | Before the in-scope processing each law lists | Common sections; "United States: Notice, consent and opt-out"; "United States: Assessment approval" |
 | EU | DPIA, GDPR Article 35 | Likely high risk; Article 35(3) cases; national lists | Common sections; "EU: Legal basis" |
 | United Kingdom | DPIA, UK GDPR Article 35, with the ICO list | As the EU, with the ICO's list | Common sections; "United Kingdom: Lawful basis and ADM safeguards" |
+| Australia, NSW agency | PIA under the IPC's Guide to PIAs in NSW and its AI PIA guide | Expected, not statutory; the IPC says a PIA "will typically be required" when an AI system handles personal information | Common sections; "Australia: NSW IPP and HPP check" |
+| New Zealand | PIA along the OPC toolkit | Not required by the Act; the OPC expects one before using AI tools; public service guidance asks for one for any GenAI use | Common sections; "New Zealand: IPP compliance check"; "New Zealand: Collection and notice inputs" |
+| Singapore | DPIA along the PDPC guide; the deemed consent by notification and legitimate interests assessments | DPIA encouraged, never mandatory; those assessments required where relied on | Common sections; "Singapore: PDPA obligations check"; "Singapore: Notification and policy inputs" |
+| Canada | PIA; in Quebec the EFVP | Quebec: required for an information system project (s 3.3) and before data leaves Quebec (s 17); federal institutions under their own policy; the OPC expects PIAs or AIAs for generative AI | Common sections; "Canada: Consent and notice inputs"; "Canada: Quebec PIA and s 17 facts" |
+
+Sources for these rows are in [Australia](australia.md),
+[New Zealand](new-zealand.md), [Singapore](singapore.md) and
+[Canada](canada.md), all read 26 October 2026.
 
 ## Screening: is an assessment needed?
 
@@ -264,7 +274,8 @@ right-to-erasure report, 18 February 2026).
 Write one row per recipient in the input pack's recipients table, and one
 row per restricted transfer in the
 [transfer assessment annex](../assets/transfer-assessment-annex-template.md)
-when `eu` or `uk` is in scope. The conclusions are counsel's.
+when `eu`, `uk`, `nz`, `sg` or `ca` is in scope (the annex is not written for
+Australian APP 8 facts alone). The conclusions are counsel's.
 
 **EU (Chapter V).** Australia has no adequacy decision. When agency staff
 outside the EEA view or handle the client's personal data (support, logs and
@@ -298,8 +309,35 @@ control, the region) in the recipients table; APP 8.1 reasonable steps and s
 16C liability follow a disclosure. No countries are prescribed under APP 8.3.
 My Health Record information may not be processed outside Australia at all.
 
+**NSW agency clients (PPIP Act s 19(2), HPP 14).** For a NSW agency's
+data the test is stricter than APP 8: any recipient outside NSW, including
+another Australian state, a Commonwealth agency or a non-NSW region, is a
+s 19(2) fact. Record each flow in the input pack's "outside NSW?" table;
+whether it is a use or a disclosure, and which ground applies, is
+`counsel:`. These facts stay in the input pack, not the annex.
+
+**New Zealand (s 11 and IPP 12).** Sending information to a party that
+holds it only for the client (the consultancy, the model endpoint) is not a
+disclosure; IPP 12's grounds apply when a party uses it for its own
+purposes. No country is prescribed. Gemini lists no New Zealand processing
+region, so every New Zealand pack has an annex row per offshore party.
+
+**Singapore (Transfer Limitation Obligation).** Every transfer out of
+Singapore, including those the client's data intermediary makes and
+consultancy access from Australia, is the client's to cover with a contract
+that names the countries, binding rules or a specified certification. No
+adequacy list. One annex row per transfer.
+
+**Canada (PIPEDA, Quebec s 17, Alberta).** PIPEDA treats a transfer for
+processing as a use, protected by contract, with notice of possible foreign
+access; it has no standard clauses, so PIPEDA facts sit in the input pack.
+Quebec requires a PIA and a written agreement before personal information
+leaves Quebec, including to another province; Alberta requires the
+countries where service providers handle data to be listed. Those two go in
+the annex's Canada section.
+
 **United States.** State privacy laws follow residents, not servers; US
-transfer questions arise only for EU, UK or Australian data, above.
+transfer questions arise only for the other regimes' data, above.
 
 **Groups of companies.** Where a parent and a subsidiary in different
 countries each serve customers (a UK bank with an Irish subsidiary), write
@@ -322,7 +360,13 @@ In Australia there is no processor category: the consultancy is an APP
 entity in its own right unless exempt, and a Commonwealth client flows the
 APPs down by contract (s 95B). In the US, service provider and processor
 contracts carry the statutory terms, including assistance with the client's
-assessments (CPPA §7050(h) for California).
+assessments (CPPA §7050(h) for California). For a NSW agency, the contract
+must carry the IPPs to the consultancy, because the PPIP Act binds only the
+agency. In New Zealand the consultancy is an agent under s 11 unless it uses
+information for its own purposes; in Singapore it is a data intermediary
+under a written contract; in Canada the statutes speak of transfers for
+processing (PIPEDA) and service contracts (Quebec s 18.3, reported). Each
+role is `counsel:`.
 
 ## Records of processing (Article 30)
 
@@ -350,7 +394,8 @@ why it was strictly necessary (Article 4a(1)(f)).
 **Australia** has no Article 30 register. The input pack's "Australia:
 Inventory and notice inputs" section replaces it, feeding the APP 1.4
 privacy policy, the APP 5 notice and, from 10 December 2026, the APP 1.8
-entries. **The United States** has no register either; Minnesota requires a
+entries. **New Zealand, Singapore and Canada** have no Article 30 register;
+their input pack sections replace it. **The United States** has no register either; Minnesota requires a
 data inventory and a named privacy lead (Minn. Stat. 325M.18), which the
 data-flow rows serve. Keep governance records as long as each law requires:
 CPPA risk assessments five years, FEHA automated-decision data four years,

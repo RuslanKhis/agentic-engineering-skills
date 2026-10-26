@@ -435,7 +435,8 @@ profile is MVP, pilot or production, add a **governance goal**, type
 governance, `Primary skill: adk-governance-pack`, placed before the
 production-approval presentation goal, which depends on it. It drafts the
 papers the client's counsel, DPO and security reviewers sign (a
-jurisdiction screen across Australian, US, EU and UK law, a regulatory
+jurisdiction screen across Australian, US, EU, UK, New Zealand,
+Singapore and Canadian law, form answers for a NSW or Commonwealth agency, a regulatory
 memo, privacy impact inputs, impact assessment, system card, processing
 records, questionnaire answers), sized by that skill to the profile; a
 proof of concept on real personal data gets its one-page note inside

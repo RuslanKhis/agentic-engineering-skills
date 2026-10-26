@@ -123,6 +123,13 @@ Run `git diff --check`. Keep personal environments, credentials and raw customer
 data out of the contribution. Publishing a result as “better” requires a
 comparable baseline; passing one smoke example establishes only that example.
 
+## Re-verify the law references
+
+The governance pack's references each carry a `<!-- verified: <date>; re-check
+every N days -->` line; the validator requires it and warns when it is due.
+Re-verify them quarterly, or when warned, by
+[docs/maintenance/law-refresh.md](docs/maintenance/law-refresh.md).
+
 ## Release a version
 
 Releases are dated (`YYYY.MM.DD`, `.N` for a second one that day) and carry the

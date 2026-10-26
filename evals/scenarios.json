@@ -2238,6 +2238,80 @@
         "Sets counsel_required: yes on every draft and leaves the New York City answer to counsel with the facts it needs.",
         "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing."
       ]
+    },
+    {
+      "id": "governance-pack-nsw-agency-chatbot",
+      "prompt": "The agency's Accountable Official, its privacy officer and the CISO want the governance papers for the public enquiries chatbot before the pilot. Draft what they need from our docs.",
+      "available_skills": [
+        "adk-governance-pack",
+        "adk-engineer",
+        "adk-presenter"
+      ],
+      "context": "A Sydney consultancy's project record for a NSW agency's public-facing service chatbot: answers enquiries from published guidance and can look up a caller's application status; Gemini pinned with a retirement date about four months away; hosting in australia-southeast1; abuse monitoring and some support access outside NSW; transcripts kept 90 days; an ICTA contract with the default six-month model-change notice; pilot profile.",
+      "expected_primary": "adk-governance-pack",
+      "assertions": [
+        "Records jurisdictions: [au] with a seven-row screen, each other regime left out with a reason, and treats the client as a NSW agency inside the Australian sections.",
+        "Writes government form answers for the AIAF Platform registration and the 2024 AIAF from the crosswalk, with form, form_version, form_url and form_checked, says the draft is not the official form, and leaves officer names, ratings and approvals as agency:.",
+        "Screens PPIP Act s 19(2) for every flow outside NSW, the Part 6A scheme, GIPA, prompts and outputs as State records, the NSW Cyber Security Policy at Maturity Level One with 24-hour reporting, and s 7B(5) for the consultancy, each conclusion as counsel:.",
+        "Flags the Gemini retirement inside the ICTA six-month model-change notice window as a gap for adk-model-and-output-contracts and a counsel question.",
+        "Names the AI Review Committee referral within 5 business days as a wait if the band is high or critical, leaving the band to the agency.",
+        "Sets counsel_required: yes on every draft, leaves every sign-off decision pending, and runs check_governance.py until every draft passes."
+      ]
+    },
+    {
+      "id": "governance-pack-commonwealth-dta-assessment",
+      "prompt": "Prepare our input to the department's DTA AI impact assessment and transparency statement for the claims-triage agent, and whatever else their privacy officer needs.",
+      "available_skills": [
+        "adk-governance-pack",
+        "adk-engineer"
+      ],
+      "context": "A non-corporate Commonwealth entity client; the agent drafts triage recommendations that officers accept or change; personal and sensitive information in claim notes; Gemini in australia-southeast1; the consultancy supports it from Sydney; pilot profile.",
+      "expected_primary": "adk-governance-pack",
+      "assertions": [
+        "Writes a government form answers document for the DTA AI impact assessment tool v1.0 in the form's question order, citing the record, with proposed inherent ratings marked assumption: and every officer field agency:.",
+        "Writes transparency statement and register-row inputs, and notes the usage-pattern list difference between the tool and Appendix D v2.1 as an agency: question.",
+        "Treats question 1.8's legislative authority and 10.2's human rights alignment as counsel:, and the Agencies Privacy Code PIA as required for a high privacy risk project, with counsel: on the threshold.",
+        "Names a possible Commonwealth AI Review Committee referral as a wait and states the 15 December 2026 date with a checked date.",
+        "Sets counsel_required: yes and runs check_governance.py until every draft passes."
+      ]
+    },
+    {
+      "id": "governance-pack-auckland-singapore-retailer",
+      "prompt": "Kowhai Retail's privacy officer in Auckland and its Singapore DPO want the governance papers for the customer agent before the pilot. Draft what they need from our docs.",
+      "available_skills": [
+        "adk-governance-pack",
+        "adk-engineer",
+        "protect-adk-sensitive-data"
+      ],
+      "context": "A retailer with stores and online customers in New Zealand and Singapore; the customer agent answers order and returns questions, reads order history from the CRM and can issue store credit up to a limit; Gemini in australia-southeast1; consultancy engineers in Sydney read traces; transcripts reused for evaluation; pilot profile.",
+      "expected_primary": "adk-governance-pack",
+      "assertions": [
+        "Records jurisdictions: [au, nz, sg] in that order, with Australia for the consultancy's own handling and the United States, the EU, the UK and Canada left out with reasons.",
+        "Treats the consultancy and Google as s 11 agents in New Zealand unless they use information for their own purposes, and the consultancy as a data intermediary in Singapore, each as counsel:.",
+        "Writes a transfer assessment annex with New Zealand rows (s 11 facts, IPP 12 only for own-purpose use) and Singapore Transfer Limitation Obligation rows for Sydney access and the Australian model endpoint.",
+        "Covers IPP 3A for CRM reads from 1 May 2026, IPP 8 accuracy before use, the Singapore consent or exception per purpose including the reuse of transcripts, and the 3-calendar-day PDPC clock, with checked dates.",
+        "Uses agency, IPP and personal information in New Zealand sections and organisation, data intermediary and personal data in Singapore sections, never APP or GDPR terms.",
+        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing."
+      ]
+    },
+    {
+      "id": "governance-pack-quebec-ontario-hr-assistant",
+      "prompt": "Érable Logistics' counsel wants the governance papers for the HR assistant before the pilot, and wants to know whether Law 25 applies to its leave decisions. Draft what they need from our docs.",
+      "available_skills": [
+        "adk-governance-pack",
+        "adk-engineer",
+        "adk-agent-evaluation"
+      ],
+      "context": "An HR assistant for an employer with staff in Montréal and Toronto; it answers policy questions and auto-approves routine leave requests under two days with no human review; hosting in a Toronto region; Gemini processing in the US; consultancy engineers in Sydney read logs; staff prompts logged with employee IDs; pilot profile.",
+      "expected_primary": "adk-governance-pack",
+      "assertions": [
+        "Records jurisdictions: [au, ca] with the screen naming Canada (never CA) and every other regime with a reason.",
+        "Screens which law governs each flow: Quebec's private sector Act for Montréal staff and, for Ontario staff of a provincially regulated employer, no general private sector statute, with counsel: on torts and collective agreements.",
+        "Treats auto-approved leave as a possible decision based exclusively on automated processing under Quebec s 12.1, with notice, explanation and review facts, and sets counsel_required: yes.",
+        "Writes the s 3.3 PIA facts and an s 17 assessment row for every flow leaving Quebec, including the Toronto region, the US model processing and Sydney access.",
+        "Names the Ontario electronic monitoring policy for logged prompts as a wait, and answers the Law 25 question in the memo Summary marked counsel:.",
+        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing."
+      ]
     }
   ]
 }

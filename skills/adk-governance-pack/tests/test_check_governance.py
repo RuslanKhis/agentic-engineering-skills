@@ -30,6 +30,9 @@ sources: docs/discovery/policy.md, docs/architecture/policy.md
 - United States: n/a: no US client, staff or customers.
 - EU: in scope, because the client employs staff in the Netherlands (D3).
 - United Kingdom: n/a: no UK establishment or staff.
+- New Zealand: n/a: no New Zealand client, staff or customers.
+- Singapore: n/a: no Singapore client, staff or customers.
+- Canada: n/a: no Canadian client, staff or customers.
 - Article 50(1) of Regulation (EU) 2024/1689 applies from 2 August 2026 (checked 2026-10-20): users are told they are talking to an AI system (C4).
 - No prohibited practice applies; counsel: confirm before the production decision.
 
@@ -66,6 +69,9 @@ SCREEN = """## Jurisdiction screen
 | United States | no | No US data subjects (D3) | n/a: no US client or people |
 | EU | no | No EU people (D3) | n/a: Australian staff only |
 | United Kingdom | no | No UK people (D3) | n/a: no UK establishment |
+| New Zealand | no | No New Zealand people (D3) | n/a: no NZ client or people |
+| Singapore | no | No Singapore people (D3) | n/a: no Singapore client or people |
+| Canada | no | No people in Canada (D3) | n/a: no Canadian client or people |
 """
 
 AU_MEMO = """---
@@ -111,14 +117,34 @@ counsel_required: pending
 """
 
 
-def run(*args, files=None):
+BANNER = ("> **Drafting aid output, not legal advice.** Prepared to support the reviewer named in `for:`. "
+          "It is not reviewed until that reviewer records a decision in Review and sign-off.\n")
+SIGNOFF = ("\n## Review and sign-off\n\n| Reviewer (role) | Scope reviewed | Decision | Date |\n"
+           "| --- | --- | --- | --- |\n| Privacy officer | This document | pending | pending |\n")
+
+
+def framed(text):
+    """Add what every draft carries (status, banner, sign-off) unless the test wrote it."""
+    if not text.startswith("---\ndocument:"):
+        return text
+    if "\nstatus:" not in text.split("\n---\n", 1)[0]:
+        text = text.replace("---\ndocument:", "---\nstatus: draft\ndocument:", 1)
+    if "not legal advice" not in text:
+        head, sep, body = text.partition("\n---\n")
+        text = head + sep + "\n" + BANNER + body
+    if "## Review and sign-off" not in text:
+        text = text.rstrip("\n") + "\n" + SIGNOFF
+    return text
+
+
+def run(*args, files=None, frame=True):
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         paths = {}
         for name, text in (files or {}).items():
             path = root / name
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(text, encoding="utf-8")
+            path.write_text(framed(text) if frame else text, encoding="utf-8")
             paths[name] = str(path)
         argv = [paths.get(a[1:], a) if a.startswith("@") else a for a in args]
         result = subprocess.run([sys.executable, "-I", str(SCRIPT), "--today", TODAY, *argv],
@@ -181,10 +207,12 @@ class CheckGovernance(unittest.TestCase):
         result = run("@n.md", files={"n.md": empty})
         self.assertEqual(result.returncode, 1)
         self.assertIn("jurisdictions is missing or empty", result.stdout)
-        unknown = POC_NOTE.replace("jurisdictions: [au, eu]", "jurisdictions: [au, nz]")
-        self.assertIn("unknown jurisdiction nz", run("@n.md", files={"n.md": unknown}).stdout)
+        unknown = POC_NOTE.replace("jurisdictions: [au, eu]", "jurisdictions: [au, jp]")
+        self.assertIn("unknown jurisdiction jp", run("@n.md", files={"n.md": unknown}).stdout)
         unordered = POC_NOTE.replace("jurisdictions: [au, eu]", "jurisdictions: [eu, au]")
-        self.assertIn("order au, us, eu, uk", run("@n.md", files={"n.md": unordered}).stdout)
+        self.assertIn("order au, us, eu, uk, nz, sg, ca", run("@n.md", files={"n.md": unordered}).stdout)
+        late = POC_NOTE.replace("jurisdictions: [au, eu]", "jurisdictions: [au, ca, nz]")
+        self.assertIn("order au, us, eu, uk, nz, sg, ca", run("@n.md", files={"n.md": late}).stdout)
         bare = POC_NOTE.replace("jurisdictions: [au, eu]", "jurisdictions: au, eu")
         self.assertEqual(run("@n.md", files={"n.md": bare}).returncode, 0)
 
@@ -394,7 +422,9 @@ counsel_required: no
         for template in sorted((SKILL / "assets").glob("*-template.md")):
             text = template.read_text(encoding="utf-8")
             text = re.sub(r"counsel_required: .*", "counsel_required: yes", text)
-            text = re.sub(r"jurisdictions: .*", "jurisdictions: [au, us, eu, uk]", text)
+            text = re.sub(r"jurisdictions: .*", "jurisdictions: [au, us, eu, uk, nz, sg, ca]", text)
+            text = re.sub(r"form_url: .*", "form_url: https://www.digital.gov.au/ai/impact-assessment-tool", text)
+            text = re.sub(r"form_checked: .*", f"form_checked: {TODAY}", text)
             previous = None
             while previous != text:
                 previous, text = text, re.sub(r"<[A-Za-z][^<>\n]*>", "C1", text)
@@ -423,12 +453,278 @@ counsel_required: no
 
     def test_templates_fail_until_filled(self):
         templates = sorted((SKILL / "assets").glob("*-template.md"))
-        self.assertEqual(len(templates), 8)
+        self.assertEqual(len(templates), 9)
         for template in templates:
             result = subprocess.run([sys.executable, "-I", str(SCRIPT), "--today", TODAY, str(template)],
                                     capture_output=True, text=True)
             self.assertEqual(result.returncode, 1, f"{template.name}: {result.stdout}{result.stderr}")
             self.assertIn("placeholder", result.stdout, template.name)
+
+
+FOUR_ROW_SCREEN = """## Jurisdiction screen
+
+| Regime | In scope | Trigger facts | Reason |
+| --- | --- | --- | --- |
+| Australia | yes | Consultancy staff in Sydney (D3) | The consultancy's own handling |
+| United States | no | No US data subjects (D3) | n/a: no US client or people |
+| EU | no | No EU people (D3) | n/a: Australian staff only |
+| United Kingdom | no | No UK people (D3) | n/a: no UK establishment |
+"""
+
+FORM_ANSWERS = """---
+document: government-form-answers
+jurisdictions: [au]
+counsel_required: yes
+for: Assessing officer
+form: DTA AI impact assessment tool
+form_version: v1.0
+form_url: https://www.digital.gov.au/ai/impact-assessment-tool
+form_checked: 2026-10-26
+---
+
+# Draft answers for the DTA AI impact assessment tool: Benefits enquiry assistant
+
+This is not the official form. It drafts answers in the form's own order for the agency's officers.
+
+## Form and version
+
+- DTA AI impact assessment tool v1.0 (checked 2026-10-26).
+
+## Who completes and approves
+
+| Role in the form | Who | Evidence |
+| --- | --- | --- |
+| Assessing officer | agency: name and position once named | gap: not named |
+
+## Draft answers
+
+| # | Question (paraphrase) | Draft answer | Evidence | Who decides |
+| --- | --- | --- | --- | --- |
+| 1.4 | Use case description | Answers enquiries about payment dates from published guidance (C1) | C1 | agency: approves |
+| 3.5 | Privacy risk | assumption: medium, because prompts may carry personal information | C2 | agency: the assessing officer rates it |
+
+## Questions for the agency
+
+- agency: which records disposal authority applies to transcripts?
+
+## Questions for counsel
+
+- counsel: does any output inform an administrative decision under an Act?
+"""
+
+
+class SevenRegimes(unittest.TestCase):
+    """New Zealand, Singapore and Canada join the screen after the first four."""
+
+    def test_four_row_screen_now_fails_with_a_fix(self):
+        memo = AU_MEMO.replace(SCREEN, FOUR_ROW_SCREEN)
+        result = run("@memo.md", files={"memo.md": memo})
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("names no row for New Zealand", result.stdout)
+        self.assertIn("names no row for Canada", result.stdout)
+        self.assertIn("the screen now covers seven regimes", result.stdout)
+
+    def test_ca_alone_does_not_name_canada(self):
+        memo = AU_MEMO.replace("| Canada | no | No people in Canada (D3) | n/a: no Canadian client or people |",
+                               "| CA | no | No people there (D3) | n/a: no client or people |")
+        result = run("@memo.md", files={"memo.md": memo})
+        self.assertIn("names no row for Canada", result.stdout)
+        quebec = memo.replace("| CA | no | No people there (D3) |", "| Quebec | no | No Quebec people (D3) |")
+        self.assertEqual(run("@memo.md", files={"memo.md": quebec}).returncode, 0)
+
+    def test_new_regimes_require_their_memo_and_pack_sections(self):
+        memo = AU_MEMO.replace("jurisdictions: [au]", "jurisdictions: [au, nz, sg, ca]")
+        result = run("@memo.md", files={"memo.md": memo})
+        for heading in ("New Zealand: Privacy Act and IPPs", "Singapore: PDPA and roles",
+                        "Singapore: AI governance frameworks", "Canada: Automated decisions",
+                        "Canada: Employment, sector and government AI policy"):
+            self.assertIn(f"missing section: ## {heading}", result.stdout)
+        pack = "---\ndocument: privacy-impact-input-pack\njurisdictions: [nz, sg, ca]\ncounsel_required: pending\n---\n"
+        result = run("@p.md", files={"p.md": pack})
+        for heading in ("New Zealand: IPP compliance check", "Singapore: PDPA obligations check",
+                        "Canada: Quebec PIA and s 17 facts"):
+            self.assertIn(f"missing section: ## {heading}", result.stdout)
+
+    def test_new_regime_section_without_its_code_fails(self):
+        memo = AU_MEMO.replace("## Applicable dates", "## Singapore: PDPA and roles\n\n- n/a: no Singapore people (D3).\n\n"
+                                                     "## Applicable dates")
+        self.assertIn("belongs to Singapore", run("@memo.md", files={"memo.md": memo}).stdout)
+
+    def test_transfer_annex_follows_regimes_with_a_transfer_rule(self):
+        annex = ("---\ndocument: transfer-assessment\njurisdictions: [au]\ncounsel_required: pending\n---\n\n"
+                 "## Transfers\n\n- n/a: none (D3).\n\n## Destination and access facts\n\n- n/a: none (D3).\n\n"
+                 "## Supplementary measures\n\n- n/a: none (D3).\n\n## Questions for counsel\n\n- counsel: none.\n")
+        result = run("@a.md", files={"a.md": annex})
+        self.assertIn("APP 8 facts belong in the input pack", result.stdout)
+        singapore = annex.replace("[au]", "[au, sg]").replace(
+            "## Questions for counsel", "## Singapore: Transfer Limitation Obligation\n\n- n/a: none (D3).\n\n"
+                                        "## Questions for counsel")
+        self.assertEqual(run("@a.md", files={"a.md": singapore}).returncode, 0, run("@a.md", files={"a.md": singapore}).stdout)
+        canada = annex.replace("[au]", "[ca]")
+        self.assertIn("missing section: ## Canada: Quebec s 17 and Alberta service providers",
+                      run("@a.md", files={"a.md": canada}).stdout)
+
+    def test_agency_marker_counts_as_a_citation(self):
+        draft = with_line(POC_NOTE, "agency: the agency names the accountable use case owner.")
+        result = run("--json", "@note.md", files={"note.md": draft})
+        data = json.loads(result.stdout)[0]
+        self.assertEqual(data["errors"], [])
+        self.assertEqual(data["agency_items"], 1)
+
+    def test_new_law_references_need_checked_dates(self):
+        lines = (
+            "IPP 3A applies from 1 May 2026 (C1).",
+            "The Biometric Processing Privacy Code applies to existing processing from 3 August 2026 (C1).",
+            "The PDPA breach rules apply since 1 February 2021 (C1).",
+            "Law 25 s 12.1 is in force since 22 September 2023 (C1).",
+            "The PIPEDA breach record applies from 1 November 2018 (C1).",
+            "The Ontario rule under the Working for Workers Four Act, 2024 applies from January 1, 2026 (C1).",
+            "The PPIP Act Part 6A scheme applies from 28 November 2023 (C1).",
+            "The NSW Cyber Security Policy reporting duty applies from 1 July 2026 (C1).",
+            "The DTA impact assessment applies to in-scope use cases by 15 December 2026 (C1).",
+        )
+        for line in lines:
+            result = run("@note.md", files={"note.md": with_line(POC_NOTE, line)})
+            self.assertIn("legal applicability date", result.stdout, line)
+            fixed = line.replace(" (C1).", " (checked 2026-10-26; C1).")
+            self.assertEqual(run("@note.md", files={"note.md": with_line(POC_NOTE, fixed)}).returncode, 0, fixed)
+
+    def test_new_counsel_triggers(self):
+        cases = {
+            "public-body clients": (
+                "The client is a NSW agency running a public service chatbot (D2).",
+                "The use case is registered on the AIAF Platform (D2).",
+                "High-risk bands go to the AI Review Committee (D2).",
+                "The consultancy works under a State contract with the agency (D2).",
+                "The client is a federal department in Ottawa (D2).",
+                "The department expects AIA level III (D2).",
+                "The client is a Singapore statutory board (D2).",
+                "The client is a Crown entity in Wellington (D2).",
+            ),
+            "automated decisions": ("Refund refusals are exclusively automated for Quebec customers (C1).",),
+            "biometrics": ("The voice agent runs emotion inference on callers (C1).",),
+        }
+        for area, lines in cases.items():
+            for line in lines:
+                result = run("--json", "@note.md", files={"note.md": with_line(POC_NOTE, line)})
+                data = json.loads(result.stdout)[0]
+                self.assertIn(area, data["counsel_triggers"], line)
+                self.assertEqual(result.returncode, 1, line)
+
+    def test_reported_secondary_fact_counts_as_flagged(self):
+        line = "The Auckland region's status is reported; not confirmed at the source on 2026-10-26."
+        self.assertEqual(run("@note.md", files={"note.md": with_line(POC_NOTE, line)}).returncode, 0)
+        bare = "The Auckland region's status is reported."
+        self.assertIn("cites no ID", run("@note.md", files={"note.md": with_line(POC_NOTE, bare)}).stdout)
+
+    def test_template_rows_do_not_fire_their_own_triggers(self):
+        line = "| Biometric Processing Privacy Code rules 1, 3 and 10 (if the code applies) | n/a: none | C1 |"
+        result = run("--json", "@note.md", files={"note.md": with_line(POC_NOTE, line)})
+        self.assertEqual(json.loads(result.stdout)[0]["counsel_triggers"], [])
+
+    def test_trigger_near_misses_stay_quiet(self):
+        for line in ("n/a: not a NSW agency; a private retailer (D2).",
+                     "Store credit decisions under NZD 50 run without review (C1).",
+                     "The Biometric Processing Privacy Code does not apply: no face or voice processing (C1).",
+                     "The State contract exemption (s 7B(5)) is named for completeness (D2).",
+                     "CA Civ. Code 1798.100 rights are handled by the US team (D2).",
+                     "No decision is exclusively automated; a person approves each one (C1)."):
+            result = run("--json", "@note.md", files={"note.md": with_line(POC_NOTE, line)})
+            self.assertEqual(json.loads(result.stdout)[0]["counsel_triggers"], [], line)
+
+
+class GovernmentFormAnswers(unittest.TestCase):
+    """Draft answers for an official form name it, date it and never claim to be it."""
+
+    def test_clean_answers_pass(self):
+        result = run("--json", "@f.md", files={"f.md": FORM_ANSWERS})
+        data = json.loads(result.stdout)[0]
+        self.assertEqual(data["errors"], [], result.stdout)
+        self.assertGreaterEqual(data["agency_items"], 4)
+
+    def test_form_fields_are_required(self):
+        draft = FORM_ANSWERS.replace("form_checked: 2026-10-26\n", "").replace("form_version: v1.0\n", "")
+        result = run("@f.md", files={"f.md": draft})
+        self.assertIn("form_version is missing", result.stdout)
+        self.assertIn("form_checked must be the ISO date", result.stdout)
+        self.assertEqual(result.returncode, 1)
+
+    def test_stale_form_check_warns(self):
+        draft = FORM_ANSWERS.replace("form_checked: 2026-10-26", "form_checked: 2026-06-01")
+        result = run("@f.md", files={"f.md": draft})
+        self.assertEqual(result.returncode, 0, result.stdout)
+        self.assertIn("form_checked 2026-06-01 is over 90 days old", result.stdout)
+        future = FORM_ANSWERS.replace("form_checked: 2026-10-26", "form_checked: 2027-01-01")
+        self.assertIn("form_checked 2027-01-01 is in the future", run("@f.md", files={"f.md": future}).stdout)
+
+    def test_must_say_it_is_not_the_official_form(self):
+        draft = FORM_ANSWERS.replace("This is not the official form. ", "")
+        self.assertIn("must say this is not the official form", run("@f.md", files={"f.md": draft}).stdout)
+
+    def test_needs_australia_and_its_sections(self):
+        draft = FORM_ANSWERS.replace("jurisdictions: [au]", "jurisdictions: [nz]")
+        self.assertIn("jurisdictions must list au", run("@f.md", files={"f.md": draft}).stdout)
+        short = FORM_ANSWERS.split("## Questions for the agency")[0]
+        self.assertIn("missing section: ## Questions for the agency", run("@f.md", files={"f.md": short}).stdout)
+
+
+class ReviewAndSignOff(unittest.TestCase):
+    """Every draft says it is a drafting aid and leaves the decision to its reviewer."""
+
+    def test_framed_draft_passes(self):
+        self.assertEqual(run("@note.md", files={"note.md": POC_NOTE}).returncode, 0)
+
+    def test_missing_banner_fails(self):
+        draft = framed(POC_NOTE).replace(BANNER, "")
+        result = run("@note.md", files={"note.md": draft}, frame=False)
+        self.assertIn("missing the drafting-aid banner", result.stdout)
+
+    def test_missing_signoff_fails(self):
+        draft = framed(POC_NOTE).replace(SIGNOFF, "\n")
+        result = run("@note.md", files={"note.md": draft}, frame=False)
+        self.assertIn("missing section: ## Review and sign-off", result.stdout)
+
+    def test_signoff_needs_a_reviewer_row(self):
+        draft = framed(POC_NOTE).replace("| Privacy officer | This document | pending | pending |\n", "")
+        result = run("@note.md", files={"note.md": draft}, frame=False)
+        self.assertIn("no reviewer row", result.stdout)
+
+    def test_unknown_decision_fails(self):
+        draft = framed(POC_NOTE).replace("| pending | pending |", "| looks fine | pending |")
+        self.assertIn("decision must be one of", run("@n.md", files={"n.md": draft}, frame=False).stdout)
+
+    def test_draft_cannot_carry_a_decision(self):
+        draft = framed(POC_NOTE).replace("| pending | pending |", "| approved | 2026-10-25 |")
+        result = run("@n.md", files={"n.md": draft}, frame=False)
+        self.assertIn("status is draft but a reviewer decision is recorded", result.stdout)
+
+    def test_reviewed_document_needs_a_dated_decision(self):
+        reviewed = framed(POC_NOTE).replace("status: draft", "status: reviewed")
+        self.assertIn("every sign-off decision is pending",
+                      run("@n.md", files={"n.md": reviewed}, frame=False).stdout)
+        undated = reviewed.replace("| pending | pending |", "| approved with changes | pending |")
+        self.assertIn("needs the date the reviewer signed", run("@n.md", files={"n.md": undated}, frame=False).stdout)
+        future = reviewed.replace("| pending | pending |", "| approved | 2027-01-01 |")
+        self.assertIn("is in the future", run("@n.md", files={"n.md": future}, frame=False).stdout)
+        signed = reviewed.replace("| pending | pending |", "| approved | 2026-10-25 |")
+        self.assertEqual(run("@n.md", files={"n.md": signed}, frame=False).returncode, 0)
+
+    def test_status_must_be_draft_or_reviewed(self):
+        draft = framed(POC_NOTE).replace("status: draft", "status: final")
+        self.assertIn("status must be draft or reviewed", run("@n.md", files={"n.md": draft}, frame=False).stdout)
+
+    def test_signoff_rows_are_not_held_to_cite_or_flag(self):
+        result = run("@note.md", files={"note.md": POC_NOTE})
+        self.assertNotIn("Privacy officer", result.stdout)
+
+    def test_every_template_carries_banner_and_signoff(self):
+        for template in sorted((SKILL / "assets").glob("*-template.md")):
+            text = template.read_text(encoding="utf-8")
+            with self.subTest(template=template.name):
+                self.assertIn("not legal advice", text)
+                self.assertIn("not\n> reviewed until", text)
+                self.assertIn("## Review and sign-off", text)
+                self.assertIn("status: draft", text)
 
 
 if __name__ == "__main__":
