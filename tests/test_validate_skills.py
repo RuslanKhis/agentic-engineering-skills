@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from contextlib import redirect_stdout
+import datetime
 import io
 from pathlib import Path
 import sys
@@ -10,7 +11,7 @@ import tempfile
 import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from validate_skills import main, validate_repository
+from validate_skills import Report, check_reference_freshness, main, validate_repository
 
 
 class PackageValidationTests(unittest.TestCase):
@@ -385,6 +386,67 @@ class SharedReferenceTests(unittest.TestCase):
         (self.root / "skills" / "adk-presenter" / "references" / "practice-profile.md").write_text(
             "# Different\n", encoding="utf-8")
         self.assertEqual([], self.errors())
+
+class ReferenceFreshnessTests(unittest.TestCase):
+    """Law references carry the day they were verified and warn once it is old."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.skills = Path(self.temp.name) / "skills"
+        self.refs = self.skills / "adk-governance-pack" / "references"
+        self.refs.mkdir(parents=True)
+        self.today = datetime.date(2026, 10, 26)
+
+    def report(self):
+        report = Report()
+        check_reference_freshness(self.skills, report, self.today)
+        return report
+
+    def test_recent_marker_passes(self):
+        (self.refs / "australia.md").write_text(
+            "# Australia\n\n<!-- verified: 2026-10-26; re-check every 180 days -->\n", encoding="utf-8")
+        report = self.report()
+        self.assertEqual(([], []), (report.errors, report.warnings))
+
+    def test_missing_marker_in_governance_pack_fails(self):
+        (self.refs / "new-zealand.md").write_text("# New Zealand\n", encoding="utf-8")
+        self.assertTrue(any("no '<!-- verified" in e for e in self.report().errors))
+
+    def test_missing_marker_in_portability_planning_fails(self):
+        refs = self.skills / "adk-portability-planning" / "references"
+        refs.mkdir(parents=True)
+        (refs / "gcp-on-oci.md").write_text("# OCI\n", encoding="utf-8")
+        self.assertTrue(any("gcp-on-oci.md" in e and "no '<!-- verified" in e for e in self.report().errors))
+
+    def test_shared_reference_needs_no_marker(self):
+        (self.refs / "practice-profile.md").write_text("# Rules\n", encoding="utf-8")
+        self.assertEqual([], self.report().errors)
+
+    def test_old_marker_warns_after_its_own_interval(self):
+        (self.refs / "united-states.md").write_text(
+            "# US\n\n<!-- verified: 2026-07-01; re-check every 90 days -->\n", encoding="utf-8")
+        (self.refs / "eu.md").write_text("# EU\n\n<!-- verified: 2026-07-01 -->\n", encoding="utf-8")
+        warnings = self.report().warnings
+        self.assertTrue(any("united-states.md" in w and "over 90 days" in w for w in warnings), warnings)
+        self.assertFalse(any("eu.md" in w for w in warnings), warnings)
+
+    def test_future_or_invalid_date_fails(self):
+        (self.refs / "a.md").write_text("# A\n<!-- verified: 2027-01-01 -->\n", encoding="utf-8")
+        (self.refs / "b.md").write_text("# B\n<!-- verified: 2026-02-30 -->\n", encoding="utf-8")
+        errors = self.report().errors
+        self.assertTrue(any("in the future" in e for e in errors), errors)
+        self.assertTrue(any("not a real date" in e for e in errors), errors)
+
+    def test_other_packages_are_checked_only_when_marked(self):
+        other = self.skills / "adk-discovery" / "references"
+        other.mkdir(parents=True)
+        (other / "notes.md").write_text("# Notes\n", encoding="utf-8")
+        (other / "law.md").write_text("# Law\n<!-- verified: 2025-01-01 -->\n", encoding="utf-8")
+        report = self.report()
+        self.assertEqual([], report.errors)
+        self.assertTrue(any("law.md" in w for w in report.warnings))
+
 
 if __name__ == "__main__":
     unittest.main()

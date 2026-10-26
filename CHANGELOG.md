@@ -5,6 +5,48 @@ One section per tagged release, newest first. Pin a release with
 
 ## Unreleased
 
+Changes since v2026.10.26.1, to fold into the next release:
+
+- **Governance pack: drafting aid, reviewer sign-off and law freshness.**
+  Every `adk-governance-pack` template opens with a banner saying the draft
+  is drafting-aid output, not legal advice, and is not reviewed until its
+  reviewer signs, and ends with a Review and sign-off table. The checker
+  requires both, keeps every decision `pending` while `status: draft`, and
+  requires a dated decision once `status: reviewed`; the skill never fills a
+  reviewer's decision. Each law reference carries a `verified:` date that
+  `scripts/validate_skills.py` requires for the governance pack and warns on
+  when due, and `docs/maintenance/law-refresh.md` with a quarterly GitHub
+  workflow opens a refresh issue in January, April, July and October.
+- **Governance pack: New Zealand, Singapore and Canada.** The jurisdiction
+  screen now runs Australia, United States, EU, UK, New Zealand, Singapore,
+  Canada, with codes `nz`, `sg` and `ca`; Canada is named Canada or Quebec,
+  never CA (California). New references at screen depth cover the Privacy
+  Act 2020 (s 11 agents, IPP 3A, IPP 8, IPP 12, the Biometric Processing
+  Privacy Code, public sector guidance), the PDPA (data intermediaries,
+  consent and exceptions, the Transfer Limitation Obligation, the 3-day
+  breach clock, the agentic AI framework) and Canadian law (PIPEDA, Quebec's
+  Law 25 with s 3.3, s 12.1 and s 17, Alberta and BC, Ontario employment
+  rules, the federal Directive on Automated Decision-Making). The memo and
+  privacy pack require each regime's sections, the transfer annex covers
+  New Zealand, Singapore and Quebec flows, and a screen that names only the
+  first four regimes is now an error with a fix message.
+- **Governance pack: NSW and Commonwealth government clients.** A new
+  `au-government-crosswalks.md` maps the DTA AI impact assessment tool,
+  transparency statement, use-case register, agentic addendum, NSW AIAF
+  registration and assessment, and the IPC AI PIA guide to the project's
+  records, re-checked every 90 days; a new `government-form-answers`
+  document drafts answers in the official form's order for the agency's
+  officers, names the form, version, URL and checked date, never claims to
+  be the form, and marks what only the agency can answer `agency:`.
+  `australia.md` gains NSW state law: PPIP Act s 19(2) for any recipient
+  outside NSW, the HRIP Act, the Part 6A breach scheme, GIPA, the State
+  Records Act 1998, the NSW Cyber Security Policy (Essential Eight Maturity
+  Level One, 24-hour reporting), ICTA clause 6.11 tied to the model
+  lifecycle check, s 7B(5), DCS-2026-02 and the Operational Policy's AIAF
+  bands and review committee referral.
+- The engineer's routing, the designer's governance goal and scoping, and
+  the practice-profile interview name the seven regimes.
+
 - **New skill: `adk-portability-planning`.** The toolkit still builds
   production Google ADK applications on GCP, and that stays the primary
   build. The new optional skill answers a stakeholder's lock-in question in

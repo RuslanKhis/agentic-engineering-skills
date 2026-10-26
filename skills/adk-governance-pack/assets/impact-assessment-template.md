@@ -3,7 +3,7 @@ document: impact-assessment
 system: <system name>
 version: <build or design revision assessed>
 status: draft
-jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
+jurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
 for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
@@ -13,12 +13,17 @@ sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<t
 
 # AI system impact assessment: <system name>
 
+> **Drafting aid output, not legal advice.** Prepared to support the
+> reviewer named in `for:`, never to replace the client's lawyer. It is not
+> reviewed until that reviewer records a decision in Review and sign-off at
+> the end; counsel decides every legal conclusion in it.
+
 Structured along the topics of ISO/IEC 42005:2025 and mapped to NIST AI RMF
 1.0 and NIST AI 600-1. Draft for <client>'s risk owner; scores are
 provisional until they set them. Not legal advice.
 
-<!-- The last four sections are optional: keep each one whose condition
-holds and delete the rest, with this comment. -->
+<!-- The sections after "Monitoring and review" are optional: keep each one
+whose condition holds and delete the rest, with this comment. -->
 
 ## Scope and intended use
 
@@ -90,6 +95,7 @@ holds and delete the rest, with this comment. -->
 | <group> | <rate> | <ratio> | <test, n, window> | <postcode, name, age signals> | <M ID or gap:> |
 
 - **Less discriminatory alternatives considered and accessibility route:** <what and why> (<D IDs>; counsel: <is any disparity justified?>).
+- **Regime checklists:** <Ontario: the OHRC Human Rights AI Impact Assessment questions; New Zealand: Human Rights Act s 65 good-reason facts; Singapore: the Workplace Fairness Act characteristics; or n/a:> (<M IDs or gap:>).
 
 ## Australia: Guidance for AI Adoption mapping
 
@@ -105,6 +111,40 @@ holds and delete the rest, with this comment. -->
 - **Use-case owner, assessing and approving officers:** <names or roles> (source: <who>, <YYYY-MM-DD> / gap:).
 - **Transparency statement inputs:** <usage pattern and domain, public interaction without human review, monitoring> (system-card.md; <IDs>).
 - **Agentic AI addendum (AGT.1 to AGT.8):** <memory scope, bounded workflows and approvals, typed tools, adversarial evaluation, monitoring, kill switch, decommissioning> (<C/SB IDs>).
+- **Draft form answers:** <the DTA tool, transparency statement and register answers for the agency's officers> (government-form-answers-<form>.md; agency: <who completes and approves>).
+
+## Australia: NSW AIAF inputs (NSW agency clients)
+
+- **Registration and assessment:** <AIAF Platform registration answers and the 2024 AIAF answers, and which version the agency uses> (government-form-answers-<form>.md; agency: <Accountable Owner, version>).
+- **Proposed band:** <low, medium, high or critical, intrinsic under the Operational Policy, with its basis> (assumption: <basis>; agency: <sets the band>).
+- **Review committee:** <referral within 5 business days of completing the AIAF if high or critical, as a conditional wait> (<W ID or gap:>; counsel: <referral needed?>).
+- **Contract and records:** <ICTA clause 6.11 Order Form AI list and model-change notice against the model's retirement date; outputs and metadata captured as State records> (<D IDs>; gap: <if any>).
+
+## New Zealand: Responsible AI Guidance mapping and Māori impact
+
+| Item | Content in this assessment | Evidence |
+| --- | --- | --- |
+| MBIE Responsible AI Guidance (private clients): inventory, PIA at design, security and jurisdictional risk, transparency | <content> | <IDs> |
+| Algorithm Charter (signatory agencies): likelihood and impact rating, role of humans, contact point, appeal channel | <content, or n/a: not a signatory> | <IDs; agency:> |
+| Māori impact and engagement: data about Māori, noa or tapu classification, offshore storage rationale, engagement owner | <content> | <IDs or gap:> |
+| Senior leadership approval (OPC expectation) | <who and when> | <source: or gap:> |
+
+## Singapore: Agentic MGF mapping
+
+| Dimension (Model AI Governance Framework for Agentic AI v1.5) | Content in this assessment | Evidence |
+| --- | --- | --- |
+| 1 Assess and bound the risks up front (error tolerance, sensitive data and memory, external systems, write actions, reversibility, autonomy) | <content> | <D/C IDs> |
+| 2 Make humans meaningfully accountable (value-chain roles, approval checkpoints, override rate and review time) | <content> | <C IDs, M IDs> |
+| 3 Technical controls and processes (change management on model updates, pre-deployment testing, gradual roll-out) | <content> | <C/SB/G IDs> |
+| 4 End-user responsibility (disclosure at the point of interaction, range of actions, escalation contacts) | <content> | <C IDs> |
+
+- **Financial clients:** <MAS materiality inputs (impact, complexity, reliance), FEAT fairness definition and metrics, kill switch, independent review; or n/a: not MAS-regulated> (<IDs>).
+
+## Canada: AIA inputs (federal clients)
+
+- **Administrative decision and impact level:** <whether the output makes or informs an administrative decision; the proposed level as the department will score it> (<C IDs>; counsel: <decision?>; agency: <level and approver>).
+- **Appendix C requirements as waits:** <peer review, notice, human involvement, explanation, approval to operate> (<W IDs or gap:>).
+- **Ontario human rights checklist:** see "Adverse impact and equality" (<M IDs or n/a:>).
 
 ## EU: FRIA crosswalk (AI Act Article 27, if required)
 
@@ -116,3 +156,13 @@ holds and delete the rest, with this comment. -->
 | (d) specific risks of harm | Impacts; privacy-impact-input-pack.md Risks and measures | <IDs> |
 | (e) human oversight measures | system-card.md Human oversight | <IDs> |
 | (f) measures if risks materialise, governance, complaints | Measures; Residual risk and decision | <IDs; counsel: required under Article 27?> |
+
+## Review and sign-off
+
+<!-- Only the reviewer fills Decision and Date. Leave both `pending` while
+status is draft; the reviewer sets status: reviewed when they sign. One row
+per reviewer: the role from `for:` first, then any other reviewer. -->
+
+| Reviewer (role) | Scope reviewed | Decision | Date |
+| --- | --- | --- | --- |
+| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |

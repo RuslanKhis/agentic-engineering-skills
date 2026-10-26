@@ -1,5 +1,7 @@
 # AI system impact assessment
 
+<!-- verified: 2026-10-25; re-check every 180 days -->
+
 Read when writing the impact assessment. It records who the system affects
 and how, beyond the client organisation's own risk, and what the design
 does about each impact. It is organised along ISO/IEC 42005 and mapped to
@@ -106,7 +108,30 @@ the rows the regime asks for. Sources read 26 October 2026 (see
   tool, the use-case owner and the assessing and approving officers, the
   transparency statement inputs and an AGT.1 to AGT.8 conformance list. The
   agency's officers complete the assessment, due for in-scope use cases by
-  15 December 2026 (checked 2026-10-26).
+  15 December 2026 (checked 2026-10-26). For a Commonwealth or NSW agency,
+  the draft answers to the official forms (the DTA tool, transparency
+  statement, register row and agentic addendum; the NSW AIAF registration
+  and assessment) go in `government-form-answers-<form>.md`, from
+  [AU government crosswalks](au-government-crosswalks.md).
+- **New Zealand: Responsible AI Guidance mapping and Māori impact** (`nz`):
+  MBIE's voluntary Responsible AI Guidance for Businesses (July 2025) for
+  private clients (inventory, PIA at design, security and jurisdictional
+  risk, transparency); the Algorithm Charter's likelihood and impact rating,
+  role of humans, contact point and appeal channel for signatory agencies;
+  Māori impact and engagement whenever the agent handles data about Māori or
+  serves Māori, and always for a public sector client; the senior leadership
+  approval the OPC expects. See [New Zealand](new-zealand.md).
+- **Singapore: Agentic MGF mapping** (`sg`, any agent): the four dimensions
+  of IMDA's Model AI Governance Framework for Agentic AI v1.5 (bound the
+  risks; meaningful human accountability, with the override rate and review
+  time as M records; technical controls and change management; end-user
+  responsibility), plus MAS materiality and FEAT rows for financial
+  clients. See [Singapore](singapore.md).
+- **Canada: AIA inputs** (`ca`, federal institution): whether the output
+  makes or informs an administrative decision, the level the department
+  will score, and the Appendix C requirements as waits; the OHRC Human
+  Rights AI Impact Assessment as the adverse-impact checklist for Ontario.
+  See [Canada](canada.md).
 - **EU: FRIA crosswalk** (`eu`, Article 27 deployer): Article 27(1)(a) to
   (f) mapped to pack sections, so the FRIA can cross-reference the DPIA as
   Article 27(4) allows.

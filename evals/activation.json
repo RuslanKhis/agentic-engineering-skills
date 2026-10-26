@@ -709,6 +709,34 @@
       "rationale": "A general website privacy policy is not a governance paper about an ADK agent drawn from its design and evidence, even though it mentions privacy law."
     },
     {
+      "id": "governance-pack-nsw-agency-chatbot-positive",
+      "skill": "adk-governance-pack",
+      "prompt": "We built a public-facing service chatbot for a NSW agency on ADK and Gemini. Their Accountable Official wants the AIAF answers and whatever their privacy and legal teams need before the pilot; draft them from our design and plan.",
+      "should_trigger": true,
+      "rationale": "Draft answers for the NSW AIAF from the crosswalk, plus the NSW privacy, records and contract screen for a state agency client, are governance papers this skill drafts from the project record."
+    },
+    {
+      "id": "governance-pack-commonwealth-dta-positive",
+      "skill": "adk-governance-pack",
+      "prompt": "A Commonwealth department wants to use our ADK claims-triage agent. Their assessing officer asked for our input to the DTA AI impact assessment and the transparency statement; prepare it from our docs.",
+      "should_trigger": true,
+      "rationale": "Inputs to the DTA AI impact assessment tool and transparency statement, drawn from the design and evidence for the agency's officers, are this skill's government form answers."
+    },
+    {
+      "id": "governance-pack-auckland-singapore-retailer-positive",
+      "skill": "adk-governance-pack",
+      "prompt": "Our customer-service agent for a retailer with stores in Auckland and Singapore goes to pilot next month. Their privacy officer and DPO want the privacy papers, including what covers our support access from Sydney.",
+      "should_trigger": true,
+      "rationale": "A New Zealand and Singapore privacy screen, with the transfer facts for an Australian consultancy's access, is a governance pack drawn from the project record."
+    },
+    {
+      "id": "governance-pack-quebec-ontario-hr-positive",
+      "skill": "adk-governance-pack",
+      "prompt": "Draft the governance papers for our HR assistant before the pilot: the client employs staff in Quebec and Ontario, and their counsel asked whether Law 25 applies to the agent's leave decisions.",
+      "should_trigger": true,
+      "rationale": "Screening Quebec's private sector Act, its automated-decision and outside-Quebec rules and Ontario employment rules for an HR agent, with the question left to counsel, is this skill's deliverable."
+    },
+    {
       "id": "sensitive-data-logs-not-governance-positive",
       "skill": "protect-adk-sensitive-data",
       "prompt": "Redact PII from our agent's logs before they reach Cloud Logging.",

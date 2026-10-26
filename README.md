@@ -44,7 +44,7 @@ behaviour, or prepare a deployment.
 | **Not sure where AI fits, or which use case comes first** | `/adk-discovery` | A short discovery conversation, a ranked list of opportunities with the technology each needs (agent, LLM, classical ML, rules or a process change), the first use case with its outcome measure and baseline, and the exact prompt for the designer |
 | **Starting a new ADK application** | `/adk-system-designer` | A short design conversation, then an architecture document, a goal plan, and the exact prompt for the first goal |
 | **Changing an application you already have** | `/adk-engineer` | It names the specialist it is using, makes the change with local tests, and says what is still unverified |
-| **Answering a client's legal, privacy or security reviewers** | `/adk-governance-pack` | A screen of which Australian, US, EU and UK privacy and AI laws apply, then draft papers built from the design and plan: a regulatory memo (with the EU AI Act classification where the EU applies), privacy impact inputs serving as PIA, DPIA or US risk assessment, transfer facts, an impact assessment, a system card, processing records and security questionnaire answers, each statement citing its evidence or flagged for counsel |
+| **Answering a client's legal, privacy or security reviewers** | `/adk-governance-pack` | A screen of which Australian (including NSW and Commonwealth government), US, EU, UK, New Zealand, Singapore and Canadian privacy and AI laws apply, then draft papers built from the design and plan: a regulatory memo (with the EU AI Act classification where the EU applies), privacy impact inputs serving as PIA, DPIA or US risk assessment, transfer facts, an impact assessment, a system card, processing records, security questionnaire answers and, for a government agency, draft answers to the DTA or NSW AIAF forms, each statement citing its evidence or flagged for counsel; drafts that support the client's lawyer, never replace one |
 | **Presenting the work to decide the next step** | `/adk-presenter` | A slide outline with evidence under every claim, what to say, the questions to expect and a one-page decision memo, for a business or a technical audience, at proof-of-concept approval, production approval, results review, or as a public case study |
 
 Discovery, design, engineering and presentation all lead to the same nineteen specialists; the governance pack drafts from what they record, and the optional portability planner assesses an accepted design for lock-in without changing it. You never need to remember which
@@ -434,7 +434,7 @@ specialists follow Chapters 0–10 of the book; no chapter reading is required.
 | Help choosing an approach or combining concerns | [adk-engineer](#adk-engineer) |
 | A presentation for a proof-of-concept approval, a production decision, a results review or a public case study | [adk-presenter](#adk-presenter) |
 | Your employer's and clients' context and lessons, kept outside every repository and offered as defaults in the next project | [practice-profile](#practice-profile) |
-| Draft papers for a client's counsel, DPO or CISO: which of Australian, US, EU and UK law applies, regulatory memo with the EU AI Act classification, impact assessment, PIA or DPIA inputs, transfer facts, system card, processing records, security questionnaire | [adk-governance-pack](#adk-governance-pack) |
+| Draft papers for a client's counsel, DPO or CISO: which of Australian, US, EU, UK, New Zealand, Singapore and Canadian law applies, regulatory memo with the EU AI Act classification, impact assessment, PIA or DPIA inputs, transfer facts, system card, processing records, security questionnaire, and draft answers to DTA or NSW AIAF forms for a government agency | [adk-governance-pack](#adk-governance-pack) |
 | A separate lock-in and portability plan for an accepted GCP and ADK design: AWS and Azure alternatives, other agent frameworks, replacement boundaries, migration risks | [adk-portability-planning](#adk-portability-planning) |
 | Sequential steps, parallel work or bounded loops | [adk-workflow-design](#adk-workflow-design) |
 | Reliable API calls and protection against duplicate actions | [safe-api-tool-calls](#safe-api-tool-calls) |
@@ -772,31 +772,42 @@ questions they don't answer.
 Use this when a client's counsel, data protection officer or security team
 asks for papers before a pilot or production decision. It reads the
 discovery brief, the design and the plan's evidence and first screens which
-regimes apply, always in the order Australia, United States, EU, UK: where
-the client is, where the people whose data it handles are, where the data is
-processed (including the agency's own staff in Australia), the client type,
-the sector and whether outputs feed decisions about people. An unknown fact
-keeps a regime in scope. It then drafts a regulatory memo: the full EU AI Act
-classification where the EU applies (prohibited practices, Annex III
-high-risk areas such as hiring or credit, Article 50 transparency, provider
-and deployer roles) and, for Australia, the US and the UK, which have no AI
-Act, a screen of the laws that do apply (the Privacy Act and APP 1.7
-automated-decision transparency; California's CPPA rules, Colorado, NYC Local
-Law 144, state privacy and sector laws; UK GDPR as amended by the Data (Use
-and Access) Act 2025, the Equality Act and the FCA). Alongside it come an AI
-impact assessment along ISO/IEC 42005 mapped to the NIST AI RMF, a privacy
-impact input pack that serves as the Australian PIA, the EU or UK DPIA and
-the US risk assessment, a transfer assessment annex for EU and UK data the
-agency reaches from Australia, a system card with an automated-decision
-disclosure block, records-of-processing rows under GDPR or UK GDPR and a
-security questionnaire answer bank. Every statement cites a contract,
-decision or evidence ID, or is marked as an assumption or a question for
-counsel; these are drafts, not legal advice. A proof of concept gets a
+regimes apply, always in the order Australia, United States, EU, UK, New
+Zealand, Singapore, Canada: where the client is, where the people whose data
+it handles are (the Canadian province included), where the data is processed
+(including the agency's own staff in Australia), the client type (a NSW or
+Commonwealth agency among them), the sector and whether outputs feed
+decisions about people. An unknown fact keeps a regime in scope. It then
+drafts a regulatory memo: the full EU AI Act classification where the EU
+applies (prohibited practices, Annex III high-risk areas such as hiring or
+credit, Article 50 transparency, provider and deployer roles) and, for the
+other six regimes, which have no AI Act, a screen of the laws that do apply
+(the Privacy Act and APP 1.7 automated-decision transparency, and for NSW
+agencies the PPIP and HRIP Acts, GIPA, State records, the NSW Cyber Security
+Policy and ICTA contract AI clauses; California's CPPA rules, Colorado, NYC
+Local Law 144, state privacy and sector laws; UK GDPR as amended by the Data
+(Use and Access) Act 2025, the Equality Act and the FCA; New Zealand's
+Privacy Act 2020 and IPP 3A; Singapore's PDPA and its data intermediaries;
+PIPEDA and Quebec's Law 25 in Canada). Alongside it come an AI impact
+assessment along ISO/IEC 42005 mapped to the NIST AI RMF, a privacy impact
+input pack that serves as each regime's PIA, DPIA or risk assessment, a
+transfer assessment annex for EU, UK, New Zealand, Singapore and Quebec data
+the agency reaches from Australia, a system card with an automated-decision
+disclosure block, records-of-processing rows under GDPR or UK GDPR, a
+security questionnaire answer bank and, for a Commonwealth or NSW agency,
+draft answers in the official form's order for the DTA AI impact assessment
+or the NSW AIAF, from crosswalks that never copy the forms. Every statement
+cites a contract, decision or evidence ID, or is marked as an assumption or a
+question for counsel or the agency; every draft carries a drafting-aid
+banner and a sign-off table only its reviewer fills. These are drafts that
+support the client's lawyer, not legal advice. A proof of concept gets a
 one-page note; a pilot or production service gets the full pack. A helper
-fails a draft with no jurisdictions, a section for a regime not in scope, an
-uncited statement, an invented ID, a legal date without the day it was
-checked, or a high-stakes fact (hiring, credit, housing, insurance, health,
-children, biometrics, a government client) without a counsel flag. The
+fails a draft with no jurisdictions, a screen missing any of the seven
+regimes, a section for a regime not in scope, an uncited statement, an
+invented ID, a legal date without the day it was checked, form answers
+without their form version and checked date, or a high-stakes fact (hiring,
+credit, housing, insurance, health, children, biometrics, a government
+client, an exclusively automated decision) without a counsel flag. The
 designer plans it as a goal before the production decision.
 
 **Invoke:** Claude Code `/adk-governance-pack` · Codex `$adk-governance-pack`
@@ -2479,6 +2490,41 @@ for [Australia](docs/research/au-ai-privacy-law-2026-10-26.md), the
 [UK](docs/research/uk-ai-privacy-law-2026-10-26.md), and the
 [record](docs/testing/governance-jurisdictions-2026-10-26.md).
 
+### Governance papers for New Zealand, Singapore, Canada and AU government forms · 26 October 2026
+
+The governance pack now screens seven regimes, always in the order
+Australia, United States, EU, UK, New Zealand, Singapore, Canada, and a
+screen that still names only the first four fails with a fix message. New
+references at screen depth cover New Zealand's Privacy Act 2020 (s 11
+agents, IPP 3A, IPP 8, IPP 12, the Biometric Processing Privacy Code),
+Singapore's PDPA (data intermediaries, consent and exceptions, the Transfer
+Limitation Obligation, the 3-day breach clock) and Canadian law (PIPEDA,
+Quebec's Law 25 with s 3.3, s 12.1 and s 17, Alberta, BC, Ontario
+employment rules, the federal Directive on Automated Decision-Making).
+For NSW and Commonwealth agencies, crosswalks map the DTA AI impact
+assessment, transparency statement, register, agentic addendum, NSW AIAF
+and IPC AI PIA guide to the project's records without copying the forms,
+and a new form answers document drafts answers in each form's order for the
+agency's officers, marked `agency:` where only they can answer; the
+crosswalks are re-checked every 90 days. The Australian reference gains NSW
+state law, including PPIP Act s 19(2) for any recipient outside NSW, State
+records, the NSW Cyber Security Policy and ICTA clause 6.11's six-month
+model-change notice checked against the pinned model's retirement date.
+Every draft keeps the drafting-aid banner and the reviewer's sign-off from
+the same branch's earlier change. Three fresh-agent trials (a NSW agency
+chatbot, an Auckland and Singapore retailer, a Quebec and Ontario HR
+assistant) picked the right regimes in order, left every sign-off pending
+and passed the checker (ease 3, 3 and 3 of 5); 19 frictions were fixed the
+same day and the rest recorded with reasons. All **25 packages** pass
+validation and **1,022 tests** pass with **59 optional SDK checks
+skipped**. These are drafts that support the client's lawyer; no skill
+replaces one. See the research notes for
+[New Zealand](docs/research/nz-ai-privacy-law-2026-10-26.md),
+[Singapore](docs/research/sg-ai-privacy-law-2026-10-26.md),
+[Canada](docs/research/ca-ai-privacy-law-2026-10-26.md) and
+[AU government forms and NSW law](docs/research/au-government-forms-nsw-2026-10-26.md),
+and the [record](docs/testing/governance-apac-canada-2026-10-26.md).
+
 ### Portability planning for a GCP and ADK design · 26 October 2026
 
 This toolkit builds production Google ADK applications on GCP, and that
@@ -2498,7 +2544,7 @@ portability ticket, and an unrelated goal routing to its own specialist; an
 independent review and the trials found eighteen issues, all fixed the same
 day, among them a build goal ordered behind the assessment and a checker that
 let hyphenated estimates through. All **26 packages** pass validation and
-**1,130 tests** run, with **60 optional SDK checks skipped**. See the research notes on
+**1,163 tests** run, with **60 optional SDK checks skipped**. See the research notes on
 [AWS](docs/research/portability-aws-2026-10-26.md),
 [Azure](docs/research/portability-azure-2026-10-26.md),
 [agent frameworks](docs/research/portability-agent-frameworks-2026-10-26.md)

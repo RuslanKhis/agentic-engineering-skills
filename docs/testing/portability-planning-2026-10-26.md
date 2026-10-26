@@ -19,7 +19,7 @@ one scope-gate question.
 | Package validation (`scripts/validate_skills.py`) | 26 packages, 0 errors, 0 warnings; the designer's `SKILL.md` stays at 500 lines |
 | Checker suite (`skills/adk-portability-planning/tests`) | 73 tests pass: a filled claims-triage fixture passes; the unfilled template fails on placeholders; each rule fails on its own mutation (sections, classes, invented IDs, undated or future sources, unsupported hours, prices and dates, overpromises with and without a nearby negation, missing dimension rows, Terraform, Bicep, CloudFormation and cloud CLI blocks, an uninstalled specialist) |
 | Designer suite (`skills/adk-system-designer/tests`) | 63 tests pass, 8 in `test_document_goals.py`: a portability ticket with `(deliverable)` items and `contracts: []` passes `check_tickets.py`; the tag fails on implementation, presentation and governance tickets; a missing skill fails; the phase gate skips the portability goal; `check_schedule.py` reports a build goal that waits for it; the handoff's example front matter and acceptance pass the lint |
-| Full `scripts/check_repo.py` (repo `.venv`, Python 3.12.9) | Passed: 1,130 tests run, 1,070 pass, 60 optional SDK checks skipped |
+| Full `scripts/check_repo.py` (repo `.venv`, Python 3.12.9) | Passed: 1,130 tests run, 1,070 pass, 60 optional SDK checks skipped on the branch; after merging `main` at `ff87b9c` (the governance APAC and Canada work), 1,163 run, 1,103 pass, 60 skipped |
 | Evaluation cases | 8 activation cases (3 positive, 5 near-miss) and 4 scenarios (no concern, concern, ticket carried out, unrelated goal); structure valid, model activation not run |
 | Provider and framework facts | Read at official sources on 26 October 2026 (research notes); an independent reviewer re-checked eight decision-relevant claims at source and confirmed all eight |
 
@@ -123,7 +123,9 @@ specialist's local recipes for atomic index swaps and lockfiles (D); and
   still needs a human reviewer; C's acceptance A3 was shown by its source
   table, not by an independent re-read.
 - Provider facts move quickly. The references carry
-  `<!-- verified: 2026-10-26; re-check every 90 days -->`; the validator's
-  freshness check on the unmerged `governance-signoff` branch would warn on
-  them once both land. This branch does not add the skill to that check, to
-  keep the two branches merging cleanly.
+  `<!-- verified: 2026-10-26; re-check every 90 days -->`, and the
+  validator's freshness check (merged from `main`) now requires that line in
+  this skill's references and warns when one is due; a test covers the
+  missing-marker case. The re-check procedure in
+  `docs/maintenance/law-refresh.md` is written for law references; provider
+  references are re-read at the sources each one lists.

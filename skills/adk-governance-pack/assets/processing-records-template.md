@@ -2,7 +2,7 @@
 document: processing-records
 system: <system name>
 status: draft
-jurisdictions: [<codes in scope; must include eu or uk>]
+jurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca; must include eu or uk>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
 for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
@@ -12,12 +12,19 @@ sources: <docs/architecture/<topic>.md, privacy-impact-input-pack.md>
 
 # Records of processing rows: <system name>
 
+> **Drafting aid output, not legal advice.** Prepared to support the
+> reviewer named in `for:`, never to replace the client's lawyer. It is not
+> reviewed until that reviewer records a decision in Review and sign-off at
+> the end; counsel decides every legal conclusion in it.
+
 Rows for <client>'s existing register under GDPR Article 30(1) or UK GDPR
 Article 30(1), as the jurisdiction screen found them in scope; the DPO
 merges them. One row per purpose, not per component. Not legal advice.
 Australia has no Article 30 register: for Australian personal information
 the privacy impact input pack's "Australia: Inventory and notice inputs"
 section does this job and feeds the APP privacy policy and collection notice.
+New Zealand, Singapore and Canada have none either; their input pack
+sections do the same job.
 
 ## Processing activities
 
@@ -30,3 +37,13 @@ section does this job and feeds the APP privacy policy and collection notice.
 | Processor | Controller | Categories of processing | Transfers | Security measures | Evidence |
 | --- | --- | --- | --- | --- | --- |
 | <agency> | <client> | <build, test, support> | <none / where staff access from, mechanism> | <SB IDs> | <D ID or contract reference> |
+
+## Review and sign-off
+
+<!-- Only the reviewer fills Decision and Date. Leave both `pending` while
+status is draft; the reviewer sets status: reviewed when they sign. One row
+per reviewer: the role from `for:` first, then any other reviewer. -->
+
+| Reviewer (role) | Scope reviewed | Decision | Date |
+| --- | --- | --- | --- |
+| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |

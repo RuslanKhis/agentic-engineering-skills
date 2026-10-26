@@ -1,0 +1,54 @@
+name: Law reference refresh reminder
+
+# Once a quarter, list the governance pack's law references with their
+# verified dates and open one reminder issue. The refresh itself is done by
+# a maintainer with docs/maintenance/law-refresh.md; this job changes no file.
+on:
+  schedule:
+    - cron: '17 22 1 1,4,7,10 *'   # 22:17 UTC on 1 Jan/Apr/Jul/Oct (morning of the 2nd in Sydney)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: List verified dates and due references
+        run: |
+          python - <<'EOF' > body.md
+          import datetime as dt, pathlib, re
+          pattern = re.compile(r"<!--\s*verified:\s*(\d{4}-\d{2}-\d{2})(?:;\s*re-check every (\d+) days)?\s*-->")
+          today = dt.date.today()
+          print("Quarterly re-verification of the governance pack's law references.")
+          print("Follow docs/maintenance/law-refresh.md on a local branch; review the diff before merging.\n")
+          print("| Reference | Verified | Interval | Due |\n| --- | --- | --- | --- |")
+          for path in sorted(pathlib.Path("skills").glob("*/references/*.md")):
+              match = pattern.search(path.read_text(encoding="utf-8", errors="replace"))
+              if not match:
+                  continue
+              verified, days = dt.date.fromisoformat(match.group(1)), int(match.group(2) or 180)
+              due = "yes" if (today - verified).days > days else "quarterly pass"
+              print(f"| `{path}` | {verified} | {days} days | {due} |")
+          print("\nThe references support the client's lawyer; they never replace one.")
+          EOF
+          cat body.md
+      - name: Open the reminder issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Law reference refresh: $(date -u +%Y-%m)"
+          if gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$title\" in:title" --json number --jq 'length' | grep -qv '^0$'; then
+            echo "Issue already open: $title"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" --body-file body.md
+          fi
