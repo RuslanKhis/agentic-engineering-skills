@@ -112,7 +112,10 @@ where its endpoint is available. A model retired or retiring before the
 decision's horizon, or processing outside the region a contract promises,
 is a limit and a gap for that skill. Processing outside the client's country
 is also a transfer or overseas-disclosure fact for the privacy impact input
-pack.
+pack. When neither the page nor the table can be read (no web access, or the
+table is not installed), write the retirement date and the processing region
+as `gap:` lines beside the design's model decision ID, propose the check as
+a goal for `adk-model-and-output-contracts`, and never assume either value.
 
 ## Read the practice profile, if one is bound
 
@@ -156,7 +159,11 @@ UK) gets the regulatory memo, not just the note.
 Each draft's front matter sets `counsel_required`: `yes` when counsel must
 review it before anyone relies on it (any `counsel:` item that blocks the
 decision, and always on a counsel trigger), `no` when the reviewer named
-in `for:` can rely on it alone, `pending` until you know.
+in `for:` can rely on it alone, `pending` until you know. The checker reads
+the trigger phrases in the source records for every draft, so every
+document of a high-stakes system carries `yes`, the security questionnaire
+included; that is intended, because a reviewer reading one document alone
+should still see that counsel is involved.
 
 ## Draft each document
 
@@ -164,8 +171,15 @@ Copy each template into `docs/governance/<topic>/` under its own name
 (`regulatory-memo.md`, `impact-assessment.md`,
 `privacy-impact-input-pack.md`, `transfer-assessment.md`, `system-card.md`,
 `processing-records.md`, `security-questionnaire.md`, or `poc-note.md`),
-delete the regime sections whose code is not in `jurisdictions:`, and fill
-it in this order, because later ones cite earlier ones:
+delete the regime sections whose code is not in `jurisdictions:` and the
+regime bullets and rows for those regimes inside shared sections (Summary,
+Roles, Applicable dates, Screening), and fill it in this order, because
+later ones cite earlier ones. When Australia is in scope only through the
+consultancy's own handling, the Australian sections are scoped to that
+handling: write `n/a:` with the reason for the client's own APP 1.7 and
+sector rows, let the inventory describe the consultancy's handling for its
+own privacy policy, and skip the Guidance for AI Adoption mapping, which is
+for Australian clients.
 
 1. **Regulatory memo** ([template](assets/regulatory-memo-template.md)):
    the jurisdiction screen first, then roles in every regime in scope, then
@@ -211,12 +225,13 @@ Hold every draft to these rules; the checker enforces the first five:
   plan or evidence ID (`C3`, `D2`, `SB14`, `G05/A2`, `M1`, `I1`, `W1`), a
   project file by path (`docs/discovery/<topic>.md §4`, not "the brief"),
   or a dated source (`source: Head of TA, 2026-10-20`), or is marked
-  `assumption:`, `counsel:`, `gap:`, `deferred:` or `n/a:` with its reason.
-  A statement the user makes in the conversation is cited as
-  `source: <role>, <date>`. A provider fact taken from these references
-  rather than the page itself says so (`source: adk-governance-pack
-  reference, read 2026-10-26`); re-read the page for anything a decision
-  rests on.
+  `assumption:`, `counsel:`, `gap:`, `deferred:`, `hypothesis:` or `n/a:`
+  with its reason. A statement the user makes in the conversation is cited
+  as `source: <role>, <date>`. A provider fact taken from these references
+  rather than the page itself says so, with the date the reference gives
+  (`source: adk-governance-pack reference, read 2026-10-25`); re-read the
+  page for anything a decision rests on, and when you cannot, say so beside
+  the fact. Template guidance in HTML comments is deleted, not kept.
 - **Jurisdictions drive the sections.** Every draft carries
   `jurisdictions:`; the required sections follow it, and a regime section
   whose code is not listed is an error. The memo's screen names all four
@@ -239,9 +254,10 @@ Hold every draft to these rules; the checker enforces the first five:
   public-body clients; solely automated significant decisions. Set it
   yourself whenever a fact could place the system in such an area that the
   phrase list misses. Uses listed under an out-of-scope heading, the
-  screening and jurisdiction-screen tables, and the memo's Article 5 and
-  high-risk checklists, do not trigger it; the system's own description and
-  its records do.
+  screening and jurisdiction-screen tables, the memo's Article 5 and
+  high-risk checklists, and a draft clause that says the phrase does not
+  apply ("n/a:", "no", "not") do not trigger it; the system's own
+  description and its records do.
 - **Dates carry their check.** Write when a law or one of its provisions
   applies in words ("2 August 2026", "10 December 2026", "January 1,
   2027") and add `checked <YYYY-MM-DD>`, the day you or the reference last
@@ -252,7 +268,9 @@ Hold every draft to these rules; the checker enforces the first five:
 - **Facts as the sources state them.** State as fact only what a reference
   records as read at the primary source, with its checked date. A
   reference line marked "reported; not confirmed at the source" stays
-  marked that way in the draft, or is left out.
+  marked that way in the draft, or is left out. A law the references do not
+  cover (for example a US state's age-discrimination or breach-notification
+  statute) is named as a `counsel:` question, never described from memory.
 - **Planned is not in place.** Use the status words in the system card
   reference; a control evidenced locally is not "in production".
 - **One home per fact.** Model-provider data use lives in the privacy impact
@@ -297,14 +315,24 @@ is a calendar wait `W<n>` in the plan that the production goals depend on,
 requested the day the drafts go out. Add a missing wait to the plan's
 schedule when the pack is a plan goal or the user asked you to update the
 plan, then cite its ID; otherwise cite the waits that exist and list the new
-ones, unnumbered, in your closing message for the plan's owner.
+ones, unnumbered, in your closing message for the plan's owner. Add new
+waits before the final checker run, because the drafts cite them and the
+plan is one of its sources, and add each wait to the "Depends on" of the
+goal it blocks. A goal whose drafts are written but not yet sent stays in
+its current state with "drafted, not sent" in its evidence.
+
+When the user asked a direct question (can we use it in New York City, do we
+need a DPIA), put the proposed answer, marked `counsel:`, in the memo's
+Summary and in your closing message, with the facts it rests on.
 
 End with: where the files are, the checker's result, the regimes in scope
 in order with the reason for each one left out, the proposed EU
 classification (if the EU is in scope) and the main obligation in each other
 regime, each in one line with its counsel flag, the counsel questions that
 block the next decision, the gaps and the goal each needs, the waits to
-schedule, and the prompt for the next step, for example:
+schedule (first any whose needed-by date is within 14 days, such as a
+workplace surveillance notice period), and the prompt for the next step,
+for example:
 
 ```text
 /adk-presenter Prepare the production-approval presentation from

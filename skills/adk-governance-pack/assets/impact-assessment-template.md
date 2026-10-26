@@ -6,6 +6,7 @@ status: draft
 jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
+for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
 trigger: <why this assessment now: design, production decision, significant change>
 sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<topic>.md, regulatory-memo.md>
 ---

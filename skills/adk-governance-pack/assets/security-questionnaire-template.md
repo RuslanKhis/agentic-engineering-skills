@@ -6,6 +6,7 @@ status: draft
 jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
+for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
 sources: <docs/architecture/<topic>.md (contracts, SB table), docs/plans/<topic>.md>
 ---
 
@@ -37,7 +38,8 @@ or `n/a:` with its ID.
 | Human oversight | Who reviews or approves outputs and actions? | <approval points> | <status> | <SB18, C IDs> |
 | Vulnerability management | Dependency audits, scans, penetration test? | <audits in CI, ZAP, pen test> | <status> | <SB15, SB21, SB24> |
 | Secure development | Code review, CI gates, release and rollback? | <gates and rollback unit> | <status> | <D/G IDs> |
-| Incident response | How are incidents detected, reported and handled? | <alerts, owner; notification clocks that apply in the regimes in scope: agency to client without undue delay; GDPR or UK GDPR 72 hours to the authority; Australian eligible data breach assessed within 30 days and notified as soon as practicable; APRA CPS 234 72 hours; GLBA Safeguards 30 days; NIS2 24 and 72 hours if the client is in scope; CRA 24 and 72 hours if a product; AI Act Art 73 if high-risk> | <status> | <D/G IDs, I IDs> |
+| Incident response | How are incidents detected, reported and handled? | <alerts, owner; notification clocks that apply in the regimes in scope: agency to client without undue delay; GDPR or UK GDPR 72 hours to the authority; Australian eligible data breach assessed within 30 days and notified as soon as practicable; APRA CPS 234 72 hours; GLBA Safeguards 30 days; NIS2 24 and 72 hours if the client is in scope; DORA major ICT incident reporting for EU financial entities (counsel: clock); CRA 24 and 72 hours if a product; AI Act Art 73 if high-risk> | <status> | <D/G IDs, I IDs> |
 | Deletion | How is data deleted at end of contract or on request? | <erasure path and period> | <status> | <C/D IDs> |
 | Availability and recovery | What are the availability target and recovery plan? | <SLO, backup, restore test> | <status> | <C/D IDs> |
+| AI security baseline | Which AI security code or standard do you follow? | <for UK clients who ask: DSIT Code of Practice principles mapped to SB and C IDs; otherwise n/a: not requested> | <status> | <SB/C IDs> |
 | Certifications | Which certifications apply? | <the cloud provider's, cited; the application's own, if any> | <status> | <source:> |

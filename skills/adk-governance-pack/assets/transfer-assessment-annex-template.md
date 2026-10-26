@@ -5,7 +5,8 @@ status: draft
 jurisdictions: [<codes in scope; must include eu or uk>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
-exporter: <client legal entity, or counsel: who exports>
+for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
+exporter: <client legal entity per transfer; for a group, each exporting entity, or counsel: who exports>
 sources: <docs/architecture/<topic>.md, privacy-impact-input-pack.md>
 ---
 

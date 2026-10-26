@@ -240,6 +240,33 @@ class CheckGovernance(unittest.TestCase):
             result = run("--json", "@note.md", files={"note.md": with_line(POC_NOTE, line)})
             self.assertEqual(json.loads(result.stdout)[0]["counsel_triggers"], [], line)
 
+    def test_drafter_negation_skips_a_trigger_but_a_bare_cell_does_not(self):
+        for line in ("n/a: no PHI, MDR device or under-13 data is processed (C1).",
+                     "No court order stays a state law relied on here (checked 2026-10-26)."):
+            result = run("--json", "@note.md", files={"note.md": with_line(POC_NOTE, line)})
+            self.assertEqual(json.loads(result.stdout)[0]["counsel_triggers"], [], line)
+        table = "| Use | Applies | Evidence |\n| --- | --- | --- |\n| Hiring decisions | n/a: none | C1 |"
+        result = run("--json", "@note.md", files={"note.md": with_line(POC_NOTE, table)})
+        self.assertEqual(json.loads(result.stdout)[0]["counsel_triggers"], ["employment"])
+
+    def test_performance_management_uses_trigger(self):
+        line = "Managers get an attendance summary before a performance conversation (C1)."
+        result = run("--json", "@note.md", files={"note.md": with_line(POC_NOTE, line)})
+        self.assertIn("employment", json.loads(result.stdout)[0]["counsel_triggers"])
+
+    def test_wrapped_statement_may_carry_checked_on_another_line(self):
+        bullet = ("- Annex III obligations apply from 2 December 2027 (Art. 113(c)(i),\n"
+                  "  checked 2026-10-26; C1).")
+        self.assertEqual(run("@note.md", files={"note.md": with_line(POC_NOTE, bullet)}).returncode, 0)
+        prose = ("Annex III obligations apply from 2 December 2027 (Art. 113(c)(i),\n"
+                 "checked 2026-10-26; C1).")
+        self.assertEqual(run("@note.md", files={"note.md": with_line(POC_NOTE, prose)}).returncode, 0)
+
+    def test_project_section_sign_is_not_a_statute(self):
+        line = "The FCA said on 8 June 2026 that existing rules apply (docs/discovery/x.md §4)."
+        result = run("@note.md", files={"note.md": with_line(POC_NOTE, line)})
+        self.assertNotIn("legal applicability date", result.stdout)
+
     def test_trigger_in_source_file_forces_counsel(self):
         brief = "# Discovery brief\nThe assistant screens job applicants before interviews.\n"
         result = run("@note.md", "--source", "@brief.md", "--source", "@design.md",

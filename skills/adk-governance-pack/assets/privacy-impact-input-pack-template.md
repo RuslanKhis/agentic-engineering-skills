@@ -6,7 +6,8 @@ status: draft
 jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
-owner: <client legal entity>; reviewer: <DPO, privacy officer or role>
+owner: <client legal entity; for a group, each entity and its role>
+for: <DPO, privacy officer or role>
 sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<topic>.md>
 ---
 
@@ -20,8 +21,11 @@ them in scope. The client writes and signs each assessment; this pack
 supplies the facts the design and plan record and the questions only counsel
 can answer. Not legal advice.
 
-<!-- Keep only the regime sections whose code is in jurisdictions. Delete
-this comment. -->
+<!-- Keep only the regime sections, and the regime rows and bullets inside
+shared sections, whose code is in jurisdictions. When Australia is in scope
+only through the consultancy's own handling, the Australian sections cover
+that handling and the inventory feeds the consultancy's own privacy policy.
+Delete this comment. -->
 
 ## Screening
 
@@ -51,9 +55,9 @@ Result: counsel: <assessment required / recommended / not required per regime; t
 | <logs and traces> | <what remains> | <service> | <sink, region> | <period> | <yes / no> | <control> | <SB14, D ID> |
 | <consultancy access> | <what staff can see> | <client environment> | <consultancy staff, country> | <period> | <n/a:> | <control> | <D ID or gap:> |
 
-## Data subjects and categories
+## People and data categories
 
-| Data subjects | Categories | Sensitive or special category data (including inferred) | Source (from the person, a third party, or generated) | Evidence |
+| People (data subjects or individuals) | Categories | Sensitive or special category data (including inferred) | Source (from the person, a third party, or generated) | Evidence |
 | --- | --- | --- | --- | --- |
 | <who> | <categories> | <none / which; counsel:> | <system of record> | <docs/discovery/<topic>.md §4 data register> |
 
@@ -76,7 +80,7 @@ Result: counsel: <assessment required / recommended / not required per regime; t
 | --- | --- | --- | --- | --- |
 | <session store> | <conversation> | <period> | <how a request reaches it> | <C/D IDs> |
 
-## Recipients, processors and regions
+## Recipients and regions
 
 | Recipient or processor | Role | Region or country | Transfer or overseas disclosure: mechanism and assessment | Evidence |
 | --- | --- | --- | --- | --- |

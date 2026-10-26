@@ -6,6 +6,7 @@ status: draft
 jurisdictions: [<codes in scope, in the order au, us, eu, uk>]
 counsel_required: <yes / no / pending>
 prepared: <YYYY-MM-DD> by <agency or team>
+for: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>
 sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<topic>.md, evaluation reports>
 ---
 
@@ -49,9 +50,7 @@ Not yet measured: <measure>, measured by <goal ID> (<gap:>).
 
 ## Automated-decision disclosure
 
-Facts the client's privacy policy, notices and explanations draw on. Write
-`n/a:` with the reason when no output decides, or feeds a decision about, a
-person.
+<!-- Facts for the client's privacy policy, notices and explanations; write n/a: with the reason when no output decides, or feeds a decision about, a person. Delete this comment. -->
 
 - **Kinds of personal information used:** <kinds, in plain language> (<C/D IDs>).
 - **Decisions made solely by the system:** <kinds, or none> (<C IDs>).

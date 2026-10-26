@@ -31,13 +31,17 @@ reviewer would otherwise find by hand:
   clients; solely automated significant decisions). Sections headed as
   out-of-scope or excluded uses, the screening and jurisdiction-screen
   checklists, and the memo's prohibited-practices, high-risk and transparency
-  checklists are not scanned;
+  checklists are not scanned, and in a draft a phrase is skipped when the
+  drafter's own clause before it says "n/a:", "no" or "not" (source files
+  are always scanned in full);
 - a line that states when a law or one of its provisions applies (a legal
   reference from any of the four regimes, an applicability word and a date
   written in words, such as "2 August 2026" or "January 1, 2027") without
   ``checked <date>``; ISO dates are treated as project or provenance dates,
   and "read", "updated" or "published" dates are ignored; a checked date in
-  the future is an error, one older than ``--max-age-days`` a warning;
+  the future is an error, one older than ``--max-age-days`` a warning; a
+  wrapped statement may carry its checked date on another of its lines, and a
+  project-file citation such as ``docs/x.md §4`` is not a statute section;
 - with ``--source``, a cited R, C, D, SB, M, I, W or O ID that no source
   file contains (an invented reference); an SB rule named on a ``gap:``,
   ``n/a:`` or ``deferred:`` line is exempt, because the baseline lists rules
@@ -82,9 +86,9 @@ REQUIRED = {
         "Impacts", "Measures", "Residual risk and decision", "NIST AI RMF mapping",
         "Monitoring and review"),
     "privacy-impact-input-pack": (
-        "Screening", "Processing description", "Data flows", "Data subjects and categories",
+        "Screening", "Processing description", "Data flows", "People and data categories|Data subjects",
         "Automated decisions", "Necessity and proportionality", "Retention and erasure",
-        "Recipients, processors and regions", "Model provider data use",
+        "Recipients", "Model provider data use",
         "Risks and measures", "Questions for counsel"),
     "system-card": (
         "Intended use", "Out-of-scope use", "Limits", "Evaluation results",
@@ -142,7 +146,9 @@ COUNSEL_TRIGGERS = {
                    r"terminat(?:e|ion) of employment", r"dismissal", r"(?:employee|worker|staff) performance",
                    r"allocat(?:e|ing|ion of) (?:tasks|work|shifts) to (?:employees|workers|staff)",
                    r"monitor(?:ing)? (?:employees|workers|staff)", r"remuneration (?:decisions?|outcomes?)",
-                   r"bonus (?:decisions?|outcomes?)", r"automated employment decision"),
+                   r"bonus (?:decisions?|outcomes?)", r"automated employment decision",
+                   r"performance (?:management|conversations?|reviews?|ratings?|improvement plans?)",
+                   r"attendance (?:records?|summar(?:y|ies))"),
     "essential services": (r"creditworth", r"credit scor", r"credit decision", r"loan (?:approval|decision|application)",
                            r"public (?:assistance|benefits?)", r"social (?:security|benefits?)",
                            r"eligibility for (?:benefits|services)", r"life insurance", r"health insurance",
@@ -204,8 +210,10 @@ LEGAL_REF = re.compile(
     r"|CCPA|CPRA|CPPA|CalPrivacy|ADMT|Colorado|Texas|TRAIGA|Utah|Illinois|Local Law|FEHA|COPPA|HIPAA"
     r"|GLBA|FCRA|ECOA|TCPA|CFR|Civ\. Code|DUAA|Data \(Use and Access\) Act|DPA 2018|PECR"
     r"|Equality Act|Online Safety Act|(?:SB|HB|AB|LD)\s?\d+|PA\s\d\d-\d+)\b"
-    r"|§\s?\d+|(?<![\w'’])ss?\.?\s\d+[A-Z]*\b",
+    r"|(?<!\.md )§\s?\d+|(?<![\w'’])ss?\.?\s\d+[A-Z]*\b",
     re.IGNORECASE)
+# Words in the drafter's own clause that say a trigger phrase does not apply.
+NEGATION = re.compile(r"(?<![\w/])n/a\s*:|\b(?:no|not|none|never|without|neither|nor)\b", re.IGNORECASE)
 APPLICABILITY = re.compile(r"\b(?:appl(?:y|ies|ied|ying|ication|icable)|in force|enters?|entry into force"
                            r"|from|until|since|due|deadline|delay(?:ed|s)?|postpone(?:d|s)?|effective"
                            r"|commenc(?:e|es|ed|ement|ing)|operative|takes? effect|obligations? start)\b",
@@ -273,16 +281,23 @@ def cites(text: str) -> bool:
                 or CHECKED.search(text) or MARKER.search(text))
 
 
-def statements(lines: list[tuple[int, str]]):
-    """Yield (line_number, text) for bullets, table data rows and prose paragraphs."""
-    paragraph: list[tuple[int, str]] = []
+def statements(lines: list[tuple[int, str]], spans: list | None = None):
+    """Yield (line_number, text) for bullets, table data rows and prose paragraphs.
+
+    A bullet absorbs the indented lines that continue it. When ``spans`` is a
+    list, (first_line, last_line, text) is appended for every statement.
+    """
+    buffer: list[tuple[int, str]] = []
+    in_bullet = False
     table_row = 0
 
     def flush():
-        if paragraph:
-            joined = " ".join(t.strip() for _, t in paragraph)
-            first = paragraph[0][0]
-            paragraph.clear()
+        if buffer:
+            joined = " ".join(t.strip() for _, t in buffer)
+            first, last = buffer[0][0], buffer[-1][0]
+            buffer.clear()
+            if spans is not None:
+                spans.append((first, last, joined))
             return (first, joined)
         return None
 
@@ -292,15 +307,18 @@ def statements(lines: list[tuple[int, str]]):
             item = flush()
             if item:
                 yield item
-            table_row = 0
+            table_row, in_bullet = 0, False
             continue
         if line.startswith("|"):
             item = flush()
             if item:
                 yield item
+            in_bullet = False
             table_row += 1
             if table_row == 1 or re.fullmatch(r"\|?[\s:|-]+\|?", line):
                 continue
+            if spans is not None:
+                spans.append((number, number, line))
             cells = [c.strip() for c in line.strip("|").split("|")]
             if any(c and c not in {"-", "—"} for c in cells[1:]) or len(cells) == 1:
                 yield number, line
@@ -310,12 +328,28 @@ def statements(lines: list[tuple[int, str]]):
             item = flush()
             if item:
                 yield item
-            yield number, line
+            buffer.append((number, raw))
+            in_bullet = True
             continue
-        paragraph.append((number, raw))
+        if in_bullet and not raw[:1].isspace():
+            item = flush()
+            if item:
+                yield item
+            in_bullet = False
+        buffer.append((number, raw))
     item = flush()
     if item:
         yield item
+
+
+def negated(line: str, start: int) -> bool:
+    """True when the drafter's own clause says the phrase does not apply ("n/a:", "no", "not").
+
+    Only drafts are read this way; the source records always trigger, so a real
+    high-stakes fact still forces counsel through the brief, design or plan.
+    """
+    clause = re.split(r"[;|]|\.\s", line[:start])[-1]
+    return bool(NEGATION.search(clause))
 
 
 def lead_in(text: str) -> bool:
@@ -330,8 +364,11 @@ def check_structure(doc: str, codes: list[str], found: dict[str, list]) -> list[
     required = list(REQUIRED[doc])
     for code in codes:
         required.extend(REGIME_REQUIRED.get(doc, {}).get(code, ()))
-    for name in required:
-        match = next((h for h in found if h.startswith(name.lower())), None)
+    for entry in required:
+        # "New name|older name": a pack written before a heading was renamed still passes.
+        names = entry.split("|")
+        name = names[0]
+        match = next((h for h in found if any(h.startswith(n.lower()) for n in names)), None)
         if match is None:
             errors.append(f"missing section: ## {name}")
         elif not any(t.strip() for _, t in found[match]):
@@ -382,13 +419,15 @@ def check(path: Path, sources: list[Path], today: date, max_age: int) -> tuple[l
     cited_ids: dict[str, int] = {}
     for heading, lines in sections(body, offset):
         excluded = bool(EXCLUDED_HEADING.search(heading))
+        spans: list[tuple[int, int, str]] = []
+        section_statements = list(statements(lines, spans))
         for number, raw in lines:
             for placeholder in PLACEHOLDER.findall(raw):
                 if not HTML_TAG.match(placeholder) and not placeholder.startswith(("<http:", "<https:")):
                     errors.append(f"line {number}: unfilled placeholder {placeholder}")
             if not excluded:
                 for area, pattern in TRIGGER_PATTERNS:
-                    hit = pattern.search(raw)
+                    hit = next((h for h in pattern.finditer(raw) if not negated(raw, h.start())), None)
                     if hit:
                         triggers.setdefault(area, set()).add(f"{path.name}:{number} '{hit.group(0)}'")
             for ident in CHECKABLE_ID.findall(raw):
@@ -400,7 +439,9 @@ def check(path: Path, sources: list[Path], today: date, max_age: int) -> tuple[l
                     warnings.append(f"line {number}: cited file {cited} not found from the current directory")
             undated = PROVENANCE.sub("", raw)
             if LEGAL_REF.search(undated) and APPLICABILITY.search(undated) and LEGAL_DATE.search(undated):
-                if not CHECKED.search(raw):
+                # A wrapped statement may carry its checked date on a neighbouring line.
+                statement = next((text for first, last, text in spans if first <= number <= last), raw)
+                if not CHECKED.search(raw) and not CHECKED.search(statement):
                     errors.append(f"line {number}: legal applicability date without 'checked <YYYY-MM-DD>'")
             for value in CHECKED.findall(raw):
                 try:
@@ -414,7 +455,7 @@ def check(path: Path, sources: list[Path], today: date, max_age: int) -> tuple[l
                     warnings.append(f"line {number}: checked {value} is over {max_age} days old; re-check the source")
         if heading == "(preamble)":
             continue
-        for number, statement in statements(lines):
+        for number, statement in section_statements:
             if lead_in(statement) or cites(statement):
                 continue
             snippet = statement if len(statement) <= 70 else statement[:67] + "..."

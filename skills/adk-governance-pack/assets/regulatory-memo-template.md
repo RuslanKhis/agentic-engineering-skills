@@ -19,8 +19,11 @@ in scope, and a screen of the existing laws that apply in Australia, the
 United States and the United Kingdom, none of which has an AI Act or assigns
 a risk tier. Conclusions are proposals for counsel; not legal advice.
 
-<!-- Keep only the regime sections whose code is in jurisdictions, in the
-order Australia, United States, EU, United Kingdom. Delete this comment. -->
+<!-- Keep only the regime sections, and the regime bullets inside shared
+sections (Summary, Roles, Applicable dates), whose code is in jurisdictions,
+in the order Australia, United States, EU, United Kingdom. When Australia is
+in scope only through the consultancy's own handling, scope the Australian
+sections to that handling and say so. Delete this comment. -->
 
 ## Summary
 
@@ -40,7 +43,6 @@ order Australia, United States, EU, United Kingdom. Delete this comment. -->
 | United Kingdom | <yes / no / yes (gap:)> | <UK establishment, people in the UK, central government client> (<IDs or source:>) | <reason, or n/a: why not> |
 
 - **Processing locations:** <hosting region; model processing region from the model page; logs; grounding; abuse monitoring; telemetry; consultancy access from Australia> (<D IDs>, source: <model page>, <YYYY-MM-DD>).
-- **Practice profile:** <facts that added a regime, regulator, reviewer or wait, or n/a: no profile bound> (source: practice profile <org>, reviewed <YYYY-MM-DD>).
 
 ## System and intended purpose
 

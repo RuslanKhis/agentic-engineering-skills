@@ -331,7 +331,7 @@ assessment.
 
 | Law | Trigger | What the pack records |
 | --- | --- | --- |
-| NSW Workplace Surveillance Act 2005 | Staff in NSW and agent logs or telemetry record their computer use, including prompts | Written notice at least 14 days before computer surveillance starts, under a notified policy (Judicial Commission bench book); the notice is a calendar wait `W`; counsel: is prompt logging computer surveillance? ACT and Victorian rules: counsel |
+| NSW Workplace Surveillance Act 2005 | Staff in NSW and agent logs or telemetry record their computer use, including prompts | Written notice at least 14 days before computer surveillance starts, under a notified policy (Judicial Commission bench book); the notice is a calendar wait `W`; counsel: is prompt logging computer surveillance? Staff in other states, including the ACT, Victoria and Queensland: counsel, because this reference does not cover their rules |
 | NSW Work Health and Safety Amendment (Digital Work Systems) Act 2026 | The agent allocates work | Assent 18 February 2026; main duties await proclamation, not in force (checked 2026-10-26) |
 | APRA CPS 234 and CPS 230 | Bank, insurer or super trustee client; agent supports a critical operation | CPS 234: notify APRA within 72 hours of a material information security incident (para 35). CPS 230 (from 1 July 2025, checked 2026-10-26): 72 hours for a material operational risk incident; a register of material service providers, with core technology services presumed material; notice before material offshoring. APRA's 30 April 2026 release adds no requirements and expects AI governance under existing standards |
 | My Health Records Act 2012 s 77 | Any My Health Record integration | Nothing held, taken, processed or handled outside Australia: an offshore endpoint or log sink blocks the design |
@@ -372,7 +372,7 @@ One line each in the memo, with `checked 2026-10-26`:
 | The consultancy handles personal information (build, test, support) | Consultancy as APP entity; s 6D, s 7B, s 95B | Memo Roles; inventory consultancy rows |
 | Client is a Commonwealth agency | Agencies Privacy Code s 12 PIA; s 95B; DTA policy | Input pack (PIA required); impact assessment DTA inputs; `counsel_required: yes` |
 | Client is a state agency, council or state-owned corporation | s 7B(5); state privacy Acts; NSW AI Assessment Framework | Memo Roles and sector section; state PIA template |
-| Data subjects are the client's employees | Employee records exemption (client only); workplace surveillance | Memo Roles; workplace surveillance notice wait |
+| The people affected are the client's employees | Employee records exemption (client only); workplace surveillance | Memo Roles; workplace surveillance notice wait |
 | Output feeds a decision about a person: contract right, benefit, significant service, employment, credit, insurance, health, education, pricing | APP 1.7 to 1.9; anti-discrimination | Memo APP 1.7 table; system card disclosure; impact assessment bias; `counsel_required: yes` |
 | Endpoint, processing, logs, grounding, abuse review or support outside Australia, or not listed in Australia | APP 8.1, s 16C; APP 5.2 | Input pack recipients and inventory countries |
 | Sensitive information collected, inferred or likely in free text | APP 3.3; APP 6.2 | Input pack data subjects and APP check |

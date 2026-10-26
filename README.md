@@ -2322,6 +2322,34 @@ skipped**. See the
 [note](docs/research/spec-tools-comparison-2026-10-26.md) and the
 [record](docs/testing/spec-tools-alignment-2026-10-26.md).
 
+### Governance papers for Australian, US, EU and UK law · 26 October 2026
+
+The governance pack assumed the EU AI Act and GDPR everywhere. It now
+screens jurisdictions before drafting, always in the order Australia, United
+States, EU, UK, from where the client, the people and the processing are
+(including the agency's own staff in Australia), and keeps a regime in scope
+while a fact is unknown. Every draft records `jurisdictions:` and the
+checker fails a missing list or a section for a regime not in scope. The
+classification memo becomes a regulatory memo: the EU AI Act classification
+where the EU applies, and for Australia, the US and the UK, which have no AI
+Act, a screen of the laws that do (the Privacy Act and APP 1.7 from 10
+December 2026; California's CPPA rules, Colorado, NYC Local Law 144 and
+federal sector laws; UK GDPR as amended by the Data (Use and Access) Act
+2025). The DPIA input pack now serves as the Australian PIA and the US risk
+assessment too, a transfer annex covers EU and UK data reached from
+Australia, and the EU reference carries the Article 50 guidelines, Article
+25(4), SCHUFA and Dun & Bradstreet. Three fresh-agent trials (an Australian
+HR assistant, a UK bank chatbot, a US hiring screener) picked the right
+regimes in the right order, set counsel flags where they belonged and
+passed the checker (ease 4, 3 and 4 of 5); all 22 frictions were fixed or
+recorded the same day. All **25 packages** pass validation and **966
+tests** pass with **59 optional SDK checks skipped**. See the research notes
+for [Australia](docs/research/au-ai-privacy-law-2026-10-26.md), the
+[United States](docs/research/us-ai-privacy-law-2026-10-26.md), the
+[EU](docs/research/eu-ai-privacy-law-2026-10-26.md) and the
+[UK](docs/research/uk-ai-privacy-law-2026-10-26.md), and the
+[record](docs/testing/governance-jurisdictions-2026-10-26.md).
+
 ### Durable engines that keep ADK's guardrails · 25 October 2026
 
 Restate's ADK plugin journals model calls, but because it answers the model

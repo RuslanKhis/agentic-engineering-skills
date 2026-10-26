@@ -110,8 +110,10 @@ the rows the regime asks for. Sources read 26 October 2026 (see
 - **EU: FRIA crosswalk** (`eu`, Article 27 deployer): Article 27(1)(a) to
   (f) mapped to pack sections, so the FRIA can cross-reference the DPIA as
   Article 27(4) allows.
-- **UK rows:** Consumer Duty outcomes for FCA-authorised clients; the ICO's
-  ten agentic risks live in the input pack's risk table.
+- **UK rows:** Consumer Duty outcomes for FCA-authorised clients go in as
+  rows of the Impacts table (products and services, price and value,
+  consumer understanding, consumer support); the ICO's ten agentic risks
+  live in the input pack's risk table.
 - **Consumer claims** (`au` and `uk` consumer-facing agents): refund,
   guarantee and retention flows reviewed against the Australian Consumer Law
   and the CMA's AI-agent guidance.

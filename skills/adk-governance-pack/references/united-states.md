@@ -119,6 +119,15 @@ tested in *Mobley v. Workday*, reported; not confirmed at the source on
   impact section and an accommodation route in the system card.
 - **TCPA.** AI-generated voices are "artificial" voices; calls need prior
   express consent, written for telemarketing (FCC 24-17, 8 February 2024).
+- **Federal agency clients.** OMB memoranda M-25-21, M-25-22 and M-26-04
+  bind federal agencies and, through their contracts, their suppliers;
+  M-26-04 asks LLM vendors for model, system or data cards and
+  acceptable-use policies, which the system card supplies. They impose
+  nothing on a private client.
+- **TAKE IT DOWN Act** (mention only): platforms hosting user images or
+  video remove reported non-consensual intimate images, including AI
+  forgeries, within 48 hours; FTC enforcement from 19 May 2026 (checked
+  2026-10-26).
 
 ## California
 
@@ -158,7 +167,13 @@ law is the only state privacy law covering employees and B2B contacts.
   from 1 January 2026; for processing begun before 2026, by 31 December
   2027; ADMT duties for existing significant-decision use by 1 January 2027;
   first risk-assessment submission and executive attestation by 1 April
-  2028.
+  2028. The research read gives the ADMT duties (pre-use notice, opt-out or
+  human appeal, access) as applying from 1 January 2027; whether a use that
+  starts earlier needs the notices from its first day is `counsel:`.
+
+**Not covered by this reference**, so named only as `counsel:` questions:
+federal and state age-discrimination law, New York State law, and state
+breach-notification statutes.
 - **ADMT notices**: a pre-use notice (§7220) with purpose, the opt-out or the
   exception relied on, the access right, plain-language logic and an
   alternative process; an opt-out with two methods honoured within 15
@@ -235,8 +250,13 @@ one).
   employment agency using an automated employment decision tool on NYC
   candidates or employees needs an independent bias audit within a year
   before use and yearly, a published summary with selection or scoring
-  rates and impact ratios, and notice 10 business days before use. The
-  audit is the client's; the pack supplies inputs.
+  rates and impact ratios by sex, race and ethnicity and their
+  intersections, notice 10 business days before use naming the
+  qualifications assessed and the route to an alternative process, and
+  data-source and retention information on request. Whether a tool
+  "substantially assists or replaces" discretionary decisions under the
+  DCWP definition, and who the independent auditor is, are `counsel:`
+  questions. The audit is the client's; the pack supplies inputs.
 - **Connecticut PA 26-15.** Companion chatbot duties from 1 January 2027;
   automated employment decision notices before the decision from 1 October
   2027 (checked 2026-10-26; the OLR summary's date).

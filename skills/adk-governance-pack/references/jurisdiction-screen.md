@@ -43,10 +43,22 @@ a section counsel strikes out costs less than missing one.
 
 | Regime | In scope when any of these holds | Notes |
 | --- | --- | --- |
-| `au` Australia | The client is established or carries on business in Australia; data subjects are in Australia; or the consultancy's staff or systems handle personal information for the project | When only the consultancy's own handling brings it in, the Australian sections cover that handling (the consultancy's APP entity status, APP 8 and 11, notifiable data breaches) and say so; whether the Privacy Act reaches it is `counsel:` |
+| `au` Australia | The client is established or carries on business in Australia; data subjects are in Australia; or the consultancy's staff or systems handle personal information for the project | When only the consultancy's own handling brings it in, the Australian sections cover that handling (the consultancy's APP entity status, APP 8 and 11, notifiable data breaches) and say so: the client's own APP 1.7 and sector rows are `n/a:` with the reason, the inventory describes the consultancy's handling for its own privacy policy, and the Guidance for AI Adoption mapping is skipped. Whether the Privacy Act reaches that handling is `counsel:` |
 | `us` United States | The client is established or does business in the US; the data subjects include US residents (consumers, employees or applicants); the client is a US federal agency or contractor | Data merely stored or routed in the US does not bring state privacy laws in; it is a transfer question for the other regimes |
 | `eu` EU | The client is established in the EU; the system offers goods or services to, or monitors, people in the EU; the system is placed on the EU market or its output is used in the EU (AI Act) | GDPR territorial scope (Article 3) and AI Act scope (Article 2) are `counsel:` conclusions; record the facts |
 | `uk` United Kingdom | The client is established in the UK; the system offers goods or services to, or monitors, people in the UK; the client is a UK central government department or in-scope arm's-length body | UK GDPR territorial scope is a `counsel:` conclusion; a UK pack with EU users keeps the EU sections as well |
+
+**A public website or chat reachable from anywhere** does not by itself put
+every country in scope. Record whether the client offers its services to,
+or monitors, people there (language, currency, delivery, marketing). Where
+it does, or the record does not say, the regime stays in scope; where the
+record shows incidental visitors only, write the row as out of scope with
+`assumption:` and `counsel:` to confirm.
+
+**A group of companies** (a parent in one country, a subsidiary in another)
+may hold two controller or APP entity roles. Name each entity in Roles and
+in the input pack's front matter, and write which is the exporter of each
+transfer as `counsel:`.
 
 ## Record the result
 

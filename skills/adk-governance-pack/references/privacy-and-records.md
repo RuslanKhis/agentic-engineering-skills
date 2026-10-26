@@ -100,11 +100,11 @@ and also cover the OAIC's steps 3 to 7 and the CPPA §7152 content:
 
 | Contents | Pack section | Draw from |
 | --- | --- | --- |
-| Description and purposes (Art 35(7)(a); OAIC step 3; §7152 purpose, categories, approximate number of consumers) | Processing description, Data flows, Data subjects and categories | Brief §4 data register and workflow; design data-and-authority table; D-IDs for stores, regions and model endpoint |
+| Description and purposes (Art 35(7)(a); OAIC step 3; §7152 purpose, categories, approximate number of consumers) | Processing description, Data flows, People and data categories | Brief §4 data register and workflow; design data-and-authority table; D-IDs for stores, regions and model endpoint |
 | Lawful basis, collection or notice | The regime sections: EU legal basis; UK lawful basis; APP 3, 5 and 6; US notice, consent and opt-out | `counsel:` prompts with the facts |
 | Necessity and proportionality | Necessity and proportionality, Retention and erasure | Contracts that minimise (removed fields, scoped reads), retention contracts, erasure paths |
 | Risks (Art 35(7)(c); OAIC step 6; §7152 negative impacts) | Risks and measures | Brief harms; failure review; I records; for the UK, the ICO's ten agentic risks |
-| Measures (Art 35(7)(d); OAIC step 7; §7152 safeguards) | Risks and measures; Recipients, processors and regions | C and SB IDs with evidence status; sensitive-data controls |
+| Measures (Art 35(7)(d); OAIC step 7; §7152 safeguards) | Risks and measures; Recipients and regions | C and SB IDs with evidence status; sensitive-data controls |
 | Approval (§7152: whether the business will proceed; approver's name, position and date) | United States: Assessment approval | Named by the client; a `gap:` until they are |
 
 Trace one data flow per path the personal data takes: user input, model
@@ -300,6 +300,12 @@ My Health Record information may not be processed outside Australia at all.
 
 **United States.** State privacy laws follow residents, not servers; US
 transfer questions arise only for EU, UK or Australian data, above.
+
+**Groups of companies.** Where a parent and a subsidiary in different
+countries each serve customers (a UK bank with an Irish subsidiary), write
+one transfer row per exporting entity, and leave which entity exports, and
+which SCC module applies when a group company acts as a processor, to
+counsel.
 
 ## Processor terms (Article 28)
 
