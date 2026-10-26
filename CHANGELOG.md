@@ -3,10 +3,9 @@
 One section per tagged release, newest first. Pin a release with
 `npx skills@latest add RuslanKhis/agentic-engineering-skills#v<version> --skill '*'`.
 
-## Unreleased
+## 2026.10.26.1 · 26 October 2026
 
-Not yet tagged; `release.py prepare` will add the dated section above this
-one, and these notes move into it.
+Changes since v2026.10.26:
 
 - **Practice profile: interview and document import.** `practice-profile`
   now offers two ways in. `init` asks "interview, import, or both?"; the
@@ -40,6 +39,12 @@ one, and these notes move into it.
   references. The pack reads the practice profile's jurisdiction, data,
   AI-policy and consultation sections; a profile fact can add a check,
   never remove one.
+- **Wave 3 process and toolkit sources.** Five Medium-tier sources
+  integrated (12-factor-agents, spec-kit/OpenSpec/Conductor/HumanLayer, the
+  Agent Skills reference and skill-creator, agents-shipgate, assistant-ui).
+  `plan_status.py --gate` reads the code against every ticket's touches;
+  `inspect_security_surface.py` gains `--compare` for a pull-request
+  capability gate and reports ADK 2.x Workflow graphs as unread.
 
 ## 2026.10.26 · 26 October 2026
 

@@ -7,7 +7,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "cross-framework"
   verified-against: "google-adk 2.8.0 source and adk-python main CHANGELOG, 2026-10-06"
-  version: "2026.10.26"
+  version: "2026.10.26.1"
 ---
 
 # ADK tool interface design

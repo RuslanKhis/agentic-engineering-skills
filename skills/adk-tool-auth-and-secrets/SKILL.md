@@ -7,7 +7,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "09"
   validation-date: "2026-09-16"
-  version: "2026.10.26"
+  version: "2026.10.26.1"
 ---
 
 # Secure ADK tool authentication and credentials
