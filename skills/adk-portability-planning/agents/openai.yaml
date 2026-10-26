@@ -1,0 +1,4 @@
+interface:
+  display_name: "ADK Portability Planning"
+  short_description: "Separate lock-in and portability plan for a GCP and ADK design"
+  default_prompt: "Use $adk-portability-planning to assess how dependent docs/architecture/<topic>.md is on Google Cloud and ADK and write docs/portability/<topic>.md: classify every component, assess cloud, framework, model, service and deployment, compare AWS, Azure and other agent frameworks, name the boundaries worth having and a phased alternative outline with relative effort, and change no code or design."

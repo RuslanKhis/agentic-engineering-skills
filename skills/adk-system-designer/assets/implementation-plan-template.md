@@ -60,7 +60,7 @@ designer's `scripts/check_schedule.py` reads it; tickets copy it):
   contracts: [C1, C3]    # design contracts this goal's acceptance proves
   security: [SB01, SB05] # web security rules this goal's acceptance proves, if any
   mentions_only: []      # IDs (or wait) the prose names without depending on them
-  type: implementation   # implementation | journey | presentation | teardown | discovery
+  type: implementation   # implementation | journey | presentation | teardown | discovery | governance | portability
   status: planned        # when no ticket exists; a ticket's status replaces it
 ```
 

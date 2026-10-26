@@ -30,6 +30,7 @@ body:
         - adk-memory-architecture
         - adk-model-and-output-contracts
         - adk-operational-guardrails
+        - adk-portability-planning
         - adk-presenter
         - adk-release-engineering
         - adk-sql-agent-engineering

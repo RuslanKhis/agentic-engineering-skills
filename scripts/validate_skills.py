@@ -353,10 +353,10 @@ SHARED_REFERENCES = {
 
 
 # Law and provider references carry the day they were last verified at the
-# source; the governance pack's references must, so a new jurisdiction cannot
-# ship without one.
+# source; the governance pack's and the portability planner's references must,
+# so a new jurisdiction or provider cannot ship without one.
 VERIFIED = re.compile(r"<!--\s*verified:\s*(\d{4}-\d{2}-\d{2})(?:;\s*re-check every (\d+) days)?\s*-->")
-VERIFIED_REQUIRED = ("adk-governance-pack",)
+VERIFIED_REQUIRED = ("adk-governance-pack", "adk-portability-planning")
 VERIFIED_DEFAULT_DAYS = 180
 
 
@@ -369,7 +369,7 @@ def check_reference_freshness(skills: Path, report: Report, today: dt.date | Non
         match = VERIFIED.search(text)
         if match is None:
             if package in VERIFIED_REQUIRED and f"references/{path.name}" not in shared:
-                report.error(path, "law reference has no '<!-- verified: YYYY-MM-DD; re-check every N days -->' "
+                report.error(path, "law or provider reference has no '<!-- verified: YYYY-MM-DD; re-check every N days -->' "
                                    "line under its title")
             continue
         try:

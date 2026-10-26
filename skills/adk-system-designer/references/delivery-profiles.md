@@ -22,6 +22,7 @@ in one word. Group the questions in one turn; they are the scope gate.
 | Does it need its own web interface, who can reach its URL, and will other developers continue it? | `adk web` for the builder only; not handed over | Frontend depth, identity, the handover fundamentals in [web application defaults](web-app-defaults.md) and the [security baseline](security-baseline.md) tier |
 | What data does it touch (synthetic, internal, personal, regulated) and what can it change (nothing, drafts, reversible writes, money, messages to real people)? | Synthetic data, read only | Sets the floor and the security depth |
 | Which reviews need a presentation, for whom and when: before the proof of concept is built, after it to decide on production, after the production build? | All three, business audience, dates to confirm | Presentation goals at the phase boundaries and the decision waits the next phase depends on |
+| Is vendor lock-in a concern: moving to AWS or Azure, replacing the agent framework, or keeping chosen components modular? Ask whether, not which provider | No | Nothing when no. When yes, the design stays GCP + ADK and the plan gains a portability goal owned by `adk-portability-planning`; data residency stays with the governance jurisdiction screen |
 
 The data row decides the risk, whatever label the user gives. A "POC" that
 sends email to real customers from a real inbox carries production risk;

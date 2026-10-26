@@ -16,7 +16,7 @@ from check_schedule import InputError, parse_range, read_plan
 
 STATUSES = ("planned", "proposed", "ready", "in_progress", "blocked", "verified_local", "verified_live", "done")
 FINISHED = ("verified_local", "verified_live", "done")
-TYPES = ("implementation", "journey", "presentation", "teardown", "discovery")
+TYPES = ("implementation", "journey", "presentation", "teardown", "discovery", "governance", "portability")
 ACCEPTANCE = re.compile(r"(?m)^\s*[-*]\s*\[([ xX])\]\s*(A\d+)\b(.*)$")
 CONTRACT_ID = re.compile(r"(?<![\w/-])C\d+(?![\w/-])")
 RULE_ID = re.compile(r"(?<![\w/-])SB\d+(?![\w/-])")

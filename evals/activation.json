@@ -742,6 +742,62 @@
       "prompt": "Redact PII from our agent's logs before they reach Cloud Logging.",
       "should_trigger": true,
       "rationale": "Keeping personal data out of logs is a sensitive-data boundary this skill implements; the word privacy does not make it a governance paper."
+    },
+    {
+      "id": "portability-lock-in-writeup-positive",
+      "skill": "adk-portability-planning",
+      "prompt": "Our CTO worries we'll be locked into Google. Using docs/architecture/claims.md and docs/plans/claims.md, write up what moving to AWS or Azure, or to LangGraph, would involve, without changing the GCP build.",
+      "should_trigger": true,
+      "rationale": "A separate assessment of what a move to another cloud or agent framework would involve for an accepted GCP and ADK design, leaving the build unchanged, is this skill's deliverable."
+    },
+    {
+      "id": "portability-ticket-positive",
+      "skill": "adk-portability-planning",
+      "prompt": "Carry out docs/tickets/claims/G07.md from docs/plans/claims.md: the portability goal whose primary skill is adk-portability-planning.",
+      "should_trigger": true,
+      "rationale": "A portability goal's ticket names this skill and asks for docs/portability/<topic>.md, not code."
+    },
+    {
+      "id": "portability-boundaries-positive",
+      "skill": "adk-portability-planning",
+      "prompt": "A stakeholder asked which components of our existing ADK design on GCP are provider-specific and which replacement boundaries are worth keeping. Answer from docs/architecture/support.md without redesigning anything.",
+      "should_trigger": true,
+      "rationale": "Classifying an existing design's components by provider dependency and naming the boundaries worth having is the core of the portability assessment."
+    },
+    {
+      "id": "portability-deploy-cloud-run-near-miss",
+      "skill": "adk-portability-planning",
+      "prompt": "Deploy our ADK agent to Cloud Run.",
+      "should_trigger": false,
+      "rationale": "Deploying on Google Cloud is deploy-adk-on-google-cloud; nothing here asks about lock-in or another provider."
+    },
+    {
+      "id": "portability-model-fallback-near-miss",
+      "skill": "adk-portability-planning",
+      "prompt": "Add a fallback from Gemini to Claude when Gemini returns 429.",
+      "should_trigger": false,
+      "rationale": "Configuring model failover in the running agent is adk-model-and-output-contracts; the portability planner only assesses model portability in a document."
+    },
+    {
+      "id": "portability-migration-build-near-miss",
+      "skill": "adk-portability-planning",
+      "prompt": "Rewrite our ADK agent in LangGraph and deploy it on AWS.",
+      "should_trigger": false,
+      "rationale": "Building or migrating the application on another framework and cloud is a migration build, which this skill excludes; it only writes the assessment."
+    },
+    {
+      "id": "portability-azure-a2a-near-miss",
+      "skill": "adk-portability-planning",
+      "prompt": "Connect our agent to a remote A2A agent running on Azure.",
+      "should_trigger": false,
+      "rationale": "Wiring a remote A2A peer is adk-agent-interoperability, even though the peer runs on another cloud."
+    },
+    {
+      "id": "portability-new-gcp-design-near-miss",
+      "skill": "adk-portability-planning",
+      "prompt": "Design a new ADK app on GCP for our claims team.",
+      "should_trigger": false,
+      "rationale": "A new design is adk-system-designer's work; the designer asks the lock-in question and only a yes adds a portability goal."
     }
   ]
 }

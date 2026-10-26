@@ -123,6 +123,7 @@ lessons tagged with that specialist and its stack conventions.
 | A go-live rollout pack: user guide, quick-reference card, training plan, rollout messages, AI disclosure text, adoption metrics, hypercare exit test | `adk-presenter` (rollout pack) |
 | Handing an agent's operation to a client's IT team (support tiers, RACI, alert ownership, access transfer) or a blameless postmortem for an agent incident | `adk-agent-observability` (handover) |
 | Papers for a client's legal, privacy or security reviewers: which of Australian (including NSW and Commonwealth government), US, EU, UK, New Zealand, Singapore and Canadian privacy and AI law applies, a regulatory memo (EU AI Act classification where the EU applies), AI impact assessment, privacy impact inputs (PIA, DPIA or US risk assessment), transfer facts, system card, records of processing, security questionnaire answers | `adk-governance-pack` |
+| Vendor lock-in, an exit plan, or what moving to AWS or Azure or another agent framework would involve for an accepted GCP and ADK design: a separate portability assessment, not a migration | `adk-portability-planning` |
 
 Use `adk-system-designer` for the system-design conversation. `adk-discovery`
 comes before it when the use case is not yet chosen or the business outcome is
@@ -130,10 +131,14 @@ unnamed; it ends with the designer's prompt. `adk-presenter` turns a plan's
 recorded evidence into stakeholder material and never implements; a goal whose
 primary skill is `adk-presenter` produces documents under `docs/presentations/`,
 not code, and completes when its outline passes the deck check (a rollout pack:
-when it passes the rollout check). A focused feature
-design or code fix stays with its topic specialist; it does not need a new
-architecture interview. Preserve the user's requested design-only scope and
-already agreed architecture when handing work between skills.
+when it passes the rollout check). A goal whose primary skill is
+`adk-portability-planning` writes `docs/portability/<topic>.md` and changes no
+code, even where it recommends changes (those wait for a designer checkpoint),
+and completes when `check_portability.py` passes and the design is unchanged.
+A focused feature design or code fix stays with its topic specialist; it does
+not need a new architecture interview. Preserve the user's requested
+design-only scope and already agreed architecture when handing work between
+skills.
 
 Locate the selected skill through the coding agent's available-skills catalogue
 and read its `SKILL.md`. When using a filesystem installation without a catalogue

@@ -16,7 +16,7 @@ design_system: <path to DESIGN.md for UI tickets, or none>
 contract_deltas: [<none, or a contract ID and its one-line revision when this ticket narrows, widens or withdraws one; a withdrawal needs a SHALL NOT acceptance item tagged with that ID>]
 pass_to_pass: [<earlier tickets' acceptance items, as G01/A2, whose tests this ticket must keep passing: those whose touches or contracts overlap this ticket's, or empty; with no earlier tickets, the existing test ids instead; these are the evaluation skill's pass_to_pass tests>]
 phase: <1, 2 or later>
-type: <implementation | journey | presentation | teardown | discovery>
+type: <implementation | journey | presentation | teardown | discovery | governance | portability>
 profile: <proof of concept / assignment / internal tool / MVP or pilot / production>
 estimate:                # human hours, agent-assisted
   hands_on: <range, e.g. 1-2>
@@ -71,9 +71,10 @@ provisioning (a judge run, a paid evaluation) is one more line with its cap.>
 - [ ] A3 <under condition> THE <app> SHALL NOT <forbidden effect> (C3, SB03)
 
 <An item that proves a floor or a version pin rather than a contract is
-tagged (floor). A security rule ID sits beside the contract it helps
-prove. A box is ticked when the item's verification ran at the stated
-tier.>
+tagged (floor). A portability ticket tags its items (deliverable): they
+prove a separate document, not a contract.
+A security rule ID sits beside the contract it helps prove. A box is
+ticked when the item's verification ran at the stated tier.>
 
 Verification, automated: <runnable command with the expected exit code, on
 the project's pinned interpreter; offline, local or authorised live>.

@@ -413,6 +413,12 @@ class ReferenceFreshnessTests(unittest.TestCase):
         (self.refs / "new-zealand.md").write_text("# New Zealand\n", encoding="utf-8")
         self.assertTrue(any("no '<!-- verified" in e for e in self.report().errors))
 
+    def test_missing_marker_in_portability_planning_fails(self):
+        refs = self.skills / "adk-portability-planning" / "references"
+        refs.mkdir(parents=True)
+        (refs / "gcp-on-oci.md").write_text("# OCI\n", encoding="utf-8")
+        self.assertTrue(any("gcp-on-oci.md" in e and "no '<!-- verified" in e for e in self.report().errors))
+
     def test_shared_reference_needs_no_marker(self):
         (self.refs / "practice-profile.md").write_text("# Rules\n", encoding="utf-8")
         self.assertEqual([], self.report().errors)

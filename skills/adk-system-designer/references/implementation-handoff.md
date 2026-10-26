@@ -42,6 +42,7 @@ These are starting points, not a stack to install in every application:
 | Stakeholder approval or results review at a phase boundary | A deck outline with an action title and an evidence citation per slide, the spoken narrative, the questions to expect and a one-page decision memo, built from this plan's recorded evidence; one outline per audience (business, technical) and a public case study when the result is shareable. | None | `adk-presenter` |
 | Monthly value report after launch | A one-page report for the sponsor: outcome against the brief's baseline, counter-metric, adoption, cost per outcome against the plan's estimate, incidents and thresholds fired, each figure citing an M or I record, ending in a stop, continue or scale call with its decider. | None | `adk-presenter` (`value-report` stage) |
 | Governance papers for the client's reviewers | Drafts under `docs/governance/<topic>/`, after a jurisdiction screen (Australia, United States, EU, UK, New Zealand, Singapore, Canada, in that order): regulatory memo (EU AI Act classification where the EU applies), privacy impact input pack (PIA, DPIA or US risk assessment), transfer assessment annex, records-of-processing rows under GDPR or UK GDPR, impact assessment, system card and security questionnaire answers, and for a Commonwealth or NSW agency draft answers to the official DTA or AIAF forms, each statement citing contract, decision and evidence IDs or flagged for counsel; sized to the profile. Sign-offs are calendar waits. | None | `adk-governance-pack` |
+| Portability or lock-in concern recorded in the scope gate | A separate, high-level assessment at `docs/portability/<topic>.md`: provider dependencies, AWS and Azure alternatives, a small comparison of other agent frameworks, model portability, the replacement boundaries worth having, migration risks and a phased outline with relative effort. The GCP + ADK design stays the build; nothing is implemented and the design does not change. | None | `adk-portability-planning` |
 | Runtime and release | Package the actual serving entrypoint and dependencies; configure identity, state and lifecycle; define deployment readback and recovery checks. | Cloud Run, managed Agent Runtime or GKE according to the accepted design | `deploy-adk-on-google-cloud` |
 | Telemetry, SLOs and production-to-evaluation hand-off | One telemetry provider owner per process; content-capture gates set deliberately with the sensitive-data policy; usage counted once per logical model call; good/total SLIs from measured baselines with error-budget alerts; trace, invocation and session identifiers preserved at every hop; sampled production sessions redacted into evaluation cases. | Trace, monitoring, logging and analytics sinks with their own access and retention | `adk-agent-observability` |
 | Release lifecycle, pinning, CI gates, canary and rollback | One release unit (image or revision, prompt version, model and judge IDs, tool schema hash, eval-set hash, secret versions) recorded in a manifest; a deterministic evaluation gate that fails by exit code; model retirement handled as a planned re-baseline; staged traffic with the previous revision kept ready. | CI runner; traffic split and revision retention on the chosen host | `adk-release-engineering` |
@@ -167,6 +168,111 @@ goal should yield a decision or evidence artifact, with a stopping condition.
 Keep later work coarse when it depends on that answer. Choose the smallest
 ready implementation slice; independent local progress remains possible while
 provider or deployment checks are pending.
+
+## Plan a portability goal when the scope gate asks for one
+
+Only when the scope gate's lock-in question was answered yes. When it was no,
+the plan has no portability goal, no ticket and no load of
+`adk-portability-planning`. A yes changes no architecture: the design stays
+GCP + Google ADK, and the assessment is a separate document beside it. Data
+residency is not this question; the governance jurisdiction screen owns it.
+
+- **Placement:** phase 1 by default, independent of the build goals:
+  `blocked_by: []`, because it depends only on the design (a draft is
+  enough; the assessment carries its open decisions), and no build goal
+  waits for it, not even to order one person's work: `check_schedule.py`
+  reports a goal other than a presentation that lists it in `blocked_by`.
+  `plan_status.py --gate` skips it, like a review or teardown, so an
+  unfinished assessment never holds the phase. A presentation goal depends
+  on it only when that review must answer the concern; otherwise the review
+  lists it under `mentions_only`. The journey check is transitive: a review
+  that depends on the portability goal and on built work still needs its
+  journey goal; one that depends only on the portability goal needs none.
+- **Estimate:** human hours, hands-on and review, like other document goals:
+  reading the design and plan, checking provider sources, and the stakeholder
+  read-through. In a statement of work it belongs to a deliverable like any
+  goal in a priced phase.
+- **Fields:** `type: portability`, `primary_skill: adk-portability-planning`,
+  `contracts: []`, `security: []`, `touches: [docs/portability/<topic>.md]`
+  (the gate flags changed files no ticket lists), and `docs:`
+  `adk-portability-planning/references/principles.md` plus the reference for
+  each target the scope gate named: `aws.md`, `azure.md`, and
+  `agent-frameworks.md` for another agent framework or model portability.
+- **Ticket:** written even when the other goals stay goals-only, so the
+  session that runs it has the acceptance and the no-code boundary in one
+  file. In the compact form (a one-person proof of concept with no plan file)
+  the portability goal is a goal line in the design file, and the ticket's
+  `plan` field, like `--plan` in its verification, points at the design file.
+- **Outcome:** "Read the accepted GCP + Google ADK architecture and plan.
+  Produce a high-level portability assessment for <the targets and dimensions
+  the scope gate recorded>, for <who raised the concern>, at
+  `docs/portability/<topic>.md`. Keep it separate from the baseline. Do not
+  implement an alternative application or change the approved GCP
+  implementation."
+- **Recommendations:** the assessment's optional recommendations for the
+  current build (a boundary worth adding now, for example) are proposals.
+  Each becomes a ticket only after a designer checkpoint approves it, with
+  the specialist the assessment names as primary skill and the design's
+  contracts in its acceptance; the portability ticket writes neither tickets
+  nor code.
+
+Acceptance, each item tagged `(deliverable)`, which `check_tickets.py`
+accepts on portability tickets in place of a contract ID:
+
+- [ ] A1 THE assessment docs/portability/<topic>.md SHALL exist and check_portability.py SHALL exit 0 with --design and --plan (deliverable)
+- [ ] A2 THE assessment SHALL cover the targets recorded in the scope gate and each of the five dimensions, assessed or marked not a concern with a reason (deliverable)
+- [ ] A3 EVERY provider or framework claim that drives a classification or risk SHALL cite an official source with its read date (deliverable)
+- [ ] A4 THE design document SHALL NOT change and no other goal's scope SHALL change; `git hash-object docs/architecture/<topic>.md` prints the value recorded in Evidence before the assessment was written (deliverable)
+- [ ] A5 THE skill SHALL NOT write application code, infrastructure code or new tickets; improvements to the current build appear only under Optional recommendations with their specialist (deliverable)
+
+Verification, automated, with `SKILL_DIR` resolved to the
+`adk-portability-planning` directory (exit 0 expected):
+
+```bash
+python3 "$SKILL_DIR/scripts/check_portability.py" docs/portability/<topic>.md \
+  --design docs/architecture/<topic>.md --plan docs/plans/<topic>.md
+git hash-object docs/architecture/<topic>.md   # equals the value in Evidence
+```
+
+Fill `<topic>` when writing the ticket, or `check_tickets.py` reports it as
+an unfilled placeholder. `git hash-object` works whether or not the design is
+committed, so the ticket is `ready` from the start. Verification, manual:
+none.
+
+The ticket's front matter, for a design whose scope gate named AWS and
+another agent framework:
+
+```yaml
+---
+goal: G02
+title: Portability assessment for the support assistant
+design: docs/architecture/support.md
+plan: docs/plans/support.md
+primary_skill: adk-portability-planning
+supporting_skills: []
+docs: [adk-portability-planning/references/principles.md, adk-portability-planning/references/aws.md, adk-portability-planning/references/agent-frameworks.md]
+blocked_by: []
+touches: [docs/portability/support.md]
+parallel_safe: yes
+contracts: []
+companion_skills: []
+security: []
+design_system: none
+contract_deltas: []
+pass_to_pass: []
+phase: 1
+type: portability
+profile: MVP or pilot
+estimate:
+  hands_on: 2-3
+  review_and_verify: 1-2
+  total: 3-5
+  handoff: none
+  calendar_waits: none
+owner: Ana
+status: ready
+---
+```
 
 ## Continue the work
 

@@ -2312,6 +2312,83 @@
         "Names the Ontario electronic monitoring policy for logged prompts as a wait, and answers the Law 25 question in the memo Summary marked counsel:.",
         "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing."
       ]
+    },
+    {
+      "id": "designer-no-portability-concern",
+      "prompt": "Design a pilot of an ADK assistant on GCP that answers our claims handlers' policy questions and drafts replies. Two engineers, six weeks.",
+      "available_skills": [
+        "adk-system-designer",
+        "adk-portability-planning",
+        "adk-memory-architecture",
+        "adk-engineer"
+      ],
+      "context": "A greenfield request in an empty repository; no cloud access; the user answers questions when asked and, when asked whether vendor lock-in or future portability is a concern, says no.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "Asks once whether vendor lock-in or future portability is a concern, without a series of questions about which providers or frameworks.",
+        "Adds no portability goal and writes no portability ticket, and does not load adk-portability-planning.",
+        "The plan's goals are the normal GCP and Google ADK goals for the scope, unchanged by the question."
+      ]
+    },
+    {
+      "id": "designer-adds-portability-goal",
+      "prompt": "Design a pilot of an ADK assistant on GCP that answers our claims handlers' policy questions and drafts replies. Two engineers, six weeks.",
+      "available_skills": [
+        "adk-system-designer",
+        "adk-portability-planning",
+        "adk-memory-architecture",
+        "adk-engineer"
+      ],
+      "context": "A greenfield request in an empty repository; no cloud access; the user answers questions when asked and, when asked about lock-in, says yes: the CTO worries because the parent company may standardise on AWS.",
+      "expected_primary": "adk-system-designer",
+      "assertions": [
+        "The baseline design is still GCP and Google ADK; the concern changes no hosting, framework or model decision.",
+        "Records the concern, who raised it and AWS as the named target in the design's scope-gate table row \"Portability or lock-in concern\".",
+        "Adds one goal of type portability with Primary skill: adk-portability-planning and blocked_by: [], and no build goal depends on it.",
+        "Writes its ticket with type portability and acceptance items tagged (deliverable), its design and plan fields and verification command naming docs/architecture/<topic>.md and docs/plans/<topic>.md, and docs/portability/<topic>.md in touches.",
+        "Does not write the portability assessment itself during the design conversation.",
+        "Adds no adapters, abstraction layers or portability work to any other goal."
+      ]
+    },
+    {
+      "id": "portability-ticket-carried-out",
+      "prompt": "Carry out docs/tickets/claims/G07.md.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-portability-planning",
+        "adk-system-designer",
+        "deploy-adk-on-google-cloud",
+        "adk-model-and-output-contracts"
+      ],
+      "context": "An accepted design docs/architecture/claims.md (Cloud Run, Gemini through Vertex AI, Agent Platform Memory Bank, Vertex AI Search, Firestore; requirements R1-R6, contracts C1-C6, decisions D1-D6) and plan docs/plans/claims.md whose G07 is a portability goal (Primary skill: adk-portability-planning) for a CTO worried about a move to AWS; G01-G06 are build goals, G01-G02 finished; the scope gate names AWS and Azure as targets and LangGraph as a framework to compare.",
+      "expected_primary": "adk-portability-planning",
+      "assertions": [
+        "Reads the design and the plan before writing.",
+        "Writes docs/portability/claims.md from the skill's template with every required section.",
+        "Classifies each component as shared logic, a replaceable adapter, provider-specific by choice or an expensive dependency, citing the design's IDs.",
+        "Assesses cloud, agent framework, model, service and deployment portability separately, each assessed or marked not a concern with a reason.",
+        "Compares the AWS and Azure alternatives and a small set of agent frameworks, with ADK first, citing official sources with their read dates.",
+        "Gives relative effort as small, medium, large, very large or unknown with stated drivers, sizing by the largest driver, and invents no hours, prices or dates.",
+        "Runs check_portability.py with --design and --plan and fixes its errors before finishing.",
+        "Leaves the design and every other goal unchanged and writes no application code, Terraform, IAM policy or Kubernetes manifest."
+      ]
+    },
+    {
+      "id": "engineer-gcp-goal-unaffected-by-portability",
+      "prompt": "Carry out G02 from docs/plans/claims.md.",
+      "available_skills": [
+        "adk-engineer",
+        "adk-memory-architecture",
+        "adk-portability-planning",
+        "adk-agent-evaluation"
+      ],
+      "context": "A plan with a portability goal G07 (Primary skill: adk-portability-planning, not started) and a build goal G02 that adds Agent Platform Memory Bank recall to the GCP and ADK agent (Primary skill: adk-memory-architecture); the design is GCP and Google ADK.",
+      "expected_primary": "adk-memory-architecture",
+      "assertions": [
+        "Routes G02 to adk-memory-architecture and builds it as the plan describes on GCP and Google ADK.",
+        "Does not load adk-portability-planning for G02.",
+        "Adds no adapter, abstraction layer or provider-neutral wrapper that G02's acceptance items do not ask for, even though G07 exists."
+      ]
     }
   ]
 }

@@ -9,7 +9,10 @@ Run after writing tickets from the ticket template. Errors (exit 1):
 - the design or plan path does not exist;
 - a contract or security rule ID is not in the design's tables;
 - an acceptance item cites no contract, rule or ``(floor)``, or a ticket
-  contract is cited by no acceptance item;
+  contract is cited by no acceptance item; a ticket whose ``type`` is
+  portability may instead tag an item ``(deliverable)``, since it proves a
+  separate document rather than a contract, and the tag on any other type is
+  the same error;
 - a primary or supporting skill is not an installed sibling skill (Google
   product skills, ``google/skills:<name>``, are checked against the
   implementation handoff's dated table and only warned about);
@@ -43,6 +46,7 @@ PLACEHOLDER = re.compile(r"<(?!!--)(?:[A-Za-z][^<>\n]{1,80})>")
 PIN = re.compile(r"@\S*\d|\bv?\d+\.\d+|\b[0-9a-f]{7,40}\b|\bpin(?:ned)?\b\s*[:=]?\s*\S+", re.IGNORECASE)
 GOAL_REF = re.compile(r"^([A-Z]+\d+)/A(\d+)$")
 CHARS_PER_TOKEN = 4
+DOCUMENT_TYPES = ("portability",)
 
 
 def skill_name(entry: str) -> str:
@@ -119,10 +123,17 @@ def lint(tickets: list[dict], root: Path, skills_dir: Path, design: Path | None,
             errors += [f"{name}: security rule {r} is not in the design's security baseline table"
                        for r in ticket["security"] if r not in rules]
         cited = set()
+        document = ticket["type"] in DOCUMENT_TYPES
         for item, data in ticket["acceptance"].items():
             ids = set(re.findall(r"(?<![\w/-])(?:C|SB)\d+(?![\w/-])", data["text"]))
-            if not ids and "(floor)" not in data["text"]:
-                errors.append(f"{name}: acceptance {item} cites no contract, security rule or (floor)")
+            if not ids and "(floor)" not in data["text"] and not (document and "(deliverable)" in data["text"]):
+                if document:
+                    errors.append(f"{name}: acceptance {item} cites no contract, security rule, (floor) or "
+                                  "(deliverable)")
+                else:
+                    errors.append(f"{name}: acceptance {item} cites no contract, security rule or (floor)"
+                                  + ("; (deliverable) only on a portability ticket"
+                                     if "(deliverable)" in data["text"] else ""))
             cited |= ids
         if not ticket["acceptance"]:
             errors.append(f"{name}: no acceptance items (- [ ] A1 ...)")
