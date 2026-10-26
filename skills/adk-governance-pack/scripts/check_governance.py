@@ -25,7 +25,8 @@ law. It reports what a reviewer would otherwise find by hand:
 - a statement (a bullet, a table data row or a prose paragraph) that cites
   nothing: no design, plan or evidence ID (``R``, ``C``, ``D``, ``SB``, ``G``
   with ``/A``, ``M``, ``I``, ``W``, ``O``), no project file path, no dated
-  source (``source: <who or what>, <YYYY-MM-DD>`` or ``checked <YYYY-MM-DD>``)
+  source (``source: <who or what>, <YYYY-MM-DD>``, ``checked <YYYY-MM-DD>``, or
+  a secondary fact's ``reported; not confirmed at the source on <YYYY-MM-DD>``)
   and no ``assumption:``, ``counsel:``, ``agency:``, ``gap:``, ``deferred:``,
   ``hypothesis:`` or ``n/a:`` marker (``agency:`` marks what only a
   government client's officers can answer);
@@ -44,7 +45,7 @@ law. It reports what a reviewer would otherwise find by hand:
   drafter's own clause before it says "n/a:", "no" or "not" (source files
   are always scanned in full);
 - a line that states when a law or one of its provisions applies (a legal
-  reference from any of the four regimes, an applicability word and a date
+  reference from any of the seven regimes, an applicability word and a date
   written in words, such as "2 August 2026" or "January 1, 2027") without
   ``checked <date>``; ISO dates are treated as project or provenance dates,
   and "read", "updated" or "published" dates are ignored; a checked date in
@@ -221,7 +222,7 @@ COUNSEL_TRIGGERS = {
                    r"performance (?:management|conversations?|reviews?|ratings?|improvement plans?)",
                    r"attendance (?:records?|summar(?:y|ies))", r"screen, assess or select applicants",
                    r"publicly advertised job postings?", r"electronic monitoring", r"evaluative purpose"),
-    "essential services": (r"creditworth", r"credit scor", r"credit decision", r"loan (?:approval|decision|application)",
+    "essential services": (r"creditworth", r"credit scor", r"(?<!store )credit decision", r"loan (?:approval|decision|application)",
                            r"public (?:assistance|benefits?)", r"social (?:security|benefits?)",
                            r"eligibility for (?:benefits|services)", r"life insurance", r"health insurance",
                            r"insurance pricing", r"emergency (?:calls?|dispatch)", r"patient triage",
@@ -280,7 +281,7 @@ CHECKABLE_ID = re.compile(r"(?<![\w/-])(SB\d+|[RCDMIWO]\d+)(?![\w/-])")
 PATH = re.compile(r"(?<![\w])[\w./-]+\.(?:md|json|csv|yaml|yml|txt|html|pdf)\b")
 URL = re.compile(r"https?://\S+")
 ISO = r"\d{4}-\d{2}-\d{2}"
-DATED_SOURCE = re.compile(r"\bsource:[^\n]*?" + ISO, re.IGNORECASE)
+DATED_SOURCE = re.compile(r"\bsource:[^\n]*?" + ISO + r"|not confirmed at the source on " + ISO, re.IGNORECASE)
 CHECKED = re.compile(r"\bchecked\s+(" + ISO + r")", re.IGNORECASE)
 MARKER = re.compile(r"(?<![\w/])(?:assumption|counsel|agency|gap|n/a|hypothesis|deferred)\s*:\s*[^\s|]",
                     re.IGNORECASE)

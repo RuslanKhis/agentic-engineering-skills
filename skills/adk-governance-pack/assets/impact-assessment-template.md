@@ -95,6 +95,7 @@ whose condition holds and delete the rest, with this comment. -->
 | <group> | <rate> | <ratio> | <test, n, window> | <postcode, name, age signals> | <M ID or gap:> |
 
 - **Less discriminatory alternatives considered and accessibility route:** <what and why> (<D IDs>; counsel: <is any disparity justified?>).
+- **Regime checklists:** <Ontario: the OHRC Human Rights AI Impact Assessment questions; New Zealand: Human Rights Act s 65 good-reason facts; Singapore: the Workplace Fairness Act characteristics; or n/a:> (<M IDs or gap:>).
 
 ## Australia: Guidance for AI Adoption mapping
 
@@ -110,7 +111,14 @@ whose condition holds and delete the rest, with this comment. -->
 - **Use-case owner, assessing and approving officers:** <names or roles> (source: <who>, <YYYY-MM-DD> / gap:).
 - **Transparency statement inputs:** <usage pattern and domain, public interaction without human review, monitoring> (system-card.md; <IDs>).
 - **Agentic AI addendum (AGT.1 to AGT.8):** <memory scope, bounded workflows and approvals, typed tools, adversarial evaluation, monitoring, kill switch, decommissioning> (<C/SB IDs>).
-- **Draft form answers:** <the DTA tool, transparency statement and register answers, or the NSW AIAF registration and assessment answers, for the agency's officers> (government-form-answers-<form>.md; agency: <who completes and approves>).
+- **Draft form answers:** <the DTA tool, transparency statement and register answers for the agency's officers> (government-form-answers-<form>.md; agency: <who completes and approves>).
+
+## Australia: NSW AIAF inputs (NSW agency clients)
+
+- **Registration and assessment:** <AIAF Platform registration answers and the 2024 AIAF answers, and which version the agency uses> (government-form-answers-<form>.md; agency: <Accountable Owner, version>).
+- **Proposed band:** <low, medium, high or critical, intrinsic under the Operational Policy, with its basis> (assumption: <basis>; agency: <sets the band>).
+- **Review committee:** <referral within 5 business days of completing the AIAF if high or critical, as a conditional wait> (<W ID or gap:>; counsel: <referral needed?>).
+- **Contract and records:** <ICTA clause 6.11 Order Form AI list and model-change notice against the model's retirement date; outputs and metadata captured as State records> (<D IDs>; gap: <if any>).
 
 ## New Zealand: Responsible AI Guidance mapping and Māori impact
 
@@ -136,7 +144,7 @@ whose condition holds and delete the rest, with this comment. -->
 
 - **Administrative decision and impact level:** <whether the output makes or informs an administrative decision; the proposed level as the department will score it> (<C IDs>; counsel: <decision?>; agency: <level and approver>).
 - **Appendix C requirements as waits:** <peer review, notice, human involvement, explanation, approval to operate> (<W IDs or gap:>).
-- **Ontario human rights checklist:** <the OHRC Human Rights AI Impact Assessment questions for an agent that screens or ranks people, or n/a:> (<M IDs>).
+- **Ontario human rights checklist:** see "Adverse impact and equality" (<M IDs or n/a:>).
 
 ## EU: FRIA crosswalk (AI Act Article 27, if required)
 

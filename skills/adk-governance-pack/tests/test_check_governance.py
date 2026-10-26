@@ -611,8 +611,20 @@ class SevenRegimes(unittest.TestCase):
                 self.assertIn(area, data["counsel_triggers"], line)
                 self.assertEqual(result.returncode, 1, line)
 
+    def test_reported_secondary_fact_counts_as_flagged(self):
+        line = "The Auckland region's status is reported; not confirmed at the source on 2026-10-26."
+        self.assertEqual(run("@note.md", files={"note.md": with_line(POC_NOTE, line)}).returncode, 0)
+        bare = "The Auckland region's status is reported."
+        self.assertIn("cites no ID", run("@note.md", files={"note.md": with_line(POC_NOTE, bare)}).stdout)
+
+    def test_template_rows_do_not_fire_their_own_triggers(self):
+        line = "| Biometric Processing Privacy Code rules 1, 3 and 10 (if the code applies) | n/a: none | C1 |"
+        result = run("--json", "@note.md", files={"note.md": with_line(POC_NOTE, line)})
+        self.assertEqual(json.loads(result.stdout)[0]["counsel_triggers"], [])
+
     def test_trigger_near_misses_stay_quiet(self):
         for line in ("n/a: not a NSW agency; a private retailer (D2).",
+                     "Store credit decisions under NZD 50 run without review (C1).",
                      "The Biometric Processing Privacy Code does not apply: no face or voice processing (C1).",
                      "The State contract exemption (s 7B(5)) is named for completeness (D2).",
                      "CA Civ. Code 1798.100 rights are handled by the US team (D2).",

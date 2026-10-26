@@ -31,6 +31,13 @@ government-form-answers-<form>.md. Take the question order and numbers from
 references/au-government-crosswalks.md, never a copy of the form. Re-read the
 form's official page first; if its version differs from the crosswalk's,
 write a gap: in Form and version and stop until the crosswalk is updated.
+If the page cannot be read (no web access, or the form sits behind the
+agency's login), take form_version and form_checked from the crosswalk,
+which records when the form was last read at the source, and write
+"gap: official page not re-read" in Form and version; the checker's 90-day
+warning then tracks the true age. Question numbers are written as the form
+writes them ("Reg 1", "1.5"), never as bare R1, C1 or M1, which the checker
+reads as the design's IDs.
 Never fill an officer's name, an approval, a risk rating decision or legal
 advice: propose a rating as assumption: with its basis and leave the rest
 agency: or counsel:. Delete this comment. -->

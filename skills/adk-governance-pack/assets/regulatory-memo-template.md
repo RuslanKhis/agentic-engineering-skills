@@ -28,10 +28,14 @@ counsel; not legal advice.
 <!-- Keep only the regime sections, and the regime bullets inside shared
 sections (Summary, Roles, Applicable dates), whose code is in jurisdictions,
 in the order Australia, United States, EU, United Kingdom, New Zealand,
-Singapore, Canada. The screen table keeps all seven rows. When Australia is
-in scope only through the consultancy's own handling, scope the Australian
+Singapore, Canada (the Summary's EU classification bullet goes too when the
+EU is out). The screen table keeps all seven rows. When Australia is in
+scope only through the consultancy's own handling, scope the Australian
 sections to that handling and say so. Keep "Australia: Government client"
-only for a Commonwealth or NSW agency client. Delete this comment. -->
+only for a Commonwealth or NSW agency client; for a NSW agency, the APP 1.7
+table and APP rows cover the consultancy's handling outside s 7B(5) and
+give n/a: for the agency's own handling, which the NSW material covers.
+Delete this comment. -->
 
 ## Summary
 
@@ -217,6 +221,10 @@ answers in government-form-answers-<form>.md. -->
 
 - **No AI-specific statute:** Canada has no AI Act; the Artificial Intelligence and Data Act died with Bill C-27, and Bill C-36 is not law (checked <YYYY-MM-DD>).
 - **Which law governs each flow:** <PIPEDA, Quebec's private sector Act (Law 25), Alberta PIPA, BC PIPA, by flow; employee data at federal works, in Quebec, Alberta and BC> (<IDs>; counsel: <which law>).
+
+| Flow (from the input pack's Data flows) | People and province | Law proposed | Evidence |
+| --- | --- | --- | --- |
+| <employee prompts; customer chat; logs> | <Quebec staff; Ontario customers> | <Quebec Act / PIPEDA / no general private sector statute (counsel:)> | <D IDs; counsel: which law> |
 - **Consent and appropriate purposes:** <meaningful consent (s 6.1), the s 5(3) reasonable-person test, express consent for sensitive information> (privacy-impact-input-pack.md; counsel: <implied or express>).
 - **Cross-border and out-of-Quebec flows:** <PIPEDA contract and foreign-access notice; Alberta country list (s 6(2)) and notice (s 13.1); Quebec s 17 PIA and written agreement before any flow leaves Quebec> (transfer-assessment.md; counsel: <adequate protection>).
 - **Breach clocks and records:** <PIPEDA as soon as feasible and a 24-month record of every breach; Quebec CAI notice and incident register; Alberta without unreasonable delay; BC none> (security-questionnaire.md).
@@ -242,6 +250,7 @@ answers in government-form-answers-<form>.md. -->
 | <regime> | <obligation> | <date in words> (<provision>, checked <YYYY-MM-DD>) | <why it matters; plan goal> |
 
 - **AI literacy (EU AI Act Article 4) and staff training:** <training and guidance for users> (<goal ID or gap:>).
+- **Documents the client's own process produces:** <each document the pack names but does not draft (a DTA assessment, AIAF registration, Quebec EFVP, NYC bias audit, ATRS record), with its owner and wait> (<W IDs or gap:>).
 
 ## Questions for counsel
 

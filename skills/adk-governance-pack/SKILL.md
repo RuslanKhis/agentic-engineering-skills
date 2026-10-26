@@ -135,6 +135,8 @@ pack. When neither the page nor the table can be read (no web access, or the
 table is not installed), write the retirement date and the processing region
 as `gap:` lines beside the design's model decision ID, propose the check as
 a goal for `adk-model-and-output-contracts`, and never assume either value.
+A value the design already records from the page, with its read date, may be
+cited through the design's ID with that date; write "not re-read" beside it.
 When the contract sets a model-change notice period (NSW ICTA clause 6.11:
 six months' notice of a change to the underlying model by default), compare
 it with the retirement date: a retirement inside the notice window is a gap
@@ -208,7 +210,9 @@ consultancy's own handling, the Australian sections are scoped to that
 handling: write `n/a:` with the reason for the client's own APP 1.7 and
 sector rows, let the inventory describe the consultancy's handling for its
 own privacy policy, and skip the Guidance for AI Adoption mapping, which is
-for Australian clients.
+for Australian clients. For a NSW agency the APP sections work the same way:
+they cover the consultancy's handling outside the s 7B(5) State contract
+exemption, and the agency's own handling goes in the NSW sections.
 
 1. **Regulatory memo** ([template](assets/regulatory-memo-template.md)):
    the jurisdiction screen first, then roles in every regime in scope, then
@@ -256,7 +260,9 @@ for Australian clients.
    AIAF assessment; the IPC AI PIA guide rows live in the input pack).
    Answer in the official form's order from the crosswalk, citing the pack
    documents above, and mark what only the agency can answer `agency:`.
-   Front matter names `form`, `form_version`, `form_url` and `form_checked`.
+   Front matter names `form`, `form_version`, `form_url` and `form_checked`;
+   when the page cannot be read, take the version and checked date from the
+   crosswalk and write the re-read as a `gap:`.
    Never fill an officer's name, an approval, a rating decision or legal
    advice, and never present the draft as the form: the agency's officers
    complete and approve it in the official tool.
@@ -402,7 +408,10 @@ plan, then cite its ID; otherwise cite the waits that exist and list the new
 ones, unnumbered, in your closing message for the plan's owner. Add new
 waits before the final checker run, because the drafts cite them and the
 plan is one of its sources, and add each wait to the "Depends on" of the
-goal it blocks. A goal whose drafts are written but not yet sent stays in
+goal it blocks. A wait that applies only on a condition (a review committee
+referral if the band is high) says the condition in its text; a wait needed
+before production blocks the production-approval goal when the plan has no
+production goal. A goal whose drafts are written but not yet sent stays in
 its current state with "drafted, not sent" in its evidence.
 
 When the user asked a direct question (can we use it in New York City, do we

@@ -36,7 +36,17 @@ Every answer cites a record ID or pack document, or says who answers it:
 - **Re-read the form's official page first.** Record the version it shows
   and the date in `form_version` and `form_checked`. If the version differs
   from the one below, write a `gap:` in "Form and version" and do not draft
-  answers to the changed questions until this file is updated.
+  answers to the changed questions until this file is updated. If the page
+  cannot be read (no web access, or the form sits behind the agency's
+  login), use the version and checked date recorded below for `form_version`
+  and `form_checked`, and write "gap: official page not re-read" in "Form
+  and version"; the checker's 90-day warning then tracks the true age.
+- **Number questions as the form does** ("Reg 1", "1.5", "Part 2"), never as
+  a bare R, C, M or D number, which the checker reads as a design ID.
+- **Which NSW assessment to draft.** The AIAF Platform's own questions are
+  not public; draft the 2024 AIAF answers below and ask the agency which
+  version it uses (`agency:`). Registration answers are drafted for every
+  NSW use case.
 - **Never fill an officer's decision.** Officer names, approvals, the risk
   ratings the officer sets, the review committee's outcome and legal advice
   stay `agency:` or `counsel:`. Propose a rating only as `assumption:` with
@@ -48,6 +58,11 @@ Every answer cites a record ID or pack document, or says who answers it:
   may later be managed or mitigated"); the 2024 AIAF rated residual risk.
 - **Planned is not in place.** A planned treatment is "planned G<n>", never
   "in place".
+- **Who signs each pack document** for a government client: the memo, the
+  agency's counsel or Accountable Official; the input pack, its Privacy
+  Officer; the questionnaire, its CISO; each form answers document, the
+  officer who completes that form (assessing officer or Accountable Owner).
+  Add a sign-off row for every other reviewer the record names.
 - **The vendor is not the form-filler.** The DTA tool says it is "designed
   for Australian Government staff"; the NSW Operational Policy's registration
   rule "does not apply to third-party suppliers". The agency's officers own
@@ -278,10 +293,10 @@ All checked 2026-10-26.
 
 | # | Question (paraphrase) | From our records, or who answers |
 | --- | --- | --- |
-| R1 | Using an agency-approved AI system, platform or product? | `agency:` (approved list); model and hosting decisions (D) |
-| R2 | Automates or materially influences consequential decisions about a person? | Decision contracts (C); memo APP 1.7 table; M share reviewed |
-| R3 | Elevated risk beyond routine productivity or analytical assistance? | Autonomy and tools (C, SB18); public channel; personal data. An ADK agent with tools embedded in a public-facing service is normally "yes" |
-| R4 | Experimental use only, on synthetic, public or non-sensitive data in an isolated environment? | Yes only for a proof of concept on synthetic data (design profile; POC note) |
+| Reg 1 | Using an agency-approved AI system, platform or product? | `agency:` (approved list); model and hosting decisions (D) |
+| Reg 2 | Automates or materially influences consequential decisions about a person? | Decision contracts (C); memo APP 1.7 table; M share reviewed |
+| Reg 3 | Elevated risk beyond routine productivity or analytical assistance? | Autonomy and tools (C, SB18); public channel; personal data. An ADK agent with tools embedded in a public-facing service is normally "yes" |
+| Reg 4 | Experimental use only, on synthetic, public or non-sensitive data in an isolated environment? | Yes only for a proof of concept on synthetic data (design profile; POC note) |
 | Registration | Agency, responsible officer and use case details | Owner `agency:`; description from the system card |
 
 ## Form: NSW AIAF self-assessment (2024 framework, Excel and offline process)

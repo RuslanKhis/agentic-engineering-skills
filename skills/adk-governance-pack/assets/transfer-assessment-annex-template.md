@@ -28,14 +28,16 @@ conclusion that the protection is adequate, comparable or not materially
 lower is counsel's. Not legal advice.
 
 <!-- Keep only the regime sections, and the rows, whose code is in
-jurisdictions. Australian APP 8 and NSW s 19(2) facts stay in the privacy
-impact input pack. Delete this comment. -->
+jurisdictions, and list the same codes as the pack's other drafts (au
+included when the consultancy brings it in). Australian APP 8 and NSW
+s 19(2) facts stay in the privacy impact input pack. Delete this comment. -->
 
 ## Transfers
 
 | Transfer | From (regime) | To (recipient, country) | Data categories and volume | Access mode | Mechanism | Evidence |
 | --- | --- | --- | --- | --- | --- | --- |
 | <consultancy access from Australia> | <EU / UK / New Zealand / Singapore / Quebec> | <agency, Australia> | <categories; approximate volume> | <remote access to logs, traces, evaluation sets, support tickets> | <SCC Module 2 / IDTA / Addendum / s 11 agent contract / contract specifying the countries / s 17 written agreement; counsel:> | <D ID or gap:> |
+| <group company: a subsidiary's data in the parent's systems in another country> | <the subsidiary's regime> | <parent, country> | <categories> | <shared system of record> | <contract or binding corporate rules; counsel: who exports> | <D ID or gap:> |
 | <model endpoint or telemetry outside the region> | <EU / UK / New Zealand / Singapore / Quebec> | <provider, country> | <categories> | <API call, storage> | <adequacy, DPF or UK Extension with check date, SCCs, contract or certification; counsel:> | <D ID, source:> |
 
 ## Destination and access facts

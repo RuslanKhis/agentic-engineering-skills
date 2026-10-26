@@ -8,6 +8,16 @@ memo assign no risk tier. They screen which existing laws and government
 policies the agent falls under, from facts the design records, and leave
 every legal conclusion to counsel.
 
+**Which sections to read.** Every Australian pack: Roles, the APPs,
+automated-decision transparency, privacy impact assessment, overseas
+processing, notifiable data breaches, the screen and the checklist. When
+Australia is in scope only through the consultancy's own handling, those
+are enough. Add "Commonwealth and state government clients" for any
+government client, "NSW government clients" for a NSW agency or State
+contract, and the Consumer Law and sector rows when their trigger fires.
+Whether the Privacy Act reaches a foreign client's data merely hosted or
+read in Australia is not covered here: write it as `counsel:`.
+
 ## Sources and their status
 
 Read at the primary source on 26 October 2026 unless a line says

@@ -34,7 +34,9 @@ can answer. Not legal advice.
 shared sections, whose code is in jurisdictions. When Australia is in scope
 only through the consultancy's own handling, the Australian sections cover
 that handling and the inventory feeds the consultancy's own privacy policy.
-Keep "Australia: NSW IPP and HPP check" only for a NSW agency client.
+Keep "Australia: NSW IPP and HPP check" only for a NSW agency client; then
+the APP sections cover the consultancy's handling outside s 7B(5) and give
+n/a: for the agency's own handling, which the NSW check covers.
 Delete this comment. -->
 
 ## Screening
@@ -96,7 +98,7 @@ Result: counsel: <assessment required / recommended / not required per regime; t
 
 ## Recipients and regions
 
-| Recipient or processor | Role | Region or country | Transfer or overseas disclosure: mechanism and assessment | Evidence |
+| Recipient (processor, service provider, agent or data intermediary, in the regime's own word) | Role | Region or country | Transfer or overseas disclosure: mechanism and assessment | Evidence |
 | --- | --- | --- | --- | --- |
 | <Google Cloud> | <processor or service provider under the client's agreement> | <region> | <none / adequacy, DPF with check date, SCC module, IDTA or Addendum; APP 8 use or disclosure; counsel:> | <D ID, source:> |
 | <agency> | <processor or service provider during build and support; APP entity in its own right in Australia; s 11 agent in New Zealand; data intermediary in Singapore; service provider in Canada> | <where staff access from> | <none / SCC Module 2 or IDTA and transfer-assessment.md; counsel:> | <contract reference or gap:> |
@@ -192,7 +194,7 @@ undertaking privacy impact assessments on AI systems and projects
 | IPP 9 retention; IPP 10 use of existing data; IPP 11 disclosure | <fact> | <counsel: directly related purpose?> | <D IDs> |
 | IPP 12 and s 11 (agent or foreign recipient) | <fact> | <counsel: agent or recipient> | <D ID, source:> |
 | IPP 13 unique identifiers (national, tax or customer numbers echoed) | <fact> | <counsel: or n/a:> | <C ID> |
-| Biometric Processing Privacy Code rules 1, 3 and 10 (if any biometric processing) | <fact, or n/a: none> | <counsel:> | <C/D IDs> |
+| Biometric Processing Privacy Code rules 1, 3 and 10 (if the code applies) | <fact, or n/a: none> | <counsel:> | <C/D IDs> |
 
 ## New Zealand: Collection and notice inputs
 

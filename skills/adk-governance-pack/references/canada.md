@@ -310,6 +310,17 @@ OPC's "work on agentic AI is ongoing"; it has published no agentic guidance
 - For federal clients: is the output an administrative decision, what
   impact level, and who approves operation?
 - Which entity reports a breach to which commissioner?
+- Does Quebec's Act reach information a Quebec enterprise holds about its
+  staff or customers in another province, or does PIPEDA or no statute
+  govern that flow? This reference does not settle it.
+- Does s 12.1 cover a favourable decision (an approval) as well as a
+  refusal? The reported text is silent; APP 1.9's "adverse or beneficial"
+  is Australian and does not answer it.
+- Does Quebec's Charter of the French Language require French notices,
+  interfaces or documents for this system? This reference does not cover
+  that law; name it as a question, never describe it.
+- Does a new logging practice need the Ontario electronic monitoring policy
+  updated now, rather than at the next yearly cycle?
 
 ## Words to use
 
