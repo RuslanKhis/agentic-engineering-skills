@@ -45,9 +45,26 @@ Read at the primary source on 26 October 2026 unless a line says
   Competition and Consumer Amendment (Unfair Trading Practices) Act 2026
   (<https://www.legislation.gov.au/C2026A00064/asmade>).
 - Sector sources named in their sections below.
+- NSW government (read 26 October 2026 for the NSW sections below):
+  DCS-2026-02 (<https://arp.nsw.gov.au/dcs-2026-02-use-of-artificial-intelligence-by-nsw-government-agencies>);
+  the NSW AI Operational Policy, Final v1.1, and the AIAF and AI Review
+  Committee pages (<https://www.digital.nsw.gov.au>); the NSW Cyber
+  Security Policy 2026–2027; ICTA (August 2025) and the Core& One Core Terms
+  (<https://www.info.buy.nsw.gov.au>); the Information and Privacy
+  Commission's PPIP Act, IPP, s 19(2), HRIP Act, HPP, mandatory data breach,
+  privacy management plan, AI PIA, generative AI and GIPA pages
+  (<https://www.ipc.nsw.gov.au>); State Records NSW's legislation and AI
+  recordkeeping pages; DPC circular C2005-37 on the Workplace Surveillance
+  Act; the NSW Law Reform Commission's Anti-Discrimination Act review page.
+  **legislation.nsw.gov.au, AustLII and parliament.nsw.gov.au refused
+  automated reads that day**, so NSW statutory wording comes from the
+  regulators' pages that quote it, or from a superseded 2016 compilation of
+  the PPIP Act; each such point says "re-read the section at the source".
 
-The full research note, with every secondary item marked, is
-`docs/research/au-ai-privacy-law-2026-10-26.md` in the skills repository.
+The full research notes, with every secondary item marked, are
+`docs/research/au-ai-privacy-law-2026-10-26.md` and
+`docs/research/au-government-forms-nsw-2026-10-26.md` in the skills
+repository.
 
 ## No AI Act
 
@@ -301,10 +318,25 @@ biometric feature forces counsel and a proportionality section.
   and fills the impact assessment's "Australia: DTA AI impact assessment
   inputs" section; the agency's officers complete the assessment. The PIA
   under the Agencies Privacy Code is required as well.
+- **More on the DTA forms** (checked 2026-10-26). The AI impact assessment
+  tool v1.0 was published on 1 December 2025. Section 3 rates **inherent**
+  risk, before controls; an inherent high risk is reported to the
+  accountable official, governed through a board or senior executive,
+  reported to the DTA once deployment is decided and reviewed at least every
+  12 months. Since v2.0 a **Commonwealth AI Review Committee** gives
+  non-binding advice on use cases with a residual high-risk rating, or that
+  agencies deem highly sensitive, novel or complex, up to PROTECTED. The
+  tool's question 1.7 lists four usage patterns while Appendix D of policy
+  v2.1 lists seven. The DTA AI model clauses (17 March 2025) are the
+  vendor's contract duties; their text is reported; not confirmed at the
+  source on 2026-10-26. The form crosswalks, and the
+  `government-form-answers` document they produce, are in
+  [AU government crosswalks](au-government-crosswalks.md).
 - **NSW agencies.** Registering and assessing use cases on the NSW AI
   Assessment Framework platform has been mandatory since 30 September 2026
   (checked 2026-10-26); high or critical risk cases go to the AI Review
-  Committee.
+  Committee. See "NSW government clients" below for the policy, the state
+  law and the contract terms.
 - **State public sector privacy.** NSW agencies run the Mandatory
   Notification of Data Breach scheme (PPIP Act Part 6A). In Victoria, OVIC's
   generative AI guidance (both pages updated 26 June 2026) says personal
@@ -314,6 +346,264 @@ biometric feature forces counsel and a proportionality section.
   Standards bind contracted service providers. Queensland's amended
   Information Privacy Act is reported; not confirmed at the source on
   2026-10-26. Use the state's own PIA template.
+
+## NSW government clients
+
+Read when the client is a NSW public sector agency or state owned
+corporation, or the consultancy works under a NSW State contract. A NSW
+agency client always sets `counsel_required: yes`. Write NSW sections in
+NSW terms: personal information, health information, IPP, HPP, public
+sector agency, privacy management plan, eligible data breach under Part
+6A. Never use APP terms for the agency's own duties. Each point below was
+checked 2026-10-26; NSW statute wording the research could not read at
+legislation.nsw.gov.au is marked "re-read the section at the source".
+
+### Policy: DCS-2026-02, the Operational Policy and the AIAF
+
+- **DCS-2026-02**, "Use of Artificial Intelligence by NSW Government
+  Agencies", was issued on 30 July 2026 and updated on 1 September 2026. It
+  is mandatory for departments, executive agencies, separate agencies,
+  statutory bodies, state owned corporations, public financial and
+  non-financial corporations, advisory entities and NSW Government
+  subsidiaries, and replaces DCS-2024-04.
+- It mandates the **NSW AI Operational Policy, Final v1.1**, which replaces
+  the NSW AI Ethics Policy and makes Australia's eight AI Ethics Principles
+  "the mandatory NSW Government AI ethical principles". The policy's cover
+  says 30 July 2026 while its version table reads v1.1 approved on 31
+  August 2026; quote the cover and note the table.
+- Agencies must adhere to the principles, appoint an Accountable Official,
+  establish governance and assurance, register **all** AI use cases on the
+  AIAF Platform with lifecycle records, apply the AIAF where registration
+  requires it, refer high and critical risk use cases to the AI Review
+  Committee, align acceptable use policies and offer AI training. The first
+  annual attestation is due by 31 October 2027.
+- **AIAF risk bands** (Operational Policy): low ("can be easily reversed or
+  corrected without causing any harm or damage"), medium ("noticeable but
+  ... generally limited and manageable"), high ("substantial risk profile
+  ... significant, affect trust or operations") and critical ("the highest
+  level of risk ... severe, widespread, or irreversible"). The band is
+  **intrinsic**: what the use case involves and how it is intended to be
+  used, not how it may later be mitigated. The 2024 AIAF, still used in the
+  Excel transition process, referred residual high and very high risk.
+- **AI Review Committee.** Agencies "must refer critical and high-risk AI use
+  cases", by email to the AI Secretariat "within 5 business days of
+  completing the AIAF"; NSW GovAI may also refer medium-risk cases with
+  higher-risk characteristics. The committee advises; the agency keeps the
+  decision. Write the referral as a calendar wait `W` that the production
+  goal depends on.
+- **Cost is not the trigger.** Projects over $5 million, or funded by the
+  Digital Restart Fund, get Digital Assurance Framework oversight, which
+  then checks AIAF compliance; AI Review Committee referral follows the
+  band.
+- **The vendor does not register.** The Operational Policy is not mandatory
+  for third-party suppliers, and its registration rule "does not apply to
+  third-party suppliers"; the agency's Accountable Owner registers. The
+  consultancy supplies evidence, and the pack drafts answers in
+  `government-form-answers-<form>.md` from
+  [AU government crosswalks](au-government-crosswalks.md).
+- The AI agent usage and deployment guidance (October 2025) is "a guideline
+  only. It is not mandatory"; its production checklist asks to update the
+  AIAF assessment and register the agent in the asset register.
+
+### Roles: the s 7B(5) State contract rule
+
+The Privacy Act 1988 defines a "State contract" as one "under which services
+are to be, or were to be, provided to a State or Territory authority"
+(s 6(1)). An organisation's act is exempt if it is "a contracted service
+provider for a State contract" and the act is done "for the purposes of
+meeting (directly or indirectly) an obligation under the contract" (s
+7B(5)). So the consultancy's acts for the NSW contract fall outside the
+APPs, and the IPC says outside the Commonwealth notifiable data breach
+scheme too. For everything else (its own staff, other clients, any reuse of
+agency data for its own purposes, which the contract should forbid) the
+consultancy stays an APP entity unless s 6D exempts it. The PPIP Act binds
+the **agency**, not the contractor: "The service provider will only be
+subject to NSW privacy law if specifically required under the contract"
+(IPC). The HRIP Act can bind the consultancy directly (below). Whether every
+act is "for the purposes of meeting" the contract is `counsel:`.
+
+### PPIP Act 1998: the IPPs and s 19(2)
+
+- The 12 IPPs (ss 8 to 19, IPC fact sheet, August 2026): lawful, direct,
+  open, relevant collection; secure; transparent; accessible; correct;
+  accurate before use; limited use; restricted disclosure; and special
+  restrictions on disclosure (s 19).
+- **Section 19(2) reaches any recipient outside NSW**, including other
+  Australian states and a Commonwealth agency: an agency "must not disclose
+  the information to any person or body who is in a jurisdiction outside New
+  South Wales or to a Commonwealth agency unless" a ground applies, among
+  them a reasonable belief that the recipient is bound by substantially
+  similar principles, express consent, and "reasonable steps" to ensure the
+  recipient will not handle it inconsistently with the IPPs (IPC fact
+  sheet, November 2019; re-read the section at the source). The IPC names no
+  jurisdictions and "urges caution"; for reasonable steps it expects at
+  least an enforceable contract requiring IPP-compliant handling, with
+  enforcement rights, complaints, breach notice to the agency and flow-down
+  to subcontractors. **This is stricter than APP 8**: a Melbourne support
+  engineer, a non-NSW region or abuse-monitoring storage elsewhere is
+  "outside NSW".
+- **Use or disclosure.** The IPC's AI PIA guide says vendor access "for the
+  sole purpose of carrying out a contracted service ... is likely to be a
+  'use'". Whether a given flow is a use or a disclosure, and which s 19(2)
+  ground applies to a disclosure, is `counsel:`.
+- Information a contractor holds for the engagement is "held" by the
+  agency (s 4(4)), and the agency does everything reasonably within its
+  power to prevent unauthorised use or disclosure by service providers
+  (s 12(d)); both are from the superseded 2016 compilation: re-read the
+  sections at the source. Sensitive information under s 19(1) must pass
+  s 19(1) first.
+- **Privacy management plan (s 33).** It covers compliance with the PPIP
+  and HRIP Acts and, under s 33(2)(c1), the Part 6A procedures (IPC guide,
+  May 2026); "the plan should include information about the use of AI and
+  ADM". Re-read s 33 at the source. The update is the agency's
+  (`agency:`).
+- Paperwork: the input pack's "Australia: NSW IPP and HPP check" replaces
+  the APP check for the agency's handling, with an "outside NSW?" column per
+  flow; proposed s 10 notice text (the IPC prefers a chatbot's notice "at
+  the time the conversation is occurring"); a contract privacy schedule as
+  `counsel:`.
+
+### HRIP Act 2002: health information
+
+The 15 HPPs apply to public sector agencies and to private sector persons
+that provide a health service or collect, hold or use health information,
+so **the HRIP Act can bind the consultancy directly** (IPC). HPP 14 controls
+transfer of health information outside NSW; the AI PIA guide lists the main
+grounds (equivalent standards, consent, or a contract benefiting the person
+where consent is impracticable); re-read HPP 14 at the source. A citizen
+mentioning a condition to a transport agent is health information in free
+text. A turnover qualifier for some businesses is reported; not confirmed
+at the source on 2026-10-26. Counsel: is the consultancy an "organisation"
+bound in its own right; is HPP 14 met?
+
+### Mandatory Notification of Data Breach scheme (PPIP Act Part 6A)
+
+From 28 November 2023, every NSW public sector agency bound by the PPIP Act
+must notify the Privacy Commissioner and affected individuals of eligible
+data breaches (IPC guide, July 2024). The agency contains the breach
+immediately, completes the assessment within 30 days (s 59E(2)(b)),
+notifies the Commissioner immediately on the approved form (s 59M) and
+individuals as soon as reasonably practicable, keeps a published data
+breach policy (s 59ZD) and an internal register (s 59ZE). The section that
+lets the agency extend the 30 days was not verified: re-read Part 6A at the
+source. The scheme "does not generally apply to contracted service
+providers", but in hosted services "in most cases the agency will be
+considered to hold" the information (s 59C), so the contract should require
+the provider to report promptly, mitigate and assist. Whether the agency
+holds data in the consultancy's development, test and log environments is
+`counsel:`.
+
+### GIPA Act 2009
+
+- Agencies keep a **government contracts register** of contracts with
+  private sector entities valued at $150,000 (including GST) or more, with
+  more particulars for larger contracts and a copy where the contract is
+  more than, or expected to reach, $5 million (IPC); commercial-in-confidence
+  provisions may be excluded with reasons. Re-read GIPA ss 27 to 35 at the
+  source.
+- **Section 121.** A contract for **services to the public on behalf of** an
+  agency must give the agency an "immediate right of access" to information
+  about the contractor's performance, information collected from the
+  public and information received from the agency (IPC). A public-facing
+  agent the consultancy operates is the case to screen; whether s 121
+  applies is `counsel:`.
+- Access rights "remain applicable" to technology-assisted decisions, and
+  databases, SaaS content and audit logs are records (IPC), so prompts,
+  outputs and traces the agency holds are government information; the
+  design needs log export and search, or a `gap:`. Agency information
+  guides should list "machine-enhanced decision-making systems" (IPC fact
+  sheet, August 2024).
+
+### State Records Act 1998
+
+There is no State Records Act 2024: the State Records Act 1998 still
+governs (State Records NSW), and the State Records Regulation 2024
+commencing on 1 September 2024 is reported; not confirmed at the source on
+2026-10-26. State Records NSW: "any record created during government
+business – whether by AI, a computer system, or a person – is a State
+record", with metadata on AI-generated status, "the software used" and "the
+prompts, inputs or algorithms used", and "It is not enough to leave them in
+the AI tool". The Operational Policy says AI outputs and metadata are State
+records. **Prompts and outputs used in government business are State
+records**: the design exports them, with model ID and version and
+timestamps, to the agency's recordkeeping system (a goal for
+adk-agent-observability and adk-memory-architecture), retention follows the
+agency's disposal authority (`agency:`), and the contract provides for
+return or destruction at its end. The Act's section numbers were not read:
+re-read them at the source before citing one.
+
+### NSW Cyber Security Policy 2026–2027
+
+Mandatory for departments, public service agencies and statutory
+authorities (not state owned corporations, councils or universities), and it
+covers third-party and shared services. Requirements 3.3 to 3.10 "embed the
+Maturity Level One Essential Eight controls": **Maturity Level One is the
+mandatory baseline**, and higher maturity is risk-based. Cyber incidents are
+reported through the Cyber Portal "within 24 hours of detection and
+classification". Suppliers: a contractually supported process to notify
+incidents and data breaches (1.10.2) and contract cyber clauses with break
+clauses (1.10.4). Paperwork: the questionnaire's Government security policy
+row, ML1 evidence for the delivered environment, and an incident procedure
+that fits inside the agency's 24 hours.
+
+### NSW contract AI clauses: ICTA clause 6.11 and Core&
+
+- Procurement uses the ICT Purchasing Framework (PBD-2025-03): Core& for
+  low-risk buys up to $1 million excluding GST, MICTA and ICTA for high-risk
+  buys or $1 million or more.
+- **ICTA (August 2025) clause 6.11, AI Systems.** Other than AI systems set
+  out in the Order Form, no use of an AI system without written notice, a
+  three-month wait (or another period set by a Module or the Order Form)
+  and the customer's prior written approval; "detailed records of any AI
+  System ... (including records of the design (including functions, features
+  and interconnected systems), performance, governance and intended and
+  actual use)"; a warranty of risk-managed design, training and testing. By
+  default it also requires an AI incident programme, **six months' notice of
+  "a change to the underlying model"**, Customer Data kept in NSW unless the
+  Order Form permits otherwise, and security incident notice "immediately",
+  then details within 48 hours.
+- **Core& One Core Terms (August 2025):** three months' notice and consent
+  before using AI; AI logs are Buyer Data; no personal information outside
+  Australia, or accessed from outside it; breach notice within 48 hours.
+- **The model-change notice meets the model lifecycle check.** List the
+  Gemini model IDs in the Order Form. Compare the notice period with the
+  pinned model's retirement date (SKILL.md, "Read the record first"): **a
+  retirement date inside the notice window**, or a forced migration the
+  supplier cannot announce six months ahead, **is a gap** for
+  adk-model-and-output-contracts and adk-release-engineering **and a
+  counsel question** on the notice period and the Order Form terms. When the
+  retirement date cannot be read, the conflict stays a `gap:` until it is.
+- Customer Data in NSW: Google Cloud australia-southeast1 is in Sydney, but
+  check the model's processing region and support access on the model page.
+
+### NSW Workplace Surveillance Act and anti-discrimination
+
+- The Workplace Surveillance Act 2005 notice (at least 14 days, s 10, per
+  DPC circular C2005-37) is in "Screen when the trigger fires" below; for a
+  NSW agency client the notice is the agency's, a wait of at least 14 days
+  before production if identity-linked logs of staff prompts count as
+  computer surveillance (`counsel:`), and whether consultancy staff on
+  agency systems receive notice from the agency, the consultancy or both is
+  `counsel:`. Re-read ss 10 to 22 at the source.
+- The NSW Anti-Discrimination Act 1977 review is still in progress, with no
+  new Act and no final report (NSW Law Reform Commission page, last updated
+  26 October 2026). Show bias measurement in the impact assessment and leave
+  indirect discrimination to `counsel:`.
+
+### What a NSW agency produces, and what the pack supplies
+
+| Item | Owner | Pack document |
+| --- | --- | --- |
+| AIAF Platform registration and assessment; review committee referral within 5 business days for high or critical | Agency (Accountable Owner) | government-form-answers documents; impact assessment |
+| Agency PIA under the IPC guides | Agency | Input pack with "Australia: NSW IPP and HPP check" |
+| s 19(2) and HPP 14 analysis | Agency, `counsel:` | Input pack recipients and the "outside NSW?" flow table |
+| Privacy management plan update; Part 6A policy and register entry | Agency | Memo; security questionnaire |
+| GIPA contract register entry; s 121 access clause | Agency | Memo "Australia: Government client" |
+| State records capture of outputs and metadata | Agency; design | Design goal; system card Data |
+| Cyber Security Policy mapping, ML1 evidence, 24-hour incident path | Agency; consultancy evidence | Security questionnaire |
+| ICTA 6.11 Order Form AI list, records, model-change notice | Contract | Memo "Australia: Government client"; design model decision |
+| Workplace surveillance notice | Agency | Wait `W` |
+| Digital Assurance Framework gateway (over $5 million or DRF funded) | Agency | Wait `W` |
 
 ## Australian Consumer Law
 
@@ -382,6 +672,11 @@ One line each in the memo, with `checked 2026-10-26`:
 | Re-use of existing customer or staff data | APP 6; OAIC training guidance | Input pack necessity and proportionality |
 | Consumers, or claims about products, refunds or guarantees | ACL ss 18 and 29; s 28B from 1 July 2027 | System card claims and disclosure; impact assessment |
 | Any personal information held | Notifiable data breaches | Questionnaire incident response |
+| Client is a NSW agency, or the consultancy works under a NSW State contract | DCS-2026-02 and the AIAF; s 7B(5); PPIP and HRIP Acts; Part 6A; GIPA; State Records Act 1998; NSW Cyber Security Policy; ICTA 6.11 | Memo "Australia: Government client"; input pack NSW IPP and HPP check; government form answers; `counsel_required: yes` |
+| Any flow to a recipient outside NSW (another state, an overseas region, support staff elsewhere) for a NSW agency | PPIP Act s 19(2); HPP 14 for health information | Input pack "outside NSW?" flow table (`counsel:`) |
+| NSW contract lists a model-change notice period | ICTA clause 6.11 | Memo government row; model retirement date against the notice window (`gap:` and `counsel:` if inside it) |
+| Contract of $150,000 (including GST) or more with a NSW agency; the agent serves the public for the agency | GIPA contracts register; s 121 | Memo government row (`agency:`, `counsel:`) |
+| Client is a non-corporate Commonwealth entity | DTA policy and tool; Commonwealth AI Review Committee | Government form answers from [AU government crosswalks](au-government-crosswalks.md) |
 
 ## Questions counsel usually gets
 
@@ -395,3 +690,18 @@ One line each in the memo, with `checked 2026-10-26`:
   review "extensive human oversight and control"?
 - Does the client's privacy policy need amending before 10 December 2026?
 - Which entity notifies an eligible data breach?
+- For a NSW agency: is the model endpoint, logging or support access a use
+  or a disclosure to a recipient outside NSW, and which s 19(2) ground
+  applies to a disclosure? Does the contract meet the IPC's reasonable-steps
+  minimum?
+- Is everything the consultancy does "for the purposes of meeting" the State
+  contract (s 7B(5))?
+- Does the agency hold, under s 59C, data in the consultancy's environments,
+  and who notifies a Part 6A breach?
+- Does the agent provide services to the public on behalf of the agency
+  (GIPA s 121)?
+- Does any output feed an administrative decision under an Act, needing
+  express legislative authority?
+- Which AIAF band applies, and is review committee referral needed?
+- Does the ICTA model-change notice period fit the pinned model's
+  retirement date, and which AI systems does the Order Form list?
