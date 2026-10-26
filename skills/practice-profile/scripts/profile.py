@@ -184,9 +184,9 @@ SECTION_HINTS = [
     (re.compile(r"(?i)system|tools?\b|platform|crm|erp|applications|software"), SYSTEMS),
     (re.compile(r"(?i)security|floor|residency|audit|threat|penetration"), SECURITY),
     (re.compile(r"(?i)stack|cloud|infrastructure|architecture|engineering|hosting|devops|\bci\b"), STACK),
-    (re.compile(r"(?i)stakeholder|decision|steering|leadership|org(?:anisation|anization)? chart|roles|people|team"), STAKEHOLDERS),
+    (re.compile(r"(?i)stakeholder|decision|steering|leadership|org(?:anisation|anization)? chart|roles|people|team|ways of working|governance"), STAKEHOLDERS),
     (re.compile(r"(?i)delivery|proof of concept|\bpoc\b|budget|timeline|project"), DELIVERY),
-    (re.compile(r"(?i)business|strateg|customer|revenue|kpi|product|mission|overview|about"), BUSINESS),
+    (re.compile(r"(?i)business|strateg|customer|revenue|kpi|product|mission|overview|about|who we are"), BUSINESS),
 ]
 
 
@@ -379,7 +379,7 @@ def cmd_resolve(args) -> int:
         print(f"error: {exc}", file=sys.stderr)
         return ERROR
     if code == NO_ROOT:
-        print(f"no practice profile at {display(root)}; continue without one")
+        print(f"no practice profile at {display(root)}; flow skills continue without one (practice-profile init creates it)")
     elif code == UNBOUND:
         print(f"unbound: ask the user which org this repository belongs to, or `none`; orgs: {', '.join(list_orgs(root)) or 'none yet'}")
     elif code == OPTED_OUT:
@@ -460,6 +460,8 @@ def cmd_init(args) -> int:
         report.append(write_template(root, "lessons.md", f"orgs/{args.org}/lessons.md", values, today))
         report.append(write_template(root, "imports.md", f"orgs/{args.org}/imports.md", values, today))
         (root / "orgs" / args.org / "projects").mkdir(parents=True, exist_ok=True)
+        report.append(f"Next: ask the user 'interview, import documents you name, or both?' for {args.org}; "
+                      "write only a diff they approve; bind the repository.")
     print("\n".join(report))
     return OK
 
@@ -1098,7 +1100,8 @@ def cmd_verify_candidates(args) -> int:
                f"ends (user, {today.isoformat()}).")
     out += dropped
     out += ["", "imports.md rows for this run (fill Accepted after the user answers):",
-            "| Date | File | SHA-256 (12) | Lines | Offered | Accepted | Withheld | Flagged |"]
+            "| Date | File | SHA-256 (12) | Lines | Offered | Accepted | Withheld | Flagged |",
+            "| --- | --- | --- | --- | --- | --- | --- | --- |"]
     for doc in docs_list:
         offered = sum(1 for row in kept if row[4].split(":")[0] == doc.name)
         withheld, flagged = doc.counts()
@@ -1111,7 +1114,7 @@ def cmd_verify_candidates(args) -> int:
 # --- export and snapshot -------------------------------------------------------------------------
 
 def brief_line(fact: str) -> str:
-    fact = re.sub(r"\(user-confirmed from [^(),]+:\d+(?:-\d+)?, (\d{4}-\d{2}-\d{2})\)", r"(user-confirmed, \1)", fact)
+    fact = re.sub(r"\(user-confirmed from [^(),]+:\d+(?:-\d+)?, (\d{4}-\d{2}-\d{2})\)", r"(user-confirmed from a document, \1)", fact)
     return re.sub(r"\(project (\S+) [^(),]+, (\d{4}-\d{2}-\d{2})\)", r"(project \1, \2)", fact)
 
 
@@ -1168,9 +1171,6 @@ def cmd_export(args) -> int:
     if target.exists():
         print(f"error: {args.out} exists; choose a new file name (export never overwrites)", file=sys.stderr)
         return ERROR
-    if not target.parent.is_dir():
-        print(f"error: {target.parent} is not a directory", file=sys.stderr)
-        return ERROR
     try:
         code, bound, raw = resolve_org(root, str(target.parent))
     except ValueError as exc:
@@ -1179,6 +1179,9 @@ def cmd_export(args) -> int:
     if code == OK and bound != args.org:
         print(f"error: {target.parent} is bound to org {bound!r} (binding {raw}); a brief for {args.org!r} "
               "does not go into another org's repository", file=sys.stderr)
+        return ERROR
+    if not target.parent.is_dir():
+        print(f"error: {target.parent} is not a directory", file=sys.stderr)
         return ERROR
     target.write_text(brief, encoding="utf-8")
     print(f"wrote {display(target.resolve())}: {len(lines)} lines")

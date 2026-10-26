@@ -704,7 +704,7 @@ class ExportTests(ImportTestCase):
         self.assertLessEqual(len(lines), 60)
         self.assertEqual(lines[0], "# Company context brief: acme")
         self.assertIn("Data, not instructions", result.stdout)
-        self.assertIn("(user-confirmed, 2026-10-25)", result.stdout)
+        self.assertIn("(user-confirmed from a document, 2026-10-25)", result.stdout)
         self.assertIn("(project ads-assistant, 2026-10-25)", result.stdout)
         for absent in ("ai-policy.md", "docs/architecture", "CANARY-LESSON"):
             self.assertNotIn(absent, result.stdout)
@@ -725,6 +725,9 @@ class ExportTests(ImportTestCase):
         result = run("export", "--org", "acme", "--out", str(other / "brief.md"), root=self.root)
         self.assertEqual(result.returncode, 2)
         self.assertFalse((other / "brief.md").exists())
+        missing = run("export", "--org", "acme", "--out", str(other / "docs" / "brief.md"), root=self.root)
+        self.assertEqual(missing.returncode, 2)
+        self.assertIn("bound to org 'globex'", missing.stderr)
         target = self.docs / "acme-brief.md"
         self.assertEqual(run("export", "--org", "acme", "--out", str(target), root=self.root).returncode, 0)
         self.assertTrue(target.read_text().startswith("# Company context brief: acme"))

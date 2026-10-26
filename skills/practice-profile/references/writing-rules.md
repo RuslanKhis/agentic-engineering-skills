@@ -106,6 +106,8 @@ lines and tell the user why; do not reword a secret to get it past the scan.
    as a removed and an added line.
 2. Show one diff per file (`profile.md`, `lessons.md`, a project card), with
    the file path above it. Keep it short: five lines is a good harvest.
+   An init interview or an import is larger; group its diff by section so
+   the user can name lines to drop.
 3. Scan it. Remove refused lines.
 4. Ask one question: "Write these N lines to <org>'s profile?" Write only
    after an explicit yes to that diff in the user's next message. A yes that
@@ -114,6 +116,9 @@ lines and tell the user why; do not reword a secret to get it past the scan.
    only those. In an import, accepting candidates selects them; the write
    still needs a yes to the diff. Before an import write, run
    `profile.py snapshot --org <slug>` so the previous profile can be restored.
+   Take a snapshot too before any other write that replaces or removes
+   existing profile lines. A reply that changes the diff and says yes in
+   the same message is not a yes to the new diff: show it and ask again.
 5. Update `reviewed:` in the frontmatter of each file you changed; leave
    `review_by` alone unless the user confirmed the whole file.
 

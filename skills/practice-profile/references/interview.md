@@ -6,9 +6,11 @@ order.
 
 ## How to ask
 
-- **One section per turn, at most three questions**, each with the skill that
-  will use the answer ("adk-governance-pack uses this to add the works-council
-  wait").
+- **At most three questions per turn**, a section at a time, or two short
+  sections together, each with the skill that will use the answer
+  ("adk-governance-pack uses this to add the works-council wait"). The core
+  set fits in about seven turns. When the user answers ahead, or answers
+  everything in one message, take it and ask only what is left.
 - **Core first.** The sixteen core questions (C) take about fifteen minutes
   with menus. Ask deep questions (D) only when the user asks for more, or
   when a flow skill needs that section and it is empty.
@@ -22,11 +24,25 @@ order.
   to the last AI tool someone proposed?", not "Would your board support AI?".
   "We'd love to use AI for X" is an aspiration; record it as one, if at all,
   never as a priority.
-- **"Don't know" is an answer.** For a core question in a section a
-  governance or design step reads (sector and jurisdictions, data subjects
+- **"Don't know" is an answer.** For a core question in a gate-read section
+  (sector and jurisdictions, stakeholders and decision norms, data subjects
   and data classes, AI policy and approvals, procurement and consultation,
-  security floor), record `- Works council: unknown; ask HR. (user, <date>)`
-  so the flow skill asks instead of assuming. Elsewhere leave it empty.
+  security and compliance floor), record `- Works council: unknown; ask HR.
+  (user, <date>)` so the flow skill asks instead of assuming. Elsewhere
+  leave it empty. A question with several parts answered in part records
+  the parts given, and the missing parts as "unknown; ask" in those
+  sections.
+- **Menus come from what the user has said.** Build a regulator or law menu
+  from the countries the user named, always with "other" and "don't know".
+  Record only options the user picked; a regulator you named in the
+  question and the user did not pick is not written.
+- **Contradictions are asked about before the diff.** Two answers naming
+  different approvers, or capacity that disagrees with the usual proof of
+  concept, get one question ("Both, in that order, or one of them?"), not
+  two lines written side by side.
+- **Figures.** Counts and allowances the user gives (about 140 stores, AUD
+  300 a month) are fine unless the user or a document marks them
+  confidential; revenue and margins are not asked for.
 - **Roles, not names.** Product names of systems (Salesforce, SAP, Jira) are
   fine; hostnames, tenant IDs, URLs and people's names are not.
 - **Offer import** where an answer already sits in a document (a strategy, an
@@ -42,7 +58,20 @@ source and date, by [writing rules](writing-rules.md).
 Role; hours a week for one project; ADK and GCP familiarity (new, some,
 fluent); host (Claude Code, Codex, Gemini CLI, Antigravity); writing voice
 (British or US spelling, plain or formal, length). Lead each with a
-recommended answer: these are conventions about the user.
+recommended answer: these are conventions about the user. Ask them over two
+turns, and fill the host from what you can see rather than asking.
+
+## Recommended answers for conventions
+
+Offer these when the user has said nothing better; they are starting
+points, not facts about the company:
+
+- H1, the usual proof of concept: two to three weeks, one engineer part
+  time, a small monthly model and cloud allowance approved by the sponsor,
+  judged by the sponsor against one measure.
+- J1: the cloud region nearest where the data must stay; Cloud Run for
+  hosting; model versions pinned and changed only by a reviewed change.
+- L1: about ten slides, the company template, the decision asked for first.
 
 ## Question bank
 
