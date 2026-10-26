@@ -69,7 +69,9 @@ drafting; those gaps become slides, not omissions.
 
 If the engineer keeps a practice profile, read
 [practice profile](references/practice-profile.md) for the org's audience and
-presentation style; numbers still come only from the record.
+presentation style; numbers still come only from the record. Its past AI
+attempts can frame the story ("the last chatbot was stopped for accuracy;
+this measures accuracy first"), never as a figure on a slide.
 
 Then settle three things in one line each, asking only for what the request
 and the record do not say:

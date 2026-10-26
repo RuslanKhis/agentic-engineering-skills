@@ -47,6 +47,14 @@ assume. Then say which mode this is, in one line the user can correct:
 If the engineer keeps a practice profile, read
 [practice profile](references/practice-profile.md) before the first question;
 it pre-fills the business context and scope-gate rows as labelled org defaults.
+It can also pre-fill interview questions 1 (business and KPIs), 5 (the
+likely system of record), 14 (deciders, reviewers and usual lead times) and
+19 (unofficial AI use) for the user to confirm. Past AI attempts and what
+stopped them pre-fill the matching stall checks, labelled "reported (org
+profile, reviewed <date>)". A sector the profile marks as high-impact raises
+the risk questions, never lowers them, and a works council or union adds a
+change-management row. Always ask questions 2, 4, 6 and 10: they are about
+this case.
 
 Open with that mode's opener from
 [the discovery conversation](references/discovery-interview.md): the

@@ -3,6 +3,26 @@
 One section per tagged release, newest first. Pin a release with
 `npx skills@latest add RuslanKhis/agentic-engineering-skills#v<version> --skill '*'`.
 
+## Unreleased
+
+Not yet tagged; `release.py prepare` will add the dated section above this
+one, and these notes move into it.
+
+- **Practice profile: interview and document import.** `practice-profile`
+  now offers two ways in. `init` asks "interview, import, or both?"; the
+  interview has sixteen core questions over thirteen sections (six new:
+  sector and jurisdictions, data subjects and data classes, systems of
+  record and tools, AI policy and approvals, AI maturity and past attempts,
+  procurement and consultation), with menus and "don't know" for company
+  facts. `import` reads Markdown or text files the user names: the helper's
+  `extract` withholds secrets and personal data, flags instruction-like and
+  hidden text and refuses crafted files; `verify-candidates` keeps only
+  lines whose quote is on the cited line; the user accepts each line, and
+  the write needs a yes to the diff, after a snapshot. `export` prints a
+  one-page company context brief to reuse elsewhere, refused in a
+  repository bound to another org. Discovery, the designer and the
+  presenter read the new sections; the profile cap rises to 200 lines.
+
 ## 2026.10.26 · 26 October 2026
 
 Changes since v2026.10.25:

@@ -103,7 +103,10 @@ offer to share only when the helper reports the same override recorded before.
 If the engineer keeps a practice profile, offer its org defaults in place of
 these defaults, labelled with their source, as
 [practice profile](references/practice-profile.md) describes; accepted values
-go into the scope-gate or assumed-answers table with that label.
+go into the scope-gate or assumed-answers table with that label. Its data
+classes and AI policy set the data-and-effects default and can raise the
+floor; its jurisdictions feed residency; its procurement lead times become
+calendar waits in the plan.
 
 Read [delivery profiles](references/delivery-profiles.md) to turn the answers
 into a profile (proof of concept, quality-judged assignment, internal tool, MVP
