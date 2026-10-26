@@ -660,6 +660,34 @@
       "rationale": "Release gates belong to adk-release-engineering, even though governance reviewers may later ask about them."
     },
     {
+      "id": "governance-pack-au-hr-positive",
+      "skill": "adk-governance-pack",
+      "prompt": "We built an internal HR assistant for an Australian retailer. It reads staff leave and roster records from Workday and runs on Gemini in Sydney. Their Privacy Officer wants to know what the Privacy Act needs from us before the pilot; draft the papers from our design and plan.",
+      "should_trigger": true,
+      "rationale": "Drafting a privacy impact assessment and regulatory screen for an Australian client from the design and plan is this skill's deliverable, even though no EU law is involved."
+    },
+    {
+      "id": "governance-pack-uk-bank-chatbot-positive",
+      "skill": "adk-governance-pack",
+      "prompt": "Our Sydney team built a customer-service chatbot for a UK bank that also has EU customers, and we will support it from Australia. Their DPOs want the DPIA inputs and whatever covers our access to the data from here.",
+      "should_trigger": true,
+      "rationale": "UK and EU DPIA inputs and the transfer facts for an Australian consultancy's access are governance papers this skill drafts from the project record."
+    },
+    {
+      "id": "governance-pack-us-hiring-positive",
+      "skill": "adk-governance-pack",
+      "prompt": "A California logistics client wants to use our ADK resume screener in California and New York City. Their general counsel asked what US law requires before the pilot; draft the papers from the design and the backtest results.",
+      "should_trigger": true,
+      "rationale": "A US regulatory screen, risk assessment inputs and bias evidence for an automated hiring tool, drawn from the design and evaluation records, belong to the governance pack."
+    },
+    {
+      "id": "governance-pack-website-privacy-policy-near-miss",
+      "skill": "adk-governance-pack",
+      "prompt": "Write the privacy policy page for our company website explaining how we use cookies and analytics.",
+      "should_trigger": false,
+      "rationale": "A general website privacy policy is not a governance paper about an ADK agent drawn from its design and evidence, even though it mentions privacy law."
+    },
+    {
       "id": "sensitive-data-logs-not-governance-positive",
       "skill": "protect-adk-sensitive-data",
       "prompt": "Redact PII from our agent's logs before they reach Cloud Logging.",
