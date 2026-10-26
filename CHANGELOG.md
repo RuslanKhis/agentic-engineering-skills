@@ -22,6 +22,24 @@ one, and these notes move into it.
   one-page company context brief to reuse elsewhere, refused in a
   repository bound to another org. Discovery, the designer and the
   presenter read the new sections; the profile cap rises to 200 lines.
+- **Governance pack: Australian, US, EU and UK law.** `adk-governance-pack`
+  now screens jurisdictions before drafting, always in the order Australia,
+  United States, EU, UK, from where the client, the people and the
+  processing are (the model's region and the consultancy's own staff
+  included), the client type, sector and decision effects; an unknown fact
+  keeps a regime in scope as a `gap:`. The classification memo becomes a
+  regulatory memo: the EU AI Act classification stays (corrected against
+  the Official Journal and the Commission's Article 50 guidelines), and
+  Australia and the UK get screens of existing law with no risk tier. The
+  DPIA input pack becomes a privacy impact input pack serving the
+  Australian PIA (APPs, APP 8 offshore processing, APP 1.7 automated
+  decisions from 10 December 2026), the EU and UK DPIA (GDPR Article 22,
+  UK Articles 22A to 22D) and US risk assessments (CPPA), with a new
+  transfer assessment annex for EU and UK data reached from Australia. The
+  checker follows each draft's `jurisdictions:` and dates AU, US and UK law
+  references. The pack reads the practice profile's jurisdiction, data,
+  AI-policy and consultation sections; a profile fact can add a check,
+  never remove one.
 
 ## 2026.10.26 · 26 October 2026
 

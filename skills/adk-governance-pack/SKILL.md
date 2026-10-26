@@ -123,10 +123,13 @@ When the repository is bound to an org in
 `${AGENTIC_ENGINEERING_HOME:-~/.agentic-engineering}` (its `bindings.md`
 maps repository paths to org slugs; the longest matching path wins), read
 these sections of `orgs/<slug>/profile.md`: "Sector and jurisdictions",
-"Data subjects and data classes", "AI policy and approvals", "Procurement
-and consultation" and "Security and compliance floor". Skip any section
-the profile does not have. If there is no such directory or no binding,
-continue without it and do not mention it.
+"Stakeholders and decision norms", "Data subjects and data classes", "AI
+policy and approvals", "Procurement and consultation", "Security and
+compliance floor" and "Glossary". Skip any section the profile does not
+have. If there is no such directory or no binding, continue without it and
+do not mention it. Choose the org and read it as
+[practice profile](references/practice-profile.md) describes (`profile.py
+brief --repo . --for adk-governance-pack`); the rules below add to it.
 
 - Cite each fact you use as `source: practice profile <org>, reviewed
   <date>`, with the date the profile records.

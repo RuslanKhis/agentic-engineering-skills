@@ -346,6 +346,7 @@ def validate_package(package: Path, report: Report) -> None:
 SHARED_REFERENCES = {
     "references/practice-profile.md": (
         "practice-profile", "adk-discovery", "adk-system-designer", "adk-presenter", "adk-engineer",
+        "adk-governance-pack",
     ),
 }
 
