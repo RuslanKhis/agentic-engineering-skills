@@ -20,7 +20,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "cross-cutting"
   sources-reviewed: "2026-10-25"
-  version: "2026.10.25"
+  version: "2026.10.26"
 ---
 
 # Practice profile

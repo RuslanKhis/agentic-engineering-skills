@@ -3,6 +3,13 @@
 One section per tagged release, newest first. Pin a release with
 `npx skills@latest add RuslanKhis/agentic-engineering-skills#v<version> --skill '*'`.
 
+## 2026.10.26 · 26 October 2026
+
+Changes since v2026.10.25:
+
+- `adk-memory-architecture`'s `local_retrieval.py` now parses on Python 3.11,
+  the minimum the skills support; in 2026.10.25 it failed to compile there.
+
 ## 2026.10.25 · 25 October 2026
 
 First tagged release. Earlier changes are recorded in the README under

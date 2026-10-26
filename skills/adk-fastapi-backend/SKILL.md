@@ -6,7 +6,7 @@ metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   last-tested: "2026-10-23"
-  version: "2026.10.25"
+  version: "2026.10.26"
 ---
 
 # ADK FastAPI backend

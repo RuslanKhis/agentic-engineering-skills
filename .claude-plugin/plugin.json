@@ -1,7 +1,7 @@
 {
   "name": "agentic-engineering",
   "displayName": "Agentic Engineering Skills",
-  "version": "2026.10.25",
+  "version": "2026.10.26",
   "description": "Discovery, system design, a router and the ADK specialists that carry out each goal, for Google ADK applications on Google Cloud",
   "author": {
     "name": "Ruslan Khissamiyev",
@@ -10,5 +10,10 @@
   "homepage": "https://github.com/RuslanKhis/agentic-engineering-skills",
   "repository": "https://github.com/RuslanKhis/agentic-engineering-skills",
   "license": "MIT",
-  "keywords": ["google-adk", "google-cloud", "agents", "skills"]
+  "keywords": [
+    "google-adk",
+    "google-cloud",
+    "agents",
+    "skills"
+  ]
 }
