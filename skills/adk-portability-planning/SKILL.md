@@ -69,7 +69,7 @@ the discovery brief, when it exists, for stakeholders and their calendar.
 When code exists, inspect it for the provider dependencies it actually has:
 
 ```bash
-grep -rnE "from google\.cloud|import vertexai|from vertexai|from google import genai|google\.genai|google\.adk\.tools\.(vertex|google_search)|VertexAi[A-Za-z]+|GcsArtifactService|google_search|bigquery|firestore|LiteLlm" --include=*.py .
+grep -rnE "from google\.cloud|import vertexai|from vertexai|from google import genai|google\.genai|google\.adk\.tools\.(vertex|google_search)|VertexAi[A-Za-z]+|GcsArtifactService|google_search|bigquery|firestore|LiteLlm" --include='*.py' .
 ```
 
 Mark each baseline fact `inspected` or `design-only`. A design that says
@@ -200,6 +200,8 @@ unchanged: this prints the value recorded as `design before`:
 git hash-object docs/architecture/<topic>.md
 ```
 
+Keep checker output in the ticket's Evidence rather than in `.adk-evidence/`:
+the ticket touches only the assessment, so this session creates no other file.
 Fill the ticket's Evidence per `adk-engineer` conventions: the assessment
 path; the checker's result line; `design before` and `design after` values; targets and
 frameworks assessed; the five dimensions with their outcome; each acceptance
@@ -217,7 +219,8 @@ docs/architecture/<topic>.md, use the goal's primary and supporting skills,
 verify its acceptance cases locally and record evidence in its ticket.
 ```
 
-When an optional recommendation needs approval, end instead with:
+When an optional recommendation needs approval, end instead with this prompt,
+in place of the next-goal prompt `plan_status.py` suggests:
 
 ```text
 /adk-system-designer Checkpoint docs/plans/<topic>.md: decide the optional

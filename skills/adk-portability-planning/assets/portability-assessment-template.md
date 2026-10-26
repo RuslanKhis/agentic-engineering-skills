@@ -51,6 +51,8 @@ status: draft
 
 ## Cloud alternatives
 
+<!-- Keep a column only for a target in the front matter's targets list; say in Concern and scope why another is left out. -->
+
 | Responsibility | GCP (design ID) | AWS | Azure | Difference | Portability |
 | --- | --- | --- | --- | --- | --- |
 | <hosting, model, sessions, data, retrieval, identity, observability, safety> | <service (D1)> | <option and status> | <option and status> | <what changes that matters> | <straightforward / moderate / expensive> |

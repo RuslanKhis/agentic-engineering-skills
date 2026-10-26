@@ -2492,9 +2492,13 @@ comparison with dated sources; the boundaries worth keeping; migration
 risks; and relative effort with its drivers, never invented hours or prices.
 It changes no code and no design. The designer asks once whether lock-in is
 a concern (default no); only a yes adds a portability goal and its ticket,
-which block no build goal. <TRIALS> All **<PACKAGES> packages** pass
-validation and **<TESTS> tests** pass with **<SKIPPED> optional SDK checks
-skipped**. See the research notes on
+which no build goal may wait for and the phase gate skips. Four fresh-agent
+trials covered a no and a yes in the designer, the engineer carrying out the
+portability ticket, and an unrelated goal routing to its own specialist; an
+independent review and the trials found eighteen issues, all fixed the same
+day, among them a build goal ordered behind the assessment and a checker that
+let hyphenated estimates through. All **26 packages** pass validation and
+**1,130 tests** run, with **60 optional SDK checks skipped**. See the research notes on
 [AWS](docs/research/portability-aws-2026-10-26.md),
 [Azure](docs/research/portability-azure-2026-10-26.md),
 [agent frameworks](docs/research/portability-agent-frameworks-2026-10-26.md)
