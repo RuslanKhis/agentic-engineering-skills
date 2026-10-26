@@ -11,8 +11,16 @@ how often to re-check them:
 `scripts/validate_skills.py` (and so `scripts/check_repo.py` and CI) fails a
 governance-pack reference without that line and warns when the interval has
 passed. The United States reference uses 90 days, because state law there
-moves fastest. A warning never blocks a release; it says which reference to
-re-verify next.
+moves fastest, and so does `au-government-crosswalks.md`, because the
+official DTA and NSW forms it maps change faster than laws. A warning never
+blocks a release; it says which reference to re-verify next.
+
+For the crosswalks, re-read each official form's page (the DTA tool's
+document control table, the NSW Operational Policy's registration
+questions, the IPC guide) and compare the version with the one the file
+records. A changed form means changed question rows, not only a new date.
+Drafts already written carry their own `form_checked` date, which
+`check_governance.py` warns on after 90 days.
 
 ## When
 

@@ -122,7 +122,7 @@ lessons tagged with that specialist and its stack conventions.
 | A client proposal, statement of work, change request or data-and-access request letter built from the design and plan | `adk-system-designer` (engagement scoping) |
 | A go-live rollout pack: user guide, quick-reference card, training plan, rollout messages, AI disclosure text, adoption metrics, hypercare exit test | `adk-presenter` (rollout pack) |
 | Handing an agent's operation to a client's IT team (support tiers, RACI, alert ownership, access transfer) or a blameless postmortem for an agent incident | `adk-agent-observability` (handover) |
-| Papers for a client's legal, privacy or security reviewers: which of Australian, US, EU and UK privacy and AI law applies, a regulatory memo (EU AI Act classification where the EU applies), AI impact assessment, privacy impact inputs (PIA, DPIA or US risk assessment), transfer facts, system card, records of processing, security questionnaire answers | `adk-governance-pack` |
+| Papers for a client's legal, privacy or security reviewers: which of Australian (including NSW and Commonwealth government), US, EU, UK, New Zealand, Singapore and Canadian privacy and AI law applies, a regulatory memo (EU AI Act classification where the EU applies), AI impact assessment, privacy impact inputs (PIA, DPIA or US risk assessment), transfer facts, system card, records of processing, security questionnaire answers | `adk-governance-pack` |
 
 Use `adk-system-designer` for the system-design conversation. `adk-discovery`
 comes before it when the use case is not yet chosen or the business outcome is

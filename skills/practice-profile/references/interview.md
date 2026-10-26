@@ -84,7 +84,7 @@ adk-presenter, Eng = adk-engineer, Gov = adk-governance-pack.
 | | | A2 | D | Where does revenue come from and where does most cost sit? | Qualitative |
 | | | A3 | D | Which priorities does this year's strategy name? | Offer import; else free text |
 | | | A4 | D | Which partners or outsourcers run parts of the operation? | Roles or company types |
-| Sector and jurisdictions | Gov, Des, Disc | B1 | C | Which sector, in the words a regulator would use, and in which countries are its customers and staff? | Menu (EU states, UK, US states, Australia, other, don't know) |
+| Sector and jurisdictions | Gov, Des, Disc | B1 | C | Which sector, in the words a regulator would use, and in which countries are its customers and staff? | Menu (Australia and its states, New Zealand, Singapore, Canada and its provinces, US states, EU states, UK, other, don't know) |
 | | | B2 | C | Which regulators supervise it besides the data-protection authority? | Menu by sector, "none known", "don't know" |
 | | | B3 | D | Does it do any of these as a business: credit, insurance pricing, recruitment or worker management, education assessment, medical devices, critical infrastructure, public services, biometrics? | Checklist; governance treats each tick as an area to check, never a conclusion |
 | | | B4 | D | When it uses AI built by others, is it usually a deployer, and does it ever put AI on the market under its own name? | Menu; recorded as `assumption:`; counsel decides per system |
