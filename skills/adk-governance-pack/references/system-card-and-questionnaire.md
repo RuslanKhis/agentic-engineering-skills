@@ -1,5 +1,7 @@
 # System card and security questionnaire
 
+<!-- verified: 2026-10-26; re-check every 180 days -->
+
 Read when writing the system card or the questionnaire answer bank. Both
 describe one build to outsiders, so both use the plan's evidence vocabulary
 and nothing warmer.

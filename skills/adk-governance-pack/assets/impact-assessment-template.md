@@ -13,6 +13,11 @@ sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<t
 
 # AI system impact assessment: <system name>
 
+> **Drafting aid output, not legal advice.** Prepared to support the
+> reviewer named in `for:`, never to replace the client's lawyer. It is not
+> reviewed until that reviewer records a decision in Review and sign-off at
+> the end; counsel decides every legal conclusion in it.
+
 Structured along the topics of ISO/IEC 42005:2025 and mapped to NIST AI RMF
 1.0 and NIST AI 600-1. Draft for <client>'s risk owner; scores are
 provisional until they set them. Not legal advice.
@@ -116,3 +121,13 @@ holds and delete the rest, with this comment. -->
 | (d) specific risks of harm | Impacts; privacy-impact-input-pack.md Risks and measures | <IDs> |
 | (e) human oversight measures | system-card.md Human oversight | <IDs> |
 | (f) measures if risks materialise, governance, complaints | Measures; Residual risk and decision | <IDs; counsel: required under Article 27?> |
+
+## Review and sign-off
+
+<!-- Only the reviewer fills Decision and Date. Leave both `pending` while
+status is draft; the reviewer sets status: reviewed when they sign. One row
+per reviewer: the role from `for:` first, then any other reviewer. -->
+
+| Reviewer (role) | Scope reviewed | Decision | Date |
+| --- | --- | --- | --- |
+| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |

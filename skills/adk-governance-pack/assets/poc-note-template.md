@@ -11,6 +11,11 @@ sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md>
 
 # Governance note: <system name> proof of concept
 
+> **Drafting aid output, not legal advice.** Prepared to support the
+> reviewer named in `for:`, never to replace the client's lawyer. It is not
+> reviewed until that reviewer records a decision in Review and sign-off at
+> the end; counsel decides every legal conclusion in it.
+
 One page for <client>'s reviewers before the proof of concept runs. Not legal
 advice; it says what the full pack must settle before production.
 
@@ -36,3 +41,13 @@ advice; it says what the full pack must settle before production.
 - counsel: <question that blocks the production decision, and who answers it by when>.
 
 Full pack before production: <documents and the goal that writes them>.
+
+## Review and sign-off
+
+<!-- Only the reviewer fills Decision and Date. Leave both `pending` while
+status is draft; the reviewer sets status: reviewed when they sign. One row
+per reviewer: the role from `for:` first, then any other reviewer. -->
+
+| Reviewer (role) | Scope reviewed | Decision | Date |
+| --- | --- | --- | --- |
+| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |

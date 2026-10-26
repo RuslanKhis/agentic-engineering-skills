@@ -1,5 +1,7 @@
 # Jurisdiction screen
 
+<!-- verified: 2026-10-26; re-check every 180 days -->
+
 Read before drafting anything. The screen decides which regimes' sections
 each draft carries. It is the first step of every pack, including a
 proof-of-concept note and a single requested document.

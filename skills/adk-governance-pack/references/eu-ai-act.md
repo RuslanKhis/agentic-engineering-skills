@@ -1,5 +1,7 @@
 # EU AI Act classification
 
+<!-- verified: 2026-10-26; re-check every 180 days -->
+
 Read when the [jurisdiction screen](jurisdiction-screen.md) puts `eu` in
 scope and you are writing the EU sections of the regulatory memo or the
 proof-of-concept note. The EU sections classify the system the design

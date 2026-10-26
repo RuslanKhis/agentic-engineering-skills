@@ -111,14 +111,34 @@ counsel_required: pending
 """
 
 
-def run(*args, files=None):
+BANNER = ("> **Drafting aid output, not legal advice.** Prepared to support the reviewer named in `for:`. "
+          "It is not reviewed until that reviewer records a decision in Review and sign-off.\n")
+SIGNOFF = ("\n## Review and sign-off\n\n| Reviewer (role) | Scope reviewed | Decision | Date |\n"
+           "| --- | --- | --- | --- |\n| Privacy officer | This document | pending | pending |\n")
+
+
+def framed(text):
+    """Add what every draft carries (status, banner, sign-off) unless the test wrote it."""
+    if not text.startswith("---\ndocument:"):
+        return text
+    if "\nstatus:" not in text.split("\n---\n", 1)[0]:
+        text = text.replace("---\ndocument:", "---\nstatus: draft\ndocument:", 1)
+    if "not legal advice" not in text:
+        head, sep, body = text.partition("\n---\n")
+        text = head + sep + "\n" + BANNER + body
+    if "## Review and sign-off" not in text:
+        text = text.rstrip("\n") + "\n" + SIGNOFF
+    return text
+
+
+def run(*args, files=None, frame=True):
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         paths = {}
         for name, text in (files or {}).items():
             path = root / name
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(text, encoding="utf-8")
+            path.write_text(framed(text) if frame else text, encoding="utf-8")
             paths[name] = str(path)
         argv = [paths.get(a[1:], a) if a.startswith("@") else a for a in args]
         result = subprocess.run([sys.executable, "-I", str(SCRIPT), "--today", TODAY, *argv],
@@ -429,6 +449,65 @@ counsel_required: no
                                     capture_output=True, text=True)
             self.assertEqual(result.returncode, 1, f"{template.name}: {result.stdout}{result.stderr}")
             self.assertIn("placeholder", result.stdout, template.name)
+
+
+class ReviewAndSignOff(unittest.TestCase):
+    """Every draft says it is a drafting aid and leaves the decision to its reviewer."""
+
+    def test_framed_draft_passes(self):
+        self.assertEqual(run("@note.md", files={"note.md": POC_NOTE}).returncode, 0)
+
+    def test_missing_banner_fails(self):
+        draft = framed(POC_NOTE).replace(BANNER, "")
+        result = run("@note.md", files={"note.md": draft}, frame=False)
+        self.assertIn("missing the drafting-aid banner", result.stdout)
+
+    def test_missing_signoff_fails(self):
+        draft = framed(POC_NOTE).replace(SIGNOFF, "\n")
+        result = run("@note.md", files={"note.md": draft}, frame=False)
+        self.assertIn("missing section: ## Review and sign-off", result.stdout)
+
+    def test_signoff_needs_a_reviewer_row(self):
+        draft = framed(POC_NOTE).replace("| Privacy officer | This document | pending | pending |\n", "")
+        result = run("@note.md", files={"note.md": draft}, frame=False)
+        self.assertIn("no reviewer row", result.stdout)
+
+    def test_unknown_decision_fails(self):
+        draft = framed(POC_NOTE).replace("| pending | pending |", "| looks fine | pending |")
+        self.assertIn("decision must be one of", run("@n.md", files={"n.md": draft}, frame=False).stdout)
+
+    def test_draft_cannot_carry_a_decision(self):
+        draft = framed(POC_NOTE).replace("| pending | pending |", "| approved | 2026-10-25 |")
+        result = run("@n.md", files={"n.md": draft}, frame=False)
+        self.assertIn("status is draft but a reviewer decision is recorded", result.stdout)
+
+    def test_reviewed_document_needs_a_dated_decision(self):
+        reviewed = framed(POC_NOTE).replace("status: draft", "status: reviewed")
+        self.assertIn("every sign-off decision is pending",
+                      run("@n.md", files={"n.md": reviewed}, frame=False).stdout)
+        undated = reviewed.replace("| pending | pending |", "| approved with changes | pending |")
+        self.assertIn("needs the date the reviewer signed", run("@n.md", files={"n.md": undated}, frame=False).stdout)
+        future = reviewed.replace("| pending | pending |", "| approved | 2027-01-01 |")
+        self.assertIn("is in the future", run("@n.md", files={"n.md": future}, frame=False).stdout)
+        signed = reviewed.replace("| pending | pending |", "| approved | 2026-10-25 |")
+        self.assertEqual(run("@n.md", files={"n.md": signed}, frame=False).returncode, 0)
+
+    def test_status_must_be_draft_or_reviewed(self):
+        draft = framed(POC_NOTE).replace("status: draft", "status: final")
+        self.assertIn("status must be draft or reviewed", run("@n.md", files={"n.md": draft}, frame=False).stdout)
+
+    def test_signoff_rows_are_not_held_to_cite_or_flag(self):
+        result = run("@note.md", files={"note.md": POC_NOTE})
+        self.assertNotIn("Privacy officer", result.stdout)
+
+    def test_every_template_carries_banner_and_signoff(self):
+        for template in sorted((SKILL / "assets").glob("*-template.md")):
+            text = template.read_text(encoding="utf-8")
+            with self.subTest(template=template.name):
+                self.assertIn("not legal advice", text)
+                self.assertIn("not\n> reviewed until", text)
+                self.assertIn("## Review and sign-off", text)
+                self.assertIn("status: draft", text)
 
 
 if __name__ == "__main__":

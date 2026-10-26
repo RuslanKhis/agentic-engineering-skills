@@ -1,5 +1,7 @@
 # Privacy assessments, transfers and records
 
+<!-- verified: 2026-10-25; re-check every 180 days -->
+
 Read when writing the privacy impact input pack, the records-of-processing
 rows or the transfer assessment annex. One input pack serves every regime the
 [jurisdiction screen](jurisdiction-screen.md) found in scope: the Australian

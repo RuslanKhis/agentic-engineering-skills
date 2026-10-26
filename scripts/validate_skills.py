@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 from dataclasses import dataclass, field
+import datetime as dt
 import os
 from pathlib import Path
 import re
@@ -351,6 +352,39 @@ SHARED_REFERENCES = {
 }
 
 
+# Law and provider references carry the day they were last verified at the
+# source; the governance pack's references must, so a new jurisdiction cannot
+# ship without one.
+VERIFIED = re.compile(r"<!--\s*verified:\s*(\d{4}-\d{2}-\d{2})(?:;\s*re-check every (\d+) days)?\s*-->")
+VERIFIED_REQUIRED = ("adk-governance-pack",)
+VERIFIED_DEFAULT_DAYS = 180
+
+
+def check_reference_freshness(skills: Path, report: Report, today: dt.date | None = None) -> None:
+    today = today or dt.date.today()
+    shared = set(SHARED_REFERENCES)
+    for path in sorted(skills.glob("*/references/*.md")):
+        package = path.parents[1].name
+        text = path.read_text(encoding="utf-8", errors="replace")
+        match = VERIFIED.search(text)
+        if match is None:
+            if package in VERIFIED_REQUIRED and f"references/{path.name}" not in shared:
+                report.error(path, "law reference has no '<!-- verified: YYYY-MM-DD; re-check every N days -->' "
+                                   "line under its title")
+            continue
+        try:
+            verified = dt.date.fromisoformat(match.group(1))
+        except ValueError:
+            report.error(path, f"verified date {match.group(1)} is not a real date")
+            continue
+        days = int(match.group(2) or VERIFIED_DEFAULT_DAYS)
+        if verified > today:
+            report.error(path, f"verified date {verified} is in the future")
+        elif (today - verified).days > days:
+            report.warnings.append(f"{path}: verified {verified}, over {days} days ago; re-verify its sources "
+                                   "(docs/maintenance/law-refresh.md)")
+
+
 def check_shared_references(skills: Path, report: Report) -> None:
     for relative, packages in SHARED_REFERENCES.items():
         source = skills / packages[0] / relative
@@ -390,6 +424,7 @@ def validate_repository(root: Path) -> Report:
         validate_package(package, report)
     check_release_versions(root, [p for p in packages if not p.is_symlink()], report)
     check_shared_references(skills, report)
+    check_reference_freshness(skills, report)
     return report
 
 

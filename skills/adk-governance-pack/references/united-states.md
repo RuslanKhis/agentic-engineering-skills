@@ -1,5 +1,7 @@
 # United States
 
+<!-- verified: 2026-10-26; re-check every 90 days -->
+
 Read when the [jurisdiction screen](jurisdiction-screen.md) puts `us` in
 scope. The United States has no AI Act and no federal privacy statute, so
 the US sections of the regulatory memo assign no risk tier. They screen the

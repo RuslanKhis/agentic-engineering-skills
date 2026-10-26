@@ -13,6 +13,11 @@ sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<t
 
 # Privacy impact input pack: <system name>
 
+> **Drafting aid output, not legal advice.** Prepared to support the
+> reviewer named in `for:`, never to replace the client's lawyer. It is not
+> reviewed until that reviewer records a decision in Review and sign-off at
+> the end; counsel decides every legal conclusion in it.
+
 Inputs for <client>'s privacy assessments of this system: the privacy impact
 assessment under the Australian Privacy Principles, the data protection
 impact assessment under GDPR or UK GDPR Article 35, and the data protection
@@ -149,3 +154,13 @@ Result: counsel: <assessment required / recommended / not required per regime; t
 ## Questions for counsel
 
 - counsel: <question>, regime <regime>, needed by <goal or wait ID>.
+
+## Review and sign-off
+
+<!-- Only the reviewer fills Decision and Date. Leave both `pending` while
+status is draft; the reviewer sets status: reviewed when they sign. One row
+per reviewer: the role from `for:` first, then any other reviewer. -->
+
+| Reviewer (role) | Scope reviewed | Decision | Date |
+| --- | --- | --- | --- |
+| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |

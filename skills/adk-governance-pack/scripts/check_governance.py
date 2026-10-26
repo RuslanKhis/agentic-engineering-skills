@@ -47,7 +47,16 @@ reviewer would otherwise find by hand:
   ``n/a:`` or ``deferred:`` line is exempt, because the baseline lists rules
   a design may omit; a cited ``docs/`` file that does not exist from the
   current directory is a warning;
-- an unfilled template placeholder (``<...>``).
+- an unfilled template placeholder (``<...>``);
+- a draft without the drafting-aid banner under its title (it says the draft
+  is not legal advice and is not reviewed until the reviewer signs), without
+  a ``## Review and sign-off`` table holding at least one reviewer row, with a
+  decision outside ``pending``, ``approved``, ``approved with changes``,
+  ``changes requested`` or ``rejected``, or with a recorded decision that has
+  no sign-off date; ``status`` must be ``draft`` or ``reviewed``, a draft may
+  not carry a recorded decision (only the reviewer signs, and sets
+  ``status: reviewed`` when they do), and a reviewed document needs one. The
+  sign-off rows are not held to the cite-or-flag rule.
 
 Exit status: 0 clean (warnings allowed), 1 when any error is found, 2 when a
 file cannot be read, has no front matter or names an unknown document type.
@@ -125,6 +134,12 @@ NEEDS_REGIME = {"processing-records": ("eu", "uk"), "transfer-assessment": ("eu"
 # The section that must name all four regimes, with a row or line for each.
 SCREEN_SECTION = {"regulatory-memo": "jurisdiction screen", "poc-note": "classification"}
 COUNSEL_VALUES = {"yes", "no", "pending"}
+STATUS_VALUES = {"draft", "reviewed"}
+# Every draft opens with the drafting-aid banner and ends with the reviewer's
+# sign-off table; only the reviewer records a decision there.
+SIGNOFF = "review and sign-off"
+BANNER_PHRASES = ("not legal advice", "not reviewed until")
+DECISIONS = {"pending", "approved", "approved with changes", "changes requested", "rejected"}
 
 # Phrases that put a system near a high-stakes area in at least one regime: the
 # EU AI Act's Annex III areas, Australian APP 1.7 significant decisions, US
@@ -392,6 +407,60 @@ def check_structure(doc: str, codes: list[str], found: dict[str, list]) -> list[
     return errors
 
 
+def check_review(meta: dict, found: dict[str, list], today: date) -> list[str]:
+    """The drafting-aid banner, the sign-off table and a status that matches it."""
+    errors: list[str] = []
+    preamble = " ".join(t.strip().lstrip(">").strip() for _, t in found.get("(preamble)", [])).lower()
+    preamble = re.sub(r"[*_`]", "", re.sub(r"\s+", " ", preamble))
+    if not all(phrase in preamble for phrase in BANNER_PHRASES):
+        errors.append("missing the drafting-aid banner under the title (it says the draft is not legal advice "
+                      "and not reviewed until the reviewer signs); copy it from the template")
+    status = (meta.get("status") or "").lower()
+    if status not in STATUS_VALUES:
+        errors.append(f"front matter: status must be draft or reviewed (found {status or 'nothing'!r})")
+    match = next((h for h in found if h.startswith(SIGNOFF)), None)
+    if match is None:
+        errors.append("missing section: ## Review and sign-off")
+        return errors
+    rows = []
+    for number, raw in found[match]:
+        line = raw.strip()
+        if not line.startswith("|") or re.fullmatch(r"\|?[\s:|-]+\|?", line):
+            continue
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        if cells and cells[0].lower().startswith("reviewer"):
+            continue
+        rows.append((number, cells))
+    if not rows:
+        errors.append("## Review and sign-off: no reviewer row; add one for the reviewer named in for:")
+    decided = 0
+    for number, cells in rows:
+        if len(cells) < 4 or not cells[0]:
+            errors.append(f"line {number}: a sign-off row needs reviewer, scope, decision and date")
+            continue
+        decision, when = cells[2].lower(), cells[3].lower()
+        if decision not in DECISIONS:
+            errors.append(f"line {number}: decision must be one of {', '.join(sorted(DECISIONS))} "
+                          f"(found {cells[2]!r})")
+            continue
+        if decision == "pending":
+            continue
+        decided += 1
+        try:
+            signed = date.fromisoformat(when)
+        except ValueError:
+            errors.append(f"line {number}: a recorded decision needs the date the reviewer signed (YYYY-MM-DD)")
+            continue
+        if signed > today:
+            errors.append(f"line {number}: sign-off date {when} is in the future")
+    if status == "draft" and decided:
+        errors.append("status is draft but a reviewer decision is recorded; only the reviewer signs, and sets "
+                      "status: reviewed when they do")
+    if status == "reviewed" and rows and not decided:
+        errors.append("status is reviewed but every sign-off decision is pending")
+    return errors
+
+
 def check(path: Path, sources: list[Path], today: date, max_age: int) -> tuple[list[str], list[str], dict]:
     text = path.read_text(encoding="utf-8")
     parsed = split_front_matter(text)
@@ -414,6 +483,7 @@ def check(path: Path, sources: list[Path], today: date, max_age: int) -> tuple[l
     for heading, lines in sections(body, offset):
         found[heading.lower()] = lines
     errors.extend(check_structure(doc, codes, found))
+    errors.extend(check_review(meta, found, today))
 
     triggers: dict[str, set[str]] = {}
     cited_ids: dict[str, int] = {}
@@ -453,7 +523,7 @@ def check(path: Path, sources: list[Path], today: date, max_age: int) -> tuple[l
                     errors.append(f"line {number}: checked date {value} is in the future")
                 elif (today - when).days > max_age:
                     warnings.append(f"line {number}: checked {value} is over {max_age} days old; re-check the source")
-        if heading == "(preamble)":
+        if heading == "(preamble)" or heading.lower().startswith(SIGNOFF):
             continue
         for number, statement in section_statements:
             if lead_in(statement) or cites(statement):

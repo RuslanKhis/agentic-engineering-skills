@@ -1,5 +1,7 @@
 # AI system impact assessment
 
+<!-- verified: 2026-10-25; re-check every 180 days -->
+
 Read when writing the impact assessment. It records who the system affects
 and how, beyond the client organisation's own risk, and what the design
 does about each impact. It is organised along ISO/IEC 42005 and mapped to

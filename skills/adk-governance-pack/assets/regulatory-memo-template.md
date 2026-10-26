@@ -12,6 +12,11 @@ sources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<t
 
 # Regulatory memo: <system name>
 
+> **Drafting aid output, not legal advice.** Prepared to support the
+> reviewer named in `for:`, never to replace the client's lawyer. It is not
+> reviewed until that reviewer records a decision in Review and sign-off at
+> the end; counsel decides every legal conclusion in it.
+
 Draft for <client>'s counsel. It records which regimes the jurisdiction
 screen found in scope, the facts the design records, and the provisions that
 appear relevant in each regime: the EU AI Act classification where the EU is
@@ -160,3 +165,13 @@ sections to that handling and say so. Delete this comment. -->
 ## Questions for counsel
 
 - counsel: <question>; regime <regime>; facts at <IDs>; needed before <goal or wait ID>.
+
+## Review and sign-off
+
+<!-- Only the reviewer fills Decision and Date. Leave both `pending` while
+status is draft; the reviewer sets status: reviewed when they sign. One row
+per reviewer: the role from `for:` first, then any other reviewer. -->
+
+| Reviewer (role) | Scope reviewed | Decision | Date |
+| --- | --- | --- | --- |
+| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |

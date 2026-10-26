@@ -1,5 +1,7 @@
 # Australia
 
+<!-- verified: 2026-10-26; re-check every 180 days -->
+
 Read when the [jurisdiction screen](jurisdiction-screen.md) puts `au` in
 scope. Australia has no AI Act, so the Australian sections of the regulatory
 memo assign no risk tier. They screen which existing laws and government

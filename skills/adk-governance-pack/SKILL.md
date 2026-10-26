@@ -34,6 +34,9 @@ security questionnaire answers. The deliverable is documents under
 `docs/governance/<topic>/`; the skill changes no code and gives no legal
 advice. Counsel, the DPO or privacy officer and the CISO decide; the drafts
 give them the facts with their IDs and the questions only they can answer.
+The pack supports the client's lawyer and never replaces one: no draft is
+relied on until its reviewer signs it, and a project with no lawyer to
+review it gets the drafts and the questions, not answers.
 
 The consultancy that uses this skill is in Australia and builds for clients
 in Australia, the United States, the EU and the UK. Which of those regimes
@@ -222,7 +225,20 @@ Online Safety Act risk assessments, an EU fundamental rights impact
 assessment. The memo lists each with its owner and wait; the pack supplies
 its inputs ([jurisdiction screen](references/jurisdiction-screen.md)).
 
-Hold every draft to these rules; the checker enforces the first five:
+Hold every draft to these rules; the checker enforces the first six:
+
+- **Banner and sign-off.** Keep the template's drafting-aid banner under
+  the title, word for word, and its Review and sign-off table at the end,
+  with a row for the reviewer named in `for:` (and one per other reviewer).
+  Leave every Decision and Date `pending` and `status: draft`: only the
+  reviewer records a decision (approved, approved with changes, changes
+  requested, rejected) and the date they signed, and sets
+  `status: reviewed`. Never fill a decision from a report that someone
+  approved it; ask the user to have the reviewer sign. Record one only when
+  the user, in their own message, says they are that reviewer and gives
+  their decision and date, or pastes the reviewer's signed record. A
+  document whose reviewer requested changes goes back to `status: draft`
+  with a new pending row once you revise it.
 
 - **Cite or flag.** Every bullet, table row and paragraph cites a design,
   plan or evidence ID (`C3`, `D2`, `SB14`, `G05/A2`, `M1`, `I1`, `W1`), a
@@ -296,7 +312,8 @@ python3 "$SKILL_DIR/scripts/check_governance.py" docs/governance/<topic>/ \
   --source docs/plans/<topic>.md
 ```
 
-Exit 0 means every draft carries a valid `jurisdictions:` list, every
+Exit 0 means every draft carries the banner, a sign-off table whose
+decisions match its `status`, a valid `jurisdictions:` list, every
 section its regimes require is filled and no other regime's section is
 present, the memo's screen names all four regimes, every statement cites or
 is flagged, every cited R, C, D, SB, M, I, W or O ID exists in a source, the
