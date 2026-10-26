@@ -178,14 +178,16 @@ GCP + Google ADK, and the assessment is a separate document beside it. Data
 residency is not this question; the governance jurisdiction screen owns it.
 
 - **Placement:** phase 1 by default, independent of the build goals:
-  `blocked_by: []`, because it depends only on the accepted design, and no
-  build goal waits for it. `plan_status.py --gate` counts it like any goal
-  that is not a review or teardown, so it must finish inside its phase. A
-  presentation goal depends on it only when that review must answer the
-  concern; otherwise the review lists it under `mentions_only`. The journey
-  check is transitive: a review that depends on the portability goal and on
-  built work still needs its journey goal; one that depends only on the
-  portability goal needs none.
+  `blocked_by: []`, because it depends only on the design (a draft is
+  enough; the assessment carries its open decisions), and no build goal
+  waits for it, not even to order one person's work: `check_schedule.py`
+  reports a goal other than a presentation that lists it in `blocked_by`.
+  `plan_status.py --gate` skips it, like a review or teardown, so an
+  unfinished assessment never holds the phase. A presentation goal depends
+  on it only when that review must answer the concern; otherwise the review
+  lists it under `mentions_only`. The journey check is transitive: a review
+  that depends on the portability goal and on built work still needs its
+  journey goal; one that depends only on the portability goal needs none.
 - **Estimate:** human hours, hands-on and review, like other document goals:
   reading the design and plan, checking provider sources, and the stakeholder
   read-through. In a statement of work it belongs to a deliverable like any
@@ -215,13 +217,12 @@ residency is not this question; the governance jurisdiction screen owns it.
   nor code.
 
 Acceptance, each item tagged `(deliverable)`, which `check_tickets.py`
-accepts on presentation, governance and portability tickets in place of a
-contract ID:
+accepts on portability tickets in place of a contract ID:
 
 - [ ] A1 THE assessment docs/portability/<topic>.md SHALL exist and check_portability.py SHALL exit 0 with --design and --plan (deliverable)
 - [ ] A2 THE assessment SHALL cover the targets recorded in the scope gate and each of the five dimensions, assessed or marked not a concern with a reason (deliverable)
 - [ ] A3 EVERY provider or framework claim that drives a classification or risk SHALL cite an official source with its read date (deliverable)
-- [ ] A4 THE design document SHALL NOT change and no other goal's scope SHALL change; `git diff --exit-code <base> -- docs/architecture/<topic>.md` exits 0 (deliverable)
+- [ ] A4 THE design document SHALL NOT change and no other goal's scope SHALL change; `git hash-object docs/architecture/<topic>.md` prints the value recorded in Evidence before the assessment was written (deliverable)
 - [ ] A5 THE skill SHALL NOT write application code, infrastructure code or new tickets; improvements to the current build appear only under Optional recommendations with their specialist (deliverable)
 
 Verification, automated, with `SKILL_DIR` resolved to the
@@ -229,14 +230,14 @@ Verification, automated, with `SKILL_DIR` resolved to the
 
 ```bash
 python3 "$SKILL_DIR/scripts/check_portability.py" docs/portability/<topic>.md \
-  --design docs/architecture/<topic>.md --plan docs/plans/<topic>.md \
-  && git diff --exit-code <base> -- docs/architecture/<topic>.md
+  --design docs/architecture/<topic>.md --plan docs/plans/<topic>.md
+git hash-object docs/architecture/<topic>.md   # equals the value in Evidence
 ```
 
-Fill `<topic>` and `<base>` when writing the ticket, or `check_tickets.py`
-reports them as unfilled placeholders. `<base>` is the commit that holds the
-accepted design (`git log -1 --format=%h -- docs/architecture/<topic>.md`).
-Verification, manual: none.
+Fill `<topic>` when writing the ticket, or `check_tickets.py` reports it as
+an unfilled placeholder. `git hash-object` works whether or not the design is
+committed, so the ticket is `ready` from the start. Verification, manual:
+none.
 
 The ticket's front matter, for a design whose scope gate named AWS and
 another agent framework:

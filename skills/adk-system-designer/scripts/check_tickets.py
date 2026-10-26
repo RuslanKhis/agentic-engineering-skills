@@ -10,9 +10,9 @@ Run after writing tickets from the ticket template. Errors (exit 1):
 - a contract or security rule ID is not in the design's tables;
 - an acceptance item cites no contract, rule or ``(floor)``, or a ticket
   contract is cited by no acceptance item; a ticket whose ``type`` is
-  presentation, governance or portability may instead tag an item
-  ``(deliverable)`` when it proves the document rather than a contract, and
-  the tag on any other type is the same error;
+  portability may instead tag an item ``(deliverable)``, since it proves a
+  separate document rather than a contract, and the tag on any other type is
+  the same error;
 - a primary or supporting skill is not an installed sibling skill (Google
   product skills, ``google/skills:<name>``, are checked against the
   implementation handoff's dated table and only warned about);
@@ -46,7 +46,7 @@ PLACEHOLDER = re.compile(r"<(?!!--)(?:[A-Za-z][^<>\n]{1,80})>")
 PIN = re.compile(r"@\S*\d|\bv?\d+\.\d+|\b[0-9a-f]{7,40}\b|\bpin(?:ned)?\b\s*[:=]?\s*\S+", re.IGNORECASE)
 GOAL_REF = re.compile(r"^([A-Z]+\d+)/A(\d+)$")
 CHARS_PER_TOKEN = 4
-DOCUMENT_TYPES = ("presentation", "governance", "portability")
+DOCUMENT_TYPES = ("portability",)
 
 
 def skill_name(entry: str) -> str:
@@ -132,7 +132,7 @@ def lint(tickets: list[dict], root: Path, skills_dir: Path, design: Path | None,
                                   "(deliverable)")
                 else:
                     errors.append(f"{name}: acceptance {item} cites no contract, security rule or (floor)"
-                                  + ("; (deliverable) only on a presentation, governance or portability ticket"
+                                  + ("; (deliverable) only on a portability ticket"
                                      if "(deliverable)" in data["text"] else ""))
             cited |= ids
         if not ticket["acceptance"]:

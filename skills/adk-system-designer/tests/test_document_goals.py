@@ -191,20 +191,22 @@ class DocumentGoals(unittest.TestCase):
         items = [line for line in section.splitlines() if line.startswith("- [ ] A")]
         self.assertEqual(5, len(items))
         self.assertTrue(all(line.endswith("(deliverable)") for line in items), items)
-        body = "\n".join(items).replace("<topic>", "support").replace("<base>", "3f2a1bc")
+        body = "\n".join(items).replace("<topic>", "support")
         self.write(self.tickets / "G01.md", PORTABILITY_TICKET.split("---", 2)[0] + front.replace("goal: G02", "goal: G01")
                    + "\n# G01\n\n## Acceptance\n\n" + body + "\n\n## Evidence\n")
         code, result = self.lint()
         self.assertEqual([], result["errors"])
         self.assertEqual(0, code)
 
-    def test_deliverable_tag_is_accepted_on_presentation_and_governance_tickets(self):
+    def test_deliverable_tag_is_only_for_portability_tickets(self):
+        # Presentation and governance tickets keep the existing rule: a contract, rule or (floor).
         for kind, skill in (("presentation", "adk-presenter"), ("governance", "adk-governance-pack")):
             with self.subTest(kind=kind):
                 self.write(self.tickets / "G01.md", PORTABILITY_TICKET.replace("type: portability", f"type: {kind}")
                            .replace("primary_skill: adk-portability-planning", f"primary_skill: {skill}"))
                 code, result = self.lint()
-                self.assertEqual([], result["errors"])
+                self.assertEqual(1, code)
+                self.assertIn("(deliverable) only on a portability ticket", "\n".join(result["errors"]))
 
     def test_deliverable_tag_on_an_implementation_ticket_is_an_error(self):
         self.edit(self.tickets / "G02.md", "contracts: [C1]", "contracts: []")
@@ -214,7 +216,7 @@ class DocumentGoals(unittest.TestCase):
         errors = [e for e in result["errors"] if e.startswith("G02.md")]
         self.assertEqual(1, len(errors), errors)
         self.assertIn("acceptance A1 cites no contract, security rule or (floor)", errors[0])
-        self.assertIn("(deliverable) only on a presentation, governance or portability ticket", errors[0])
+        self.assertIn("(deliverable) only on a portability ticket", errors[0])
         self.assertEqual([], [e for e in result["errors"] if e.startswith("G01.md")])
 
     def test_ticket_naming_an_uninstalled_portability_skill_is_an_error(self):
@@ -225,13 +227,27 @@ class DocumentGoals(unittest.TestCase):
         self.assertIn("G01.md: skill 'adk-portability-planning' is not an installed skill", errors)
         self.assertIn("G01.md: docs path 'adk-portability-planning/references/principles.md' does not resolve", errors)
 
-    def test_roll_up_lists_the_portability_goal_and_the_gate_waits_for_it(self):
+    def test_roll_up_lists_the_portability_goal_and_the_gate_does_not_wait_for_it(self):
         code, result = self.status()
         self.assertEqual(["G01", "G02"], result["ready"])
         code, result = self.status("--gate")
         reasons = "\n".join(result["gate"]["reasons"])
-        self.assertIn("G01 is ready", reasons)
+        self.assertIn("G02 is ready", reasons)
+        self.assertNotIn("G01", reasons)
         self.assertNotIn("journey", reasons)
+
+    def test_a_build_goal_that_waits_for_the_portability_goal_is_a_problem(self):
+        self.write(self.plan, PLAN.replace("  contracts: [C1]\n- goal: G03", "  contracts: [C1]\n- goal: G03", 1)
+                   .replace("""  owner: Ana
+  blocked_by: []
+  contracts: [C1]""", """  owner: Ana
+  blocked_by: [G01]
+  contracts: [C1]""", 1))
+        code, schedule = self.run_script("check_schedule.py", "--plan", str(self.plan), "--json")
+        problems = [p for p in schedule["problems"] if "portability" in p]
+        self.assertEqual(1, len(problems), schedule["problems"])
+        self.assertIn("G02", problems[0])
+        self.assertEqual(1, code)
 
     def test_a_review_that_depends_only_on_the_portability_goal_needs_no_journey_goal(self):
         self.write(self.plan, PLAN.split("- goal: G02")[0] + """- goal: G02

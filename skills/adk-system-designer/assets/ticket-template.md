@@ -71,8 +71,8 @@ provisioning (a judge run, a paid evaluation) is one more line with its cap.>
 - [ ] A3 <under condition> THE <app> SHALL NOT <forbidden effect> (C3, SB03)
 
 <An item that proves a floor or a version pin rather than a contract is
-tagged (floor). A presentation, governance or portability ticket may tag
-an item (deliverable) when it proves the document rather than a contract.
+tagged (floor). A portability ticket tags its items (deliverable): they
+prove a separate document, not a contract.
 A security rule ID sits beside the contract it helps prove. A box is
 ticked when the item's verification ran at the stated tier.>
 

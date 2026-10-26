@@ -44,8 +44,10 @@ designer checkpoint approves them.
 
 A `portability` goal or ticket names this skill, or a stakeholder asks about
 lock-in, an exit plan or another cloud or framework for an existing design.
-Without an accepted design (`docs/architecture/<topic>.md` with decisions the
-user accepted), say so and stop with this prompt instead of designing:
+A design still marked draft is enough: assess it as it stands and carry its
+open decisions that change a classification into "Open questions". Without
+a design (`docs/architecture/<topic>.md`), say so and stop with this prompt
+instead of designing:
 
 ```text
 /adk-system-designer Design <application> on GCP and ADK. Record in the scope
@@ -55,7 +57,10 @@ none named>), so the plan gains a portability goal.
 
 ## Read the record
 
-Read, noting the ID of every fact you will use: the ticket or plan goal
+Before writing anything, record the design's fingerprint in the ticket's
+Evidence as `design before: <value>`, from `git hash-object
+docs/architecture/<topic>.md` (it works whether or not the file is
+committed). Read, noting the ID of every fact you will use: the ticket or plan goal
 (acceptance items, `touches`, named targets); the design (requirements `R`,
 contracts `C`, decisions `D`, and the scope-gate row "Portability or lock-in concern":
 who raised it, what they fear, targets named); the plan (goals `G`,
@@ -189,19 +194,19 @@ python3 "$SKILL_DIR/scripts/check_portability.py" docs/portability/<topic>.md \
 
 Its docstring lists every rule. Fix every error and review the warnings; a
 pass checks form, not the architecture. Then confirm the design is
-unchanged, with `<base>` the commit the goal started from:
+unchanged: this prints the value recorded as `design before`:
 
 ```bash
-git diff --exit-code <base> -- docs/architecture/<topic>.md
+git hash-object docs/architecture/<topic>.md
 ```
 
 Fill the ticket's Evidence per `adk-engineer` conventions: the assessment
-path; the checker's result line; the design diff result; targets and
+path; the checker's result line; `design before` and `design after` values; targets and
 frameworks assessed; the five dimensions with their outcome; each acceptance
 item tagged `(deliverable)` with what showed it; the unverified claims the
 recommendation rests on; the recommendations awaiting a checkpoint; an
 `actual:` line with the human hours reported. Set the status to
-`verified_local` when the checker passes and the diff is empty; the owner
+`verified_local` when the checker passes and the two values match; the owner
 sets `done` on acceptance.
 
 End with the run prompt for the next ready goal, for example:

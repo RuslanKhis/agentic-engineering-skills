@@ -16,9 +16,11 @@ One section per tagged release, newest first. Pin a release with
   changes no code and no design. The designer asks once whether lock-in is
   a concern (default no, and no changes nothing); a yes adds a portability
   goal, depending only on the design and blocking no build goal, and its
-  ticket. `check_tickets.py` accepts a `(deliverable)` tag on the
-  acceptance items of presentation, governance and portability tickets,
-  and `adk-engineer` routes lock-in and exit-plan requests to the skill.
+  ticket. The plan checks keep it off the primary build's path:
+  `check_schedule.py` reports any goal but a presentation that waits for
+  it, and the phase gate skips it. `check_tickets.py` accepts a
+  `(deliverable)` tag on a portability ticket's acceptance items, and
+  `adk-engineer` routes lock-in and exit-plan requests to the skill.
 
 ## 2026.10.26.1 · 26 October 2026
 

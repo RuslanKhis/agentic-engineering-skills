@@ -10,7 +10,9 @@ respects dependencies, one person doing one goal at a time, and calendar waits.
 When the schedule records goal types (``type: implementation | journey |
 presentation | teardown | discovery | governance | portability``), a
 presentation goal that comes after built work must also come after a journey
-goal; a governance or portability goal is a document, not built work.
+goal; a governance or portability goal is a document, not built work. No goal
+but a presentation may wait for a portability goal: the assessment is optional
+and never holds the primary build.
 
 It also lists, for review without failing, goal IDs a goal's prose names that
 are neither before nor after it, and outside approvals with no matching wait.
@@ -371,6 +373,21 @@ def check_security(path, goals):
     return problems, summary
 
 
+def check_portability(goals):
+    """Only a presentation goal may wait for a portability goal; build goals never do."""
+    kinds = {g["goal"]: g["type"] for g in goals}
+    problems = []
+    for goal in goals:
+        if goal["type"] in ("presentation", "portability"):
+            continue
+        for dep in goal["blocked_by"]:
+            if kinds.get(dep) == "portability":
+                problems.append(f"{goal['goal']} waits for the portability goal {dep}; the assessment never holds "
+                                "the primary build, so remove the dependency (to order one person's work, leave "
+                                "it to the finish estimate)")
+    return problems
+
+
 def check_journey(goals):
     """A presentation goal that presents built work waits for a journey goal that checks the whole path.
 
@@ -627,6 +644,7 @@ def main(argv=None):
                          args.reserve)
         result["problems"] += mismatches
         result["problems"] += check_journey(goals)
+        result["problems"] += check_portability(goals)
         if args.design:
             result["problems"] += check_grid(args.design, goals)
             contract_problems, coverage = check_contracts(args.design, goals)

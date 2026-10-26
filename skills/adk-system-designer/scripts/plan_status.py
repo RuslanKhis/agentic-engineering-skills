@@ -244,8 +244,9 @@ def gate(result: dict, goals: list[dict], phase: str) -> list[str]:
     reasons = []
     phase_goals = [g for g in goals if in_phase(g, phase)]
     for goal in phase_goals:
-        # The gate runs before the review goal, and teardown follows the review.
-        if goal["type"] in ("presentation", "teardown"):
+        # The gate runs before the review goal, and teardown follows the review. A portability
+        # assessment is optional and never holds the primary build's phase.
+        if goal["type"] in ("presentation", "teardown", "portability"):
             continue
         if goal["status"] not in FINISHED:
             reasons.append(f"{goal['goal']} is {goal['status'] or 'without a status'}")
