@@ -230,6 +230,21 @@ class Figures(unittest.TestCase):
                        "Keep the current build and record this exit plan (assumption: a move takes 6 weeks);")
         self.assertEqual(run(text).returncode, 0)
 
+    def test_provider_limit_outside_estimate_sections_passes(self):
+        text = replace("- Identity (D7, C3):", "- Sessions: AgentCore Runtime caps a session at 8 hours. Identity (D7, C3):")
+        self.assertEqual(run(text).returncode, 0, run(text).stdout)
+
+    def test_price_outside_estimate_sections_still_fails(self):
+        result = run(replace("- Identity (D7, C3):", "- Identity costs $400 a month. Identity (D7, C3):"))
+        self.assertIn("figure '$4'", result.stdout)
+
+    def test_m365_is_not_a_measurement(self):
+        text = replace("- Identity (D7, C3):", "- Identity (D7, C3), as with M365 tenants:")
+        self.assertEqual(run(text).returncode, 0, run(text).stdout)
+        result = run(replace("Keep the current build and record this exit plan;",
+                             "Keep the current build and record this exit plan, 6 weeks like M365;"))
+        self.assertIn("figure '6 weeks'", result.stdout)
+
     def test_figures_in_sources_are_ignored(self):
         text = replace("| Cost of avoiding lock-in |", "| Cost of avoiding lock-in (2019 essay, 12 months of data) |")
         self.assertEqual(run(text).returncode, 0)

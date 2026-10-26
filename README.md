@@ -845,7 +845,7 @@ the AWS and Azure equivalents and a small set of other agent frameworks with
 official sources and the dates they were read, and names the boundaries
 worth keeping, what each costs now, the feature differences and the
 migration risks. It ends with a recommended strategy and a phased outline
-whose relative effort (small, medium or large) states its drivers rather
+whose relative effort (small to very large, or unknown) states its drivers rather
 than inventing hours or prices. It writes one document,
 `docs/portability/<topic>.md`, and a helper fails it for a missing section,
 an invented ID, a source without a read date, an unsupported figure, a

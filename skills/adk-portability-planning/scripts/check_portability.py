@@ -22,9 +22,12 @@ template. The checker judges form, not the architecture. Errors (exit 1):
   ``--today``; a Sources table with no rows;
 - a Relative effort row whose effort is not small, medium, large, very large
   or unknown, or whose Drivers cell is empty;
-- a currency figure or a duration estimate (hours, days, weeks, months,
-  sprints, person-days) outside the Sources section on a line that cites no
-  ``M<n>`` record and does not say "assumption";
+- a currency figure outside the Sources section, or a duration estimate
+  (hours, days, weeks, months, sprints, person-days) in a section where
+  estimates are made (summary, strategy, phased outline, relative effort,
+  optional recommendations), on a line that cites no ``M<n>`` record and does
+  not say "assumption"; a provider limit such as "8-hour sessions" elsewhere
+  is a fact with its source, not an estimate;
 - an overpromise ("fully portable", "seamless migration", "drop-in
   replacement", "zero lock-in", "100% portable", "completely cloud-agnostic",
   "no lock-in") on a line without a negation (not, never, n't, cannot, no
@@ -85,6 +88,10 @@ MAX_AGE_DAYS = 180
 ISO = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 ID = re.compile(r"(?<![\w/.-])([RCDGM]\d+)(?![\w-])")
 M_ID = re.compile(r"(?<![\w/.-])M\d+(?![\w-])")
+# Product names shaped like a measurement ID; never read as one.
+NOT_IDS = frozenset({"M365"})
+ESTIMATE_SECTIONS = frozenset({"summary for the reader", "recommended strategy", "phased outline",
+                               "relative effort", "optional recommendations for the current build"})
 URL = re.compile(r"https?://\S+")
 CODE_SPAN = re.compile(r"`[^`\n]*`")
 PLACEHOLDER = re.compile(r"<(?!!--)(?!/?(?:br|sub|sup|b|i|em|strong|code|details|summary|p|a)\b)"
@@ -469,15 +476,18 @@ def check(path: Path, design: Path | None, plan: Path | None, skills_dir: Path, 
             errors.append(f"line {number}: unfilled placeholder {placeholder}")
     for heading, _, lines in sections:
         in_sources = heading.lower() == "sources"
+        estimates = heading.lower() in ESTIMATE_SECTIONS
         for number, raw in lines:
             prose = CODE_SPAN.sub("", raw)
             for placeholder in PLACEHOLDER.findall(prose):
                 errors.append(f"line {number}: unfilled placeholder {placeholder}")
             for ident in ID.findall(URL.sub("", prose)):
-                cited.setdefault(ident, number)
-            if not in_sources and (CURRENCY.search(raw) or DURATION.search(raw)) \
-                    and not M_ID.search(raw) and not ASSUMPTION.search(raw):
-                figure = (CURRENCY.search(raw) or DURATION.search(raw)).group(0)
+                if ident not in NOT_IDS:
+                    cited.setdefault(ident, number)
+            figure = CURRENCY.search(raw) or (DURATION.search(raw) if estimates else None)
+            measured = any(m not in NOT_IDS for m in M_ID.findall(raw))
+            if not in_sources and figure and not measured and not ASSUMPTION.search(raw):
+                figure = figure.group(0)
                 errors.append(f"line {number}: figure {figure!r} needs a plan measurement (M<n>) on the same line "
                               "or the word 'assumption'")
             for match in OVERPROMISE.finditer(raw):

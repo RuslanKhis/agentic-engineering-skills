@@ -2269,7 +2269,7 @@
       "expected_primary": "adk-system-designer",
       "assertions": [
         "The baseline design is still GCP and Google ADK; the concern changes no hosting, framework or model decision.",
-        "Records the concern, who raised it and AWS as the named target in the design's scope-gate table row \"Portability concern\".",
+        "Records the concern, who raised it and AWS as the named target in the design's scope-gate table row \"Portability or lock-in concern\".",
         "Adds one goal of type portability with Primary skill: adk-portability-planning and blocked_by: [], and no build goal depends on it.",
         "Writes its ticket with acceptance items tagged (deliverable) that cite docs/architecture/<topic>.md and docs/plans/<topic>.md, and lists docs/portability/<topic>.md in touches.",
         "Does not write the portability assessment itself during the design conversation.",

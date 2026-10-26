@@ -94,9 +94,9 @@ answered, in one turn, and offer the default so a user can accept it in one word
 - Is it built for a client under a contract, needing a proposal or statement
   of work? (Default: no.) When yes, the statement of work is a goal written
   from this design and plan.
-- Does anyone worry about vendor lock-in: moving to AWS or Azure, another agent
-  framework, or components kept changeable? (Default: no.) When yes, the design
-  stays GCP + ADK and the plan gains a goal owned by `adk-portability-planning`.
+- Is vendor lock-in a concern: moving to AWS or Azure, replacing the agent framework,
+  or keeping chosen components modular? (Default: no.) Ask whether, not which provider.
+  When yes, the design stays GCP + ADK; the plan gains an `adk-portability-planning` goal.
 
 When the user overrides one of these defaults and `adk-engineer` is installed,
 record it as an `overridden-default` field note (its field-feedback reference);

@@ -57,7 +57,7 @@ none named>), so the plan gains a portability goal.
 
 Read, noting the ID of every fact you will use: the ticket or plan goal
 (acceptance items, `touches`, named targets); the design (requirements `R`,
-contracts `C`, decisions `D`, and the scope-gate row "Portability concern":
+contracts `C`, decisions `D`, and the scope-gate row "Portability or lock-in concern":
 who raised it, what they fear, targets named); the plan (goals `G`,
 measurement records `M`; in compact form the plan is the design file); and
 the discovery brief, when it exists, for stakeholders and their calendar.

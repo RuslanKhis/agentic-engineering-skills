@@ -19,7 +19,7 @@ model drafts and code controls every write.
 | People and hours | One developer, one claims lead reviewing |
 | Data touched and effects allowed | Personal claim data; writes to the claims platform only after handler approval |
 | Delivery profile | MVP or pilot: one team, real claims, handler approval on every write |
-| Portability concern | yes: raised by the insurer's CTO (source: CTO, 2026-10-20); group IT may standardise on Azure, and the board asked what AWS would involve. Exit plan wanted, not a second platform. |
+| Portability or lock-in concern | yes: raised by the insurer's CTO (source: CTO, 2026-10-20); group IT may standardise on Azure, and the board asked what AWS would involve. Exit plan wanted, not a second platform. |
 
 ## Requirements and contracts
 
