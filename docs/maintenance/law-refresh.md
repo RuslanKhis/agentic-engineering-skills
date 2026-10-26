@@ -24,6 +24,11 @@ re-verify next.
 - When a known event lands: a commencement date passes, a bill passes, a
   regulator publishes final guidance the reference calls pending.
 
+The workflow `.github/workflows/law-refresh.yml` opens a "Law reference
+refresh: <YYYY-MM>" issue on 1 January, April, July and October (UTC; the
+morning of the 2nd in Sydney) with the table of verified dates. It changes no
+file; run it by hand from the Actions tab with "Run workflow" at any time.
+
 ## How
 
 Run this in Claude Code (or any coding agent with web access) from the
