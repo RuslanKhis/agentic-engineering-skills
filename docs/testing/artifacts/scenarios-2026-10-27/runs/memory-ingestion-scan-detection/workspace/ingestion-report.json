@@ -1,0 +1,55 @@
+{
+  "method": "Rules of qualify_ingestion.py applied by hand to the PDF bytes of pack/*.pdf (no shell available, script not executed). Counts marked approx were counted by hand.",
+  "thresholds": {"min_chars": 200, "min_alnum_ratio": 0.5, "min_vector_ops": 8, "status": "defaults; not calibrated (4 pages only)"},
+  "ocr_executed": false,
+  "visual_review_executed": false,
+  "pages": [
+    {
+      "document": "text-page.pdf", "page": 1,
+      "chars": "approx 800", "alnum_ratio": "approx 0.8", "image_count": 0, "vector_drawing_ops": 0,
+      "density": "text", "table_candidate": false, "drawing_candidate": false,
+      "written_dimensions": ["1.0 m", "4.0 m", "6.0 m"], "scale_statements": [],
+      "route": "text", "text_origin": "native",
+      "notes": "Cites Table 2 of the Design SPD, which is not on this page; see table-page.pdf."
+    },
+    {
+      "document": "scanned-page.pdf", "page": 1,
+      "chars": 34, "alnum_ratio": 0.964, "image_count": 1, "vector_drawing_ops": 0,
+      "density": "low_density", "table_candidate": false, "drawing_candidate": false,
+      "written_dimensions": [], "scale_statements": [],
+      "route": "ocr_or_vision", "text_origin": "native (header only: 'Synthetic Local Plan 2021 - page 7')",
+      "notes": "Text layer is a running header; body is a 120x160 8-bit grey raster drawn at 475x700 pt. Body is UNREAD: no OCR or vision available. Never pass as a text page. Perfect alnum ratio does not rescue it."
+    },
+    {
+      "document": "table-page.pdf", "page": 1,
+      "chars": "approx 205-280 depending on extractor (caption and cell separators)", "image_count": 0, "vector_drawing_ops": 10,
+      "density": "text (sits near the 200 threshold)", "table_candidate": true, "drawing_candidate": false,
+      "written_dimensions": ["400 m"], "scale_statements": [],
+      "route": "both", "text_origin": "native",
+      "notes": "Cells are placed individually; row reconstruction needed (header + 3 rows, 'see note 2' joins 'Note 2: within 400 m of a frequent bus stop the standard reduces by 1 space.'). The '400 m' is a bus-stop distance, not a drawing dimension. Route is 'both' because of the table hint, not the char count."
+    },
+    {
+      "document": "drawing-page.pdf", "page": 1,
+      "chars": "approx 95", "image_count": 0, "vector_drawing_ops": "10 counted by hand; generator inventory says 14 (both >= 8)",
+      "density": "low_density", "table_candidate": false, "drawing_candidate": true,
+      "written_dimensions": ["6.0 m", "10 m"], "scale_statements": ["Scale 1:200"],
+      "route": "both", "text_origin": "native",
+      "notes": "'6.0 m' is a text label beside a dimension line; which element it measures is a visual fact not established here. '10 m' is the scale-bar end label, not a building dimension. No pixel estimate made; any later one must be labelled pixel_estimate with the 1:200 @ A3 assumption."
+    }
+  ],
+  "summary": {
+    "pages": 4,
+    "low_density_pages": [["scanned-page.pdf", 1], ["drawing-page.pdf", 1]],
+    "image_only_pages": [],
+    "table_candidates": [["table-page.pdf", 1]],
+    "drawing_candidates": [["drawing-page.pdf", 1]],
+    "reading_order_anomalies": [],
+    "estimated_visual_pass_images": 3,
+    "text_only_pages": [["text-page.pdf", 1]],
+    "unread_pages": [["scanned-page.pdf", 1]]
+  },
+  "unresolved_evidence": [
+    "scanned-page.pdf p1 body content: never read (no OCR/vision). Treat as unresolved evidence, not as absence of provisions.",
+    "table-page.pdf p1 and drawing-page.pdf p1: routed 'both' but the visual half has not been executed."
+  ]
+}

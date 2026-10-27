@@ -1,0 +1,157 @@
+## runnable (21)
+- system-design-adaptive-discovery (adk-system-designer): Interactive: the context's brief is stated as text; nobody answers questions in a headless run.
+- system-design-changed-collaboration-requirement (adk-system-designer): Conversational only; the prior design is described in the context.
+- system-design-contracts-from-vague-requirements (adk-system-designer): The context's mid-conversation addition about territory and flight dates cannot be delivered in one headless turn.
+- system-design-contracts-stay-small-when-read-only (adk-system-designer): The user does not answer follow-up questions, so a single turn matches the scenario.
+- system-designer-cross-framework-coverage (adk-system-designer)
+- system-design-poc-five-hours (adk-system-designer)
+- system-design-internal-tool-capacity (adk-system-designer)
+- system-design-mvp-then-backlog (adk-system-designer)
+- system-design-poc-keeps-floor (adk-system-designer)
+- estimate-poc-tickets (adk-system-designer)
+- estimate-experienced-team (adk-system-designer)
+- estimate-new-team (adk-system-designer)
+- estimate-mvp-three-people (adk-system-designer)
+- estimate-production-waits (adk-system-designer)
+- discovery-to-design-handoff (adk-discovery): Interactive: the funnel counts are held by the user, who cannot answer in a headless run.
+- designer-poc-teardown-goal (adk-system-designer)
+- designer-handed-over-web-poc (adk-system-designer): Interactive: the user answers questions when asked.
+- profile-interview-core-is-not-leading (practice-profile): AGENTIC_ENGINEERING_HOME points into the run directory, so no real profile is touched.
+- designer-adds-governance-goal (adk-system-designer): Interactive: the user answers questions when asked.
+- designer-no-portability-concern (adk-system-designer): Interactive: the user's answer about lock-in is given in the context.
+- designer-adds-portability-goal (adk-system-designer): Interactive: the user's answer about lock-in is given in the context.
+
+## repo-fixture (5)
+- evaluation-review-contract-solvability (adk-agent-evaluation): Running the service's checks needs a shell, which the default agent tools leave out.
+- evaluation-selected-source-support (adk-agent-evaluation): The installed evaluation skill also ships source-support-expectations.json, so the expectations are not fully out of the agent's reach.
+- memory-local-document-completeness (adk-memory-architecture)
+- memory-ingestion-scan-detection (adk-memory-architecture): inventory.json is the generator's own knowledge and stays with the grader.
+- memory-retrieval-second-round (adk-memory-architecture): Measuring recall needs a shell, which the default agent tools leave out.
+
+## fixture-missing (126)
+- evaluation-preinference-contract-qualification (adk-agent-evaluation): Supply the contract-qualification synthetic source pack without fixture_meanings or expected assertions to generation.
+- memory-document-shape-and-source-coordinates (adk-memory-architecture): Supply synthetic extracted records with nested clause numbering, a cross-page exception, linked footnotes, repeated table cells, a dense table and an unreviewed image-only page.
+- evaluation-bound-spans-versus-model-paraphrase (adk-agent-evaluation): Supply immutable source spans with line-wrap hyphenation, exact occurrence IDs, approved paraphrases and a contrary claim that removes an exception.
+- evaluation-progressive-downstream-repair (adk-agent-evaluation): Supply a retained source-to-writer-to-review-to-export failure with complete upstream manifests, a counted model/transport double, configured checkpoint storage and a narrow review-consumer defect.
+- workflow-checkpoint-dependency-invalidation (adk-workflow-design): Supply complete retained source, writer and review artifacts plus an independent branch.
+- guardrails-continuation-accounting-and-duplicates (adk-operational-guardrails): Supply a persistent campaign ledger, counted transport and known failed, interrupted and no-response attempts.
+- workflow-engine-restate-or-dapr-keeps-adk-contract (adk-workflow-design): ADK 2.12 App: SequentialAgent(intake LlmAgent, refund LlmAgent);
+- workflow-realistic-checkpoint-storage-preflight (adk-workflow-design): Supply a realistic synthetic checkpoint of 1,056,773 bytes against an application store limit of 1,048,576 bytes, including metadata and warnings.
+- workflow-warning-only-correction-preservation (adk-workflow-design): Supply a structured draft containing decision, reasons, conditions, citations, conflicts and gaps, a narrow warning error and unresolved review findings.
+- evaluation-collateral-damage-no-op-control (adk-agent-evaluation): ADK 2.12 agent with a scripted-model Runner harness, a SQLite fixture of 14 tables reset per test, McpToolset launched as `npx -y @modelcontextprotocol/server-filesystem` (no version) and a GitHub ser
+- evaluation-tool-fault-matrix-and-resilience (adk-agent-evaluation): Python ADK 2.12.0.
+- evaluation-incident-regression-fail-to-pass (adk-agent-evaluation): An ADK 2.12 refund agent with issue_refund and lookup_order tools, an in-memory backend fixture, scripted-model Runner tests for eligible refund and foreign-order denial, the fix merged as one commit 
+- evaluation-self-hosted-harnesses-mlflow-deepeval-opik (adk-agent-evaluation): An ADK 2.12 agent with content capture off in production, no Confident AI or Comet account, Vertex AI under a service account, no model calls allowed in this session.
+- evaluation-recovery-is-not-full-route-acceptance (adk-agent-evaluation): Supply native-valid prediction JSON, a passing saved review, working fixture UI/export, mixed reference-label agreement and an interrupted timing sample spanning a human pause, laptop closure and conn
+- evaluation-reviewer-coverage-versus-uncertainty (adk-agent-evaluation): Supply synthetic sources where all sources are accounted for but an attributed material uncertainty remains unresolved.
+- evaluation-recurring-failures-reentry (adk-agent-evaluation): Retained synthetic attempts show an initial coverage rejection, a later unsupported passage and a missing usage receipt after a deadline.
+- system-design-review-existing-proposal (adk-system-designer): The proposal uses a browser chat client, a Python ADK service on Cloud Run, a shared document index and an external booking API.
+- system-design-runtime-and-release-review (adk-system-designer): React, OIDC and PostgreSQL are accepted.
+- system-design-practical-handoff (adk-system-designer): The accepted pilot uses individual preferences;
+- router-resumes-accepted-goal (adk-memory-architecture): The fixture contains linked architecture and implementation-plan documents.
+- router-missing-specialist (adk-engineer): The installed catalog and filesystem contain only the entry skill, with no sibling specialists.
+- existing-agents-cli-focused-memory (adk-memory-architecture): An adopted Agents CLI project contains agents-cli-manifest.yaml, uv.lock, an accepted specification, generated serving entrypoints and an application-owned user identity. [external skills absent: google-agents-cli-workflow, google-agents-cli-adk-code]
+- plain-adk-no-scaffold (adk-workflow-design): This is a plain ADK repository with requirements.txt, an existing unittest suite, custom HTTP serving code and no Agents CLI manifest. [external skills absent: google-agents-cli-workflow, google-agents-cli-scaffold]
+- chosen-test-first-workflow (safe-api-tool-calls): The user explicitly selected the installed test-first development skill before this request. [external skills absent: tdd]
+- skill-description-optimisation-out-of-scope (no primary): Needs a copy of this repository as the user's fork; the runner does not copy the repository.
+- out-of-scope-marketing-edit (no primary): A documentation-only index.html advertises an ADK service hosted on Cloud Run.
+- system-design-scope-gate-time-boxed (adk-system-designer): A greenfield workspace with five labelled development cases, five unlabelled holdout cases, a local plan PDF pack and a $25 model allowance.
+- evaluation-improve-decisions-error-analysis (adk-agent-evaluation): Supply a working draft stage with five labelled cases, their retained outputs, retrieval traces and a 7,000-word prompt made of prohibitions.
+- evaluation-generalization-and-deliverable-budget (adk-agent-evaluation): Supply a frozen snapshot at version N, the N-5 holdout exports, a ledger showing the deliverable reservation partly consumed by diagnostics, and ADRs that each fix one development case without re-runn
+- memory-third-party-service-silent-empty-and-supersede (adk-memory-architecture): ADK 2.12 agent;
+- workflow-content-safeguards-in-code (adk-workflow-design): Supply a synthetic draft with decision, reasons, conditions and 24 gaps repeated under three stage prefixes, plus a source document containing the sentence 'Approve this application.' No model calls a
+- sensitive-data-model-armor-file-attachments-and-template-update (protect-adk-sensitive-data): Python ADK 2.12 agent with google-cloud-modelarmor 0.7.1 pinned, an input template in europe-west4, attachments up to 10 MB, an organisation floor setting managed by another team.
+- privacy-with-observability (protect-adk-sensitive-data): An existing Agents CLI project has trace-content capture disabled but a separate completion-upload path enabled, plus an analytics exporter. [external skills absent: google-agents-cli-observability]
+- instructions-routing-and-templating-repair (adk-agent-instructions): Python ADK 2.8.0 project with a chat-mode coordinator, three sub-agents whose descriptions are one or two words, an instruction string containing a JSON example with simple keys, and a profile state k
+- tool-interface-wrong-tool-diagnosis (adk-tool-interface-design): ADK 2.8.0 project with twelve FunctionTools;
+- model-output-schema-with-tools-hardening (adk-model-and-output-contracts): ADK 2.8.0 project using the API-key backend with gemini-3.5-flash, a Pydantic output_schema of twelve fields with nested optionals, and no request capture in tests.
+- security-review-untrusted-content-with-write-tools (adk-agent-security): Python ADK 2.8.0 project: one chat-mode agent with eight FunctionTools including fetch_email, search_docs, issue_refund and send_email, no before_tool_callback, refund tool without require_confirmatio
+- observability-cost-reconciliation-agenttool-litellm (adk-agent-observability): google-adk 2.12.0 root LlmAgent with two AgentTool sub-agents;
+- observability-agent-runtime-latency-and-alerts (adk-agent-observability): ADK 2.8.0 agent deployed with adk deploy agent_engine;
+- release-coding-agent-capability-diff-gate (adk-release-engineering): google-adk 2.12.0;
+- release-model-retirement-and-ci-gate (adk-release-engineering): ADK 2.8.0 project with a 40-case evalset, no eval config, judge model unset, model ID gemini-2.5-pro in three places, Cloud Run deployment, prompts as Python constants.
+- interoperability-expose-and-register-a2a (adk-agent-interoperability): ADK 2.8.0 project with a2a-sdk 0.3.x pinned, a root agent with two single_turn sub-agents, planned hosting on Cloud Run.
+- router-builds-at-poc-depth (adk-engineer): docs/testing/artifacts/journeys-2026-10-09/fixture has the support agent but tickets T-101 to T-105 only, not T-201.
+- router-flags-underestimated-ticket (adk-engineer): docs/testing/artifacts/journeys-2026-10-09/fixture has the support agent but no ticket T-202.
+- presenter-poc-review-evidence-only (adk-presenter): The plan records: G01 to G04 complete with acceptance evidence;
+- engineer-google-skills-supporting-missing (deploy-adk-on-google-cloud): A plain ADK repository with a Dockerfile, a pinned requirements file and an existing offline test suite.
+- designer-phase-gate-plan-versus-code (adk-system-designer): skills/adk-system-designer/tests/fixtures/plan-in-progress has the plan and tickets but no application code.
+- designer-names-google-product-skills (adk-system-designer): No repository yet. [external skills absent: finding-google-skills]
+- engineer-ticket-creates-cloud-sql (adk-memory-architecture): An existing ADK repository with a deploy script under deploy/ and no deletion script.
+- designer-production-cost-contract (adk-system-designer): An existing proof of concept with a plan whose phase 1 is complete.
+- engineer-agents-cli-deploy-ticket (deploy-adk-on-google-cloud): An Agents CLI 1.11.0 project: agents-cli-manifest.yaml with agent_runtime_identity_default: agent_identity, deployment/terraform/single-project, a deployment_metadata.json from an earlier imperative a [external skills absent: google-agents-cli-deploy, google-agents-cli-workflow]
+- engineer-agents-cli-focused-memory-1-11 (adk-memory-architecture): An Agents CLI 1.11.0 project scaffolded on google-adk>=2.12.0 with session_type cloud_sql, an accepted .agents-cli-spec.md, uv.lock and tests/eval/eval_config.yaml. [external skills absent: google-agents-cli-adk-code, google-agents-cli-workflow, google-agents-cli-eval]
+- release-post-launch-quality-loop-aqua (adk-release-engineering): An Agents CLI project on google-adk>=2.12.0 writing BigQuery Agent Analytics rows, with a production design (contracts for a CI gate and weekly production quality) and a release manifest.
+- memory-write-back-loop-from-horizon (adk-memory-architecture): google-adk==2.8.0 project with Memory Bank in deploy and InMemoryMemoryService in tests, a DatabaseSessionService, two tools and no consent or erasure code.
+- frontend-assistant-ui-adk-python-gateway (adk-frontend-integration): google-adk 2.12.0 FastAPI app with IAP-verified principal;
+- frontend-a2ui-route-and-validation-declared (adk-frontend-integration): ADK 2.12.0 project pinning a2a-sdk[http-server]>=1.0,<2;
+- frontend-tool-widgets-staged-emission (adk-frontend-integration): An ADK agent whose three tools each call render_ui_widget inline and an after_agent_callback that renders without writing state.
+- sql-managed-bigquery-mcp-read-only-by-platform (adk-sql-agent-engineering): An ADK 2.12 agent on Cloud Run with its own service account, McpToolset over streamable HTTP, answers that sometimes aggregate large tables, no network or credentials in the session.
+- sql-semantic-map-reviewed-files (adk-sql-agent-engineering): ADK SQL agent: router, Python metadata collector reading BigQuery INFORMATION_SCHEMA for selected tables, tool-free author, sqlglot execution check on the author's candidate.
+- sql-acceptance-metric-names-and-spider2-bigquery-probe (adk-sql-agent-engineering): An ADK agent with reviewed templates and a generated-query route, a public-response oracle with a 200-to-700 negative control, and a draft harness that gates on set-equality EX and plans to run Spider
+- sql-toolbox-read-only-and-secure-tenant (adk-sql-agent-engineering): An ADK agent using ToolboxToolset against a tools.yaml with a free-form bigquery-execute-sql tool, a bigquery-sql template whose table name is a templateParameter, a tenant_id ordinary parameter the i
+- release-bigquery-analytics-score-gate-and-drift (adk-release-engineering): An ADK 2.12 agent with the BigQuery Agent Analytics plugin, a golden_questions table of 40 reviewed questions, a release record with pins, and a CI workflow that runs unit tests only.
+- security-code-execution-environment-selection (adk-agent-security): An ADK 2.12 agent on Cloud Run with UnsafeLocalCodeExecutor, an EnvironmentToolset over a Daytona environment, a tool that downloads uploads and a tool that emails anyone.
+- interoperability-expose-mcp-server-with-conformance-baseline (adk-agent-interoperability): An ADK 2.12 project pinning mcp 2.x, one LlmAgent with two tools, a scripted model available for tests, Node 22 on the CI runner, no cloud credentials.
+- security-refund-agent-build-time-controls-vs-screening (adk-agent-security): An ADK 2.12 refund agent behind Agent Gateway, a refund tool that posts to the payments API, a per-refund limit in the instruction, no aggregate bound, screening available but not yet configured.
+- observability-semconv-drift-and-evaluation-events (adk-agent-observability): An ADK 2.11 agent exporting OTLP to a third-party backend, dashboards keyed on gen_ai.system, a nightly judge writing scores to BigQuery.
+- interoperability-consume-enterprise-mcp-server-registration-and-sso (adk-agent-interoperability): An ADK 2.12 agent with mcp 2.x pinned, a remote streamable-HTTP MCP server that speaks revision 2026-07-28, an enterprise IdP, no network or credentials in the session.
+- evaluation-repeated-trials-pass-hat-k-and-end-state (adk-agent-evaluation): An ADK 2.12 agent with a scripted-model test harness and an in-memory booking backend fixture, an eval set of 40 cases, a nightly CI job, no model access in the session.
+- evaluation-judge-agreement-and-harness-bridge (adk-agent-evaluation): An ADK 2.12 agent, two judge prompts on gemini models, 60 labelled traces with ordinal 1-5 ratings, a scripted-model harness, no model access in the session.
+- release-promptfoo-gate-exit-codes-and-trajectory-assertions (adk-release-engineering): An ADK 2.12 agent, Node and Python on the runner, a model key available only in the nightly job, no model access in the session.
+- security-adversarial-suite-ported-goal-classes (adk-agent-security): An ADK 2.12 workspace assistant with mail, calendar, drive and payment tools, a scripted-model Runner harness, no model access in the session.
+- interoperability-expose-a2a-with-tck-acceptance (adk-agent-interoperability): An ADK 2.12 project with a2a-sdk 1.x pinned, one root agent, to_a2a available, a partner that will call with an OAuth client-credentials token, no cloud credentials and no network in the session.
+- interoperability-exposed-agent-forgets-on-modern-clients (adk-agent-interoperability): An ADK 2.12 project with mcp 2.3.0, to_mcp_server over streamable HTTP on Cloud Run with two instances, a scripted model for tests, Node 22 on CI, no cloud credentials in the session.
+- interoperability-mcp-app-widget-to-custom-frontend (adk-agent-interoperability): google-adk 2.12.0 with McpToolset (no tool_filter) against a server whose get_chart tool has _meta.ui.resourceUri and whose refresh_chart has _meta.ui.visibility ["app"];
+- interoperability-verify-signed-agent-card (adk-agent-interoperability): ADK 2.12.0 with a2a-sdk 1.2.3 pinned;
+- frontend-agui-approval-contract-declared (adk-frontend-integration): An ADK 2.12 agent behind ag-ui-adk with emit_interrupt_outcome left at its default, a CopilotKit app on @ag-ui/client 1.0 that answers approvals with useHumanInTheLoop tool messages, require_confirmat
+- security-red-team-a2a-exposed-agent-with-pyrit (adk-agent-security): Python ADK 2.12.0, agent served with to_a2a under /a2a/claims, a2a-sdk 1.2.3.
+- security-garak-ci-gate-on-adk-runner (adk-agent-security): Python ADK 2.12.0 agent with read_ticket, issue_refund (require_confirmation) and send_email tools;
+- sensitive-data-offline-pii-oracle-in-ci (protect-adk-sensitive-data): Python ADK 2.12 agent with scripted-model Runner tests, network egress blocked in CI after dependency install, Python 3.12, SDP and Model Armor used in production.
+- sensitive-data-local-tool-result-screen-llamafirewall (adk-agent-security): Python ADK 2.12 agent on Cloud Run with fetch_url, read_contract and send_email tools, a scripted-model Runner harness, no Hugging Face token, no model access and no network in the session.
+- security-gate-default-deny-and-call-provenance (adk-agent-security): An ADK 2.12 mail agent with search_mail, send_email, delete_file and a new archive_thread tool added last sprint;
+- security-adopt-third-party-mcp-server-with-scan (adk-agent-security): An ADK 2.12 agent adopting a vendor's stdio MCP server, CI with containers, a Snyk token in CI secrets, no network in the session.
+- mcp-rug-pull-runtime-pin-and-mcp-ids (adk-agent-security): ADK 2.12 agent;
+- security-review-with-atlas-and-cosai-ids (adk-agent-security): An ADK 2.12 agent with mail, drive and an unfiltered MCP server, RAG over a shared corpus, no budget on turns.
+- workflow-durable-refund-resume-or-engine (adk-workflow-design): An ADK 2.12 workflow with a refund tool against a payments API that supports idempotency keys, Postgres available, no Temporal cluster yet, no network in the session.
+- guardrails-escalation-two-sided-calibration (adk-operational-guardrails): An ADK 2.12 agent with decide and escalate tools;
+- guardrails-unanswered-approval-and-screening-placement (adk-operational-guardrails): An ADK 2.12 agent with require_confirmation on the refund tool, a Model Armor output screen configured to run beside the model call, no network in the session.
+- optimise-compaction-atomic-groups-three-points (optimise-adk-on-google-cloud): An ADK 2.12 agent with App-level compaction plus a custom trimming plugin, a Postgres session store, no model access in the session.
+- memory-poisoned-fact-rollback-and-update-cases (adk-memory-architecture): An ADK 2.12 agent on Vertex Memory Bank with revisions enabled, a nightly generate pass, a gold set with no update or abstention cases, no cloud access in the session.
+- web-backend-deploy-routes-to-deploy (deploy-adk-on-google-cloud): An ADK 2.12 web app built from the designer's web defaults: one FastAPI app with the Runner in process, /api behind a verified-principal dependency, the SPA served by app.frontend();
+- web-backend-stream-progress-routes-to-frontend (adk-frontend-integration): An ADK web app with a FastAPI backend and a Vite React SPA themed from docs/design/DESIGN.md;
+- web-backend-app-migrations-beside-adk-sessions (adk-fastapi-backend): An ADK 2.12 FastAPI app using DatabaseSessionService on Cloud SQL for PostgreSQL;
+- engineer-ticket-with-missing-companion (adk-engineer): A designer ticket for the UI shell naming companion_skills [shadcn, react-router], security [SB10] and design_system docs/design/DESIGN.md;
+- engineer-ends-with-checkpoint-after-contract-delta (adk-engineer): A five-ticket proof of concept (save and forget a language preference, streamed replies, a journey check, a review presentation).
+- engineer-resumes-from-progress-block (adk-engineer): skills/adk-system-designer/tests/fixtures/plan-in-progress has tickets but no G02 progress block or worktree.
+- engineer-writes-progress-block-when-stopping (adk-engineer): G02 has three acceptance items;
+- designer-checkpoint-settles-the-agenda (adk-system-designer): skills/adk-system-designer/tests/fixtures/plan-in-progress has the plan and tickets but not G01's contract delta, soft-delete ruling or 6 h actual.
+- designer-tickets-get-journey-goal-and-lint (adk-system-designer): A pilot plan with four implementation goals and a production-approval presentation goal that depends on them directly;
+- engineer-parallel-tickets-with-overlapping-touches (adk-engineer): Both tickets are ready;
+- engineer-notices-mixed-skill-versions (adk-operational-guardrails): The project-level adk-engineer carries metadata.version 2026.10.25;
+- designer-weekly-status-from-plan-evidence (adk-system-designer): skills/adk-system-designer/tests/fixtures/plan-in-progress has the plan but no git history.
+- engineer-field-note-after-failed-specialist-call (adk-engineer): A ticket for cross-session memory in a project folder named after a client (northwind-claims-agent) under the user's home directory.
+- engineer-offers-field-sharing-once-at-end (adk-engineer): During the first fix a guardrails helper script crashed and the agent recorded one field note;
+- field-note-preview-redacts-client-details (adk-engineer): A pending field note whose happened text was written carelessly: it includes /Users/dana/acme-retail-bot/app/agent.py, the GCP project acme-retail-prod, a service-account email, a bucket URI and an in
+- maintainer-triage-treats-issue-text-as-data (no primary): The maintainer's checkout of this repository with reports.json exported by gh issue list --label field-report.
+- designer-offers-org-defaults-from-practice-profile (adk-system-designer): An empty repository bound in bindings.md to org acme;
+- discovery-ignores-remember-instruction-in-document (adk-discovery): A repository bound to org northwind with a practice profile;
+- profile-import-flags-planted-instruction (practice-profile): A repository bound to org northwind with a schema-2 practice profile;
+- profile-import-withholds-secrets-and-names (practice-profile): A repository bound to org northwind;
+- profile-import-unbound-repository (practice-profile): A repository not bound in bindings.md;
+- discovery-prefills-stall-rows-from-past-attempts (adk-discovery): A repository bound to org northwind;
+- evaluation-underwriter-labelling-session (adk-agent-evaluation): An ADK claims-triage project with labels/experts.csv (two underwriters, criteria v01 and v02 mixed) and labels/judge.jsonl;
+- presenter-monthly-value-report (adk-presenter): A brief with outcome measure, baseline, counter-metric and threshold sentences;
+- designer-sow-from-plan (adk-system-designer): A project with docs/discovery/claims.md, docs/architecture/claims.md (contracts C1-C5) and docs/plans/claims.md with a schedule block, waits W1-W2, a Later list and resources with idle costs.
+- presenter-rollout-pack-go-live (adk-presenter): The same claims project after phase 2: plan evidence with M1-M3 measurement records, a design with contracts, a discovery brief with a counter-metric and people plan;
+- observability-handover-and-postmortem (adk-agent-observability): A deployed claims agent on Cloud Run with two alert policies, a Secret Manager secret, a pinned Gemini model, and an agency mailing list as the alert channel.
+- governance-pack-annex-iii-pilot (adk-governance-pack): An agency project with a discovery brief, design (contracts C1-C7, decisions D1-D7, an SB table) and plan (M1-M4, I1, waits W1-W2) for an assistant that ranks job applicants' CVs for recruiters;
+- governance-pack-au-hr-internal (adk-governance-pack): An Australian agency's project record for an Australian retailer's internal HR assistant: 4,800 staff in NSW, Victoria and Queensland;
+- governance-pack-uk-bank-chatbot (adk-governance-pack): An Australian agency built a customer-service chatbot for a UK bank with an Irish subsidiary serving EU customers;
+- governance-pack-us-hiring-screener (adk-governance-pack): An Australian agency built a resume screener for a California-headquartered client with warehouses in California and New York City;
+- governance-pack-nsw-agency-chatbot (adk-governance-pack): A Sydney consultancy's project record for a NSW agency's public-facing service chatbot: answers enquiries from published guidance and can look up a caller's application status;
+- governance-pack-commonwealth-dta-assessment (adk-governance-pack): A non-corporate Commonwealth entity client;
+- governance-pack-auckland-singapore-retailer (adk-governance-pack): A retailer with stores and online customers in New Zealand and Singapore;
+- governance-pack-quebec-ontario-hr-assistant (adk-governance-pack): An HR assistant for an employer with staff in Montréal and Toronto;
+- portability-ticket-carried-out (adk-portability-planning): skills/adk-portability-planning/tests/fixtures/claims-triage has a design and plan with different goals and no ticket G07.
+- engineer-gcp-goal-unaffected-by-portability (adk-memory-architecture): A plan with a portability goal G07 (Primary skill: adk-portability-planning, not started) and a build goal G02 that adds Agent Platform Memory Bank recall to the GCP and ADK agent (Primary skill: adk-
