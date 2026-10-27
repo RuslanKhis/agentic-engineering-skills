@@ -18,7 +18,7 @@ fake, so it can return exactly one condition per test.
 | Case | Fake returns | Assert on the agent side |
 | --- | --- | --- |
 | Normal | `tools/list` matching the committed manifest; `tools/call` with `content` and `structuredContent` | Declared tools equal the manifest (names, hashes); result reaches the model as sent |
-| Rug pull | A changed description or schema for one tool | `mcp_tool_inventory.py --diff --fail-on-diff` reports `rug_pull_signal` and exits 3; the startup or test check fails |
+| Rug pull | A changed description or schema for one tool | `mcp_tool_inventory.py --diff --fail-on-diff` reports `rug_pull_signal` and exits 1; the startup or test check fails |
 | `isError` result | `{"isError": true, "content": [...]}` | Tool returns the error to the model without raising; parent does not retry a write |
 | Server down | Connection refused | `ConnectionError` surfaces as a tool error dict (graceful flag on); agent answers without the tool. On 2.12.0 a stdio server that fails to start makes the toolset contribute no tools at all (the traceback is only logged), so the model sees no such tool; assert the agent's tool list as well as its answer (observed in an offline trial, 2026-10-24) |
 | Server restarted between calls | Fake restarts, old session invalid | Second call succeeds on your version, or you have documented the 2.8.0 limit ([mcp-consumption](mcp-consumption.md)) |

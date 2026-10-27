@@ -185,7 +185,7 @@ needs (`adk-tool-interface-design` covers the schema), and pin its hash.
   tiered and gated ([agency and output](agency-and-output.md)).
 - Declarations dumped, read, hashed and committed as the interoperability
   skill's `mcp_tool_inventory.py --out` manifest, the one pin format both
-  skills use; a test runs `--diff --fail-on-diff` against it (exit 3 on a
+  skills use; a test runs `--diff --fail-on-diff` against it (exit 1 on a
   changed definition; `--diff` alone exits 0), or compares the same hashes
   from `get_tools` when the SDK is present.
 - When a scan is mandated or chosen: the pinned scan job in CI with its exit

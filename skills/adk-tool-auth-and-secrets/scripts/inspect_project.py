@@ -4,6 +4,10 @@
 Uses only Python 3.11's standard library. Project code is parsed, never imported.
 No environment files, payload files, symlinks, network, subprocesses or plugins
 are used. Output intentionally omits source, arbitrary literals and raw errors.
+
+Exit codes: 0 inspected; 1 the --expect-adk check failed; 2 invalid arguments or
+project directory; 3 inspection incomplete (see diagnostics; 3 wins over 1, since
+unread files can hide the pins).
 """
 from __future__ import annotations
 
@@ -311,7 +315,7 @@ class Inspector:
 
     def result(self, expected: str | None) -> tuple[dict, int]:
         expectation = {"requested": expected is not None, "result": "not_requested"}
-        exit_code = 2 if self.diagnostics else 0
+        exit_code = 3 if self.diagnostics else 0
         if expected is not None:
             adk = [item for item in self.dependencies if item["dependency"] == "google-adk"]
             unresolved = any(item["code"] in {"UNRESOLVED_REQUIREMENT_DIRECTIVE",
@@ -321,7 +325,7 @@ class Inspector:
                                        and item["numeric_versions"] == [expected] for item in adk)
             expectation["result"] = "static_pins_match" if matches else "missing_different_or_unproven"
             if not matches and exit_code == 0:
-                exit_code = 3
+                exit_code = 1
         report = {
             "schema_version": 1,
             "inspection": "read_only_static_inventory",
@@ -359,18 +363,39 @@ def positive_integer(value: str) -> int:
     return result
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = SafeParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("project_root", help="Project directory; target code is never executed.")
-    parser.add_argument("--dry-run", action="store_true", help="Equivalent to normal read-only inspection.")
+    parser.add_argument("--project", help="Project directory to inspect; target code is never executed.")
+    parser.add_argument("legacy_project", nargs="?", help=argparse.SUPPRESS)
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     parser.add_argument("--max-files", type=positive_integer, default=250)
     parser.add_argument("--max-file-bytes", type=positive_integer, default=262_144)
     parser.add_argument("--max-total-bytes", type=positive_integer, default=4_194_304)
-    parser.add_argument("--expect-adk", metavar="X.Y.Z", help="Require every observed ADK constraint to pin this version; exit 3 if missing, different or unproven.")
+    parser.add_argument("--expect-adk", metavar="X.Y.Z", help="Require every observed ADK constraint to pin this version; exit 1 if missing, different or unproven.")
     args = parser.parse_args(argv)
+    if args.legacy_project is not None:
+        if args.project is not None:
+            parser.error("give the project directory once, with --project")
+        print(f"{parser.prog}: a positional project directory is deprecated; use --project", file=sys.stderr)
+        args.project = args.legacy_project
+    if args.project is None:
+        parser.error("the following arguments are required: --project")
     if args.max_files > 10_000 or (args.expect_adk is not None and not EXPECT_VERSION.fullmatch(args.expect_adk)):
         parser.error("invalid bounds or version")
-    root = Path(args.project_root)
+    root = Path(args.project)
     try:
         valid = not root.is_symlink() and root.is_dir()
         root = root.resolve()

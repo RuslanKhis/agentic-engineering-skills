@@ -28,8 +28,8 @@ provenance, never runtime dependencies.
    [project inspector](scripts/inspect_project.py) (its baseline gate records
    ADK 2.8.0; `baseline_gate_passed: false` on a newer pin means "not the
    recorded baseline", so read the dated 2.12 notes in the references rather
-   than treating it as a project failure) accepts `--root`, `--mode`
-   (`auto`, `application`, `cloud-run`, `agent-runtime`, `gke`) and `--dry-run`. It reads bounded
+   than treating it as a project failure) accepts `--project`, `--mode`
+   (`auto`, `application`, `cloud-run`, `agent-runtime`, `gke`) and `--require-baseline`. It reads bounded
    dependency manifests and reports configuration presence; it does not import
    application code, read `.env` contents or execute cloud commands. Manually
    inspect its uncovered files and lock resolution. Read

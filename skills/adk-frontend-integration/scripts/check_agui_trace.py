@@ -28,11 +28,12 @@ successful protocol run need not contain assistant text or a tool call.
 
 Output contains counts and fixed diagnostic codes, never input paths, IDs,
 arguments, results, error messages or other trace content. No files are written.
---dry-run performs the same read-only validation. Limits are enforced even if
+--dry-run is a deprecated no-op kept for old commands. Limits are enforced even if
 the input grows while being read. Only regular files are accepted.
 
-Exit codes: 0 valid and expected outcome; 1 invalid/unsupported trace;
-2 argument, file, encoding or size-limit error; 3 valid but unexpected outcome.
+Exit codes: 0 valid and expected outcome; 1 invalid/unsupported trace or a
+valid trace with an unexpected outcome; 2 argument, file, encoding or
+size-limit error.
 --expect-outcome success (default) requires all runs to finish successfully;
 error requires all runs to end in RUN_ERROR; either accepts both outcomes.
 """
@@ -332,11 +333,24 @@ def positive_limit(ceiling):
     return parse
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv=None):
     try:
         parser = SafeParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
         parser.add_argument("trace", type=Path, help="UTF-8 NDJSON regular file")
-        parser.add_argument("--dry-run", action="store_true", help="same read-only validation; never writes")
+        parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
         parser.add_argument("--expect-outcome", choices=("success", "error", "either"), default="success",
                             help="expected terminal outcome for every run (default: success)")
         parser.add_argument("--max-bytes", type=positive_limit(HARD_MAX_BYTES), default=DEFAULT_MAX_BYTES,
@@ -349,7 +363,7 @@ def main(argv=None):
                       or args.expect_outcome == "error" and counts["successful_runs"] > 0)
         print(json.dumps({"status": "outcome_mismatch" if unexpected else "valid",
                           "scope": "explicit_backend_tool_runs", **counts}, sort_keys=True))
-        return 3 if unexpected else 0
+        return 1 if unexpected else 0
     except TraceError as error:
         print(json.dumps({"status": "input_error" if error.exit_code == 2 else "invalid",
                           "code": error.code, "event": error.event}, sort_keys=True))

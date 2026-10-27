@@ -16,6 +16,7 @@ import os
 from pathlib import Path
 import re
 import stat
+import sys
 
 
 EXCLUDED = {".git", ".hg", ".svn", ".venv", "venv", "env", "node_modules",
@@ -579,11 +580,25 @@ class Lint:
         self.result["issues"].sort(key=lambda item: json.dumps(item, sort_keys=True))
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
         epilog="Reads bounded Python source and prompts/<agent>/instruction.md files; skips secrets, "
-               "dependency directories and symlinks. Findings direct review; they are not a quality verdict.")
+               "dependency directories and symlinks. Findings direct review; they are not a quality verdict."
+               " Exit 0: complete scan; 2: bad arguments; 3: partial scan.")
     parser.add_argument("--project", required=True, help="project directory to inspect without executing code")
     parser.add_argument("--prompt-file", action="append", default=[], metavar="PATH",
                         help="additional Markdown or text instruction file to lint (repeatable)")
@@ -591,7 +606,7 @@ def main():
                         help="comma-separated session state keys the application guarantees (prefixes allowed)")
     parser.add_argument("--max-words", type=positive, default=1000,
                         help="instruction word budget before instruction_over_budget (default: 1000)")
-    parser.add_argument("--dry-run", action="store_true", help="perform the same read-only scan and report no changes")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     parser.add_argument("--max-files", type=positive, default=500, help="maximum eligible files (default: 500)")
     parser.add_argument("--max-entries", type=positive, default=10000,
                         help="stop at this total directory-entry count; reaching the cap is partial (default: 10000)")
@@ -623,7 +638,7 @@ def main():
         lint.inspect_prompt(path, relative, path.parent.name if path.name == "instruction.md" else path.stem)
     lint.finish()
     print(json.dumps(lint.result, indent=2, sort_keys=True))
-    return 1 if lint.result["partial"] else 0
+    return 3 if lint.result["partial"] else 0
 
 
 if __name__ == "__main__":

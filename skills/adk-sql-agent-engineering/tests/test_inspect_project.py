@@ -65,7 +65,7 @@ class InspectorTests(unittest.TestCase):
         self.write("pnpm-lock.yaml", "PRIVATE_REGISTRY_TOKEN")
         self.write("src/application.py", "raise RuntimeError('Project code must never run')\n")
         before = self.snapshot()
-        _, first, result = self.run_cli()
+        code, first, result = self.run_cli()
         _, second, _ = self.run_cli()
         self.assertEqual(first, second)
         self.assertEqual(before, self.snapshot())
@@ -73,6 +73,7 @@ class InspectorTests(unittest.TestCase):
         self.assertNotIn("DO_NOT_PARSE", first)
         self.assertNotIn("PRIVATE_REGISTRY", first)
         self.assertIn({"code": "lock_contents_not_parsed", "file": "poetry.lock"}, result["incompleteness"])
+        self.assertEqual(code, 0)  # an unparsed lockfile is a scope note, not an unread file
 
     def test_no_secret_values_or_direct_urls_echoed(self):
         self.write(".env", "CLOUD_TOKEN=ACTUAL_SECRET_DO_NOT_READ")
@@ -123,8 +124,9 @@ class InspectorTests(unittest.TestCase):
         for index in range(6):
             self.write(f"file{index}.py", "pass")
         with patch.object(inspector, "MAX_FILES", 2):
-            _, _, result = self.run_cli()
+            code, _, result = self.run_cli()
         self.assertIn({"code": "file_count_limit"}, result["incompleteness"])
+        self.assertEqual(code, 3)
         self.assertEqual(len(result["files"]), 2)
         with patch.object(inspector, "MAX_ENTRIES", 2):
             _, _, result = self.run_cli()
@@ -171,7 +173,7 @@ pydantic = {version="2.13.5", markers="PRIVATE_MARKER_SECRET"}
             with self.subTest(reason=reason):
                 self.write("requirements.txt", declaration)
                 code, raw, result = self.run_cli("--expect-adk", "2.8.0")
-                self.assertEqual(code, 3)
+                self.assertEqual(code, 1)
                 self.assertIn(reason, result["adk_gate"]["reasons"])
                 self.assertNotIn("PRIVATE_MARKER", raw)
 
@@ -185,7 +187,7 @@ pydantic = {version="2.13.5", markers="PRIVATE_MARKER_SECRET"}
                     context = patch.object(inspector.importlib.metadata, "version", return_value=value)
                 with context:
                     code, raw, result = self.run_cli("--expect-adk", "2.8.0")
-                self.assertEqual(code, 3)
+                self.assertEqual(code, 1)
                 self.assertNotIn("PRIVATE_", raw)
                 self.assertEqual(result["adk_gate"]["status"], "FAIL")
 

@@ -23,10 +23,10 @@ This skill complements Google's `agents-cli` deploy skill (three-stage pipeline,
 3. Run the inventory helper with an available Python 3.11+ interpreter after resolving `SKILL_DIR` to this skill's directory. It reads source and manifests only; it never imports the project, calls a provider or prints prompt text (hashes only).
 
 ```bash
-python "$SKILL_DIR/scripts/inventory_release_refs.py" --project . --dry-run
+python "$SKILL_DIR/scripts/inventory_release_refs.py" --project .
 ```
 
-The output is a release-manifest skeleton (components with version, hash or `unknown`) plus signals: judge model unset, set to `gemini-2.5-flash` or set to an alias (`JudgeModelOptions.judge_model` defaults to `gemini-2.5-flash` in 2.8.0, a model Google now serves only to prior users), alias model IDs, dynamic prompts, `latest` secret versions, legacy `.test.json` eval files, eval sets without a config, eval usage in tests, and deploy commands present. Exit 1 means a partial scan; fill `unknown` fields by hand. The helper reads ADK's own eval assets (`*.evalset.json`, `*.test.json`, `test_config.json`); an Agents CLI project's `tests/eval/eval_config.yaml` and `tests/eval/datasets/` are listed in the manifest by hand with their hashes. The sibling `audit_model_config.py` in adk-model-and-output-contracts owns lifecycle status; pass its table with `--lifecycle` when a status column is wanted.
+The output is a release-manifest skeleton (components with version, hash or `unknown`) plus signals: judge model unset, set to `gemini-2.5-flash` or set to an alias (`JudgeModelOptions.judge_model` defaults to `gemini-2.5-flash` in 2.8.0, a model Google now serves only to prior users), alias model IDs, dynamic prompts, `latest` secret versions, legacy `.test.json` eval files, eval sets without a config, eval usage in tests, and deploy commands present. Exit 3 means a partial scan; fill `unknown` fields by hand. The helper reads ADK's own eval assets (`*.evalset.json`, `*.test.json`, `test_config.json`); an Agents CLI project's `tests/eval/eval_config.yaml` and `tests/eval/datasets/` are listed in the manifest by hand with their hashes. The sibling `audit_model_config.py` in adk-model-and-output-contracts owns lifecycle status; pass its table with `--lifecycle` when a status column is wanted.
 
 4. Note who owns what: who edits prompts, who deploys code, who approves traffic changes, who pays for eval runs. Ownership decides git versus registry ([versioning](references/versioning.md)) and the approval points below.
 

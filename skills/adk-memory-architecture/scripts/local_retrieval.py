@@ -370,7 +370,7 @@ def main(argv: list[str] | None = None) -> int:
             output["irrelevant_hits"] = irrelevant_hits(fixture["questions"], results)
     except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
         print(f"invalid input: {exc}", file=sys.stderr)
-        return 1
+        return 2
     print(json.dumps(output, indent=2))
     return 0
 

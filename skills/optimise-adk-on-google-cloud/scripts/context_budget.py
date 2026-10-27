@@ -305,17 +305,29 @@ def positive_int(value):
     return number
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv=None):
     parser = Parser(description=__doc__, epilog=(
         "Input: a saved session export (JSON object with an events list, a JSON "
         "event array, or JSONL events), up to 16 MiB/5000 events. Exit 0: "
-        "inspected; 1: partial or malformed input; 2: invalid arguments. Output "
+        "inspected; 2: invalid arguments or malformed input; 3: partial (items skipped). Output "
         "contains counts, byte sizes, tool names and identifiers only."))
     parser.add_argument("--session", required=True, help="Saved session export path.")
     parser.add_argument("--max-result-bytes", type=positive_int, default=DEFAULT_MAX_RESULT_BYTES,
                         help="Flag function responses whose encoded size exceeds this (default 20000).")
-    parser.add_argument("--dry-run", action="store_true",
-                        help="Explicit synonym for the always read-only inspection.")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     args = parser.parse_args(argv)
     try:
         events, source_format = load_events(read_bytes(args.session, MAX_BYTES))
@@ -323,10 +335,10 @@ def main(argv=None):
     except (InvalidInput, RecursionError, OverflowError):
         print(json.dumps({"verdict": "MALFORMED", "reason": "invalid_or_unsupported_input",
                           "network_calls": 0, "writes": 0}))
-        return 1
+        return 2
     result["source_format"] = source_format
     print(json.dumps(result, sort_keys=True))
-    return 0 if result["verdict"] == "INSPECTED" else 1
+    return 0 if result["verdict"] == "INSPECTED" else 3
 
 
 if __name__ == "__main__":

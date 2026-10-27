@@ -14,9 +14,9 @@ or markers (a labelled heuristic, never a verdict).
 
 Read-only toward the server: it never calls ``tools/call`` or reads a resource.
 Non-loopback URLs are refused unless ``--allow-remote`` is given. Exit 0 when
-every source was inspected, 1 when at least one source failed (``partial``),
-2 for bad arguments, and, with ``--fail-on-diff``, 3 when the diff reports a
-rug-pull signal.
+every source was inspected, 1 with ``--fail-on-diff`` when the diff reports a
+rug-pull signal, 2 for bad arguments, and 3 when at least one source failed
+(``partial``).
 """
 
 from __future__ import annotations
@@ -656,7 +656,7 @@ def main(argv=None) -> int:
     parser.add_argument("--out", type=Path, metavar="MANIFEST", help="write the pinned manifest JSON here")
     parser.add_argument("--diff", type=Path, metavar="PRIOR_MANIFEST", help="compare against a prior manifest")
     parser.add_argument("--fail-on-diff", action="store_true",
-                        help="exit 3 when --diff reports a rug-pull signal (for CI)")
+                        help="exit 1 when --diff reports a rug-pull signal (for CI)")
     parser.add_argument("--allow-remote", action="store_true", help="permit non-loopback --url hosts")
     parser.add_argument("--timeout", type=positive, default=20.0, help="seconds per request (default: 20)")
     parser.add_argument("--max-bytes", type=int, default=4_000_000, help="maximum response size (default: 4000000)")
@@ -716,9 +716,9 @@ def main(argv=None) -> int:
                   "ADK 2.8.0 pins mcp>=1.24,<2 and speaks the initialize handshake; 2.12.0 runs on mcp 2.x and speaks 2026-07-28 only with ADK_ENABLE_MCP_MODERN_PROTOCOL=1. A server that rejects initialize is listed through server/discover at 2026-07-28 (checked against an mcp 2.3.0 server on 2026-10-24)."],
     }
     print(json.dumps(result, indent=2, sort_keys=True))
-    if result["partial"]:
-        return 1
     if args.fail_on_diff and result["diff"] is not None and result["diff"]["rug_pull_signal"]:
+        return 1
+    if result["partial"]:
         return 3
     return 0
 

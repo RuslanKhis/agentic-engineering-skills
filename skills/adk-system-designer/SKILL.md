@@ -450,7 +450,7 @@ Separate discovery questions from ready implementation; an unknown cloud guarant
 not block independent local work. When the user wants tickets, write one file
 per goal of the phase from the [ticket template](assets/ticket-template.md) under
 `docs/tickets/<topic>/`, with sibling dependencies in `blocked_by`; the plan
-stays the source of decisions. Then run `scripts/check_tickets.py --tickets
+stays the source of decisions. Then run `python3 "$SKILL_DIR/scripts/check_tickets.py" --tickets
 docs/tickets/<topic>` from the project root and fix every error before
 handing over: it catches unfilled placeholders, contract and rule IDs the
 design lacks, acceptance items that prove nothing, skills that are not

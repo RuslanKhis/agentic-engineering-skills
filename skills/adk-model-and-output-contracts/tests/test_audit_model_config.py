@@ -33,7 +33,7 @@ class AuditTests(unittest.TestCase):
 
     def scan(self, *args):
         result = self.run_cli(*args)
-        self.assertIn(result.returncode, (0, 1), result.stderr)
+        self.assertIn(result.returncode, (0, 3), result.stderr)
         return result, json.loads(result.stdout)
 
     def signals(self, data):
@@ -42,7 +42,7 @@ class AuditTests(unittest.TestCase):
     def test_help_and_invalid_arguments(self):
         result = self.run_cli("--help", project=False)
         self.assertEqual(result.returncode, 0)
-        self.assertIn("--dry-run", result.stdout)
+        self.assertNotIn("--dry-run", result.stdout)
         self.assertEqual(self.run_cli(project=False).returncode, 2)
         self.assertEqual(self.run_cli("--project", str(self.root / "absent")).returncode, 2)
         for option in ("--max-files", "--max-bytes", "--max-depth", "--max-entries"):
@@ -205,20 +205,20 @@ g = Agent(name="g", model=Gemini(model="gemini-3.8-flash", client_kwargs={"enter
         self.write("a.py", "a = 1\n")
         self.write("b.py", "b = 2\n")
         result, data = self.scan("--max-files", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertIn("file_count_limit", {item["reason"] for item in data["issues"]})
         result, data = self.scan("--max-bytes", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertTrue(all(item["reason"] == "file_size_limit" for item in data["issues"]))
         self.write("one/two/hidden.py", "pass\n")
         result, data = self.scan("--max-depth", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertIn({"path": "one/two", "reason": "depth_limit"}, data["issues"])
         private = "PRIVATE_SOURCE_TEXT"
         self.write("bad.py", f"def {private}(\n")
         self.write("pyproject.toml", f"[{private}\n")
         result, data = self.scan()
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn(private, result.stdout + result.stderr)
         self.assertEqual({item["reason"] for item in data["issues"]}, {"malformed_file"})
 
@@ -227,14 +227,14 @@ g = Agent(name="g", model=Gemini(model="gemini-3.8-flash", client_kwargs={"enter
         outside.write_text('MODEL = "gemini-3.8-flash"\n')
         (self.root / "link.py").symlink_to(outside)
         result, data = self.scan()
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertEqual(data["signals"], [])
         self.assertEqual({item["reason"] for item in data["issues"]}, {"symlink_skipped"})
         (self.root / "link.py").unlink()
         for index in range(12):
             self.write(f"ignored-{index}.bin", "irrelevant")
         result, data = self.scan("--max-entries", "5")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertEqual(data["directory_entries_seen"], 5)
         self.assertEqual(data["issues"], [{"path": ".", "reason": "entry_count_limit"}])
 

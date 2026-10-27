@@ -204,14 +204,14 @@ class CliTests(unittest.TestCase):
     def test_late_error_is_not_success_and_can_be_expected(self):
         self.trace.write_text(ndjson([start(), *text_events(), {"type": "RUN_ERROR", "message": "synthetic-secret"}]), encoding="utf-8")
         result = self.run_cli(self.trace)
-        self.assertEqual(result.returncode, 3)
+        self.assertEqual(result.returncode, 1)
         self.assertEqual(json.loads(result.stdout)["error_runs"], 1)
         self.assertNotIn("synthetic-secret", result.stdout + result.stderr)
         self.assertEqual(self.run_cli(self.trace, "--expect-outcome", "error").returncode, 0)
         self.assertEqual(self.run_cli(self.trace, "--expect-outcome", "either").returncode, 0)
 
     def test_success_does_not_satisfy_expected_error(self):
-        self.assertEqual(self.run_cli(self.trace, "--expect-outcome", "error").returncode, 3)
+        self.assertEqual(self.run_cli(self.trace, "--expect-outcome", "error").returncode, 1)
 
     def test_errors_never_echo_trace_content_or_path(self):
         self.trace.write_text('synthetic-secret-token', encoding="utf-8")

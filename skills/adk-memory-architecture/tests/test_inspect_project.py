@@ -93,7 +93,7 @@ def test_pin_conflict_is_actionable_without_mutating(tmp_path, content, expected
     manifest = tmp_path / "requirements.txt"
     manifest.write_text(content)
     report, code = inspector.inspect_project(tmp_path)
-    assert code == 3
+    assert code == 1
     assert report["compatibility"] == expected
     assert manifest.read_text() == content
 
@@ -105,7 +105,7 @@ def test_matching_unsupported_major_fails_clearly(tmp_path, monkeypatch):
         lambda: {"python": "3.11.4", "installed": {"google-adk": "1.20.0"}},
     )
     report, code = inspector.inspect_project(tmp_path)
-    assert code == 3
+    assert code == 1
     assert report["compatibility"] == "unsupported_adk_major_for_source_guidance"
 
 
@@ -125,7 +125,7 @@ def test_version_suffix_is_not_silently_treated_as_the_baseline(tmp_path, versio
     report, code = inspector.inspect_project(tmp_path)
     assert report["declarations"][0]["version"] == version
     assert report["compatibility"] == "declared_installed_adk_mismatch"
-    assert code == 3
+    assert code == 1
 
 
 def test_explicit_rag_adapter_is_found_without_instantiating_client(tmp_path):

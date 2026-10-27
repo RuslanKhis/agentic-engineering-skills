@@ -58,7 +58,7 @@ it for the next decision, bound its size, and make failures actionable.
   user-ready. Retrieval and compaction patterns for that store belong to
   `optimise-adk-on-google-cloud` and `adk-memory-architecture`; the result
   shape belongs here.
-- Measure: `python scripts/report_tool_result_sizes.py --events events.json`
+- Measure: `python "$SKILL_DIR/scripts/report_tool_result_sizes.py" --events events.json`
   reports bytes, estimated tokens (bytes/4), max and p95 per tool, repeated
   identical responses and responses above `--max-bytes`. Repeated identical
   responses usually mean the model re-called a tool whose result it already had,

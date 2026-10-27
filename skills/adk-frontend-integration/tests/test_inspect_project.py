@@ -268,7 +268,7 @@ class InspectorTests(unittest.TestCase):
             with self.subTest(name=name):
                 path = self.write(name, text)
                 code, data = self.run_main()
-                self.assertEqual(code, 4)
+                self.assertEqual(code, 3)
                 self.assertFalse(data["project"]["complete_within_scope"])
                 self.assertEqual(data["project"]["manifests"][0]["status"], "unreadable_invalid_or_changed")
                 path.unlink()
@@ -276,7 +276,7 @@ class InspectorTests(unittest.TestCase):
     def test_duplicate_package_fields_are_not_silently_overwritten(self):
         self.write("package.json", '{"dependencies":{"react":"18.3.1"},"dependencies":{"react":"19.2.1"}}')
         code, data = self.run_main()
-        self.assertEqual(code, 4)
+        self.assertEqual(code, 3)
         self.assertEqual(data["project"]["warnings"], ["manifest_not_inspected"])
 
     def test_installed_metadata_is_not_assumed_to_be_target_environment(self):
@@ -302,19 +302,19 @@ class InspectorTests(unittest.TestCase):
                 self.assertEqual(set(data["tested_stack_gate"]["checked_packages"]), expected)
                 failing = next(iter(expected))
                 code, data = self.run_main("--mode", mode, "--require-tested-stack", versions={failing: None})
-                self.assertEqual(code, 3)
+                self.assertEqual(code, 1)
                 self.assertEqual(data["tested_stack_gate"]["failures"][0]["status"], "missing")
 
     def test_version_mismatch_is_unverified_not_claimed_incompatible(self):
         code, data = self.run_main("--mode", "json", "--require-tested-stack", versions={"google-adk": "3.0.0"})
-        self.assertEqual(code, 3)
+        self.assertEqual(code, 1)
         self.assertEqual(data["tested_stack_gate"]["failures"][0]["status"], "different_from_tested")
         code, _ = self.run_main("--mode", "json", versions={"google-adk": "3.0.0"})
         self.assertEqual(code, 0)
 
     def test_suspicious_installed_versions_are_redacted_and_fail_strict(self):
         code, data = self.run_main("--mode", "managed-agui", "--require-tested-stack", versions={"google-adk": "2.8.0+" + SECRET})
-        self.assertEqual(code, 3)
+        self.assertEqual(code, 1)
         record = next(item for item in data["installed_python"] if item["name"] == "google-adk")
         self.assertIsNone(record["version"])
         self.assertEqual(record["status"], "unverified")

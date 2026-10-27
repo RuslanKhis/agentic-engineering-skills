@@ -28,10 +28,10 @@ the book and companion repository are optional provenance, not prerequisites.
    existing project interpreter. The read-only helper can provide an initial map:
 
    ```bash
-   python /path/to/adk-workflow-design/scripts/inspect_project.py --project .
+   python "$SKILL_DIR/scripts/inspect_project.py" --project .
    ```
 
-   Replace the skill path with its installed location. Read
+   Resolve `SKILL_DIR` to this skill's installed directory. Read
    [compatibility.md](references/compatibility.md) before using an SDK recipe or
    interpreting the helper. A different/missing version blocks claims of tested
    compatibility; independent planning continues. Resolve the target API

@@ -15,12 +15,12 @@ python "$SKILL_DIR/scripts/agent_card_check.py" --url http://localhost:8001/a2a/
 
 Expect: `diff.rug_pull_signal` false unless the change was a reviewed
 definition update (the diff alone exits 0 whatever it finds; in CI add
-`--fail-on-diff` so a signal exits 3); `tool_name_collision` empty; `reserved_adk_tool_name`
+`--fail-on-diff` so a signal exits 1); `tool_name_collision` empty; `reserved_adk_tool_name`
 empty; every `description_imperative_phrase` read and either explained or
 escalated to `adk-agent-security`; card `counts.errors` zero (in CI, run the
-card check with `--fail-on error` so the step exits 3 instead of 0) and
+card check with `--fail-on error` so the step exits 1 instead of 0) and
 `gemini_enterprise.missing` empty when registering there. Commit the
-manifest; a test compares the live list with it. Exit 1 (`partial`) means a
+manifest; a test compares the live list with it. Exit 3 (`partial`) means a
 source was unreachable and must be explained.
 
 The diff compares tools by bare name whenever each manifest holds a single

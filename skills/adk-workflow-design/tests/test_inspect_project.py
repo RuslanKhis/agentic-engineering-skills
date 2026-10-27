@@ -129,21 +129,21 @@ agents.ParallelAgent(name="factory", sub_agents=make_children())
             self.assertEqual(inspector.inspect(self.root, required_adk="2.8.0")[1], 0)
             p.write_text("google-adk>=2.8.0\n")
             output, status = inspector.inspect(self.root, required_adk="2.8.0")
-            self.assertEqual(status, 3)
+            self.assertEqual(status, 1)
             self.assertIn("not an exact pin", output["compatibility_reason"])
             p.write_text("pytest\n")
             output, status = inspector.inspect(self.root, required_adk="2.8.0")
-            self.assertEqual(status, 3)
+            self.assertEqual(status, 1)
             self.assertIn("no google-adk declaration", output["compatibility_reason"])
             p.write_text("google-adk==2.7.0\n")
-            self.assertEqual(inspector.inspect(self.root, required_adk="2.8.0")[1], 3)
+            self.assertEqual(inspector.inspect(self.root, required_adk="2.8.0")[1], 1)
         p.write_text("google-adk==2.8.0\n")
         with patch.object(
             inspector.importlib.metadata,
             "version",
             side_effect=inspector.importlib.metadata.PackageNotFoundError,
         ):
-            self.assertEqual(inspector.inspect(self.root, required_adk="2.8.0")[1], 3)
+            self.assertEqual(inspector.inspect(self.root, required_adk="2.8.0")[1], 1)
 
     def test_lockfile_and_untrusted_version_suffix(self):
         self.write("uv.lock", '[[package]]\nname="google-adk"\nversion="2.8.0"\n')
@@ -169,7 +169,7 @@ agents.ParallelAgent(name="factory", sub_agents=make_children())
             inspector.importlib.metadata, "version", return_value="2.8.0"
         ):
             result, status = inspector.inspect(self.root, required_adk="2.8.0")
-        self.assertEqual(status, 3)
+        self.assertEqual(status, 1)
         self.assertEqual(result["declarations"], [])
         self.write(
             "pyproject.toml",
@@ -196,7 +196,7 @@ agents.ParallelAgent(name="factory", sub_agents=make_children())
                 inspector.importlib.metadata, "version", return_value="2.8.0"
             ):
                 data, status = inspector.inspect(self.root, required_adk="2.8.0")
-            self.assertEqual(status, 3, declaration)
+            self.assertEqual(status, 1, declaration)
             self.assertNotIn("private-source", json.dumps(data))
         self.write(
             "pyproject.toml",
@@ -211,20 +211,20 @@ agents.ParallelAgent(name="factory", sub_agents=make_children())
         self.write("recursive.py", "x = " + "-" * 4000 + "1\n")
         self.write("pyproject.toml", "x = " + "[" * 4000 + "1" + "]" * 4000 + "\n")
         result = self.cli("--project", self.root)
-        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.returncode, 3)
         self.assertFalse(json.loads(result.stdout)["complete"])
         self.assertNotIn("Traceback", result.stderr)
 
     def test_parse_and_scan_failures_are_incomplete_not_pass(self):
         self.write("invalid.py", "def secret-sentinel")
-        self.assertEqual(self.cli("--project", self.root).returncode, 2)
+        self.assertEqual(self.cli("--project", self.root).returncode, 3)
         self.assertNotIn("secret-sentinel", self.cli("--project", self.root).stdout)
         self.write("other.py", "x = 1")
         self.assertEqual(
-            self.cli("--project", self.root, "--max-files", 1).returncode, 2
+            self.cli("--project", self.root, "--max-files", 1).returncode, 3
         )
         self.assertEqual(
-            self.cli("--project", self.root, "--max-bytes", 1).returncode, 2
+            self.cli("--project", self.root, "--max-bytes", 1).returncode, 3
         )
 
     def test_symlinks_and_environments_are_excluded(self):

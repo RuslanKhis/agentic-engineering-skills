@@ -42,8 +42,14 @@ class InspectorTests(unittest.TestCase):
     def test_help_requires_no_project(self):
         result = self.run_cli("--help")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("--dry-run", result.stdout)
+        self.assertNotIn("--dry-run", result.stdout)
         self.assertIn("--require-adk", result.stdout)
+
+    def test_require_adk_mismatch_is_a_failed_check(self):
+        self.write("pyproject.toml", '[project]\ndependencies = ["google-adk==2.8.0"]\n')
+        result = self.run_cli("--project", str(self.root), "--require-adk", "0.0.1")
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertFalse(json.loads(result.stdout)["adk_compatibility"]["matches"])
 
     def test_dry_run_equivalence_and_no_writes_or_project_execution(self):
         self.write("pyproject.toml", '[project]\nrequires-python = ">=3.11"\ndependencies = ["google-adk==2.8.0", "google-genai>=1.0,<2"]\n')
@@ -73,7 +79,7 @@ class InspectorTests(unittest.TestCase):
         self.write("requirements.txt", "google-adk==" + sentinel + "\ngoogle-genai @ https://" + sentinel + "\n")
         self.write("pyproject.toml", '[project]\ndependencies = ["google-adk==2.8.0; secret == ' + "'" + sentinel + "'" + '"]\n')
         result = self.run_cli("--project", str(self.root))
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn(sentinel, result.stdout + result.stderr)
         report = json.loads(result.stdout)
         self.assertFalse(report["complete_within_scope"])
@@ -112,7 +118,7 @@ class InspectorTests(unittest.TestCase):
         self.write("pyproject.toml", "[project\nsecret = 'not echoed'")
         self.write("huge.py", "x" * (inspector.MAX_BYTES + 1))
         result = self.run_cli("--project", str(self.root))
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         warnings = json.loads(result.stdout)["warnings"]
         self.assertIn("file_unreadable_or_configuration_malformed", warnings)
         self.assertIn("file_size_limit_reached", warnings)
@@ -121,7 +127,7 @@ class InspectorTests(unittest.TestCase):
     def test_deep_toml_returns_incomplete_inventory_without_traceback(self):
         self.write("pyproject.toml", "x = " + "[" * 2000 + "1" + "]" * 2000 + "\n")
         result = self.run_cli("--project", str(self.root))
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         report = json.loads(result.stdout)
         self.assertFalse(report["complete_within_scope"])
         self.assertIn("file_unreadable_or_configuration_malformed", report["warnings"])

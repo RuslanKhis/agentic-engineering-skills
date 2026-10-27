@@ -20,9 +20,10 @@ signature cryptographically. Accepts the a2a-sdk 0.3 card shape (``url``, ``pref
 
 Read-only: one GET per candidate path, no RPC call. Non-loopback hosts are
 refused unless ``--allow-remote`` is given. Exit 0 when a card was obtained and
-checked (findings are in the JSON), 1 when no card could be read, 2 for bad
-arguments, 3 when ``--fail-on`` is given and a finding at that level or above
-was reported (the JSON is still printed).
+checked (findings are in the JSON), 1 when ``--fail-on`` is given and a finding
+at that level or above was reported (the JSON is still printed), 2 for bad
+arguments or a ``--file`` that cannot be read as a JSON object, 3 when no card
+could be fetched from ``--url``.
 """
 
 from __future__ import annotations
@@ -539,7 +540,7 @@ def main(argv=None) -> int:
     parser.add_argument("--key-host", action="append", default=[], metavar="HOST",
                         help="host besides the card's origin that may serve its jku key set (repeatable)")
     parser.add_argument("--fail-on", choices=("error", "review"),
-                        help="exit 3 when a finding at this level or above is reported (for CI)")
+                        help="exit 1 when a finding at this level or above is reported (for CI)")
     parser.add_argument("--timeout", type=positive, default=10.0, help="seconds per request (default: 10)")
     parser.add_argument("--max-bytes", type=int, default=1_000_000, help="maximum card size (default: 1000000)")
     args = parser.parse_args(argv)
@@ -595,9 +596,9 @@ def main(argv=None) -> int:
     ]
     print(json.dumps(result, indent=2, sort_keys=True))
     if result["partial"]:
-        return 1
+        return 2 if args.file else 3
     failing = {"error": ("error",), "review": ("error", "review")}.get(args.fail_on, ())
-    return 3 if any(result["counts"][{"error": "errors", "review": "review"}[level]] for level in failing) else 0
+    return 1 if any(result["counts"][{"error": "errors", "review": "review"}[level]] for level in failing) else 0
 
 
 if __name__ == "__main__":

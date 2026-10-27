@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Bounded offline inventory. Does not import project code or contact providers."""
+"""Bounded offline inventory. Does not import project code or contact providers.
+
+Exit codes: 0 inspected; 1 the declared or installed google-adk pins conflict,
+differ or are outside 2.x; 2 invalid arguments or project directory.
+"""
 
 from __future__ import annotations
 
@@ -187,16 +191,16 @@ def inspect_project(project: Path, *, dry_run: bool = False) -> tuple[dict, int]
     code = 0
     if len(pins) > 1:
         report["compatibility"] = "conflicting_declared_adk_pins"
-        code = 3
+        code = 1
     elif pins and installed and installed not in pins:
         report["compatibility"] = "declared_installed_adk_mismatch"
-        code = 3
+        code = 1
     elif any(
         version.split(".")[0] != "2"
         for version in pins | ({installed} if installed else set())
     ):
         report["compatibility"] = "unsupported_adk_major_for_source_guidance"
-        code = 3
+        code = 1
     elif pins == {"2.8.0"} and installed == "2.8.0":
         report["compatibility"] = "adk_baseline_matches_other_contracts_unchecked"
     else:

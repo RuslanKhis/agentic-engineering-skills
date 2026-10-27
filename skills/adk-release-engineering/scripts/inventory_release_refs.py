@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import re
 import stat
+import sys
 try:
     import tomllib
 except ModuleNotFoundError:  # Python < 3.11
@@ -596,10 +597,23 @@ def load_lifecycle(path, parser):
     return document
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, epilog="Reads bounded source, manifests, eval assets and deploy files; skips secrets, dependency directories and symlinks. Prompt text is reported as sha256 only. Signals direct inspection and are not a verdict on provider or platform behaviour. Exit 0: complete scan; 1: partial scan; 2: bad arguments.")
+    parser = argparse.ArgumentParser(description=__doc__, epilog="Reads bounded source, manifests, eval assets and deploy files; skips secrets, dependency directories and symlinks. Prompt text is reported as sha256 only. Signals direct inspection and are not a verdict on provider or platform behaviour. Exit 0: complete scan; 2: bad arguments; 3: partial scan.")
     parser.add_argument("--project", required=True, help="project directory to inspect without executing code")
-    parser.add_argument("--dry-run", action="store_true", help="perform the same read-only scan and report no changes")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     parser.add_argument("--lifecycle", type=Path, default=None, help="optional model lifecycle JSON table (same shape as adk-model-and-output-contracts' assets/model-lifecycle-*.json) to annotate model IDs with a status")
     parser.add_argument("--max-files", type=positive, default=500, help="maximum eligible files (default: 500)")
     parser.add_argument("--max-entries", type=positive, default=10000, help="stop at this total directory-entry count; reaching the cap is conservatively partial (default: 10000)")
@@ -618,7 +632,7 @@ def main():
     inventory.walk(root)
     inventory.finish()
     print(json.dumps(inventory.result, indent=2, sort_keys=True))
-    return 1 if inventory.result["partial"] else 0
+    return 3 if inventory.result["partial"] else 0
 
 
 if __name__ == "__main__":

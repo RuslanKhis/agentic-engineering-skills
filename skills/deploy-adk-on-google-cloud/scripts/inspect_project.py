@@ -342,13 +342,13 @@ def compatibility(inspector, mode):
 
 
 def cloud_plan(args):
-    if not args.project:
+    if not args.gcp_project:
         return []
-    common = [f"--account={args.account}", f"--project={args.project}",
-              f"--billing-project={args.project}", "--quiet", "--format=json"]
+    common = [f"--account={args.account}", f"--project={args.gcp_project}",
+              f"--billing-project={args.gcp_project}", "--quiet", "--format=json"]
     plan = [
-        ("project_access", ["projects", "describe", args.project]),
-        ("billing_status", ["billing", "projects", "describe", args.project]),
+        ("project_access", ["projects", "describe", args.gcp_project]),
+        ("billing_status", ["billing", "projects", "describe", args.gcp_project]),
         ("enabled_apis", ["services", "list", "--enabled"]),
     ]
     if args.mode in {"cloud-run", "gke"}:
@@ -357,36 +357,64 @@ def cloud_plan(args):
             for purpose, command in plan]
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv=None):
     parser = SafeParser(description=__doc__, epilog=(
         "Always offline and read-only: no cloud commands, installs, imports of project code, or writes. "
         "JSON reports declarations, not installed versions or proven compatibility. Lockfiles and .env contents "
         "are never read. Numeric .python-version pins are separate from this tool's interpreter and Python constraints. "
         "Filename hints do not establish an architecture. Exit 0: inspection completed "
-        "(possibly unverified); 2: invalid input, unreadable/invalid manifest, or exceeded hard limit; "
-        "3: --require-baseline evidence gate not met. Use a stable project tree during inspection."))
-    parser.add_argument("--root", required=True, help="Project directory; inspect bounded nonsymlink manifests beneath it.")
+        "(possibly unverified); 1: --require-baseline evidence gate not met; 2: invalid arguments or "
+        "project directory; 3: inspection stopped (unreadable or invalid manifest, or a hard limit). "
+        "Use a stable project tree during inspection."))
+    parser.add_argument("--project", help="Project directory; inspect bounded nonsymlink manifests beneath it.")
+    parser.add_argument("--root", dest="legacy_root", action=Deprecated, default=None, note="use --project")
     parser.add_argument("--mode", choices=("auto", "cloud-run", "agent-runtime", "gke"), default="auto")
-    parser.add_argument("--dry-run", action="store_true", help="Explicit synonym for the default offline, read-only inspection.")
-    parser.add_argument("--require-baseline", action="store_true", help="Exit 3 unless required packages have unconditional exact recorded pins.")
-    parser.add_argument("--project", help="Validated GCP project ID for planned read-only argv only; requires region, account, explicit mode.")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
+    parser.add_argument("--require-baseline", action="store_true", help="Exit 1 unless required packages have unconditional exact recorded pins.")
+    parser.add_argument("--gcp-project", help="Validated GCP project ID for planned read-only argv only; requires region, account, explicit mode.")
     parser.add_argument("--region", help="Regional deployment location for the plan; global is not a hosting region.")
     parser.add_argument("--account", help="Explicit email identity for the plan; never inferred from gcloud configuration.")
     args = parser.parse_args(argv)
-    target_values = (args.project, args.region, args.account)
+    if args.legacy_root is not None:
+        if args.project is not None:
+            # An old command paired --root DIR with --project GCP_ID.
+            print(json.dumps({"error": "--project is now the project directory (it replaces --root); "
+                              "pass the GCP project ID with --gcp-project.", "network_calls": 0, "writes": 0}),
+                  file=sys.stderr)
+            return 2
+        args.project = args.legacy_root
+    if args.project is None:
+        parser.error("the following arguments are required: --project")
+    supplied_root = Path(args.project).expanduser()
+    if supplied_root.is_symlink() or not supplied_root.is_dir():
+        print(json.dumps({"error": "--project must be an existing nonsymlink project directory; "
+                          "pass a GCP project ID with --gcp-project.", "network_calls": 0, "writes": 0}),
+              file=sys.stderr)
+        return 2
+    target_values = (args.gcp_project, args.region, args.account)
     if any(value is not None for value in target_values):
         if not all(target_values) or args.mode == "auto":
             parser.error("Complete explicit target required")
-        if not re.fullmatch(r"[a-z][a-z0-9-]{4,28}[a-z0-9]", args.project):
+        if not re.fullmatch(r"[a-z][a-z0-9-]{4,28}[a-z0-9]", args.gcp_project):
             parser.error("Invalid project")
         if not re.fullmatch(r"[a-z]+-[a-z]+[0-9]+", args.region):
             parser.error("Invalid region")
         if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._+%-]{0,127}@[A-Za-z0-9](?:[A-Za-z0-9.-]{0,189})\.[A-Za-z]{2,24}", args.account):
             parser.error("Invalid account")
     try:
-        supplied_root = Path(args.root).expanduser()
-        if supplied_root.is_symlink() or not supplied_root.is_dir():
-            raise InspectionError("Root must be an existing nonsymlink directory.")
         inspector = Inspector(supplied_root.resolve(strict=True))
         inspector.scan()
         packages, baseline_ok = compatibility(inspector, args.mode)
@@ -424,11 +452,11 @@ def main(argv=None):
             ],
         }
         print(json.dumps(result, indent=2, sort_keys=True))
-        return 3 if args.require_baseline and not baseline_ok else 0
+        return 1 if args.require_baseline and not baseline_ok else 0
     except (InspectionError, OSError, ValueError) as error:
         message = str(error) if isinstance(error, InspectionError) else "Project inspection failed; input details omitted."
         print(json.dumps({"error": message, "network_calls": 0, "writes": 0}), file=sys.stderr)
-        return 2
+        return 3
 
 
 if __name__ == "__main__":

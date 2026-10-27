@@ -5,6 +5,10 @@ This script imports no project modules and runs no project commands. Interpreter
 metadata is a separate observation, not proof of the target's environment.
 Directory scanning requires file-descriptor support (POSIX); unsupported
 platforms fail clearly so the agent can perform a manual read-only inventory.
+
+Exit codes: 0 inspected; 1 the --expect-adk gate failed; 2 invalid arguments,
+project or platform; 3 a limit or an unreadable file left part of the project unread
+(scope notes in incompleteness, such as unparsed lockfiles, stay exit 0).
 """
 from __future__ import annotations
 
@@ -28,6 +32,9 @@ MAX_ENTRIES = 12000
 MAX_DEPTH = 32
 MAX_FILE_BYTES = 256 * 1024
 MAX_TOTAL_BYTES = 16 * 1024 * 1024
+# Incompleteness that left files unread (exit 3); scope notes such as unparsed lockfiles do not.
+UNREAD = frozenset({"depth_limit", "entry_limit", "file_byte_limit", "file_count_limit", "total_byte_limit",
+                    "malformed_manifest", "not_regular_file", "unreadable_directory", "unreadable_or_non_utf8_file"})
 PACKAGES = (
     "google-adk", "google-genai", "google-cloud-bigquery", "google-auth",
     "pydantic", "sqlglot", "pytest",
@@ -390,6 +397,10 @@ def interpreter_metadata() -> dict:
             "python_version": ".".join(map(str, sys.version_info[:3])), "packages": packages}
 
 
+def stopped(report: dict) -> bool:
+    return any(row["code"] in UNREAD for row in report["incompleteness"])
+
+
 def check_adk(report: dict, expected: str) -> dict:
     installed = report["interpreter"]["packages"].get("google-adk")
     declarations = [row for row in report["dependency_declarations"] if row["package"] == "google-adk"]
@@ -417,7 +428,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = SafeParser(description=__doc__)
     parser.add_argument("--project", required=True, help="Existing readable project directory; never imported or changed.")
     parser.add_argument("--dry-run", action="store_true", help="Inventory names and planned scope only; read no project file contents or installed-package metadata.")
-    parser.add_argument("--expect-adk", help="Require an exact numeric ADK version in target declarations and this interpreter; exit 3 on mismatch or unresolved evidence.")
+    parser.add_argument("--expect-adk", help="Require an exact numeric ADK version in target declarations and this interpreter; exit 1 on mismatch or unresolved evidence.")
     args = parser.parse_args(argv)
     if os.scandir not in os.supports_fd:
         emit({"error": "directory_descriptor_scanning_unsupported"})
@@ -444,12 +455,14 @@ def main(argv: list[str] | None = None) -> int:
         if args.expect_adk is not None:
             report["adk_gate"] = {"status": "NOT_RUN_DRY_RUN", "expected": args.expect_adk}
         emit(report)
-        return 0
+        return 3 if stopped(report) else 0
     report["interpreter"] = interpreter_metadata()
-    status = 0
+    status = 3 if stopped(report) else 0
     if args.expect_adk is not None:
         report["adk_gate"] = check_adk(report, args.expect_adk)
-        status = 3 if report["adk_gate"]["status"] == "FAIL" else 0
+        # An incomplete inventory alone is exit 3, not a failed gate.
+        if set(report["adk_gate"]["reasons"]) - {"target_inventory_incomplete"}:
+            status = 1
     emit(report)
     return status
 

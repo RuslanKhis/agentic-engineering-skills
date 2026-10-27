@@ -112,7 +112,7 @@ The [scorer](../scripts/score_document_coverage.py) and
 Set `PYTHON` to an existing interpreter and `SKILL_DIR` to this installed skill.
 The scorer uses only the standard library; the test command uses the target's
 existing pytest. CLI exit 0 means complete fixture spans; exit 1 means an
-incomplete or invalid retrieval observation. Invalid input raises an error.
+incomplete or invalid retrieval observation; exit 2 means unreadable input.
 
 The adapter-owned observation has this shape; the deliberately sparse example
 fails the supplementary-exception question:

@@ -24,7 +24,7 @@ Deliver a small integration change or an actionable review that bounds API work,
 For a bounded, read-only inventory, resolve `SKILL_DIR` to this skill's installed directory and run the helper with an available Python 3.11+ interpreter. If none is available, inspect manually without changing the target's Python version:
 
 ```bash
-python "$SKILL_DIR/scripts/inspect_project.py" --project . --dry-run
+python "$SKILL_DIR/scripts/inspect_project.py" --project .
 ```
 
 The helper reads source and declarations without importing project code, loading `.env`, running commands or contacting services. Its signals direct inspection; they do not certify safety or report the installed dependency versions. Read [inspection limits](references/inspection.md) when using its output. A partial scan is a reason to inspect the omitted area, not a clean result.

@@ -216,7 +216,7 @@ class StdioTests(unittest.TestCase):
 
     def test_malformed_response_is_partial(self):
         code, payload, _ = run("--command", stdio_command("malformed"), "--timeout", "5")
-        self.assertEqual(code, 1)
+        self.assertEqual(code, 3)
         self.assertTrue(payload["partial"])
         self.assertEqual(payload["sources"][0]["status"], "failed")
         self.assertIn("not JSON", payload["sources"][0]["error"])
@@ -265,7 +265,7 @@ class StdioTests(unittest.TestCase):
             self.assertEqual(len(diff["removed"]), 1)
             code, _, _ = run("--command", stdio_command("poisoned"), "--diff", str(manifest), "--no-resources",
                              "--fail-on-diff")
-            self.assertEqual(code, 3)
+            self.assertEqual(code, 1)
             code, _, _ = run("--command", stdio_command(), "--out", str(manifest), "--no-resources")
             code, _, _ = run("--command", stdio_command(), "--diff", str(manifest), "--no-resources",
                              "--fail-on-diff")
@@ -302,7 +302,7 @@ class HttpTests(unittest.TestCase):
     def test_malformed_http_body_is_partial(self):
         with LoopbackServer("malformed") as server:
             code, payload, _ = run("--url", server.url)
-            self.assertEqual(code, 1)
+            self.assertEqual(code, 3)
             self.assertEqual(payload["sources"][0]["status"], "failed")
 
     def test_collision_across_sources(self):
@@ -314,7 +314,7 @@ class HttpTests(unittest.TestCase):
 
     def test_unreachable_port_is_partial(self):
         code, payload, _ = run("--url", "http://127.0.0.1:9/mcp", "--timeout", "3")
-        self.assertEqual(code, 1)
+        self.assertEqual(code, 3)
         self.assertTrue(payload["partial"])
 
 

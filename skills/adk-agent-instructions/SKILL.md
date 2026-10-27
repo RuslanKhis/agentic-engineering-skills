@@ -23,7 +23,7 @@ Deliver a small instruction change or an actionable review that keeps the prompt
 5. Run the bounded, read-only linter with an available Python 3.11+ interpreter, resolving `SKILL_DIR` to this skill's installed directory:
 
 ```bash
-python "$SKILL_DIR/scripts/instruction_lint.py" --project . --state-keys company,user:plan --dry-run
+python "$SKILL_DIR/scripts/instruction_lint.py" --project . --state-keys company,user:plan
 ```
 
 The linter parses source with `ast`, never imports or executes the project, and reports per agent: word count against a budget, unresolved and optional placeholders, JSON-like literal braces, provider or deprecated `global_instruction` use, shouting-modifier density, mandated tool-call phrasing, prohibition-only sentences, tools never mentioned or mentioned but absent from `tools=`, weak or near-duplicate sibling descriptions, and always/never pairs for human review. Its findings direct reading; they are not a quality verdict, and a partial scan is a reason to inspect the omitted area.

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Read-only, bounded project inventory. Findings are hints, never a safety verdict."""
+"""Read-only, bounded project inventory. Findings are hints, never a safety verdict.
+
+Exit codes: 0 inspection complete; 1 --require-adk does not match the installed
+google-adk; 2 invalid arguments; 3 inspection incomplete (see warnings).
+"""
 import argparse
 import configparser
 from collections import deque
@@ -10,6 +14,7 @@ from pathlib import Path
 import platform
 import re
 import stat
+import sys
 
 PACKAGES = ("google-adk", "google-genai")
 IDENTIFIERS = ("SafeAgentRuntime", "MockBudgetStore", "max_llm_calls", "before_model_callback",
@@ -224,10 +229,23 @@ def inspect(project, required=None):
     return report
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True, help="Existing project directory; never imported or executed")
-    parser.add_argument("--dry-run", action="store_true", help="Same read-only inspection; this program never writes")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     parser.add_argument("--require-adk", help="Optional exact installed google-adk version to check; never installs")
     args = parser.parse_args()
     root = Path(args.project).absolute()
@@ -237,7 +255,9 @@ def main():
         parser.error("require-adk must be a numeric release version")
     result = inspect(root, args.require_adk)
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 0 if result["complete_within_scope"] else 1
+    if result.get("adk_compatibility", {}).get("matches") is False:
+        return 1
+    return 0 if result["complete_within_scope"] else 3
 
 
 if __name__ == "__main__":

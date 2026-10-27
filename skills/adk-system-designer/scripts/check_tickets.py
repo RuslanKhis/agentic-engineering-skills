@@ -204,11 +204,25 @@ def lint(tickets: list[dict], root: Path, skills_dir: Path, design: Path | None,
     return errors, warnings, budgets
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--tickets", type=Path, required=True, help="directory of ticket files")
-    parser.add_argument("--root", type=Path, default=Path.cwd(),
+    parser.add_argument("--project", type=Path, default=Path.cwd(),
                         help="repository root the tickets' design and plan paths start from (default: cwd)")
+    parser.add_argument("--root", dest="project", type=Path, action=Deprecated, note="use --project")
     parser.add_argument("--design", type=Path, help="design Markdown (default: the tickets' design field)")
     parser.add_argument("--plan", type=Path, help="plan Markdown (default: the tickets' plan field)")
     parser.add_argument("--agents", type=Path, help="AGENTS.md with the companion table (default: found upwards)")
@@ -223,7 +237,7 @@ def main(argv: list[str] | None = None) -> int:
         tickets = read_tickets(args.tickets)
         if not tickets:
             raise InputError(f"{args.tickets}: no ticket files with a goal in their front matter")
-        errors, warnings, budgets = lint(tickets, args.root.resolve(), args.skills_dir.resolve(), args.design,
+        errors, warnings, budgets = lint(tickets, args.project.resolve(), args.skills_dir.resolve(), args.design,
                                          args.plan, args.agents, args.budget, args.max_supporting)
     except (InputError, OSError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)

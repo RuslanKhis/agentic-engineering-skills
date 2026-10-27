@@ -16,8 +16,8 @@ read: its nodes are named and the run is partial. With `--compare BASE_JSON`
 tools added or removed, changed gates, callbacks, toolsets, sub-agents and
 executors, and rising guard findings.
 
-Exit status: 0 complete, 1 partial, 2 bad arguments, 3 with --compare when
-any capability changed (3 takes precedence over 1; `unread_paths` then lists
+Exit status: 0 complete, 1 with --compare when any capability changed, 2 bad
+arguments, 3 partial (1 takes precedence over 3; `unread_paths` then lists
 what was not read, for the gate to check against the changed files).
 """
 
@@ -29,6 +29,7 @@ import os
 from pathlib import Path
 import re
 import stat
+import sys
 try:
     import tomllib
 except ModuleNotFoundError:  # Python < 3.11
@@ -991,13 +992,26 @@ def capability_changes(base, head):
     return changes
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
         epilog="Reads bounded source, manifests and deploy text only; skips secrets, dependency directories and symlinks. "
                "Findings are review prompts for a threat model, not a security verdict.")
     parser.add_argument("--project", required=True, help="project directory to inspect without executing code")
-    parser.add_argument("--dry-run", action="store_true", help="perform the same read-only scan and report no changes")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     parser.add_argument("--max-files", type=positive, default=500, help="maximum eligible files (default: 500)")
     parser.add_argument("--max-entries", type=positive, default=10000,
                         help="stop at this total directory-entry count, including exclusions (default: 10000)")
@@ -1005,7 +1019,7 @@ def main():
     parser.add_argument("--max-depth", type=positive, default=8, help="maximum subdirectory depth (default: 8)")
     parser.add_argument("--compare", metavar="BASE_JSON",
                         help="an earlier run's JSON (e.g. the base commit of a pull request); list what each agent can "
-                             "now do differently and exit 3 when anything changed")
+                             "now do differently and exit 1 when anything changed")
     args = parser.parse_args()
     root = Path(args.project)
     try:
@@ -1028,8 +1042,8 @@ def main():
         inventory.result["unread_paths"] = sorted({i["path"] for i in inventory.result["issues"]})
     print(json.dumps(inventory.result, indent=2, sort_keys=True))
     if inventory.result.get("capability_changes"):
-        return 3
-    return 1 if inventory.result["partial"] else 0
+        return 1
+    return 3 if inventory.result["partial"] else 0
 
 
 if __name__ == "__main__":

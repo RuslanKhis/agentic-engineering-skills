@@ -102,7 +102,8 @@ def percentile(values, fraction):
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
-        epilog="Prints tool names, counts and sizes only. Token counts are bytes/4 estimates.")
+        epilog="Prints tool names, counts and sizes only. Token counts are bytes/4 estimates. "
+               "Exit 0: every event read; 2: bad arguments; 3: some events or lines could not be read.")
     parser.add_argument("--events", required=True, help="JSON or JSONL file of ADK events")
     parser.add_argument("--max-bytes", type=positive, default=20000,
                         help="flag a single serialised response above this many bytes (default: 20000)")
@@ -179,7 +180,7 @@ def main():
               "response_bytes_total": total_bytes, "approx_tokens_total": total_bytes // 4,
               "tools": tools, "flags": flags, "issues": issues}
     print(json.dumps(report, indent=2, sort_keys=True))
-    return 1 if partial else 0
+    return 3 if partial else 0
 
 
 if __name__ == "__main__":

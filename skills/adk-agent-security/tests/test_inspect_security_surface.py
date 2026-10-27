@@ -104,7 +104,7 @@ class InspectionTests(unittest.TestCase):
 
     def scan(self, *args):
         result = self.run_cli(*args)
-        self.assertIn(result.returncode, (0, 1), result.stderr)
+        self.assertIn(result.returncode, (0, 3), result.stderr)
         return result, json.loads(result.stdout)
 
     def findings(self, data, kind):
@@ -116,7 +116,7 @@ class InspectionTests(unittest.TestCase):
     def test_help_and_invalid_arguments_exit_two(self):
         result = self.run_cli("--help", project=False)
         self.assertEqual(result.returncode, 0)
-        self.assertIn("--dry-run", result.stdout)
+        self.assertNotIn("--dry-run", result.stdout)
         self.assertEqual(self.run_cli(project=False).returncode, 2)
         for option in ("--max-files", "--max-bytes", "--max-depth", "--max-entries"):
             for value in ("0", "-1", "not-a-number"):
@@ -297,7 +297,7 @@ def deploy_report(node_input: str) -> str:
 root_agent = Workflow(name="weekly_report", edges=[("START", writer), (writer, deploy_report)])
 ''')
         result = self.run_cli()
-        self.assertEqual(1, result.returncode, result.stderr)
+        self.assertEqual(3, result.returncode, result.stderr)
         data = json.loads(result.stdout)
         self.assertTrue(data["partial"])
         [finding] = self.findings(data, "workflow_graph_unread")
@@ -306,7 +306,7 @@ root_agent = Workflow(name="weekly_report", edges=[("START", writer), (writer, d
         base_path = Path(self.temp.name) / "workflow-base.json"
         base_path.write_text(result.stdout)
         again = self.run_cli("--compare", str(base_path))
-        self.assertEqual(1, again.returncode)
+        self.assertEqual(3, again.returncode)
         self.assertEqual([], json.loads(again.stdout)["capability_changes"])
         self.assertEqual(["report/agent.py"], json.loads(again.stdout)["unread_paths"])
 
@@ -337,7 +337,7 @@ root_agent = LlmAgent(name="refunds", model="m", before_tool_callback=check,
         self.write("refunds/agent.py", base_source.replace(", require_confirmation=True", "")
                    .replace(" before_tool_callback=check,", ""))
         head = self.run_cli("--compare", str(base_path))
-        self.assertEqual(3, head.returncode, head.stderr)
+        self.assertEqual(1, head.returncode, head.stderr)
         changes = [c["change"] for c in json.loads(head.stdout)["capability_changes"]]
         self.assertIn("gate changed on refund_order", changes)
         self.assertIn("callbacks changed", changes)
@@ -629,22 +629,22 @@ root = LlmAgent(name="root", model="m", instruction="{marker}", tools=[send_repo
         self.assertNotIn(str(self.root), result.stdout)
         self.assertEqual(data["files_inspected"], 1)
 
-    def test_bounds_report_partial_scan_with_exit_one(self):
+    def test_bounds_report_partial_scan_with_exit_three(self):
         self.write("a.py", "a = 1\n")
         self.write("b.py", "b = 2\n")
         result, data = self.scan("--max-files", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertTrue(data["partial"])
         self.assertIn("file_count_limit", {item["reason"] for item in data["issues"]})
         result, data = self.scan("--max-bytes", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertTrue(all(item["reason"] == "file_size_limit" for item in data["issues"]))
         self.write("one/two/hidden.py", "pass\n")
         result, data = self.scan("--max-depth", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertIn({"path": "one/two", "reason": "depth_limit"}, data["issues"])
         result, data = self.scan("--max-entries", "2")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertIn("entry_count_limit", {item["reason"] for item in data["issues"]})
 
     def test_malformed_and_symlinked_files_are_partial(self):
@@ -655,7 +655,7 @@ root = LlmAgent(name="root", model="m", instruction="{marker}", tools=[send_repo
         outside.write_text("x = 1\n")
         (self.root / "link.py").symlink_to(outside)
         result, data = self.scan()
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn(marker, result.stdout + result.stderr)
         self.assertEqual({item["reason"] for item in data["issues"]}, {"malformed_file", "unreadable_file", "symlink_skipped"})
         (self.root / "directory").symlink_to(self.root, target_is_directory=True)

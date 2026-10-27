@@ -1,6 +1,6 @@
 # Read-only inspection helper
 
-Use `scripts/inspect_project.py --project PATH` to locate dependency declarations and safety-related source signals without executing target code. `--dry-run` performs the same read-only inspection and explicitly reports that no changes were made. `--help` describes its bounded traversal.
+Use `scripts/inspect_project.py --project PATH` to locate dependency declarations and safety-related source signals without executing target code. It only reads (the old `--dry-run` flag is a deprecated no-op); exit 3 means a partial scan. `--help` describes its bounded traversal.
 
 The helper requires Python 3.11+ for its own TOML reader. This does not impose Python 3.11 on the target project. Select an already available compatible interpreter; never upgrade the target just to run an inventory helper.
 

@@ -5,6 +5,9 @@ Python 3.11+; standard library only. Inspection is root-only: pass the package
 directory itself, not a monorepo root. All directories and symlinks are skipped.
 Lockfiles, source files, test configuration, and environment files are never
 read. This inventories declarations; it does not resolve or assess compatibility.
+
+Exit codes: 0 inspected; 2 invalid arguments or project directory; 3 some
+metadata could not be read or was over a limit (see errors).
 """
 
 from __future__ import annotations
@@ -350,14 +353,37 @@ def inspect_project(project: Path, *, dry_run: bool = False) -> dict:
     return result
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = SafeArgumentParser(description=__doc__)
-    parser.add_argument("project", type=Path, help="Package directory; only recognized root metadata is inspected.")
+    parser.add_argument("--project", type=Path, help="Package directory; only recognized root metadata is inspected.")
+    parser.add_argument("legacy_project", nargs="?", type=Path, help=argparse.SUPPRESS)
     parser.add_argument("--dry-run", action="store_true", help="List metadata and planned reads without reading any file content.")
     args = parser.parse_args(argv)
+    if args.legacy_project is not None:
+        if args.project is not None:
+            parser.error("give the project directory once, with --project")
+        print(f"{parser.prog}: a positional project directory is deprecated; use --project", file=sys.stderr)
+        args.project = args.legacy_project
+    if args.project is None:
+        parser.error("the following arguments are required: --project")
     result = inspect_project(args.project, dry_run=args.dry_run)
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 2 if result["errors"] else 0
+    if {item["code"] for item in result["errors"]} & {"symlink_project_root_refused", "invalid_project_directory"}:
+        return 2
+    return 3 if result["errors"] else 0
 
 
 if __name__ == "__main__":

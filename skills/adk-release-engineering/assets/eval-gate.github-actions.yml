@@ -64,7 +64,7 @@ jobs:
       - name: Inventory release references (read-only, hashes only)
         run: |
           # Write outside the checkout: a report inside the scanned tree is read back as an empty JSON file.
-          python "<PATH to adk-release-engineering>/scripts/inventory_release_refs.py" --project . --dry-run > "${RUNNER_TEMP}/inventory.json"
+          python "<PATH to adk-release-engineering>/scripts/inventory_release_refs.py" --project . > "${RUNNER_TEMP}/inventory.json"
           python - <<'PY'
           import json, os, sys
           data = json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "inventory.json")))

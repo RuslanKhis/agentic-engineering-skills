@@ -15,7 +15,7 @@ From the installed skill directory, use a Python 3.11+ interpreter:
 ```bash
 python -B -m unittest discover -s tests -p 'test_inspect_project.py' -v
 python scripts/inspect_project.py --help
-python scripts/inspect_project.py --root . --dry-run
+python scripts/inspect_project.py --project .
 ```
 
 The skill's structural validator is supplied by the authoring environment, not required at runtime. Its checks are supplemented by relative-link resolution, frontmatter/metadata checks, code-fence parsing, secret-pattern inspection and independent forward testing. The source repository has no skill-specific formatter configuration; `ruff` was unavailable in the existing environment, and packages were not installed just to add one.

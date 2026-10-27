@@ -143,7 +143,7 @@ with the function tools when budgeting; see
 
 ## Observable checks
 
-- Tool-count report: `python scripts/lint_tool_schemas.py --project . --max-tools 20`
+- Tool-count report: `python "$SKILL_DIR/scripts/lint_tool_schemas.py" --project . --max-tools 20`
   lists `tool_count_exceeds_max`, `toolset_count_unknown` and `tools_not_literal`
   per agent; resolve the runtime count for toolsets with `await toolset.get_tools(None)`
   in a test.

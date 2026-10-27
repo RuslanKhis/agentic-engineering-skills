@@ -7,6 +7,7 @@ model-produced claims of coverage. See references/local-document-coverage.md.
 import argparse
 import json
 from pathlib import Path
+import sys
 
 
 FIXTURE = Path(__file__).resolve().parents[1] / "assets" / "document-coverage.json"
@@ -101,9 +102,13 @@ def main():
     parser.add_argument("--question", required=True)
     parser.add_argument("--observation", type=Path, required=True)
     args = parser.parse_args()
-    fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
-    observation = json.loads(args.observation.read_text(encoding="utf-8"))
-    report = score(fixture, args.question, observation)
+    try:
+        fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
+        observation = json.loads(args.observation.read_text(encoding="utf-8"))
+        report = score(fixture, args.question, observation)
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        print(f"invalid input: {type(exc).__name__}: {exc}", file=sys.stderr)
+        return 2
     print(json.dumps(report, indent=2))
     return 0 if report["retrieval_pass"] else 1
 

@@ -123,7 +123,7 @@ is written until the user accepts that line. Follow
    whether the engagement agreement allows keeping notes from these
    documents outside the client's systems; "no" or "not sure" stops the
    import. Ask whether each document is the current version.
-3. Run `profile.py extract --repo . FILE...` (with `--list` first for a
+3. Run `profile.py extract --project . FILE...` (with `--list` first for a
    directory) and read **only its output**, never the raw files. Use no
    network tool and fetch no link a document contains.
 4. Draft at most 40 candidates in the fixed table, one org-level fact per
@@ -174,8 +174,8 @@ not the original documents.
 Ask which org this repository belongs to, listing existing orgs, with
 "none" as an option. Never infer it from the git remote, folder name or
 documents. On the answer, run
-`profile.py bind --repo . --org <slug|none>` and confirm with
-`profile.py resolve --repo .`. A repository belongs to one org; rebinding
+`profile.py bind --project . --org <slug|none>` and confirm with
+`profile.py resolve --project .`. A repository belongs to one org; rebinding
 replaces the row. There is no global active org.
 
 ## remember: propose a change

@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "note": "Justified exceptions to docs/helper-conventions.md, checked by tests/test_helper_conventions.py. Each entry names the script, the rule and the argument; keep the reason current.",
+  "exceptions": [
+    {
+      "script": "skills/adk-governance-pack/scripts/check_governance.py",
+      "rule": "positional",
+      "name": "drafts",
+      "why": "The positional arguments are the draft documents being checked (files, or a folder of drafts), not a project directory."
+    },
+    {
+      "script": "skills/adk-portability-planning/scripts/check_portability.py",
+      "rule": "positional",
+      "name": "assessment",
+      "why": "The positional argument is the assessment document being checked, not a project directory."
+    },
+    {
+      "script": "skills/adk-frontend-integration/scripts/check_agui_trace.py",
+      "rule": "positional",
+      "name": "trace",
+      "why": "The positional argument is the NDJSON trace file being validated, not a project directory."
+    },
+    {
+      "script": "skills/practice-profile/scripts/profile.py",
+      "rule": "positional",
+      "name": "files",
+      "why": "scan and extract take the documents the user named; they are inputs, not a project directory."
+    },
+    {
+      "script": "skills/practice-profile/scripts/profile.py",
+      "rule": "positional",
+      "name": "candidates",
+      "why": "verify-candidates takes the candidate table file being checked."
+    },
+    {
+      "script": "skills/practice-profile/scripts/profile.py",
+      "rule": "directory-flag",
+      "name": "--root",
+      "why": "--root is the practice-profile store (default $AGENTIC_ENGINEERING_HOME or ~/.agentic-engineering), not the project; the project is --project."
+    },
+    {
+      "script": "skills/practice-profile/scripts/profile.py",
+      "rule": "exit-codes",
+      "name": "4-6",
+      "why": "resolve and brief report binding state through exit codes 3 (unbound), 4 (no profile root), 5 (bound to none) and 6 (document refused as crafted); six skills' practice-profile.md copies branch on them, so they keep their numbers."
+    },
+    {
+      "script": "skills/adk-engineer/scripts/field_notes.py",
+      "rule": "directory-flag",
+      "name": "--repo",
+      "why": "url --repo is the GitHub owner/name that receives the issue, not a directory."
+    }
+  ]
+}

@@ -16,6 +16,7 @@ import os
 from pathlib import Path
 import re
 import stat
+import sys
 
 
 EXCLUDED = {".git", ".hg", ".svn", ".venv", "venv", "env", "node_modules",
@@ -652,13 +653,27 @@ class Lint:
         self.result["counts"] = dict(sorted(self.result["counts"].items()))
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
         epilog="Reads bounded Python source only; skips secrets, dependency directories and symlinks. "
-               "Findings are review prompts, not a verdict on model behaviour.")
+               "Findings are review prompts, not a verdict on model behaviour."
+               " Exit 0: complete scan; 2: bad arguments; 3: partial scan.")
     parser.add_argument("--project", required=True, help="project directory to inspect without executing code")
-    parser.add_argument("--dry-run", action="store_true", help="perform the same read-only scan and report no changes")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     parser.add_argument("--max-tools", type=positive, default=20,
                         help="flag agents whose tools=[...] literal has more entries (default: 20)")
     parser.add_argument("--max-files", type=positive, default=500, help="maximum Python files (default: 500)")
@@ -679,7 +694,7 @@ def main():
     lint.walk(root)
     lint.analyse()
     print(json.dumps(lint.result, indent=2, sort_keys=True))
-    return 1 if lint.result["partial"] else 0
+    return 3 if lint.result["partial"] else 0
 
 
 if __name__ == "__main__":

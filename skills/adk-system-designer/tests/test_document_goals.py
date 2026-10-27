@@ -180,6 +180,14 @@ class DocumentGoals(unittest.TestCase):
         return self.run_script("plan_status.py", "--plan", str(self.plan), "--tickets", str(self.tickets),
                                "--design", str(self.design), "--json", *extra)
 
+    def test_root_is_a_deprecated_alias_for_project(self):
+        command = [sys.executable, str(SCRIPTS / "check_tickets.py"), "--tickets", str(self.tickets),
+                   "--skills-dir", str(self.skills), "--json"]
+        new = subprocess.run(command + ["--project", str(self.root)], capture_output=True, text=True, cwd=self.root)
+        old = subprocess.run(command + ["--root", str(self.root)], capture_output=True, text=True, cwd=self.root)
+        self.assertEqual((old.returncode, old.stdout), (new.returncode, new.stdout))
+        self.assertIn("--root is deprecated; use --project", old.stderr)
+
     def test_portability_ticket_with_deliverable_items_and_no_contracts_passes(self):
         code, result = self.lint()
         self.assertEqual([], result["errors"])

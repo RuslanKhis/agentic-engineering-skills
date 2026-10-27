@@ -39,8 +39,8 @@ The exercised manual-browser recipe stays on React 18.3.1 and Vite 6.4.3. The cu
 Run the inspector using the target's selected interpreter. Its installed metadata describes that interpreter, while manifest declarations describe the project being inspected. A script launched from another virtual environment cannot certify the target's installed packages.
 
 ```text
-python scripts/inspect_project.py --project . --mode json --dry-run
-python scripts/inspect_project.py --project . --mode managed-agui --require-tested-stack
+python "$SKILL_DIR/scripts/inspect_project.py" --project . --mode json
+python "$SKILL_DIR/scripts/inspect_project.py" --project . --mode managed-agui --require-tested-stack
 ```
 
 Run these paths from the installed skill directory, or resolve them there and set `--project` to the target. The first command is read-only evidence gathering; the second deliberately fails if its relevant invoking-interpreter package versions are missing or differ from the recorded baseline. It does not install anything. Read the helper's `--help` for scan bounds and precise exit codes.
@@ -55,6 +55,6 @@ Never solve incompatibility with an unrequested upgrade. Use the target package 
 
 ## Skill helper and agent-environment scope
 
-The two helpers use the Python standard library and require Python 3.11+. They do not import the target application, invoke package managers, install dependencies, contact a model or call cloud APIs. `--dry-run` repeats their read-only operation.
+The two helpers use the Python standard library and require Python 3.11+. They do not import the target application, invoke package managers, install dependencies, contact a model or call cloud APIs. Both only read; their old `--dry-run` flag is a deprecated no-op.
 
 The skill core is ordinary Markdown following the [Agent Skills specification](https://agentskills.io/specification). Optional `agents/openai.yaml` enables normal implicit selection in compatible clients; the core does not require it. Behavioural evaluation records belong in [validation.md](validation.md). Do not claim Claude Code, Gemini CLI, Cursor, Windows or Linux execution from Markdown validity alone; only environments actually exercised are supported by the recorded evidence.

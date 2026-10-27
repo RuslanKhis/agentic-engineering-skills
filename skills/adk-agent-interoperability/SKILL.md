@@ -61,9 +61,9 @@ source-verified against google-adk 2.8.0 unless another version is named).
    `--allow-remote` is needed for any non-loopback host and is an approval
    step: ask the owner before the first connection to a server you did not
    start. `--command` runs the command you give it; use the exact command
-   the agent uses. Exit 0 means inspected, 1 means a source failed
-   (`partial`), 2 means bad arguments; `agent_card_check.py --fail-on error`
-   (or `review`) also exits 3 when such a finding is reported, for CI.
+   the agent uses. Exit 0 means inspected, 2 means bad arguments, 3 means a
+   source failed (`partial`); `agent_card_check.py --fail-on error` (or
+   `review`) and `--fail-on-diff` exit 1 when such a finding is reported, for CI.
    Findings whose `heuristic` is true are reading prompts, never verdicts.
    For a signed card, add
    `--require-signature` and `--key-host <host serving the agreed key set>`;

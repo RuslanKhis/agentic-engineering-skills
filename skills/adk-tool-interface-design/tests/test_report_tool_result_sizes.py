@@ -39,7 +39,7 @@ class ReportTests(unittest.TestCase):
 
     def report(self, path, *args):
         result = self.run_cli("--events", str(path), *args)
-        self.assertIn(result.returncode, (0, 1), result.stderr)
+        self.assertIn(result.returncode, (0, 3), result.stderr)
         return result, json.loads(result.stdout)
 
     def test_help_and_bad_arguments(self):
@@ -100,7 +100,7 @@ class ReportTests(unittest.TestCase):
     def test_malformed_file_is_partial(self):
         path = self.write("broken.json", "{not json\n[also not json\n")
         result = self.run_cli("--events", str(path))
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         data = json.loads(result.stdout)
         self.assertTrue(data["partial"])
         self.assertEqual(data["tools"], [])
@@ -108,7 +108,7 @@ class ReportTests(unittest.TestCase):
         self.assertNotIn("not json", result.stdout)
         mixed = self.write("mixed.json", json.dumps([call("a", {}), 42, {"content": {"parts": ["text"]}}]))
         result, data = self.report(mixed)
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertEqual(data["events_skipped"], 2)
         self.assertEqual(data["tools"][0]["calls"], 1)
 

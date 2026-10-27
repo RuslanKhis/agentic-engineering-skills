@@ -155,7 +155,7 @@ compliance floor" and "Glossary". Skip any section the profile does not
 have. If there is no such directory or no binding, continue without it and
 do not mention it. Choose the org and read it as
 [practice profile](references/practice-profile.md) describes (`profile.py
-brief --repo . --for adk-governance-pack`); the rules below add to it.
+brief --project . --for adk-governance-pack`); the rules below add to it.
 
 - Cite each fact you use as `source: practice profile <org>, reviewed
   <date>`, with the date the profile records.

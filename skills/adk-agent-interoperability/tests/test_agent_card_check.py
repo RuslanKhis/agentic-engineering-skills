@@ -200,7 +200,7 @@ class FileCardTests(unittest.TestCase):
             path = Path(tmp) / "bad.json"
             path.write_text("{not json", encoding="utf-8")
             code, payload, _ = run("--file", str(path))
-        self.assertEqual(code, 1)
+        self.assertEqual(code, 2)
         self.assertTrue(payload["partial"])
         self.assertIn("cannot read", payload["error"])
 
@@ -235,19 +235,19 @@ class ServerCardTests(unittest.TestCase):
     def test_card_path_override_and_unauthorised(self):
         with CardServer({"/v1/card": (401, b"{}")}) as server:
             code, payload, _ = run("--url", server.base, "--card-path", "/v1/card")
-            self.assertEqual(code, 1)
+            self.assertEqual(code, 3)
             self.assertIn("401", payload["error"])
 
     def test_missing_card_is_partial(self):
         with CardServer({}) as server:
             code, payload, _ = run("--url", server.base)
-            self.assertEqual(code, 1)
+            self.assertEqual(code, 3)
             self.assertIn("no agent card found", payload["error"])
 
     def test_non_json_card_is_partial(self):
         with CardServer({"/.well-known/agent-card.json": (200, b"<html></html>")}) as server:
             code, payload, _ = run("--url", server.base)
-            self.assertEqual(code, 1)
+            self.assertEqual(code, 3)
 
 
 def protected(**header):
@@ -341,19 +341,19 @@ class SignatureTests(unittest.TestCase):
 
 
 class FailOnTests(unittest.TestCase):
-    def test_fail_on_turns_findings_into_exit_3(self):
+    def test_fail_on_turns_findings_into_exit_1(self):
         bad = dict(VALID_03, url="http://agents.example.com/a2a")
         with tempfile.TemporaryDirectory() as tmp:
             path = write_card(tmp, bad)
             self.assertEqual(run("--file", path)[0], 0)
             code, payload, _ = run("--file", path, "--fail-on", "error")
-            self.assertEqual(code, 3)
+            self.assertEqual(code, 1)
             self.assertGreater(payload["counts"]["errors"], 0)
             clean = write_card(tmp, VALID_03, "clean.json")
             self.assertEqual(run("--file", clean, "--fail-on", "error")[0], 0)
             reviewed = write_card(tmp, dict(VALID_03, skills=[]), "review.json")
             self.assertEqual(run("--file", reviewed, "--fail-on", "error")[0], 0)
-            self.assertEqual(run("--file", reviewed, "--fail-on", "review")[0], 3)
+            self.assertEqual(run("--file", reviewed, "--fail-on", "review")[0], 1)
         self.assertEqual(run("--file", "x.json", "--fail-on", "warning")[0], 2)
 
     def test_10_card_protocol_version_message_names_the_interface(self):

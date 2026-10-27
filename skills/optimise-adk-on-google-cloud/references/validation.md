@@ -13,7 +13,7 @@ may be copied anywhere; none of these values refers to the companion repository.
 ```bash
 "${PYTHON:?}" "${SKILL_DIR:?}/scripts/inspect_project.py" --help
 "${PYTHON:?}" "${SKILL_DIR:?}/scripts/inspect_project.py" \
-  --root "${TARGET_ROOT:?}" --mode auto --dry-run
+  --project "${TARGET_ROOT:?}" --mode auto
 ```
 
 The inspector requires Python 3.11+ and POSIX directory-descriptor support. It
@@ -25,7 +25,7 @@ are opaque to avoid disclosing project paths. Follow up manually on lockfiles,
 unsupported declarations, imported packages and real wiring.
 
 Exit 0 means the inventory completed, **not** that the project is compatible.
-`--require-baseline` additionally returns 3 unless the discovered unconditional
+`--require-baseline` additionally returns 1 unless the discovered unconditional
 runtime ADK declaration is exactly `2.8.0` without conflicting constraints.
 Select `--mode agent-runtime` to additionally require AI Platform SDK `1.153.1`
 and GenAI `2.19.0`; the known conflicting AI Platform `adk` extra also fails
@@ -33,11 +33,11 @@ that gate. `--mode gke` requires ADK and AI Platform SDK at those recorded pins,
 without imposing a GenAI pin; the known extra conflict fails this gate too.
 `auto` does not infer and enforce a hosting mode's dependency combination.
 Ranged, missing, conditional and other pins require inspection, not replacement.
-Exit 2 means invalid input, an unsupported platform or a hard inspection limit
-was reached. The depth limit is reported in coverage and makes the optional
+Exit 2 means invalid arguments or project directory; exit 3 means an unsupported
+platform, an unreadable or invalid manifest, or a hard inspection limit stopped it. The depth limit is reported in coverage and makes the optional
 baseline gate unverified. Narrow the root instead of accepting an incomplete scan.
 The inventory limits are 4 directory levels, 4,096 entries, 64 manifests,
-128 KiB per manifest and 1 MiB in total. Repetition and `--dry-run` are read-only.
+128 KiB per manifest and 1 MiB in total. Repeated runs are read-only.
 
 ## Test the changed boundary
 
@@ -111,7 +111,7 @@ example expects one schema tool call and two nonblank streamed text events:
 ```bash
 "${PYTHON:?}" "${SKILL_DIR:?}/scripts/check_run.py" --help
 "${PYTHON:?}" "${SKILL_DIR:?}/scripts/check_run.py" \
-  --events "${EVENTS_FILE:?}" --expect "${EXPECT_FILE:?}" --dry-run
+  --events "${EVENTS_FILE:?}" --expect "${EXPECT_FILE:?}"
 ```
 
 The pointers address fields in `functionResponse.response`, with JSON Pointer
@@ -150,8 +150,8 @@ target-specific verifier; accompanying text is not a substitute.
 Inputs are bounded to 8 MiB/2,000 events and a 64 KiB expectation file. Duplicate
 JSON keys, nonfinite numbers and nonregular or symlink input files are rejected.
 Only counts and fixed reason codes are printed. Exit 0 means accepted saved data,
-2 means invalid/unsupported input, and 3 means acceptance failed. All invocations,
-including `--dry-run`, make zero network calls and writes.
+1 means acceptance failed, and 2 means invalid/unsupported input. All invocations
+make zero network calls and writes.
 
 ## Estimate a saved session's context budget
 
@@ -166,11 +166,11 @@ compaction spans with covered events and the last authoritative
 ```bash
 "${PYTHON:?}" "${SKILL_DIR:?}/scripts/context_budget.py" --help
 "${PYTHON:?}" "${SKILL_DIR:?}/scripts/context_budget.py" \
-  --session "${SESSION_FILE:?}" --max-result-bytes 20000 --dry-run
+  --session "${SESSION_FILE:?}" --max-result-bytes 20000
 ```
 
-Exit 0 means inspected, 1 means malformed input or a partial report with
-skipped malformed items, and 2 means invalid arguments. Inputs are bounded to
+Exit 0 means inspected, 2 means invalid arguments or malformed input, and 3
+means a partial report with skipped malformed items. Inputs are bounded to
 16 MiB and 5,000 events; symlinks are rejected. The bytes/4 figure is an
 estimate; `usage_metadata.prompt_token_count` is the measurement. The helper
 establishes the saved file's composition only, never provider usage, compaction
@@ -249,7 +249,7 @@ this is not a whole-application privacy or external export test.
 
 ## GKE-specific acceptance
 
-Run the inspector with `--mode gke --require-baseline --dry-run` for its two-pin
+Run the inspector with `--mode gke --require-baseline` for its two-pin
 declaration gate. It does not validate Kubernetes YAML. Trace and render the
 actual generator, then check selectors, private/public exposure, source staging,
 image digest, probes, resources, quota/replicas/surge and session-backend wiring.

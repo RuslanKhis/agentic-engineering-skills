@@ -299,7 +299,7 @@ class CommandChecks(unittest.TestCase):
             self.assertEqual(before, {p.name: p.read_bytes() for p in root.iterdir()})
             ep.write_text(json.dumps(events + [{"error": "SYNTHETIC_SECRET_VALUE"}]))
             failure = self.run_cli("--events", str(ep), "--expect", str(cp))
-            self.assertEqual(failure.returncode, 3)
+            self.assertEqual(failure.returncode, 1)
             self.assertNotIn("SYNTHETIC_SECRET_VALUE", failure.stdout + failure.stderr)
             self.assertNotIn(directory, failure.stdout + failure.stderr)
             events[-1]["content"]["parts"].append({
