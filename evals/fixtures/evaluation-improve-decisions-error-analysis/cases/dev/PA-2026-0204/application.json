@@ -1,0 +1,29 @@
+{
+ "case_id": "PA-2026-0204",
+ "address": "14 Kestrel Lane, Eastmere",
+ "proposal": "Widen vehicle crossover",
+ "documents": [
+  {
+   "doc_id": "APP-FORM",
+   "version": "1",
+   "title": "Application form",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Site: 14 Kestrel Lane, Eastmere\nDwelling: detached, 3 bedrooms\nProposal: widen the crossover from 3.0 m to 4.5 m"
+    }
+   ]
+  },
+  {
+   "doc_id": "HWY",
+   "version": "1",
+   "title": "Highway authority letter",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Kestrel Lane is a 20 mph street with no through traffic.\nThe authority confirms in writing that the visibility splay requirement is waived for this crossover."
+    }
+   ]
+  }
+ ]
+}

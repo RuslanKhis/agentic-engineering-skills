@@ -1,0 +1,11 @@
+{
+ "campaign": "policy-qualification-pilot",
+ "approved_by": "Morgan Hale (product owner)",
+ "approved_on": "2026-10-20",
+ "allowance_usd": 6.0,
+ "scope": "qualification route on pack PQ-0007 and the four follow-on packs; no other route",
+ "entries": [
+  {"run_id": "PQ-0007-r1", "stage": "qualification", "reserved_usd": 0.5, "charged_usd": 0.31, "state": "settled"},
+  {"run_id": "PQ-0007-r2", "stage": "qualification", "reserved_usd": 1.5, "charged_usd": 1.12, "state": "settled"}
+ ]
+}

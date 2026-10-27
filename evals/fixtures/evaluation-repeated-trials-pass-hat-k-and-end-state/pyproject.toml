@@ -1,0 +1,5 @@
+[project]
+name = "booking-agent"
+version = "0.7.2"
+requires-python = ">=3.11"
+dependencies = ["google-adk==2.12.0"]

@@ -1,0 +1,16 @@
+{
+ "campaign": "autumn-validation",
+ "approved_by": "Morgan Hale (product owner)",
+ "approved_on": "2026-10-06",
+ "allowance_usd": 25.0,
+ "scope": "cohort A development cases, writer and review stages; holdout export once at the end",
+ "approvals": [
+  {"id": "AP-1", "date": "2026-10-06", "covers": "cohort A batches within the allowance"}
+ ],
+ "entries": [
+  {"run_id": "2026-10-08-batch1", "stage": "writer+review", "reserved_usd": 4.2, "charged_usd": 3.86, "state": "settled"},
+  {"run_id": "2026-10-15-batch2", "stage": "writer+review", "reserved_usd": 4.2, "charged_usd": 3.71, "state": "settled"},
+  {"run_id": "2026-10-21-batch3/PA-2026-0146", "stage": "writer", "reserved_usd": 0.4, "charged_usd": null, "state": "reserved"},
+  {"run_id": "2026-10-21-batch3/PA-2026-0152", "stage": "writer", "reserved_usd": 0.4, "charged_usd": null, "state": "reserved"}
+ ]
+}

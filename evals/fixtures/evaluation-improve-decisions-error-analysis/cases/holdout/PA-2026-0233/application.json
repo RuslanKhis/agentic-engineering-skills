@@ -1,0 +1,29 @@
+{
+ "case_id": "PA-2026-0233",
+ "address": "2 Alder Close, Eastmere",
+ "proposal": "Two-storey side extension",
+ "documents": [
+  {
+   "doc_id": "APP-FORM",
+   "version": "1",
+   "title": "Application form",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Site: 2 Alder Close, Eastmere\nDwelling: detached, 3 bedrooms\nProposal: two-storey side extension 5 m from a protected oak"
+    }
+   ]
+  },
+  {
+   "doc_id": "TS",
+   "version": "1",
+   "title": "Tree survey extract",
+   "pages": [
+    {
+     "page": 1,
+     "text": "T2 oak, TPO 14/2019, root protection area radius 7.2 m.\nArboricultural method statement AMS-2 attached."
+    }
+   ]
+  }
+ ]
+}

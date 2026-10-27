@@ -1,0 +1,21 @@
+{
+ "stage": "writer",
+ "saved_at": "2026-10-23T11:20:07+00:00",
+ "meta": {"usage": {"prompt_tokens": 2390, "completion_tokens": 810, "cost_usd": 0.41}, "prompt": "writer-v7", "model": "gemini-3.5-flash"},
+ "payload": {
+  "decision": "refuse",
+  "reasons": [
+   {"id": "R1", "text": "The side extension is subordinate to the house in scale and height and acceptable in design (H4).",
+    "citations": ["APP-FORM@1:p1:3", "LP-H4@2024:p31:2", "LP-H4@2024:p31:3"]},
+   {"id": "R2", "text": "T1 is a protected oak 3.5 m from the new side wall. Its stem diameter was not measured, so its root protection area is unknown and the extension may fall within it. No arboricultural method statement is supplied. On this evidence the authority cannot conclude that harm to T1 is avoided (ENV3).",
+    "citations": ["APP-FORM@1:p1:4", "TS@1:p1:2", "TS@1:p1:3", "TS@1:p1:4", "LP-ENV3@2024:p58:2", "LP-ENV3@2024:p58:3", "LP-ENV3@2024:p58:4"]}
+  ],
+  "conditions": [],
+  "citations": [
+   {"span_id": "TS@1:p1:3", "quote": "Stem diameter not measured: access to the base of T1 was refused on the survey day."},
+   {"span_id": "AGT@1:p1:1", "quote": "In our view the oak is well clear of the works and no tree issues arise."}
+  ],
+  "conflicts": ["The agent's letter says the oak is well clear of the works (AGT p1 line 1); the application form puts it 3.5 m from the new wall and the survey could not calculate its root protection area (TS p1 lines 3-4)."],
+  "gaps": ["Whether the new wall lies within T1's root protection area is unresolved: the survey records that the stem diameter was not measured (TS p1 line 3). A completed survey would settle it."]
+ }
+}

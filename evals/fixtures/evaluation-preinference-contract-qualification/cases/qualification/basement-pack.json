@@ -1,0 +1,29 @@
+{
+ "pack_id": "PQ-0007",
+ "question": "Which route and conditions apply to a basement under 21 Heron Close (semi-detached, excavation 0.6 m from the party wall)?",
+ "parser_version": "pdf-lines-v3",
+ "passages": [
+  {"id": "d7-head", "document": "D7", "version": "2024", "page": 12, "kind": "clause", "clause": "4.3(b)(ii)",
+   "text": "4.3(b)(ii) A basement under a dwelling's own footprint may be approved under the\nprior-notice route, provided the excava-", "requires": ["d7-tail", "d7-fn3"]},
+  {"id": "d7-tail", "document": "D7", "version": "2024", "page": 13, "kind": "continuation", "clause": null,
+   "text": "tion stays at least 1.0 m from any party wall. Where it does not, a structural\nmethod statement is required before work starts.", "requires": []},
+  {"id": "d7-fn3", "document": "D7", "version": "2024", "page": 13, "kind": "footnote", "clause": null,
+   "text": "3 The party-wall distance applies under the prior-notice route as well as a full application.", "requires": []},
+  {"id": "d7-tbl-head", "document": "D7", "version": "2024", "page": 14, "kind": "table-header", "clause": null,
+   "table": "table-D7.1", "text": "Table D7.1 | Ground | Route | Note (see footnote 3)", "requires": ["d7-fn3"]},
+  {"id": "d7-c1", "document": "D7", "version": "2024", "page": 14, "kind": "cell", "table": "table-D7.1", "row": 1, "col": 2,
+   "text": "Prior notice", "requires": ["d7-tbl-head"]},
+  {"id": "d7-c2", "document": "D7", "version": "2024", "page": 14, "kind": "cell", "table": "table-D7.1", "row": 2, "col": 2,
+   "text": "Prior notice", "requires": ["d7-tbl-head"]},
+  {"id": "d7-c3", "document": "D7", "version": "2024", "page": 14, "kind": "cell", "table": "table-D7.1", "row": 3, "col": 2,
+   "text": "Full application", "requires": ["d7-tbl-head", "d7-fn3"]},
+  {"id": "d7-c4", "document": "D7", "version": "2024", "page": 14, "kind": "cell", "table": "table-D7.1", "row": 4, "col": 2,
+   "text": "Full application", "requires": ["d7-tbl-head", "d7-fn3"]},
+  {"id": "d7-img", "document": "D7", "version": "2024", "page": 15, "kind": "image", "clause": null,
+   "text": null, "requires": []},
+  {"id": "d8-head", "document": "D8", "version": "2024", "page": 20, "kind": "clause", "clause": "4.3(b)(ii)",
+   "text": "4.3(b)(ii) Lightwells to the front of a dwelling must be covered by a flush grille.", "requires": []}
+ ],
+ "selected_pack": ["d7-head", "d7-tbl-head", "d7-c1", "d7-c2", "d7-c3", "d7-c4", "d8-head", "d7-tail", "d7-fn3", "d7-img"],
+ "required": ["d7-head", "d7-tail", "d7-fn3", "d7-tbl-head", "d7-c1", "d7-c2", "d7-c3", "d7-c4"]
+}

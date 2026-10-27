@@ -1,0 +1,17 @@
+{
+  "plan": "Eastmere Local Plan 2024 (synthetic)",
+  "documents": [
+    {"doc_id": "LP-H4", "version": "2024", "title": "Policy H4 Householder extensions", "pages": [
+      {"page": 31, "text": "Policy H4 Householder extensions\nExtensions to dwellings will be supported where they are subordinate to the host dwelling\nin scale and height and use materials that match or complement it.\nRear extensions on terraced dwellings should not project more than 4.0 m beyond the original\nrear wall, unless the applicant demonstrates that neighbouring habitable rooms keep\nacceptable daylight and outlook.\nFirst-floor side windows facing a neighbour within 10 m must be obscure-glazed and non-opening\nbelow 1.7 m."}
+    ]},
+    {"doc_id": "LP-T2", "version": "2024", "title": "Policy T2 Parking and access", "pages": [
+      {"page": 44, "text": "Policy T2 Parking and access\nDevelopment that removes an off-street parking space will be supported only where the\nremaining provision meets Table T2.1 or the site lies within the Town Centre Zone.\nNew or widened vehicle crossovers must provide visibility splays of 2.4 m by 43 m.\nThe splay requirement may be waived where the highway authority confirms in writing that\nthe road is a 20 mph street with no through traffic."}
+    ]},
+    {"doc_id": "LP-T2-1", "version": "2024", "title": "Table T2.1 Minimum parking", "pages": [
+      {"page": 45, "text": "Table T2.1 Minimum off-street parking\n1-2 bedrooms: 1 space\n3 bedrooms: 2 spaces\n4 or more bedrooms: 2 spaces plus 1 cycle store\nTandem spaces count as one space."}
+    ]},
+    {"doc_id": "LP-ENV3", "version": "2024", "title": "Policy ENV3 Trees", "pages": [
+      {"page": 58, "text": "Policy ENV3 Trees\nDevelopment within the root protection area of a protected tree requires an arboricultural\nmethod statement approved before work starts.\nWhere a tree survey is absent, the authority cannot conclude that harm is avoided."}
+    ]}
+  ]
+}

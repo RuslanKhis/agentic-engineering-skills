@@ -1,0 +1,10 @@
+{
+ "workflow_version": "v14",
+ "frozen_on": "2026-10-26",
+ "code_version": "e7a91c3",
+ "writer": {"model": "gemini-3.5-flash", "prompt": "writer-v14", "schema": "draft-v5", "temperature": 1.0},
+ "review": {"model": "gemini-3.5-flash", "prompt": "review-v6", "schema": "review-v2"},
+ "retrieval": {"method": "keyword overlap", "k": 4},
+ "development_results": {"cases": 5, "decisions_matching_labels": 5,
+                         "note": "each case last run on the version shown in docs/workflow-versions.md"}
+}

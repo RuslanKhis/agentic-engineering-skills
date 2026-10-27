@@ -1,0 +1,11 @@
+{
+ "run_id": "PA-2026-0141-r4-cont1",
+ "case_id": "PA-2026-0141",
+ "continues": "PA-2026-0141-r4 from its saved writer checkpoint",
+ "route": "pipeline/review_patch.py resume_review (review and export only)",
+ "workflow_version": "v14",
+ "review": {"status": "completed", "verdict": "accept", "charged_usd": 0.21, "sends": 1},
+ "export": {"status": "completed", "file": "export.json"},
+ "upstream_sends": 0,
+ "finished": "2026-10-24T16:40:03Z"
+}

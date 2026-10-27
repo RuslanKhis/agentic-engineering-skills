@@ -1,0 +1,21 @@
+{
+ "stage": "writer",
+ "saved_at": "2026-10-24T16:01:31+00:00",
+ "meta": {"usage": {"prompt_tokens": 2480, "completion_tokens": 702, "cost_usd": 0.38}},
+ "payload": {
+  "decision": "approve",
+  "reasons": [
+   {"id": "R1", "text": "The widened crossover needs no visibility splay: Kestrel Lane is a 20 mph street with no through traffic and the highway authority has confirmed the waiver in writing.",
+    "citations": ["HWY@1:p1:1", "HWY@1:p1:2", "LP-T2@2024:p44:4", "LP-T2@2024:p44:5", "LP-T2@2024:p44:6"]},
+   {"id": "R2", "text": "With the garage converted, the two side-by-side drive spaces and the cycle store meet Table T2.1 for a four-bedroom house.",
+    "citations": ["APP-FORM@1:p1:2", "APP-FORM@1:p1:4", "LP-T2-1@2024:p45:4"]}
+  ],
+  "conditions": [],
+  "citations": [
+   {"span_id": "HWY@1:p1:2", "quote": "The authority confirms the visibility splay requirement can be waived for this crossover."},
+   {"span_id": "APP-FORM@1:p1:4", "quote": "Parking after works: two spaces side by side on the drive; cycle store in the rear garden"}
+  ],
+  "conflicts": [],
+  "gaps": []
+ }
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="160" viewBox="0 0 320 160">
+  <rect width="320" height="160" fill="white"/>
+  <g fill="#1d2a1f" font-family="sans-serif" font-size="15">
+    <text x="16" y="26">Written stage depth: 4.5 m.</text>
+    <text x="16" y="146">Sketch not to scale.</text>
+  </g>
+  <g stroke="#1d2a1f" stroke-width="2" fill="none">
+    <rect x="70" y="50" width="180" height="60"/>
+    <path d="M70 120H250 M70 114V126 M250 114V126"/>
+  </g>
+</svg>

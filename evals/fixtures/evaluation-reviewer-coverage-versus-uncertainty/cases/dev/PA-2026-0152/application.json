@@ -1,0 +1,13 @@
+{
+  "case_id": "PA-2026-0152",
+  "address": "11 Alder Close, Eastmere",
+  "proposal": "Single-storey side extension",
+  "documents": [
+    {"doc_id": "APP-FORM", "version": "1", "title": "Application form", "pages": [
+      {"page": 1, "text": "Site: 11 Alder Close, Eastmere\nDwelling: detached, 4 bedrooms\nProposal: single-storey side extension\nThe beech at the rear will be 7.5 m from the new wall, outside its root protection area."}
+    ]},
+    {"doc_id": "TS", "version": "1", "title": "Tree survey extract", "pages": [
+      {"page": 1, "text": "T3 beech, mature, protected by Tree Preservation Order 22/2018.\nStem diameter 350 mm; root protection area radius 4.2 m.\nThe proposed wall at 7.5 m lies outside the root protection area of T3."}
+    ]}
+  ]
+}

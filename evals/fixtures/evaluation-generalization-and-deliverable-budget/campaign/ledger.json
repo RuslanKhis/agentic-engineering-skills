@@ -1,0 +1,25 @@
+{
+ "campaign": "autumn-validation",
+ "approved_by": "Morgan Hale (product owner)",
+ "approved_on": "2026-10-06",
+ "allowance_usd": 25.0,
+ "scope": "development cases, writer and review stages; holdout predictions regenerated once with the final version",
+ "reservations": [
+  {"id": "holdout-deliverable", "reserved_on": "2026-10-10", "amount_usd": 4.0,
+   "purpose": "one regeneration of the five holdout predictions with the final workflow version"}
+ ],
+ "entries": [
+  {"run_id": "dev-v9-all", "stage": "writer+review", "charged_usd": 3.3, "state": "settled", "against": "allowance"},
+  {"run_id": "holdout-v9", "stage": "writer+review", "charged_usd": 3.2, "state": "settled", "against": "allowance"},
+  {"run_id": "dev-v10-PA-2026-0203", "stage": "writer+review", "charged_usd": 0.66, "state": "settled", "against": "allowance"},
+  {"run_id": "dev-v11-PA-2026-0202", "stage": "writer+review", "charged_usd": 0.71, "state": "settled", "against": "allowance"},
+  {"run_id": "diag-retrieval-sweep", "stage": "writer", "charged_usd": 4.4, "state": "settled", "against": "allowance"},
+  {"run_id": "dev-v12-PA-2026-0204", "stage": "writer+review", "charged_usd": 0.64, "state": "settled", "against": "allowance"},
+  {"run_id": "diag-prompt-ablation", "stage": "writer", "charged_usd": 3.9, "state": "settled", "against": "allowance"},
+  {"run_id": "dev-v13-PA-2026-0201", "stage": "writer+review", "charged_usd": 0.69, "state": "settled", "against": "allowance"},
+  {"run_id": "diag-schema-repair-probe", "stage": "writer", "charged_usd": 1.1, "state": "settled", "against": "holdout-deliverable"},
+  {"run_id": "diag-thinking-level-probe", "stage": "writer", "charged_usd": 0.95, "state": "settled", "against": "holdout-deliverable"},
+  {"run_id": "dev-v14-PA-2026-0205", "stage": "writer+review", "charged_usd": 0.62, "state": "settled", "against": "allowance"}
+ ],
+ "estimates": {"holdout_run_usd": "3.10-3.40 for five cases, writer and review, at v14 token counts"}
+}

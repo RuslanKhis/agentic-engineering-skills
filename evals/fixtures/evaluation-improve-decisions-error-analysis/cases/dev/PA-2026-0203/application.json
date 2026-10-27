@@ -1,0 +1,40 @@
+{
+ "case_id": "PA-2026-0203",
+ "address": "30 Linnet Row, Eastmere",
+ "proposal": "Single-storey rear extension to a terraced house",
+ "documents": [
+  {
+   "doc_id": "APP-FORM",
+   "version": "1",
+   "title": "Application form",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Site: 30 Linnet Row, Eastmere\nDwelling: mid-terrace, 2 bedrooms\nProposal: single-storey rear extension, kitchen"
+    }
+   ]
+  },
+  {
+   "doc_id": "DWG-03",
+   "version": "1",
+   "title": "Drawing 03 proposed ground floor plan",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Proposed ground floor plan, scale 1:50\nExtension depth beyond original rear wall: 3.8 m\nInternal width: 4.1 m"
+    }
+   ]
+  },
+  {
+   "doc_id": "DWG-05",
+   "version": "1",
+   "title": "Drawing 05 proposed side elevation",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Proposed side elevation, scale 1:50\nMaximum height of extension: 4.2 m\nEaves height: 2.6 m"
+    }
+   ]
+  }
+ ]
+}

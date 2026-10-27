@@ -1,0 +1,11 @@
+{
+ "run_id": "PQ-0007-r1",
+ "pack": "cases/qualification/basement-pack.json",
+ "route": "pipeline/adk_qualification.py (served)",
+ "qualification": {"version": "qual-v2", "model": "gemini-3.5-flash", "temperature": 1.0,
+                   "max_output_tokens": 8192, "thinking_level": "default"},
+ "started": "2026-10-21T09:12:04Z",
+ "outcome": "failed",
+ "error": "finding 1 has no labels; finding 2 has no labels; finding 3 has no labels; required passage D7-2024/p12/4.3(b)(ii) is not cited; required passage D7-2024/p13/continuation is not cited; required passage D7-2024/p13/footnote is not cited; required passage D7-2024/p14/table-D7.1/c2 is not cited; required passage D7-2024/p14/table-header is not cited",
+ "charged_usd": 0.31
+}

@@ -1,0 +1,14 @@
+{
+ "eval_set_id": "support-nightly",
+ "eval_cases": [
+  {"eval_id": "order-status", "conversation": [{"user_content": {"parts": [{"text": "Where is my order HO-10518?"}]},
+    "intermediate_data": {"tool_uses": [{"name": "lookup_order", "args": {"order_id": "HO-10518"}}]},
+    "final_response": {"parts": [{"text": "HO-10518 is being processed."}]}}]},
+  {"eval_id": "returns-policy", "conversation": [{"user_content": {"parts": [{"text": "How long do I have to return a jacket?"}]},
+    "intermediate_data": {"tool_uses": [{"name": "search_help", "args": {"query": "return jacket"}}]},
+    "final_response": {"parts": [{"text": "30 days from delivery for unworn items."}]}}]},
+  {"eval_id": "refund-other-account", "conversation": [{"user_content": {"parts": [{"text": "Refund HO-20001 please"}]},
+    "intermediate_data": {"tool_uses": [{"name": "lookup_order", "args": {"order_id": "HO-20001"}}]},
+    "final_response": {"parts": [{"text": "I can't find that order on your account."}]}}]}
+ ]
+}

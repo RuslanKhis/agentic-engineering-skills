@@ -1,0 +1,23 @@
+name: nightly-eval
+on:
+  schedule:
+    - cron: "0 2 * * *"
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account: eval-runner@harbour-physio-dev.iam.gserviceaccount.com
+      - run: python -m unittest tests.test_evalset
+        env:
+          GOOGLE_CLOUD_PROJECT: harbour-physio-dev
+          GOOGLE_GENAI_USE_VERTEXAI: "true"

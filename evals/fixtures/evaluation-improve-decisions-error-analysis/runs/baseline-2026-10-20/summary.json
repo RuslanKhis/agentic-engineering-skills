@@ -1,0 +1,38 @@
+{
+ "run": "baseline-2026-10-20",
+ "writer": {
+  "prompt": "writer-v12",
+  "model": "gemini-3.5-flash",
+  "temperature": 1.0
+ },
+ "retrieval": {
+  "k": 2,
+  "method": "pipeline/retrieval.py keyword overlap"
+ },
+ "cases": {
+  "PA-2026-0201": {
+   "decision": "approve",
+   "writer_errors": []
+  },
+  "PA-2026-0202": {
+   "decision": "approve",
+   "writer_errors": []
+  },
+  "PA-2026-0203": {
+   "decision": "refuse",
+   "writer_errors": []
+  },
+  "PA-2026-0204": {
+   "decision": "approve_with_conditions",
+   "writer_errors": []
+  },
+  "PA-2026-0205": {
+   "decision": null,
+   "writer_errors": [
+    "missing gaps",
+    "condition C1 has no reason"
+   ]
+  }
+ },
+ "agreement_with_labels": "1 of 5 decisions (PA-2026-0204), 3 of 5 key reasons missed"
+}

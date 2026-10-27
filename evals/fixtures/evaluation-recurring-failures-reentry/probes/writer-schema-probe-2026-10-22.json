@@ -1,0 +1,25 @@
+{
+ "probe": "writer route, exact serialized draft-v6 schema, through the controlled transport (recorded, not billed)",
+ "date": "2026-10-22",
+ "request": {
+  "url": "https://gateway.example.invalid/v1/chat/completions",
+  "model": "gemini-3.5-flash",
+  "response_format": {"type": "json_schema", "json_schema": {"name": "draft", "strict": true, "schema": {
+   "type": "object",
+   "required": ["decision", "reasons", "conditions", "citations", "conflicts", "gaps"],
+   "properties": {
+    "decision": {"type": "string", "enum": ["approve", "approve_with_conditions", "refuse"]},
+    "conditions": {"type": "array", "items": {"type": "object", "required": ["id", "template", "reason_id"], "properties": {
+     "id": {"type": "string"},
+     "reason_id": {"type": "string"},
+     "template": {"type": "string", "enum": [
+      "The development shall be carried out in accordance with the approved plans.\nReason: for the avoidance of doubt.",
+      "The first-floor side window shall be obscure-glazed and non-opening below 1.7 m.\nReason: to protect neighbouring privacy.",
+      "No work shall start until an arboricultural method statement has been approved.\nReason: to protect the tree under Policy ENV3."
+     ]}}}},
+    "reasons": {"type": "array"}, "citations": {"type": "array"}, "conflicts": {"type": "array"}, "gaps": {"type": "array"}
+   }}}}
+ },
+ "response": {"status": 400, "body": {"error": {"code": "invalid_request_error",
+   "message": "Invalid schema for response_format 'draft': enum value at properties.conditions.items.properties.template contains a line break"}}}
+}

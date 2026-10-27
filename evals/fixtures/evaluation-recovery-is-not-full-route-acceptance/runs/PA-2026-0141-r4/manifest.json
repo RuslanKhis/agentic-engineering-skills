@@ -1,0 +1,13 @@
+{
+ "run_id": "PA-2026-0141-r4",
+ "case_id": "PA-2026-0141",
+ "route": "normal route, pipeline/workflow.py",
+ "workflow_version": "v14",
+ "code_version": "3c9f0aa (+ local changes, see docs/runtime-state.txt)",
+ "writer": {"status": "completed", "operation_id": "op-7f3a2c91", "charged_usd": 0.38},
+ "review": {"status": "interrupted", "operation_id": "op-91bd04e2",
+            "error": "connection reset while waiting for the response; provider status unknown"},
+ "export": {"status": "not run"},
+ "started": "2026-10-24T13:02:10Z",
+ "ended": "2026-10-24T15:11:47Z"
+}

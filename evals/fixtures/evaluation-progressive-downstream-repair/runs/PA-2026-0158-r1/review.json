@@ -1,0 +1,13 @@
+{
+ "stage": "review",
+ "saved_at": "2026-10-24T16:02:09+00:00",
+ "meta": {"usage": {"prompt_tokens": 3120, "completion_tokens": 330, "cost_usd": 0.22}},
+ "payload": {
+  "verdict": "accept",
+  "claims": [
+   {"reason_id": "R1", "support": "supported", "span_ids": ["HWY@1:p1:1", "HWY@1:p1:2", "LP-T2@2024:p44:4", "LP-T2@2024:p44:5", "LP-T2@2024:p44:6"]},
+   {"reason_id": "R2", "support": "supported", "span_ids": ["APP-FORM@1:p1:4"]}
+  ],
+  "findings": []
+ }
+}

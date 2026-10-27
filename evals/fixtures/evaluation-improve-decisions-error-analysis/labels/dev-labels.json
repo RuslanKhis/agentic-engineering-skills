@@ -1,0 +1,52 @@
+{
+ "labelled_by": "J. Okoro (planning officer), 2026-10-14",
+ "cases": {
+  "PA-2026-0201": {
+   "decision": "refuse",
+   "key_reasons": [
+    "After conversion the four-bedroom house has one space; Table T2.1 needs two plus a cycle store and the site is outside the Town Centre Zone (T2)."
+   ],
+   "policies": [
+    "LP-T2",
+    "LP-T2-1"
+   ]
+  },
+  "PA-2026-0202": {
+   "decision": "refuse",
+   "key_reasons": [
+    "The extension comes within 3.2 m of a protected lime with no tree survey or method statement, so harm cannot be ruled out (ENV3)."
+   ],
+   "policies": [
+    "LP-ENV3",
+    "LP-H4"
+   ]
+  },
+  "PA-2026-0203": {
+   "decision": "approve",
+   "key_reasons": [
+    "The 3.8 m depth (drawing 03) is within H4's 4.0 m for terraces; the 4.2 m on drawing 05 is the height."
+   ],
+   "policies": [
+    "LP-H4"
+   ]
+  },
+  "PA-2026-0204": {
+   "decision": "approve",
+   "key_reasons": [
+    "The splay requirement is waived by the highway authority in writing for this 20 mph no-through street (T2)."
+   ],
+   "policies": [
+    "LP-T2"
+   ]
+  },
+  "PA-2026-0205": {
+   "decision": "approve_with_conditions",
+   "key_reasons": [
+    "The side window is within 10 m of No. 63, so H4 requires obscure glazing and non-opening below 1.7 m, secured by condition."
+   ],
+   "policies": [
+    "LP-H4"
+   ]
+  }
+ }
+}

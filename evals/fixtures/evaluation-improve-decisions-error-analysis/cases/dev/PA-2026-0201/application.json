@@ -1,0 +1,29 @@
+{
+ "case_id": "PA-2026-0201",
+ "address": "22 Finch Road, Eastmere",
+ "proposal": "Convert the integral garage to a bedroom",
+ "documents": [
+  {
+   "doc_id": "APP-FORM",
+   "version": "1",
+   "title": "Application form",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Site: 22 Finch Road, Eastmere\nDwelling: semi-detached, 3 bedrooms now, 4 after works\nProposal: convert integral garage to a fourth bedroom\nParking after works: one space on the drive; the garage space is lost\nThe site is 1.2 km from the Town Centre Zone boundary."
+    }
+   ]
+  },
+  {
+   "doc_id": "DAS",
+   "version": "1",
+   "title": "Design statement",
+   "pages": [
+    {
+     "page": 1,
+     "text": "The garage door is replaced by a window and brick panel to match the house.\nNo extension is proposed."
+    }
+   ]
+  }
+ ]
+}

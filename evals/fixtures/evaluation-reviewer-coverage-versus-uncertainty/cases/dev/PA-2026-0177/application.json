@@ -1,0 +1,16 @@
+{
+  "case_id": "PA-2026-0177",
+  "address": "5 Alder Close, Eastmere",
+  "proposal": "Two-storey side extension",
+  "documents": [
+    {"doc_id": "APP-FORM", "version": "1", "title": "Application form", "pages": [
+      {"page": 1, "text": "Site: 5 Alder Close, Eastmere\nDwelling: detached, 3 bedrooms\nProposal: two-storey side extension towards the side garden\nThe oak in the side garden will be 3.5 m from the new side wall."}
+    ]},
+    {"doc_id": "AGT", "version": "1", "title": "Agent's covering letter", "pages": [
+      {"page": 1, "text": "In our view the oak is well clear of the works and no tree issues arise.\nFoundations will be conventional strip footings."}
+    ]},
+    {"doc_id": "TS", "version": "1", "title": "Tree survey extract", "pages": [
+      {"page": 1, "text": "T1 oak, mature, good condition, in the side garden of No. 5.\nT1 is protected by Tree Preservation Order 14/2019.\nStem diameter not measured: access to the base of T1 was refused on the survey day.\nRoot protection area therefore not calculated."}
+    ]}
+  ]
+}

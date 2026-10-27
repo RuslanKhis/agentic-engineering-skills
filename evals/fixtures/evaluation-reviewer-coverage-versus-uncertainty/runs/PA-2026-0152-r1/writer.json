@@ -1,0 +1,20 @@
+{
+ "stage": "writer",
+ "saved_at": "2026-10-22T15:02:40+00:00",
+ "meta": {"usage": {"prompt_tokens": 2150, "completion_tokens": 520, "cost_usd": 0.33}, "prompt": "writer-v7", "model": "gemini-3.5-flash"},
+ "payload": {
+  "decision": "approve",
+  "reasons": [
+   {"id": "R1", "text": "The single-storey side extension is subordinate to the house and acceptable in design (H4).",
+    "citations": ["APP-FORM@1:p1:3", "LP-H4@2024:p31:2", "LP-H4@2024:p31:3"]},
+   {"id": "R2", "text": "The protected beech T3 has a root protection area radius of 4.2 m and the new wall is 7.5 m away, outside it, so ENV3's method-statement requirement is not engaged.",
+    "citations": ["APP-FORM@1:p1:4", "TS@1:p1:1", "TS@1:p1:2", "TS@1:p1:3", "LP-ENV3@2024:p58:2", "LP-ENV3@2024:p58:3"]}
+  ],
+  "conditions": [],
+  "citations": [
+   {"span_id": "TS@1:p1:3", "quote": "The proposed wall at 7.5 m lies outside the root protection area of T3."}
+  ],
+  "conflicts": [],
+  "gaps": []
+ }
+}

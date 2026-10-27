@@ -1,0 +1,37 @@
+fast_track_correct: uw-castillo vs uw-mensah on 24 cases: agreement 75.0%, kappa 0.44, fail share 0.33, 6 to adjudicate
+  adjudicate CLM-4106: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4109: uw-castillo=fail uw-mensah=pass
+  adjudicate CLM-4113: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4116: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4119: uw-castillo=fail uw-mensah=pass
+  adjudicate CLM-4121: uw-castillo=pass uw-mensah=fail
+fraud_flags_correct: uw-castillo vs uw-mensah on 24 cases: agreement 54.2%, kappa 0.10, fail share 0.52, 11 to adjudicate
+  adjudicate CLM-4103: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4104: uw-castillo=fail uw-mensah=pass
+  adjudicate CLM-4107: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4108: uw-castillo=fail uw-mensah=pass
+  adjudicate CLM-4115: uw-castillo=fail uw-mensah=pass
+  adjudicate CLM-4117: uw-castillo=fail uw-mensah=pass
+  adjudicate CLM-4118: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4120: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4121: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4123: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4124: uw-castillo=pass uw-mensah=fail
+note_grounded: uw-castillo vs uw-mensah on 24 cases: agreement 58.3%, kappa 0.16, fail share 0.46, 10 to adjudicate
+  adjudicate CLM-4101: uw-castillo=fail uw-mensah=pass
+  adjudicate CLM-4103: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4104: uw-castillo=fail uw-mensah=pass
+  adjudicate CLM-4105: uw-castillo=fail uw-mensah=pass
+  adjudicate CLM-4108: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4110: uw-castillo=fail uw-mensah=pass
+  adjudicate CLM-4111: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4113: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4123: uw-castillo=pass uw-mensah=fail
+  adjudicate CLM-4124: uw-castillo=fail uw-mensah=pass
+ATTENTION fast_track_correct, uw-castillo and uw-mensah: kappa 0.44 below 0.60 on 24 cases; adjudicate the disagreements and sharpen the criterion's definition
+ATTENTION fraud_flags_correct, uw-castillo and uw-mensah: kappa 0.10 below 0.60 on 24 cases; adjudicate the disagreements and sharpen the criterion's definition
+ATTENTION note_grounded, uw-castillo and uw-mensah: kappa 0.16 below 0.60 on 24 cases; adjudicate the disagreements and sharpen the criterion's definition
+ATTENTION fast_track_correct: no 'adjudicated' labels to compare the judge with; adjudicate first
+ATTENTION fraud_flags_correct: no 'adjudicated' labels to compare the judge with; adjudicate first
+ATTENTION note_grounded: no 'adjudicated' labels to compare the judge with; adjudicate first
+ATTENTION fraud_flags_correct: uw-mensah labels span criteria versions v01, v02; re-review the 12 labelled under an older version against v02

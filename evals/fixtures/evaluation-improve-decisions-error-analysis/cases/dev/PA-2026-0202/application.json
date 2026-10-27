@@ -1,0 +1,29 @@
+{
+ "case_id": "PA-2026-0202",
+ "address": "9 Sedge Lane, Eastmere",
+ "proposal": "Single-storey side extension",
+ "documents": [
+  {
+   "doc_id": "APP-FORM",
+   "version": "1",
+   "title": "Application form",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Site: 9 Sedge Lane, Eastmere\nDwelling: detached, 3 bedrooms\nProposal: single-storey side extension, utility room\nThe extension comes within 3.2 m of the lime tree on the boundary."
+    }
+   ]
+  },
+  {
+   "doc_id": "TPO",
+   "version": "1",
+   "title": "Council tree register extract",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Lime tree at 9 Sedge Lane boundary: Tree Preservation Order 31/2017, confirmed.\nNo tree survey is held for this site."
+    }
+   ]
+  }
+ ]
+}

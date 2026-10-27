@@ -1,0 +1,11 @@
+{
+ "stage": "writer",
+ "payload": null,
+ "raw_response": "{\"decision\": \"approve_with_conditions\", \"reasons\": [{\"id\": \"R1\", \"text\": \"The bathroom window is 8.0 m from No. 63, within 10 m, so it must be obscure-glazed and non-opening below 1.7 m (H4).\", \"citations\": [\"DWG-02@1:p1:1\", \"LP-H4@2024:p31:7\", \"LP-H4@2024:p31:8\"]}], \"conditions\": [{\"id\": \"C1\", \"text\": \"Window W2 shall be obscure-glazed and non-opening below 1.7 m above floor level.\"}], \"citations\": [{\"span_id\": \"DWG-02@1:p1:1\", \"quote\": \"Bathroom window W2 in the first-floor side wall, 8.0 m from No. 63's side wall\"}], \"conflicts\": []}",
+ "meta": {
+  "errors": [
+   "missing gaps",
+   "condition C1 has no reason"
+  ]
+ }
+}

@@ -1,0 +1,1845 @@
+{
+ "eval_set_id": "booking",
+ "eval_cases": [
+  {
+   "eval_id": "booking-01-move",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Move my appointment to Quay on 4 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Quay",
+         "day": "2026-11-04"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0903"
+        }
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-02-cancel",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Cancel my appointment"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-03-status",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "When is my next appointment?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-04-book",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Book me the 9am at Harbour on 3 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Harbour",
+         "day": "2026-11-03"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0901"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": []
+    }
+   }
+  },
+  {
+   "eval_id": "booking-05-move",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Move my appointment to Quay on 4 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Quay",
+         "day": "2026-11-04"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0903"
+        }
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-06-cancel",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Cancel my appointment"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-07-status",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "When is my next appointment?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-08-book",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Book me the 9am at Harbour on 3 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Harbour",
+         "day": "2026-11-03"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0901"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": []
+    }
+   }
+  },
+  {
+   "eval_id": "booking-09-move",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Move my appointment to Quay on 4 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Quay",
+         "day": "2026-11-04"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0903"
+        }
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-10-cancel",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Cancel my appointment"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-11-status",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "When is my next appointment?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-12-book",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Book me the 9am at Harbour on 3 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Harbour",
+         "day": "2026-11-03"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0901"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": []
+    }
+   }
+  },
+  {
+   "eval_id": "booking-13-move",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Move my appointment to Quay on 4 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Quay",
+         "day": "2026-11-04"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0903"
+        }
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-14-cancel",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Cancel my appointment"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-15-status",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "When is my next appointment?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-16-book",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Book me the 9am at Harbour on 3 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Harbour",
+         "day": "2026-11-03"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0901"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": []
+    }
+   }
+  },
+  {
+   "eval_id": "booking-17-move",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Move my appointment to Quay on 4 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Quay",
+         "day": "2026-11-04"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0903"
+        }
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-18-cancel",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Cancel my appointment"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-19-status",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "When is my next appointment?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-20-book",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Book me the 9am at Harbour on 3 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Harbour",
+         "day": "2026-11-03"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0901"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": []
+    }
+   }
+  },
+  {
+   "eval_id": "booking-21-move",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Move my appointment to Quay on 4 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Quay",
+         "day": "2026-11-04"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0903"
+        }
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-22-cancel",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Cancel my appointment"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-23-status",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "When is my next appointment?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-24-book",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Book me the 9am at Harbour on 3 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Harbour",
+         "day": "2026-11-03"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0901"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": []
+    }
+   }
+  },
+  {
+   "eval_id": "booking-25-move",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Move my appointment to Quay on 4 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Quay",
+         "day": "2026-11-04"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0903"
+        }
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-26-cancel",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Cancel my appointment"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-27-status",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "When is my next appointment?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-28-book",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Book me the 9am at Harbour on 3 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Harbour",
+         "day": "2026-11-03"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0901"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": []
+    }
+   }
+  },
+  {
+   "eval_id": "booking-29-move",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Move my appointment to Quay on 4 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Quay",
+         "day": "2026-11-04"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0903"
+        }
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-30-cancel",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Cancel my appointment"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-31-status",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "When is my next appointment?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-32-book",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Book me the 9am at Harbour on 3 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Harbour",
+         "day": "2026-11-03"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0901"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": []
+    }
+   }
+  },
+  {
+   "eval_id": "booking-33-move",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Move my appointment to Quay on 4 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Quay",
+         "day": "2026-11-04"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0903"
+        }
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-34-cancel",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Cancel my appointment"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-35-status",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "When is my next appointment?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-36-book",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Book me the 9am at Harbour on 3 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Harbour",
+         "day": "2026-11-03"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0901"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": []
+    }
+   }
+  },
+  {
+   "eval_id": "booking-37-move",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Move my appointment to Quay on 4 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Quay",
+         "day": "2026-11-04"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0903"
+        }
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-38-cancel",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Cancel my appointment"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       },
+       {
+        "name": "cancel_booking",
+        "args": {
+         "booking_id": "B-001"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-39-status",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "When is my next appointment?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "get_my_bookings",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": [
+      "S-0902"
+     ]
+    }
+   }
+  },
+  {
+   "eval_id": "booking-40-book",
+   "conversation": [
+    {
+     "user_content": {
+      "parts": [
+       {
+        "text": "Book me the 9am at Harbour on 3 November"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_slots",
+        "args": {
+         "clinic": "Harbour",
+         "day": "2026-11-03"
+        }
+       },
+       {
+        "name": "book_slot",
+        "args": {
+         "slot_id": "S-0901"
+        }
+       }
+      ]
+     },
+     "final_response": {
+      "parts": [
+       {
+        "text": "Done."
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "booking_agent",
+    "user_id": "p-1",
+    "state": {
+     "seed_bookings": []
+    }
+   }
+  }
+ ]
+}

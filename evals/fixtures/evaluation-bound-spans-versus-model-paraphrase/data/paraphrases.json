@@ -1,0 +1,11 @@
+{
+ "approved_by": "Policy team (R. Adeyemi), 2026-09-30",
+ "rule": "A reason may restate a source in these approved forms; quantities, negations, exceptions and the document identity must not change.",
+ "pairs": [
+  {"source": "3.0 m", "paraphrase": "three metres"},
+  {"source": "rear building line", "paraphrase": "rear building-line"},
+  {"source": "should not project more than 4.0 m beyond the original rear wall", "paraphrase": "may project up to 4.0 m beyond the original rear wall"},
+  {"source": "vertical sky component", "paraphrase": "VSC"},
+  {"source": "below the 20% guideline", "paraphrase": "within the 20% guideline"}
+ ]
+}

@@ -29,6 +29,14 @@ def skill_files() -> list[Path]:
             if p.is_file() and "__pycache__" not in p.parts]
 
 
+# Grader-side files no scenario lists, with the reason they stay out of skill packages.
+UNLISTED_ALLOWED = {
+    "evals/graders/evaluation-selected-source-support/source-support-expectations.json":
+        "labels for the evaluation skill's own worked example, read by its unit test; the scenario "
+        "now has its own pack and labels",
+}
+
+
 def grader_entries() -> dict[str, list[str]]:
     data = json.loads((ROOT / "evals" / "scenario-fixtures.json").read_text(encoding="utf-8"))
     return {cid: [item["from"] for item in entry.get("grader", [])]
@@ -45,9 +53,9 @@ class GraderMaterialTests(unittest.TestCase):
                 self.assertTrue((ROOT / path).is_file(), path)
 
     def test_every_grader_file_is_listed_for_a_scenario(self):
-        listed = {path for paths in grader_entries().values() for path in paths}
+        listed = {path for paths in grader_entries().values() for path in paths} | set(UNLISTED_ALLOWED)
         for path in sorted(GRADERS.rglob("*")):
-            if path.is_file():
+            if path.is_file() and "__pycache__" not in path.parts:
                 rel = path.relative_to(ROOT).as_posix()
                 self.assertIn(rel, listed, f"{rel} is not listed under grader in scenario-fixtures.json")
 

@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "review_status": "AI-authored provisional expectations; no domain-competent human review and no live-model calibration.",
+  "mapping_to_assertions": {
+    "A1": [
+      "h01",
+      "h04"
+    ],
+    "A2": [
+      "h06",
+      "h16",
+      "h17",
+      "h07",
+      "h13",
+      "h02",
+      "h10"
+    ],
+    "A3": [
+      "h05",
+      "h12"
+    ],
+    "A4": [
+      "h03",
+      "h09",
+      "h14",
+      "h15"
+    ],
+    "A5": "report wording"
+  },
+  "judgments": [
+    {
+      "case_id": "h01",
+      "source_identity": "valid",
+      "span_completeness": "incomplete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "True elsewhere on the page, but the selected span is the question only."
+    },
+    {
+      "case_id": "h02",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The selected field states the material."
+    },
+    {
+      "case_id": "h03",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The selected record gives 62 C for the same reading and time."
+    },
+    {
+      "case_id": "h04",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "Question and explicit answer are both selected."
+    },
+    {
+      "case_id": "h05",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The written dimension is explicit; no pixel conversion is needed."
+    },
+    {
+      "case_id": "h06",
+      "source_identity": "invalid",
+      "span_completeness": "unresolved",
+      "applicability": "unresolved",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "stage-p9 does not exist; familiar text cannot repair the citation."
+    },
+    {
+      "case_id": "h07",
+      "source_identity": "valid",
+      "span_completeness": "incomplete",
+      "applicability": "not_applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The selected rule drops its exception, which covers this event."
+    },
+    {
+      "case_id": "h08",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "Exact field."
+    },
+    {
+      "case_id": "h09",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "A field that was not recorded gives no value; absence is not a contradiction."
+    },
+    {
+      "case_id": "h10",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "not_applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The shared excerpt is the material field, not capacity."
+    },
+    {
+      "case_id": "h11",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "Half past eight is a faithful paraphrase of 08:30."
+    },
+    {
+      "case_id": "h12",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "An unscaled pixel length is no physical measurement."
+    },
+    {
+      "case_id": "h13",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The complete rule includes the exception that applies."
+    },
+    {
+      "case_id": "h14",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "unresolved",
+      "support": "unresolved",
+      "rationale": "An equally authoritative record gives 58 C; precedence is unresolved."
+    },
+    {
+      "case_id": "h15",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The complete quotation contradicts the unconditional conclusion."
+    },
+    {
+      "case_id": "h16",
+      "source_identity": "invalid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The text is from the fire door survey, not the cited hall inspection."
+    },
+    {
+      "case_id": "h17",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "not_applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "Valid id and complete field, unrelated to the opening width."
+    }
+  ]
+}

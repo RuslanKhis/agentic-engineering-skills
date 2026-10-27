@@ -1,0 +1,19 @@
+{
+ "batch": "2026-10-15-batch2",
+ "cohort": "A (6 development cases, fixed 2026-10-06)",
+ "code_version": "9be22f1",
+ "writer": {"model": "gemini-3.5-flash", "prompt": "writer-v6", "schema": "draft-v4"},
+ "review": {"model": "gemini-3.5-flash", "prompt": "review-v3"},
+ "local_tests": "31 passed",
+ "results": [
+  {"case": "PA-2026-0141", "stage_failed": null},
+  {"case": "PA-2026-0144", "stage_failed": null},
+  {"case": "PA-2026-0146", "stage_failed": "review", "finding": "R2 cites LP-H4@2024:p31:7 for 'side windows within 10 m must be obscure-glazed'; the passage continues on line 8 ('and non-opening below 1.7 m') and the reason relies on that part"},
+  {"case": "PA-2026-0149", "stage_failed": null},
+  {"case": "PA-2026-0152", "stage_failed": null},
+  {"case": "PA-2026-0158", "stage_failed": null}
+ ],
+ "passed": 5,
+ "charged_usd": 3.71,
+ "diagnosis_at_the_time": "Unsupported passage: the model cited one line of a two-line policy sentence. Not reproduced locally."
+}

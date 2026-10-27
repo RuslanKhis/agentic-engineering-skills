@@ -1,0 +1,43 @@
+{
+ "stage": "writer",
+ "payload": {
+  "decision": "approve_with_conditions",
+  "reasons": [
+   {
+    "id": "R1",
+    "text": "The widened crossover is acceptable.",
+    "citations": [
+     "APP-FORM@1:p1:3"
+    ]
+   },
+   {
+    "id": "R2",
+    "text": "The visibility splay requirement is waived because the highway authority confirmed in writing that Kestrel Lane is a 20 mph street with no through traffic (T2).",
+    "citations": [
+     "HWY@1:p1:1",
+     "HWY@1:p1:2",
+     "LP-T2@2024:p44:5",
+     "LP-T2@2024:p44:6"
+    ]
+   }
+  ],
+  "conditions": [
+   {
+    "id": "C1",
+    "text": "Visibility splays of 2.4 m by 43 m shall be provided before the widened crossover is first used.",
+    "reason_id": "R2"
+   }
+  ],
+  "citations": [
+   {
+    "span_id": "HWY@1:p1:2",
+    "quote": "The authority confirms in writing that the visibility splay requirement is waived for this crossover."
+   }
+  ],
+  "conflicts": [],
+  "gaps": []
+ },
+ "meta": {
+  "errors": []
+ }
+}

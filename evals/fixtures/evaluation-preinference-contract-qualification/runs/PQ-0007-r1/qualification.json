@@ -1,0 +1,16 @@
+{
+ "stage": "qualification",
+ "saved_at": "2026-10-21T09:12:31+00:00",
+ "meta": {"usage": {"prompt_tokens": 412, "completion_tokens": 388, "cost_usd": 0.31}, "version": "qual-v2",
+          "errors": ["finding 1 has no labels", "finding 2 has no labels", "finding 3 has no labels",
+                     "required passage D7-2024/p12/4.3(b)(ii) is not cited",
+                     "required passage D7-2024/p13/continuation is not cited",
+                     "required passage D7-2024/p13/footnote is not cited",
+                     "required passage D7-2024/p14/table-D7.1/c2 is not cited",
+                     "required passage D7-2024/p14/table-header is not cited"]},
+ "payload": {"findings": [
+  {"statement": "A basement under the dwelling's own footprint may be approved under the prior-notice route.", "support": "supported"},
+  {"statement": "Table D7.1 gives prior notice for the first two ground types and a full application for the others.", "support": "supported"},
+  {"statement": "Front lightwells must be covered by a flush grille.", "support": "supported", "qualifications": ["applies under 4.3(b)(ii)"]}
+ ]}
+}

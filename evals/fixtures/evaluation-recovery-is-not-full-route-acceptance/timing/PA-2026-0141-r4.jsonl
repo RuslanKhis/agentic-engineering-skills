@@ -1,0 +1,9 @@
+{"t": "2026-10-24T13:02:10Z", "event": "run_start", "run_id": "PA-2026-0141-r4"}
+{"t": "2026-10-24T13:02:11Z", "event": "writer_dispatch", "operation_id": "op-7f3a2c91"}
+{"t": "2026-10-24T13:03:02Z", "event": "writer_response", "operation_id": "op-7f3a2c91"}
+{"t": "2026-10-24T13:03:03Z", "event": "awaiting_officer_check", "note": "officer asked to glance at the draft before review"}
+{"t": "2026-10-24T13:44:40Z", "event": "officer_check_done"}
+{"t": "2026-10-24T13:44:41Z", "event": "review_dispatch", "operation_id": "op-91bd04e2"}
+{"t": "2026-10-24T13:45:05Z", "event": "host_sleep", "note": "laptop lid closed"}
+{"t": "2026-10-24T15:10:52Z", "event": "host_wake"}
+{"t": "2026-10-24T15:11:47Z", "event": "error", "error": "connection reset while waiting for review response"}
