@@ -29,7 +29,7 @@ In the repository:
 
 `scripts/validate_skills.py` after the edits: **22 packages**, 0 errors,
 0 warnings; `git diff --check` clean. The full `scripts/check_repo.py` counts
-are in the README entry for this date. No helper script, test or
+are in the [testing log](index.md) entry for this date. No helper script, test or
 `last-tested` date changed.
 
 ## Fresh-agent trial

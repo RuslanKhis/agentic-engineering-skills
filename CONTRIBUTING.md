@@ -69,7 +69,7 @@ them. Attribute borrowed patterns and retain any required upstream licence.
 | --- | --- |
 | Metadata, links or package layout | Package check and relevant invalid-package regression tests |
 | Helper script | A failing case for the defect, then the relevant test suite |
-| Skill description or routing | Positive and near-miss cases in `evals/activation.json`, and a contextual case (a `evals/scenarios.json` case whose `context` decides the route); trigger rates over repeated fresh sessions with a held-out split, as `docs/testing/skill-quality.md` describes; distinguish selection from execution; the description, the README's skill entry and `agents/openai.yaml`'s `short_description` kept consistent |
+| Skill description or routing | Positive and near-miss cases in `evals/activation.json`, and a contextual case (a `evals/scenarios.json` case whose `context` decides the route); trigger rates over repeated fresh sessions with a held-out split, as `docs/testing/skill-quality.md` describes; distinguish selection from execution; the description, the skill's row in the README's skills table, its entry in `docs/skills.md` and `agents/openai.yaml`'s `short_description` kept consistent |
 | Implementation guidance | A representative task with an independent check of its output or effects |
 | SDK recipe | Exact tested versions and relevant runtime contract tests |
 | A fact read from an external repository | A dated citation with the commit, and its row in `docs/research/source-register.json` so `scripts/check_source_freshness.py` reports when it goes quiet, stale, archived or relicensed |
@@ -84,6 +84,12 @@ Do not update a specialist's `last-tested` date because a link checker passed.
 Its compatibility/validation references should say which runtime recipe was
 actually exercised. Keep package checks, model behavior and cloud results
 separate in reports.
+
+Record each checked change as a dated entry at the top of the
+[testing log](docs/testing/index.md) (`## <what changed> · <D Month YYYY>`,
+newest first), with the package and test counts the check printed and a link
+to its record under `docs/testing/`. The README keeps only a short summary of
+what has been tested; do not add dated entries there.
 
 ## Triage field reports
 
