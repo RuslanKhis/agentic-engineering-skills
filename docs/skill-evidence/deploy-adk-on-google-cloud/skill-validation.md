@@ -45,7 +45,7 @@ A manual regression probe initially demonstrated that a conflicting `-c constrai
 
 The cases cover local Cloud Run preparation, a customised shared-GKE project on a different ADK pin, missing Runtime credentials/access, concrete approval-gated cloud commands, an unrelated spelling edit and a repeated invocation. Judge generated artefacts and actual commands; matching a prescribed answer is not a behavioural test.
 
-All six cases passed independent forward evaluation. [forward-results.json](../../../skills/deploy-adk-on-google-cloud/tests/forward-results.json) records outcomes and raw evaluator-report hashes. Three fresh evaluators received only the copied skill, assigned fixture/request and offline execution boundary; an existing interpreter/package environment was supplied, without permission to inspect companion source. The parent checked the actual outputs and verified original-file preservation.
+All six cases passed independent forward evaluation. [forward-results.json](forward-results.json) records outcomes and raw evaluator-report hashes. Three fresh evaluators received only the copied skill, assigned fixture/request and offline execution boundary; an existing interpreter/package environment was supplied, without permission to inspect companion source. The parent checked the actual outputs and verified original-file preservation.
 
 - Greenfield preparation produced a functioning API-only serving layer and seven passing tests with real ADK/FastAPI/session components and a fake model. Source exclusions, tool result, final grounded answer, explicit recall, HTTP negatives and local SQLite app recreation were exercised. A container was defined but not built.
 - The shared-GKE review preserved ADK 2.7.0, `/ready`, names and pre-existing KSA/cluster ownership. Its version stayed unverified; no migration or replacement cluster was proposed.
@@ -77,7 +77,7 @@ The added helper pin field reports declarations separately from the inspection i
 
 ### Additional independent forward evaluations
 
-[recheck-cases.json](../../../skills/deploy-adk-on-google-cloud/tests/recheck-cases.json) supplies three realistic requests and complete synthetic inputs. Materialise one case in its own directory and copy the skill independently; give an evaluator only that skill, its assigned fixture/request and the stated offline boundary. Use the existing compatible interpreter without installing packages or giving access to companion sources. Assess actual file changes, commands and results. [recheck-results.json](../../../skills/deploy-adk-on-google-cloud/tests/recheck-results.json) records the outcomes, original-file preservation and report/instruction hashes.
+[recheck-cases.json](../../../skills/deploy-adk-on-google-cloud/tests/recheck-cases.json) supplies three realistic requests and complete synthetic inputs. Materialise one case in its own directory and copy the skill independently; give an evaluator only that skill, its assigned fixture/request and the stated offline boundary. Use the existing compatible interpreter without installing packages or giving access to companion sources. Assess actual file changes, commands and results. [recheck-results.json](recheck-results.json) records the outcomes, original-file preservation and report/instruction hashes.
 
 All three fresh evaluators completed after an initial account-usage interruption. The parent inspected the resulting code/reports and checked the changes against the original fixtures. They were not given the intended answers.
 

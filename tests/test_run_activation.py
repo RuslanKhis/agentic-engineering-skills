@@ -21,6 +21,7 @@ def load_module(name, path):
 
 
 act = load_module("run_activation", ROOT / "scripts/run_activation.py")
+scen = load_module("run_scenarios", ROOT / "scripts/run_scenarios.py")
 backends = sys.modules["model_backends"]
 
 
@@ -175,7 +176,7 @@ class RunAndResultsTests(unittest.TestCase):
                 out = Path(tmp) / "results.json"
                 stdout = io.StringIO()
                 with redirect_stdout(stdout), redirect_stderr(io.StringIO()):
-                    code = act.main(["--root", str(root), "--backend", "anthropic", "--repeat", "2",
+                    code = act.main(["--root", str(root), "--backend", "claude-cli", "--repeat", "2",
                                      "--batch-size", "4", "--out", str(out)])
             finally:
                 act.call_model = original
@@ -268,7 +269,7 @@ class RunAndResultsTests(unittest.TestCase):
             try:
                 out = Path(tmp) / "heldout.json"
                 with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
-                    code = act.main(["--root", str(root), "--backend", "anthropic", "--split", "heldout",
+                    code = act.main(["--root", str(root), "--backend", "claude-cli", "--split", "heldout",
                                      "--out", str(out)])
             finally:
                 act.call_model = original
@@ -312,6 +313,15 @@ class RunAndResultsTests(unittest.TestCase):
 
 
 class BackendTests(unittest.TestCase):
+    def test_only_keyless_backends_are_offered(self):
+        for module in (act, scen):
+            with self.assertRaises(SystemExit), redirect_stderr(io.StringIO()):
+                module.parse_args(["--backend", "anthropic"] if module is act
+                                  else ["judge", "--run-dir", "x", "--judge-backend", "anthropic"])
+        self.assertFalse(hasattr(backends, "call_anthropic"))
+        with self.assertRaises(backends.BackendError):
+            backends.call_model("anthropic", "p", "s", "m")
+
     def test_claude_cli_isolation_flags_and_parsing(self):
         seen = {}
 
@@ -333,46 +343,6 @@ class BackendTests(unittest.TestCase):
             self.assertIn(flag, seen["command"])
         self.assertEqual(seen["command"][seen["command"].index("--tools") + 1], "")
         self.assertNotEqual(Path(seen["cwd"]).resolve(), ROOT)
-
-    def test_anthropic_request_shape(self):
-        captured = {}
-
-        class Response:
-            def __enter__(self):
-                return self
-
-            def __exit__(self, *exc):
-                return False
-
-            def read(self):
-                return json.dumps({"model": "claude-sonnet-5-5", "stop_reason": "end_turn",
-                                   "content": [{"type": "thinking", "thinking": ""},
-                                               {"type": "text", "text": "hello"}],
-                                   "usage": {"output_tokens": 1}}).encode()
-
-        def opener(request, timeout):
-            captured["request"] = request
-            return Response()
-
-        reply = backends.call_anthropic("p", "s", "claude-sonnet-5-5", api_key="k", opener=opener)
-        self.assertEqual(reply.text, "hello")
-        request = captured["request"]
-        self.assertEqual(request.full_url, backends.API_URL)
-        self.assertEqual(request.get_header("X-api-key"), "k")
-        self.assertEqual(request.get_header("Anthropic-version"), "2023-06-01")
-        body = json.loads(request.data)
-        self.assertEqual(body["system"], "s")
-        self.assertEqual(body["messages"], [{"role": "user", "content": "p"}])
-
-    def test_anthropic_needs_a_key(self):
-        import os
-        saved = os.environ.pop("ANTHROPIC_API_KEY", None)
-        try:
-            with self.assertRaises(backends.BackendError):
-                backends.call_anthropic("p", "s", "m", opener=lambda *a, **k: None)
-        finally:
-            if saved is not None:
-                os.environ["ANTHROPIC_API_KEY"] = saved
 
 
 if __name__ == "__main__":

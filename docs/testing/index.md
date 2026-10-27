@@ -17,6 +17,26 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## Trustworthy scenario runs and grader answers kept out of skills · 27 October 2026
+
+Grader-side files no longer ship inside skill packages. The ingestion
+inventory and the source-support labels moved to `evals/graders/`, and the
+safe-api oracle and the guardrails trial protocol moved to `evals/trials/`.
+The scenario runner gives grader files to the judge only, and a test fails if
+a skill ships one. Scenario agents now run in `dontAsk` mode with allow rules
+scoped to the workspace, project settings only and auto-memory off; a probe
+showed reads of the repository, `~/.claude` and the grader folder refused,
+and nothing from `~/.claude/skills` in the catalogue. The judge grades three
+times and flags assertions whose votes differ. The API-key backend and the
+activation workflow were removed.
+
+**Results.** Re-running the five phase 1 scenarios with Sonnet 5.5, the
+primary `SKILL.md` loaded natively in 4 of 5 (2 of 5 before). 15 of 22
+assertions passed by majority and 5 were unstable. Run-to-run variation of
+the agent is larger than the judge's, so five single runs cannot show a
+quality change.
+[Runner and graders record](runner-and-graders-2026-10-27.md).
+
 ## Held-out activation cases · 27 October 2026
 
 Every activation case now has a `split`. The 154 existing cases are `dev`.

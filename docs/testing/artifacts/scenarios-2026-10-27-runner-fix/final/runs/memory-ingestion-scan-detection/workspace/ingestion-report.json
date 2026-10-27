@@ -1,0 +1,42 @@
+{
+  "method": "hand-applied rules of scripts/qualify_ingestion.py to text layers shown by the Read tool; script NOT executed (no shell in this session); no pypdf, no OCR, no vision",
+  "evidence": "local, derived by hand, not machine-verified",
+  "thresholds": {"min_chars": 200, "min_alnum_ratio": 0.5, "min_vector_ops": 8, "status": "skill defaults; not calibrated (4 pages is too few)"},
+  "pages": [
+    {"document": "text-page.pdf", "page": 1, "chars_approx": 690, "density": "text", "image_count": 0,
+     "table_candidate": false, "drawing_candidate": false,
+     "written_dimensions": ["4.0 m", "6.0 m", "1.0 m"], "scale_statements": [],
+     "route": "text", "text_origin": "native",
+     "notes": "Cites Table 2 of the Design SPD, which is on table-page.pdf. Mentions of 'Table 2' alone are not a table hint."},
+    {"document": "scanned-page.pdf", "page": 7, "chars": 34, "alnum_ratio": 0.964, "density": "low_density", "image_count": 1,
+     "table_candidate": false, "drawing_candidate": false, "written_dimensions": [], "scale_statements": [],
+     "route": "ocr_or_vision", "text_origin": "native (running header only: 'Synthetic Local Plan 2021 - page 7')",
+     "notes": "Body is a raster with no glyphs. Header-only text is still a scan. Body content UNREAD; must not be passed as a text page or described as absent. The rendered page shows only grey bars, no legible words."},
+    {"document": "table-page.pdf", "page": 1, "chars_approx": 270, "density": "text", "image_count": 0,
+     "table_candidate": true, "drawing_candidate": false, "written_dimensions": ["400 m"], "scale_statements": [],
+     "route": "both", "text_origin": "native",
+     "notes": "Reconstruct rows before querying. Row '2-3 bedrooms | 2 | 2 | see note 2' joins to 'Note 2: within 400 m of a frequent bus stop the standard reduces by 1 space.' Last cell 'Tandem spaces count once' overflows the cell border, so check the render."},
+    {"document": "drawing-page.pdf", "page": 1, "chars_approx": 115, "density": "low_density", "image_count": 0,
+     "vector_drawing_ops": "not measured",
+     "table_candidate": false, "drawing_candidate": true,
+     "written_dimensions": ["6.0 m", "10 m"], "scale_statements": ["Scale 1:200"],
+     "route": "both", "text_origin": "native",
+     "notes": "Drawing hint comes from the scale statement, so unmeasured vector ops do not change the route. Written dimension 6.0 m (extension depth) is a separate field from any pixel_estimate. Scale bar 0-5-10 m; '@ A3' is in the text. Pixel estimates must carry that scale assumption."}
+  ],
+  "summary": {
+    "pages": 4,
+    "low_density_pages": [["scanned-page.pdf", 7], ["drawing-page.pdf", 1]],
+    "image_only_pages": [],
+    "table_candidates": [["table-page.pdf", 1]],
+    "drawing_candidates": [["drawing-page.pdf", 1]],
+    "reading_order_anomalies": ["scanned-page.pdf: printed page 7 but the file has one page; the script would flag 'missing pages 1-6' if page=7 were used as the page number. Treated as a printed folio of a larger document, with pages 1-6 not supplied."],
+    "estimated_visual_pass_images": 3
+  },
+  "unresolved_evidence": [
+    "scanned-page.pdf body: no OCR or vision available, content unknown",
+    "table-page.pdf and drawing-page.pdf renders: routed 'both' but not reviewed by any model in this trial; the native text is the only evidence read",
+    "Policy H3 text: its 6.0 m detached rear-extension limit and the drawing's 6.0 m are NOT compared here"
+  ],
+  "ocr_executed": false,
+  "visual_review_executed": false
+}

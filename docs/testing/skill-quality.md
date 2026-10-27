@@ -114,9 +114,8 @@ always shows a row per split.
 
 `claude-cli` uses the local Claude Code login through `claude -p` in an empty
 directory, with tools, skills, settings, MCP servers and project instructions
-switched off. `anthropic` calls the Messages API with `ANTHROPIC_API_KEY`; the
-[Activation evaluation](../../.github/workflows/activation.yml) workflow runs it
-on request and uploads the results. `files` writes the batch prompts to a
+switched off. No API key is used; there is no CI workflow for activation,
+because it would need one. `files` writes the batch prompts to a
 directory (`--export DIR`) for a person or fresh agent sessions to answer, then
 grades the saved answers (`--import DIR`); keep that directory's
 `manifest.json` away from the selectors, because it maps labels to case ids.
@@ -216,18 +215,51 @@ subset in throwaway workspaces and grades the assertions with a separate judge:
 ```
 
 Each scenario gets a fresh directory under `--tmp-root` (default: the system
-temporary directory) holding its fixture and only those of its
-`available_skills` that exist in this repository, under `.claude/skills/`. The
-`claude-cli` agent runs headless with project settings only, so a global
-installation cannot supply a skill, and without a shell by default
-(`--agent-tools` changes that); `AGENTIC_ENGINEERING_HOME` points into the run
-directory. The prompt is given with the context as the situation and a note
-that nobody will answer questions. The judge (`--judge-backend claude-cli`,
-`anthropic` or `files`) sees the assertions, the final answer, the files the
-agent wrote and the skills it loaded, and returns PASS or FAIL with a quote;
-the runner records whether each quote occurs in the evidence. With
-`--backend files`, `run` only prepares the workspaces for a person or another
-agent, and `judge --run-dir DIR` grades what they saved.
+temporary directory; never inside this repository, whose `CLAUDE.md` and
+`.claude/` settings Claude Code would otherwise read) holding its fixture and
+only those of its `available_skills` that exist in this repository, copied
+(not linked, `tests/` left out) as Claude Code project skills under
+`<workspace>/.claude/skills/`. `--skill-install add-dir` copies them to a
+sibling directory passed with `--add-dir` instead, so a glob of the workspace
+does not list them. The `claude-cli` agent runs headless with
+`--setting-sources project,local` (no user-level skills, settings or
+`CLAUDE.md`; `~/.claude/skills` does not reach the catalogue),
+`--strict-mcp-config`, auto-memory switched off
+(`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`; otherwise the agent may read its own
+memory directory under `~/.claude/projects/`), and `--permission-mode dontAsk --permission-prompts none`
+with the allow rules `Read(./**)`, `Edit(./**)`, `Write(./**)` and `Skill`:
+reads, globs and writes outside the workspace are refused, not merely left
+unanswered. A bare `Glob` or `Grep` rule would reach `~/.claude`, so the runner
+never passes one; a shell (`--agent-tools` with Bash) cannot be confined by
+path rules and is recorded as unconfined. Allow rules written into the
+workspace's own `.claude/settings.json` are ignored, because a headless
+session does not trust a new directory. `AGENTIC_ENGINEERING_HOME` points
+into the run directory. The prompt is given with the context as the situation
+and a note that nobody will answer questions. Each `agent.json` records the
+command, the session's skill catalogue (and any repository skill in it that
+was not installed), `skill_md_loaded` per installed skill (through the Skill
+tool or a read of `SKILL.md`, and how many other files of that skill were
+read) and every refused tool call.
+
+Grader material (answer keys, labels, generator knowledge) lives in
+`evals/graders/<scenario-id>/` and is listed under `grader` in
+[scenario-fixtures.json](../../evals/scenario-fixtures.json). The runner copies
+it beside the workspace, where the agent's reads are refused, and puts it in
+the judge's prompt only; `tests/test_grader_material.py` fails if a skill
+package ships such a file by name or content. Trial oracles (independent
+acceptance tests and observation protocols) live in `evals/trials/<skill>/`.
+
+The judge (`--judge-backend claude-cli` or `files`) sees the assertions, the
+grader material, the final answer, the files the agent wrote and the skills it
+loaded, and returns PASS or FAIL with a quote; the runner records whether each
+quote occurs in the evidence. A model judge grades the same evidence
+`--judge-repeats` times (default 3, in parallel; a reply that cannot be read is
+asked for once more); each assertion takes PASS only on a strict majority,
+and the results record every vote, the agreement
+and an `unstable` list of assertions whose votes differed. Read an unstable
+assertion's verdict as uncertain. With `--backend files`, `run` only prepares
+the workspaces for a person or another agent, and `judge --run-dir DIR`
+grades what they saved (one repeat).
 
 [scenario-fixtures.json](../../evals/scenario-fixtures.json) says which
 scenarios are runnable in an empty workspace, which need a fixture copied from

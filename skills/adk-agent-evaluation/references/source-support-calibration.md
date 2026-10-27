@@ -3,7 +3,10 @@
 Read this when claims rely on selected passages or a citation checker appears to
 accept unsupported conclusions. The bundled cases use invented workshop records
 and rules, not real policy or customer data. Their expectations are **AI-authored,
-provisional and not reviewed by a domain-competent human**. Use them to reveal
+provisional and not reviewed by a domain-competent human**, and they are not
+shipped with this skill: the source repository keeps them with its grader in
+`evals/graders/evaluation-selected-source-support/`, so an agent judging these
+cases cannot read the answers. Use them to reveal
 specific evaluator mistakes; obtain substantive human review before adapting them
 into a domain quality gate.
 
@@ -39,8 +42,8 @@ judge until it agrees. Both remain rejection controls for conclusion support.
 ## Run the synthetic contrasts
 
 Use [source-support-cases.json](../assets/source-support-cases.json) as judge input
-and keep [source-support-expectations.json](../assets/source-support-expectations.json)
-out of inference. The source registry contains full synthetic pages. Each case
+and keep the expectations file out of inference: hold it where the judge's tools
+cannot reach it, never beside the cases. The source registry contains full synthetic pages. Each case
 specifies the exact selection and, where applicable, known contrary evidence.
 The [diagram](../assets/source-support-diagram.svg) contrasts a written dimension
 with an unscaled pixel measurement; this is not an OCR or visual-model benchmark.
@@ -54,7 +57,7 @@ truth somewhere in the page and complete quotations each have rejection controls
 From the installed skill directory, run the dependency-free demonstration:
 
 ```bash
-python3 scripts/check_source_support.py --demo
+python3 scripts/check_source_support.py --demo --expectations /path/held/by/evaluator/source-support-expectations.json
 ```
 
 It compares deliberately weak ID-only and literal-substring judges against the
@@ -67,8 +70,13 @@ For a real calibration, produce JSON with a `judgments` list containing one obje
 per `case_id`, the five dimensions above and a brief `rationale`. Then run:
 
 ```bash
-python3 scripts/check_source_support.py --judgments .adk-evidence/source-judgments.json
+python3 scripts/check_source_support.py --judgments .adk-evidence/source-judgments.json \
+  --expectations /path/held/by/evaluator/source-support-expectations.json
 ```
+
+`--expectations` is required: the scorer has no labels of its own. For your own
+cases, write the expectations in the same shape (a `judgments` list with the five
+dimensions and a rationale per `case_id`) and pass your case file with `--cases`.
 
 The scorer reports every expected case, rejects missing/duplicate/unknown cases and
 invalid labels, and exits nonzero for disagreement. It compares labels; it does not

@@ -247,7 +247,7 @@
       "id": "evaluation-selected-source-support",
       "prompt": "Assess whether these selected passages justify their observations. Return judgments using the five-dimensional support rubric, with a rationale for each case. No external calls.",
       "available_skills": ["adk-agent-evaluation"],
-      "context": "Supply assets/source-support-cases.json and source-support-diagram.svg from the evaluation skill. Keep source-support-expectations.json and scorer outputs out of the judge's inference context. These are synthetic workshop documents with case-specific source scope.",
+      "context": "Supply assets/source-support-cases.json and source-support-diagram.svg from the evaluation skill. The expected labels and any scorer outputs are held back by the person asking for grading and are not in the workspace. These are synthetic workshop documents with case-specific source scope.",
       "expected_primary": "adk-agent-evaluation",
       "assertions": [
         "Rejects a true width observation cited only to the question and accepts it when the answer span is selected.",
@@ -565,7 +565,7 @@
       "id": "memory-ingestion-scan-detection",
       "prompt": "Qualify this document pack before we call the model. Some pages are scans and some are drawings. Produce the ingestion report and the per-page route.",
       "available_skills": ["adk-memory-architecture", "adk-agent-evaluation"],
-      "context": "Use the memory skill's ingestion fixture: a text page, a header-only scanned page with an embedded image, a table page and a drawing page with a scale bar and a written dimension. No OCR engine or vision model is available in this trial.",
+      "context": "Use the memory skill's ingestion fixture, copied to pack/ (the generator's own inventory is held back for grading): a text page, a header-only scanned page with an embedded image, a table page and a drawing page with a scale bar and a written dimension. No OCR engine or vision model is available in this trial.",
       "expected_primary": "adk-memory-architecture",
       "assertions": [
         "Classifies the header-only scanned page as low density and routes it to OCR or vision instead of passing it as a text page.",

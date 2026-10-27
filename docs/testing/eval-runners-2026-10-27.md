@@ -32,10 +32,15 @@ rewrite of 51 scenario prompts into the words a user would use.
   determinism, catalogue extraction, the results and compare formats, the
   files round trips for both runners, fixture classification and the
   workspace layout, with fake subprocess and HTTP openers.
-- [`.github/workflows/activation.yml`](../../.github/workflows/activation.yml),
-  on request only (a weekly schedule is written but commented out), running
-  the anthropic backend with the `ANTHROPIC_API_KEY` secret and uploading the
-  results. `validate.yml` is unchanged and stays offline.
+- `.github/workflows/activation.yml`, on request only (a weekly schedule is
+  written but commented out), running the anthropic backend with the
+  `ANTHROPIC_API_KEY` secret and uploading the results. `validate.yml` is
+  unchanged and stays offline.
+
+  *Removed later on 27 October 2026:* the owner does not want API keys, so the
+  workflow and the `anthropic` backend (with its tests) were deleted; the
+  runners support `claude-cli` (local Claude Code login) and `files` only. See
+  [runner and graders](runner-and-graders-2026-10-27.md).
 
 ## Activation baseline
 

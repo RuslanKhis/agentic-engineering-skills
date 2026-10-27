@@ -1,0 +1,45 @@
+{
+  "method": "manual: raw PDF content streams read with Grep (no shell, so qualify_ingestion.py and pypdf were not run). Character counts are hand tallies of the Tj strings, approximate to about +-10%.",
+  "thresholds": {"min_chars": 200, "min_alnum_ratio": 0.5, "drawing_vector_ops": 8, "calibrated_on_corpus": false},
+  "origin_label_for_all_text": "native",
+  "pages": [
+    {"document": "text-page.pdf", "page": 1, "approx_chars": 860, "image_count": 0, "density_class": "text",
+     "hints": [], "written_dimensions": ["4.0 m", "6.0 m", "1.0 m"], "scale_statements": [],
+     "route": "text", "send": "text layer (native)",
+     "notes": "Cites Table 2 of the Design SPD, which is not on this page (see table-page.pdf)."},
+    {"document": "scanned-page.pdf", "page": 1, "approx_chars": 34, "image_count": 1, "density_class": "image_only",
+     "hints": ["header-only text layer: 'Synthetic Local Plan 2021 - page 7'", "full-page 120x160 gray Flate image placed at 475x700"],
+     "written_dimensions": [], "scale_statements": [],
+     "route": "ocr_or_vision", "send": "rendered image",
+     "status": "UNRESOLVED: body content never read; no OCR or vision available in this trial",
+     "notes": "Header alone must not be treated as the page content. Embedded image is 120x160 px stretched to 475x700 pt, so it is low resolution and OCR legibility is uncertain."},
+    {"document": "table-page.pdf", "page": 1, "approx_chars": 240, "image_count": 0, "density_class": "text",
+     "hints": ["table: 4 columns, 4 rows, ruled lines", "continuation 'see note 2'"],
+     "written_dimensions": ["400 m"], "scale_statements": [],
+     "route": "text_and_image", "send": "native text plus rendered image",
+     "table_reconstruction": {
+       "header": ["Dwelling size", "Minimum spaces", "Cycle spaces", "Note"],
+       "rows": [["1 bedroom", "1", "1", "Zone A: 0"],
+                ["2-3 bedrooms", "2", "2", "see note 2"],
+                ["4+ bedrooms", "3", "2", "Tandem spaces count once"]],
+       "notes": {"2": "within 400 m of a frequent bus stop the standard reduces by 1 space."}},
+     "status": "text read natively; image pass pending (not available)"},
+    {"document": "drawing-page.pdf", "page": 1, "approx_chars": 100, "image_count": 0, "density_class": "low_density",
+     "hints": ["drawing: three rectangles, dimension line, scale bar 0/5/10 m, north arrow; vector ops >= 8"],
+     "written_dimensions": ["6.0 m"], "scale_statements": ["Scale 1:200 @ A3"],
+     "route": "text_and_image", "send": "native text plus rendered image",
+     "pixel_estimates": [],
+     "status": "written dimension and scale captured from text layer; geometry not read visually",
+     "notes": "Text layer lacks what the 6.0 m refers to beyond position next to the extension; a model must not infer other dimensions from pixels without labelling them pixel_estimate with the 1:200 assumption."}
+  ],
+  "summary": {
+    "pages": 4,
+    "low_density": ["drawing-page.pdf p1", "scanned-page.pdf p1 (image_only)"],
+    "image_only": ["scanned-page.pdf p1"],
+    "table_candidates": ["table-page.pdf p1"],
+    "drawing_candidates": ["drawing-page.pdf p1"],
+    "reading_order_anomalies": "none detectable: each file is a single page; scanned-page header says 'page 7', so the pack is an excerpt and pages 1-6 are absent",
+    "images_for_full_visual_pass": 3,
+    "unresolved_evidence": ["scanned-page.pdf p1 body"]
+  }
+}

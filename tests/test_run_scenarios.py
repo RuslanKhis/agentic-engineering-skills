@@ -42,11 +42,13 @@ def make_root(base: Path) -> Path:
         {"id": "broken-fixture", "prompt": "x", "expected_primary": None, "available_skills": ["alpha-skill"],
          "context": "c.", "assertions": ["a"]},
     ]
-    (base / "evals").mkdir()
+    (base / "evals" / "graders" / "with-seed").mkdir(parents=True)
+    (base / "evals" / "graders" / "with-seed" / "answers.json").write_text('{"fixed": "SECRET-ANSWER"}')
     (base / "evals" / "scenarios.json").write_text(json.dumps({"version": 1, "cases": cases}))
     (base / "evals" / "scenario-fixtures.json").write_text(json.dumps({"version": 1, "scenarios": {
         "empty-design": {"status": "runnable", "note": "n"},
-        "with-seed": {"status": "repo-fixture", "copy": [{"from": "fixtures/seed", "to": "."}]},
+        "with-seed": {"status": "repo-fixture", "copy": [{"from": "fixtures/seed", "to": "."}],
+                      "grader": [{"from": "evals/graders/with-seed/answers.json"}]},
         "broken-fixture": {"status": "repo-fixture", "copy": [{"from": "fixtures/absent", "to": "."}]},
     }}))
     return base
@@ -114,6 +116,33 @@ class PrepareTests(unittest.TestCase):
             self.assertEqual(statuses["imaginary-project"], "fixture-missing")
             self.assertEqual(manifest["scenarios"][0]["skills_installed"], ["alpha-skill"])
 
+    def test_grader_material_reaches_the_judge_but_not_the_workspace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            run_dir, manifest = scen.prepare(root, [cases[1]], scen.load_fixtures(root), Path(tmp) / "runs")
+            case_dir = run_dir / "with-seed"
+            self.assertEqual(manifest["scenarios"][0]["grader_files"], ["answers.json"])
+            self.assertTrue((case_dir / "grader/answers.json").exists())
+            workspace_text = "".join(p.read_text() for p in (case_dir / "workspace").rglob("*") if p.is_file())
+            self.assertNotIn("SECRET-ANSWER", workspace_text)
+            self.assertNotIn("SECRET-ANSWER", (case_dir / "task.md").read_text())
+            (case_dir / "final.md").write_text("Fixed.")
+            pending = scen.judge_case(run_dir, cases[1], "files", "human", 60)
+            self.assertEqual(pending["status"], "awaiting-judge")
+            prompt = (case_dir / "judge-prompt.md").read_text()
+            self.assertIn("SECRET-ANSWER", prompt.split("## Evidence")[0])
+            self.assertNotIn("SECRET-ANSWER", prompt.split("## Evidence")[1])
+
+    def test_grader_material_outside_evals_graders_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            fixtures = {"with-seed": {"status": "repo-fixture", "copy": [{"from": "fixtures/seed", "to": "."}],
+                                      "grader": [{"from": "skills/beta-skill/SKILL.md"}]}}
+            with self.assertRaises(scen.InputError):
+                scen.classify(cases[1], fixtures, root)
+
     def test_fixture_cannot_escape_workspace(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = make_root(Path(tmp) / "repo")
@@ -141,8 +170,15 @@ TRANSCRIPT = [
         {"type": "text", "text": "Working."}]}}),
     "not json",
     json.dumps({"type": "result", "subtype": "success", "is_error": False, "num_turns": 3,
-                "total_cost_usd": 0.2, "result": "Wrote design.md with one risk: cost."}),
+                "total_cost_usd": 0.2, "result": "Wrote design.md with one risk: cost.",
+                "permission_denials": [{"tool_name": "Read", "tool_use_id": "t",
+                                        "tool_input": {"file_path": "/home/u/.claude/CLAUDE.md"}}]}),
 ]
+
+
+def verdicts(*values):
+    return json.dumps({"verdicts": [{"assertion": f"A{i}", "verdict": v, "quote": "# Design", "reason": "r"}
+                                    for i, v in enumerate(values, 1)]})
 
 
 class AgentAndJudgeTests(unittest.TestCase):
@@ -153,13 +189,147 @@ class AgentAndJudgeTests(unittest.TestCase):
         self.assertEqual(summary["final"], "Wrote design.md with one risk: cost.")
         self.assertEqual(summary["result"]["num_turns"], 3)
         self.assertEqual(len(summary["tool_calls"]), 3)
+        self.assertEqual(summary["skill_tool_calls"], ["alpha-skill"])
+        self.assertEqual(summary["skill_md_reads"], ["beta-skill"])
+        self.assertEqual(summary["permission_denials"][0]["tool"], "Read")
 
-    def test_agent_command_is_bounded_and_project_scoped(self):
+    def test_skill_md_loaded_per_installed_skill(self):
+        summary = scen.parse_transcript(TRANSCRIPT)
+        report = scen.skill_md_loaded(summary, ["alpha-skill", "beta-skill", "gamma-skill"])
+        self.assertEqual(report["alpha-skill"]["how"], "skill-tool")
+        self.assertEqual(report["beta-skill"]["how"], "read")
+        self.assertEqual(report["gamma-skill"], {"loaded": False, "how": None, "other_files_read": 1})
+
+    def test_catalogue_check_flags_repository_skills_that_were_not_installed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp))
+            check = scen.catalogue_check(["alpha-skill", "beta-skill", "dataviz"], ["alpha-skill"], root)
+            self.assertEqual(check, {"missing": [], "leaked": ["beta-skill"]})
+            self.assertEqual(scen.catalogue_check(["dataviz"], ["alpha-skill"], root)["missing"], ["alpha-skill"])
+
+    def test_agent_command_is_bounded_project_scoped_and_confined(self):
         command = scen.agent_command("claude-sonnet-5-5", 30, scen.AGENT_TOOLS, 2.5)
-        self.assertEqual(command[command.index("--setting-sources") + 1], "project")
-        self.assertEqual(command[command.index("--max-turns") + 1], "30")
-        self.assertEqual(command[command.index("--max-budget-usd") + 1], "2.5")
-        self.assertNotIn("Bash", command[command.index("--tools") + 1])
+        value = lambda flag: command[command.index(flag) + 1]
+        self.assertEqual(value("--setting-sources"), "project,local")
+        self.assertEqual(value("--max-turns"), "30")
+        self.assertEqual(value("--max-budget-usd"), "2.5")
+        self.assertNotIn("Bash", value("--tools"))
+        self.assertEqual(value("--permission-mode"), "dontAsk")
+        self.assertEqual(value("--permission-prompts"), "none")
+        rules = value("--allowedTools").split(",")
+        self.assertEqual(sorted(rules), ["Edit(./**)", "Read(./**)", "Skill", "Write(./**)"])
+        self.assertNotIn("Glob", rules)  # a bare Glob rule reaches ~/.claude
+        self.assertNotIn("--add-dir", command)
+        self.assertIn("--strict-mcp-config", command)
+        self.assertTrue(scen.confinement(scen.AGENT_TOOLS, "project")["confined_to_workspace"])
+        widened = scen.confinement(scen.AGENT_TOOLS + ",Bash", "project")
+        self.assertEqual(widened["unconfined_tools"], ["Bash"])
+        self.assertFalse(widened["confined_to_workspace"])
+
+    def test_add_dir_install_keeps_skills_out_of_the_workspace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            run_dir, manifest = scen.prepare(root, cases[:1], scen.load_fixtures(root), Path(tmp) / "runs",
+                                             skill_install="add-dir")
+            case_dir = run_dir / "empty-design"
+            self.assertEqual(manifest["skill_install"], "add-dir")
+            self.assertTrue((case_dir / "skills-host/.claude/skills/alpha-skill/SKILL.md").exists())
+            self.assertFalse((case_dir / "workspace/.claude").exists())
+            seen = {}
+
+            class Proc:
+                returncode = 0
+                stdout = "\n".join(TRANSCRIPT)
+
+            def runner(command, **kwargs):
+                seen["command"] = command
+                return Proc()
+
+            scen.run_agent(run_dir, manifest["scenarios"][0], "m", 5, 60, scen.AGENT_TOOLS, None,
+                           runner=runner, skill_install="add-dir", root=root)
+            self.assertEqual(seen["command"][seen["command"].index("--add-dir") + 1],
+                             str(case_dir / "skills-host"))
+
+    def test_skills_are_copied_not_linked(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            (Path(tmp) / "outside.md").write_text("outside")
+            (root / "skills/alpha-skill/linked.md").symlink_to(Path(tmp) / "outside.md")
+            cases, _ = scen.load_scenarios(root)
+            run_dir, _ = scen.prepare(root, cases[:1], scen.load_fixtures(root), Path(tmp) / "runs")
+            copied = run_dir / "empty-design/workspace/.claude/skills/alpha-skill"
+            self.assertFalse(any(p.is_symlink() for p in copied.rglob("*")))
+            self.assertEqual((copied / "linked.md").read_text(), "outside")
+
+    def test_run_directory_inside_the_repository_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            with self.assertRaises(scen.InputError):
+                scen.prepare(root, cases[:1], scen.load_fixtures(root), root / "runs")
+
+    def test_judge_repeats_take_the_majority_and_flag_disagreement(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            run_dir, _ = scen.prepare(root, cases[:1], scen.load_fixtures(root), Path(tmp) / "runs")
+            case_dir = run_dir / "empty-design"
+            (case_dir / "final.md").write_text("# Design")
+            replies = iter([verdicts("PASS", "FAIL"), verdicts("PASS", "PASS"), verdicts("PASS", "FAIL")])
+            prompts = []
+
+            def caller(backend, prompt, system, model, timeout):
+                prompts.append(prompt)
+                return scen.call_model.__globals__["ModelReply"](text=next(replies), model=model)
+
+            graded = scen.judge_case(run_dir, cases[0], "claude-cli", "m", 60, repeats=3, caller=caller)
+        self.assertEqual(len(prompts), 3)
+        self.assertEqual(len(set(prompts)), 1)
+        self.assertEqual(graded["judge_repeats"], 3)
+        self.assertEqual([r["verdict"] for r in graded["assertions"]], ["PASS", "FAIL"])
+        self.assertEqual(graded["assertions"][1]["votes"], ["FAIL", "PASS", "FAIL"])
+        self.assertEqual(graded["assertions"][1]["agreement"], 0.67)
+        self.assertEqual(graded["unstable"], [2])
+        self.assertEqual(graded["passed"], 1)
+
+    def test_majority_needs_more_than_half_to_pass(self):
+        rows = lambda v: [{"n": 1, "verdict": v, "quote": "", "quote_found": False, "reason": ""}]
+        tie = scen.majority([rows("PASS"), rows("FAIL")])[0]
+        self.assertEqual((tie["verdict"], tie["unstable"]), ("FAIL", True))
+        split = scen.majority([rows("PASS"), rows("UNGRADED"), rows("FAIL")])[0]
+        self.assertEqual(split["verdict"], "FAIL")
+        self.assertEqual(split["agreement"], 0.33)
+        same = scen.majority([rows("PASS")] * 3)[0]
+        self.assertEqual((same["verdict"], same["agreement"], same["unstable"]), ("PASS", 1.0, False))
+
+    def test_unreadable_judge_reply_is_asked_for_once_more(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            run_dir, _ = scen.prepare(root, cases[:1], scen.load_fixtures(root), Path(tmp) / "runs")
+            replies = iter(['{"verdicts": [,}', verdicts("PASS", "PASS")])
+
+            def caller(backend, prompt, system, model, timeout):
+                return scen.call_model.__globals__["ModelReply"](text=next(replies), model=model)
+
+            graded = scen.judge_case(run_dir, cases[0], "claude-cli", "m", 60, repeats=1, caller=caller)
+            self.assertTrue((run_dir / "empty-design/judge-reply-1-retry.txt").exists())
+        self.assertEqual((graded["status"], graded["judge_repeats"], graded["passed"]), ("graded", 1, 2))
+        self.assertEqual(len(graded["judge_errors"]), 1)
+
+    def test_judge_errors_on_every_repeat_are_reported(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            run_dir, _ = scen.prepare(root, cases[:1], scen.load_fixtures(root), Path(tmp) / "runs")
+
+            def caller(*args):
+                raise scen.BackendError("down")
+
+            graded = scen.judge_case(run_dir, cases[0], "claude-cli", "m", 60, repeats=2, caller=caller)
+        self.assertEqual(graded["status"], "judge-error")
+        self.assertIn("down", graded["error"])
 
     def test_agent_then_files_judge_round_trip(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -178,9 +348,14 @@ class AgentAndJudgeTests(unittest.TestCase):
                 return Proc()
 
             entry = manifest["scenarios"][0]
-            record = scen.run_agent(run_dir, entry, "m", 5, 60, scen.AGENT_TOOLS, None, runner=runner)
+            record = scen.run_agent(run_dir, entry, "m", 5, 60, scen.AGENT_TOOLS, None, runner=runner, root=root)
             self.assertEqual(record["skills_loaded"], ["alpha-skill", "beta-skill"])
+            self.assertEqual(record["skill_md_loaded"]["alpha-skill"]["how"], "skill-tool")
+            self.assertEqual(record["catalogue_check"], {"missing": [], "leaked": []})
+            self.assertEqual(record["permission_denials"][0]["tool"], "Read")
+            self.assertIn("dontAsk", record["command"])
             self.assertTrue(seen["env"]["AGENTIC_ENGINEERING_HOME"].startswith(str(run_dir)))
+            self.assertEqual(seen["env"]["CLAUDE_CODE_DISABLE_AUTO_MEMORY"], "1")
             case = cases[0]
             pending = scen.judge_case(run_dir, case, "files", "human", 60)
             self.assertEqual(pending["status"], "awaiting-judge")
@@ -204,7 +379,8 @@ class AgentAndJudgeTests(unittest.TestCase):
         self.assertTrue(rows["empty-design"]["primary_loaded"])
         self.assertTrue(rows["empty-design"]["primary_consulted"])
         self.assertEqual(rows["with-seed"]["status"], "not-run")
-        self.assertIn("| empty-design | graded | 2/2 | yes | yes |", scen.format_results(results))
+        self.assertEqual(rows["empty-design"]["skill_md_loaded"], {"alpha-skill": True})
+        self.assertIn("| empty-design | graded | 2/2 | none | 1.00 | yes | yes |", scen.format_results(results))
 
     def test_verdicts_flag_invented_quotes_and_missing_items(self):
         case = {"assertions": ["one", "two"]}

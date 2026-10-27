@@ -14,9 +14,9 @@ trial (docs/testing/activation-trial-2026-10-08.md):
   PARTIAL when it is supporting behind another primary, FAIL when it is primary.
 
 A batch whose answer cannot be read grades its cases ERROR, which is neither a
-pass nor a fail. Backends: ``claude-cli`` (headless ``claude -p``),
-``anthropic`` (Messages API, needs ANTHROPIC_API_KEY) and ``files`` (export
-prompt files for a person or another agent to answer, then import the answers).
+pass nor a fail. Backends: ``claude-cli`` (headless ``claude -p`` on the local
+Claude Code login; no API key) and ``files`` (export prompt files for a person
+or another agent to answer, then import the answers).
 
 Examples::
 
@@ -460,7 +460,7 @@ def parse_args(argv):
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0],
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--root", type=Path, default=ROOT)
-    parser.add_argument("--backend", choices=("claude-cli", "anthropic", "files"), default="claude-cli")
+    parser.add_argument("--backend", choices=("claude-cli", "files"), default="claude-cli")
     parser.add_argument("--model", help=f"selector model (default {DEFAULT_MODEL}; "
                         f"also {', '.join(m for m in KNOWN_MODELS if m != DEFAULT_MODEL)})")
     parser.add_argument("--repeat", type=int, default=1, help="independent reshuffled runs")

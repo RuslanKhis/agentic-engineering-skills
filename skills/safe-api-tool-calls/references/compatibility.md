@@ -5,10 +5,13 @@ Chapter 1 evidence establishes. Source names below identify historical
 provenance; using this skill does not require the book repository. The behaviour
 and limits are described here independently of those files.
 
-For this package's actual interpreter, helper checks and independent agent
-evaluations, read the [skill validation record](../tests/forward-evaluation.md).
-For the later implementation-depth recheck and retained fixture validation,
-read the [recheck record](../tests/depth-recheck.md).
+This package's interpreter, helper checks and independent agent evaluations
+are recorded outside the installed skill, in the source repository's
+`docs/skill-evidence/safe-api-tool-calls/forward-evaluation.md`; the later
+implementation-depth recheck is in `depth-recheck.md` beside it. The retained
+evaluation fixtures and their independent acceptance tests live in
+`evals/trials/safe-api-tool-calls/`, so an agent being evaluated with this
+skill cannot read the oracle.
 
 ## Historical environment
 

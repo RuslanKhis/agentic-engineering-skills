@@ -1,7 +1,7 @@
 # Skill validation — 15 September 2026
 
 This records validation of this skill package, separately from the historical
-chapter results in [compatibility](../references/compatibility.md). It is an
+chapter results in [compatibility](../../../skills/safe-api-tool-calls/references/compatibility.md). It is an
 execution record, not an assurance that every future generated integration is
 safe. The installed skill needs none of the original chapter files.
 
@@ -133,7 +133,7 @@ production templates. The packaged CLI tests are self-contained and repeatable;
 repeating the agent evaluation requires recreating the described fixtures and
 issuing the requests to an agent.
 
-The subsequent [retained evaluation cases](forward-cases.md) provide exact
+The subsequent [retained evaluation cases](../../../evals/trials/safe-api-tool-calls/forward-cases.md) provide exact
 inputs, requests and independent assertions for the implementation-depth
 recheck. They extend the package without claiming to reconstruct this earlier
 temporary evaluation exactly.

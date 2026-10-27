@@ -125,20 +125,23 @@ stays unresolved.
 ## Run the fixture
 
 The fixture directory `assets/ingestion-fixture/` holds four synthetic one-page
-PDFs with real bytes and an [inventory](../assets/ingestion-fixture/inventory.json),
-produced by [`make_ingestion_fixture.py`](../scripts/make_ingestion_fixture.py):
+PDFs with real bytes, produced by
+[`make_ingestion_fixture.py`](../scripts/make_ingestion_fixture.py):
 
-| File | What it is | Expected route |
-| --- | --- | --- |
-| `text-page.pdf` | A fictional residential-extension policy citing an SPD table | `text` |
-| `scanned-page.pdf` | A running header plus a raster body with no glyphs | `ocr_or_vision` |
-| `table-page.pdf` | A parking-standards table with a continued note | `both` |
-| `drawing-page.pdf` | A site plan with a scale bar, "Scale 1:200" and a written 6.0 m dimension | `both` |
+| File | What it is |
+| --- | --- |
+| `text-page.pdf` | A fictional residential-extension policy citing an SPD table |
+| `scanned-page.pdf` | A running header plus a raster body with no glyphs |
+| `table-page.pdf` | A parking-standards table with a continued note |
+| `drawing-page.pdf` | A site plan with a scale bar, a scale statement and a written dimension |
 
-`inventory.json` beside them is what the generator knows it wrote, not an
-extraction result. Run the project's extractor over the PDFs, qualify its
-output, and compare with the committed inventory to see what the extractor
-dropped. The [tests](../tests/test_ingestion_qualification.py) establish the
+The skill does not ship the generator's inventory: it is the answer key for
+anyone testing an extractor or an agent on these pages. To use it, regenerate
+the pack into a scratch directory the extractor under test cannot read
+(`"$PYTHON" "$SKILL_DIR/scripts/make_ingestion_fixture.py" --output "$SCRATCH"`),
+run the project's extractor over the PDFs, qualify its output, and compare with
+`$SCRATCH/inventory.json` to see what the extractor dropped. That inventory is
+what the generator knows it wrote, not an extraction result. The [tests](../tests/test_ingestion_qualification.py) establish the
 classification rules, deterministic generation and the pypdf path when that
 package is installed:
 

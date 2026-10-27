@@ -23,9 +23,17 @@ qualify = load("qualify_ingestion")
 generator = load("make_ingestion_fixture")
 
 
+@pytest.fixture(scope="module")
+def generated(tmp_path_factory):
+    # The inventory is the answer key, so the skill does not ship it; regenerate it.
+    output = tmp_path_factory.mktemp("ingestion-fixture")
+    generator.write_fixture(output)
+    return output
+
+
 @pytest.fixture
-def inventory():
-    return json.loads((FIXTURE / "inventory.json").read_text(encoding="utf-8"))["pages"]
+def inventory(generated):
+    return json.loads((generated / "inventory.json").read_text(encoding="utf-8"))["pages"]
 
 
 def page(inventory, name):
@@ -115,7 +123,9 @@ def test_generator_is_deterministic_and_matches_committed_assets(tmp_path):
                      "table-page.pdf", "text-page.pdf"]
     for name in names:
         assert sha256_of(first / name) == sha256_of(second / name)
+    for name in (n for n in names if n.endswith(".pdf")):
         assert sha256_of(first / name) == sha256_of(FIXTURE / name), name
+    assert sorted(p.name for p in FIXTURE.iterdir()) == [n for n in names if n.endswith(".pdf")]
 
 
 def test_fixture_pdfs_have_pdf_header_and_trailer():
@@ -126,8 +136,8 @@ def test_fixture_pdfs_have_pdf_header_and_trailer():
         assert b"/Type /Page" in data
 
 
-def test_inventory_is_labelled_as_generator_knowledge():
-    manifest = json.loads((FIXTURE / "inventory.json").read_text(encoding="utf-8"))
+def test_inventory_is_labelled_as_generator_knowledge(generated):
+    manifest = json.loads((generated / "inventory.json").read_text(encoding="utf-8"))
     assert manifest["kind"] == "generator_knowledge_not_extraction_result"
     assert len(manifest["pages"]) == 4
 

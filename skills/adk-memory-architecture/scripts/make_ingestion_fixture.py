@@ -7,9 +7,12 @@ so repeated runs produce identical bytes.
 
 `inventory.json` beside the PDFs records what this generator KNOWS it wrote
 (the text placed in each text layer, image and vector operation counts). It
-is generator knowledge, not an extraction result. A target project's own
+is generator knowledge, not an extraction result: the answer key for anyone
+testing an extractor or an agent on these pages. A target project's own
 extractor must produce its inventory from the bytes; compare the two to
-measure that extractor, never substitute one for the other.
+measure that extractor, never substitute one for the other. The skill ships
+the PDFs only (assets/ingestion-fixture/); write the inventory with
+--output into a directory the agent under test cannot read.
 
 Standard library only. See references/document-ingestion.md.
 """
@@ -22,7 +25,6 @@ from pathlib import Path
 import zlib
 
 
-OUTPUT = Path(__file__).resolve().parents[1] / "assets" / "ingestion-fixture"
 PAGE_WIDTH = 595
 PAGE_HEIGHT = 842
 
@@ -220,8 +222,9 @@ def write_fixture(output: Path) -> list[dict]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, default=OUTPUT,
-                        help="directory for the PDFs and inventory.json")
+    parser.add_argument("--output", type=Path, required=True,
+                        help="directory for the PDFs and inventory.json (the answer key; "
+                             "keep it away from the agent or extractor under test)")
     args = parser.parse_args()
     records = write_fixture(args.output)
     for record in records:

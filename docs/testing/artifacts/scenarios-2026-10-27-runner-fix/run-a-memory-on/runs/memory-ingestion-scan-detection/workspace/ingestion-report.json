@@ -1,0 +1,56 @@
+{
+  "provenance": {
+    "method": "manual application of qualify_ingestion.py rules to content streams read as raw bytes with Grep; the script was NOT executed (no shell available in this session)",
+    "evidence_tier": "offline, hand-derived; not tool-verified",
+    "extractor": "none run; text layer taken from uncompressed PDF content streams (Tj strings)",
+    "ocr_executed": false,
+    "visual_review_executed": false,
+    "image_xobject_decoded": false
+  },
+  "thresholds": {"min_chars": 200, "min_alnum_ratio": 0.5, "min_vector_ops": 8,
+                 "status": "defaults; not calibrated (4 pages is too few to calibrate)"},
+  "summary": {
+    "pages": 4,
+    "low_density_pages": [["scanned-page.pdf", 1], ["drawing-page.pdf", 1]],
+    "image_only_pages": [],
+    "table_candidates": [["table-page.pdf", 1]],
+    "drawing_candidates": [["drawing-page.pdf", 1]],
+    "reading_order_anomalies": [],
+    "estimated_visual_pass_images": 3,
+    "unresolved_evidence": [["scanned-page.pdf", 1, "body is a raster image never read; no OCR/vision available"]]
+  },
+  "pages": [
+    {"document": "text-page.pdf", "page": 1, "chars": "~800 (hand count)", "alnum_ratio": "~0.8 (estimate)",
+     "image_count": 0, "vector_drawing_ops": 0, "density": "text",
+     "table_candidate": false, "drawing_candidate": false,
+     "written_dimensions": ["1.0 m", "4.0 m", "6.0 m"], "scale_statements": [],
+     "route": "text", "text_origin": "native",
+     "notes": "Cites Table 2 of the Design SPD (held on table-page.pdf) and Zone A (not defined in the pack)."},
+    {"document": "scanned-page.pdf", "page": 1, "chars": 34, "alnum_ratio": 0.964,
+     "image_count": 1, "vector_drawing_ops": 0, "density": "low_density",
+     "table_candidate": false, "drawing_candidate": false,
+     "written_dimensions": [], "scale_statements": [],
+     "route": "ocr_or_vision", "text_origin": "native (header only: 'Synthetic Local Plan 2021 - page 7')",
+     "notes": "Text layer is only a running header; body is one 120x160 8-bit gray Flate image stretched to 475x700 pt (about 18 dpi), so legibility is doubtful even for a future OCR pass. Never pass as a text page. Body content is unknown."},
+    {"document": "table-page.pdf", "page": 1, "chars": "~480 (hand count)", "alnum_ratio": "~0.85 (estimate)",
+     "image_count": 0, "vector_drawing_ops": 14, "density": "text",
+     "table_candidate": true, "drawing_candidate": false,
+     "written_dimensions": ["400 m"], "scale_statements": [],
+     "route": "both", "text_origin": "native",
+     "notes": "Ruled 4-column grid (Dwelling size | Minimum spaces | Cycle spaces | Note). Script table_hint depends on how the extractor lays out cells, so it may need a layout-aware extractor; the structure is evident in the stream. Row 2-3 bedrooms points to 'see note 2' (reduces by 1 space within 400 m of a frequent bus stop); row 1 bedroom says 'Zone A: 0'. Reconstruct rows and join note 2 before asking."},
+    {"document": "drawing-page.pdf", "page": 1, "chars": "~140 (hand count)", "alnum_ratio": "~0.8 (estimate)",
+     "image_count": 0, "vector_drawing_ops": 18, "density": "low_density",
+     "table_candidate": false, "drawing_candidate": true,
+     "written_dimensions": ["6.0 m", "10 m"], "scale_statements": ["Scale 1:200"],
+     "route": "both", "text_origin": "native",
+     "notes": "Vector site plan with scale bar (0 / 5 / 10 m), 'Scale 1:200 @ A3', north arrow, labels 'Proposed extension' and 'Existing dwelling'. Written dimension '6.0 m' sits beside a 90 pt line; the text layer does not say what it measures. Pixel check: the bar gives 80 pt = 5 m, so 90 pt is about 5.6 m; 1:200 at A3 would give about 6.4 m. Both are pixel_estimate values and neither replaces the written 6.0 m. The scale bar and the stated ratio disagree slightly, so treat the page as not to scale until a reviewer looks."}
+  ],
+  "questions_and_assumptions": [
+    {"question": "Is the 'page 7' header on scanned-page.pdf from a larger Local Plan whose other pages should be in the pack?",
+     "assumption": "Pack is only these four single-page files; page 7 stands alone and no pages are reported missing."},
+    {"question": "What does the written 6.0 m on the drawing measure?",
+     "assumption": "Unknown; reported as a written dimension with no attribution to the extension depth."},
+    {"question": "What is Zone A, and is the pack's table the Table 2 the text page cites?",
+     "assumption": "Treated as the same table by title match ('Table 2 Parking standards (Design SPD)'); Zone A is undefined in the pack and stays unresolved."}
+  ]
+}

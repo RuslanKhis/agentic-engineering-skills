@@ -115,13 +115,18 @@ def main(argv=None) -> int:
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--demo", action="store_true", help="run offline negative controls")
     mode.add_argument("--judgments", type=Path, help="judge output JSON, without expected labels")
+    parser.add_argument("--expectations", type=Path, required=True,
+                        help="expected labels JSON, held by the evaluator outside the judge's reach; "
+                             "the installed skill ships none")
+    parser.add_argument("--cases", type=Path, default=ASSETS / "source-support-cases.json",
+                        help="case file the judgments answer (default: the skill's synthetic cases)")
     args = parser.parse_args(argv)
     try:
-        fixture = read_json(ASSETS / "source-support-cases.json")
+        fixture = read_json(args.cases)
         ids = {case["case_id"] for case in fixture["cases"]}
         if not ids or len(ids) != len(fixture["cases"]):
             raise ValueError("empty fixture or duplicate case identities")
-        expected_file = read_json(ASSETS / "source-support-expectations.json")
+        expected_file = read_json(args.expectations)
         expected = index_judgments(expected_file, ids)
         if args.demo:
             results = {"label_replay_scorer_self_check": score(expected, expected)}

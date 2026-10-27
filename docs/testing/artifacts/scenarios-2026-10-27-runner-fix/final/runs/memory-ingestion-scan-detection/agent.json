@@ -1,0 +1,104 @@
+{
+ "exit": 0,
+ "timed_out": false,
+ "seconds": 69.5,
+ "model": "claude-sonnet-5-5",
+ "max_turns": 30,
+ "tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "subtype": "success",
+ "is_error": false,
+ "num_turns": 13,
+ "total_cost_usd": 0.18216069999999998,
+ "duration_ms": 68367,
+ "terminal_reason": "completed",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-sonnet-5-5",
+  "--output-format",
+  "stream-json",
+  "--verbose",
+  "--setting-sources",
+  "project,local",
+  "--strict-mcp-config",
+  "--no-session-persistence",
+  "--max-turns",
+  "30",
+  "--tools",
+  "Read,Write,Edit,Glob,Grep,Skill",
+  "--permission-mode",
+  "dontAsk",
+  "--permission-prompts",
+  "none",
+  "--allowedTools",
+  "Read(./**),Write(./**),Edit(./**),Skill",
+  "--max-budget-usd",
+  "3.0"
+ ],
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "skills_loaded": [
+  "adk-memory-architecture"
+ ],
+ "skill_files_read": [
+  "adk-memory-architecture/references/document-ingestion.md",
+  "adk-memory-architecture/scripts/qualify_ingestion.py"
+ ],
+ "skill_md_loaded": {
+  "adk-memory-architecture": {
+   "loaded": true,
+   "how": "skill-tool",
+   "other_files_read": 2
+  },
+  "adk-agent-evaluation": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  }
+ },
+ "permission_denials": [],
+ "tool_calls": 11,
+ "catalogue": [
+  "adk-agent-evaluation",
+  "adk-memory-architecture",
+  "deep-research",
+  "design",
+  "design-sync",
+  "dataviz",
+  "update-config",
+  "verify",
+  "debug",
+  "code-review",
+  "simplify",
+  "batch",
+  "fewer-permission-prompts",
+  "doctor",
+  "loop",
+  "schedule",
+  "claude-api",
+  "workflow-authoring",
+  "run",
+  "run-skill-generator",
+  "plugin-authoring"
+ ],
+ "catalogue_check": {
+  "missing": [],
+  "leaked": []
+ }
+}

@@ -1,0 +1,162 @@
+{
+  "rubric": "adk-agent-evaluation source-support five-dimension rubric (source-support-calibration.md)",
+  "conventions": {
+    "invalid_citations": "Secondary dimensions assess only authenticated evidence. With no authenticated span, completeness and applicability are unresolved, contrary_evidence is none, and support is unsupported.",
+    "pixel_estimate": "A claim that unscaled pixels establish a physical width is treated as a method claim that the cited text directly negates, so it is contradicted rather than merely unsupported."
+  },
+  "judgments": [
+    {
+      "case_id": "s01",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The quote occurs verbatim in roof-p1 and is the whole finding. It concerns the roof and matches the observation."
+    },
+    {
+      "case_id": "s02",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The quote is the full Monday sentence. 'Starts opening at nine in the morning' is a faithful paraphrase of 'opens at 09:00 on Mondays'."
+    },
+    {
+      "case_id": "s03",
+      "source_identity": "valid",
+      "span_completeness": "incomplete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The quote is only the form question. The answer '3.2 m' sits on the next line of the same page and was not selected. The full page cannot stand in for the cited span, so the value is not supported by the selection."
+    },
+    {
+      "case_id": "s04",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The span keeps the question and its answer, '3.2 m', which matches the observation. This is the contrast case to s03."
+    },
+    {
+      "case_id": "s05",
+      "source_identity": "valid",
+      "span_completeness": "incomplete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The quote drops the same-sentence-group exception for flexible mats stored rolled, which is the very situation in the context. The rule alone cannot justify a bay-permit conclusion for this mat. The observation restates the general rule and does not itself assert the mat needs a permit, so I use none rather than contradiction. This is a convention choice and the alternative is contradiction."
+    },
+    {
+      "case_id": "s06",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The span holds the rule and its exception. A 3 m flexible mat stored rolled falls under the exception, so it needs no bay permit."
+    },
+    {
+      "case_id": "s07",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The selected passage itself states an exception for flexible mats stored rolled. 'Without exception' is directly contradicted."
+    },
+    {
+      "case_id": "s08",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "'Crate A is blue.' is verbatim, complete for the colour question, and matches the observation."
+    },
+    {
+      "case_id": "s09",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "not_applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The quote is genuine and complete, but it is the colour field and says nothing about mass. The 8 kg line is true elsewhere on the page but was not selected, so it cannot support the observation."
+    },
+    {
+      "case_id": "s10",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "supported",
+      "rationale": "The task asks for the written width, and the quote states it. The unscaled-drawing caveat is irrelevant to a written value."
+    },
+    {
+      "case_id": "s11",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The selected 'Drawing not to scale.' bears directly on the pixel inference, and no metres-per-pixel scale is given. The claim that 160 pixels establish 3.2 m treats the drawing as scaled, which the source negates. The 3.2 m figure matches the written dimension only by coincidence. A reviewer who treats this as an unsupported value would use unsupported with none. Either way the observation is rejected."
+    },
+    {
+      "case_id": "s12",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "contradiction",
+      "support": "contradicted",
+      "rationale": "The completed record says 12 litres, and the observation says 15."
+    },
+    {
+      "case_id": "s13",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The field is blank, so it supplies no value. 15 litres appears only in an out-of-scope record. Missing evidence is not a contradiction, so contrary_evidence is none."
+    },
+    {
+      "case_id": "s14",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "applicable",
+      "contrary_evidence": "unresolved",
+      "support": "unresolved",
+      "rationale": "The selected record says 12 litres, but the context record for the same meter and time says 15. The case states neither has precedence or is a verified correction, so the conflict between equally authoritative records is unresolved."
+    },
+    {
+      "case_id": "s15",
+      "source_identity": "valid",
+      "span_completeness": "complete",
+      "applicability": "not_applicable",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "The quote is a valid, complete field, but it is the applicant name and has nothing to do with access width."
+    },
+    {
+      "case_id": "s16",
+      "source_identity": "invalid",
+      "span_completeness": "unresolved",
+      "applicability": "unresolved",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "'missing-p1' is not in the source registry, so the quote cannot be tied to a document. The text matches roof-p1, but a quote that happens to match another source does not authenticate this citation. Under the stated convention the secondary dimensions are unresolved."
+    },
+    {
+      "case_id": "s17",
+      "source_identity": "invalid",
+      "span_completeness": "unresolved",
+      "applicability": "unresolved",
+      "contrary_evidence": "none",
+      "support": "unsupported",
+      "rationale": "roof-p1 resolves, but the quoted access-width span does not occur in it. That span exists only in access-p1. The roof page is authenticated and concerns the roof, so it cannot support the width. Secondary dimensions follow the authenticated-only convention."
+    }
+  ]
+}

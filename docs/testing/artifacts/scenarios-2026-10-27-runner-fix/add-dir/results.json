@@ -1,0 +1,1076 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T07:52:44+00:00",
+ "run_dir": "/private/tmp/claude-501/aes-runner-fix/aes-scenarios-ibk22b1x",
+ "commit": "554f58176c498b53391195d325edba1fac904f47",
+ "scenarios_sha256": "d9cc768e523df58176d12196b00634be721698d5b2f1856cc0c2e24c7b5f9e02",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "add-dir",
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "system-design-contracts-stay-small-when-read-only",
+   "expected_primary": "adk-system-designer",
+   "fixture_status": "runnable",
+   "note": "The user does not answer follow-up questions, so a single turn matches the scenario.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Uses the compact form of about 1,200 words with assumed answers stated, rather than the full template.",
+     "verdict": "FAIL",
+     "quote": "It's one page and marked draft",
+     "quote_found": true,
+     "reason": "The document is a full template with many sections (constraints table, decisions table, floor/depth table, phase 2, open decisions), not a compact ~1,200-word form; the assumed answers are stated but the compactness is not shown.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "States three to five one-line contracts (for example answers come from the policy, unsupported questions say so, spend stops at the cap) with where each is enforced and checked.",
+     "verdict": "FAIL",
+     "quote": "| C1 | Every policy claim cites a page present in the policy text; ... | C5 | Text inside the PDF is data, not instructions. | Structural: no tool, so injected text cannot act. | G03/A5 |",
+     "quote_found": false,
+     "reason": "It states five contracts with enforcement and checks, but they are not all one-line (C1 and C4 are multi-sentence) and the spend contract is enforced by an external quota, so it only loosely meets the assertion.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Does not add confirmation, idempotency, rights or recovery contracts the read-only journey does not need.",
+     "verdict": "PASS",
+     "quote": "| Writes, personal data | n/a: read only, public PDF | Any booking or expense feature |",
+     "quote_found": true,
+     "reason": "No confirmation, idempotency, rights or recovery contracts were added; writes were marked n/a.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Has each phase 1 goal cite the contracts its acceptance proves.",
+     "verdict": "PASS",
+     "quote": "**G02. Agent running in `adk web`.** ... Contracts: C2, C4, D2. ... Acceptance: A1 the lisbon question gets an answer; A2 the agent has no tools and the path is not user-controlled; A3 project quota is set",
+     "quote_found": false,
+     "reason": "Each phase 1 goal lists the contracts it covers, and the acceptance checks tie back to them (G03 cites C1, C3, C5; G04 is the exception with no contracts).",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2516,
+   "files": [
+    "docs/architecture/travel-policy-bot.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 62.7,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 7,
+    "total_cost_usd": 0.2233292,
+    "duration_ms": 61587,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--add-dir",
+     "/private/tmp/claude-501/aes-runner-fix/aes-scenarios-ibk22b1x/system-design-contracts-stay-small-when-read-only/skills-host",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "add-dir",
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-system-designer"
+    ],
+    "skill_files_read": [
+     "adk-system-designer/references/delivery-profiles.md",
+     "adk-system-designer/references/failure-review.md"
+    ],
+    "skill_md_loaded": {
+     "adk-system-designer": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-memory-architecture": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 5,
+    "catalogue": [
+     "adk-engineer",
+     "adk-memory-architecture",
+     "adk-system-designer",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-system-designer": true,
+    "adk-engineer": false,
+    "adk-memory-architecture": false
+   }
+  },
+  {
+   "id": "estimate-poc-tickets",
+   "expected_primary": "adk-system-designer",
+   "fixture_status": "runnable",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-agent-evaluation",
+    "deploy-adk-on-google-cloud",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Every phase 1 goal and every ticket file carries a human-effort estimate as a range, stated as hours for a developer working with a coding agent, split into hands-on and review-and-verify time.",
+     "verdict": "FAIL",
+     "quote": "G04 OCR for scanned pages: `adk-memory-architecture`, 1–3 h; acceptance: coverage report shows zero unreviewed scanned pages.",
+     "quote_found": true,
+     "reason": "Phase 1 goals and tickets have hands-on/review ranges, but the phase 2 goals G04–G07 are given only a single total range, with no hands-on/review split, so 'every goal' is not satisfied.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Ticket estimates match their goals, and the phase 1 total equals the sum of its goals and is compared with capacity after a reserve, high end included.",
+     "verdict": "PASS",
+     "quote": "sum 3.25–4.5 h. Six hours, taken as focused, minus a 25% reserve (1.5 h) leaves 4.5 h; the high end fits with no slack",
+     "quote_found": true,
+     "reason": "Ticket estimates match the plan table (1.0–1.5, 1.25–1.75, 1.0–1.25), the sum is correct (3.25–4.5), and it is compared to capacity after reserve including the high end.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Calendar waits (reviews, grants, provider verification) are listed separately from hours where they apply.",
+     "verdict": "PASS",
+     "quote": "No calendar waits.",
+     "quote_found": true,
+     "reason": "The plan explicitly states calendar waits are none, with each ticket carrying calendar_waits: none, and phase 2 lists the HR session date as a separate wait.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Phase 1 estimates fit about six hours of one person with a reserve, and the plan says which goals still give a demo if time runs out.",
+     "verdict": "PASS",
+     "quote": "Cut line if time runs short, in the order work stays useful: G01 (corpus is indexed and its gaps known) → G02 (demoable agent) → G03.",
+     "quote_found": false,
+     "reason": "The estimates fit within 6 hours after a 1.5h reserve, and the plan states which goals still yield a demo (G01+G02) if time runs out.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.83,
+   "unstable": [
+    1,
+    3
+   ],
+   "final_chars": 2887,
+   "files": [
+    "docs/architecture/hr-policy-agent.md",
+    "docs/tickets/hr-policy-agent/G01-ingest-and-coverage.md",
+    "docs/tickets/hr-policy-agent/G02-grounded-search-agent.md",
+    "docs/tickets/hr-policy-agent/G03-gold-check-and-demo.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 149.1,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 21,
+    "total_cost_usd": 0.46468649999999995,
+    "duration_ms": 147991,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--add-dir",
+     "/private/tmp/claude-501/aes-runner-fix/aes-scenarios-ibk22b1x/estimate-poc-tickets/skills-host",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "add-dir",
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-system-designer"
+    ],
+    "skill_files_read": [
+     "adk-system-designer/references/delivery-profiles.md",
+     "adk-system-designer/assets/ticket-template.md",
+     "adk-system-designer/scripts",
+     "adk-memory-architecture/references/local-document-coverage.md",
+     "adk-memory-architecture/references/compatibility.md",
+     "adk-system-designer/scripts/check_tickets.py",
+     "adk-system-designer/scripts/plan_files.py"
+    ],
+    "skill_md_loaded": {
+     "adk-system-designer": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 5
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-memory-architecture": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 2
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 19,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-engineer",
+     "adk-memory-architecture",
+     "adk-system-designer",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-system-designer": true,
+    "adk-engineer": false,
+    "adk-agent-evaluation": false,
+    "deploy-adk-on-google-cloud": false,
+    "adk-memory-architecture": false
+   }
+  },
+  {
+   "id": "evaluation-selected-source-support",
+   "expected_primary": "adk-agent-evaluation",
+   "fixture_status": "repo-fixture",
+   "note": "The cases are the evaluation skill's own worked example, and its calibration reference describes what a good judgment does with them, so this is not a blind test.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "source-support-expectations.json"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Rejects a true width observation cited only to the question and accepts it when the answer span is selected.",
+     "verdict": "PASS",
+     "quote": "\"case_id\": \"s03\", ... \"span_completeness\": \"incomplete\", ... \"support\": \"unsupported\"",
+     "quote_found": false,
+     "reason": "s03 (question-only span) is rejected as unsupported and s04 (question plus answer) is accepted as supported, as required.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Separates valid identities from support, handles an omitted exception and rejects the unrelated half of a shared-excerpt pair.",
+     "verdict": "PASS",
+     "quote": "\"case_id\": \"s09\", ... \"applicability\": \"not_applicable\", ... \"support\": \"unsupported\"",
+     "quote_found": false,
+     "reason": "Valid identities are kept separate from support (s09, s15 valid but unsupported), the s07 omitted-exception contradiction is handled, and s09 is rejected against the shared excerpt that supports s08, so the assertion is met despite s05 being labelled differently.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 3,
+     "assertion": "Accepts written dimensions while rejecting unsupported physical inference from unscaled pixels.",
+     "verdict": "PASS",
+     "quote": "The task asks for the written width, and the quote states it. The unscaled-drawing caveat is irrelevant to a written value.",
+     "quote_found": true,
+     "reason": "s10 is accepted as supported on the written dimension and s11's pixel inference is rejected, even though the labels differ from the key (contradicted vs unsupported).",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Distinguishes contradictions from absent evidence and records unresolved conflicting records.",
+     "verdict": "PASS",
+     "quote": "\"contrary_evidence\": \"none\", \"support\": \"unsupported\" ... Missing evidence is not a contradiction",
+     "quote_found": false,
+     "reason": "s13 (blank field) is unsupported rather than contradicted, s12 is contradicted, and s14 is unresolved with the conflicting records recorded.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Reports judgments and label disagreements as AI-only calibration evidence, without claiming independent human truth.",
+     "verdict": "FAIL",
+     "quote": "The judgments are my own reading of the cases and the rubric.",
+     "quote_found": true,
+     "reason": "The answer does say the labels are AI-authored and provisional and should not be used as a quality gate without human review, but it does not describe the judgments or label disagreements as AI-only calibration evidence, and it reports no disagreement figures.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 4,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.87,
+   "unstable": [
+    2,
+    3
+   ],
+   "final_chars": 2735,
+   "files": [
+    "source-judgments.json"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 44.5,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 9,
+    "total_cost_usd": 0.16145839999999997,
+    "duration_ms": 43396,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--add-dir",
+     "/private/tmp/claude-501/aes-runner-fix/aes-scenarios-ibk22b1x/evaluation-selected-source-support/skills-host",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "add-dir",
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-evaluation"
+    ],
+    "skill_files_read": [
+     "adk-agent-evaluation/references/source-support-calibration.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-evaluation": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 7,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-evaluation": true
+   }
+  },
+  {
+   "id": "memory-ingestion-scan-detection",
+   "expected_primary": "adk-memory-architecture",
+   "fixture_status": "repo-fixture",
+   "note": "The pack is the memory skill's own demonstration fixture and its generator script is installed with the skill, so the page contents are within the agent's reach; a separate pack would make this blind.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-memory-architecture",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "inventory.json"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Classifies the header-only scanned page as low density and routes it to OCR or vision instead of passing it as a text page.",
+     "verdict": "PASS",
+     "quote": "\"density_class\": \"image_only\"",
+     "quote_found": true,
+     "reason": "The header-only scanned page is classed image_only (low density) and routed to ocr_or_vision, not passed as text.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Flags the table page and the drawing page and routes them to both text and image.",
+     "verdict": "PASS",
+     "quote": "\"route\": \"text_and_image\", \"send\": \"native text plus rendered image\"",
+     "quote_found": true,
+     "reason": "Both the table page and the drawing page are flagged (table and drawing hints) and routed to text and image.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Extracts the written dimension and the scale statement as separate fields and labels any pixel-derived value as an estimate.",
+     "verdict": "PASS",
+     "quote": "\"written_dimensions\": [\"6.0 m\"], \"scale_statements\": [\"Scale 1:200 @ A3\"]",
+     "quote_found": true,
+     "reason": "The dimension and scale are separate fields, and pixel-derived values are required to be labelled pixel_estimate; none were measured.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Sizes the image budget from the pack and labels the thresholds as defaults to calibrate.",
+     "verdict": "FAIL",
+     "quote": "I set none. I suggest 150-200 dpi for the table and 200-300 dpi for the drawing",
+     "quote_found": true,
+     "reason": "The thresholds are labelled as uncalibrated defaults, but the image budget was not set; the report only gives a count of 3 images for a full visual pass and no budget, and it says none was set.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Reports that OCR and vision were not executed and keeps those pages unresolved rather than empty.",
+     "verdict": "PASS",
+     "quote": "\"status\": \"UNRESOLVED: body content never read; no OCR or vision available in this trial\"",
+     "quote_found": true,
+     "reason": "The report states OCR and vision were not run and keeps the scanned page unresolved rather than empty.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 4,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 1934,
+   "files": [
+    "ingestion-report.json",
+    "ingestion-report.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 50.8,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 13,
+    "total_cost_usd": 0.16585099999999997,
+    "duration_ms": 49711,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--add-dir",
+     "/private/tmp/claude-501/aes-runner-fix/aes-scenarios-ibk22b1x/memory-ingestion-scan-detection/skills-host",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "add-dir",
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-memory-architecture"
+    ],
+    "skill_files_read": [
+     "adk-memory-architecture/references/document-ingestion.md"
+    ],
+    "skill_md_loaded": {
+     "adk-memory-architecture": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 11,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-memory-architecture",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-memory-architecture": true,
+    "adk-agent-evaluation": false
+   }
+  },
+  {
+   "id": "memory-local-document-completeness",
+   "expected_primary": "adk-memory-architecture",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-memory-architecture"
+   ],
+   "grader_files": [],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Scores document and operative-section coverage separately and fails the supplement-dependent question for a main-only retriever.",
+     "verdict": "PASS",
+     "quote": "\"main_policy_only\": ... False, (1, 2), (2, 3), {(\"maintenance-exception\", \"query_miss\")}",
+     "quote_found": false,
+     "reason": "The control scores document coverage (1/2) and section coverage (2/3) separately and expects failure for the main-only retriever on the supplement-dependent question, though it was not run.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Distinguishes absent content, empty extraction, query miss, truncation and unviewed visuals.",
+     "verdict": "PASS",
+     "quote": "{(\"closure-notice\", \"empty_extraction\"), (\"closure-notice\", \"unviewed_visuals\")}",
+     "quote_found": true,
+     "reason": "Controls expect distinct diagnoses for absent_content, empty_extraction, query_miss, section_truncation and unviewed_visuals.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 3,
+     "assertion": "Preserves an unresolved visual-evidence outcome and specifies the governed review path instead of interpreting empty text as no relevant provision.",
+     "verdict": "FAIL",
+     "quote": "Reviewing the closure notice's image. The fixture has no image bytes, so the Route Cedar closure question stays unresolved.",
+     "quote_found": true,
+     "reason": "Unresolved status is preserved, but no governed review path is specified in the answer or code.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Retains manual golden queries as diagnostic evidence and does not claim they prove agent query formulation or real PDF extraction.",
+     "verdict": "PASS",
+     "quote": "I used `manual_golden` as the query origin, so nothing here counts as evidence of how the agent formulates queries.",
+     "quote_found": true,
+     "reason": "The answer retains manual golden queries as diagnostic and disclaims proof of agent query formulation, and it also states that real extraction was not run.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.83,
+   "unstable": [
+    1,
+    2
+   ],
+   "final_chars": 2740,
+   "files": [
+    "coverage_controls.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 45.9,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 9,
+    "total_cost_usd": 0.1519178,
+    "duration_ms": 44697,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--add-dir",
+     "/private/tmp/claude-501/aes-runner-fix/aes-scenarios-ibk22b1x/memory-local-document-completeness/skills-host",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "add-dir",
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [
+     "adk-memory-architecture/references/local-document-coverage.md",
+     "adk-memory-architecture/scripts/score_document_coverage.py",
+     "adk-memory-architecture/scripts/local_retrieval.py"
+    ],
+    "skill_md_loaded": {
+     "adk-memory-architecture": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 3
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 8,
+    "catalogue": [
+     "adk-memory-architecture",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-memory-architecture": false
+   }
+  }
+ ]
+}

@@ -12,15 +12,20 @@ import unittest
 
 SKILL = Path(__file__).resolve().parents[1]
 SCRIPT = SKILL / "scripts" / "check_source_support.py"
+# The labels are grader material: the source repository keeps them outside the
+# installed skill so an agent judging these cases cannot read the answers.
+EXPECTATIONS = (SKILL.parents[1] / "evals" / "graders" / "evaluation-selected-source-support"
+                / "source-support-expectations.json")
 spec = importlib.util.spec_from_file_location("source_support", SCRIPT)
 checker = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(checker)
 
 
+@unittest.skipUnless(EXPECTATIONS.exists(), "expected labels live in the source repository's evals/graders")
 class SourceSupportTests(unittest.TestCase):
     def setUp(self):
         self.fixture = checker.read_json(SKILL / "assets" / "source-support-cases.json")
-        self.labels = checker.read_json(SKILL / "assets" / "source-support-expectations.json")
+        self.labels = checker.read_json(EXPECTATIONS)
         self.ids = {c["case_id"] for c in self.fixture["cases"]}
         self.expected = checker.index_judgments(self.labels, self.ids)
 
@@ -73,19 +78,21 @@ class SourceSupportTests(unittest.TestCase):
         def run(*args):
             return subprocess.run([sys.executable, str(SCRIPT), *args], text=True,
                                   capture_output=True, timeout=10, check=False)
-        demo = run("--demo")
+        self.assertEqual(run("--demo").returncode, 2)  # no expectations, no score
+        labels = ("--expectations", str(EXPECTATIONS))
+        demo = run("--demo", *labels)
         self.assertEqual(demo.returncode, 0, demo.stderr)
         self.assertEqual(json.loads(demo.stdout)["results"]["label_replay_scorer_self_check"]["exact_matches"], len(self.ids))
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "judgments.json"
             path.write_text(json.dumps(self.labels))
             before = path.read_bytes()
-            self.assertEqual(run("--judgments", str(path)).returncode, 0)
+            self.assertEqual(run("--judgments", str(path), *labels).returncode, 0)
             self.assertEqual(path.read_bytes(), before)
             path.write_text(json.dumps(checker.weak_judgments(self.fixture, "id_only")))
-            self.assertEqual(run("--judgments", str(path)).returncode, 1)
+            self.assertEqual(run("--judgments", str(path), *labels).returncode, 1)
             path.write_text('{"judgments": [], "judgments": []}')
-            self.assertEqual(run("--judgments", str(path)).returncode, 2)
+            self.assertEqual(run("--judgments", str(path), *labels).returncode, 2)
 
 
 if __name__ == "__main__":
