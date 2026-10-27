@@ -38,6 +38,8 @@ If the project has no ledger, keep its limited scope explicit. Reuse existing in
 
 For ADK, inspect the installed confirmation wrapper and actual session/Runner path. Verify missing or rejected confirmation causes zero provider calls. When ADK returns `"This tool call is rejected."`, report that the action was cancelled and no payment was attempted. This is distinct from an unknown outcome after dispatch.
 
+Check the installed version before relying on one run per approval. ADK 2.12.0 runs a confirmed tool once per approval (CHANGELOG, bfdeb4a, closes #7434); below 2.12.0 a re-sent approval could run the tool again. The resume page also warns that long-running functions may run more than once when resuming. On every version, test a duplicate approval reply and keep the operation record from section 1 as the guard: it, not the framework, makes a repeated approval converge on one effect.
+
 Direct Python calls bypass ADK's wrapper. Secure every supported entry point at the appropriate service boundary. Without ADK, use the framework's equivalent approval mechanism or application gate. Enforce repeated-operation behaviour in code; prompts, session persistence and model-call limits are not operation deduplication.
 
 Immediately before dispatch, revalidate authority, current business preconditions and the approved action, amount, currency and revision. They may have changed while the confirmation dialog was open. A mismatch follows the defined correction/reapproval flow and sends no provider request. An earlier approval must not silently authorise a different payload. Bind any balance reservation or conditional state update atomically so concurrent operations cannot both pass a stale balance check.

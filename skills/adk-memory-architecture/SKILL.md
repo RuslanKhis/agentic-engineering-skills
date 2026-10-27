@@ -7,7 +7,7 @@ description: >-
   consent, retention, replay and erasure boundaries. Use for agent memory,
   knowledge retrieval or cross-session continuity work. Do not activate for
   general database administration, arbitrary SQL generation, deployment alone,
-  prompt-only editing (adk-agent-evaluation owns decision quality) or
+  prompt-only editing (adk-agent-instructions owns prompt wording) or
   non-agent caching.
 license: MIT
 metadata:
