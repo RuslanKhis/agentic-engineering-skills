@@ -64,7 +64,7 @@ Evaluators received the copied skill, their clean fixture and realistic request,
 plus an existing interpreter and an offline execution boundary. They did not
 receive expected answers or the provenance/validation reports. The parent
 reviewed their actual artefacts and reran both generated code test suites.
-Inputs are retained in [forward-cases.json](../tests/forward-cases.json).
+Inputs are retained in [forward-cases.json](../../../skills/optimise-adk-on-google-cloud/tests/forward-cases.json).
 
 | Scenario | Observed result |
 | --- | --- |
@@ -87,7 +87,7 @@ behaviour, durable sessions or fresh-project onboarding.
 
 Deployment, API activation, provisioning, IAM/secrets, migrations, paid tests and
 deletion remain subject to the exact-scope approval and ownership rules in
-[lifecycle.md](lifecycle.md). Creation here changed only this new skill directory;
+[lifecycle.md](../../../skills/optimise-adk-on-google-cloud/references/lifecycle.md). Creation here changed only this new skill directory;
 manuscripts and original companion source were not edited, and the skill was not
 committed, published or installed globally.
 
@@ -148,7 +148,7 @@ agent-behaviour checks, not tests of an unrestricted tool runner's enforcement.
 | Near miss | **PASS:** excluded the marketing typo from optimisation scope and changed only the requested word. |
 | Repeated invocation | **PASS:** all 13 continuation tests passed again; hashes for all four fixture files matched and no API, pin or source changes were made. |
 
-The six runtime inputs extend [forward-cases.json](../tests/forward-cases.json),
+The six runtime inputs extend [forward-cases.json](../../../skills/optimise-adk-on-google-cloud/tests/forward-cases.json),
 which also retains the six Part 1 cases. No global installation, native automatic
 skill-injection test or other coding-agent environment is claimed. New live
 runtime, compaction, memory, streaming, job, performance and cleanup validation
@@ -225,7 +225,7 @@ not enforcement by an unrestricted tool runner.
 | Near miss | **PASS:** excluded the GKE marketing spelling request from optimisation scope and changed only “Optimizing” to “Optimising”, verified against exact HTML. |
 | Repeated invocation | **PASS:** all nine observation tests passed again; SHA-256 values of all five fixture files stayed identical, with no duplicate component, changed API or pin edits. |
 
-The six GKE inputs extend [forward-cases.json](../tests/forward-cases.json) to
+The six GKE inputs extend [forward-cases.json](../../../skills/optimise-adk-on-google-cloud/tests/forward-cases.json) to
 18 retained cases across the three parts. The earlier Part 1/2 forward cases were
 not re-executed during this extension; their helper tests remain in the 67-test
 suite. The complete release copy contains 26 files with no private source paths
@@ -330,7 +330,7 @@ Part 2 and Part 3 forward scenarios were not repeated; the complete package test
 suite still covers their bundled helpers. Live application/hosting, production
 ownership and authorisation, distributed budgets, speedup, fresh-project setup
 and other coding-agent products remain separate evidence boundaries. Required
-external approvals are unchanged in [lifecycle.md](lifecycle.md).
+external approvals are unchanged in [lifecycle.md](../../../skills/optimise-adk-on-google-cloud/references/lifecycle.md).
 
 ### Files in this refinement
 

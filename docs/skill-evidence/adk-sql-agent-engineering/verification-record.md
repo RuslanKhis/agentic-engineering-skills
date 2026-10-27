@@ -6,7 +6,7 @@ Initial validation: 15 September 2026. The first sections preserve that package'
 
 ## Environment
 
-Package and forward tests used the existing isolated Python **3.11.4** environment, on **macOS / Darwin 25.6.0, arm64**, with **pytest 9.1.1** and **PyYAML 6.0.3**. Synthetic workflow fixtures used **SQLite 3.42.0** and **SQLGlot 29.0.1**. The selected interpreter also had the exact ADK/provider versions recorded in [compatibility.md](compatibility.md); no dependency installation or version changes occurred.
+Package and forward tests used the existing isolated Python **3.11.4** environment, on **macOS / Darwin 25.6.0, arm64**, with **pytest 9.1.1** and **PyYAML 6.0.3**. Synthetic workflow fixtures used **SQLite 3.42.0** and **SQLGlot 29.0.1**. The selected interpreter also had the exact ADK/provider versions recorded in [compatibility.md](../../../skills/adk-sql-agent-engineering/references/compatibility.md); no dependency installation or version changes occurred.
 
 Agent behaviour was exercised in **Codex Desktop** using two independent agents with fresh context. Each received only the packaged skill, a clean synthetic project, a realistic request and the permitted local interpreter. Neither had access to the book, companion code or the other agent's fixture. The core `SKILL.md` SHA-256 was `96c4d6d34541cd09af04a1ff1c5ddeeef842e314de301a246d1238d279d37b6a`, matching the 15 September entrypoint before the depth-review revision.
 
@@ -27,7 +27,7 @@ Commands below use `python` to denote the selected Python 3.11.4 interpreter. Pa
 | Inspector `--project` with `--dry-run --expect-adk 2.8.0` | Exit 0, inventory only; ADK gate explicitly `NOT_RUN_DRY_RUN`; no content reads |
 | Inspector against current companion with `--expect-adk 2.8.0` | Exit 0, gate PASS; declared and interpreter ADK versions reported separately; no `.env` values read |
 | `python scripts/check_results.py --help` | Exit 0, static help |
-| Checker against the two JSON examples in [validation.md](validation.md), with `--expected`, `--actual` and `--dry-run` | Exit 0, `DRY_RUN`, `SHAPES_VALID_NO_VERDICT` |
+| Checker against the two JSON examples in [validation.md](../../../skills/adk-sql-agent-engineering/references/validation.md), with `--expected`, `--actual` and `--dry-run` | Exit 0, `DRY_RUN`, `SHAPES_VALID_NO_VERDICT` |
 | Same checker examples without `--dry-run` | Exit 0, `PASS`, `RESULTS_MATCH` |
 
 The 30 checker tests cover explicit aliases, exact precision, missing/conflicting metrics, duplicate cohorts/JSON keys, malformed input, non-finite values, cardinality, bounded reads, symlinks, secret-safe output, dry-run behaviour and repeated read-only invocation. The 15 inspector tests cover separate version evidence, custom package managers, unchanged files, secret suppression, skipped links, bounds, malformed/unsupported manifests, version conflicts, help/dry-run, and unsupported platform handling. Exit 1/2/3 failure paths were asserted where applicable; a dry run was never counted as a successful live integration.
@@ -51,7 +51,7 @@ Both independent implementations initially exposed SQLite's optimised `COUNT(*)`
 
 The original manuscript and companion source were unchanged. All 44 source files still match the recorded follow-up fingerprints. Existing repository skills and concurrent work were preserved. No commit, push, publication, deployment, new cloud resource or secret was produced.
 
-The skill entrypoint, scripts, tests, conditional references, MIT licence and optional discovery metadata are the complete deliverable. The historical live behaviour remains separately dated in [compatibility.md](compatibility.md). Before using a new production target, verify its model/SDK contract, authenticated scope, provider SQL policy, cumulative budgets, output completeness and separately approved live lifecycle. The skill's local results do not supply those target-specific guarantees.
+The skill entrypoint, scripts, tests, conditional references, MIT licence and optional discovery metadata are the complete deliverable. The historical live behaviour remains separately dated in [compatibility.md](../../../skills/adk-sql-agent-engineering/references/compatibility.md). Before using a new production target, verify its model/SDK contract, authenticated scope, provider SQL policy, cumulative budgets, output completeness and separately approved live lifecycle. The skill's local results do not supply those target-specific guarantees.
 
 ## 16 September 2026 — implementation depth review
 
@@ -76,7 +76,7 @@ The change adds five conditional references and one runnable test asset:
 - A synthetic ADK contract asset that retains the actual SDK serializer and blocks
   ADC discovery and socket/DNS operations during its test fixture.
 
-The [coverage map](compatibility.md#depth-review-coverage) connects the chapter's
+The [coverage map](../../../skills/adk-sql-agent-engineering/references/compatibility.md#depth-review-coverage) connects the chapter's
 sections and campaign findings to these procedures. Production extensions remain
 labelled, including caller isolation, complete SQL policy, cumulative deadlines,
 semantic follow-ups and cloud frontend hosting. The failed historical latency gate

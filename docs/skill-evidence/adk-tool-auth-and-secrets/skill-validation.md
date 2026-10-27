@@ -6,7 +6,7 @@ This records package checks, separate from the historical companion evidence.
 
 ## Depth recheck — 16 September 2026
 
-Three independent read-only reviews compared the existing skill with current companion implementation/tests, the revised manuscript and historical campaign reports. They found operational and production details worth retaining without changing the chapter-level job. Added the conditional [operations runbook](operations-runbook.md), expanded identity/OAuth/custody/validation guidance and updated source mapping. A subsequent independent documentation review caught an overly broad gradual-rotation instruction; it was corrected to respect the provider's overlap/invalidation semantics.
+Three independent read-only reviews compared the existing skill with current companion implementation/tests, the revised manuscript and historical campaign reports. They found operational and production details worth retaining without changing the chapter-level job. Added the conditional [operations runbook](../../../skills/adk-tool-auth-and-secrets/references/operations-runbook.md), expanded identity/OAuth/custody/validation guidance and updated source mapping. A subsequent independent documentation review caught an overly broad gradual-rotation instruction; it was corrected to respect the provider's overlap/invalidation semantics.
 
 Validation used the existing Python 3.11.4 environment on macOS. Official Skill Creator `quick_validate.py` passed; YAML/name/automatic-discovery, all relative links/anchors, Python syntax, private-identifier and unfinished-marker checks passed across **15 files**. `git diff --check -- skills/adk-tool-auth-and-secrets` passed. All **37** source fingerprints from the historical final campaign still matched. The main entrypoint remains **925 words**; the new detail is loaded conditionally.
 
@@ -21,7 +21,7 @@ These cases validate guidance through generated plans, not implementation/runtim
 
 ## Initial environment — 15 September 2026
 
-Codex desktop on macOS, Darwin 25.6.0 arm64; existing repository virtual environment with Python **3.11.4**, pytest **8.4.2**, PyYAML **6.0.3**, google-adk **2.8.0** and google-genai **2.19.0**. Installed versions were read from distribution metadata. No packages were installed or pins changed. The historical chapter campaign used different resolved versions; see [compatibility-and-evidence.md](compatibility-and-evidence.md).
+Codex desktop on macOS, Darwin 25.6.0 arm64; existing repository virtual environment with Python **3.11.4**, pytest **8.4.2**, PyYAML **6.0.3**, google-adk **2.8.0** and google-genai **2.19.0**. Installed versions were read from distribution metadata. No packages were installed or pins changed. The historical chapter campaign used different resolved versions; see [compatibility-and-evidence.md](../../../skills/adk-tool-auth-and-secrets/references/compatibility-and-evidence.md).
 
 The helper and adapter require only Python 3.11's standard library. The installed ADK/GenAI pair was used for one optional real event-shape assertion, not a live model call or a new orchestration acceptance run. Default Python **3.9.13** was also checked: the inspector exited 2 with `PYTHON_3_11_REQUIRED` rather than a missing-`tomllib` traceback.
 
@@ -63,4 +63,4 @@ The greenfield evaluators ran `python -m unittest discover -s tests -v`; the cus
 
 These are offline package and coding-agent behaviour checks, not new live OAuth, Secret Manager, Firebase, managed authentication or hosted-deployment evidence. No paid model/provider calls, credential reads, cloud changes or deployments were performed for packaging. Historical six-workflow Gemini evidence remains labelled historical in the provenance reference. Other coding-agent products and operating systems were not smoke-tested; plain Markdown and a clean-copy test alone do not establish their behavioural compatibility.
 
-Use [validation.md](validation.md) to reproduce checks. Static observations do not certify runtime authorisation, and public-text projection is not secret redaction.
+Use [validation.md](../../../skills/adk-tool-auth-and-secrets/references/validation.md) to reproduce checks. Static observations do not certify runtime authorisation, and public-text projection is not secret redaction.

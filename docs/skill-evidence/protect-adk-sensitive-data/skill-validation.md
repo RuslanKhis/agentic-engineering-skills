@@ -90,7 +90,7 @@ DLP 3.38.0, Model Armor 0.7.1, google-genai 2.19.0, Pydantic 2.13.4,
 FastAPI 0.136.3, pytest 8.4.2 and PyYAML 6.0.3. The shipped helper/controller
 use the standard library; fixture tests also used the existing pytest/SDK
 packages. The original chapter's declared pytest range differs from this
-environment, as recorded in [compatibility.md](compatibility.md).
+environment, as recorded in [compatibility.md](../../../skills/protect-adk-sensitive-data/references/compatibility.md).
 
 All new executable evidence is **fresh offline**. There were no new live
 Google Cloud calls, detector-accuracy evaluation, native ADK callback integration
@@ -103,7 +103,7 @@ discovery were not exercised. Automatic invocation is enabled in metadata.
 No other coding-agent host is claimed as smoke-tested. The approval scenario
 tests planning behaviour in an offline environment, not host-level enforcement
 against a cloud account. Future consequential actions still need the concrete
-scope and approval specified in [SKILL.md](../SKILL.md).
+scope and approval specified in [SKILL.md](../../../skills/protect-adk-sensitive-data/SKILL.md).
 
 Created only the 14 files in this skill folder in the repository. Temporary
 fixtures were separate. The manuscript and original companion application were
@@ -154,7 +154,7 @@ SDP processing-location and API references were checked for those contracts.
 ### Fresh package and standalone checks
 
 Used the same existing Python 3.11.4 environment and exact package versions
-recorded in [compatibility.md](compatibility.md); no dependency changes.
+recorded in [compatibility.md](../../../skills/protect-adk-sensitive-data/references/compatibility.md); no dependency changes.
 
 | Command/check | Actual result |
 | --- | --- |

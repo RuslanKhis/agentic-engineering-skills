@@ -4,7 +4,7 @@
 
 This skill adapts the author-owned Chapter 6 implementation and revised
 manuscript of *Agentic Engineering*, under the repository's MIT licence. The
-included [licence](../LICENSE) preserves that notice. No external source code or
+included [licence](../../../skills/adk-memory-architecture/LICENSE) preserves that notice. No external source code or
 other author's skill is bundled. The source repository has no published book
 URL, so no publication link is invented. This package is fully usable alone.
 On 21 October 2026 the Apache-2.0 `google/skills` collection (`skills/cloud/`)
@@ -13,7 +13,7 @@ nothing from it is bundled. On 22 October 2026 Google's Agents CLI 1.11.0
 skills (Apache-2.0), `google-agents-cli-adk-code` `references/adk-python.md`
 and `references/samples.md`, were reviewed the same way for the native memory
 surfaces and the `cross-session-memory` recipe cited in
-[memory-bank.md](memory-bank.md) and [sessions-state.md](sessions-state.md);
+[memory-bank.md](../../../skills/adk-memory-architecture/references/memory-bank.md) and [sessions-state.md](../../../skills/adk-memory-architecture/references/sessions-state.md);
 nothing is bundled or was executed.
 
 Paths below identify historical evidence relative to the optional source
@@ -50,8 +50,8 @@ names in the source are examples to choose deliberately in a target project.
 
 The second review compared the manuscript, serving code, installed SDK adapters,
 test doubles, deployment guides and failure/recovery records. It added
-[integration recipes](integration-recipes.md), [managed deployment](managed-deployment.md)
-and [failure recovery](failure-recovery.md), and expanded the four store guides.
+[integration recipes](../../../skills/adk-memory-architecture/references/integration-recipes.md), [managed deployment](../../../skills/adk-memory-architecture/references/managed-deployment.md)
+and [failure recovery](../../../skills/adk-memory-architecture/references/failure-recovery.md), and expanded the four store guides.
 The entrypoint loads these references conditionally. More detail does not change
 the source's acceptance boundary or turn recommendations into implemented code.
 
@@ -116,7 +116,7 @@ These results come from `INDEPENDENT_HOSTED_ACCEPTANCE_2026-09-14.md`,
 `INDEPENDENT_DLP_DIAGNOSIS_2026-09-15.md`, `CLEANUP_CONFIRMATION_2026-09-15.md`,
 `verification/2026-09-15-hosted-acceptance/` and
 `verification/2026-09-15-cost-closure/`. Exact source versions are in
-[compatibility.md](compatibility.md). Current skill tests are recorded separately
+[compatibility.md](../../../skills/adk-memory-architecture/references/compatibility.md). Current skill tests are recorded separately
 in [skill-validation.md](skill-validation.md).
 
 ## adk-recipes review — 22 October 2026
@@ -127,14 +127,14 @@ NOTICE; `core/python/cross-session-memory` carries its own Apache LICENSE):
 `horizon/infrastructure/db_resilience.py`, `AGENTS.md`;
 `core/python/rag-vector-search/README.md`, `core/python/rag-agent-search/README.md`,
 `contrib/python/multiformat-hybrid-rag/README.md` and `architecture.md`.
-Imported as vendor-sample facts into [memory-bank.md](memory-bank.md)
-(the write-back loop and its honesty notes), [rag.md](rag.md) (the three
+Imported as vendor-sample facts into [memory-bank.md](../../../skills/adk-memory-architecture/references/memory-bank.md)
+(the write-back loop and its honesty notes), [rag.md](../../../skills/adk-memory-architecture/references/rag.md) (the three
 managed retrieval recipes and the inspection-point consequence of
-`VertexAiSearchTool`), [retrieval-strategy.md](retrieval-strategy.md) (the
-managed RRF twin) and [sessions-state.md](sessions-state.md) (`pool_pre_ping`
+`VertexAiSearchTool`), [retrieval-strategy.md](../../../skills/adk-memory-architecture/references/retrieval-strategy.md) (the
+managed RRF twin) and [sessions-state.md](../../../skills/adk-memory-architecture/references/sessions-state.md) (`pool_pre_ping`
 is not enough). Nothing was copied or executed; the repository's "not
 production use" disclaimer applies to every recipe named.
 
 ## Memory sources review — 23 October 2026
 
-Read Google's "Memory revisions" page (updated 2026-10-21) for consolidation outcomes, `previous_revision`, `rollback` and `revision_labels`; xiaowu0162/LongMemEval commit 9e0b455 (MIT) `README.md` for the five abilities (dataset not imported); docling-project/docling commit 29caea8 (MIT) `README.md` and PyPI metadata for 2.142.0. Imported into [memory-bank.md](memory-bank.md), [retrieval-strategy.md](retrieval-strategy.md) and [document-ingestion.md](document-ingestion.md); nothing executed or copied.
+Read Google's "Memory revisions" page (updated 2026-10-21) for consolidation outcomes, `previous_revision`, `rollback` and `revision_labels`; xiaowu0162/LongMemEval commit 9e0b455 (MIT) `README.md` for the five abilities (dataset not imported); docling-project/docling commit 29caea8 (MIT) `README.md` and PyPI metadata for 2.142.0. Imported into [memory-bank.md](../../../skills/adk-memory-architecture/references/memory-bank.md), [retrieval-strategy.md](../../../skills/adk-memory-architecture/references/retrieval-strategy.md) and [document-ingestion.md](../../../skills/adk-memory-architecture/references/document-ingestion.md); nothing executed or copied.
