@@ -86,9 +86,9 @@ activation runner and introduce no new FAIL against the last recorded run:
 .venv/bin/python scripts/run_activation.py --compare docs/testing/artifacts/activation-2026-10-27/sonnet-5-5.json after.json
 ```
 
-`claude-cli` uses your Claude Code login; `--backend anthropic` uses
-`ANTHROPIC_API_KEY`; `--backend files --export DIR` writes prompts for fresh
-sessions to answer when neither is available. `--compare` exits 1 on a new
+`claude-cli` uses your Claude Code login; `--backend files --export DIR`
+writes prompts for fresh sessions to answer when it is not available. The
+runners use no API key. `--compare` exits 1 on a new
 FAIL. Say in the pull request which cases changed grade and why. To check a
 scenario end to end, `scripts/run_scenarios.py list` shows which scenarios can
 run as they stand, and `run --ids ...` runs them in throwaway workspaces with

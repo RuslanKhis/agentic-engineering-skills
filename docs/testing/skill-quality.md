@@ -109,9 +109,8 @@ every case's grade and reason:
 
 `claude-cli` uses the local Claude Code login through `claude -p` in an empty
 directory, with tools, skills, settings, MCP servers and project instructions
-switched off. `anthropic` calls the Messages API with `ANTHROPIC_API_KEY`; the
-[Activation evaluation](../../.github/workflows/activation.yml) workflow runs it
-on request and uploads the results. `files` writes the batch prompts to a
+switched off. No API key is used; there is no CI workflow for activation,
+because it would need one. `files` writes the batch prompts to a
 directory (`--export DIR`) for a person or fresh agent sessions to answer, then
 grades the saved answers (`--import DIR`); keep that directory's
 `manifest.json` away from the selectors, because it maps labels to case ids.
@@ -184,8 +183,8 @@ temporary directory) holding its fixture and only those of its
 installation cannot supply a skill, and without a shell by default
 (`--agent-tools` changes that); `AGENTIC_ENGINEERING_HOME` points into the run
 directory. The prompt is given with the context as the situation and a note
-that nobody will answer questions. The judge (`--judge-backend claude-cli`,
-`anthropic` or `files`) sees the assertions, the final answer, the files the
+that nobody will answer questions. The judge (`--judge-backend claude-cli`
+or `files`) sees the assertions, the final answer, the files the
 agent wrote and the skills it loaded, and returns PASS or FAIL with a quote;
 the runner records whether each quote occurs in the evidence. With
 `--backend files`, `run` only prepares the workspaces for a person or another

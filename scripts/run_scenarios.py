@@ -17,7 +17,7 @@ Subcommands::
     list                      which scenarios are runnable, need a repo fixture, or lack one
     prepare --ids a,b         build the run directory and workspaces only
     agent   --run-dir D       run the coding agent in each prepared workspace (claude-cli)
-    judge   --run-dir D       grade assertions (claude-cli, anthropic, or files)
+    judge   --run-dir D       grade assertions (claude-cli or files)
     run     --ids a,b         prepare, agent and judge in one go
 
 With ``--backend files`` the agent step is left to a person or another agent:
@@ -453,7 +453,7 @@ def parse_args(argv):
     parser.add_argument("--backend", choices=("claude-cli", "files"), default="claude-cli",
                         help="coding agent backend")
     parser.add_argument("--model", default=DEFAULT_MODEL, help="coding agent model")
-    parser.add_argument("--judge-backend", choices=("claude-cli", "anthropic", "files"))
+    parser.add_argument("--judge-backend", choices=("claude-cli", "files"))
     parser.add_argument("--judge-model", default=DEFAULT_MODEL)
     parser.add_argument("--max-turns", type=int, default=40)
     parser.add_argument("--timeout", type=float, default=900, help="seconds per agent run")

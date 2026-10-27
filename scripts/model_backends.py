@@ -1,10 +1,11 @@
 """Model calls shared by the evaluation runners. Standard library only.
 
-Two text backends: ``claude-cli`` (headless ``claude -p`` using the local Claude
+One model backend: ``claude-cli`` (headless ``claude -p`` using the local Claude
 Code login, run in an empty directory with tools, skills, settings, MCP servers
-and project instructions switched off) and ``anthropic`` (the Messages API over
-urllib with ``ANTHROPIC_API_KEY``). Both return the same ``ModelReply``.
-Nothing here runs at import time and the tests never call either backend.
+and project instructions switched off). No API key is used anywhere; the
+runners' other backend, ``files``, hands prompts to a person or another agent
+and calls no model. Nothing here runs at import time and the tests never call
+the model.
 """
 
 from __future__ import annotations
@@ -12,19 +13,14 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import hashlib
 import json
-import os
 from pathlib import Path
 import re
 import subprocess
 import tempfile
 import time
-import urllib.error
-import urllib.request
 
 DEFAULT_MODEL = "claude-sonnet-5-5"
 KNOWN_MODELS = ("claude-sonnet-5-5", "claude-opus-5-5", "claude-haiku-5-5")
-API_URL = "https://api.anthropic.com/v1/messages"
-API_VERSION = "2023-06-01"
 FENCE = re.compile(r"```(?:json)?\s*(.*?)```", re.DOTALL)
 
 
@@ -98,47 +94,9 @@ def call_claude_cli(prompt: str, system: str, model: str, timeout: float = 600,
                       duration_s=round(time.monotonic() - started, 1))
 
 
-def call_anthropic(prompt: str, system: str, model: str, timeout: float = 600,
-                   api_key: str | None = None, max_tokens: int = 16000,
-                   opener=urllib.request.urlopen, attempts: int = 4) -> ModelReply:
-    key = api_key or os.environ.get("ANTHROPIC_API_KEY")
-    if not key:
-        raise BackendError("ANTHROPIC_API_KEY is not set")
-    body = json.dumps({"model": model, "max_tokens": max_tokens, "system": system,
-                       "messages": [{"role": "user", "content": prompt}]}).encode()
-    headers = {"content-type": "application/json", "x-api-key": key,
-               "anthropic-version": API_VERSION}
-    started = time.monotonic()
-    for attempt in range(1, attempts + 1):
-        request = urllib.request.Request(API_URL, data=body, headers=headers, method="POST")
-        try:
-            with opener(request, timeout=timeout) as response:
-                data = json.loads(response.read().decode())
-            break
-        except urllib.error.HTTPError as exc:
-            retryable = exc.code == 429 or exc.code >= 500
-            if not retryable or attempt == attempts:
-                detail = exc.read().decode(errors="replace")[:300] if exc.fp else ""
-                raise BackendError(f"Messages API HTTP {exc.code}: {detail}") from exc
-            wait = exc.headers.get("retry-after") if exc.headers else None
-            time.sleep(min(float(wait), 60) if wait and wait.isdigit() else 2 ** attempt)
-        except (urllib.error.URLError, TimeoutError) as exc:
-            if attempt == attempts:
-                raise BackendError(f"Messages API unreachable: {exc}") from exc
-            time.sleep(2 ** attempt)
-    if data.get("stop_reason") == "refusal":
-        raise BackendError("the model declined the request (stop_reason refusal)")
-    text = "".join(block.get("text", "") for block in data.get("content", [])
-                   if block.get("type") == "text")
-    return ModelReply(text=text, model=data.get("model", model), usage=data.get("usage") or {},
-                      duration_s=round(time.monotonic() - started, 1))
-
-
 def call_model(backend: str, prompt: str, system: str, model: str, timeout: float = 600) -> ModelReply:
     if backend == "claude-cli":
         return call_claude_cli(prompt, system, model, timeout)
-    if backend == "anthropic":
-        return call_anthropic(prompt, system, model, timeout)
     raise BackendError(f"backend {backend!r} does not call a model")
 
 
