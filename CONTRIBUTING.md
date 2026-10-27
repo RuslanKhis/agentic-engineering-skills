@@ -75,6 +75,27 @@ them. Attribute borrowed patterns and retain any required upstream licence.
 | A fact read from an external repository | A dated citation with the commit, and its row in `docs/research/source-register.json` so `scripts/check_source_freshness.py` reports when it goes quiet, stale, archived or relicensed |
 | Combination with another collection | Which workflow led, which skills loaded and whether the task's scope was preserved |
 
+### Re-run activation after a description or routing change
+
+A change to any skill's description, or to routing (an exclusion, a hand-off
+between specialists, adk-engineer's selection), must be re-run through the
+activation runner and introduce no new FAIL against the last recorded run:
+
+```bash
+.venv/bin/python scripts/run_activation.py --backend claude-cli --repeat 2 --out after.json
+.venv/bin/python scripts/run_activation.py --compare docs/testing/artifacts/activation-2026-10-27/sonnet-5-5.json after.json
+```
+
+`claude-cli` uses your Claude Code login; `--backend anthropic` uses
+`ANTHROPIC_API_KEY`; `--backend files --export DIR` writes prompts for fresh
+sessions to answer when neither is available. `--compare` exits 1 on a new
+FAIL. Say in the pull request which cases changed grade and why. To check a
+scenario end to end, `scripts/run_scenarios.py list` shows which scenarios can
+run as they stand, and `run --ids ...` runs them in throwaway workspaces with
+a separate judge; see [checking skill quality](docs/testing/skill-quality.md#run-the-scenario-runner).
+Both runners call models and cost money; `check_repo.py` stays offline and
+only tests them.
+
 Use the [evaluation protocol](docs/testing/skill-quality.md) to compare old/new
 instructions or skill/no-skill conditions. Do not give the executing agent the
 expected answers. Preserve failed trials, inspect actual artifacts and record

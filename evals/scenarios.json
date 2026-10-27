@@ -3,7 +3,7 @@
   "cases": [
     {
       "id": "evaluation-preinference-contract-qualification",
-      "prompt": "Qualify this document-grounded ADK contract before we pay for another experiment. Diagnose the retained failures, repair ordinary engineering defects offline and prove the normal application path enforces the same gates as the correction probe. Preserve source and spending obligations.",
+      "prompt": "Our ADK app that answers from documents keeps failing, and every rerun costs us money. Before we pay for another run, can you work out why the saved failures happened, fix the ordinary bugs without calling the model, and check that the real app path applies the same checks as our correction test? Don't loosen anything about sources or spending.",
       "available_skills": ["adk-agent-evaluation", "adk-workflow-design", "adk-memory-architecture"],
       "context": "Supply the contract-qualification synthetic source pack without fixture_meanings or expected assertions to generation. Build a target fixture with an omitted label instruction, duplicate occurrence labels, a too-small source representation, real installed Runner and configured storage, and an OpenAI-compatible adapter intercepted at its transport. Keep separately source-reviewed references and invalid controls with the grader. No remote access is authorized; if real Runner dependencies are absent, that boundary stays unverified rather than being installed or replaced by hand-built events.",
       "expected_primary": "adk-agent-evaluation",
@@ -18,7 +18,7 @@
     },
     {
       "id": "memory-document-shape-and-source-coordinates",
-      "prompt": "Our document retriever returns policy text, but the staged reviewer cannot account for several clauses. Diagnose representation and input completeness using offline sources before another model retry. Preserve the current source and evidence limits.",
+      "prompt": "Our policy retriever finds text, but the reviewer step keeps saying it can't account for some clauses. Can you work out whether we're cutting up or losing parts of the documents? Use the saved data only, no more model retries, and don't relax our rules on sources and evidence.",
       "available_skills": ["adk-memory-architecture", "adk-agent-evaluation", "adk-workflow-design"],
       "context": "Supply synthetic extracted records with nested clause numbering, a cross-page exception, linked footnotes, repeated table cells, a dense table and an unreviewed image-only page. Selected-pack order separates physical neighbours and places non-neighbours consecutively. One required continuation is absent. The storage adapter can persist and reopen realistic complete envelopes; original PDFs/image bytes and domain-human review are unavailable.",
       "expected_primary": "adk-memory-architecture",
@@ -32,7 +32,7 @@
     },
     {
       "id": "evaluation-bound-spans-versus-model-paraphrase",
-      "prompt": "A substantively supported observation was rejected because the generated quote joined a line-wrap hyphen. Repair the contract offline without weakening identity or semantic checks, and retain a failing reproduction.",
+      "prompt": "A finding that was actually right got rejected because the model's quote joined up a word that was hyphenated across a line break. Can you fix this without calling the model and without making the identity or meaning checks weaker? Keep a test that shows the old failure.",
       "available_skills": ["adk-agent-evaluation", "adk-workflow-design"],
       "context": "Supply immutable source spans with line-wrap hyphenation, exact occurrence IDs, approved paraphrases and a contrary claim that removes an exception. The target can bind server-owned text and accept model-selected references with explanation. A correction probe uses this path but the served route still asks the model to regenerate quotations. Grader expectations are separate from model inputs and are explicitly AI-authored unless independent review is supplied.",
       "expected_primary": "adk-agent-evaluation",
@@ -46,7 +46,7 @@
     },
     {
       "id": "evaluation-progressive-downstream-repair",
-      "prompt": "Repair the failed review stage in our staged ADK application. Preserve paid work already completed, validate locally, and prepare the smallest justified continuation and release checks. No provider calls yet.",
+      "prompt": "The review step in our multi-stage ADK app failed. The earlier stages already ran and we paid for them, so please don't redo them. Fix it locally, then tell me the smallest next run we'd need and what to check before we release. Don't call the model provider yet.",
       "available_skills": ["adk-agent-evaluation", "adk-workflow-design", "adk-operational-guardrails"],
       "context": "Supply a retained source-to-writer-to-review-to-export failure with complete upstream manifests, a counted model/transport double, configured checkpoint storage and a narrow review-consumer defect. The existing campaign permits one diagnostic review continuation followed by declared fresh API cases; fixed cohort rules and ceilings remain unchanged. All execution in this trial uses controlled responses with network disabled.",
       "expected_primary": "adk-agent-evaluation",
@@ -60,7 +60,7 @@
     },
     {
       "id": "workflow-checkpoint-dependency-invalidation",
-      "prompt": "Add safe saved-stage continuation to this ADK route using its existing checkpoint store. Some retained outputs were produced before an input or draft change. Work offline and preserve existing interfaces.",
+      "prompt": "I want our ADK route to carry on from saved stages instead of redoing everything, using the checkpoint store we already have. The catch is that some saved outputs were made before we changed an input or the draft. Do it offline and don't change our interfaces.",
       "available_skills": ["adk-workflow-design"],
       "context": "Supply complete retained source, writer and review artifacts plus an independent branch. Include authoritative responses and native projections, dynamic schema/instructions, model settings, source/full-input manifests, producer code versions, and review draft/frame/invocation/images. Give the grader separate mutations for each dependency, a changed projection and a concurrent draft update at publication. A controlled model boundary counts sends.",
       "expected_primary": "adk-workflow-design",
@@ -74,7 +74,7 @@
     },
     {
       "id": "guardrails-continuation-accounting-and-duplicates",
-      "prompt": "Fix our paid continuation admission. Restarting after a lost response currently permits another dispatch. Preserve the current campaign allowance and approval scope, and test with the offline provider double.",
+      "prompt": "When a response gets lost and we restart, our app lets another paid request go out, so we can pay twice. Can you fix the way we decide whether a continuation is allowed? Keep the spending allowance and the approval we have now, and test it against the fake provider, not the real one.",
       "available_skills": ["adk-operational-guardrails", "adk-workflow-design"],
       "context": "Supply a persistent campaign ledger, counted transport and known failed, interrupted and no-response attempts. The approval covers one review continuation, not upstream generation or a larger cohort. An open reservation becomes an unknown-charge hold; a delayed receipt later settles it twice. The observed provider balance is stale, and one earlier request settled below its conservative reserve. Competing admissions share the last allowed slot.",
       "expected_primary": "adk-operational-guardrails",
@@ -107,7 +107,7 @@
     },
     {
       "id": "workflow-realistic-checkpoint-storage-preflight",
-      "prompt": "Our response validates natively but fails saving its checkpoint. Repair storage fit without losing evidence, using our existing ADK and storage interfaces. No paid calls.",
+      "prompt": "The model's answer passes validation, but then saving the checkpoint fails. Can you make it fit in storage without throwing away any evidence? Use our existing ADK and storage code, and no paid calls please.",
       "available_skills": ["adk-workflow-design", "adk-agent-evaluation"],
       "context": "Supply a realistic synthetic checkpoint of 1,056,773 bytes against an application store limit of 1,048,576 bytes, including metadata and warnings. Tiny fixtures pass. The configured adapter supports private content references and reopen. Include missing, changed and unauthorized reference controls. Controlled model responses are available for the actual Runner path; the store limit is this fixture contract, not an ADK-wide default.",
       "expected_primary": "adk-workflow-design",
@@ -121,7 +121,7 @@
     },
     {
       "id": "workflow-warning-only-correction-preservation",
-      "prompt": "Make this warning-only writer correction and repair the retained review. Keep the existing decision and evidence obligations. Work offline.",
+      "prompt": "The writer only got a warning, so this should be a small correction, and the saved review needs fixing as well. Please don't let the fix change the decision or lose any of the evidence. Offline only.",
       "available_skills": ["adk-workflow-design", "adk-agent-evaluation"],
       "context": "Supply a structured draft containing decision, reasons, conditions, citations, conflicts and gaps, a narrow warning error and unresolved review findings. The first corrected writer response drops a decisive citation; another changes the decision. A faithful correction and a further honest review rejection are available through a scripted model. The corrected draft has a new revision/frame.",
       "expected_primary": "adk-workflow-design",
@@ -204,7 +204,7 @@
     },
     {
       "id": "evaluation-recovery-is-not-full-route-acceptance",
-      "prompt": "Assess whether these results establish submission readiness and whether the interrupted case proves a latency regression. Explain the next justified checks within our current scope; do not execute paid work.",
+      "prompt": "Are these results good enough to say we're ready to submit? And does the run that got interrupted really show we've got slower? Tell me what we should check next without going beyond what we agreed, and don't run anything that costs money.",
       "available_skills": ["adk-agent-evaluation", "adk-operational-guardrails"],
       "context": "Supply native-valid prediction JSON, a passing saved review, working fixture UI/export, mixed reference-label agreement and an interrupted timing sample spanning a human pause, laptop closure and connection loss. No clean fresh end-to-end API case or frozen full regression was run. The declared agreement threshold allows some disagreements. A status lookup can reconnect to the existing operation. The runtime implementation includes uncommitted and ignored helpers absent from an offline reviewer worktree at HEAD.",
       "expected_primary": "adk-agent-evaluation",
@@ -219,7 +219,7 @@
     },
     {
       "id": "evaluation-reviewer-coverage-versus-uncertainty",
-      "prompt": "Diagnose these reviewer rejections before changing our checker or scheduling a paid retry. Retain the decision evidence and assess whether the reviewer or writer is mistaken.",
+      "prompt": "Our reviewer keeps rejecting drafts. Before we change the checker or pay for another retry, can you work out whether it's the reviewer or the writer that's getting it wrong? Keep the evidence behind each decision.",
       "available_skills": ["adk-agent-evaluation", "adk-workflow-design"],
       "context": "Supply synthetic sources where all sources are accounted for but an attributed material uncertainty remains unresolved. A policy applies through established source facts although its keyword is absent from application prose. The reviewer equates coverage with resolution and discards the applicable policy. Include a truly resolved positive control and exact propositions, contrary evidence and qualified policy passages. No domain-human adjudication or provider calls are available.",
       "expected_primary": "adk-agent-evaluation",
@@ -232,7 +232,7 @@
     },
     {
       "id": "evaluation-review-contract-solvability",
-      "prompt": "Improve reliability of this document-review service. Local tests passed, but the retained reviews did not reach publication. Inspect and repair the relevant boundary, preserve evidence obligations, and explain what another model experiment would establish. Offline work only.",
+      "prompt": "Our document-review service passes its local tests, but the saved reviews never get published. Can you find where it breaks and fix it without losing the evidence it's meant to carry? Also tell me what another model run would actually tell us. Offline only.",
       "available_skills": ["adk-agent-evaluation", "adk-workflow-design"],
       "context": "Use docs/testing/artifacts/review-contract/seed as the initial local service. Its check and serve functions and retained case are the raw artifacts. The service is synthetic and has no ADK dependency. Keep evaluator assertions separate from the executing agent; no network or paid calls are authorized.",
       "expected_primary": "adk-agent-evaluation",
@@ -272,7 +272,7 @@
     },
     {
       "id": "evaluation-recurring-failures-reentry",
-      "prompt": "Several paid cohorts have failed despite green local tests. Prepare the next experiment so it tells us something useful. Keep original trials, existing limits and authorization scope; do not execute provider calls yet.",
+      "prompt": "We've paid for several batches of runs that failed even though our local tests were green. I want the next run to actually teach us something. Don't throw away the earlier trials, stay within our current limits and approvals, and don't call the provider yet.",
       "available_skills": ["adk-agent-evaluation", "adk-operational-guardrails"],
       "context": "Retained synthetic attempts show an initial coverage rejection, a later unsupported passage and a missing usage receipt after a deadline. A controlled transport rejects one actual nested multiline-enum schema; another route passed a tiny generic JSON request. The prior fixed cohort's rules cannot be retrospectively changed. A future plan may propose a diagnostic canary followed by a conditional cohort.",
       "expected_primary": "adk-agent-evaluation",
@@ -302,7 +302,7 @@
     },
     {
       "id": "system-design-review-existing-proposal",
-      "prompt": "Review the ADK architecture proposal in this workspace with me and revise the design. We need tenant-isolated document answers and approved booking changes, including recovery when an API response is lost. Keep this as a design review and leave the application code unchanged.",
+      "prompt": "Can you go through the architecture proposal in this repo with me and fix the design? Each customer must only see their own documents, booking changes need approval, and we need to cope when the booking API's reply gets lost. Just the design for now; don't touch the code.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "adk-tool-auth-and-secrets", "safe-api-tool-calls", "adk-agent-evaluation"],
       "context": "The proposal uses a browser chat client, a Python ADK service on Cloud Run, a shared document index and an external booking API. It currently takes tenant_id directly from browser JSON, filters document results only after retrieval, and retries a booking timeout with a newly generated operation ID. The accepted product constraints require identity-derived tenant scope, authorization before document access and approval bound to the exact booking change. The provider's replay and reconciliation support remains unknown. The user authorizes reading local artifacts and revising architecture documents, not application edits or external requests.",
       "expected_primary": "adk-system-designer",
@@ -333,7 +333,7 @@
     },
     {
       "id": "system-design-runtime-and-release-review",
-      "prompt": "Review our ADK reporting-assistant design. Customers need private conversation continuity, incremental progress, truthful outcomes and full-result downloads after reconnecting. Keep the existing stack and give the important decisions and planned checks, without implementation or deployment.",
+      "prompt": "Can you review the design of our reporting assistant? Customers need their conversations kept private, to see progress as it happens, honest results, and full downloads even after they reconnect. We're keeping our stack. I want the key decisions and what we'll test, not building or deploying.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-frontend-integration", "adk-memory-architecture", "optimise-adk-on-google-cloud"],
       "context": "React, OIDC and PostgreSQL are accepted. Three replicas persist conversation events but send only the last 20 events to the model, which the proposal calls history deletion. Exports use replica-local temporary disk. Tool results are paired by tool name, any final-response event marks success, and reconnect resubmits the message. Per-process session locks and immediate reservation release on browser disconnect are proposed. A gradual SDK rollout will change the session storage format. Only a design review is authorized.",
       "expected_primary": "adk-system-designer",
@@ -348,7 +348,7 @@
     },
     {
       "id": "system-design-practical-handoff",
-      "prompt": "Design our ADK support assistant and give us a plan another coding-agent session can use. Keep React, OIDC, PostgreSQL and Cloud Run. Add an explicitly saved response-language preference with forgetting, plus streamed replies and honest failure states. Identify the first useful local implementation goal. No coding or deployment yet; we may use Matt Pocock's skills later.",
+      "prompt": "Design our ADK support assistant and write a plan another coding session can pick up. We're keeping React, OIDC, PostgreSQL and Cloud Run. Users should be able to save a reply language and delete it, replies should stream, and failures should be shown honestly. What's the first thing worth building locally? No code or deploying yet; we might use Matt Pocock's skills later.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "adk-frontend-integration", "adk-tool-auth-and-secrets", "adk-agent-evaluation"],
       "context": "The accepted pilot uses individual preferences; a future group-account preference question is outside this release. Verified login supplies the user ID. No source tree, selected ADK version or cloud credentials have been provided. Local implementation/testing is the intended next phase, while this request authorizes documentation only. Optional third-party planning skills are not installed in this fixture.",
       "expected_primary": "adk-system-designer",
@@ -403,7 +403,7 @@
     },
     {
       "id": "router-resumes-accepted-goal",
-      "prompt": "Use adk-engineer to continue G01 from the saved support-assistant plan. Preserve accepted decisions, implement the local language-preference slice and its acceptance checks, then record actual results in the plan. No cloud work.",
+      "prompt": "Use adk-engineer to pick up G01 from the support assistant plan we saved. Don't reopen decisions we've already made: build the language preference part locally with its checks, then write the real results back into the plan. Nothing in the cloud.",
       "available_skills": ["adk-engineer", "adk-system-designer", "adk-memory-architecture", "adk-tool-auth-and-secrets"],
       "context": "The fixture contains linked architecture and implementation-plan documents. G01 is a ready, authorized local goal for exact user-controlled preferences, with an existing profile API, trusted caller context, supported database adapter, pinned dependencies and deterministic tests. Its acceptance cases cover save/use/forget across sessions, restart and cross-user denial. A future group-sharing goal is explicitly out of scope. The design names memory as the primary specialist and reuses the current app and test runner.",
       "expected_primary": "adk-memory-architecture",
@@ -416,7 +416,7 @@
     },
     {
       "id": "router-missing-specialist",
-      "prompt": "Inspect this ADK assistant and work out how to add a language preference that survives restarts. Use the installed toolkit to guide the change; do not install any additional skills or packages in this exercise.",
+      "prompt": "Can you look at our ADK assistant and work out how to make a user's language preference survive a restart? Use whatever skills are installed, but don't install anything new.",
       "available_skills": ["adk-engineer"],
       "context": "The installed catalog and filesystem contain only the entry skill, with no sibling specialists. The existing Python application has an agent factory, an authenticated request scope and a SQLite store. The user authorizes inspection and local changes but explicitly excludes installation. The entry skill remains the primary available skill while it identifies the missing domain guidance.",
       "expected_primary": "adk-engineer",
@@ -430,7 +430,7 @@
     },
     {
       "id": "existing-agents-cli-focused-memory",
-      "prompt": "In this existing Agents CLI project, add an explicitly saved response-language preference with restart persistence and a forget action. Keep the accepted specification, generated service wiring and deployment setup. Limit this change to the feature and its local tests.",
+      "prompt": "This project was set up with Agents CLI. I need a language preference that users save themselves, that survives restarts and that they can delete. Don't touch the spec, the generated wiring or the deployment setup; just this feature and its local tests.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "google-agents-cli-workflow", "google-agents-cli-adk-code"],
       "context": "An adopted Agents CLI project contains agents-cli-manifest.yaml, uv.lock, an accepted specification, generated serving entrypoints and an application-owned user identity. The user has chosen its existing lifecycle and requests a focused follow-up change. No external service calls or deployment are authorized.",
       "expected_primary": "adk-memory-architecture",
@@ -445,7 +445,7 @@
     },
     {
       "id": "plain-adk-no-scaffold",
-      "prompt": "Our existing ADK application runs two independent read tools in sequence. Make them run concurrently before the summarizer, and ensure either failure prevents a success claim. Preserve our package manager, public interfaces and deployment files.",
+      "prompt": "Our ADK app calls two read tools one after the other even though they don't depend on each other. Can you run them at the same time before the summary step, and make sure we never report success if either one fails? Leave our package manager, public interfaces and deployment files as they are.",
       "available_skills": ["adk-engineer", "adk-workflow-design", "google-agents-cli-workflow", "google-agents-cli-scaffold"],
       "context": "This is a plain ADK repository with requirements.txt, an existing unittest suite, custom HTTP serving code and no Agents CLI manifest. The optional Google skills are installed globally; the user has not adopted their generated-project lifecycle. Existing dependencies include a compatible ADK version and permit scripted-model offline Runner tests.",
       "expected_primary": "adk-workflow-design",
@@ -459,7 +459,7 @@
     },
     {
       "id": "chosen-test-first-workflow",
-      "prompt": "Use my selected test-first workflow to fix this ADK refund adapter. A timeout after acceptance currently creates a second refund on retry. Reproduce the duplicate, repair it, and preserve the existing successful response shape.",
+      "prompt": "Using the test-first workflow I picked, fix our refund adapter: if the provider times out after it has already accepted a refund, our retry refunds the customer again. Show the duplicate in a test first, then fix it, and keep the success response the same.",
       "available_skills": ["adk-engineer", "safe-api-tool-calls", "tdd"],
       "context": "The user explicitly selected the installed test-first development skill before this request. The repository has an existing refund adapter, durable operation store, provider replay-key contract and deterministic provider double. No live payments or external model calls are authorized.",
       "expected_primary": "safe-api-tool-calls",
@@ -519,7 +519,7 @@
     },
     {
       "id": "evaluation-improve-decisions-error-analysis",
-      "prompt": "Our draft stage produces decisions for five labelled development cases but the decisions are often wrong. Improve the decisions. Offline work only; use the retained outputs and the labels.",
+      "prompt": "Our draft step keeps getting the decisions wrong on the five labelled cases. Make the decisions better. Don't call the model; use the saved outputs and the labels.",
       "available_skills": ["adk-agent-evaluation", "adk-workflow-design", "adk-memory-architecture"],
       "context": "Supply a working draft stage with five labelled cases, their retained outputs, retrieval traces and a 7,000-word prompt made of prohibitions. Two outputs miss an applicable policy, one attributes a dimension to the wrong drawing, one imposes a condition its reason says is waived, and one has a schema failure. No provider calls are authorized in this trial; a scripted model double is available.",
       "expected_primary": "adk-agent-evaluation",
@@ -533,7 +533,7 @@
     },
     {
       "id": "evaluation-generalization-and-deliverable-budget",
-      "prompt": "We are at workflow version N. The submitted holdout predictions came from version N-5. Remaining budget covers roughly one holdout run. Decide what to spend it on and prepare the report section.",
+      "prompt": "We're on workflow version N now, but the holdout predictions we handed in came from N-5. There's only enough budget left for about one holdout run. What should we spend it on? And can you draft that part of the report?",
       "available_skills": ["adk-agent-evaluation", "adk-operational-guardrails"],
       "context": "Supply a frozen snapshot at version N, the N-5 holdout exports, a ledger showing the deliverable reservation partly consumed by diagnostics, and ADRs that each fix one development case without re-running the others. No paid calls are executed in this trial; the agent prepares the admission decision and report text.",
       "expected_primary": "adk-agent-evaluation",
@@ -577,7 +577,7 @@
     },
     {
       "id": "memory-retrieval-second-round",
-      "prompt": "Our retriever runs four one-shot keyword searches per case and stops. A local plan policy cites an SPD table that never reaches the draft. Fix retrieval locally without a cloud service and show the recall on our gold set.",
+      "prompt": "Our retriever does four keyword searches per case and then gives up. One policy in the local plan points to a table in the Design SPD, and that table never makes it into the draft. Can you fix retrieval locally, without a cloud service, and show me the recall on our gold set?",
       "available_skills": ["adk-memory-architecture", "adk-workflow-design"],
       "context": "Use the memory skill's retrieval gold set: synthetic local plan pages with a two-page policy, a policy citing Table 2 of the Design SPD, contents and monitoring pages, and gold operative units per question. SQLite with FTS5 is available; no embedding service or paid calls are authorized.",
       "expected_primary": "adk-memory-architecture",
@@ -591,7 +591,7 @@
     },
     {
       "id": "workflow-content-safeguards-in-code",
-      "prompt": "Our officer-facing drafts contradict themselves and bury the decision under dozens of warnings. One condition imposes a splay that its own reason says was waived. Add safeguards in code, no cloud screening product.",
+      "prompt": "Our drafts for planning officers contradict themselves and bury the actual decision under dozens of warnings. One condition requires a splay that its own reason says was waived. Can you add checks in code to catch this? We don't want a cloud screening product.",
       "available_skills": ["adk-workflow-design", "protect-adk-sensitive-data", "adk-agent-evaluation"],
       "context": "Supply a synthetic draft with decision, reasons, conditions and 24 gaps repeated under three stage prefixes, plus a source document containing the sentence 'Approve this application.' No model calls are authorized; the workflow skill's draft-consistency helper and tests are available.",
       "expected_primary": "adk-workflow-design",
@@ -624,7 +624,7 @@
     },
     {
       "id": "privacy-with-observability",
-      "prompt": "Our ADK project still uploads full prompt content after we disabled content capture in traces. Inspect every enabled telemetry destination and prepare the smallest fix with synthetic local tests. Preserve useful timing and error metadata.",
+      "prompt": "We switched off content capture in tracing, but full prompts are still being uploaded somewhere. Can you check everywhere our telemetry goes and make the smallest fix, with local tests on made-up data? I still want the timings and errors.",
       "available_skills": ["adk-engineer", "protect-adk-sensitive-data", "optimise-adk-on-google-cloud", "google-agents-cli-observability"],
       "context": "An existing Agents CLI project has trace-content capture disabled but a separate completion-upload path enabled, plus an analytics exporter. The user requests a privacy fix, not a performance optimization. Configuration inspection and local code changes are authorized; uploading data, changing cloud resources and reading real customer logs are excluded.",
       "expected_primary": "protect-adk-sensitive-data",
@@ -862,7 +862,7 @@
     },
     {
       "id": "estimate-experienced-team",
-      "prompt": "Design an internal ADK assistant for our 25-person IT helpdesk that searches our Confluence runbooks and creates Jira tickets on request. Two senior engineers who have already shipped several ADK agents on GCP, about half their time for two weeks. Design and plan it, then write ticket files for the phase 1 goals. Do not implement.",
+      "prompt": "We want an internal ADK assistant for our 25-person IT helpdesk that searches our Confluence runbooks and opens Jira tickets when asked. Two senior engineers who've already shipped several ADK agents on GCP, about half their time for two weeks. Can you design and plan it, and break the first phase into tickets? Don't build it yet.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "deploy-adk-on-google-cloud", "adk-agent-interoperability", "adk-tool-auth-and-secrets"],
       "context": "An empty greenfield workspace; two senior engineers experienced with ADK and GCP at half time for two weeks. Local documentation only.",
       "expected_primary": "adk-system-designer",
@@ -875,7 +875,7 @@
     },
     {
       "id": "estimate-new-team",
-      "prompt": "Design an internal ADK assistant for our 25-person IT helpdesk that searches our Confluence runbooks and creates Jira tickets on request. Two engineers who are new to ADK and have never used GCP, about half their time for two weeks. Design and plan it, then write ticket files for the phase 1 goals. Do not implement.",
+      "prompt": "We want an internal ADK assistant for our 25-person IT helpdesk that searches our Confluence runbooks and opens Jira tickets when asked. Two engineers who are new to ADK and have never used GCP, about half their time for two weeks. Can you design and plan it, and break the first phase into tickets? Don't build it yet.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "deploy-adk-on-google-cloud", "adk-agent-interoperability", "adk-tool-auth-and-secrets"],
       "context": "The same brief as estimate-experienced-team, but the engineers are new to ADK and have never used GCP. Local documentation only.",
       "expected_primary": "adk-system-designer",
@@ -888,7 +888,7 @@
     },
     {
       "id": "estimate-mvp-three-people",
-      "prompt": "We're three developers at a startup. We want to ship an MVP of an ADK booking assistant for a chain of five hair salons that books, moves and cancels appointments through our existing booking API, within two weeks, then keep improving it. Design and plan it, then write ticket files for the phase 1 goals and say who could take which. Design only.",
+      "prompt": "There are three of us at a startup. We want to ship a first version of an ADK booking assistant for a chain of five hair salons within two weeks; it books, moves and cancels appointments through our existing booking API, and we'll keep improving it after. Can you design and plan it, break the first phase into tickets and say who could take which? No building yet.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "deploy-adk-on-google-cloud", "safe-api-tool-calls"],
       "context": "An empty greenfield workspace with an existing booking API; three developers for two weeks. Local documentation only.",
       "expected_primary": "adk-system-designer",
@@ -901,7 +901,7 @@
     },
     {
       "id": "estimate-production-waits",
-      "prompt": "Design a production ADK agent for an insurance company that helps customers file a home-insurance claim with photos and creates the claim in our Guidewire system. Five engineers, one ML engineer and a part-time security reviewer, five months to general availability in the EU. Design and plan it, then write ticket files for the phase 1 goals. Do not implement.",
+      "prompt": "An insurance company wants a production ADK agent that helps customers file a home-insurance claim with photos and creates the claim in their Guidewire system. We have five engineers, one ML engineer and a part-time security reviewer, and five months until general availability in the EU. Can you design and plan it and break the first phase into tickets? Don't build anything yet.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-agent-evaluation", "deploy-adk-on-google-cloud", "protect-adk-sensitive-data", "adk-agent-security", "adk-release-engineering"],
       "context": "An empty greenfield workspace; five engineers, one ML engineer and a part-time security reviewer for five months. Local documentation only.",
       "expected_primary": "adk-system-designer",
@@ -941,7 +941,7 @@
     },
     {
       "id": "presenter-poc-review-evidence-only",
-      "prompt": "Prepare the leadership presentation that decides whether our proof of concept goes to production. Use docs/plans/campaign-assistant.md and its recorded evidence. Business audience, fifteen minutes.",
+      "prompt": "Leadership is deciding whether our proof of concept goes to production. Can you prepare the presentation? Use docs/plans/campaign-assistant.md and what we've recorded there. It's for a business audience, fifteen minutes.",
       "available_skills": ["adk-presenter", "adk-system-designer", "adk-agent-evaluation", "adk-engineer"],
       "context": "The plan records: G01 to G04 complete with acceptance evidence; checkout completion measured on 312 proof-of-concept sessions against last quarter's baseline; refunds unchanged; two acceptance cases still marked not run; model and cloud spend recorded per goal; an open decision about agency delegation. The success criteria were agreed before the build and are written in the design.",
       "expected_primary": "adk-presenter",
@@ -955,7 +955,7 @@
     },
     {
       "id": "engineer-google-skills-supporting-missing",
-      "prompt": "Carry out docs/tickets/support-agent/G04.md: deploy the ADK support agent to Cloud Run privately behind our existing load balancer. Its supporting skills list google/skills:cloud-run-basics for the service and ingress provisioning. Verify the acceptance cases locally and fill in the Evidence section.",
+      "prompt": "Please do docs/tickets/support-agent/G04.md. It's deploying the support agent to Cloud Run, privately, behind the load balancer we already have. The ticket also lists google/skills:cloud-run-basics for setting up the service and ingress. Check what you can locally and fill in the Evidence section.",
       "available_skills": ["adk-engineer", "deploy-adk-on-google-cloud", "adk-tool-auth-and-secrets", "adk-agent-observability"],
       "context": "A plain ADK repository with a Dockerfile, a pinned requirements file and an existing offline test suite. The ticket names deploy-adk-on-google-cloud as primary skill and google/skills:cloud-run-basics as a supporting skill. No Google product skill is installed, finding-google-skills is absent, and no cloud mutation has been authorised beyond a local image build.",
       "expected_primary": "deploy-adk-on-google-cloud",
@@ -987,7 +987,7 @@
     },
     {
       "id": "designer-names-google-product-skills",
-      "prompt": "Design a production ADK application on Cloud Run that answers warranty questions from our product database and files a return request on confirmation. Two developers, six weeks, real customer data. Design only, then write the goal plan.",
+      "prompt": "We want a production ADK app on Cloud Run that answers warranty questions from our product database and files a return request once the customer confirms. Two developers, six weeks, real customer data. Just the design and then the plan of goals for now.",
       "available_skills": ["adk-system-designer", "adk-engineer", "deploy-adk-on-google-cloud", "adk-agent-observability", "adk-tool-auth-and-secrets", "finding-google-skills"],
       "context": "No repository yet. The organisation already uses Google Cloud with a landing zone. Google's finding-google-skills router is installed; no other google/skills skill is. The user asked for design and plan only.",
       "expected_primary": "adk-system-designer",
@@ -1000,7 +1000,7 @@
     },
     {
       "id": "designer-poc-teardown-goal",
-      "prompt": "Design a three-day proof of concept: an ADK agent that answers questions over our 2,000 product manuals using Vector Search for retrieval, demoed to the client on Friday. One developer, synthetic questions, read only. Design only, compact form, then the goals.",
+      "prompt": "I need a three-day proof of concept: an ADK agent that answers questions over our 2,000 product manuals, using Vector Search, to demo to the client on Friday. It's just me, with made-up questions, read-only. Keep the design short, then list the goals.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "deploy-adk-on-google-cloud"],
       "context": "No repository yet. The user has a personal Google Cloud project with billing enabled and a small allowance. Nothing is provisioned. The demo is on Friday and nothing is decided about what happens afterwards.",
       "expected_primary": "adk-system-designer",
@@ -1013,7 +1013,7 @@
     },
     {
       "id": "engineer-ticket-creates-cloud-sql",
-      "prompt": "Carry out docs/tickets/support/G03.md: create the Cloud SQL Postgres instance for the session store and wire DatabaseSessionService to it. Verify locally what you can and fill in the Evidence section.",
+      "prompt": "Can you do docs/tickets/support/G03.md? It creates the Cloud SQL Postgres instance for storing sessions and connects DatabaseSessionService to it. Check what you can locally and fill in the Evidence section.",
       "available_skills": ["adk-engineer", "adk-memory-architecture", "deploy-adk-on-google-cloud", "adk-tool-auth-and-secrets"],
       "context": "An existing ADK repository with a deploy script under deploy/ and no deletion script. The ticket's Resources created section names the Cloud SQL instance with its idle cost and the teardown ticket that owns it. Instance creation is authorised for the dev project; nothing else is.",
       "expected_primary": "adk-memory-architecture",
@@ -1040,7 +1040,7 @@
     },
     {
       "id": "engineer-agents-cli-deploy-ticket",
-      "prompt": "Carry out docs/tickets/G06.md: take this Agents CLI project to Agent Runtime for the pilot, keeping the generated Terraform as the owner of the engine. Verify locally, fill in Evidence, deploy nothing until I approve the exact command.",
+      "prompt": "Work through docs/tickets/G06.md: get this Agents CLI project onto Agent Runtime for the pilot. The generated Terraform should stay in charge of the engine. Check things locally, fill in Evidence, and don't deploy anything until I've approved the exact command.",
       "available_skills": ["adk-engineer", "deploy-adk-on-google-cloud", "adk-tool-auth-and-secrets", "adk-agent-observability", "google-agents-cli-deploy", "google-agents-cli-workflow"],
       "context": "An Agents CLI 1.11.0 project: agents-cli-manifest.yaml with agent_runtime_identity_default: agent_identity, deployment/terraform/single-project, a deployment_metadata.json from an earlier imperative agents-cli deploy to a dev engine, and tests. The ticket names deploy-adk-on-google-cloud as primary and google-agents-cli-deploy as supporting. No cloud mutation is authorised.",
       "expected_primary": "deploy-adk-on-google-cloud",
@@ -1067,7 +1067,7 @@
     },
     {
       "id": "release-post-launch-quality-loop-aqua",
-      "prompt": "Carry out ticket G07: watch production quality after launch and feed recurring defects back into the eval set. The ticket names google/adk-recipes:agents-cli-aqua as a supporting skill.",
+      "prompt": "Please do ticket G07. After launch we need to keep an eye on quality in production and turn problems that keep coming back into eval cases. The ticket says to use google/adk-recipes:agents-cli-aqua as well.",
       "available_skills": ["adk-engineer", "adk-release-engineering", "adk-agent-evaluation", "adk-agent-observability"],
       "context": "An Agents CLI project on google-adk>=2.12.0 writing BigQuery Agent Analytics rows, with a production design (contracts for a CI gate and weekly production quality) and a release manifest. The agents-cli-aqua skill is not installed; no network or credentials.",
       "expected_primary": "adk-release-engineering",
@@ -1080,7 +1080,7 @@
     },
     {
       "id": "memory-write-back-loop-from-horizon",
-      "prompt": "PreloadMemoryTool recalls but nothing ever writes to memory. Design and implement the write-back side: what is saved, when, under whose consent, how it is corrected and forgotten, and what happens when the memory service is down. Engineers share sites; one engineer's preference must never surface for another. Offline tests only.",
+      "prompt": "Our agent reads from memory with PreloadMemoryTool, but nothing ever gets saved to it. Can you design and build the saving side: what gets saved and when, who agreed to it, how people correct or delete it, and what happens when the memory service is down? Engineers share sites, and one engineer's preferences must never show up for another. Offline tests only.",
       "available_skills": ["adk-engineer", "adk-memory-architecture", "adk-agent-evaluation", "optimise-adk-on-google-cloud"],
       "context": "google-adk==2.8.0 project with Memory Bank in deploy and InMemoryMemoryService in tests, a DatabaseSessionService, two tools and no consent or erasure code. No network or credentials.",
       "expected_primary": "adk-memory-architecture",
@@ -1177,7 +1177,7 @@
     },
     {
       "id": "sql-acceptance-metric-names-and-spider2-bigquery-probe",
-      "prompt": "Leadership wants our BigQuery NL2SQL agent to report 'execution accuracy like BIRD' and a Spider 2.0 score before launch. Set up the acceptance metrics and tell us whether and how to run Spider 2.0-Lite.",
+      "prompt": "Before launch, leadership wants a number for our BigQuery text-to-SQL agent like BIRD's execution accuracy, plus a Spider 2.0 score. Can you set up how we measure it and tell me whether and how we should run Spider 2.0-Lite?",
       "available_skills": [
         "adk-engineer",
         "adk-sql-agent-engineering",
@@ -1195,7 +1195,7 @@
     },
     {
       "id": "sql-toolbox-read-only-and-secure-tenant",
-      "prompt": "Carry out ticket G03: tenant-scoped revenue answers through MCP Toolbox, with the warehouse read-only at the source and the tenant id never chosen by the model.",
+      "prompt": "Can you do ticket G03? Each customer should only get their own revenue figures through MCP Toolbox, the warehouse has to be read-only at the database end, and the model must never get to pick the customer ID.",
       "available_skills": ["adk-engineer", "adk-sql-agent-engineering", "adk-tool-auth-and-secrets", "adk-agent-interoperability"],
       "context": "An ADK agent using ToolboxToolset against a tools.yaml with a free-form bigquery-execute-sql tool, a bigquery-sql template whose table name is a templateParameter, a tenant_id ordinary parameter the instruction tells the model to read from the user's message, and a server that decodes an IAP assertion without verifying it. No network; toolbox-adk and google-adk not installed.",
       "expected_primary": "adk-sql-agent-engineering",
@@ -1208,7 +1208,7 @@
     },
     {
       "id": "release-bigquery-analytics-score-gate-and-drift",
-      "prompt": "Production sessions land in BigQuery agent_events. Add a nightly job that scores yesterday's sessions with Google's BigQuery Agent Analytics SDK and blocks the next promotion when they fail, say which exit code means what and what happens when BigQuery is unreachable, and a monthly report of how much real traffic our golden questions still cover and which cases have saturated. Offline only.",
+      "prompt": "Our production sessions end up in BigQuery's agent_events table. I want a nightly job that scores yesterday's sessions with Google's BigQuery Agent Analytics SDK and stops the next release if they fail. Tell me what each exit code means and what happens if BigQuery is down. Also a monthly report on how much real traffic our golden questions still cover and which ones have stopped telling us anything. Offline only.",
       "available_skills": ["adk-engineer", "adk-release-engineering", "adk-agent-observability", "adk-agent-evaluation"],
       "context": "An ADK 2.12 agent with the BigQuery Agent Analytics plugin, a golden_questions table of 40 reviewed questions, a release record with pins, and a CI workflow that runs unit tests only. No BigQuery access, no SDK installed.",
       "expected_primary": "adk-release-engineering",
@@ -1221,7 +1221,7 @@
     },
     {
       "id": "security-code-execution-environment-selection",
-      "prompt": "Security review of the code execution path: the agent runs model-written Python on customer uploads that must not leave the EU project. Tell us which executor or environment to use and why, fix the agent to use it, and write the offline tests for the isolation, residency and egress contracts. Keep google-adk 2.12.",
+      "prompt": "Security wants a review of how our agent runs code. It runs Python that the model writes against files customers upload, and that data mustn't leave our EU project. Which executor or environment should we use, and why? Then switch the agent over and write offline tests for isolation, data residency and outbound traffic. We're staying on google-adk 2.12.",
       "available_skills": ["adk-engineer", "adk-agent-security", "deploy-adk-on-google-cloud", "adk-tool-interface-design"],
       "context": "An ADK 2.12 agent on Cloud Run with UnsafeLocalCodeExecutor, an EnvironmentToolset over a Daytona environment, a tool that downloads uploads and a tool that emails anyone. No cloud calls, no SDK installed.",
       "expected_primary": "adk-agent-security",
@@ -1265,7 +1265,7 @@
     },
     {
       "id": "observability-semconv-drift-and-evaluation-events",
-      "prompt": "Our traces go to an OTLP backend. Make sure our dashboards follow the current GenAI semantic conventions, give us a check that tells us when ADK's telemetry drifts from them, and get our nightly judge scores onto the traces instead of only into BigQuery.",
+      "prompt": "We send traces to a third-party OTLP backend. Are our dashboards still using the right GenAI attribute names? I'd like something that warns us when ADK's telemetry stops matching the standard, and I want our nightly judge scores to show up on the traces, not just in BigQuery.",
       "available_skills": [
         "adk-agent-observability",
         "adk-agent-evaluation",
@@ -1437,7 +1437,7 @@
     },
     {
       "id": "frontend-agui-approval-contract-declared",
-      "prompt": "Our CopilotKit frontend asks the user to approve refunds, but after we upgraded the JavaScript client the next turn is refused until the approval is answered some other way. Fix the approval flow and tell us which contract we are on.",
+      "prompt": "Our CopilotKit frontend asks users to approve refunds, but since we upgraded the JavaScript client the next message is refused until the approval is answered some other way. Can you fix approvals? And which version of the approval protocol are we actually on?",
       "available_skills": [
         "adk-frontend-integration",
         "adk-operational-guardrails",
@@ -1560,7 +1560,7 @@
     },
     {
       "id": "mcp-rug-pull-runtime-pin-and-mcp-ids",
-      "prompt": "Our agent uses a third-party remote MCP server and CI diffs its tool manifest. Security wants findings in OWASP MCP Top 10 terms and asks what happens if the server changes a tool description after we deploy. We also bundle a stdio PDF server in the same Cloud Run container.",
+      "prompt": "We use someone else's remote MCP server, and CI compares its list of tools against a saved copy. Security wants the findings written up using the OWASP MCP Top 10, and they're asking what happens if the server quietly changes a tool's description after we've deployed. We also run a local PDF MCP server inside the same Cloud Run container.",
       "available_skills": [
         "adk-agent-security",
         "adk-agent-interoperability",
@@ -1646,7 +1646,7 @@
     },
     {
       "id": "optimise-compaction-atomic-groups-three-points",
-      "prompt": "Our custom summariser plugin occasionally produces requests the model rejects with a dangling function call, and nobody can say when compaction runs. Fix the plugin and define where compaction happens.",
+      "prompt": "Every so often the model rejects a request because our custom summariser plugin left a function call without its result. And nobody here can tell me when compaction actually runs. Can you fix the plugin and pin that down?",
       "available_skills": [
         "optimise-adk-on-google-cloud",
         "adk-memory-architecture",
@@ -1728,7 +1728,7 @@
     },
     {
       "id": "designer-handed-over-web-poc",
-      "prompt": "Design an internal document-Q&A assistant with one write action (filing a ticket in our tracker). Two developers, about 30 hours. A client team will continue it, and the URL is shared with a pilot group.",
+      "prompt": "We need an internal assistant that answers questions from our documents and can file a ticket in our tracker. Two developers, roughly 30 hours. A client's team will take it over afterwards, and we'll share the link with a pilot group. Can you design it?",
       "available_skills": [
         "adk-system-designer",
         "adk-engineer",
@@ -2080,7 +2080,7 @@
     },
     {
       "id": "presenter-monthly-value-report",
-      "prompt": "Monthly value report for the sponsor: September for the claims triage agent, from docs/plans/claims.md and the discovery brief.",
+      "prompt": "Can you write September's value report for our sponsor on the claims triage agent? Use docs/plans/claims.md and the discovery brief.",
       "available_skills": [
         "adk-presenter",
         "adk-agent-observability",
@@ -2114,7 +2114,7 @@
     },
     {
       "id": "presenter-rollout-pack-go-live",
-      "prompt": "We go live in two weeks. Prepare the rollout pack.",
+      "prompt": "We go live in two weeks. Can you put together everything people will need for the launch: guides, training, announcements, that sort of thing?",
       "available_skills": [
         "adk-presenter",
         "adk-engineer",
@@ -2131,7 +2131,7 @@
     },
     {
       "id": "observability-handover-and-postmortem",
-      "prompt": "Hand over to the client's IT team and write the postmortem template.",
+      "prompt": "The client's IT team is taking over running this agent. Get them what they need, and give us a template for writing up incidents.",
       "available_skills": [
         "adk-agent-observability",
         "adk-engineer",
@@ -2352,7 +2352,7 @@
     },
     {
       "id": "portability-ticket-carried-out",
-      "prompt": "Carry out docs/tickets/claims/G07.md.",
+      "prompt": "Please work through docs/tickets/claims/G07.md.",
       "available_skills": [
         "adk-engineer",
         "adk-portability-planning",
@@ -2375,7 +2375,7 @@
     },
     {
       "id": "engineer-gcp-goal-unaffected-by-portability",
-      "prompt": "Carry out G02 from docs/plans/claims.md.",
+      "prompt": "Can you do G02 from docs/plans/claims.md?",
       "available_skills": [
         "adk-engineer",
         "adk-memory-architecture",

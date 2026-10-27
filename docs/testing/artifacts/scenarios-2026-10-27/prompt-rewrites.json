@@ -1,0 +1,257 @@
+[
+ {
+  "id": "evaluation-preinference-contract-qualification",
+  "old": "Qualify this document-grounded ADK contract before we pay for another experiment. Diagnose the retained failures, repair ordinary engineering defects offline and prove the normal application path enforces the same gates as the correction probe. Preserve source and spending obligations.",
+  "new": "Our ADK app that answers from documents keeps failing, and every rerun costs us money. Before we pay for another run, can you work out why the saved failures happened, fix the ordinary bugs without calling the model, and check that the real app path applies the same checks as our correction test? Don't loosen anything about sources or spending."
+ },
+ {
+  "id": "memory-document-shape-and-source-coordinates",
+  "old": "Our document retriever returns policy text, but the staged reviewer cannot account for several clauses. Diagnose representation and input completeness using offline sources before another model retry. Preserve the current source and evidence limits.",
+  "new": "Our policy retriever finds text, but the reviewer step keeps saying it can't account for some clauses. Can you work out whether we're cutting up or losing parts of the documents? Use the saved data only, no more model retries, and don't relax our rules on sources and evidence."
+ },
+ {
+  "id": "evaluation-bound-spans-versus-model-paraphrase",
+  "old": "A substantively supported observation was rejected because the generated quote joined a line-wrap hyphen. Repair the contract offline without weakening identity or semantic checks, and retain a failing reproduction.",
+  "new": "A finding that was actually right got rejected because the model's quote joined up a word that was hyphenated across a line break. Can you fix this without calling the model and without making the identity or meaning checks weaker? Keep a test that shows the old failure."
+ },
+ {
+  "id": "evaluation-progressive-downstream-repair",
+  "old": "Repair the failed review stage in our staged ADK application. Preserve paid work already completed, validate locally, and prepare the smallest justified continuation and release checks. No provider calls yet.",
+  "new": "The review step in our multi-stage ADK app failed. The earlier stages already ran and we paid for them, so please don't redo them. Fix it locally, then tell me the smallest next run we'd need and what to check before we release. Don't call the model provider yet."
+ },
+ {
+  "id": "workflow-checkpoint-dependency-invalidation",
+  "old": "Add safe saved-stage continuation to this ADK route using its existing checkpoint store. Some retained outputs were produced before an input or draft change. Work offline and preserve existing interfaces.",
+  "new": "I want our ADK route to carry on from saved stages instead of redoing everything, using the checkpoint store we already have. The catch is that some saved outputs were made before we changed an input or the draft. Do it offline and don't change our interfaces."
+ },
+ {
+  "id": "guardrails-continuation-accounting-and-duplicates",
+  "old": "Fix our paid continuation admission. Restarting after a lost response currently permits another dispatch. Preserve the current campaign allowance and approval scope, and test with the offline provider double.",
+  "new": "When a response gets lost and we restart, our app lets another paid request go out, so we can pay twice. Can you fix the way we decide whether a continuation is allowed? Keep the spending allowance and the approval we have now, and test it against the fake provider, not the real one."
+ },
+ {
+  "id": "workflow-realistic-checkpoint-storage-preflight",
+  "old": "Our response validates natively but fails saving its checkpoint. Repair storage fit without losing evidence, using our existing ADK and storage interfaces. No paid calls.",
+  "new": "The model's answer passes validation, but then saving the checkpoint fails. Can you make it fit in storage without throwing away any evidence? Use our existing ADK and storage code, and no paid calls please."
+ },
+ {
+  "id": "workflow-warning-only-correction-preservation",
+  "old": "Make this warning-only writer correction and repair the retained review. Keep the existing decision and evidence obligations. Work offline.",
+  "new": "The writer only got a warning, so this should be a small correction, and the saved review needs fixing as well. Please don't let the fix change the decision or lose any of the evidence. Offline only."
+ },
+ {
+  "id": "evaluation-recovery-is-not-full-route-acceptance",
+  "old": "Assess whether these results establish submission readiness and whether the interrupted case proves a latency regression. Explain the next justified checks within our current scope; do not execute paid work.",
+  "new": "Are these results good enough to say we're ready to submit? And does the run that got interrupted really show we've got slower? Tell me what we should check next without going beyond what we agreed, and don't run anything that costs money."
+ },
+ {
+  "id": "evaluation-reviewer-coverage-versus-uncertainty",
+  "old": "Diagnose these reviewer rejections before changing our checker or scheduling a paid retry. Retain the decision evidence and assess whether the reviewer or writer is mistaken.",
+  "new": "Our reviewer keeps rejecting drafts. Before we change the checker or pay for another retry, can you work out whether it's the reviewer or the writer that's getting it wrong? Keep the evidence behind each decision."
+ },
+ {
+  "id": "evaluation-review-contract-solvability",
+  "old": "Improve reliability of this document-review service. Local tests passed, but the retained reviews did not reach publication. Inspect and repair the relevant boundary, preserve evidence obligations, and explain what another model experiment would establish. Offline work only.",
+  "new": "Our document-review service passes its local tests, but the saved reviews never get published. Can you find where it breaks and fix it without losing the evidence it's meant to carry? Also tell me what another model run would actually tell us. Offline only."
+ },
+ {
+  "id": "evaluation-recurring-failures-reentry",
+  "old": "Several paid cohorts have failed despite green local tests. Prepare the next experiment so it tells us something useful. Keep original trials, existing limits and authorization scope; do not execute provider calls yet.",
+  "new": "We've paid for several batches of runs that failed even though our local tests were green. I want the next run to actually teach us something. Don't throw away the earlier trials, stay within our current limits and approvals, and don't call the provider yet."
+ },
+ {
+  "id": "router-resumes-accepted-goal",
+  "old": "Use adk-engineer to continue G01 from the saved support-assistant plan. Preserve accepted decisions, implement the local language-preference slice and its acceptance checks, then record actual results in the plan. No cloud work.",
+  "new": "Use adk-engineer to pick up G01 from the support assistant plan we saved. Don't reopen decisions we've already made: build the language preference part locally with its checks, then write the real results back into the plan. Nothing in the cloud."
+ },
+ {
+  "id": "router-missing-specialist",
+  "old": "Inspect this ADK assistant and work out how to add a language preference that survives restarts. Use the installed toolkit to guide the change; do not install any additional skills or packages in this exercise.",
+  "new": "Can you look at our ADK assistant and work out how to make a user's language preference survive a restart? Use whatever skills are installed, but don't install anything new."
+ },
+ {
+  "id": "existing-agents-cli-focused-memory",
+  "old": "In this existing Agents CLI project, add an explicitly saved response-language preference with restart persistence and a forget action. Keep the accepted specification, generated service wiring and deployment setup. Limit this change to the feature and its local tests.",
+  "new": "This project was set up with Agents CLI. I need a language preference that users save themselves, that survives restarts and that they can delete. Don't touch the spec, the generated wiring or the deployment setup; just this feature and its local tests."
+ },
+ {
+  "id": "plain-adk-no-scaffold",
+  "old": "Our existing ADK application runs two independent read tools in sequence. Make them run concurrently before the summarizer, and ensure either failure prevents a success claim. Preserve our package manager, public interfaces and deployment files.",
+  "new": "Our ADK app calls two read tools one after the other even though they don't depend on each other. Can you run them at the same time before the summary step, and make sure we never report success if either one fails? Leave our package manager, public interfaces and deployment files as they are."
+ },
+ {
+  "id": "chosen-test-first-workflow",
+  "old": "Use my selected test-first workflow to fix this ADK refund adapter. A timeout after acceptance currently creates a second refund on retry. Reproduce the duplicate, repair it, and preserve the existing successful response shape.",
+  "new": "Using the test-first workflow I picked, fix our refund adapter: if the provider times out after it has already accepted a refund, our retry refunds the customer again. Show the duplicate in a test first, then fix it, and keep the success response the same."
+ },
+ {
+  "id": "privacy-with-observability",
+  "old": "Our ADK project still uploads full prompt content after we disabled content capture in traces. Inspect every enabled telemetry destination and prepare the smallest fix with synthetic local tests. Preserve useful timing and error metadata.",
+  "new": "We switched off content capture in tracing, but full prompts are still being uploaded somewhere. Can you check everywhere our telemetry goes and make the smallest fix, with local tests on made-up data? I still want the timings and errors."
+ },
+ {
+  "id": "system-design-review-existing-proposal",
+  "old": "Review the ADK architecture proposal in this workspace with me and revise the design. We need tenant-isolated document answers and approved booking changes, including recovery when an API response is lost. Keep this as a design review and leave the application code unchanged.",
+  "new": "Can you go through the architecture proposal in this repo with me and fix the design? Each customer must only see their own documents, booking changes need approval, and we need to cope when the booking API's reply gets lost. Just the design for now; don't touch the code."
+ },
+ {
+  "id": "system-design-runtime-and-release-review",
+  "old": "Review our ADK reporting-assistant design. Customers need private conversation continuity, incremental progress, truthful outcomes and full-result downloads after reconnecting. Keep the existing stack and give the important decisions and planned checks, without implementation or deployment.",
+  "new": "Can you review the design of our reporting assistant? Customers need their conversations kept private, to see progress as it happens, honest results, and full downloads even after they reconnect. We're keeping our stack. I want the key decisions and what we'll test, not building or deploying."
+ },
+ {
+  "id": "system-design-practical-handoff",
+  "old": "Design our ADK support assistant and give us a plan another coding-agent session can use. Keep React, OIDC, PostgreSQL and Cloud Run. Add an explicitly saved response-language preference with forgetting, plus streamed replies and honest failure states. Identify the first useful local implementation goal. No coding or deployment yet; we may use Matt Pocock's skills later.",
+  "new": "Design our ADK support assistant and write a plan another coding session can pick up. We're keeping React, OIDC, PostgreSQL and Cloud Run. Users should be able to save a reply language and delete it, replies should stream, and failures should be shown honestly. What's the first thing worth building locally? No code or deploying yet; we might use Matt Pocock's skills later."
+ },
+ {
+  "id": "evaluation-generalization-and-deliverable-budget",
+  "old": "We are at workflow version N. The submitted holdout predictions came from version N-5. Remaining budget covers roughly one holdout run. Decide what to spend it on and prepare the report section.",
+  "new": "We're on workflow version N now, but the holdout predictions we handed in came from N-5. There's only enough budget left for about one holdout run. What should we spend it on? And can you draft that part of the report?"
+ },
+ {
+  "id": "evaluation-improve-decisions-error-analysis",
+  "old": "Our draft stage produces decisions for five labelled development cases but the decisions are often wrong. Improve the decisions. Offline work only; use the retained outputs and the labels.",
+  "new": "Our draft step keeps getting the decisions wrong on the five labelled cases. Make the decisions better. Don't call the model; use the saved outputs and the labels."
+ },
+ {
+  "id": "sql-toolbox-read-only-and-secure-tenant",
+  "old": "Carry out ticket G03: tenant-scoped revenue answers through MCP Toolbox, with the warehouse read-only at the source and the tenant id never chosen by the model.",
+  "new": "Can you do ticket G03? Each customer should only get their own revenue figures through MCP Toolbox, the warehouse has to be read-only at the database end, and the model must never get to pick the customer ID."
+ },
+ {
+  "id": "release-post-launch-quality-loop-aqua",
+  "old": "Carry out ticket G07: watch production quality after launch and feed recurring defects back into the eval set. The ticket names google/adk-recipes:agents-cli-aqua as a supporting skill.",
+  "new": "Please do ticket G07. After launch we need to keep an eye on quality in production and turn problems that keep coming back into eval cases. The ticket says to use google/adk-recipes:agents-cli-aqua as well."
+ },
+ {
+  "id": "memory-write-back-loop-from-horizon",
+  "old": "PreloadMemoryTool recalls but nothing ever writes to memory. Design and implement the write-back side: what is saved, when, under whose consent, how it is corrected and forgotten, and what happens when the memory service is down. Engineers share sites; one engineer's preference must never surface for another. Offline tests only.",
+  "new": "Our agent reads from memory with PreloadMemoryTool, but nothing ever gets saved to it. Can you design and build the saving side: what gets saved and when, who agreed to it, how people correct or delete it, and what happens when the memory service is down? Engineers share sites, and one engineer's preferences must never show up for another. Offline tests only."
+ },
+ {
+  "id": "sql-acceptance-metric-names-and-spider2-bigquery-probe",
+  "old": "Leadership wants our BigQuery NL2SQL agent to report 'execution accuracy like BIRD' and a Spider 2.0 score before launch. Set up the acceptance metrics and tell us whether and how to run Spider 2.0-Lite.",
+  "new": "Before launch, leadership wants a number for our BigQuery text-to-SQL agent like BIRD's execution accuracy, plus a Spider 2.0 score. Can you set up how we measure it and tell me whether and how we should run Spider 2.0-Lite?"
+ },
+ {
+  "id": "release-bigquery-analytics-score-gate-and-drift",
+  "old": "Production sessions land in BigQuery agent_events. Add a nightly job that scores yesterday's sessions with Google's BigQuery Agent Analytics SDK and blocks the next promotion when they fail, say which exit code means what and what happens when BigQuery is unreachable, and a monthly report of how much real traffic our golden questions still cover and which cases have saturated. Offline only.",
+  "new": "Our production sessions end up in BigQuery's agent_events table. I want a nightly job that scores yesterday's sessions with Google's BigQuery Agent Analytics SDK and stops the next release if they fail. Tell me what each exit code means and what happens if BigQuery is down. Also a monthly report on how much real traffic our golden questions still cover and which ones have stopped telling us anything. Offline only."
+ },
+ {
+  "id": "security-code-execution-environment-selection",
+  "old": "Security review of the code execution path: the agent runs model-written Python on customer uploads that must not leave the EU project. Tell us which executor or environment to use and why, fix the agent to use it, and write the offline tests for the isolation, residency and egress contracts. Keep google-adk 2.12.",
+  "new": "Security wants a review of how our agent runs code. It runs Python that the model writes against files customers upload, and that data mustn't leave our EU project. Which executor or environment should we use, and why? Then switch the agent over and write offline tests for isolation, data residency and outbound traffic. We're staying on google-adk 2.12."
+ },
+ {
+  "id": "optimise-compaction-atomic-groups-three-points",
+  "old": "Our custom summariser plugin occasionally produces requests the model rejects with a dangling function call, and nobody can say when compaction runs. Fix the plugin and define where compaction happens.",
+  "new": "Every so often the model rejects a request because our custom summariser plugin left a function call without its result. And nobody here can tell me when compaction actually runs. Can you fix the plugin and pin that down?"
+ },
+ {
+  "id": "designer-handed-over-web-poc",
+  "old": "Design an internal document-Q&A assistant with one write action (filing a ticket in our tracker). Two developers, about 30 hours. A client team will continue it, and the URL is shared with a pilot group.",
+  "new": "We need an internal assistant that answers questions from our documents and can file a ticket in our tracker. Two developers, roughly 30 hours. A client's team will take it over afterwards, and we'll share the link with a pilot group. Can you design it?"
+ },
+ {
+  "id": "presenter-monthly-value-report",
+  "old": "Monthly value report for the sponsor: September for the claims triage agent, from docs/plans/claims.md and the discovery brief.",
+  "new": "Can you write September's value report for our sponsor on the claims triage agent? Use docs/plans/claims.md and the discovery brief."
+ },
+ {
+  "id": "presenter-rollout-pack-go-live",
+  "old": "We go live in two weeks. Prepare the rollout pack.",
+  "new": "We go live in two weeks. Can you put together everything people will need for the launch: guides, training, announcements, that sort of thing?"
+ },
+ {
+  "id": "observability-handover-and-postmortem",
+  "old": "Hand over to the client's IT team and write the postmortem template.",
+  "new": "The client's IT team is taking over running this agent. Get them what they need, and give us a template for writing up incidents."
+ },
+ {
+  "id": "presenter-poc-review-evidence-only",
+  "old": "Prepare the leadership presentation that decides whether our proof of concept goes to production. Use docs/plans/campaign-assistant.md and its recorded evidence. Business audience, fifteen minutes.",
+  "new": "Leadership is deciding whether our proof of concept goes to production. Can you prepare the presentation? Use docs/plans/campaign-assistant.md and what we've recorded there. It's for a business audience, fifteen minutes."
+ },
+ {
+  "id": "memory-retrieval-second-round",
+  "old": "Our retriever runs four one-shot keyword searches per case and stops. A local plan policy cites an SPD table that never reaches the draft. Fix retrieval locally without a cloud service and show the recall on our gold set.",
+  "new": "Our retriever does four keyword searches per case and then gives up. One policy in the local plan points to a table in the Design SPD, and that table never makes it into the draft. Can you fix retrieval locally, without a cloud service, and show me the recall on our gold set?"
+ },
+ {
+  "id": "engineer-google-skills-supporting-missing",
+  "old": "Carry out docs/tickets/support-agent/G04.md: deploy the ADK support agent to Cloud Run privately behind our existing load balancer. Its supporting skills list google/skills:cloud-run-basics for the service and ingress provisioning. Verify the acceptance cases locally and fill in the Evidence section.",
+  "new": "Please do docs/tickets/support-agent/G04.md. It's deploying the support agent to Cloud Run, privately, behind the load balancer we already have. The ticket also lists google/skills:cloud-run-basics for setting up the service and ingress. Check what you can locally and fill in the Evidence section."
+ },
+ {
+  "id": "engineer-ticket-creates-cloud-sql",
+  "old": "Carry out docs/tickets/support/G03.md: create the Cloud SQL Postgres instance for the session store and wire DatabaseSessionService to it. Verify locally what you can and fill in the Evidence section.",
+  "new": "Can you do docs/tickets/support/G03.md? It creates the Cloud SQL Postgres instance for storing sessions and connects DatabaseSessionService to it. Check what you can locally and fill in the Evidence section."
+ },
+ {
+  "id": "engineer-agents-cli-deploy-ticket",
+  "old": "Carry out docs/tickets/G06.md: take this Agents CLI project to Agent Runtime for the pilot, keeping the generated Terraform as the owner of the engine. Verify locally, fill in Evidence, deploy nothing until I approve the exact command.",
+  "new": "Work through docs/tickets/G06.md: get this Agents CLI project onto Agent Runtime for the pilot. The generated Terraform should stay in charge of the engine. Check things locally, fill in Evidence, and don't deploy anything until I've approved the exact command."
+ },
+ {
+  "id": "designer-poc-teardown-goal",
+  "old": "Design a three-day proof of concept: an ADK agent that answers questions over our 2,000 product manuals using Vector Search for retrieval, demoed to the client on Friday. One developer, synthetic questions, read only. Design only, compact form, then the goals.",
+  "new": "I need a three-day proof of concept: an ADK agent that answers questions over our 2,000 product manuals, using Vector Search, to demo to the client on Friday. It's just me, with made-up questions, read-only. Keep the design short, then list the goals."
+ },
+ {
+  "id": "designer-names-google-product-skills",
+  "old": "Design a production ADK application on Cloud Run that answers warranty questions from our product database and files a return request on confirmation. Two developers, six weeks, real customer data. Design only, then write the goal plan.",
+  "new": "We want a production ADK app on Cloud Run that answers warranty questions from our product database and files a return request once the customer confirms. Two developers, six weeks, real customer data. Just the design and then the plan of goals for now."
+ },
+ {
+  "id": "engineer-gcp-goal-unaffected-by-portability",
+  "old": "Carry out G02 from docs/plans/claims.md.",
+  "new": "Can you do G02 from docs/plans/claims.md?"
+ },
+ {
+  "id": "portability-ticket-carried-out",
+  "old": "Carry out docs/tickets/claims/G07.md.",
+  "new": "Please work through docs/tickets/claims/G07.md."
+ },
+ {
+  "id": "estimate-experienced-team",
+  "old": "Design an internal ADK assistant for our 25-person IT helpdesk that searches our Confluence runbooks and creates Jira tickets on request. Two senior engineers who have already shipped several ADK agents on GCP, about half their time for two weeks. Design and plan it, then write ticket files for the phase 1 goals. Do not implement.",
+  "new": "We want an internal ADK assistant for our 25-person IT helpdesk that searches our Confluence runbooks and opens Jira tickets when asked. Two senior engineers who've already shipped several ADK agents on GCP, about half their time for two weeks. Can you design and plan it, and break the first phase into tickets? Don't build it yet."
+ },
+ {
+  "id": "estimate-new-team",
+  "old": "Design an internal ADK assistant for our 25-person IT helpdesk that searches our Confluence runbooks and creates Jira tickets on request. Two engineers who are new to ADK and have never used GCP, about half their time for two weeks. Design and plan it, then write ticket files for the phase 1 goals. Do not implement.",
+  "new": "We want an internal ADK assistant for our 25-person IT helpdesk that searches our Confluence runbooks and opens Jira tickets when asked. Two engineers who are new to ADK and have never used GCP, about half their time for two weeks. Can you design and plan it, and break the first phase into tickets? Don't build it yet."
+ },
+ {
+  "id": "estimate-mvp-three-people",
+  "old": "We're three developers at a startup. We want to ship an MVP of an ADK booking assistant for a chain of five hair salons that books, moves and cancels appointments through our existing booking API, within two weeks, then keep improving it. Design and plan it, then write ticket files for the phase 1 goals and say who could take which. Design only.",
+  "new": "There are three of us at a startup. We want to ship a first version of an ADK booking assistant for a chain of five hair salons within two weeks; it books, moves and cancels appointments through our existing booking API, and we'll keep improving it after. Can you design and plan it, break the first phase into tickets and say who could take which? No building yet."
+ },
+ {
+  "id": "estimate-production-waits",
+  "old": "Design a production ADK agent for an insurance company that helps customers file a home-insurance claim with photos and creates the claim in our Guidewire system. Five engineers, one ML engineer and a part-time security reviewer, five months to general availability in the EU. Design and plan it, then write ticket files for the phase 1 goals. Do not implement.",
+  "new": "An insurance company wants a production ADK agent that helps customers file a home-insurance claim with photos and creates the claim in their Guidewire system. We have five engineers, one ML engineer and a part-time security reviewer, and five months until general availability in the EU. Can you design and plan it and break the first phase into tickets? Don't build anything yet."
+ },
+ {
+  "id": "workflow-content-safeguards-in-code",
+  "old": "Our officer-facing drafts contradict themselves and bury the decision under dozens of warnings. One condition imposes a splay that its own reason says was waived. Add safeguards in code, no cloud screening product.",
+  "new": "Our drafts for planning officers contradict themselves and bury the actual decision under dozens of warnings. One condition requires a splay that its own reason says was waived. Can you add checks in code to catch this? We don't want a cloud screening product."
+ },
+ {
+  "id": "mcp-rug-pull-runtime-pin-and-mcp-ids",
+  "old": "Our agent uses a third-party remote MCP server and CI diffs its tool manifest. Security wants findings in OWASP MCP Top 10 terms and asks what happens if the server changes a tool description after we deploy. We also bundle a stdio PDF server in the same Cloud Run container.",
+  "new": "We use someone else's remote MCP server, and CI compares its list of tools against a saved copy. Security wants the findings written up using the OWASP MCP Top 10, and they're asking what happens if the server quietly changes a tool's description after we've deployed. We also run a local PDF MCP server inside the same Cloud Run container."
+ },
+ {
+  "id": "observability-semconv-drift-and-evaluation-events",
+  "old": "Our traces go to an OTLP backend. Make sure our dashboards follow the current GenAI semantic conventions, give us a check that tells us when ADK's telemetry drifts from them, and get our nightly judge scores onto the traces instead of only into BigQuery.",
+  "new": "We send traces to a third-party OTLP backend. Are our dashboards still using the right GenAI attribute names? I'd like something that warns us when ADK's telemetry stops matching the standard, and I want our nightly judge scores to show up on the traces, not just in BigQuery."
+ },
+ {
+  "id": "frontend-agui-approval-contract-declared",
+  "old": "Our CopilotKit frontend asks the user to approve refunds, but after we upgraded the JavaScript client the next turn is refused until the approval is answered some other way. Fix the approval flow and tell us which contract we are on.",
+  "new": "Our CopilotKit frontend asks users to approve refunds, but since we upgraded the JavaScript client the next message is refused until the approval is answered some other way. Can you fix approvals? And which version of the approval protocol are we actually on?"
+ }
+]

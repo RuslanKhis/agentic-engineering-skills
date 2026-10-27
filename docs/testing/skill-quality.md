@@ -89,6 +89,44 @@ For each case:
 4. Record the target skill's actual activation and compare it with the label.
    Review ambiguous labels; another valid specialist selection may be useful.
 
+### Run the activation runner
+
+[`scripts/run_activation.py`](../../scripts/run_activation.py) automates the
+description-only part of this check, which the [8 October
+trial](activation-trial-2026-10-08.md) did by hand. A selector model sees the
+catalogue built from every `SKILL.md` frontmatter (name and description only)
+and seeded, shuffled batches of prompts under neutral labels; it never sees
+case ids, labels or rationales. The answers are graded with the 8 October
+rules (PASS, PARTIAL, FAIL; ERROR when a batch reply cannot be read) and
+written to a results JSON with the catalogue and corpus hashes, the model and
+every case's grade and reason:
+
+```bash
+.venv/bin/python scripts/run_activation.py --backend claude-cli --repeat 2 --out after.json
+.venv/bin/python scripts/run_activation.py --backend claude-cli --model claude-haiku-5-5 --out haiku.json
+.venv/bin/python scripts/run_activation.py --compare before.json after.json
+```
+
+`claude-cli` uses the local Claude Code login through `claude -p` in an empty
+directory, with tools, skills, settings, MCP servers and project instructions
+switched off. `anthropic` calls the Messages API with `ANTHROPIC_API_KEY`; the
+[Activation evaluation](../../.github/workflows/activation.yml) workflow runs it
+on request and uploads the results. `files` writes the batch prompts to a
+directory (`--export DIR`) for a person or fresh agent sessions to answer, then
+grades the saved answers (`--import DIR`); keep that directory's
+`manifest.json` away from the selectors, because it maps labels to case ids.
+`--only skill-a,skill-b` limits the cases, never the catalogue. The default
+model is `claude-sonnet-5-5`; `claude-opus-5-5` and `claude-haiku-5-5` also
+work. `--compare` lists every case whose grades changed and exits 1 when a
+case gained a FAIL.
+
+**After any change to a description or to routing** (an exclusion, a
+supporting-skill hand-off, adk-engineer's selection table), re-run activation
+on at least the default model and compare it with the last recorded run: the
+change must introduce no new FAIL. Record a new PARTIAL with the reason the
+selector gave. A description-only selector still says nothing about a host's
+own loader, which the steps above test.
+
 Use explicit `/skill-name` or `$skill-name` separately to test execution after
 invocation. An explicit-invocation pass says nothing about natural discovery.
 The current corpus is a small starting set; add paraphrases and held-out
@@ -127,6 +165,38 @@ Grade observable work: preserved files, actual effects, executed checks and
 loaded instructions. An agent that writes a sound plan has completed a design
 case, not an implementation case. Store the fixture alongside any published
 result so others can check that distinction.
+
+### Run the scenario runner
+
+[`scripts/run_scenarios.py`](../../scripts/run_scenarios.py) runs a chosen
+subset in throwaway workspaces and grades the assertions with a separate judge:
+
+```bash
+.venv/bin/python scripts/run_scenarios.py list
+.venv/bin/python scripts/run_scenarios.py run --ids estimate-poc-tickets,memory-ingestion-scan-detection \
+  --max-turns 30 --timeout 900 --max-budget-usd 3
+```
+
+Each scenario gets a fresh directory under `--tmp-root` (default: the system
+temporary directory) holding its fixture and only those of its
+`available_skills` that exist in this repository, under `.claude/skills/`. The
+`claude-cli` agent runs headless with project settings only, so a global
+installation cannot supply a skill, and without a shell by default
+(`--agent-tools` changes that); `AGENTIC_ENGINEERING_HOME` points into the run
+directory. The prompt is given with the context as the situation and a note
+that nobody will answer questions. The judge (`--judge-backend claude-cli`,
+`anthropic` or `files`) sees the assertions, the final answer, the files the
+agent wrote and the skills it loaded, and returns PASS or FAIL with a quote;
+the runner records whether each quote occurs in the evidence. With
+`--backend files`, `run` only prepares the workspaces for a person or another
+agent, and `judge --run-dir DIR` grades what they saved.
+
+[scenario-fixtures.json](../../evals/scenario-fixtures.json) says which
+scenarios are runnable in an empty workspace, which need a fixture copied from
+this repository, and (by omission) which describe fixtures that do not exist
+yet. Those are reported as `fixture-missing` and never run against nothing;
+`list` prints all three groups. Building a missing fixture and moving its
+scenario into the file is how the runnable set grows.
 
 ## Compare execution against a baseline
 
