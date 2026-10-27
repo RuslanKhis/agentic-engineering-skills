@@ -1,0 +1,111 @@
+{
+ "created": "2026-10-27T07:48:00+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a009c4f8618873e7d",
+ "commit": "187baec59278813f3a1c7b995aada271432a867e",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "system-design-contracts-stay-small-when-read-only",
+   "status": "runnable",
+   "note": "The user does not answer follow-up questions, so a single turn matches the scenario.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-memory-architecture"
+   ],
+   "grader_files": []
+  },
+  {
+   "id": "estimate-poc-tickets",
+   "status": "runnable",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-agent-evaluation",
+    "deploy-adk-on-google-cloud",
+    "adk-memory-architecture"
+   ],
+   "grader_files": []
+  },
+  {
+   "id": "evaluation-selected-source-support",
+   "status": "repo-fixture",
+   "copy": [
+    {
+     "from": "skills/adk-agent-evaluation/assets/source-support-cases.json",
+     "to": "source-support-cases.json"
+    },
+    {
+     "from": "skills/adk-agent-evaluation/assets/source-support-diagram.svg",
+     "to": "source-support-diagram.svg"
+    }
+   ],
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-selected-source-support/source-support-expectations.json"
+    }
+   ],
+   "note": "The cases are the evaluation skill's own worked example, and its calibration reference describes what a good judgment does with them, so this is not a blind test.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "source-support-expectations.json"
+   ]
+  },
+  {
+   "id": "memory-ingestion-scan-detection",
+   "status": "repo-fixture",
+   "copy": [
+    {
+     "from": "skills/adk-memory-architecture/assets/ingestion-fixture/text-page.pdf",
+     "to": "pack/text-page.pdf"
+    },
+    {
+     "from": "skills/adk-memory-architecture/assets/ingestion-fixture/scanned-page.pdf",
+     "to": "pack/scanned-page.pdf"
+    },
+    {
+     "from": "skills/adk-memory-architecture/assets/ingestion-fixture/table-page.pdf",
+     "to": "pack/table-page.pdf"
+    },
+    {
+     "from": "skills/adk-memory-architecture/assets/ingestion-fixture/drawing-page.pdf",
+     "to": "pack/drawing-page.pdf"
+    }
+   ],
+   "grader": [
+    {
+     "from": "evals/graders/memory-ingestion-scan-detection/inventory.json"
+    }
+   ],
+   "note": "The pack is the memory skill's own demonstration fixture and its generator script is installed with the skill, so the page contents are within the agent's reach; a separate pack would make this blind.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-memory-architecture",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "inventory.json"
+   ]
+  },
+  {
+   "id": "memory-local-document-completeness",
+   "status": "repo-fixture",
+   "copy": [
+    {
+     "from": "skills/adk-memory-architecture/assets/document-coverage.json",
+     "to": "document-coverage.json"
+    }
+   ],
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-memory-architecture"
+   ],
+   "grader_files": []
+  }
+ ]
+}
