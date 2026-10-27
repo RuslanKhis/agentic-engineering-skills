@@ -496,5 +496,145 @@ class AgentAndJudgeTests(unittest.TestCase):
             self.assertIn("final.md", out.getvalue())
 
 
+REAL_ENV = {
+    "PATH": "/usr/bin:/opt/google-cloud-sdk/bin", "HOME": "/Users/someone", "LANG": "en_AU.UTF-8",
+    "GOOGLE_APPLICATION_CREDENTIALS": "/Users/someone/key.json", "GOOGLE_CLOUD_PROJECT": "prod-project",
+    "GOOGLE_GENAI_USE_VERTEXAI": "1", "CLOUDSDK_CORE_PROJECT": "prod-project",
+    "CLOUDSDK_CONFIG": "/Users/someone/.config/gcloud", "GCLOUD_PROJECT": "prod-project",
+    "AWS_ACCESS_KEY_ID": "AKIA", "AWS_PROFILE": "admin", "AZURE_CLIENT_SECRET": "s", "ARM_CLIENT_SECRET": "s",
+    "SSH_AUTH_SOCK": "/tmp/agent.sock", "GH_TOKEN": "t", "KUBECONFIG": "/Users/someone/.kube/config",
+    "CLAUDE_CODE_MESSAGING_TOKEN": "t", "CLAUDE_CODE_ENTRYPOINT": "cli", "GOOGLEY": "kept",
+}
+SHELL_TOOLS = scen.AGENT_TOOLS + ",Bash"
+SHELL_TRANSCRIPT = [
+    json.dumps({"type": "system", "subtype": "init", "skills": ["alpha-skill"]}),
+    json.dumps({"type": "assistant", "message": {"content": [
+        {"type": "tool_use", "id": "b1", "name": "Bash",
+         "input": {"command": "cat .claude/skills/alpha-skill/SKILL.md | head -40"}},
+        {"type": "tool_use", "id": "b2", "name": "Bash",
+         "input": {"command": "python3 scripts/check.py --strict"}},
+        {"type": "tool_use", "id": "b3", "name": "Bash",
+         "input": {"command": "echo .claude/skills/beta-skill/SKILL.md"}}]}}),
+    json.dumps({"type": "user", "message": {"content": [
+        {"type": "tool_result", "tool_use_id": "b1", "content": "---\nname: alpha-skill\n---"},
+        {"type": "tool_result", "tool_use_id": "b2", "is_error": True,
+         "content": [{"type": "text", "text": "FAIL: 2 checks\nexit 1"}]}]}}),
+    json.dumps({"type": "result", "subtype": "success", "is_error": False, "num_turns": 2,
+                "total_cost_usd": 0.1, "result": "Ran the checker; two checks fail."}),
+]
+
+
+class ShellRunTests(unittest.TestCase):
+    """A shell cannot be confined by path, so a shell run is unconfined and its environment scrubbed."""
+
+    def test_shell_run_removes_credentials_and_redirects_tool_configuration(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            case_dir = Path(tmp) / "case"
+            env, removed = scen.agent_environment(case_dir, SHELL_TOOLS, environ=REAL_ENV)
+            for name in ("GOOGLE_APPLICATION_CREDENTIALS", "GOOGLE_CLOUD_PROJECT", "GOOGLE_GENAI_USE_VERTEXAI",
+                         "CLOUDSDK_CORE_PROJECT", "GCLOUD_PROJECT", "AWS_ACCESS_KEY_ID", "AWS_PROFILE",
+                         "AZURE_CLIENT_SECRET", "ARM_CLIENT_SECRET", "SSH_AUTH_SOCK", "GH_TOKEN",
+                         "CLAUDE_CODE_MESSAGING_TOKEN"):
+                self.assertNotIn(name, env, name)
+                self.assertIn(name, removed)
+            self.assertNotIn("PATH", removed)
+            self.assertEqual(env["GOOGLEY"], "kept")  # prefixes need their underscore
+            # No value survives, under any name.
+            for value in ("/Users/someone/key.json", "prod-project", "AKIA", "/tmp/agent.sock"):
+                self.assertNotIn(value, env.values())
+            shell_dir = case_dir / scen.SHELL_DIR
+            for name, (kind, rel) in scen.SHELL_REDIRECTS.items():
+                target = Path(env[name])
+                self.assertEqual(target, shell_dir / rel)
+                if kind == "dir":
+                    self.assertTrue(target.is_dir())
+                    self.assertEqual(list(target.iterdir()), [], name)
+                else:
+                    self.assertEqual(target.read_text(), "", name)
+            self.assertNotEqual(env["CLOUDSDK_CONFIG"], REAL_ENV["CLOUDSDK_CONFIG"])
+            self.assertNotEqual(env["KUBECONFIG"], REAL_ENV["KUBECONFIG"])
+            # The claude CLI needs the real HOME to authenticate; the record says so.
+            self.assertEqual(env["HOME"], REAL_ENV["HOME"])
+            self.assertEqual(env["PATH"], REAL_ENV["PATH"])
+            self.assertEqual(env["GIT_CONFIG_NOSYSTEM"], "1")
+            self.assertEqual(env["AGENTIC_ENGINEERING_HOME"], str(case_dir / "home"))
+            self.assertEqual(env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"], "1")
+            self.assertEqual(env["CLAUDE_CODE_ENTRYPOINT"], "cli")
+
+    def test_run_without_a_shell_keeps_the_environment(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            case_dir = Path(tmp) / "case"
+            env, removed = scen.agent_environment(case_dir, scen.AGENT_TOOLS, environ=REAL_ENV)
+            self.assertEqual(removed, [])
+            self.assertEqual(env["GOOGLE_CLOUD_PROJECT"], "prod-project")
+            self.assertFalse((case_dir / scen.SHELL_DIR).exists())
+
+    def test_confinement_records_an_unconfined_scrubbed_run(self):
+        record = scen.confinement(SHELL_TOOLS, "project", environ=REAL_ENV)
+        self.assertTrue(record["unconfined"])
+        self.assertFalse(record["confined_to_workspace"])
+        self.assertEqual(record["unconfined_tools"], ["Bash"])
+        shell = record["shell_environment"]
+        self.assertEqual(shell["home_mode"], "real-home-redirected-config")
+        self.assertIn("GOOGLE_APPLICATION_CREDENTIALS", shell["variables_scrubbed"])
+        self.assertIn("CLOUDSDK_CORE_PROJECT", shell["variables_scrubbed"])
+        self.assertNotIn("PATH", shell["variables_scrubbed"])
+        self.assertNotIn("prod-project", json.dumps(record))  # names only, never values
+        self.assertEqual(shell["redirected"]["CLOUDSDK_CONFIG"], "<case>/shell-env/gcloud")
+        confined = scen.confinement(scen.AGENT_TOOLS, "project", environ=REAL_ENV)
+        self.assertFalse(confined["unconfined"])
+        self.assertNotIn("shell_environment", confined)
+
+    def test_shell_run_passes_the_scrubbed_environment_and_records_commands(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            run_dir, manifest = scen.prepare(root, cases[:1], scen.load_fixtures(root), Path(tmp) / "runs")
+            seen = {}
+
+            class Proc:
+                returncode = 0
+                stdout = "\n".join(SHELL_TRANSCRIPT)
+
+            def runner(command, **kwargs):
+                seen.update(kwargs, command=command)
+                (kwargs["cwd"] / "__pycache__").mkdir()
+                (kwargs["cwd"] / "__pycache__" / "x.pyc").write_bytes(b"\0")
+                (kwargs["cwd"] / "report.md").write_text("Checker: 2 fail.\n")
+                return Proc()
+
+            record = scen.run_agent(run_dir, manifest["scenarios"][0], "m", 5, 60, SHELL_TOOLS, None,
+                                    runner=runner, root=root)
+            case_dir = run_dir / "empty-design"
+            self.assertEqual(seen["env"]["CLOUDSDK_CONFIG"], str(case_dir / "shell-env/gcloud"))
+            self.assertIn("Bash", seen["command"][seen["command"].index("--allowedTools") + 1].split(","))
+            self.assertTrue(record["confinement"]["unconfined"])
+            self.assertEqual([c["command"] for c in record["shell_commands"]][1], "python3 scripts/check.py --strict")
+            self.assertTrue(record["shell_commands"][1]["is_error"])
+            self.assertIn("FAIL: 2 checks", record["shell_commands"][1]["output"])
+            self.assertIsNone(record["shell_commands"][2]["output"])
+            # cat of a SKILL.md through the shell loads it; echo of a path does not.
+            self.assertEqual(record["skill_md_loaded"]["alpha-skill"]["how"], "read")
+            self.assertEqual(record["skills_loaded"], ["alpha-skill"])
+            evidence, facts = scen.evidence_text(case_dir)
+            self.assertIn("$ python3 scripts/check.py --strict\n[error]\nFAIL: 2 checks", evidence)
+            self.assertEqual(facts["files"], ["report.md"])  # generated caches are not the agent's work
+
+    def test_runs_without_shell_commands_have_no_shell_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            run_dir, manifest = scen.prepare(root, cases[:1], scen.load_fixtures(root), Path(tmp) / "runs")
+
+            class Proc:
+                returncode = 0
+                stdout = "\n".join(TRANSCRIPT)
+
+            scen.run_agent(run_dir, manifest["scenarios"][0], "m", 5, 60, scen.AGENT_TOOLS, None,
+                           runner=lambda command, **kwargs: Proc(), root=root)
+            evidence, _ = scen.evidence_text(run_dir / "empty-design")
+            self.assertNotIn("Shell commands", evidence)
+
+
 if __name__ == "__main__":
     unittest.main()

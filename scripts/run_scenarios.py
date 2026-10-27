@@ -29,6 +29,14 @@ fixtures that do not exist are reported as ``fixture-missing``, and those
 marked ``not-representable`` (with a reason) cannot be built offline; neither
 is ever run against nothing.
 
+A shell cannot be confined to the workspace by path rules, so when ``--agent-tools``
+includes Bash the run is recorded as unconfined and made harmless through its
+environment instead: cloud, container, git-hosting and SSH credential variables are
+removed, and each tool's configuration path (gcloud, AWS, Azure, Docker, kubectl, git,
+gh, npm) points at an empty per-scenario directory outside the workspace. HOME stays
+the real one, because the claude CLI does not authenticate with HOME pointed elsewhere;
+files under it remain readable to a shell, and the record says so.
+
 Subcommands::
 
     list                      which scenarios are runnable, need a repo fixture, or lack one
@@ -83,8 +91,37 @@ SETTING_SOURCES = "project,local"
 # Auto-memory names a per-workspace directory under ~/.claude/projects/ that Claude Code
 # lets the agent read despite dontAsk; switch it off so nothing outside the workspace is read.
 AGENT_ENV = {"CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"}
+# Tools that run arbitrary commands; with one of them the run is unconfined and its
+# environment is scrubbed (shell_environment).
+SHELL_TOOLS = ("Bash",)
+# Removed from a shell run's environment: every variable with one of these prefixes ...
+SCRUB_PREFIXES = ("GOOGLE_", "GCLOUD_", "CLOUDSDK_", "AWS_", "AZURE_", "ARM_")
+# ... and these names (other credentials, agent sockets, and a channel back to a parent session).
+SCRUB_NAMES = ("SSH_AUTH_SOCK", "GH_TOKEN", "GITHUB_TOKEN", "GH_ENTERPRISE_TOKEN", "GITLAB_TOKEN",
+               "NPM_TOKEN", "HF_TOKEN", "OPENAI_API_KEY", "GEMINI_API_KEY", "VAULT_TOKEN",
+               "KUBECONFIG", "DOCKER_CONFIG", "DOCKER_HOST", "GIT_CONFIG_GLOBAL", "GIT_ASKPASS",
+               "SSH_ASKPASS", "CLAUDE_CODE_MESSAGING_SOCKET", "CLAUDE_CODE_MESSAGING_TOKEN")
+# Then each tool's configuration path points at an empty per-scenario location: (kind, path).
+SHELL_REDIRECTS = {"CLOUDSDK_CONFIG": ("dir", "gcloud"), "AWS_CONFIG_FILE": ("file", "aws/config"),
+                   "AWS_SHARED_CREDENTIALS_FILE": ("file", "aws/credentials"),
+                   "AZURE_CONFIG_DIR": ("dir", "azure"), "DOCKER_CONFIG": ("dir", "docker"),
+                   "KUBECONFIG": ("file", "kube/config"), "GIT_CONFIG_GLOBAL": ("file", "gitconfig"),
+                   "GH_CONFIG_DIR": ("dir", "gh"), "NPM_CONFIG_USERCONFIG": ("file", "npmrc")}
+# Fixed settings: no system git config; a login flow that opens a browser opens nothing.
+SHELL_SET = {"GIT_CONFIG_NOSYSTEM": "1", "BROWSER": "true"}
+SHELL_DIR = "shell-env"
+HOME_MODE = "real-home-redirected-config"
+HOME_NOTE = ("HOME is the real home directory: with HOME pointed at an empty directory the claude CLI "
+             "(2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are "
+             "redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; "
+             "files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.")
 EVIDENCE_LIMIT = 150_000
 FILE_LIMIT = 30_000
+# Directories a shell run generates (caches, environments, git metadata); not the agent's work.
+GENERATED_PARTS = {"__pycache__", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".venv", "venv",
+                   "node_modules", ".git"}
+SHELL_OUTPUT_LIMIT = 2_000
+SHELL_EVIDENCE_LIMIT = 30_000
 SKILL_PATH = re.compile(r"\.claude/skills/([^/]+)/(.*)$")
 
 RUN_CONDITIONS = """\
@@ -322,15 +359,64 @@ def agent_command(model: str, max_turns: int, tools: str, budget: float | None,
     return command
 
 
-def confinement(tools: str, skill_install: str) -> dict:
+def shell_enabled(tools: str) -> bool:
+    return any(tool.strip() in SHELL_TOOLS for tool in tools.split(","))
+
+
+def scrubbed_names(environ) -> list[str]:
+    """The variables a shell run removes from this environment (names only, never values)."""
+    return sorted(name for name in environ if name.startswith(SCRUB_PREFIXES) or name in SCRUB_NAMES)
+
+
+def shell_environment(env: dict, shell_dir: Path) -> tuple[dict, list[str]]:
+    """A copy of env with credentials removed and tool configuration pointed at empty paths.
+
+    Creates the empty per-scenario directories and files under shell_dir; returns the new
+    environment and the names removed.
+    """
+    removed = scrubbed_names(env)
+    clean = {name: value for name, value in env.items() if name not in removed}
+    for name, (kind, rel) in SHELL_REDIRECTS.items():
+        target = shell_dir / rel
+        if kind == "dir":
+            target.mkdir(parents=True, exist_ok=True)
+        else:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.touch()
+        clean[name] = str(target)
+    clean.update(SHELL_SET)
+    return clean, removed
+
+
+def agent_environment(case_dir: Path, tools: str, environ=None) -> tuple[dict, list[str]]:
+    """The agent's environment, scrubbed when the tools include a shell, and the names removed."""
+    env = dict(os.environ if environ is None else environ)
+    env.update(AGENTIC_ENGINEERING_HOME=str(case_dir / "home"), AES_FIELD_NOTES="off", **AGENT_ENV)
+    if not shell_enabled(tools):
+        return env, []
+    return shell_environment(env, case_dir / SHELL_DIR)
+
+
+def confinement(tools: str, skill_install: str, environ=None) -> dict:
     rules, unconfined = allow_rules(tools)
-    return {"setting_sources": SETTING_SOURCES, "permission_mode": "dontAsk", "permission_prompts": "none",
-            "allowed": rules, "unconfined_tools": unconfined, "skill_install": skill_install,
-            "environment": dict(AGENT_ENV),
-            "confined_to_workspace": not unconfined}
+    record = {"setting_sources": SETTING_SOURCES, "permission_mode": "dontAsk", "permission_prompts": "none",
+              "allowed": rules, "unconfined_tools": unconfined, "skill_install": skill_install,
+              "environment": dict(AGENT_ENV),
+              "confined_to_workspace": not unconfined, "unconfined": bool(unconfined)}
+    if shell_enabled(tools):
+        record["shell_environment"] = {
+            "home_mode": HOME_MODE, "home_note": HOME_NOTE,
+            "variables_scrubbed": scrubbed_names(os.environ if environ is None else environ),
+            "scrub_prefixes": list(SCRUB_PREFIXES), "scrub_names": list(SCRUB_NAMES),
+            "redirected": {name: f"<case>/{SHELL_DIR}/{rel}" for name, (_, rel) in SHELL_REDIRECTS.items()},
+            "set": dict(SHELL_SET)}
+    return record
 
 
 SLASH_COMMAND = re.compile(r"^\s*/([a-z0-9][a-z0-9-]*)\b")
+# A shell command that reads files (cat, head, sed ...) counts its skill paths as skill files read.
+SHELL_READ = re.compile(r"^\s*(cd [^;&|]+&&\s*)?(cat|head|tail|sed|less|more|nl|awk|grep|rg)\b")
+SHELL_SKILL_PATH = re.compile(r"\.claude/skills/([^/\s'\"]+)/([^\s'\"|;&>)]+)")
 
 
 def parse_transcript(lines: list[str], prompt: str = "") -> dict:
@@ -342,7 +428,8 @@ def parse_transcript(lines: list[str], prompt: str = "") -> dict:
     """
     summary = {"final": "", "texts": [], "tool_calls": [], "skills_loaded": [], "skill_tool_calls": [],
                "skill_md_reads": [], "skill_files_read": [], "slash_commands": [], "result": None,
-               "catalogue": None, "permission_denials": []}
+               "catalogue": None, "permission_denials": [], "shell_commands": []}
+    shell_by_id: dict = {}
     for line in lines:
         try:
             event = json.loads(line)
@@ -362,6 +449,16 @@ def parse_transcript(lines: list[str], prompt: str = "") -> dict:
                     if block.get("name") == "Skill" and tool_input.get("skill"):
                         summary["skills_loaded"].append(str(tool_input["skill"]))
                         summary["skill_tool_calls"].append(str(tool_input["skill"]))
+                    if block.get("name") in SHELL_TOOLS:
+                        command = str(tool_input.get("command") or "")
+                        shell_by_id[block.get("id")] = len(summary["shell_commands"])
+                        summary["shell_commands"].append({"command": command, "output": None, "is_error": None})
+                        if SHELL_READ.match(command):
+                            for match in SHELL_SKILL_PATH.finditer(command):
+                                if match.group(2) == "SKILL.md":
+                                    summary["skills_loaded"].append(match.group(1))
+                                    summary["skill_md_reads"].append(match.group(1))
+                                summary["skill_files_read"].append(f"{match.group(1)}/{match.group(2)}")
                     path = str(tool_input.get("file_path") or tool_input.get("path") or "")
                     match = SKILL_PATH.search(path)
                     if match and block.get("name") in ("Read", "Grep", "Glob"):
@@ -369,6 +466,16 @@ def parse_transcript(lines: list[str], prompt: str = "") -> dict:
                             summary["skills_loaded"].append(match.group(1))
                             summary["skill_md_reads"].append(match.group(1))
                         summary["skill_files_read"].append(f"{match.group(1)}/{match.group(2)}")
+        elif kind == "user":
+            content = (event.get("message") or {}).get("content")
+            for block in content if isinstance(content, list) else []:
+                if block.get("type") == "tool_result" and block.get("tool_use_id") in shell_by_id:
+                    output = block.get("content")
+                    if isinstance(output, list):
+                        output = "\n".join(str(part.get("text", "")) for part in output if isinstance(part, dict))
+                    entry = summary["shell_commands"][shell_by_id[block["tool_use_id"]]]
+                    entry.update(output=clip(str(output or ""), SHELL_OUTPUT_LIMIT),
+                                 is_error=bool(block.get("is_error")))
         elif kind == "result":
             summary["result"] = {key: event.get(key) for key in
                                  ("subtype", "is_error", "num_turns", "total_cost_usd", "duration_ms",
@@ -418,8 +525,7 @@ def run_agent(run_dir: Path, entry: dict, model: str, max_turns: int, timeout: f
     workspace = case_dir / "workspace"
     add_dir = skills_parent(case_dir, skill_install) if skill_install == "add-dir" else None
     command = agent_command(model, max_turns, tools, budget, add_dir)
-    env = os.environ.copy()
-    env.update(AGENTIC_ENGINEERING_HOME=str(case_dir / "home"), AES_FIELD_NOTES="off", **AGENT_ENV)
+    env, scrubbed = agent_environment(case_dir, tools)
     started, timed_out = time.monotonic(), False
     task = (case_dir / "task.md").read_text()
     try:
@@ -437,6 +543,8 @@ def run_agent(run_dir: Path, entry: dict, model: str, max_turns: int, timeout: f
               "model": model, "max_turns": max_turns, "tools": tools, **(summary["result"] or {}),
               "command": command,
               "confinement": confinement(tools, skill_install),
+              "variables_scrubbed": scrubbed,
+              "shell_commands": summary["shell_commands"],
               "skills_loaded": summary["skills_loaded"], "skill_files_read": summary["skill_files_read"],
               "skill_md_loaded": skill_md_loaded(summary, installed),
               "permission_denials": summary["permission_denials"],
@@ -457,13 +565,22 @@ def clip(text: str, limit: int = FILE_LIMIT) -> str:
     return f"{text[:head]}\n[... {len(text) - head - tail} characters omitted ...]\n{text[-tail:]}"
 
 
+def shell_text(commands: list[dict]) -> str:
+    """Each shell command with whether it failed and its (clipped) output, for the judge."""
+    blocks = []
+    for item in commands:
+        status = {True: "error", False: "ok", None: "no result recorded"}[item.get("is_error")]
+        blocks.append(f"$ {item['command']}\n[{status}]\n{item.get('output') or ''}".rstrip())
+    return "\n\n".join(blocks)
+
+
 def changed_files(case_dir: Path) -> dict[str, str]:
     workspace = case_dir / "workspace"
     before = json.loads((case_dir / "fixture-digest.json").read_text(encoding="utf-8"))
     files = {}
     for path in sorted(workspace.rglob("*")):
         rel = str(path.relative_to(workspace))
-        if not path.is_file() or rel.startswith(".claude/"):
+        if not path.is_file() or rel.startswith(".claude/") or GENERATED_PARTS & set(Path(rel).parts):
             continue
         if before.get(rel) == hashlib.sha256(path.read_bytes()).hexdigest():
             continue
@@ -485,11 +602,17 @@ def evidence_text(case_dir: Path) -> tuple[str, dict]:
                                   task.read_text(encoding="utf-8") if task.exists() else "")
         agent = {**agent, "skills_loaded": parsed["skills_loaded"],
                  "skill_files_read": parsed["skill_files_read"]}
+        shell = parsed["shell_commands"]
+    else:
+        shell = []
     files = changed_files(case_dir)
     parts = ["### Final answer\n\n" + (final or "(empty)"),
              "### Skills loaded\n\n" + (", ".join(agent.get("skills_loaded") or []) or "(none recorded)"),
              "### Skill files read\n\n" + (", ".join(agent.get("skill_files_read") or []) or "(none recorded)"),
              "### Files written or changed\n\n" + ("\n".join(files) or "(none)")]
+    if shell:
+        parts.append("### Shell commands the agent ran (from the run transcript, outputs clipped)\n\n"
+                     + clip(shell_text(shell), SHELL_EVIDENCE_LIMIT))
     for name, text in files.items():
         parts.append(f"### File: {name}\n\n{text}")
     evidence = "\n\n".join(parts)
@@ -684,7 +807,8 @@ def parse_args(argv):
     parser.add_argument("--max-budget-usd", type=float, help="cost cap per agent run")
     parser.add_argument("--agent-tools", default=AGENT_TOOLS,
                         help="Claude Code tools for the agent; Bash is left out by default and "
-                             "cannot be confined to the workspace by path rules")
+                             "cannot be confined to the workspace by path rules: with it the run is "
+                             "recorded as unconfined and its environment is scrubbed of credentials")
     parser.add_argument("--out", type=Path, help="results JSON (default: <run dir>/results.json)")
     args = parser.parse_args(argv)
     if args.command in ("agent", "judge") and not args.run_dir:
