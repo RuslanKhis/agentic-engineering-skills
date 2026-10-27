@@ -512,7 +512,7 @@
    ],
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
-   "judge_cost_usd": 0.0944,
+   "judge_cost_usd": 0.0936,
    "status": "graded",
    "assertions": [
     {
@@ -521,7 +521,7 @@
      "verdict": "FAIL",
      "quote": "It exits 0 whatever it finds, including added tools and partial comparisons. It only exits 2 when a ref can't be read. So it can't block anything.",
      "quote_found": true,
-     "reason": "It states exit 0 and advisory, but the gate does not parse comparison_status and rows from --json; shipgate is not wired in at all.",
+     "reason": "It states exit 0 and advisory, but says nothing about parsing comparison_status and rows from --json, and the gate is built on the inspector rather than on shipgate output.",
      "votes": [
       "FAIL",
       "FAIL",
@@ -536,7 +536,7 @@
      "verdict": "PASS",
      "quote": "It reported no change when `require_confirmation` or the `before_tool_callback` was removed, or when the `McpToolset` filter was widened.",
      "quote_found": true,
-     "reason": "States shipgate does not detect changes to these controls, though it does not explicitly say empty compared rows are not evidence.",
+     "reason": "It states shipgate does not compare these controls, which implies a clean result is not evidence of unchanged capability.",
      "votes": [
       "PASS",
       "FAIL",
@@ -547,15 +547,15 @@
     },
     {
      "n": 3,
-     "assertion": "Gates on inspect_security_surface.py run on the base tree and then on the head with --compare, which exits 3 and lists capability_changes (changed gates, callbacks, toolsets, sub-agents, tools, rising guard counts); requires a review label for that merge.",
-     "verdict": "FAIL",
-     "quote": "Exit 1 (capability changed) needs approval.\n  - Exit 3 (partial scan) needs approval only if a changed file is in `unread_paths`.",
+     "assertion": "Gates on inspect_security_surface.py run on the base tree and then on the head with --compare, which exits 1 and lists capability_changes (changed gates, callbacks, toolsets, sub-agents, tools, rising guard counts); requires a review label for that merge.",
+     "verdict": "PASS",
+     "quote": "runs the inspector on the merge-base tree and on the PR head with `--compare`.",
      "quote_found": true,
-     "reason": "Runs base then head with --compare and requires a label, but maps exit 1 as capability change and exit 3 as partial, contradicting the expected exit 3 for capability_changes.",
+     "reason": "The workflow runs the inspector on base and head with --compare, exit 1 means capability changed, and a capability-approved label is required.",
      "votes": [
-      "FAIL",
-      "FAIL",
-      "FAIL"
+      "PASS",
+      "PASS",
+      "PASS"
      ],
      "agreement": 1.0,
      "unstable": false
@@ -566,14 +566,14 @@
      "verdict": "FAIL",
      "quote": "Your new `Workflow` is always unread, so blocking every PR on that would fail them all. A change to `app/reporting.py` does block.",
      "quote_found": true,
-     "reason": "It notes the Workflow is unread, but does not state that the function nodes are named by the inspector and need hand review, and the gate passes unless the file changes.",
+     "reason": "It notes the Workflow is unread and that the partial scan blocks only on changed unread paths, but does not say the function nodes need hand review, and the gate is not shown to cover this the way the assertion requires.",
      "votes": [
-      "PASS",
+      "FAIL",
       "FAIL",
       "FAIL"
      ],
-     "agreement": 0.67,
-     "unstable": true
+     "agreement": 1.0,
+     "unstable": false
     },
     {
      "n": 5,
@@ -591,14 +591,13 @@
      "unstable": false
     }
    ],
-   "passed": 1,
+   "passed": 2,
    "total": 5,
    "judge_repeats": 3,
    "judge_errors": [],
-   "agreement": 0.87,
+   "agreement": 0.93,
    "unstable": [
-    2,
-    4
+    2
    ],
    "final_chars": 3410,
    "files": [

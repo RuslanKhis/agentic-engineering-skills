@@ -449,6 +449,14 @@ def run_agent(run_dir: Path, entry: dict, model: str, max_turns: int, timeout: f
 
 # ---------------------------------------------------------------- judge
 
+def clip(text: str, limit: int = FILE_LIMIT) -> str:
+    """Keep a long file's head and tail: tables and summaries often sit at the end of a document."""
+    if len(text) <= limit:
+        return text
+    head, tail = limit * 2 // 3, limit // 3
+    return f"{text[:head]}\n[... {len(text) - head - tail} characters omitted ...]\n{text[-tail:]}"
+
+
 def changed_files(case_dir: Path) -> dict[str, str]:
     workspace = case_dir / "workspace"
     before = json.loads((case_dir / "fixture-digest.json").read_text(encoding="utf-8"))
@@ -463,7 +471,7 @@ def changed_files(case_dir: Path) -> dict[str, str]:
             text = path.read_text(encoding="utf-8")
         except UnicodeDecodeError:
             text = f"(binary file, {path.stat().st_size} bytes)"
-        files[rel] = text if len(text) <= FILE_LIMIT else text[:FILE_LIMIT] + "\n[truncated]"
+        files[rel] = clip(text)
     return files
 
 
@@ -496,7 +504,7 @@ def grader_text(case_dir: Path) -> str:
     parts = []
     for path in sorted(folder.glob("*")) if folder.is_dir() else []:
         text = path.read_text(encoding="utf-8", errors="replace")
-        text = text if len(text) <= FILE_LIMIT else text[:FILE_LIMIT] + "\n[truncated]"
+        text = clip(text)
         parts.append(f"### {path.name}\n\n```\n{text}\n```")
     return "\n\n".join(parts)
 

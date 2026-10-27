@@ -51,16 +51,16 @@
    ],
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
-   "judge_cost_usd": 0.2671,
+   "judge_cost_usd": 0.2562,
    "status": "graded",
    "assertions": [
     {
      "n": 1,
      "assertion": "Writes a cost contract with the six fields: a ceiling at the stated volume split into variable per-request work and the fixed while-provisioned resources, scope, the billing export as authority, an enforcement stop that acts without a person (admission control and max_llm_calls for model work, maximum bytes billed and a daily quota for BigQuery, maximum instances for the host), what degrades first, and the goal that reads the first live bill.",
      "verdict": "PASS",
-     "quote": "fixed ≤ $300 (assumed split), variable allowance A = $1,000, reserve $200. Average request ≤ $0.05 and p95 ≤ $0.15 (placeholders until G01). Scope: project, billing month",
-     "quote_found": true,
-     "reason": "The C9 contract has a ceiling split into fixed and variable, scope, the billing export as authority, automatic stops (max_llm_calls, maximum_bytes_billed, quota, max-instances), degrade tiers, and G15 reads the first live bill.",
+     "quote": "fixed ≤ $300 (assumed split), variable allowance A = $1,000, reserve $200. ... Cloud Billing export (the ledger is an estimate)",
+     "quote_found": false,
+     "reason": "The C9 contract has a ceiling split into fixed and variable, scope, billing export authority, automatic stops, tiers for what degrades first, and G15 reading the live bill.",
      "votes": [
       "PASS",
       "PASS",
@@ -75,7 +75,7 @@
      "verdict": "PASS",
      "quote": "The Cloud Billing export reports spend hours to a day late, and a budget alert only notifies, so neither can stop a request.",
      "quote_found": true,
-     "reason": "It explicitly treats the budget alert as notification and not the cap, using it only to ratchet limits tighter.",
+     "reason": "It explicitly says the budget alert only notifies and is not the cap; the stop is admission control.",
      "votes": [
       "PASS",
       "PASS",
@@ -90,7 +90,7 @@
      "verdict": "PASS",
      "quote": "Every owned resource carries `env`, `team`, `app` labels set in the deployment code (G02/A1)",
      "quote_found": true,
-     "reason": "Labels for environment, team and app on every owned resource are set in code, and the export is sliced by them.",
+     "reason": "Requires the three labels on every owned resource, set in deployment code, for export attribution.",
      "votes": [
       "PASS",
       "PASS",
@@ -102,25 +102,25 @@
     {
      "n": 4,
      "assertion": "Puts a recurring cost review with a date trigger and a decommission item (dependants and retention included) in the Later table, and lists each while-provisioned resource with its idle cost and owner on the goal that creates it.",
-     "verdict": "FAIL",
-     "quote": "Later: recurring cost review, decommission, production hardening | carried into the plan | none removed",
+     "verdict": "PASS",
+     "quote": "Recurring cost review of the bill against C9 | first monthly bill, then monthly",
      "quote_found": true,
-     "reason": "The design lists each while-provisioned resource with idle cost and owner, but the visible Later content is only a carry-over line; the date trigger and the decommission item with dependants and retention are not shown, and the plan is truncated.",
+     "reason": "Later has a recurring cost review with a date trigger and a decommission item including dependants and backups; the resource table gives idle cost, and owner is stated generically as the cost contract (C9) and the Later decommission item, with G08/A10 recording idle cost per resource, which just about satisfies the per-goal listing.",
      "votes": [
-      "FAIL",
-      "FAIL",
+      "PASS",
+      "PASS",
       "FAIL"
      ],
-     "agreement": 1.0,
-     "unstable": false
+     "agreement": 0.67,
+     "unstable": true
     },
     {
      "n": 5,
      "assertion": "Keeps design-only scope: no provisioning, no budget creation, no live price lookups presented as retrieved.",
      "verdict": "PASS",
-     "quote": "Prices were not retrieved; the PoC figure is cited, the rest are placeholders the creating goal fills as its first acceptance item.",
-     "quote_found": false,
-     "reason": "The work is design only, with no provisioning, and the prices are labelled placeholders or an assumption (the $1.30/£ rate).",
+     "quote": "Prices were not retrievable; the PoC figure is cited, the rest are placeholders the creating goal fills as its first acceptance item.",
+     "quote_found": true,
+     "reason": "Design-only; no provisioning or budget creation, and prices are placeholders or labelled assumptions, not claimed as live lookups.",
      "votes": [
       "PASS",
       "PASS",
@@ -130,12 +130,14 @@
      "unstable": false
     }
    ],
-   "passed": 4,
+   "passed": 5,
    "total": 5,
    "judge_repeats": 3,
    "judge_errors": [],
-   "agreement": 1.0,
-   "unstable": [],
+   "agreement": 0.93,
+   "unstable": [
+    4
+   ],
    "final_chars": 3868,
    "files": [
     "docs/architecture/claims-production.md",
@@ -286,7 +288,8 @@
     "adk-sql-agent-engineering": false,
     "deploy-adk-on-google-cloud": false,
     "adk-agent-observability": false
-   }
+   },
+   "rejudged": true
   },
   {
    "id": "designer-checkpoint-settles-the-agenda",

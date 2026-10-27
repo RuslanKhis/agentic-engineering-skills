@@ -259,6 +259,14 @@ class AgentAndJudgeTests(unittest.TestCase):
         self.assertEqual(summary["skill_md_reads"], ["beta-skill"])
         self.assertEqual(summary["permission_denials"][0]["tool"], "Read")
 
+    def test_long_files_keep_head_and_tail_for_the_judge(self):
+        text = "HEAD" + "x" * 50_000 + "TAIL"
+        clipped = scen.clip(text, limit=3_000)
+        self.assertTrue(clipped.startswith("HEAD"))
+        self.assertTrue(clipped.endswith("TAIL"))
+        self.assertIn("characters omitted", clipped)
+        self.assertEqual(scen.clip("short", limit=3_000), "short")
+
     def test_leading_slash_command_counts_as_loading_a_catalogued_skill(self):
         transcript = [json.dumps({"type": "system", "subtype": "init", "skills": ["alpha-skill", "beta-skill"]})]
         summary = scen.parse_transcript(transcript, "/beta-skill Carry out docs/tickets/G01.md.")

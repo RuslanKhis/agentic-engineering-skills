@@ -737,7 +737,7 @@
       "assertions": [
         "States that agents-shipgate 1.2.0 diff --application exits 0 whatever it finds and is advisory, so a gate must parse comparison_status and rows from --json and treat exit 2 as NOT RUN",
         "States that it does not compare require_confirmation, callbacks or McpToolset tool_filter, so a compared result with no rows is not evidence that capability is unchanged",
-        "Gates on inspect_security_surface.py run on the base tree and then on the head with --compare, which exits 3 and lists capability_changes (changed gates, callbacks, toolsets, sub-agents, tools, rising guard counts); requires a review label for that merge.",
+        "Gates on inspect_security_surface.py run on the base tree and then on the head with --compare, which exits 1 and lists capability_changes (changed gates, callbacks, toolsets, sub-agents, tools, rising guard counts); requires a review label for that merge.",
         "States that a Workflow graph's function nodes are not read by either tool: the inspector names them, marks the run partial, and they need hand review.",
         "Keeps the MCP definition pin (mcp_tool_inventory.py --diff --fail-on-diff) as a separate check from the binding diff"
       ]
