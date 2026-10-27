@@ -66,5 +66,13 @@
  "memory-document-shape-and-source-coordinates": {
   "before": "Supply synthetic extracted records with nested clause numbering, a cross-page exception, linked footnotes, repeated table cells, a dense table and an unreviewed image-only page. Selected-pack order separates physical neighbours and places non-neighbours consecutively. One required continuation is absent. The storage adapter can persist and reopen realistic complete envelopes; original PDFs/image bytes and domain-human review are unavailable.",
   "after": "Our policy-review app extracts the council's policy PDFs into records, selects a pack of records per question, groups them into units for the writer and the reviewer, and saves every stage as an envelope through our storage adapter, which can store and reopen full-size envelopes. runs/run-0412 is a retained run the reviewer rejected. The original PDFs and page images are not available, nobody from the planning team can review anything this week, and no model calls are authorised."
+ },
+ "presenter-poc-review-evidence-only": {
+  "before": "The plan records: G01 to G04 complete with acceptance evidence; checkout completion measured on 312 proof-of-concept sessions against last quarter's baseline; refunds unchanged; two acceptance cases still marked not run; model and cloud spend recorded per goal; an open decision about agency delegation. The success criteria were agreed before the build and are written in the design.",
+  "after": "Our proof of concept's record is in docs/: the plan docs/plans/campaign-assistant.md holds the goals, their acceptance results, measurements and spend, and the design docs/architecture/campaign-assistant.md holds the success criteria we agreed before the build. The review is for leadership, a business audience, fifteen minutes."
+ },
+ "presenter-monthly-value-report": {
+  "before": "A brief with outcome measure, baseline, counter-metric and threshold sentences; a plan whose M records include one outcome record without a baseline and one August window, and one September incident record.",
+  "after": "The claims triage pilot has been live since late August. The discovery brief is docs/discovery/claims.md; the plan docs/plans/claims.md holds the pilot's measurement and incident records."
  }
 }
