@@ -4,13 +4,16 @@ description: >-
   Inspect, implement or review sensitive-data boundaries in Python Google ADK
   agents using Sensitive Data Protection (SDP), Model Armor, strict tool
   contracts and guarded response release. Use for PII or credential exposure
-  in prompts, tool calls, session history, logs or streamed answers, and for
-  planning these controls and their cloud prerequisites. Do not activate for
-  generic ADK setup, credential custody or OAuth tokens kept out of events
-  (adk-tool-auth-and-secrets), whole-agent threat models (adk-agent-security),
-  telemetry pipelines and alerts (adk-agent-observability), governance or
-  privacy-impact papers (adk-governance-pack), Cloud Armor WAF configuration,
-  unrelated infrastructure cleanup, or non-agent document redaction.
+  in prompts, tool calls, session history, logs or streamed answers, for
+  prompt content leaking through trace, completion-upload or analytics
+  exporters, for where a screen runs relative to the agent and tool dispatch,
+  and for planning these controls and their cloud prerequisites. Do not
+  activate for generic ADK setup, credential custody or OAuth tokens kept out
+  of events (adk-tool-auth-and-secrets), whole-agent threat models
+  (adk-agent-security), telemetry pipelines and alerts
+  (adk-agent-observability), governance or privacy-impact papers
+  (adk-governance-pack), Cloud Armor WAF configuration, unrelated
+  infrastructure cleanup, or non-agent document redaction.
 license: MIT
 metadata:
   author: Ruslan Khissamiyev
@@ -58,7 +61,8 @@ project, not affiliated with or endorsed by Google.
 | Need | Mode and conditional reading |
 | --- | --- |
 | Deny credentials or replace permitted PII before any write/call | **SDP** — read [sdp.md](references/sdp.md); choose its framework-neutral controller or regional SDK adapter |
-| Prompt injection, content screening, native ADK plugin or final response screening | **Model Armor** — read [model-armor.md](references/model-armor.md) |
+| Prompt injection, content screening, native ADK plugin or final response screening | **Model Armor** — read [model-armor.md](references/model-armor.md); for where any screen runs (blocking before the agent acts, or in parallel) read [boundaries.md](references/boundaries.md#where-a-screen-runs) |
+| Tool results that may not leave the project (no Model Armor on them): a local classifier such as LlamaFirewall's Prompt Guard 2 | **Local screen** — read [boundaries.md](references/boundaries.md#a-local-screen-for-tool-results) |
 | Tool arguments/results, session leakage, unsafe streaming, or overall audit | **Boundary integration** — read [boundaries.md](references/boundaries.md); for callback wiring, lifecycle or telemetry use [implementation-recipes.md](references/implementation-recipes.md) |
 | Missing cloud prerequisites, setup, runtime identity or owned-resource cleanup | **Cloud readiness** — read [cloud-lifecycle.md](references/cloud-lifecycle.md); prepare a plan before any mutation |
 | Startup, identity, TLS, quota, SDK, request-accounting or cleanup failure | **Diagnosis** — use the matching symptom in [troubleshooting.md](references/troubleshooting.md) |

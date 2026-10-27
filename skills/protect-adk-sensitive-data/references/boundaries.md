@@ -137,6 +137,78 @@ An offline probe accepted sensitive data in unscreened structural fields. This
 skill requires the stronger production contract; those original schemas must
 not be copied unchanged. E3 documents the finding separately from live evidence.
 
+## A local screen for tool results
+
+When tool output may not leave the project or region, so Model Armor on tool
+results is ruled out, the local alternative is Meta's LlamaFirewall with its
+Prompt Guard 2 classifier, run in-process from `after_tool_callback` on the
+projected result, or as a second signal beside Model Armor
+(meta-llama/PurpleLlama commit d934ea2, `LlamaFirewall/` (MIT scanner code),
+read 2026-10-24). It flags explicit attempts to override instructions, not
+every risk, and does nothing for sensitive data, which stays with SDP.
+
+- **Window.** It scores only the first 512 tokens (`truncation=True,
+  max_length=512`), and the model card says longer inputs must be split, so
+  an injection after token 512 passes. Chunk the projected result: count with
+  the classifier's own tokenizer (`pg.tokenizer`), keep each window under 512
+  tokens, overlap the windows, and test an injection across a window boundary
+  and one after token 512.
+- **Call shape.** Call one `PromptGuardScanner` directly, never through
+  `LlamaFirewall`: `scan()` runs each scanner with `asyncio.run`, which raises
+  inside ADK's running event loop; `scan_async()` returns a successful `ALLOW`
+  for every result that is not a block or a human-review hold, a scanner
+  `ERROR` included; both build a new scanner, reloading the model, on every
+  scan; and a role with no scanner configured returns `ALLOW`. The scanner's
+  `scan()` runs the model synchronously, so call it through
+  `asyncio.to_thread`. An exception, a status other than success or an
+  over-size result is the unknown verdict and withholds the result.
+- **Logging.** The block reason embeds the full scanned text: log the decision
+  and score, never the reason.
+- **Weights.** Construct the scanner once at startup from weights already at
+  `$HF_HOME/meta-llama--Llama-Prompt-Guard-2-86M`, and refuse to start if that
+  directory is missing: with `HF_HOME` unset the library sets it, for the
+  whole process, to a literal `~/.cache/huggingface`, and a missing directory
+  triggers a download and an interactive Hugging Face login. The weights are
+  gated under the Llama 4 Community License, separate from the MIT code;
+  whether a project may use them is its owner's licence decision, recorded
+  before deployment, and the live detector run stays pending until then.
+- **Tests.** A fake with the same interface, `async scan(message,
+  past_trace=None) -> ScanResult`, returns each decision, an `ERROR` status
+  and an exception in turn, driven through a scripted-model Runner.
+
+Its AlignmentCheck is the remote judge in step 3 above, not a local screen.
+`adk-agent-security` records this classifier as one layer in its threat model.
+
+## Where a screen runs
+
+These placement rules hold for any screen, Model Armor, Prompt Guard 2 or
+another, restated from another framework's documented contract
+(openai/openai-agents-python commit 841dfdd, MIT, `docs/guardrails.md`,
+`docs/human_in_the_loop.md`, `docs/testing.md`, read 2026-10-23; another
+framework's documented behaviour, restated as a rule for ADK):
+
+- Screen user input once, at the first agent in the chain, and final output
+  once, at the agent that produces it, with per-tool checks on every guarded
+  call, delegated specialists included, so a handoff never bypasses a check.
+- A screen that runs in parallel with the agent saves latency, but the agent
+  may have consumed tokens and executed tools before the verdict cancels it.
+  A screen that must prevent an effect runs blocking, before the agent acts.
+- When an output screen rejects the final answer, keep the completed tool
+  events and their results in the session, drop the rejected text and
+  substitute a static, data-free message (never the rejected content, never a
+  formatter that sees the run context's secrets); when the rejected answer was
+  a tool's own result, withhold that payload from the session as well.
+- A screen that raises instead of returning a verdict is an unknown verdict,
+  recorded separately from a rejection, and withholds.
+
+On ADK the first and last agent are the root agent's `before_model_callback`
+and `after_model_callback` (or the native plugin's equivalents), the per-tool
+screen is `before_tool_callback` and `after_tool_callback`, and the static
+message is `adk-operational-guardrails`' halt message. Test placement with a
+scripted-model Runner: a rejected input leaves the tool's dispatch count at
+zero, and a rejected output leaves the completed tool events in the session
+and the rejected text out of it.
+
 ## Complete-answer release
 
 Project runner events through one narrow function. First recognise blocked,

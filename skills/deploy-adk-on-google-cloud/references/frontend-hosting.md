@@ -9,11 +9,11 @@ application side (principal dependency, routes, process shape) belongs to
 
 | | Topology | Use when | Watch |
 | --- | --- | --- | --- |
-| A | **One Cloud Run service** (default): FastAPI serves the built SPA with `app.frontend()` and `/api` on the same origin, Runner in process | A POC, internal tool or MVP | ADK's own routes are not mounted; an `/api` catch-all 404 stops the SPA fallback answering under `/api` |
+| A | **One Cloud Run service** (default): FastAPI serves the built SPA with `app.frontend()` and `/api` on the same origin, Runner in process | A POC, internal tool or MVP | ADK's own routes are not mounted; an `/api` catch-all 404 stops the SPA fallback answering under `/api`; with IAP on the service the backend verifies the signed assertion against the Cloud Run audience `/projects/PROJECT_NUMBER/locations/REGION/services/SERVICE_NAME`, a fact the first live run confirms against a captured token |
 | B | **Gateway in front of a private ADK service**: the public service authenticates and calls an internal-ingress ADK service with its own ID token | The agent is deployed separately | The private service accepts only the gateway's service account (`roles/run.invoker`); the gateway overwrites `user_id` |
 | C | **Backend-for-frontend in front of Agent Runtime** | The agent runs on managed Agent Runtime | The BFF keeps session ownership; see [Agent Runtime](agent-runtime.md) |
 | D | **Static assets on Firebase Hosting or Cloud Storage**, the SPA calling the Cloud Run URL directly | Assets need a CDN at public scale | Cross-origin: an explicit origin allowlist, never `*` with credentials; no run or stream path through Hosting |
-| E | **External Application Load Balancer** with Cloud CDN for assets and IAP, `run.app` ingress restricted to internal and load balancer | Organisation-wide workforce access, WAF or Cloud Armor at the edge | IAP cannot be on both the load balancer and the service; IAP and Cloud CDN do not combine on one backend; the IAP audience is the backend service form |
+| E | **External Application Load Balancer** with Cloud CDN for assets and IAP, `run.app` ingress restricted to internal and load balancer | Organisation-wide workforce access, WAF or Cloud Armor at the edge | IAP cannot be on both the load balancer and the service; IAP and Cloud CDN do not combine on one backend; the IAP audience is the backend service form, `/projects/PROJECT_NUMBER/global/backendServices/SERVICE_ID` |
 
 ## Stream and timeout rules
 

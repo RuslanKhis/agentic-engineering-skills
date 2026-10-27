@@ -5,7 +5,9 @@ description: >-
   protection, human approval (which actions wait, durable review records, the
   confirmation and resume flow) and application cost controls in Python Google
   ADK agents. Use for runaway agent loops, cross-turn budget enforcement,
-  risky actions awaiting review, or staged cost shutdown. Do not activate for
+  risky actions awaiting review, escalation rates and review-queue load,
+  paid continuations after a lost response (attempt ledgers), or staged cost
+  shutdown. Do not activate for
   a single HTTP retry policy or replaying an approved write once
   (safe-api-tool-calls), threat-modelling which tools are dangerous
   (adk-agent-security), the approval UI (adk-frontend-integration), wrong tool
@@ -51,6 +53,7 @@ Modes compose within this one skill. Read only the references needed for the req
 | A business effect must accumulate across calls (money refunded against one order, quantity shipped, seats held) | [Token budgets](references/token-budgets.md), "Bound the business effect as well as the calls" | An aggregate keyed on the business object in the operation record, enforced where the write lands |
 | Too many escalations, reviewer fatigue, or a target escalation rate | [Human review](references/human-review.md): escalation rules in code, the floor share, and the two-sided rates to tune against |
 | Risky tool actions need a human or can be retried after uncertainty | [Human review](references/human-review.md) | Trusted identity, explicit operation states, deduplication and an approval/execution boundary |
+| An input or output screen runs in parallel and a tool fired before its verdict | Not this skill's rule: `protect-adk-sensitive-data` owns where a screen runs (a screen that must prevent an effect runs blocking, before the agent acts; a rejected output keeps its completed tool events) | This skill supplies only the static halt message that replaces rejected text |
 | Spend should degrade or suspend AI features | [Cost controls](references/cost-controls.md) | Read-only assessment or an application control plan; cloud changes require separate approval |
 | Guarded work is moving to an API/worker or several instances | [Serving and lifecycle](references/serving-and-lifecycle.md) | Wire real entry points, shared admission, recovery and owned cleanup into the selected host |
 | Provider/browser behaviour or paid continuation needs evidence after offline checks | [Live campaigns](references/live-campaigns.md) | Reproducible preflight, explicit continuation quotas, a durable shared attempt/spending envelope and honest outcome evidence |

@@ -149,7 +149,12 @@ routine corpus cleanup. Keep screening in place throughout recovery.
    unknown retrieval sources, stale structured data and protection failure as
    relevant. Assert stored effects as well as returned text. Include failure
    and retry paths; the model and persistence tests read stored state after
-   a real invocation.
+   a real invocation. When google-adk is absent in this session, still write
+   the scripted-model Runner tests of stored effects (saved, persists across
+   a restart, denied to another user, forgotten) and report them `not run`;
+   never substitute a `SimpleNamespace` or hand-built Runner and call it a
+   pass. These assert application effects, not response wording, so they are
+   not the behavioural unit tests Google's agents-cli workflow discourages.
 2. Inspect the second invocation: no duplicate files, configuration churn,
    repeated side effects or untracked operations. For production additions,
    test worker loss, lease expiry and late writes at the relevant seam.
