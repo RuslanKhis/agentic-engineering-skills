@@ -17,6 +17,29 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## Fixtures for every representable scenario · 27 October 2026
+
+126 of 152 scenarios had no project to run against. They now build their
+workspace from six small base projects (an ADK support assistant, its PoC
+plan, a document pipeline, a claims-triage record set, a React chat and a SQL
+agent) plus a per-scenario overlay, and 141 scenarios can run offline; 11 are
+marked not representable with a reason (they need a shell, a profile outside
+the workspace or another installed skill version). Thirty-three contexts that
+read as fixture instructions or listed the expected defects were rewritten,
+the source-support and ingestion scenarios got their own packs instead of
+the skills' worked examples, and a new test rejects planted-defect markers,
+grader references and copies of skill files in any fixture.
+
+**Results.** 77 scenarios ran once with Sonnet 5.5 for $39.17: 170 of 333
+assertions passed by majority, 39 had split judge votes, and the primary
+`SKILL.md` loaded in 65 runs. Of 180 triaged rows, 29 point at skill gaps
+(guardrails and evaluation descriptions that miss their own topics, screen
+placement with no owning rule, PromptGuard facts only in the security skill),
+42 at fixtures or assertions (mostly steps that need a shell this run does not
+have), and 109 at the agent leaving out what the skill it read covers. 41
+newly runnable scenarios were not run within the cap.
+[Scenario fixtures record](scenario-fixtures-2026-10-27.md).
+
 ## Trustworthy scenario runs and grader answers kept out of skills · 27 October 2026
 
 Grader-side files no longer ship inside skill packages. The ingestion

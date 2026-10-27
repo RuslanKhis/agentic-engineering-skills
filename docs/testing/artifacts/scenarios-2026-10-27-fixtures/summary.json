@@ -1,9 +1,9 @@
 {
  "spend_usd": {
   "agent": 28.77,
-  "judge": 9.7
+  "judge": 9.69
  },
- "spend_total_usd": 38.48,
+ "spend_total_usd": 38.46,
  "batches": [
   "eng1",
   "eng2",
@@ -2082,7 +2082,7 @@
     "adk-system-designer"
    ],
    "agent_cost": 1.5539977,
-   "judge_cost": 0.3483,
+   "judge_cost": 0.3344,
    "turns": 28,
    "seconds": 590.6
   },

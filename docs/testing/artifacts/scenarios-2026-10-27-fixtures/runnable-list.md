@@ -1,0 +1,159 @@
+## runnable (23)
+- system-design-adaptive-discovery (adk-system-designer): Interactive: the context's brief is stated as text; nobody answers questions in a headless run.
+- system-design-changed-collaboration-requirement (adk-system-designer): Conversational only; the prior design is described in the context.
+- system-design-practical-handoff (adk-system-designer): No source tree by design; the accepted stack and authorisation are stated in the context.
+- system-design-contracts-from-vague-requirements (adk-system-designer): The context's mid-conversation addition about territory and flight dates cannot be delivered in one headless turn.
+- system-design-contracts-stay-small-when-read-only (adk-system-designer): The user does not answer follow-up questions, so a single turn matches the scenario.
+- system-designer-cross-framework-coverage (adk-system-designer)
+- system-design-poc-five-hours (adk-system-designer)
+- system-design-internal-tool-capacity (adk-system-designer)
+- system-design-mvp-then-backlog (adk-system-designer)
+- system-design-poc-keeps-floor (adk-system-designer)
+- estimate-poc-tickets (adk-system-designer)
+- estimate-experienced-team (adk-system-designer)
+- estimate-new-team (adk-system-designer)
+- estimate-mvp-three-people (adk-system-designer)
+- estimate-production-waits (adk-system-designer)
+- discovery-to-design-handoff (adk-discovery): Interactive: the funnel counts are held by the user, who cannot answer in a headless run.
+- designer-names-google-product-skills (adk-system-designer): No repository by design; finding-google-skills is not in this collection, so the router the context names is absent from the run. [external skills absent: finding-google-skills]
+- designer-poc-teardown-goal (adk-system-designer)
+- designer-handed-over-web-poc (adk-system-designer): Interactive: the user answers questions when asked.
+- profile-interview-core-is-not-leading (practice-profile): AGENTIC_ENGINEERING_HOME points into the run directory, so no real profile is touched.
+- designer-adds-governance-goal (adk-system-designer): Interactive: the user answers questions when asked.
+- designer-no-portability-concern (adk-system-designer): Interactive: the user's answer about lock-in is given in the context.
+- designer-adds-portability-goal (adk-system-designer): Interactive: the user's answer about lock-in is given in the context.
+
+## repo-fixture (118)
+- evaluation-preinference-contract-qualification (adk-agent-evaluation): google-adk is not installed, so the ADK route stays unverified; running the suite needs a shell.
+- memory-document-shape-and-source-coordinates (adk-memory-architecture): Running the grouping against the retained run needs a shell, which the default agent tools leave out.
+- evaluation-bound-spans-versus-model-paraphrase (adk-agent-evaluation): google-adk is not installed; the served ADK route can only be reported as not run.
+- evaluation-progressive-downstream-repair (adk-agent-evaluation): No shell: the agent can read the counters and saved runs but cannot execute the continuation.
+- workflow-checkpoint-dependency-invalidation (adk-workflow-design): Three retained runs and a resume path over the document pipeline; google-adk is not installed.
+- guardrails-continuation-accounting-and-duplicates (adk-operational-guardrails)
+- workflow-engine-restate-or-dapr-keeps-adk-contract (adk-workflow-design)
+- workflow-realistic-checkpoint-storage-preflight (adk-workflow-design): The refused writer record is kept in the run; tests and the round trip need a shell to execute.
+- workflow-warning-only-correction-preservation (adk-workflow-design): Scripted writer and reviewer replies for the case are in the workspace for offline tests.
+- evaluation-collateral-damage-no-op-control (adk-agent-evaluation): Standalone expense agent; Runner case tests skip without google-adk.
+- evaluation-tool-fault-matrix-and-resilience (adk-agent-evaluation): Standalone travel agent; the Environment Simulation test skips without google-adk.
+- evaluation-incident-regression-fail-to-pass (adk-agent-evaluation): No git history in the workspace: the base and fix commits are named in docs/incidents/INC-0412.md. Runner tests skip without google-adk.
+- evaluation-self-hosted-harnesses-mlflow-deepeval-opik (adk-agent-evaluation): Advisory and configuration; no model calls.
+- evaluation-recovery-is-not-full-route-acceptance (adk-agent-evaluation): Assessment of saved results only; nothing that costs money may run.
+- evaluation-reviewer-coverage-versus-uncertainty (adk-agent-evaluation): Retained drafts and reviews only; no provider calls and no domain expert.
+- evaluation-review-contract-solvability (adk-agent-evaluation): Running the service's checks needs a shell, which the default agent tools leave out.
+- evaluation-selected-source-support (adk-agent-evaluation): Its own community-hall pack (not the skill's worked example); expected labels are judge-only.
+- memory-local-document-completeness (adk-memory-architecture): document-coverage.json is the memory skill's own worked example (allow-listed): the agent can read the same file in the installed skill.
+- evaluation-recurring-failures-reentry (adk-agent-evaluation): Retained batch summaries and probes only; no provider calls.
+- system-design-review-existing-proposal (adk-system-designer): Proposal, accepted constraints and prototype code; only architecture documents may change.
+- system-design-runtime-and-release-review (adk-system-designer): Docs-only: the runtime proposal under review.
+- router-resumes-accepted-goal (adk-memory-architecture): Running the suite after the change needs a shell, which the default agent tools leave out.
+- router-missing-specialist (adk-engineer)
+- existing-agents-cli-focused-memory (adk-memory-architecture): The google-agents-cli-* skills named in available_skills are external and not installed. [external skills absent: google-agents-cli-workflow, google-agents-cli-adk-code]
+- plain-adk-no-scaffold (adk-workflow-design): The optional Agents CLI skills are not in this repository, so they are not installed. [external skills absent: google-agents-cli-workflow, google-agents-cli-scaffold]
+- chosen-test-first-workflow (safe-api-tool-calls): The tdd skill the user chose is external and not installed by the runner. [external skills absent: tdd]
+- skill-description-optimisation-out-of-scope (no primary): A stand-in fork: two SKILL.md files, the security and FastAPI activation cases and the validator; no shell to run the validator.
+- out-of-scope-marketing-edit (no primary)
+- system-design-scope-gate-time-boxed (adk-system-designer): Assignment pack: labelled and holdout cases, local plan text extracts; documentation only.
+- evaluation-improve-decisions-error-analysis (adk-agent-evaluation): Re-measuring needs the scripted double run through a shell; without one the agent can only reason over the saved outputs.
+- evaluation-generalization-and-deliverable-budget (adk-agent-evaluation): Planning and report text only; no paid calls.
+- memory-third-party-service-silent-empty-and-supersede (adk-memory-architecture): The adapter tests need google-adk, which is absent, so they skip.
+- memory-ingestion-scan-detection (adk-memory-architecture): The pack is generated for this scenario by a judge-only script, so it is not the memory skill's demonstration fixture.
+- memory-retrieval-second-round (adk-memory-architecture): Measuring recall needs a shell, which the default agent tools leave out.
+- workflow-content-safeguards-in-code (adk-workflow-design): The skill's draft_consistency.py is reachable in the installed skill; running it needs a shell.
+- sensitive-data-model-armor-file-attachments-and-template-update (protect-adk-sensitive-data): Neither google-adk nor google-cloud-modelarmor is installed; tests use an SDK-shaped double.
+- privacy-with-observability (protect-adk-sensitive-data): Agents CLI project written for this scenario; the google-agents-cli-observability skill is not installed. [external skills absent: google-agents-cli-observability]
+- instructions-routing-and-templating-repair (adk-agent-instructions): google-adk 2.8.0 is pinned but not installed; render and transfer tests that need the SDK cannot run.
+- tool-interface-wrong-tool-diagnosis (adk-tool-interface-design): The tool-schema linter and declaration dump need a shell, which the default agent tools leave out.
+- model-output-schema-with-tools-hardening (adk-model-and-output-contracts): The schema checker needs a shell; google-adk 2.8.0 is pinned but not installed.
+- security-review-untrusted-content-with-write-tools (adk-agent-security): Running the read-only security inspector needs a shell, which the default agent tools leave out.
+- observability-cost-reconciliation-agenttool-litellm (adk-agent-observability): invocation_summary.py cannot be run without a shell.
+- observability-agent-runtime-latency-and-alerts (adk-agent-observability): The offline invocation summary needs a shell; the agent can only read the export or propose the command.
+- release-coding-agent-capability-diff-gate (adk-release-engineering): The agent has no shell; helper scripts it names can only be proposed.
+- release-model-retirement-and-ci-gate (adk-release-engineering): The agent has no shell; helper scripts it names can only be proposed.
+- interoperability-expose-and-register-a2a (adk-agent-interoperability): agent_card_check.py needs a shell; graded on validation proposed or done by reading.
+- router-builds-at-poc-depth (adk-engineer)
+- router-flags-underestimated-ticket (adk-engineer)
+- presenter-poc-review-evidence-only (adk-presenter): The deck check needs a shell; the default agent tools leave it out.
+- engineer-google-skills-supporting-missing (deploy-adk-on-google-cloud): Running the suite and the local image build needs a shell, which the default agent tools leave out.
+- designer-phase-gate-plan-versus-code (adk-system-designer): No git history and no shell: plan_status.py --gate --base cannot be run in the workspace.
+- engineer-ticket-creates-cloud-sql (adk-memory-architecture): No gcloud, credentials or shell: instance creation and the dry run cannot execute in the run.
+- designer-production-cost-contract (adk-system-designer): Completed proof-of-concept plan and design; no cost contract yet.
+- engineer-agents-cli-deploy-ticket (deploy-adk-on-google-cloud): google-agents-cli-deploy and google-agents-cli-workflow are not in this repository, so they are not installed. [external skills absent: google-agents-cli-deploy, google-agents-cli-workflow]
+- engineer-agents-cli-focused-memory-1-11 (adk-memory-architecture): The google-agents-cli-* skills named in available_skills are external and not installed. [external skills absent: google-agents-cli-adk-code, google-agents-cli-workflow, google-agents-cli-eval]
+- release-post-launch-quality-loop-aqua (adk-release-engineering): The agents-cli-aqua skill is absent, as the context says.
+- memory-write-back-loop-from-horizon (adk-memory-architecture): SDK-dependent tests skip: google-adk is not installed.
+- frontend-assistant-ui-adk-python-gateway (adk-frontend-integration)
+- frontend-a2ui-route-and-validation-declared (adk-frontend-integration)
+- frontend-tool-widgets-staged-emission (adk-frontend-integration)
+- sql-managed-bigquery-mcp-read-only-by-platform (adk-sql-agent-engineering)
+- sql-semantic-map-reviewed-files (adk-sql-agent-engineering)
+- sql-acceptance-metric-names-and-spider2-bigquery-probe (adk-sql-agent-engineering)
+- sql-toolbox-read-only-and-secure-tenant (adk-sql-agent-engineering)
+- release-bigquery-analytics-score-gate-and-drift (adk-release-engineering)
+- security-code-execution-environment-selection (adk-agent-security)
+- interoperability-expose-mcp-server-with-conformance-baseline (adk-agent-interoperability): The agent has no shell; helper scripts it names can only be proposed.
+- security-refund-agent-build-time-controls-vs-screening (adk-agent-security)
+- observability-semconv-drift-and-evaluation-events (adk-agent-observability)
+- interoperability-consume-enterprise-mcp-server-registration-and-sso (adk-agent-interoperability)
+- evaluation-repeated-trials-pass-hat-k-and-end-state (adk-agent-evaluation): Standalone booking agent; evaluator tests skip without google-adk and model access.
+- evaluation-judge-agreement-and-harness-bridge (adk-agent-evaluation): Computing alpha needs a shell; the agent can write the script and report it as not run.
+- release-promptfoo-gate-exit-codes-and-trajectory-assertions (adk-release-engineering)
+- security-adversarial-suite-ported-goal-classes (adk-agent-security)
+- interoperability-expose-a2a-with-tck-acceptance (adk-agent-interoperability): agent_card_check.py and the TCK need a shell; graded on what the agent writes and plans.
+- interoperability-exposed-agent-forgets-on-modern-clients (adk-agent-interoperability): The agent has no shell; helper scripts it names can only be proposed.
+- interoperability-mcp-app-widget-to-custom-frontend (adk-agent-interoperability)
+- interoperability-verify-signed-agent-card (adk-agent-interoperability): agent_card_check.py needs a shell; the sample signed card is in docs/partner/.
+- frontend-agui-approval-contract-declared (adk-frontend-integration)
+- security-red-team-a2a-exposed-agent-with-pyrit (adk-agent-security)
+- security-garak-ci-gate-on-adk-runner (adk-agent-security)
+- sensitive-data-offline-pii-oracle-in-ci (protect-adk-sensitive-data): Runner tests skip without google-adk; presidio is not installed and the agent has no shell.
+- sensitive-data-local-tool-result-screen-llamafirewall (adk-agent-security)
+- security-gate-default-deny-and-call-provenance (adk-agent-security)
+- security-adopt-third-party-mcp-server-with-scan (adk-agent-security)
+- mcp-rug-pull-runtime-pin-and-mcp-ids (adk-agent-security)
+- security-review-with-atlas-and-cosai-ids (adk-agent-security)
+- workflow-durable-refund-resume-or-engine (adk-workflow-design)
+- guardrails-escalation-two-sided-calibration (adk-operational-guardrails)
+- guardrails-unanswered-approval-and-screening-placement (adk-operational-guardrails)
+- optimise-compaction-atomic-groups-three-points (optimise-adk-on-google-cloud)
+- memory-poisoned-fact-rollback-and-update-cases (adk-memory-architecture): No Memory Bank access: rollback and live recall cannot run in the session.
+- web-backend-deploy-routes-to-deploy (deploy-adk-on-google-cloud)
+- web-backend-stream-progress-routes-to-frontend (adk-frontend-integration)
+- web-backend-app-migrations-beside-adk-sessions (adk-fastapi-backend): The alembic check the scenario asks for needs SQLAlchemy, Alembic and a shell; none is available to the agent.
+- engineer-ticket-with-missing-companion (adk-engineer): Lint and theme checks need a shell and npm, which the default agent tools leave out.
+- engineer-ends-with-checkpoint-after-contract-delta (adk-engineer): plan_status.py needs a shell; the assertion accepts saying it could not be run.
+- engineer-resumes-from-progress-block (adk-engineer): The worktree named in the Progress block is wt-G02/ inside the workspace; git status and the re-verify command need a shell, so the agent can only say what it would check.
+- engineer-writes-progress-block-when-stopping (adk-engineer)
+- designer-checkpoint-settles-the-agenda (adk-system-designer): No shell: plan_status.py and check_schedule.py cannot be run in the workspace.
+- designer-tickets-get-journey-goal-and-lint (adk-system-designer): No shell: check_schedule.py and check_tickets.py cannot be run in the workspace.
+- engineer-parallel-tickets-with-overlapping-touches (adk-engineer): plan_status.py needs a shell; comparing touches by hand satisfies the first assertion.
+- designer-weekly-status-from-plan-evidence (adk-system-designer): No git history and no shell: plan_status.py --weekly cannot be run in the workspace.
+- evaluation-underwriter-labelling-session (adk-agent-evaluation): Running scripts/label_agreement.py needs a shell; the helper's real output is with the judge.
+- presenter-monthly-value-report (adk-presenter): check_value_report.py needs a shell; the default agent tools leave it out.
+- designer-sow-from-plan (adk-system-designer): No shell: check_sow.py and check_schedule.py cannot be run in the workspace.
+- presenter-rollout-pack-go-live (adk-presenter): check_rollout.py needs a shell; the default agent tools leave it out.
+- observability-handover-and-postmortem (adk-agent-observability)
+- governance-pack-annex-iii-pilot (adk-governance-pack): check_governance.py needs a shell; the default agent tools leave it out.
+- governance-pack-au-hr-internal (adk-governance-pack): check_governance.py needs a shell; the default agent tools leave it out.
+- governance-pack-uk-bank-chatbot (adk-governance-pack): check_governance.py needs a shell; the default agent tools leave it out.
+- governance-pack-us-hiring-screener (adk-governance-pack): check_governance.py needs a shell; the default agent tools leave it out.
+- governance-pack-nsw-agency-chatbot (adk-governance-pack): check_governance.py needs a shell; the default agent tools leave it out.
+- governance-pack-commonwealth-dta-assessment (adk-governance-pack): check_governance.py needs a shell; the default agent tools leave it out.
+- governance-pack-auckland-singapore-retailer (adk-governance-pack): check_governance.py needs a shell; the default agent tools leave it out.
+- governance-pack-quebec-ontario-hr-assistant (adk-governance-pack): check_governance.py needs a shell; the default agent tools leave it out.
+- portability-ticket-carried-out (adk-portability-planning): check_portability.py needs a shell, and official sources cannot be re-read without network.
+- engineer-gcp-goal-unaffected-by-portability (adk-memory-architecture)
+
+## fixture-missing (0)
+
+## not-representable (11)
+- engineer-notices-mixed-skill-versions (adk-operational-guardrails): Needs adk-operational-guardrails installed at user level from an older release beside a newer project-level adk-engineer; the runner installs every skill from this checkout at one version.
+- engineer-field-note-after-failed-specialist-call (adk-engineer): Needs an installed google-adk newer than the recipe that raises at run time, a shell for field_notes.py and a home directory outside the workspace, none of which the confined offline run has.
+- engineer-offers-field-sharing-once-at-end (adk-engineer): Needs a helper script to crash under a shell, a field note recorded in the home directory outside the workspace, and a second paired fixture graded alongside; one confined headless run cannot carry these.
+- field-note-preview-redacts-client-details (adk-engineer): The pending note lives under AGENTIC_ENGINEERING_HOME outside the workspace and the assertions need field_notes.py preview run in a shell, which default confinement refuses.
+- maintainer-triage-treats-issue-text-as-data (no primary): Needs the maintainer's full checkout to edit and a shell: the safety premise is that triage_field_reports.py, not the agent, reads the report prose, and the wrong-api report must be reproduced by running code.
+- designer-offers-org-defaults-from-practice-profile (adk-system-designer): The org profile and bindings.md live under AGENTIC_ENGINEERING_HOME outside the workspace, which the confined agent cannot read, and the runner seeds no profile there.
+- discovery-ignores-remember-instruction-in-document (adk-discovery): The bound org profile lives under AGENTIC_ENGINEERING_HOME outside the workspace, which the confinement refuses, so the harvest and profile-write assertions would pass vacuously.
+- profile-import-flags-planted-instruction (practice-profile): The profile, bindings and orgs live under AGENTIC_ENGINEERING_HOME outside the workspace, which the default confinement refuses to read or write, and every assertion turns on profile.py (extract, verify-candidates, snapshot) run in a shell.
+- profile-import-withholds-secrets-and-names (practice-profile): The profile and bindings live under AGENTIC_ENGINEERING_HOME outside the workspace, which the default confinement refuses to read or write, and the import runs through profile.py extract in a shell.
+- profile-import-unbound-repository (practice-profile): The bindings and orgs live under AGENTIC_ENGINEERING_HOME outside the workspace, which the default confinement refuses to read or write, and the assertions turn on profile.py bind and extract run in a shell.
+- discovery-prefills-stall-rows-from-past-attempts (adk-discovery): The profile facts the assertions turn on (the 2025 chatbot, the works council) live under AGENTIC_ENGINEERING_HOME outside the workspace, which the confinement refuses to read.

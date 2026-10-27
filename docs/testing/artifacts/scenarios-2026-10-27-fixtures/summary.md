@@ -108,4 +108,4 @@
 | privacy-with-observability | protect-adk-sensitive-data | 2/6 | A1:FFF A2:FFP A3:PPP A4:FFF A5:PPP A6:FFF | A2 | no (-) | 0.13 |
 | chosen-test-first-workflow | safe-api-tool-calls | 2/6 | A1:FFF A2:FFF A3:FFF A4:PFF A5:PPP A6:PPP | A4 | no (-) | 0.10 |
 
-Spend: agent $28.77, judge $9.70, total $38.48
+Spend: agent $28.77, judge $9.69, total $38.46

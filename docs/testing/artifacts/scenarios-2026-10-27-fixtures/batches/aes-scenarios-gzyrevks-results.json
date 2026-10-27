@@ -1764,16 +1764,16 @@
    "grader_files": [],
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
-   "judge_cost_usd": 0.3483,
+   "judge_cost_usd": 0.3344,
    "status": "graded",
    "assertions": [
     {
      "n": 1,
      "assertion": "Produces the design and phased plan with contracts, and keeps the conversation at design level without fetching, installing or running any Google product skill.",
      "verdict": "PASS",
-     "quote": "I didn't run it. The `google/skills:*` names come from the designer's table dated 21 October 2026 ... Nothing was installed or touched in the cloud.",
+     "quote": "Google's `finding-google-skills` router is installed, but I didn't run it. ... Nothing was installed or touched in the cloud.",
      "quote_found": false,
-     "reason": "The agent produced a design and a phased plan with contracts C1–C10, and it did not fetch, install or run any Google product skill.",
+     "reason": "The agent produced the design and phased plan with contracts and did not fetch, install or run any Google product skill.",
      "votes": [
       "PASS",
       "PASS",
@@ -1786,9 +1786,9 @@
      "n": 2,
      "assertion": "Writes google/skills:<name> entries with a purpose into the supporting skills of goals whose routes need a product provisioned, queried or administered, for example cloud-run-basics for the service, iam-helper-for-policy-management for the runtime identity bindings and cloud-run-alert-configuration once SLIs are decided.",
      "verdict": "FAIL",
-     "quote": "- **Primary skill:** `adk-workflow-design`. **Supporting:** `adk-model-and-output-contracts` (model ID and lifecycle date). **Companion:** none.",
+     "quote": "**Primary skill:** `adk-presenter`. **Supporting:** none.",
      "quote_found": true,
-     "reason": "The visible goals' Supporting fields list no google/skills:<name> entries with a purpose; the product skills appear only in the design's routes table, and the goals that would need them (such as G11) are truncated.",
+     "reason": "The google/skills entries appear only in the design's routes table and as a single unconfirmed WAF mention in G15; the visible goals have no per-goal supporting-skill entries with a purpose such as cloud-run-basics or iam-helper.",
      "votes": [
       "FAIL",
       "FAIL",
@@ -1803,7 +1803,7 @@
      "verdict": "PASS",
      "quote": "| G11 Cloud Run, edge and data tier | 1 | implementation | 12–18 | G02, W1 | `deploy-adk-on-google-cloud` | blocked on W1 |",
      "quote_found": true,
-     "reason": "Every goal's primary skill is a toolkit specialist, and Google product skills appear only in a separate column of the design's routes table.",
+     "reason": "Every goal has a toolkit specialist as primary skill and Google product skills appear only in the design's routes table, never as primary.",
      "votes": [
       "PASS",
       "PASS",
@@ -1816,9 +1816,9 @@
      "n": 4,
      "assertion": "Leaves the product steps as execution-scope prerequisites and notes that adk-engineer will install or fetch the product skill when it carries out the goal.",
      "verdict": "FAIL",
-     "quote": "Product skills below are unconfirmed against the live catalogue; confirm each through the installed `finding-google-skills` router before first use, and treat their commands as proposals needing approval for the scope.",
+     "quote": "None of these product skills is installed; installing them and the specialists the plan names is a setup step.",
      "quote_found": true,
-     "reason": "The plan tells the reader to confirm product skills through the router, but it never says adk-engineer will install or fetch them at execution time, and it does not record the product steps as execution-scope prerequisites.",
+     "reason": "The agent treats installation as a human setup step and never says adk-engineer will install or fetch the product skill when executing the goal.",
      "votes": [
       "FAIL",
       "FAIL",
@@ -1979,7 +1979,8 @@
     "deploy-adk-on-google-cloud": false,
     "adk-agent-observability": false,
     "adk-tool-auth-and-secrets": false
-   }
+   },
+   "rejudged": true
   }
  ]
 }
