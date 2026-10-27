@@ -36,9 +36,13 @@ class CheckRepoTests(unittest.TestCase):
         (root / "evals").mkdir()
         self.activation = {"version": 1, "cases": [
             {"id": "positive", "skill": "example", "prompt": "Do the task",
-             "should_trigger": True, "rationale": "In scope"},
+             "should_trigger": True, "rationale": "In scope", "split": "dev"},
             {"id": "negative", "skill": "example", "prompt": "Different task",
-             "should_trigger": False, "rationale": "Outside scope"}]}
+             "should_trigger": False, "rationale": "Outside scope", "split": "dev"},
+            {"id": "heldout-positive", "skill": "example", "prompt": "Please do the task",
+             "should_trigger": True, "rationale": "In scope", "split": "heldout"},
+            {"id": "heldout-negative", "skill": "example", "prompt": "Another task",
+             "should_trigger": False, "rationale": "Outside scope", "split": "heldout"}]}
         self.scenarios = {"version": 1, "cases": [
             {"id": "scenario", "prompt": "Inspect a project", "context": "Example project",
              "available_skills": ["example"], "expected_primary": "example",
@@ -54,7 +58,7 @@ class CheckRepoTests(unittest.TestCase):
             root = Path(directory)
             self.fixture(root)
             self.assertEqual(checker.validate_cases(root), [])
-            self.activation["cases"].pop()
+            self.activation["cases"] = self.activation["cases"][:1] + self.activation["cases"][2:3]
             self.save(root)
             self.assertTrue(checker.validate_cases(root))
 
@@ -67,17 +71,27 @@ class CheckRepoTests(unittest.TestCase):
                 self.save(root)
                 self.assertTrue(checker.validate_cases(root))
 
-    def test_activation_split_is_train_or_held_out(self):
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            self.fixture(root)
-            self.activation["cases"][0]["split"] = "held-out"
-            self.activation["cases"][1]["split"] = "train"
-            self.save(root)
-            self.assertEqual(checker.validate_cases(root), [])
-            self.activation["cases"][0]["split"] = "holdout"
-            self.save(root)
-            self.assertTrue(any("split must be" in e for e in checker.validate_cases(root)))
+    def test_activation_split_is_required_and_dev_or_heldout(self):
+        for value in ("holdout", "train", None):
+            with self.subTest(value=value), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self.fixture(root)
+                if value is None:
+                    del self.activation["cases"][0]["split"]
+                else:
+                    self.activation["cases"][0]["split"] = value
+                self.save(root)
+                self.assertTrue(any("split must be" in e for e in checker.validate_cases(root)))
+
+    def test_every_skill_needs_a_heldout_positive_and_near_miss(self):
+        for index in (2, 3):
+            with self.subTest(index=index), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                self.fixture(root)
+                self.activation["cases"][index]["split"] = "dev"
+                self.save(root)
+                errors = checker.validate_cases(root)
+                self.assertTrue(any("heldout activation cases need" in e for e in errors), errors)
 
     def test_duplicate_ids_and_json_keys_are_rejected(self):
         with tempfile.TemporaryDirectory() as directory:

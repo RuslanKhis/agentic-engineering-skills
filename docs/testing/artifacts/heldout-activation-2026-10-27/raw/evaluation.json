@@ -1,0 +1,66 @@
+{
+ "short": "evaluation",
+ "round": 1,
+ "model": "claude-opus-5-5",
+ "created": "2026-10-27T07:15:52+00:00",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-opus-5-5",
+  "--output-format",
+  "json",
+  "--system-prompt",
+  "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+  "--tools",
+  "",
+  "--safe-mode",
+  "--disable-slash-commands",
+  "--no-session-persistence",
+  "--strict-mcp-config",
+  "--setting-sources",
+  "",
+  "(prompt on stdin)"
+ ],
+ "cwd": "fresh empty temporary directory (tempfile.TemporaryDirectory)",
+ "system": "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+ "prompt": "The coding assistant is used by developers who build AI agents in Python with Google's Agent Development Kit, usually hosted on Google Cloud. Their requests may or may not mention that stack.\n\nHere is one kind of help the assistant can give:\n\n<brief>\nA developer has an AI agent that sometimes makes poor decisions, and the team has no dependable way to tell whether a change to it made things better or worse. They want a repeatable way to check how the agent behaves: scripted and simulated conversations, scoring of answers, comparing one version with another, and sometimes sitting down with business experts who judge the agent's answers so an automated scorer can be checked against them.\n</brief>\n\nWrite three requests a developer might type to the assistant:\n- two that need exactly this kind of help;\n- one that sounds related but actually needs a different kind of help.\n\nWrite as real developers do: vary the tone (terse, chatty, frustrated, formal); make some vague and some full of detail that does not matter; mention their own project, code or deadline where natural. Do not reuse the wording of the brief. For the third request, say in plain words what kind of help it actually needs instead.\n\nAnswer with JSON only, in exactly this shape:\n{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"elsewhere\", \"text\": \"...\", \"needs_instead\": \"...\"}\n]}",
+ "reply_text": "{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"our ADK support agent keeps picking the wrong tool maybe 1 in 10 times (calls refund_order when the user just wants tracking info). every time someone tweaks the system prompt we just eyeball a few chats in the dev UI and ship it. I want something repeatable: a set of test conversations, multi-turn ones too, that I can run against the current version and a candidate version and get a score diff. where do I even start? we're on Vertex AI Agent Engine if that matters\"},\n {\"kind\": \"fits\", \"text\": \"Context: insurance claims triage agent (Python, google-adk 1.x, Gemini 2.5 Pro). Compliance wants proof that answers are acceptable before we go live Dec 1. Plan is to have 3 claims adjusters grade ~200 agent responses, then use an LLM-as-judge for ongoing regression runs. How should I structure the labeling session and the rubric so I can actually measure whether the automated judge agrees with the adjusters? Also want a simulated-user setup so I don't have to hand-write every conversation. Our repo already has a tests/ folder with some pytest stuff but nothing eval-related.\"},\n {\"kind\": \"elsewhere\", \"text\": \"ugh. our agent on Cloud Run got way slower since last week's deploy, p95 went from like 4s to 15s and users are complaining it 'feels dumber' because it times out mid-answer. how do I figure out which tool call or model call is eating the time? we have Cloud Trace turned on but I've never actually looked at it\", \"needs_instead\": \"Performance debugging and observability: using tracing/latency data to find the slow tool or model call in a deployed agent, not building an evaluation or scoring setup for answer quality.\"}\n]}",
+ "reply_model": "claude-opus-5-5",
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 1038,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 590,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1038,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 590,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1038,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1038
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "cost_usd": 0.020112,
+ "duration_s": 10.1
+}

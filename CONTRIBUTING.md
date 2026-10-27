@@ -38,7 +38,11 @@ For packaging alone:
 - **Discovery:** describe what the skill does and when it applies. Include a
   nearby exclusion when it prevents a likely routing mistake. Add a natural
   positive request and a near-miss to [activation cases](evals/activation.json)
-  when adding a skill or changing its scope.
+  when adding a skill or changing its scope, with `"split": "dev"`. A new
+  skill also needs a held-out positive and near-miss (`"split": "heldout"`),
+  generated from a neutral brief as
+  [checking skill quality](docs/testing/skill-quality.md#keep-a-held-out-split)
+  describes, never written by you.
 - **Domain knowledge:** preserve the API contracts, failure modes and decision
   criteria that change the coding agent's work. Generic advice such as “write
   good tests” rarely justifies another instruction.
@@ -89,7 +93,15 @@ activation runner and introduce no new FAIL against the last recorded run:
 `claude-cli` uses your Claude Code login; `--backend anthropic` uses
 `ANTHROPIC_API_KEY`; `--backend files --export DIR` writes prompts for fresh
 sessions to answer when neither is available. `--compare` exits 1 on a new
-FAIL. Say in the pull request which cases changed grade and why. To check a
+FAIL. Say in the pull request which cases changed grade and why.
+
+The `heldout` split is never used while editing a description: work from the
+`dev` cases (`--split dev`) and do not read held-out prompts or results until
+the change is finished. Then re-run `--split heldout` once and report its
+result beside the dev result; a held-out failure is reported to the skill's
+owner, not fixed in the same change. When held-out cases leak into description
+work (someone read them while editing, or a description was changed to fix
+one), move those cases to `dev` and generate a fresh held-out set. To check a
 scenario end to end, `scripts/run_scenarios.py list` shows which scenarios can
 run as they stand, and `run --ids ...` runs them in throwaway workspaces with
 a separate judge; see [checking skill quality](docs/testing/skill-quality.md#run-the-scenario-runner).

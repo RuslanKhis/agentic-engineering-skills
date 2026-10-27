@@ -21,6 +21,7 @@ prompt files for a person or another agent to answer, then import the answers).
 Examples::
 
     python scripts/run_activation.py --backend claude-cli --repeat 2 --out results.json
+    python scripts/run_activation.py --backend claude-cli --split heldout --out heldout.json
     python scripts/run_activation.py --backend files --export /tmp/act
     python scripts/run_activation.py --backend files --import /tmp/act --model claude-opus-5-5 --out results.json
     python scripts/run_activation.py --compare old.json new.json
@@ -50,6 +51,7 @@ SCHEMA = "activation-results/1"
 GRADES = ("PASS", "PARTIAL", "FAIL", "ERROR")
 DEFAULT_SEED = 20261027
 DEFAULT_BATCH = 14
+SPLITS = ("dev", "heldout")
 KEY_LINE = re.compile(r"^([A-Za-z0-9_-]+):(?:[ \t]+(.*))?$")
 
 SELECTOR_SYSTEM = """\
@@ -161,10 +163,20 @@ def catalogue_sha256(catalogue: list[dict]) -> str:
 
 # ---------------------------------------------------------------- corpus
 
-def load_cases(root: Path, only: list[str] | None = None) -> tuple[list[dict], str]:
+def case_split(case: dict) -> str:
+    return case.get("split", "dev")
+
+
+def load_cases(root: Path, only: list[str] | None = None,
+               split: str = "all") -> tuple[list[dict], str]:
+    """Cases to run, filtered by skill and split; the hash always covers the whole file."""
     path = root / "evals" / "activation.json"
     raw = path.read_bytes()
     cases = json.loads(raw)["cases"]
+    if split != "all":
+        cases = [case for case in cases if case_split(case) == split]
+        if not cases:
+            raise InputError(f"no activation cases in the {split} split")
     if only:
         unknown = set(only) - {case["skill"] for case in cases}
         if unknown:
@@ -246,9 +258,7 @@ def grade_batch(batch: list[dict], answers: dict[str, dict] | None, repeat: int,
     for i, case in enumerate(batch):
         answer = (answers or {}).get(item_label(i))
         row = {"id": case["id"], "skill": case["skill"], "should_trigger": case["should_trigger"],
-               "repeat": repeat}
-        if "split" in case:
-            row["split"] = case["split"]
+               "repeat": repeat, "split": case_split(case)}
         if answer is None:
             row.update(primary=None, supporting=[], reason="",
                        grade="ERROR", error=error or "no answer for this item")
@@ -330,6 +340,8 @@ def import_files(directory: Path, cases: list[dict], catalogue: list[dict],
     for key in ("catalogue_sha256", "corpus_sha256"):
         if manifest.get(key) != header[key]:
             raise InputError(f"{key} differs from the exported batches; re-export them")
+    if manifest.get("split", "all") != header["split"]:
+        raise InputError(f"the batches were exported with --split {manifest.get('split', 'all')}")
     by_id = {case["id"]: case for case in cases}
     names = {entry["name"] for entry in catalogue}
     rows, metas = [], []
@@ -355,12 +367,16 @@ def summarise(rows: list[dict]) -> dict:
     for row in rows:
         by_repeat.setdefault(row["repeat"], Counter())[row["grade"]] += 1
     total = Counter(row["grade"] for row in rows)
+    by_split: dict[str, Counter] = {}
+    for row in rows:
+        by_split.setdefault(row.get("split", "dev"), Counter())[row["grade"]] += 1
     per_case: dict[str, list[str]] = {}
     for row in sorted(rows, key=lambda r: r["repeat"]):
         per_case.setdefault(row["id"], []).append(row["grade"])
     return {
         "overall": {g: total.get(g, 0) for g in GRADES},
         "by_repeat": {str(r): {g: c.get(g, 0) for g in GRADES} for r, c in sorted(by_repeat.items())},
+        "by_split": {s: {g: c.get(g, 0) for g in GRADES} for s, c in sorted(by_split.items())},
         "not_pass": {cid: grades for cid, grades in sorted(per_case.items())
                      if any(g != "PASS" for g in grades)},
     }
@@ -369,12 +385,16 @@ def summarise(rows: list[dict]) -> dict:
 def format_summary(results: dict) -> str:
     summary = results["summary"]
     lines = [f"Activation run: backend {results['backend']}, model {results['model']}, "
-             f"{results['case_count']} cases x {results['repeats']} repeat(s)",
+             f"{results['case_count']} cases x {results['repeats']} repeat(s), "
+             f"split {results.get('split', 'all')}",
              f"catalogue {results['catalogue_sha256'][:16]}  corpus {results['corpus_sha256'][:16]}", "",
              "| Run | PASS | PARTIAL | FAIL | ERROR |", "| --- | --- | --- | --- | --- |"]
     for repeat, counts in summary["by_repeat"].items():
         lines.append(f"| repeat {repeat} | " + " | ".join(str(counts[g]) for g in GRADES) + " |")
     lines.append("| all | " + " | ".join(str(summary["overall"][g]) for g in GRADES) + " |")
+    lines += ["", "| Split | PASS | PARTIAL | FAIL | ERROR |", "| --- | --- | --- | --- | --- |"]
+    for split, counts in summary.get("by_split", {}).items():
+        lines.append(f"| {split} | " + " | ".join(str(counts[g]) for g in GRADES) + " |")
     if summary["not_pass"]:
         lines += ["", "Cases not passing in every repeat:"]
         rows = {}
@@ -385,7 +405,8 @@ def format_summary(results: dict) -> str:
             kind = "positive" if first["should_trigger"] else "near-miss"
             chosen = first.get("primary") or "-"
             support = ",".join(first.get("supporting") or []) or "-"
-            lines.append(f"- {cid} [{first['skill']}, {kind}] {' '.join(grades)}: "
+            lines.append(f"- {cid} [{first['skill']}, {kind}, {first.get('split', 'dev')}] "
+                         f"{' '.join(grades)}: "
                          f"primary {chosen}; supporting {support}. {first.get('reason') or first.get('error', '')}")
     return "\n".join(lines)
 
@@ -424,7 +445,7 @@ def build_results(args, catalogue, cases, corpus_hash, rows, metas, model, extra
         "created": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         "backend": args.backend, "model": model, "seed": args.seed,
         "batch_size": args.batch_size, "repeats": args.repeat,
-        "only": args.only or None, "commit": git_commit(args.root),
+        "only": args.only or None, "split": args.split, "commit": git_commit(args.root),
         "catalogue_sha256": catalogue_sha256(catalogue), "corpus_sha256": corpus_hash,
         "skill_count": len(catalogue), "case_count": len(cases),
         "grading": "8 October 2026 rules; see scripts/run_activation.py",
@@ -445,6 +466,9 @@ def parse_args(argv):
     parser.add_argument("--repeat", type=int, default=1, help="independent reshuffled runs")
     parser.add_argument("--only", type=lambda s: [x.strip() for x in s.split(",") if x.strip()],
                         help="comma-separated skills whose cases to run (the catalogue stays complete)")
+    parser.add_argument("--split", choices=(*SPLITS, "all"), default="all",
+                        help="cases to run: dev (may inform description edits), heldout "
+                             "(measure only) or all (default)")
     parser.add_argument("--seed", default=str(DEFAULT_SEED))
     parser.add_argument("--batch-size", type=int, default=DEFAULT_BATCH)
     parser.add_argument("--jobs", type=int, default=4, help="concurrent model calls")
@@ -476,11 +500,11 @@ def main(argv: list[str] | None = None) -> int:
             return 1 if new_fails else 0
         root = args.root.resolve()
         catalogue = load_catalogue(root)
-        cases, corpus_hash = load_cases(root, args.only)
+        cases, corpus_hash = load_cases(root, args.only, args.split)
         jobs = plan(cases, args.repeat, args.batch_size, args.seed)
         header = {"catalogue_sha256": catalogue_sha256(catalogue), "corpus_sha256": corpus_hash,
                   "seed": args.seed, "batch_size": args.batch_size, "repeats": args.repeat,
-                  "only": args.only or None}
+                  "only": args.only or None, "split": args.split}
         if args.backend == "files" and args.export:
             export_files(args.export, catalogue, jobs, header)
             print(f"Wrote {len(jobs)} batch prompt(s) to {args.export / 'prompts'}; "

@@ -1,0 +1,66 @@
+{
+ "short": "sensitive-data",
+ "round": 1,
+ "model": "claude-opus-5-5",
+ "created": "2026-10-27T07:16:30+00:00",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-opus-5-5",
+  "--output-format",
+  "json",
+  "--system-prompt",
+  "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+  "--tools",
+  "",
+  "--safe-mode",
+  "--disable-slash-commands",
+  "--no-session-persistence",
+  "--strict-mcp-config",
+  "--setting-sources",
+  "",
+  "(prompt on stdin)"
+ ],
+ "cwd": "fresh empty temporary directory (tempfile.TemporaryDirectory)",
+ "system": "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+ "prompt": "The coding assistant is used by developers who build AI agents in Python with Google's Agent Development Kit, usually hosted on Google Cloud. Their requests may or may not mention that stack.\n\nHere is one kind of help the assistant can give:\n\n<brief>\nPeople paste personal details (names, card numbers, health information) or passwords into an AI agent's chat, and that data ends up in what is sent to the model, in calls to helper functions, in saved history, in logs and in the streamed reply. The developer wants to detect and mask it, screen what goes into and comes out of the model with Google Cloud's content-screening services, and plan the cloud setup those need.\n</brief>\n\nWrite three requests a developer might type to the assistant:\n- two that need exactly this kind of help;\n- one that sounds related but actually needs a different kind of help.\n\nWrite as real developers do: vary the tone (terse, chatty, frustrated, formal); make some vague and some full of detail that does not matter; mention their own project, code or deadline where natural. Do not reuse the wording of the brief. For the third request, say in plain words what kind of help it actually needs instead.\n\nAnswer with JSON only, in exactly this shape:\n{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"elsewhere\", \"text\": \"...\", \"needs_instead\": \"...\"}\n]}",
+ "reply_text": "{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"our support agent (ADK, deployed on Cloud Run) keeps getting customers pasting full card numbers and sometimes their account passwords into the chat. legal flagged that this stuff is showing up in Cloud Logging and in the session history we persist to Firestore. I need a before_model_callback / after_model_callback setup that redacts PII before it hits Gemini and before it gets saved or logged, plus scrubs tool call args. Should I be using Sensitive Data Protection (DLP) for this or Model Armor or both? Also what APIs/IAM/templates do I need to provision — we're terraforming everything. deadline is end of next sprint.\"},\n {\"kind\": \"fits\", \"text\": \"Quick q. Building a health intake assistant with google-adk. Users type symptoms, meds, DOB, insurance IDs etc. I want: 1) mask that before it's sent to the model and in our logs, 2) screen prompts + responses with Model Armor for jailbreak/sensitive data, 3) not break streaming (we stream partial responses to the frontend over SSE). How do I filter the streamed chunks without buffering the whole reply? Rough architecture + GCP setup pls.\"},\n {\"kind\": \"elsewhere\", \"text\": \"Hey — security review on our ADK agent came back and they want the Gemini API key and the Postgres password out of the .env file we bake into the container image. We're on GKE. What's the cleanest way to load those at runtime, and how do I rotate them without redeploying the agent? Kinda urgent, review is Thursday.\", \"needs_instead\": \"Secrets management for the application's own credentials (e.g., Secret Manager with Workload Identity on GKE, rotation strategy), not detecting or masking sensitive data that users type into the agent chat.\"}\n]}",
+ "reply_model": "claude-opus-5-5",
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 1036,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 608,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1036,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 608,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1036,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1036
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "cost_usd": 0.020456000000000002,
+ "duration_s": 10.0
+}

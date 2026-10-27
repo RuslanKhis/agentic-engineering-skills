@@ -1,0 +1,66 @@
+{
+ "short": "fastapi-backend",
+ "round": 1,
+ "model": "claude-opus-5-5",
+ "created": "2026-10-27T07:16:01+00:00",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-opus-5-5",
+  "--output-format",
+  "json",
+  "--system-prompt",
+  "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+  "--tools",
+  "",
+  "--safe-mode",
+  "--disable-slash-commands",
+  "--no-session-persistence",
+  "--strict-mcp-config",
+  "--setting-sources",
+  "",
+  "(prompt on stdin)"
+ ],
+ "cwd": "fresh empty temporary directory (tempfile.TemporaryDirectory)",
+ "system": "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+ "prompt": "The coding assistant is used by developers who build AI agents in Python with Google's Agent Development Kit, usually hosted on Google Cloud. Their requests may or may not mention that stack.\n\nHere is one kind of help the assistant can give:\n\n<brief>\nA web application is built around an AI agent, with a Python FastAPI server in front of it. The developer needs work on the server's ordinary application side rather than the chat itself: endpoints for the app's own records (projects, invoices, uploaded files), making sure each signed-in user sees only their own rows, database migrations that sit next to the tables the agent framework creates, publishing the API description and a generated client, cross-origin and security headers, and how the server process is run in a container.\n</brief>\n\nWrite three requests a developer might type to the assistant:\n- two that need exactly this kind of help;\n- one that sounds related but actually needs a different kind of help.\n\nWrite as real developers do: vary the tone (terse, chatty, frustrated, formal); make some vague and some full of detail that does not matter; mention their own project, code or deadline where natural. Do not reuse the wording of the brief. For the third request, say in plain words what kind of help it actually needs instead.\n\nAnswer with JSON only, in exactly this shape:\n{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"elsewhere\", \"text\": \"...\", \"needs_instead\": \"...\"}\n]}",
+ "reply_text": "{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"our fastapi app wraps an ADK agent and uses DatabaseSessionService on Cloud SQL postgres. I want to add alembic for our own tables (projects, invoices) but autogenerate keeps trying to drop the sessions/events/app_states tables ADK creates. how do I make alembic ignore those and only manage ours? also need a GET /projects that only returns rows owned by the current firebase user, right now anyone with a token can list everything lol\"},\n {\"kind\": \"fits\", \"text\": \"Hi! Deadline is Friday for our client demo (invoice-processing assistant, ADK agent behind FastAPI, deployed on Cloud Run). Frontend team on a separate domain keeps hitting CORS errors on the file upload endpoint, and security review flagged missing headers (HSTS, X-Content-Type-Options, CSP). Also they want a typed TypeScript client generated from our OpenAPI spec, but the spec currently dumps every internal route including the agent's /run_sse stuff. Can you help me clean up the spec, set up CORS + headers properly, and fix our Dockerfile? We're running plain `uvicorn main:app` with --reload in prod which I'm pretty sure is wrong.\"},\n {\"kind\": \"elsewhere\", \"text\": \"The agent in our FastAPI app keeps calling the lookup_invoice tool with the wrong customer id even when the user says it clearly in chat. Sometimes it just makes one up. I've tweaked the instruction string like 5 times. what am I doing wrong\", \"needs_instead\": \"Help with the agent's own behavior: prompt/instruction design, tool schemas and docstrings, and how the ADK agent passes conversation context into tool calls. This isn't work on the web server's records, auth or deployment.\"}\n]}",
+ "reply_model": "claude-opus-5-5",
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 1058,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 612,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1058,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 612,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1058,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1058
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "cost_usd": 0.020712,
+ "duration_s": 9.7
+}

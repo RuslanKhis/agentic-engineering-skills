@@ -25,7 +25,9 @@ backends = sys.modules["model_backends"]
 
 
 def make_root(base: Path) -> Path:
-    """A miniature repository: three skills and six activation cases."""
+    """A miniature repository: three skills and six activation cases.
+
+    alpha is in the dev split, gamma in heldout, and beta has no split field (dev)."""
     skills = {
         "alpha-skill": 'name: alpha-skill\ndescription: "Alpha work. Do not activate for beta work."',
         "beta-skill": "name: beta-skill\ndescription: >-\n  Beta work across\n  two lines.\nlicense: MIT",
@@ -35,11 +37,12 @@ def make_root(base: Path) -> Path:
         (base / "skills" / name).mkdir(parents=True)
         (base / "skills" / name / "SKILL.md").write_text(f"---\n{front}\n---\n\n# {name}\n")
     cases = []
+    splits = {"alpha-skill": {"split": "dev"}, "beta-skill": {}, "gamma-skill": {"split": "heldout"}}
     for skill in skills:
         cases.append({"id": f"{skill}-positive", "skill": skill, "prompt": f"Please do {skill} things.",
-                      "should_trigger": True, "rationale": "r"})
+                      "should_trigger": True, "rationale": "r", **splits[skill]})
         cases.append({"id": f"{skill}-near-miss", "skill": skill, "prompt": f"Not {skill} at all.",
-                      "should_trigger": False, "rationale": "r"})
+                      "should_trigger": False, "rationale": "r", **splits[skill]})
     (base / "evals").mkdir()
     (base / "evals" / "activation.json").write_text(json.dumps({"version": 1, "cases": cases}))
     return base
@@ -187,6 +190,12 @@ class RunAndResultsTests(unittest.TestCase):
                          ["beta-skill-positive", "gamma-skill-positive"])
         self.assertEqual(len(calls), 4)
         self.assertIn("| all | 8 | 0 | 4 | 0 |", stdout.getvalue())
+        self.assertEqual(results["split"], "all")
+        self.assertEqual(results["summary"]["by_split"],
+                         {"dev": {"PASS": 6, "PARTIAL": 0, "FAIL": 2, "ERROR": 0},
+                          "heldout": {"PASS": 2, "PARTIAL": 0, "FAIL": 2, "ERROR": 0}})
+        self.assertIn("| heldout | 2 | 0 | 2 | 0 |", stdout.getvalue())
+        self.assertIn("[gamma-skill, positive, heldout]", stdout.getvalue())
         row = results["cases"][0]
         for key in ("id", "skill", "should_trigger", "repeat", "primary", "supporting", "reason", "grade"):
             self.assertIn(key, row)
@@ -238,6 +247,49 @@ class RunAndResultsTests(unittest.TestCase):
             self.assertEqual({c["skill"] for c in cases}, {"beta-skill"})
             with self.assertRaises(act.InputError):
                 act.load_cases(root, ["no-such-skill"])
+
+    def test_split_filters_cases_and_reaches_results(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp))
+            _, whole = act.load_cases(root)
+            heldout, hashed = act.load_cases(root, split="heldout")
+            dev, _ = act.load_cases(root, split="dev")
+            self.assertEqual({c["id"] for c in heldout}, {"gamma-skill-positive", "gamma-skill-near-miss"})
+            self.assertEqual({c["skill"] for c in dev}, {"alpha-skill", "beta-skill"})
+            self.assertEqual(len(act.load_cases(root, split="all")[0]), 6)
+            self.assertEqual(hashed, whole)
+            with self.assertRaises(act.InputError):
+                act.load_cases(root, ["alpha-skill"], split="heldout")
+            original = act.call_model
+            act.call_model = lambda backend, prompt, system, model, timeout: backends.ModelReply(
+                text=json.dumps({"answers": [{"item": act.item_label(i), "primary": "none",
+                                              "supporting": [], "reason": "r"} for i in range(6)]}),
+                model=model)
+            try:
+                out = Path(tmp) / "heldout.json"
+                with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                    code = act.main(["--root", str(root), "--backend", "anthropic", "--split", "heldout",
+                                     "--out", str(out)])
+            finally:
+                act.call_model = original
+            self.assertEqual(code, 0)
+            results = json.loads(out.read_text())
+        self.assertEqual(results["split"], "heldout")
+        self.assertEqual(results["case_count"], 2)
+        self.assertEqual(set(results["summary"]["by_split"]), {"heldout"})
+        self.assertEqual({row["split"] for row in results["cases"]}, {"heldout"})
+
+    def test_import_refuses_a_different_split(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            exchange = Path(tmp) / "exchange"
+            with redirect_stdout(io.StringIO()):
+                act.main(["--root", str(root), "--backend", "files", "--split", "heldout",
+                          "--export", str(exchange)])
+            self.assertEqual(json.loads((exchange / "manifest.json").read_text())["split"], "heldout")
+            with redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
+                code = act.main(["--root", str(root), "--backend", "files", "--import", str(exchange)])
+        self.assertEqual(code, 2)
 
     def test_compare_reports_changes_and_new_fails(self):
         def results(grades):

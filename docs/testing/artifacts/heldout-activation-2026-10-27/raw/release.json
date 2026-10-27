@@ -1,0 +1,66 @@
+{
+ "short": "release",
+ "round": 1,
+ "model": "claude-opus-5-5",
+ "created": "2026-10-27T07:16:12+00:00",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-opus-5-5",
+  "--output-format",
+  "json",
+  "--system-prompt",
+  "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+  "--tools",
+  "",
+  "--safe-mode",
+  "--disable-slash-commands",
+  "--no-session-persistence",
+  "--strict-mcp-config",
+  "--setting-sources",
+  "",
+  "(prompt on stdin)"
+ ],
+ "cwd": "fresh empty temporary directory (tempfile.TemporaryDirectory)",
+ "system": "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+ "prompt": "The coding assistant is used by developers who build AI agents in Python with Google's Agent Development Kit, usually hosted on Google Cloud. Their requests may or may not mention that stack.\n\nHere is one kind of help the assistant can give:\n\n<brief>\nA team ships changes to a live AI agent regularly: wording of the guidance it gives the model, model versions, helper-function definitions and configuration. They want those versioned together, automatic quality checks in their build pipeline that block a bad change, gradual rollout to part of the traffic with the ability to undo everything together, a plan for when the model provider announces a version shutdown, and test sets that stay current with what real users ask.\n</brief>\n\nWrite three requests a developer might type to the assistant:\n- two that need exactly this kind of help;\n- one that sounds related but actually needs a different kind of help.\n\nWrite as real developers do: vary the tone (terse, chatty, frustrated, formal); make some vague and some full of detail that does not matter; mention their own project, code or deadline where natural. Do not reuse the wording of the brief. For the third request, say in plain words what kind of help it actually needs instead.\n\nAnswer with JSON only, in exactly this shape:\n{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"elsewhere\", \"text\": \"...\", \"needs_instead\": \"...\"}\n]}",
+ "reply_text": "{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"ok so we got the email from google that gemini-2.0-flash-001 is getting retired in like 4 months and our support agent (ADK, running on Cloud Run) is pinned to it. last time we bumped a model version someone also tweaked the system instruction in the same PR and we had no idea which change broke the refund tool calls. I want a proper setup: prompt + model id + tool schemas + config all versioned as one bundle, eval gate in Cloud Build that fails the build if our golden set scores drop, then canary like 10% traffic and roll the whole bundle back in one go if it goes sideways. where do I even start\"},\n {\"kind\": \"fits\", \"text\": \"Formal request: our team maintains an ADK-based claims-intake agent on Vertex AI Agent Engine. Currently prompts live in a Python constants file, tool definitions in another module, and model settings in Terraform, so a release is three uncoordinated changes. Please propose a release process covering (1) a single versioned artifact for instructions, model, tool definitions and generation config, (2) automated evaluation in CI that blocks merges on regression, (3) staged traffic rollout with atomic rollback, and (4) a way to refresh our eval dataset from anonymized production conversations, since the current 80 test cases were written in January and nobody asks those questions anymore. Deadline for the design doc is end of next sprint.\"},\n {\"kind\": \"elsewhere\", \"text\": \"our ADK agent keeps calling the lookup_order tool twice in a row with the same args and I think it's because the tool docstring is confusing the model?? we deploy to staging tonight, can you look at agent.py and tell me why it's looping\", \"needs_instead\": \"Debugging a specific tool-calling loop in the agent code (tool description/return handling, agent instructions), not setting up versioning, CI eval gates, or rollout processes.\"}\n]}",
+ "reply_model": "claude-opus-5-5",
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 1045,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 634,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1045,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 634,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1045,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1045
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "cost_usd": 0.021047999999999997,
+ "duration_s": 10.8
+}
