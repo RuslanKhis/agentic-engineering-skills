@@ -2000,6 +2000,54 @@
       "should_trigger": false,
       "rationale": "A telemetry pipeline and a latency alert are adk-agent-observability's; no content policy or personal data is in question.",
       "split": "dev"
+    },
+    {
+      "id": "workflow-checkpoint-invalidation-positive",
+      "skill": "adk-workflow-design",
+      "prompt": "We edited one source document after our ADK pipeline had saved its extraction and draft stages. Make the route continue from the saved stages that are still valid and redo only the stages that depend on the changed input.",
+      "should_trigger": true,
+      "rationale": "Qualifying saved stages for reuse and invalidating the ones downstream of a changed input is the checkpoint contract in adk-workflow-design.",
+      "split": "dev"
+    },
+    {
+      "id": "workflow-checkpoint-storage-positive",
+      "skill": "adk-workflow-design",
+      "prompt": "Our ADK pipeline's review output validates, but writing it to the checkpoint store fails because it is over the size limit. Make it fit without dropping any evidence, and fail before the next paid stage if it cannot.",
+      "should_trigger": true,
+      "rationale": "A checkpoint too large for its store, with evidence preserved and failure before downstream dispatch, is adk-workflow-design's checkpoint contract.",
+      "split": "dev"
+    },
+    {
+      "id": "workflow-durable-wait-positive",
+      "skill": "adk-workflow-design",
+      "prompt": "Our ADK claims agent waits up to a week for a supervisor's sign-off, and a pod restart during the wait re-ran a payment tool. Decide between ADK's own resume and a durable execution engine such as Temporal, and prove the choice with a test.",
+      "should_trigger": true,
+      "rationale": "Choosing ADK resume or a durable-execution engine for a run that waits days across restarts is workflow runtime semantics; safe-api may support the re-run write.",
+      "split": "dev"
+    },
+    {
+      "id": "workflow-warning-only-correction-positive",
+      "skill": "adk-workflow-design",
+      "prompt": "The reviewer in our ADK drafting pipeline raised only a wording warning. Apply that correction so the decision, reasons and conditions stay exactly the same, and bring the stored review in line with the new draft revision.",
+      "should_trigger": true,
+      "rationale": "A warning-only writer correction that preserves the decision and re-qualifies the stored review is adk-workflow-design's review contract.",
+      "split": "dev"
+    },
+    {
+      "id": "workflow-approval-tiering-near-miss",
+      "skill": "adk-workflow-design",
+      "prompt": "Decide which of our ADK agent's refund actions must wait for a manager, and keep a durable record of each review decision with its approver and timestamp.",
+      "should_trigger": false,
+      "rationale": "Which actions wait and the durable review record belong to adk-operational-guardrails; no resume semantics or engine choice is asked for.",
+      "split": "dev"
+    },
+    {
+      "id": "workflow-staged-repair-plan-near-miss",
+      "skill": "adk-workflow-design",
+      "prompt": "The final stage of our paid ADK pipeline failed after the earlier stages succeeded. Without paying for those again, plan the smallest next run and the checks we need before we release.",
+      "should_trigger": false,
+      "rationale": "Repairing a failed stage as a validation plan (smallest next run, checks before release) is adk-agent-evaluation; nothing about the checkpoint itself changed.",
+      "split": "dev"
     }
   ]
 }
