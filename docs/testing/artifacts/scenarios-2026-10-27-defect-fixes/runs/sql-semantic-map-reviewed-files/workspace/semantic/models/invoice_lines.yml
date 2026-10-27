@@ -1,0 +1,11 @@
+name: invoice_lines
+table_reference: {project: fernhill-analytics, dataset: sales, table: invoice_lines}
+primary_key: [invoice_id, line_no]
+columns:
+  - {name: invoice_id}
+  - {name: line_no}
+  - {name: sku}
+  - {name: quantity}
+  - {name: net_amount_gbp}
+reviewed_by: null
+reviewed_on: null

@@ -1,0 +1,187 @@
+{
+ "created": "2026-10-27T12:22:05+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a787739fdce538787",
+ "commit": "c297ef126cd683f22e34f558566b28cea9056d42",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "interoperability-expose-and-register-a2a",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/interoperability-expose-and-register-a2a/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "agent_card_check.py needs a shell; graded on validation proposed or done by reading.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-agent-security",
+    "deploy-adk-on-google-cloud",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "interoperability-expose-mcp-server-with-conformance-baseline",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/interoperability-expose-mcp-server-with-conformance-baseline/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The agent has no shell; helper scripts it names can only be proposed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-release-engineering",
+    "adk-agent-security"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "interoperability-exposed-agent-forgets-on-modern-clients",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/interoperability-exposed-agent-forgets-on-modern-clients/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The agent has no shell; helper scripts it names can only be proposed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-agent-evaluation",
+    "deploy-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "interoperability-mcp-app-widget-to-custom-frontend",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/interoperability-mcp-app-widget-to-custom-frontend/situation.md"
+    }
+   ],
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-agent-interoperability",
+    "adk-frontend-integration",
+    "adk-agent-security"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "interoperability-verify-signed-agent-card",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/interoperability-verify-signed-agent-card/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "agent_card_check.py needs a shell; the sample signed card is in docs/partner/.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-agent-security",
+    "adk-tool-auth-and-secrets",
+    "deploy-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "observability-handover-and-postmortem",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/observability-handover-and-postmortem/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-observability",
+    "adk-engineer",
+    "deploy-adk-on-google-cloud",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "release-bigquery-analytics-score-gate-and-drift",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/release-bigquery-analytics-score-gate-and-drift/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-release-engineering",
+    "adk-agent-observability",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "release-post-launch-quality-loop-aqua",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/release-post-launch-quality-loop-aqua/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The agents-cli-aqua skill is absent, as the context says.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-release-engineering",
+    "adk-agent-evaluation",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

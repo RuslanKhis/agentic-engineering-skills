@@ -1,0 +1,18 @@
+name: revenue
+description: Invoiced revenue by customer, product line and month.
+tables:
+  invoices: [invoice_id, customer_id, invoice_date, currency, status]
+  invoice_lines: [invoice_id, line_no, sku, quantity, net_amount_gbp]
+  customers: [customer_id, account_name, region, account_manager]
+relationships: [invoice_lines_to_invoices, invoices_to_customers]
+derived:
+  # Read-only SQL over this domain's tables only; the CI check parses it with the same policy
+  # that gates the author's candidate.
+  monthly_net_revenue: >-
+    SELECT i.customer_id, DATE_TRUNC(i.invoice_date, MONTH) AS month,
+    SUM(l.net_amount_gbp) AS net_revenue_gbp
+    FROM `fernhill-analytics.sales.invoices` i
+    JOIN `fernhill-analytics.sales.invoice_lines` l USING (invoice_id)
+    WHERE i.status = 'posted' GROUP BY 1, 2
+reviewed_by: null
+reviewed_on: null

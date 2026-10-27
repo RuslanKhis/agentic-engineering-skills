@@ -1,0 +1,41 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - run: pip install -e . -c ci/constraints.txt
+      - run: python -m unittest discover -s tests -t .
+
+  # Protocol conformance of the exposed MCP server, one run per spec revision, pinned suite.
+  conformance:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        revision: ["2025-11-25", "2026-07-28"]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - run: pip install -e . -c ci/constraints.txt
+      - run: bash ci/conformance.sh "${{ matrix.revision }}"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: conformance-${{ matrix.revision }}
+          path: ci/out/${{ matrix.revision }}

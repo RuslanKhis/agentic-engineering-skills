@@ -1,0 +1,34 @@
+{
+  "protocolVersion": "0.3.0",
+  "name": "research_lead",
+  "description": "Market and competitor research for the sales team: sizes markets and growth from published analyst reports. Read-only; it does not purchase reports.",
+  "url": "https://SERVICE_HOST",
+  "preferredTransport": "JSONRPC",
+  "version": "0.9.0",
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false,
+    "stateTransitionHistory": false
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain"],
+  "skills": [
+    {
+      "id": "market_research",
+      "name": "Market research",
+      "description": "Answer market size and growth questions from the catalogue of published analyst reports.",
+      "tags": ["market", "research", "reports"],
+      "examples": ["How large is the EU e-bike market in 2026?"],
+      "inputModes": ["text/plain"],
+      "outputModes": ["text/plain"]
+    }
+  ],
+  "securitySchemes": {
+    "google_oidc": {
+      "type": "openIdConnect",
+      "openIdConnectUrl": "https://accounts.google.com/.well-known/openid-configuration"
+    }
+  },
+  "security": [{"google_oidc": []}],
+  "supportsAuthenticatedExtendedCard": false
+}

@@ -1,0 +1,125 @@
+{
+ "created": "2026-10-27T12:21:12+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a787739fdce538787",
+ "commit": "2fefb5707ecede1513af3f77c2d361954b94a463",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "evaluation-bound-spans-versus-model-paraphrase",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-bound-spans-versus-model-paraphrase/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "google-adk is not installed; the served ADK route can only be reported as not run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-progressive-downstream-repair",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-progressive-downstream-repair/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "No shell: the agent can read the counters and saved runs but cannot execute the continuation.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-workflow-design",
+    "adk-operational-guardrails"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-collateral-damage-no-op-control",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-collateral-damage-no-op-control/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Standalone expense agent; Runner case tests skip without google-adk.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-agent-interoperability",
+    "adk-release-engineering"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "release-coding-agent-capability-diff-gate",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/release-coding-agent-capability-diff-gate/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The agent has no shell; helper scripts it names can only be proposed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-release-engineering",
+    "adk-agent-security",
+    "adk-agent-interoperability",
+    "adk-agent-evaluation",
+    "deploy-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "interoperability-consume-enterprise-mcp-server-registration-and-sso",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/interoperability-consume-enterprise-mcp-server-registration-and-sso/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-tool-auth-and-secrets",
+    "adk-tool-interface-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

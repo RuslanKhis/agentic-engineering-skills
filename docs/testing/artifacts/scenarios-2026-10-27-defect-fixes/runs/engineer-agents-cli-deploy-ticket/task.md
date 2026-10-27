@@ -1,0 +1,6 @@
+Work through docs/tickets/G06.md: get this Agents CLI project onto Agent Runtime for the pilot. The generated Terraform should stay in charge of the engine. Check things locally, fill in Evidence, and don't deploy anything until I've approved the exact command.
+
+---
+Situation (from the person asking): An Agents CLI 1.11.0 project: agents-cli-manifest.yaml with agent_runtime_identity_default: agent_identity, deployment/terraform/single-project, a deployment_metadata.json from an earlier imperative agents-cli deploy to a dev engine, and tests. The ticket names deploy-adk-on-google-cloud as primary and google-agents-cli-deploy as supporting. No cloud mutation is authorised.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

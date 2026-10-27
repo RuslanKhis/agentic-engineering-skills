@@ -1,0 +1,471 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T19:49:25+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/b4/aes-scenarios-yiiqozq_",
+ "commit": "c297ef126cd683f22e34f558566b28cea9056d42",
+ "scenarios_sha256": "08bdfd0448ee19392db60de134e5699ca35943f4d306f794b168ae661b5138c7",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "plain-adk-no-scaffold",
+   "expected_primary": "adk-workflow-design",
+   "fixture_status": "repo-fixture",
+   "note": "The optional Agents CLI skills are not in this repository, so they are not installed.",
+   "skills_missing": [
+    "google-agents-cli-workflow",
+    "google-agents-cli-scaffold"
+   ],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0497,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Chooses workflow guidance for concurrency, handoffs and terminal failure behavior.",
+     "verdict": "PASS",
+     "quote": "Replace the two sequential readers with a `ParallelAgent` of the two readers, followed by the `LlmAgent` summary step in the same `SequentialAgent`.",
+     "quote_found": true,
+     "reason": "It loaded adk-workflow-design and planned a workflow structure covering concurrency, handoff to the summary and failure propagation.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Keeps the repository's package manager, public contracts and deployment conventions.",
+     "verdict": "PASS",
+     "quote": "`build_summary_flow()` keeps its signature.",
+     "quote_found": true,
+     "reason": "The plan keeps the signature, the success shape and the deployment/dependency files; nothing was changed in any case.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Does not scaffold, enhance, upgrade or convert the project merely because those optional capabilities are installed.",
+     "verdict": "PASS",
+     "quote": "I haven't run any tests or installed anything.",
+     "quote_found": true,
+     "reason": "No scaffolding, upgrade or conversion was proposed or done.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Tests actual concurrent execution and the failed-branch boundary through the relevant runtime seam.",
+     "verdict": "FAIL",
+     "quote": "Add offline unittest cases with a scripted model. One checks that both reads overlap, using a barrier or event.",
+     "quote_found": true,
+     "reason": "Tests are only planned; no files were written, so nothing was tested.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Preserves real failure evidence rather than replacing an unavailable report with fabricated fallback data.",
+     "verdict": "FAIL",
+     "quote": "Remove the `except Exception: orders = []` and `tickets = []` fallbacks in `app/summary.py`",
+     "quote_found": true,
+     "reason": "The plan to preserve failure evidence is stated but not implemented; no changes were made.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2324,
+   "files": [],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 26.7,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 10,
+    "total_cost_usd": 0.09136680000000001,
+    "duration_ms": 25498,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-workflow-design"
+    ],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-workflow-design": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [
+     {
+      "tool": "Read",
+      "input": "{\"file_path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/b4/aes-scenarios-yiiqozq_/plain-adk-no-scaffold/app/tools/tickets.py\"}"
+     },
+     {
+      "tool": "Read",
+      "input": "{\"file_path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/b4/aes-scenarios-yiiqozq_/plain-adk-no-scaffold/app/tools/orders.py\"}"
+     }
+    ],
+    "tool_calls": 8,
+    "catalogue": [
+     "adk-engineer",
+     "adk-workflow-design",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-workflow-design": true
+   }
+  },
+  {
+   "id": "workflow-checkpoint-dependency-invalidation",
+   "expected_primary": "adk-workflow-design",
+   "fixture_status": "repo-fixture",
+   "note": "Three retained runs and a resume path over the document pipeline; google-adk is not installed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.161,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Qualifies an unchanged checkpoint through trusted owner and complete dependency identity rather than merely finding a saved value.",
+     "verdict": "FAIL",
+     "quote": "I did not compare the manifests' `instructions_sha256` or `schema_sha256`, because I couldn't compute them here",
+     "quote_found": true,
+     "reason": "Qualification uses source manifest and prompt version/model labels but omits schema/instruction hashes, producer code version and owner, so dependency identity is incomplete.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Rejects each changed-input/config/schema/code/projection checkpoint and invalidates its affected descendants before dispatch while preserving the unaffected branch control.",
+     "verdict": "FAIL",
+     "quote": "an edit to a prompt without a version bump would go unnoticed",
+     "quote_found": true,
+     "reason": "Not every changed dependency (schema, code, temperature, etc.) is rejected; only source, constraints, model and prompt version are checked, with no per-dependency mutation tests.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Rejects stale reviews after draft/frame/invocation/image changes and prevents a concurrent changed draft from committing an old review.",
+     "verdict": "FAIL",
+     "quote": "It now refuses to export a review that was made of an older draft.",
+     "quote_found": true,
+     "reason": "Stale review after draft change is rejected and publish is fenced by revision, but frame/invocation/image changes are not checked and no concurrent-commit fence exists at review save time.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Retains immutable originals and separately linked continuations; diagnostic edited responses cannot become authoritative producer or publication evidence.",
+     "verdict": "PASS",
+     "quote": "`runs/` is never edited. Any write goes to a new `<run>-cN` directory holding copies of the stages that still qualify, plus a manifest listing what was kept and what was invalidated.",
+     "quote_found": true,
+     "reason": "Originals are kept immutable with linked continuations, and diagnostics are never read.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Exercises positive reuse controls and actual boundary effects, without claiming exactly-once execution from hashes or framework checkpoints.",
+     "verdict": "FAIL",
+     "quote": "I couldn't run anything, because this session has no shell, so none of it has been run",
+     "quote_found": true,
+     "reason": "Tests were written with positive control and send counts but never executed, so boundary effects were not actually exercised.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.93,
+   "unstable": [
+    3
+   ],
+   "final_chars": 3879,
+   "files": [
+    "pipeline/adk_app.py",
+    "pipeline/resume.py",
+    "tests/test_resume.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 239.3,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 44,
+    "total_cost_usd": 0.6129418999999999,
+    "duration_ms": 238120,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [
+     "adk-workflow-design/references/checkpoint-reuse.md"
+    ],
+    "skill_md_loaded": {
+     "adk-workflow-design": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     }
+    },
+    "permission_denials": [
+     {
+      "tool": "Write",
+      "input": "{\"file_path\": \"/tmp/probe_hashes.py\", \"content\": \"import sys, hashlib, json\\nsys.path.insert(0, sys.argv[1])\\nfrom pathlib import Path\\nfrom pipeline import prompts, schemas\\nfrom pipeline.sources import *\\nroot = Path(sys.argv[1])\\nfor c in (\\\"0141\\\", \\\"0147\\\", \\\"0152\\\"):\\n    case = load_case(root"
+     }
+    ],
+    "tool_calls": 43,
+    "catalogue": [
+     "adk-workflow-design",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-workflow-design": false
+   }
+  }
+ ]
+}

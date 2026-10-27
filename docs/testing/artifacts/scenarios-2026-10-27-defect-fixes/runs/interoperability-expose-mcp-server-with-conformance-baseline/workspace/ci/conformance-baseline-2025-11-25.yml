@@ -1,0 +1,9 @@
+# Expected conformance failures for the exposed research agent, requirements 2025-11-25.
+# UNSEEDED
+# Fixture-dependent scenarios (tools-call-image/audio/embedded-resource/mixed-content/logging/
+# progress/sampling/elicitation, elicitation-*, resources-read-*, resources-templates-read,
+# resources-subscribe, prompts-get-*, completion-complete, logging-set-level, json-schema-2020-12)
+# are expected to fail on this server; exact scenario and check ids are not known until the
+# first run. Record them from ci/out/2025-11-25, add each with a reason, then delete the
+# UNSEEDED line above to start gating.
+server: []

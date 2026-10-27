@@ -1,0 +1,6 @@
+We use someone else's remote MCP server, and CI compares its list of tools against a saved copy. Security wants the findings written up using the OWASP MCP Top 10, and they're asking what happens if the server quietly changes a tool's description after we've deployed. We also run a local PDF MCP server inside the same Cloud Run container.
+
+---
+Situation (from the person asking): ADK 2.12 agent; McpToolset over Streamable HTTP with a list tool_filter and tool_list_cache_ttl_seconds=None; committed mcp_tool_inventory manifest checked in CI; a second McpToolset uses StdioConnectionParams inside the agent container. No network in the session.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

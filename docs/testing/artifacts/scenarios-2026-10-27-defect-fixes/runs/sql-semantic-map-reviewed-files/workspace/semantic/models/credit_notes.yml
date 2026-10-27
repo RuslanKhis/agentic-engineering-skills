@@ -1,0 +1,11 @@
+name: credit_notes
+table_reference: {project: fernhill-analytics, dataset: sales, table: credit_notes}
+primary_key: [credit_note_id]
+columns:
+  - {name: credit_note_id}
+  - {name: invoice_id}
+  - {name: issued_on}
+  - {name: amount_gbp}
+  - {name: reason_code}
+reviewed_by: null
+reviewed_on: null

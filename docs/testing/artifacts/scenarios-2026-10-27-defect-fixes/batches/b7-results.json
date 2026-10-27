@@ -1,0 +1,775 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T19:55:51+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/b7/aes-scenarios-9cj25z3x",
+ "commit": "c297ef126cd683f22e34f558566b28cea9056d42",
+ "scenarios_sha256": "08bdfd0448ee19392db60de134e5699ca35943f4d306f794b168ae661b5138c7",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "portability-ticket-carried-out",
+   "expected_primary": "adk-portability-planning",
+   "fixture_status": "repo-fixture",
+   "note": "check_portability.py needs a shell, and official sources cannot be re-read without network.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-portability-planning",
+    "adk-system-designer",
+    "deploy-adk-on-google-cloud",
+    "adk-model-and-output-contracts"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.2106,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Reads the design and the plan before writing.",
+     "verdict": "PASS",
+     "quote": "Facts marked inspected were read in `claims/agent.py` and `claims/tools.py`; the rest is design-only.",
+     "quote_found": true,
+     "reason": "The document cites design IDs, plan goals and the scope gate, showing both design and plan were read before writing.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Writes docs/portability/claims.md from the skill's template with every required section.",
+     "verdict": "FAIL",
+     "quote": "",
+     "quote_found": false,
+     "reason": "The 15 template sections cannot be confirmed: the document lacks an explicit section for design hash or evidence, and the final answer admits the hash was not recorded and the checker was not run.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Classifies each component as shared logic, a replaceable adapter, provider-specific by choice or an expensive dependency, citing the design's IDs.",
+     "verdict": "PASS",
+     "quote": "| Memory Bank and `PreloadMemoryTool` | D1, C2, R2 | expensive dependency |",
+     "quote_found": true,
+     "reason": "Every component is classified into one of the four classes with design IDs cited.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Assesses cloud, agent framework, model, service and deployment portability separately, each assessed or marked not a concern with a reason.",
+     "verdict": "PASS",
+     "quote": "| Deployment | Not a concern: one Cloud Run container behind the existing load balancer, no Agent Runtime features used (D6), so the image rehosts. |",
+     "quote_found": true,
+     "reason": "All five dimensions are covered, each either assessed or marked not a concern with a reason.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Compares the AWS and Azure alternatives and a small set of agent frameworks, with ADK first, citing official sources with their read dates.",
+     "verdict": "PASS",
+     "quote": "No web access was available in this session, so no source was re-verified. Each URL below is taken from the skill's reference notes, which record the read date shown.",
+     "quote_found": true,
+     "reason": "The document compares AWS, Azure and LangGraph with ADK as the baseline column, citing official sources with a 2026-10-26 read date.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 6,
+     "assertion": "Gives relative effort as small, medium, large, very large or unknown with stated drivers, sizing by the largest driver, and invents no hours, prices or dates.",
+     "verdict": "PASS",
+     "quote": "| Whole-system move to AWS | very large | Model, memory, retrieval, data and identity all change together; needs its own plan |",
+     "quote_found": true,
+     "reason": "Effort uses the allowed scale with stated drivers, sized by the combined drivers, and no hours, prices or dates are invented.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 7,
+     "assertion": "Runs check_portability.py with --design and --plan and fixes its errors before finishing.",
+     "verdict": "FAIL",
+     "quote": "Checker: NOT RUN (no shell).",
+     "quote_found": true,
+     "reason": "The checker was named with --design and --plan but not run, and the answer says so; the rubric note allows credit for naming it and saying it was not run, yet the assertion requires running and fixing errors, and the answer itself calls this undone.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 8,
+     "assertion": "Leaves the design and every other goal unchanged and writes no application code, Terraform, IAM policy or Kubernetes manifest.",
+     "verdict": "PASS",
+     "quote": "Status left at `ready`: it becomes `verified_local` only when the checker passes and the design hash matches.",
+     "quote_found": true,
+     "reason": "Only docs/portability/claims.md and the G07 ticket's Evidence section were changed; no code, Terraform, IAM or manifests were written.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    }
+   ],
+   "passed": 6,
+   "total": 8,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    7,
+    8
+   ],
+   "final_chars": 3243,
+   "files": [
+    "docs/portability/claims.md",
+    "docs/tickets/claims/G07.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 173.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 20,
+    "total_cost_usd": 0.5827779,
+    "duration_ms": 171798,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-portability-planning"
+    ],
+    "skill_files_read": [
+     "adk-portability-planning/assets/portability-assessment-template.md",
+     "adk-portability-planning/references/principles.md",
+     "adk-portability-planning/references/aws.md",
+     "adk-portability-planning/references/azure.md",
+     "adk-portability-planning/references/agent-frameworks.md",
+     "adk-portability-planning/scripts/check_portability.py"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-portability-planning": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 6
+     },
+     "adk-system-designer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-model-and-output-contracts": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 18,
+    "catalogue": [
+     "adk-engineer",
+     "adk-model-and-output-contracts",
+     "adk-portability-planning",
+     "adk-system-designer",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-portability-planning": true,
+    "adk-system-designer": false,
+    "deploy-adk-on-google-cloud": false,
+    "adk-model-and-output-contracts": false
+   }
+  },
+  {
+   "id": "presenter-poc-review-evidence-only",
+   "expected_primary": "adk-presenter",
+   "fixture_status": "repo-fixture",
+   "note": "The deck check needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-presenter",
+    "adk-system-designer",
+    "adk-agent-evaluation",
+    "adk-engineer"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.178,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Opens with the decision requested and the result against the pre-agreed success criteria, taking every number from the plan's recorded evidence and citing the goal or acceptance ID under each claim.",
+     "verdict": "PASS",
+     "quote": "Three of four agreed criteria met. Refunds unproven. Spend £386.",
+     "quote_found": true,
+     "reason": "The deck opens with the result against S1-S4 and cites M/G IDs under each slide; derived figures (7.7%, 2.5-7.0%, £0.91) are labelled as the agent's own estimates, though they add numbers beyond the record.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "States the two not-run acceptance cases and the open delegation decision as limits on the slides themselves rather than omitting them, and labels any projected production benefit as a hypothesis.",
+     "verdict": "PASS",
+     "quote": "Not run: shopper pointed to checkout if the delivery service is down (G02/A3).",
+     "quote_found": true,
+     "reason": "Both not-run cases and the open D6 decision appear on slides, and value in pounds and production cost are stated as not measured rather than projected.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Writes a stage-appropriate outline (criteria results, what was learned, production scope, cost, risks, the ask), the spoken narrative and a question list for a business audience, and keeps architecture detail for the technical version.",
+     "verdict": "PASS",
+     "quote": "Expected questions and where the record answers them",
+     "quote_found": true,
+     "reason": "The deck has criteria, learned, scope, cost, risks and ask slides, with spoken notes and a question slide, and leaves technical detail to a separate version.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Runs or describes the deck check so that every slide carries an evidence citation, and produces a one-page decision memo with the decision, owners and the date.",
+     "verdict": "PASS",
+     "quote": "The deck check hasn't been run. The slide and notes word budgets and the spoken-time estimate are unverified, so please run `check_deck.py` before using the deck.",
+     "quote_found": true,
+     "reason": "It names the checker and says it was not run, every slide has an Evidence line, and the memo carries the decision, owner and a date marked to be confirmed because none is recorded.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Does not modify application code, rerun evaluations or invent a demo result to fill a gap in evidence.",
+     "verdict": "PASS",
+     "quote": "No demo: none is recorded, so the deck says so and shows the measured results instead.",
+     "quote_found": false,
+     "reason": "Only presentation files were written under docs/presentations, with no code changes, no reruns and no invented demo.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 5,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3206,
+   "files": [
+    "docs/presentations/campaign-assistant/decision-memo-production-approval.md",
+    "docs/presentations/campaign-assistant/pre-wiring-production-approval.md",
+    "docs/presentations/campaign-assistant/production-approval-business.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 150.6,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 16,
+    "total_cost_usd": 0.3974647,
+    "duration_ms": 149480,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-presenter"
+    ],
+    "skill_files_read": [
+     "adk-presenter/assets/deck-format.md",
+     "adk-presenter/references/stage-outlines.md",
+     "adk-presenter/references/storyline.md",
+     "adk-presenter/references/speech.md",
+     "adk-presenter/assets/decision-memo-template.md"
+    ],
+    "skill_md_loaded": {
+     "adk-presenter": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 5
+     },
+     "adk-system-designer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 14,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-engineer",
+     "adk-presenter",
+     "adk-system-designer",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-presenter": true,
+    "adk-system-designer": false,
+    "adk-agent-evaluation": false,
+    "adk-engineer": false
+   }
+  },
+  {
+   "id": "presenter-monthly-value-report",
+   "expected_primary": "adk-presenter",
+   "fixture_status": "repo-fixture",
+   "note": "check_value_report.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-presenter",
+    "adk-agent-observability",
+    "adk-engineer"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0696,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Reads references/value-report.md and writes one page from assets/value-report-template.md, not a deck.",
+     "verdict": "PASS",
+     "quote": "adk-presenter/references/value-report.md, adk-presenter/assets/value-report-template.md",
+     "quote_found": true,
+     "reason": "Both the reference and the template were read, and a single-page markdown report was written (stated as 'One page for the sponsor'), not a deck.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Cites an M or I record for every figure and keeps estimates on lines opening with Estimate.",
+     "verdict": "FAIL",
+     "quote": "We estimate this by dividing £512 by 1,184. Cost per accepted-unchanged draft (about 817 drafts, 69% of 1,184) would be about £0.63; we estimate this",
+     "quote_found": true,
+     "reason": "Estimates appear on lines that do not open with Estimate (the Actual line), and some figures cite the brief rather than an M or I record, so the convention is not followed throughout.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Runs scripts/check_value_report.py and reports the missing baseline and the stale August window rather than hiding them.",
+     "verdict": "FAIL",
+     "quote": "I couldn't run `check_value_report.py` because this session has no shell tool.",
+     "quote_found": true,
+     "reason": "The checker was not run; the report did disclose the unmeasured September counter-metric and the August-only M3 window, but the assertion requires running the checker, and the missing M2 baseline field was not named.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Ends with a stop, continue or scale call naming the brief's decider and the figure or threshold it rests on.",
+     "verdict": "PASS",
+     "quote": "Helen Okafor decides by 2026-11-04 (assumed; see questions). Continue is recommended: the stop threshold did not fire (M2)",
+     "quote_found": true,
+     "reason": "The call is continue, names Helen Okafor as decider, rests on M2 13 minutes against the 15-minute threshold, and avoids a scale call.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    3
+   ],
+   "final_chars": 1993,
+   "files": [
+    "docs/plans/claims.md",
+    "docs/presentations/claims/value-report-2026-09.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 46.5,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 14,
+    "total_cost_usd": 0.16298610000000002,
+    "duration_ms": 45295,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-presenter"
+    ],
+    "skill_files_read": [
+     "adk-presenter/references/value-report.md",
+     "adk-presenter/assets/value-report-template.md"
+    ],
+    "skill_md_loaded": {
+     "adk-presenter": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 12,
+    "catalogue": [
+     "adk-agent-observability",
+     "adk-engineer",
+     "adk-presenter",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-presenter": true,
+    "adk-agent-observability": false,
+    "adk-engineer": false
+   }
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+name: products
+table_reference: {project: fernhill-analytics, dataset: sales, table: products}
+primary_key: [sku]
+columns:
+  - {name: sku}
+  - {name: product_line}
+  - {name: description}
+  - {name: list_price_gbp}
+  - {name: discontinued}
+reviewed_by: null
+reviewed_on: null

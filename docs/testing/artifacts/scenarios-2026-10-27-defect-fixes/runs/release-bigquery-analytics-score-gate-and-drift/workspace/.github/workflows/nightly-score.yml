@@ -1,0 +1,43 @@
+name: nightly-score
+# Scores the last 24 h of production sessions. Fails the job on exit 1 (scores failed)
+# and on exit 2 (could not score): "not run" blocks, it is never a pass.
+# Needs repository variables GCP_WIF_PROVIDER and GCP_SCORER_SA (read-only BigQuery
+# service account) and thresholds filled in ops/score_gate.json. Until then it fails as not run.
+on:
+  schedule:
+    - cron: "20 0 * * *"   # UTC, just after the day boundary
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  score:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SCORER_SA }}
+      - run: pip install "bigquery-agent-analytics==0.6.1"
+      - name: Score and write the record
+        run: |
+          set +e
+          python ops/score_gate.py run --config ops/score_gate.json --record release/score_gate_record.json
+          rc=$?
+          case "$rc" in
+            0) echo "score gate passed" ;;
+            1) echo "::error::production score gate FAILED: release blocked" ;;
+            *) echo "::error::production score gate NOT RUN (exit $rc): release blocked" ;;
+          esac
+          exit "$rc"
+      - name: Keep the record
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: score-gate-record-${{ github.run_id }}
+          path: release/score_gate_record.json
+          if-no-files-found: error

@@ -1,0 +1,130 @@
+{
+ "created": "2026-10-27T12:21:13+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a787739fdce538787",
+ "commit": "2fefb5707ecede1513af3f77c2d361954b94a463",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "mcp-rug-pull-runtime-pin-and-mcp-ids",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/mcp-rug-pull-runtime-pin-and-mcp-ids/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "adk-agent-interoperability",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "engineer-agents-cli-focused-memory-1-11",
+   "status": "repo-fixture",
+   "copy": [
+    {
+     "from": "evals/fixtures/existing-agents-cli-focused-memory",
+     "to": "."
+    }
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-agents-cli-focused-memory-1-11/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The google-agents-cli-* skills named in available_skills are external and not installed.",
+   "skills_missing": [
+    "google-agents-cli-adk-code",
+    "google-agents-cli-workflow",
+    "google-agents-cli-eval"
+   ],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "engineer-ticket-creates-cloud-sql",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-ticket-creates-cloud-sql/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "No gcloud, credentials or shell: instance creation and the dry run cannot execute in the run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "deploy-adk-on-google-cloud",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "memory-write-back-loop-from-horizon",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/memory-write-back-loop-from-horizon/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "SDK-dependent tests skip: google-adk is not installed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-agent-evaluation",
+    "optimise-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "web-backend-deploy-routes-to-deploy",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-web"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/web-backend-deploy-routes-to-deploy/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "deploy-adk-on-google-cloud",
+    "adk-fastapi-backend",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

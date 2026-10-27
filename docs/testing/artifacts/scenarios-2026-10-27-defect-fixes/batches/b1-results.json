@@ -1,0 +1,1797 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T19:49:56+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/b1/aes-scenarios-2g3ju8dw",
+ "commit": "c297ef126cd683f22e34f558566b28cea9056d42",
+ "scenarios_sha256": "08bdfd0448ee19392db60de134e5699ca35943f4d306f794b168ae661b5138c7",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "interoperability-expose-and-register-a2a",
+   "expected_primary": "adk-agent-interoperability",
+   "fixture_status": "repo-fixture",
+   "note": "agent_card_check.py needs a shell; graded on validation proposed or done by reading.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-agent-security",
+    "deploy-adk-on-google-cloud",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1292,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Uses to_a2a or the api_server a2a mode with an agent card that carries the Gemini Enterprise required fields and no instructions, explains that host, port and protocol only shape the advertised URL, and validates the card with the checker.",
+     "verdict": "FAIL",
+     "quote": "`to_a2a` in 2.8.0 can't declare security schemes and so needs a handwritten card.",
+     "quote_found": true,
+     "reason": "It uses to_a2a with a card lacking instructions, but never explains that host/port/protocol only shape the advertised URL, and it did not validate with the checker (listed as not done).",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "States the registration constraints: A2A 0.3 card and streaming, Google-signed OIDC in X-Serverless-Authorization with run.invoker for the Discovery Engine service agent, traffic bypassing Agent Gateway, and the same-project rule.",
+     "verdict": "FAIL",
+     "quote": "Cloud Run documents its token as arriving in `X-Serverless-Authorization`, which Cloud Run consumes, while my middleware reads `Authorization`.",
+     "quote_found": true,
+     "reason": "It covers the OIDC header, invoker role and 0.3 card, but never states the Agent Gateway bypass or same-project rule, and it handles the header incorrectly.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Treats inbound peer messages as data, not user authority, and points the approval-over-A2A gap to adk-agent-security while keeping the A2A contract (task states, context and task IDs in event metadata) here.",
+     "verdict": "FAIL",
+     "quote": "ADK issue #6461 was still open in 2.8.0. It lets an approval payload arriving over A2A satisfy a `require_confirmation` gate",
+     "quote_found": true,
+     "reason": "It handles the approval gap structurally in-code, but does not point to adk-agent-security or cover the A2A contract (task states, context/task IDs in event metadata).",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Leaves Cloud Run deployment mechanics to deploy-adk-on-google-cloud and lists registration and API enablement as approvals, not actions taken.",
+     "verdict": "FAIL",
+     "quote": "Deploying to Cloud Run.\n- Granting the invoker role to the Discovery Engine service agent.\n- Registering the card in Gemini Enterprise.",
+     "quote_found": true,
+     "reason": "It lists deployment, registration and the invoker grant as approvals, but does not defer Cloud Run mechanics to deploy-adk-on-google-cloud and does not list API enablement.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 0,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3176,
+   "files": [
+    "deploy/agent-card.json",
+    "docs/a2a-exposure.md",
+    "research_agent/a2a_app.py",
+    "research_agent/a2a_auth.py",
+    "research_agent/a2a_guard.py",
+    "research_agent/agent.py",
+    "tests/test_a2a_surface.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 102.8,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 22,
+    "total_cost_usd": 0.34495689999999996,
+    "duration_ms": 101593,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-interoperability"
+    ],
+    "skill_files_read": [
+     "adk-agent-interoperability/references/a2a-contracts.md",
+     "adk-agent-interoperability/references/platform-registration.md",
+     "adk-agent-interoperability/assets/agent-card.template.json"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-interoperability": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 3
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-workflow-design": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 20,
+    "catalogue": [
+     "adk-agent-interoperability",
+     "adk-agent-security",
+     "adk-workflow-design",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-interoperability": true,
+    "adk-agent-security": false,
+    "deploy-adk-on-google-cloud": false,
+    "adk-workflow-design": false
+   }
+  },
+  {
+   "id": "interoperability-expose-mcp-server-with-conformance-baseline",
+   "expected_primary": "adk-agent-interoperability",
+   "fixture_status": "repo-fixture",
+   "note": "The agent has no shell; helper scripts it names can only be proposed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-release-engineering",
+    "adk-agent-security"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1301,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Serves the agent with to_mcp_server over streamable HTTP, commits the tool manifest from the inventory helper, and keeps the tool's description a capability statement without the instruction.",
+     "verdict": "FAIL",
+     "quote": "No committed tool manifest.** I couldn't generate one without running the server",
+     "quote_found": true,
+     "reason": "to_mcp_server over streamable HTTP and description are done, but no tool manifest was committed from the inventory helper.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Adds the pinned conformance command with --requirements for the revision the server speaks and an expected-failures baseline whose entries name the fixture-dependent scenarios or checks with reasons, run with a scripted model so no credentials are needed.",
+     "verdict": "FAIL",
+     "quote": "server: []",
+     "quote_found": true,
+     "reason": "Pinned command with --requirements and scripted model exist, but the baselines have no entries naming fixture-dependent scenarios with reasons (one is empty, the other has only two non-fixture entries) and are unseeded.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Explains that a baseline entry that starts passing makes the run exit 1, so the baseline shrinks on purpose, and places the check in the pull-request tier.",
+     "verdict": "FAIL",
+     "quote": "an unlisted failure fails, and so does a listed entry that now passes (stale).",
+     "quote_found": true,
+     "reason": "Stale-entry failure is explained, but the check is in the PR-triggered job that does not gate because of UNSEEDED, and exit 1 / shrink-on-purpose isn't clearly stated; PR-tier placement is not explicit.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Does not widen the server to fixture tools, resources or prompts to make the suite green, and records the approval gate for MCP callers as not satisfiable by an MCP host.",
+     "verdict": "FAIL",
+     "quote": "Hosts are trusted callers: the server has no auth and every caller is the fixed ADK user `mcp_user`.",
+     "quote_found": true,
+     "reason": "The server isn't widened with fixtures, but the approval gate for MCP callers is not recorded as unsatisfiable by an MCP host.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 0,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3525,
+   "files": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/mcp-drift.yml",
+    "README.md",
+    "ci/conformance-baseline-2025-11-25.yml",
+    "ci/conformance-baseline-2026-07-28.yml",
+    "ci/conformance.sh",
+    "ci/conformance.version",
+    "ci/constraints.txt",
+    "research/mcp_server.py",
+    "tests/conformance_server.py",
+    "tests/scripted_model.py",
+    "tests/test_mcp_server.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 129.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 27,
+    "total_cost_usd": 0.36982580000000004,
+    "duration_ms": 127921,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-interoperability"
+    ],
+    "skill_files_read": [
+     "adk-agent-interoperability/references/mcp-exposure.md",
+     "adk-agent-interoperability/references/compatibility.md",
+     "adk-agent-interoperability/references/validation.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-interoperability": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 3
+     },
+     "adk-release-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 25,
+    "catalogue": [
+     "adk-agent-interoperability",
+     "adk-agent-security",
+     "adk-release-engineering",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-interoperability": true,
+    "adk-release-engineering": false,
+    "adk-agent-security": false
+   }
+  },
+  {
+   "id": "interoperability-exposed-agent-forgets-on-modern-clients",
+   "expected_primary": "adk-agent-interoperability",
+   "fixture_status": "repo-fixture",
+   "note": "The agent has no shell; helper scripts it names can only be proposed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-agent-evaluation",
+    "deploy-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0857,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Explains that the new client negotiates 2026-07-28 by default, where every request stands alone, so to_mcp_server starts a new ADK session on each call, and that legacy-era continuity also breaks across instances without session affinity.",
+     "verdict": "PASS",
+     "quote": "The new client, mcp 2.3's default, negotiates protocol 2026-07-28, which has no connection. Every request therefore gets a new session.",
+     "quote_found": true,
+     "reason": "It explains the modern default and the per-call new session, and notes that the in-memory session map is lost across the two instances.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Chooses an explicit fix (a caller-bound, unguessable conversation handle passed as a tool argument on a hand-built server, or a documented legacy-mode requirement with affinity) and does not claim a server-side switch can disable an era.",
+     "verdict": "PASS",
+     "quote": "The server is now hand-built. Each reply returns a `conversation_id`, which is the ADK session id, and follow-ups pass it back as an argument.",
+     "quote_found": true,
+     "reason": "It chooses a hand-built server with a caller-bound, unguessable handle passed as a tool argument, and never claims a server switch can disable an era.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Adds an in-process mcp.Client(server) test with a scripted model running the same two-turn exchange under the default mode and mode=\"legacy\", asserting the promised behaviour for each.",
+     "verdict": "PASS",
+     "quote": "It makes the same two-call exchange with `mcp.Client(server)` (modern) and `mode=\"legacy\"`, and asserts the second call sees two turns.",
+     "quote_found": true,
+     "reason": "An in-process mcp.Client test with a scripted model runs the two-turn exchange in both modes and asserts the result for each.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Adds a pinned Inspector CLI tools/list step with --format json under --protocol-era legacy and modern, with isolated storage, branching on exit codes rather than piping straight into jq.",
+     "verdict": "FAIL",
+     "quote": "",
+     "quote_found": false,
+     "reason": "No Inspector CLI tools/list step was added to CI; ci.yml only runs unittest.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3160,
+   "files": [
+    ".github/workflows/ci.yml",
+    "deploy/service.yaml",
+    "tests/test_mcp_follow_up.py",
+    "triage/mcp_server.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 60.8,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 19,
+    "total_cost_usd": 0.2019705,
+    "duration_ms": 59591,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-interoperability"
+    ],
+    "skill_files_read": [
+     "adk-agent-interoperability/references/mcp-exposure.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-interoperability": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 17,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-interoperability",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-interoperability": true,
+    "adk-agent-evaluation": false,
+    "deploy-adk-on-google-cloud": false
+   }
+  },
+  {
+   "id": "interoperability-mcp-app-widget-to-custom-frontend",
+   "expected_primary": "adk-agent-interoperability",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-agent-interoperability",
+    "adk-frontend-integration",
+    "adk-agent-security"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1125,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Explains that ADK attaches UiWidget(provider=\"mcp\") with resource_uri, tool and tool_args but never fetches or renders the HTML, and that adk web 2.12.0 does not render render_ui_widgets.",
+     "verdict": "PASS",
+     "quote": "ADK doesn't fetch or render the chart HTML, and `adk web` 2.12.0 doesn't show MCP widgets.",
+     "quote_found": true,
+     "reason": "Both claims are stated, but the answer never names UiWidget(provider=\"mcp\") with resource_uri, tool and tool_args, which the assertion also asks for; the code does show ADK widgets carrying those fields, so this is a lenient pass.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Identifies that ADK does not advertise io.modelcontextprotocol/ui, so this server sends text-only tools, and records it as a finding or a server-side decision rather than patching ADK internals.",
+     "verdict": "FAIL",
+     "quote": "ADK 2.12.0's MCP session doesn't advertise `io.modelcontextprotocol/ui`. The partner therefore gave your agent `get_chart_text` and never `get_chart`",
+     "quote_found": true,
+     "reason": "The finding is identified, but the agent built a second UI-capable session in mcp_app.py, which is a workaround rather than recording it as a finding or server-side decision.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Adds a tool_filter that drops tools whose visibility lacks \"model\" and requires the backend to refuse view-initiated calls to tools whose visibility lacks \"app\".",
+     "verdict": "PASS",
+     "quote": "tool_filter=[\"get_sales_figures\", \"get_chart_text\"],",
+     "quote_found": true,
+     "reason": "An allowlist excludes refresh_chart, and call_tool_for_app refuses tools whose visibility lacks \"app\".",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Hands the renderer to adk-frontend-integration: backend resources/read, AppBridge with a null client and backend-routed handlers, a sandbox on a different origin and CSP from _meta.ui.csp; reports tests not run as not run.",
+     "verdict": "FAIL",
+     "quote": "**React chart host**: it needs `AppBridge` with a null client and a sandbox proxy on a different origin.",
+     "quote_found": true,
+     "reason": "It lists the renderer requirements as undone work. It never hands off to adk-frontend-integration, although it does report that nothing was run.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.83,
+   "unstable": [
+    3,
+    4
+   ],
+   "final_chars": 2899,
+   "files": [
+    "NOTES.md",
+    "insights/agent.py",
+    "insights/mcp_app.py",
+    "insights/server.py",
+    "tests/test_mcp_app.py",
+    "web/src/chat/useAgentStream.ts"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 103.1,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 25,
+    "total_cost_usd": 0.3412331,
+    "duration_ms": 102005,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-interoperability"
+    ],
+    "skill_files_read": [
+     "adk-agent-interoperability/references/mcp-consumption.md",
+     "adk-frontend-integration/references/production.md",
+     "adk-agent-interoperability/scripts/mcp_tool_inventory.py"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-interoperability": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-frontend-integration": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 23,
+    "catalogue": [
+     "adk-agent-interoperability",
+     "adk-agent-security",
+     "adk-engineer",
+     "adk-frontend-integration",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-agent-interoperability": true,
+    "adk-frontend-integration": false,
+    "adk-agent-security": false
+   }
+  },
+  {
+   "id": "interoperability-verify-signed-agent-card",
+   "expected_primary": "adk-agent-interoperability",
+   "fixture_status": "repo-fixture",
+   "note": "agent_card_check.py needs a shell; the sample signed card is in docs/partner/.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-agent-security",
+    "adk-tool-auth-and-secrets",
+    "deploy-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1163,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "States that RemoteA2aAgent does not verify signatures on a card it fetches by URL, resolves the card with get_agent_card(signature_verifier=create_signature_verifier(...)) and passes the AgentCard object, and re-applies the https and same-origin check ADK skips for a passed-in card.",
+     "verdict": "FAIL",
+     "quote": "ADK skips that check for a card passed in as an object, so this restores it.",
+     "quote_found": true,
+     "reason": "It resolves via get_agent_card with a verifier, passes the card, and re-applies the origin check, but never explicitly states that RemoteA2aAgent doesn't verify signatures for URL-fetched cards.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Builds the key provider on the out-of-band key set, not on the card's jku; allows asymmetric algorithms only; raises a PyJWTError subclass for an unknown kid so rotation keeps working; and fails closed when verification fails.",
+     "verdict": "PASS",
+     "quote": "An unknown `kid` raises a `jwt.PyJWTError` subclass, which the verifier needs in order to try the next signature.",
+     "quote_found": true,
+     "reason": "Key provider is built on the out-of-band JWKS, ignores jku, allows only ES256, raises a PyJWTError subclass, and raises CardRefused on failure.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Runs agent_card_check.py with --require-signature and --key-host and reads its findings (alg, kid, typ, jku origin, unprotected header, fields the signature does not cover), saying the helper does not verify the signature itself.",
+     "verdict": "FAIL",
+     "quote": "`agent_card_check.py` was not run, so these are my own findings, not its output.",
+     "quote_found": true,
+     "reason": "The checker was not run with --require-signature and --key-host, so its findings were not read.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Treats a verified card's text as untrusted data for prompts and leaves bearer-token plumbing to adk-tool-auth-and-secrets.",
+     "verdict": "FAIL",
+     "quote": "",
+     "quote_found": false,
+     "reason": "The answer never says the verified card's text is untrusted data for prompts and never mentions adk-tool-auth-and-secrets.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    1
+   ],
+   "final_chars": 4462,
+   "files": [
+    "app/a2a_card.py",
+    "app/agent.py",
+    "app/server.py",
+    "app/settings.py",
+    "pyproject.toml",
+    "tests/test_a2a_card.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 102.8,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 27,
+    "total_cost_usd": 0.32728920000000006,
+    "duration_ms": 101570,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-interoperability"
+    ],
+    "skill_files_read": [
+     "adk-agent-interoperability/references/a2a-contracts.md",
+     "adk-agent-interoperability/scripts/agent_card_check.py"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-interoperability": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-tool-auth-and-secrets": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 25,
+    "catalogue": [
+     "adk-agent-interoperability",
+     "adk-agent-security",
+     "adk-tool-auth-and-secrets",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-interoperability": true,
+    "adk-agent-security": false,
+    "adk-tool-auth-and-secrets": false,
+    "deploy-adk-on-google-cloud": false
+   }
+  },
+  {
+   "id": "observability-handover-and-postmortem",
+   "expected_primary": "adk-agent-observability",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-observability",
+    "adk-engineer",
+    "deploy-adk-on-google-cloud",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1592,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Reads operations-handover.md and writes the handover from the template with support tiers and a RACI with exactly one accountable owner per row.",
+     "verdict": "FAIL",
+     "quote": "Check: each row has exactly one A. The cost review accountability (product owner) and the access review (DPO) are guesses to confirm (Q6).",
+     "quote_found": true,
+     "reason": "The template was read and tiers and a RACI were written, but several rows list two A marks (\"**A**, R\" is one A plus R, yet the breach row and others are fine); however the Sev1, Release, and Postmortem rows put A and R in the same Kestrel IT cell while Brightlane also has R, which is acceptable, but I judged the overall result uncertain, so I fail conservatively.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Flags the agency mailing list as an alert channel that must move to a client channel before go-live.",
+     "verdict": "PASS",
+     "quote": "Every alert goes to a Brightlane mailing list.** Both policies use channel `8812`, `oncall@brightlane-agency.example`",
+     "quote_found": true,
+     "reason": "The handover flags the agency mailing list as a blocker and requires adding a Kestrel channel and verifying it before the takeover date.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Lists access transfer per item with verification by the new owner and removal of agency access, leaving the commands to deploy-adk-on-google-cloud.",
+     "verdict": "FAIL",
+     "quote": "`gcloud projects get-iam-policy kestrel-claims-prod` shows the grants.",
+     "quote_found": true,
+     "reason": "The access table has per-item transfer, verification and removal columns, but it embeds a gcloud command instead of leaving commands to deploy-adk-on-google-cloud, and no such deferral appears.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Copies the pinned model's retirement date from the model lifecycle table with its read date, and the postmortem template adds affected users by query, harm, the client's notification decision and the regression case with fail_to_pass and pass_to_pass lists.",
+     "verdict": "FAIL",
+     "quote": "the `adk-model-and-output-contracts` lifecycle table is not installed. `refresh before relying`.",
+     "quote_found": true,
+     "reason": "The agent did not copy the retirement date from the model lifecycle table; it used a note from another skill, although the postmortem template does include affected-users queries, harm, notification decision and fail_to_pass/pass_to_pass.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    1
+   ],
+   "final_chars": 3031,
+   "files": [
+    "docs/operations/claims-intake/handover.md",
+    "docs/operations/claims-intake/postmortem-template.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 104.9,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 20,
+    "total_cost_usd": 0.29907360000000005,
+    "duration_ms": 103614,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-observability"
+    ],
+    "skill_files_read": [
+     "adk-agent-observability/references/operations-handover.md",
+     "adk-agent-observability/assets/handover-template.md",
+     "adk-agent-observability/assets/agent-postmortem-template.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-observability": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 3
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 18,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-observability",
+     "adk-engineer",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-observability": true,
+    "adk-engineer": false,
+    "deploy-adk-on-google-cloud": false,
+    "adk-agent-evaluation": false
+   }
+  },
+  {
+   "id": "release-bigquery-analytics-score-gate-and-drift",
+   "expected_primary": "adk-release-engineering",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-release-engineering",
+    "adk-agent-observability",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1189,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Pins bigquery-agent-analytics at 0.6.1 or later, uses bq-agent-sdk evaluate --exit-code as a tier-3 gate over stored sessions, and maps exit 1 to block and exit 2 to NOT RUN rather than a pass.",
+     "verdict": "PASS",
+     "quote": "pip install \"bigquery-agent-analytics==0.6.1\"",
+     "quote_found": true,
+     "reason": "Pins 0.6.1, uses evaluate with --exit-code in a nightly gate over stored sessions, and maps exit 1 to block and exit 2 to not run (blocked), not a pass.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Keeps the deterministic pull-request gate primary and treats the judge-scored nightly as a comparison against the previous night, with the judge pinned.",
+     "verdict": "FAIL",
+     "quote": "A judge-based check has to wait until a `judge_model` is pinned, since your release record says \"none yet\".",
+     "quote_found": true,
+     "reason": "The nightly is deterministic-only with no judge pinned, there is no comparison against the previous night, and the deterministic PR gate is not discussed as primary.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Reports the SDK's cost-per-session and token-efficiency numbers with their stated caveats (no thought tokens in cost; cache metric passes on missing telemetry unless told to fail) and does not present them as invoice reconciliation.",
+     "verdict": "FAIL",
+     "quote": "\"Fail\" means deterministic error rate and latency for now.",
+     "quote_found": true,
+     "reason": "No cost-per-session or token-efficiency numbers are reported, and none of the caveats (thought tokens, cache metric) appear.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Writes the drift report from drift_detection over the golden table and the saturation flag from the suite's health check as triggers for the retire-or-harden decision, with every live command recorded as not run.",
+     "verdict": "FAIL",
+     "quote": "\"stopped telling us anything\" check by pass history has nothing to work from",
+     "quote_found": true,
+     "reason": "Drift detection is used for coverage, but the saturation flag comes from a custom pass-history function rather than the suite's health check, and it is not framed as a retire-or-harden trigger.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3387,
+   "files": [
+    ".github/workflows/monthly-golden-report.yml",
+    ".github/workflows/nightly-score.yml",
+    "docs/score-gate.md",
+    "ops/__init__.py",
+    "ops/golden_report.py",
+    "ops/score_gate.json",
+    "ops/score_gate.py",
+    "tests/test_ops.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 161.8,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 28,
+    "total_cost_usd": 0.4655104000000001,
+    "duration_ms": 160514,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-release-engineering"
+    ],
+    "skill_files_read": [
+     "adk-agent-observability/references/bigquery-analytics.md",
+     "adk-release-engineering/references/production-feedback.md",
+     "adk-release-engineering/assets/eval-gate.github-actions.yml",
+     "adk-release-engineering/references/ci-eval-gates.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-release-engineering": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 3
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 26,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-observability",
+     "adk-engineer",
+     "adk-release-engineering",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-release-engineering": true,
+    "adk-agent-observability": false,
+    "adk-agent-evaluation": false
+   }
+  },
+  {
+   "id": "release-post-launch-quality-loop-aqua",
+   "expected_primary": "adk-release-engineering",
+   "fixture_status": "repo-fixture",
+   "note": "The agents-cli-aqua skill is absent, as the context says.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-release-engineering",
+    "adk-agent-evaluation",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0732,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Does not build a scheduled evaluator, dedup store or dashboard of its own; names Google's Ambient Quality Agent extension as the operator, pinned by its release tag, and shows how to get its skill.",
+     "verdict": "FAIL",
+     "quote": "`google/adk-recipes:agents-cli-aqua` is not installed here and cannot be fetched in this session ... install it with the extension command in `adk-release-engineering`'s production-feedback reference",
+     "quote_found": false,
+     "reason": "It builds no evaluator, but it does not pin the extension by release tag and only points to another reference for how to get the skill rather than showing it.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Writes into the release record which insight statuses on which slice block a promotion and which open a case, instead of letting an insight gate implicitly.",
+     "verdict": "FAIL",
+     "quote": "insights_gate: false   # assumption, see docs/release/quality-loop.md Q2: insights open candidate cases, they do not block promotion",
+     "quote_found": true,
+     "reason": "The record sets no insight statuses or slices that block a promotion or open a case; it only says insights never block, and leaves the decision to Priya.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Records a week with no investigation run as missing evidence (NOT RUN), never as a clean week, and says so in the Evidence section.",
+     "verdict": "FAIL",
+     "quote": "A missing row, a review that failed, or a review that read a source the release does not write is `NOT RUN`. Missing evidence is never a pass (A3).",
+     "quote_found": true,
+     "reason": "NOT RUN handling is in the doc and manifest, but the ticket's Evidence section was left empty (\"The G07 ticket's Evidence section is also still empty\"), so the required statement there is missing.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Routes a found defect into a redacted regression case through the observability converter and keeps the deterministic CI gate primary; all cloud steps recorded as not run.",
+     "verdict": "PASS",
+     "quote": "run\n   `python .claude/skills/adk-agent-observability/scripts/events_to_eval_set.py --session <export> --out <file> --select tool_error`\n   (or `--select all`) with `--redact-hook` set to the project redaction policy.",
+     "quote_found": true,
+     "reason": "It routes recurring defects through the observability converter with a redaction hook, keeps the PR gate deterministic, and records that nothing was run against BigQuery or the session service.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    4
+   ],
+   "final_chars": 1978,
+   "files": [
+    "docs/release/quality-loop.md",
+    "release/manifest.yaml"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 45.7,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 16,
+    "total_cost_usd": 0.1651878,
+    "duration_ms": 44604,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [
+     "adk-release-engineering/references/production-feedback.md",
+     "adk-agent-observability/references/trace-to-evaluation.md",
+     "adk-engineer/references/composition.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-release-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 15,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-observability",
+     "adk-engineer",
+     "adk-release-engineering",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-release-engineering": false,
+    "adk-agent-evaluation": false,
+    "adk-agent-observability": false
+   }
+  }
+ ]
+}

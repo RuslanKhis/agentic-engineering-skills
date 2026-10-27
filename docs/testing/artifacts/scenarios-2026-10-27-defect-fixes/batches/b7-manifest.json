@@ -1,0 +1,74 @@
+{
+ "created": "2026-10-27T19:49:15+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a787739fdce538787",
+ "commit": "c297ef126cd683f22e34f558566b28cea9056d42",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "portability-ticket-carried-out",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/portability-ticket-carried-out/situation.md"
+    }
+   ],
+   "note": "check_portability.py needs a shell, and official sources cannot be re-read without network.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-portability-planning",
+    "adk-system-designer",
+    "deploy-adk-on-google-cloud",
+    "adk-model-and-output-contracts"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "presenter-poc-review-evidence-only",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/presenter-poc-review-evidence-only/situation.md"
+    }
+   ],
+   "note": "The deck check needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-presenter",
+    "adk-system-designer",
+    "adk-agent-evaluation",
+    "adk-engineer"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "presenter-monthly-value-report",
+   "status": "repo-fixture",
+   "base": [
+    "claims-docs"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/presenter-monthly-value-report/situation.md"
+    }
+   ],
+   "note": "check_value_report.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-presenter",
+    "adk-agent-observability",
+    "adk-engineer"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+name: customers
+table_reference: {project: fernhill-analytics, dataset: sales, table: customers}
+primary_key: [customer_id]
+columns:
+  - {name: customer_id}
+  - {name: account_name}
+  - {name: region}
+  - {name: account_manager}
+reviewed_by: null
+reviewed_on: null

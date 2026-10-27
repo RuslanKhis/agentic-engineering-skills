@@ -1,0 +1,48 @@
+name: mcp-drift
+# Weekly: does the exposed server still pass with the newest mcp (within <3) and the newest
+# conformance suite? Red means the SDK or suite moved: read the log, then bump
+# ci/constraints.txt / ci/conformance.version (and the baselines) deliberately.
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+jobs:
+  drift:
+    runs-on: ubuntu-24.04
+    env:
+      MCP_DRIFT_RUN: "1"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - name: Install unconstrained (newest mcp allowed by pyproject)
+        run: pip install -e .
+      - name: Resolve newest conformance suite
+        run: echo "CONFORMANCE_VERSION=$(npm view @modelcontextprotocol/conformance version)" >> "$GITHUB_ENV"
+      - name: Report what moved
+        id: moved
+        run: |
+          pinned_mcp=$(sed -n 's/^mcp==//p' ci/constraints.txt)
+          pinned_conf=$(tr -d '[:space:]' < ci/conformance.version)
+          installed_mcp=$(python -c 'import importlib.metadata as m; print(m.version("mcp"))')
+          {
+            echo "| component | pinned | newest |"; echo "|---|---|---|"
+            echo "| mcp | $pinned_mcp | $installed_mcp |"
+            echo "| conformance | $pinned_conf | $CONFORMANCE_VERSION |"
+          } >> "$GITHUB_STEP_SUMMARY"
+          moved=0
+          [ "$pinned_mcp" != "$installed_mcp" ] && { echo "::warning::mcp moved $pinned_mcp -> $installed_mcp"; moved=1; }
+          [ "$pinned_conf" != "$CONFORMANCE_VERSION" ] && { echo "::warning::conformance moved $pinned_conf -> $CONFORMANCE_VERSION"; moved=1; }
+          echo "moved=$moved" >> "$GITHUB_OUTPUT"
+      - run: python -m unittest discover -s tests -t .
+      - run: bash ci/conformance.sh 2025-11-25
+      - run: bash ci/conformance.sh 2026-07-28
+      - name: Fail when a pin is behind, even though the suite passed
+        if: always() && steps.moved.outputs.moved == '1'
+        run: |
+          echo "A pin is behind the newest release (see summary). Bump it deliberately."
+          exit 1

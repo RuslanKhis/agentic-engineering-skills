@@ -1,0 +1,5 @@
+{"verdicts":[{"assertion":"A1","verdict":"PASS","quote":"pip install \"bigquery-agent-analytics==0.6.1\"","reason":"Pins 0.6.1, runs evaluate with --exit-code in a nightly gate, maps exit 1 to blocked and exit 2 to not run/blocked."}
+,{"assertion":"A2","verdict":"FAIL","quote":"A judge-based check has to wait until a `judge_model` is pinned, since your release record says \"none yet\".","reason":"No judge is used or pinned, no comparison against the previous night is implemented, and the deterministic PR gate is not kept primary."}
+,{"assertion":"A3","verdict":"FAIL","quote":"","reason":"Cost-per-session and token-efficiency numbers and their caveats are not reported anywhere in the evidence."}
+,{"assertion":"A4","verdict":"FAIL","quote":"Real coverage needs a BigQuery run, so it is not computed here.","reason":"Drift report uses drift_detection, but there is no saturation flag from the suite's health check (saturation is derived from a custom pass history), and it is not framed as a retire-or-harden trigger."}
+]}

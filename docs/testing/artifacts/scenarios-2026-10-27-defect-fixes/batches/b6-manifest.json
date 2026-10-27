@@ -1,0 +1,126 @@
+{
+ "created": "2026-10-27T19:49:15+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a787739fdce538787",
+ "commit": "c297ef126cd683f22e34f558566b28cea9056d42",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "workflow-content-safeguards-in-code",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-content-safeguards-in-code/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The skill's draft_consistency.py is reachable in the installed skill; running it needs a shell.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design",
+    "protect-adk-sensitive-data",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "workflow-durable-refund-resume-or-engine",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-durable-refund-resume-or-engine/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design",
+    "safe-api-tool-calls",
+    "adk-system-designer",
+    "adk-operational-guardrails"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "workflow-engine-restate-or-dapr-keeps-adk-contract",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-engine-restate-or-dapr-keeps-adk-contract/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design",
+    "adk-operational-guardrails",
+    "safe-api-tool-calls",
+    "adk-system-designer"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "workflow-realistic-checkpoint-storage-preflight",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-realistic-checkpoint-storage-preflight/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The refused writer record is kept in the run; tests and the round trip need a shell to execute.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "workflow-warning-only-correction-preservation",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-warning-only-correction-preservation/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Scripted writer and reviewer replies for the case are in the workspace for offline tests.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

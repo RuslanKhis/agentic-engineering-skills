@@ -1,0 +1,12 @@
+{
+  "project_id": "REPLACE_WITH_GCP_PROJECT",
+  "dataset_id": "support_analytics",
+  "table_id": "agent_events",
+  "window": "24h",
+  "retries": 1,
+  "timeout_seconds": 900,
+  "checks": [
+    {"evaluator": "error_rate", "threshold": null},
+    {"evaluator": "latency", "threshold": null}
+  ]
+}

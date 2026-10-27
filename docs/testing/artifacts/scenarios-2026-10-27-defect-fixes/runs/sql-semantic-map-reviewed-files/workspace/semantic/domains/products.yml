@@ -1,0 +1,8 @@
+name: products
+description: Product catalogue and product lines.
+tables:
+  products: [sku, product_line, description, list_price_gbp, discontinued]
+relationships: []
+derived: {}
+reviewed_by: null
+reviewed_on: null

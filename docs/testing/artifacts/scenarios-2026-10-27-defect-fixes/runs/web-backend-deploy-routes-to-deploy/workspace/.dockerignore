@@ -1,0 +1,14 @@
+.env
+.env.*
+**/.env
+*.db
+*.sqlite*
+.git
+.claude
+.venv
+**/__pycache__
+tests
+docs
+web/node_modules
+web/dist
+AGENTS.md
