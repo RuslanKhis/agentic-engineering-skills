@@ -1,0 +1,38 @@
+{
+  "server": "https://mcp.ledgerline.example/mcp",
+  "recorded": "2026-10-09",
+  "tools": [
+    {
+      "name": "search_filings",
+      "description": "Search public company filings by company name or number.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query"
+        ]
+      },
+      "sha256": "f752f97ed2a26229ac82b0ce8e4ba6ac6a805f4b4c0171a66a8093665d5ea58c"
+    },
+    {
+      "name": "get_filing",
+      "description": "Return the text of one filing by its id.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "filing_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "filing_id"
+        ]
+      },
+      "sha256": "2b8b1e0a81cb1b4eb8004f66bddc965bbd7dd15b923e8e859f3ef0f92d7d6626"
+    }
+  ]
+}

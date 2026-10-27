@@ -1,0 +1,136 @@
+{
+ "id": "sess-7f31",
+ "app_name": "support",
+ "user_id": "[redacted]",
+ "last_update_time": 1761210011.823,
+ "events": [
+  {
+   "id": "e1",
+   "author": "user",
+   "timestamp": 1761210000.012,
+   "invocation_id": "inv-91",
+   "content": {
+    "role": "user",
+    "parts": [
+     {
+      "text": "[redacted customer message]"
+     }
+    ]
+   }
+  },
+  {
+   "id": "e2",
+   "author": "support_assistant",
+   "timestamp": 1761210001.894,
+   "invocation_id": "inv-91",
+   "content": {
+    "role": "model",
+    "parts": [
+     {
+      "function_call": {
+       "id": "fc1",
+       "name": "lookup_order",
+       "args": {
+        "order_id": "HO-10442"
+       }
+      }
+     }
+    ]
+   },
+   "usage_metadata": {
+    "prompt_token_count": 2210,
+    "candidates_token_count": 41,
+    "thoughts_token_count": 180,
+    "total_token_count": 2431
+   }
+  },
+  {
+   "id": "e3",
+   "author": "support_assistant",
+   "timestamp": 1761210002.207,
+   "invocation_id": "inv-91",
+   "content": {
+    "role": "user",
+    "parts": [
+     {
+      "function_response": {
+       "id": "fc1",
+       "name": "lookup_order",
+       "response": {
+        "status": "ok"
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "e4",
+   "author": "support_assistant",
+   "timestamp": 1761210003.611,
+   "invocation_id": "inv-91",
+   "content": {
+    "role": "model",
+    "parts": [
+     {
+      "function_call": {
+       "id": "fc2",
+       "name": "issue_refund",
+       "args": {
+        "order_id": "HO-10442",
+        "amount_cents": 2500,
+        "reason": "[redacted]"
+       }
+      }
+     }
+    ]
+   },
+   "usage_metadata": {
+    "prompt_token_count": 2390,
+    "candidates_token_count": 52,
+    "thoughts_token_count": 210,
+    "total_token_count": 2652
+   }
+  },
+  {
+   "id": "e5",
+   "author": "support_assistant",
+   "timestamp": 1761210010.402,
+   "invocation_id": "inv-91",
+   "content": {
+    "role": "user",
+    "parts": [
+     {
+      "function_response": {
+       "id": "fc2",
+       "name": "issue_refund",
+       "response": {
+        "status": "refunded"
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "e6",
+   "author": "support_assistant",
+   "timestamp": 1761210011.823,
+   "invocation_id": "inv-91",
+   "content": {
+    "role": "model",
+    "parts": [
+     {
+      "text": "[redacted reply]"
+     }
+    ]
+   },
+   "usage_metadata": {
+    "prompt_token_count": 2510,
+    "candidates_token_count": 88,
+    "thoughts_token_count": 95,
+    "total_token_count": 2693
+   }
+  }
+ ]
+}

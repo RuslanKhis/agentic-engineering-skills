@@ -1,0 +1,5 @@
+[
+ {"doc": "carrier-escalations.md", "uploaded_by": "mira@tamsin.example", "text": "Escalate a lost pallet to the carrier after 48 hours with the consignment note and photos."},
+ {"doc": "returns-procedure.md", "uploaded_by": "jon@tamsin.example", "text": "Returned goods are checked within two working days and restocked or written off."},
+ {"doc": "cold-chain.md", "uploaded_by": "mira@tamsin.example", "text": "Cold-chain loads above 8 degrees for more than 30 minutes are quarantined and the customer is told the same day."}
+]

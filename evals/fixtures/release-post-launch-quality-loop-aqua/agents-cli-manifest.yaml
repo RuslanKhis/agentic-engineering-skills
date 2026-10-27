@@ -1,0 +1,11 @@
+name: support-assistant
+agents_cli_version: 1.11.0
+template: adk_base
+agent_directory: app
+deployment_target: cloud_run
+session_type: cloud_sql
+observability:
+  bigquery_agent_analytics:
+    enabled: true
+    dataset: support_analytics
+    table: agent_events

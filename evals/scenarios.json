@@ -76,7 +76,7 @@
       "id": "guardrails-continuation-accounting-and-duplicates",
       "prompt": "When a response gets lost and we restart, our app lets another paid request go out, so we can pay twice. Can you fix the way we decide whether a continuation is allowed? Keep the spending allowance and the approval we have now, and test it against the fake provider, not the real one.",
       "available_skills": ["adk-operational-guardrails", "adk-workflow-design"],
-      "context": "Supply a persistent campaign ledger, counted transport and known failed, interrupted and no-response attempts. The approval covers one review continuation, not upstream generation or a larger cohort. An open reservation becomes an unknown-charge hold; a delayed receipt later settles it twice. The observed provider balance is stale, and one earlier request settled below its conservative reserve. Competing admissions share the last allowed slot.",
+      "context": "Our review-campaign runner keeps a persistent ledger of attempts, reservations and provider receipts (data/ holds the latest export and the receipts that arrived after it) and talks to the provider through a transport that the tests replace with a counting fake. Some earlier attempts failed, were interrupted or got no response. The approval we have covers one review continuation, not upstream generation or a larger cohort. The provider balance on file was read before the last session. No real provider calls are allowed.",
       "expected_primary": "adk-operational-guardrails",
       "assertions": [
         "Blocks duplicate dispatch for failed, interrupted and no-response identities, including after restart, with zero underlying sends.",
@@ -304,7 +304,7 @@
       "id": "system-design-review-existing-proposal",
       "prompt": "Can you go through the architecture proposal in this repo with me and fix the design? Each customer must only see their own documents, booking changes need approval, and we need to cope when the booking API's reply gets lost. Just the design for now; don't touch the code.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "adk-tool-auth-and-secrets", "safe-api-tool-calls", "adk-agent-evaluation"],
-      "context": "The proposal uses a browser chat client, a Python ADK service on Cloud Run, a shared document index and an external booking API. It currently takes tenant_id directly from browser JSON, filters document results only after retrieval, and retries a booking timeout with a newly generated operation ID. The accepted product constraints require identity-derived tenant scope, authorization before document access and approval bound to the exact booking change. The provider's replay and reconciliation support remains unknown. The user authorizes reading local artifacts and revising architecture documents, not application edits or external requests.",
+      "context": "The proposal is docs/architecture/proposal.md: a browser chat client, a Python ADK service on Cloud Run, a shared document index and an external booking API, with prototype code under app/ and web/. The accepted product constraints are in docs/architecture/constraints.md. Whether the booking provider supports replaying a request or looking up an operation's outcome is still unknown. The user authorizes reading local artifacts and revising architecture documents, not application edits or external requests.",
       "expected_primary": "adk-system-designer",
       "assertions": [
         "Starts from the supplied proposal and accepted constraints, asking only questions that affect unresolved design decisions.",
@@ -335,7 +335,7 @@
       "id": "system-design-runtime-and-release-review",
       "prompt": "Can you review the design of our reporting assistant? Customers need their conversations kept private, to see progress as it happens, honest results, and full downloads even after they reconnect. We're keeping our stack. I want the key decisions and what we'll test, not building or deploying.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-frontend-integration", "adk-memory-architecture", "optimise-adk-on-google-cloud"],
-      "context": "React, OIDC and PostgreSQL are accepted. Three replicas persist conversation events but send only the last 20 events to the model, which the proposal calls history deletion. Exports use replica-local temporary disk. Tool results are paired by tool name, any final-response event marks success, and reconnect resubmits the message. Per-process session locks and immediate reservation release on browser disconnect are proposed. A gradual SDK rollout will change the session storage format. Only a design review is authorized.",
+      "context": "React, OIDC and PostgreSQL are accepted. The runtime proposal for the reporting assistant, including the planned SDK upgrade, is docs/architecture/reporting-assistant.md. Only a design review is authorized.",
       "expected_primary": "adk-system-designer",
       "assertions": [
         "Separates model-context selection from retention and erasure, preserving required facts and complete tool exchanges while bounding data before materialization and model input.",
@@ -350,7 +350,7 @@
       "id": "system-design-practical-handoff",
       "prompt": "Design our ADK support assistant and write a plan another coding session can pick up. We're keeping React, OIDC, PostgreSQL and Cloud Run. Users should be able to save a reply language and delete it, replies should stream, and failures should be shown honestly. What's the first thing worth building locally? No code or deploying yet; we might use Matt Pocock's skills later.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "adk-frontend-integration", "adk-tool-auth-and-secrets", "adk-agent-evaluation"],
-      "context": "The accepted pilot uses individual preferences; a future group-account preference question is outside this release. Verified login supplies the user ID. No source tree, selected ADK version or cloud credentials have been provided. Local implementation/testing is the intended next phase, while this request authorizes documentation only. Optional third-party planning skills are not installed in this fixture.",
+      "context": "The accepted pilot uses individual preferences; a future group-account preference question is outside this release. Verified login supplies the user ID. No source tree, selected ADK version or cloud credentials have been provided. Local implementation/testing is the intended next phase, while this request authorizes documentation only. Optional third-party planning skills are not installed here.",
       "expected_primary": "adk-system-designer",
       "assertions": [
         "Maps requirements to concrete ADK or ordinary application components, integration points, GCP responsibilities and relevant skills, with proposed modules and version verification clearly labelled.",
@@ -481,7 +481,7 @@
         "adk-agent-evaluation",
         "adk-fastapi-backend"
       ],
-      "context": "A copy of this repository with evals/activation.json; no model credentials for batch runs; the user answers questions.",
+      "context": "Our fork of the skills collection, checked out with the two skill packages we change, their activation cases and the package validator; no model credentials for batch selection runs; the user answers questions.",
       "expected_primary": null,
       "assertions": [
         "Does not treat this as ADK agent work: neither adk-agent-evaluation nor adk-agent-security leads the change.",
@@ -507,7 +507,7 @@
       "id": "system-design-scope-gate-time-boxed",
       "prompt": "Help me design a Python ADK assistant that reads a planning application's documents and the local plan, then drafts a decision with reasons and conditions. I have 3 to 4 hours. It will be judged on five holdout predictions, the method and a short report. Plan the work before we build.",
       "available_skills": ["adk-system-designer", "adk-engineer", "adk-memory-architecture", "adk-agent-evaluation", "adk-workflow-design", "adk-operational-guardrails"],
-      "context": "A greenfield workspace with five labelled development cases, five unlabelled holdout cases, a local plan PDF pack and a $25 model allowance. The user authorizes local documentation only. No implementation, installation or cloud actions are authorized.",
+      "context": "A greenfield workspace with five labelled development cases, five unlabelled holdout cases, a local plan pack (hand-made text extracts in local-plan/; the PDFs are not in the workspace) and a $25 model allowance. The user authorizes local documentation only. No implementation, installation or cloud actions are authorized.",
       "expected_primary": "adk-system-designer",
       "assertions": [
         "Asks or records the scope gate first: available time and money, who judges the result and what they read, and the artifact type.",
@@ -838,7 +838,7 @@
       "id": "router-builds-at-poc-depth",
       "prompt": "Please take ticket tickets/T-201.md and carry it out. Tell me which specialist you are using and why.",
       "available_skills": ["adk-engineer", "safe-api-tool-calls", "adk-tool-interface-design", "adk-operational-guardrails", "adk-agent-evaluation"],
-      "context": "The journeys fixture support agent with T-201: a three-hour proof of concept for a sales demo that cancels an order through a staging API with fake orders, to be productionised later if sales likes it. ADK is not installed.",
+      "context": "Our support assistant repository with ticket tickets/T-201.md: a three-hour proof of concept for a sales demo that cancels an order through a staging API with fake orders, to be productionised later if sales likes it. ADK is not installed.",
       "expected_primary": "adk-engineer",
       "assertions": [
         "States the profile it is building for and keeps the change proportionate to a three-hour demo.",
@@ -916,7 +916,7 @@
       "id": "router-flags-underestimated-ticket",
       "prompt": "Please take ticket tickets/T-202.md and carry it out. Tell me which specialist you are using and why.",
       "available_skills": ["adk-engineer", "adk-tool-auth-and-secrets", "protect-adk-sensitive-data", "adk-agent-security"],
-      "context": "The journeys fixture support agent with T-202: per-customer Gmail connection estimated at 1-2 hours of agent-assisted human effort, for a 30-customer pilot in three weeks. ADK is not installed.",
+      "context": "Our support assistant repository with ticket tickets/T-202.md: per-customer Gmail connection estimated at 1-2 hours of agent-assisted human effort, for a 30-customer pilot in three weeks. ADK is not installed.",
       "expected_primary": "adk-engineer",
       "assertions": [
         "Says before or while working that per-user Gmail OAuth with consent, refresh and disconnect is much larger than 1-2 hours, and names the Google restricted-scope verification wait.",
@@ -975,7 +975,7 @@
         "adk-engineer",
         "adk-memory-architecture"
       ],
-      "context": "Plan, design and tickets from the plan-in-progress fixture with every phase-1 ticket verified_local; plan_status.py --gate passes on the records. In the code, the merge of G03 reintroduced the session-state cache that G01's evidence says C2 removed; app/tools/export.py changed but is in no ticket's touches; G02's contract_deltas withdraws C5 (bulk delete) yet bulk_delete is still in the agent's tools list; G02's manual OAuth consent item is ticked with no confirmation. Local reading only; no edits to code.",
+      "context": "The design, plan and tickets are under docs/ (docs/architecture/support.md, docs/plans/support.md, docs/tickets/support/), and every phase-1 ticket is verified_local. The plan records the commit phase 1 started from; this copy of the repository has no git history. Local reading only; no edits to code.",
       "expected_primary": "adk-system-designer",
       "assertions": [
         "Runs plan_status.py --gate with --base set to the phase's start commit, and does not treat a pass as proof the code does what the contracts say, because the gate reads records and the diff's paths, not behaviour.",
@@ -1769,7 +1769,7 @@
         "adk-memory-architecture",
         "adk-tool-auth-and-secrets"
       ],
-      "context": "A five-ticket proof of concept (save and forget a language preference, streamed replies, a journey check, a review presentation). Implementing G01 shows that forgetting must also clear a cached copy in session state, which the design's C2 does not say, and that forget should be a soft delete kept 30 days. The person says the work took about six hours against an estimate of 2-3. ADK is not installed.",
+      "context": "A five-ticket proof of concept under docs/tickets/support/ (save and forget a reply language, streamed replies, honest failed replies, a journey check, a review presentation). While implementing G01 I found that forgetting must also clear the copy of the language cached in session state, which the design's C2 does not say, and we decided forget should be a soft delete kept for 30 days. The work took me about six hours against the 2-3 hour estimate. ADK is not installed.",
       "expected_primary": "adk-engineer",
       "assertions": [
         "Records the narrowed C2 in the ticket's contract_deltas and the soft-delete choice under Rulings with why and the cost if wrong, without editing the contract in the design itself.",
@@ -1816,7 +1816,7 @@
         "adk-engineer",
         "adk-memory-architecture"
       ],
-      "context": "Design, plan and tickets as in the plan-in-progress fixture: G01 verified_local with a contract delta on C2, an open soft-delete ruling, actual 6 h against 2-3 h; phase capacity 10 h.",
+      "context": "The design, plan and tickets are under docs/ (docs/architecture/support.md, docs/plans/support.md, docs/tickets/support/). G01 is verified_local; its ticket records a contract delta on C2, an open ruling on soft delete, and actual 6 h against an estimate of 2-3 h. Phase capacity is now 10 h.",
       "expected_primary": "adk-system-designer",
       "assertions": [
         "Runs plan_status.py and treats its CHECKPOINT lines as the agenda, settling each with the user.",
@@ -1834,7 +1834,7 @@
         "adk-agent-evaluation",
         "adk-presenter"
       ],
-      "context": "A pilot plan with four implementation goals and a production-approval presentation goal that depends on them directly; no journey goal exists. The schedule block records goal types.",
+      "context": "A pilot plan in docs/plans/claims.md with its design in docs/architecture/claims.md; the schedule block records goal types. No tickets have been written yet.",
       "expected_primary": "adk-system-designer",
       "assertions": [
         "Adds a journey goal of type journey with primary skill adk-agent-evaluation before the presentation goal and makes the presentation depend on it, so check_schedule.py passes.",
@@ -1880,7 +1880,7 @@
         "adk-system-designer",
         "adk-presenter"
       ],
-      "context": "The plan-in-progress fixture with a git history; the last update went out on 2026-10-18.",
+      "context": "The design, plan and tickets are under docs/ (this copy of the repository has no git history). The last update went out on 2026-10-18 and is saved as docs/status/2026-10-18.md.",
       "expected_primary": "adk-system-designer",
       "assertions": [
         "Runs plan_status.py --weekly --since 2026-10-18 rather than restating figures by hand.",

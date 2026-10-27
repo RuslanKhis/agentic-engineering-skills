@@ -1,0 +1,76 @@
+{
+  "tools": [
+    {
+      "name": "get_sales_figures",
+      "description": "Monthly sales figures for a region.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "region"
+        ]
+      },
+      "_meta": {
+        "ui": {
+          "visibility": [
+            "model",
+            "app"
+          ]
+        }
+      }
+    },
+    {
+      "name": "get_chart",
+      "description": "Render a sales trend chart for a region.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string"
+          },
+          "months": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "region"
+        ]
+      },
+      "_meta": {
+        "ui": {
+          "resourceUri": "ui://charts/trend.html",
+          "visibility": [
+            "model",
+            "app"
+          ]
+        }
+      }
+    },
+    {
+      "name": "refresh_chart",
+      "description": "Re-query data for an open chart view.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "chart_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "chart_id"
+        ]
+      },
+      "_meta": {
+        "ui": {
+          "visibility": [
+            "app"
+          ]
+        }
+      }
+    }
+  ]
+}

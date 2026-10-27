@@ -1,0 +1,23 @@
+{
+  "displayName": "claims-intake p95 latency > 12 s for 15 min",
+  "conditions": [
+    {
+      "displayName": "p95 latency",
+      "conditionThreshold": {
+        "filter": "resource.type=\"cloud_run_revision\" AND resource.labels.service_name=\"claims-intake\" AND metric.type=\"run.googleapis.com/request_latencies\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 12000,
+        "duration": "900s",
+        "aggregations": [
+          {
+            "alignmentPeriod": "60s",
+            "perSeriesAligner": "ALIGN_PERCENTILE_95"
+          }
+        ]
+      }
+    }
+  ],
+  "notificationChannels": [
+    "projects/kestrel-claims-prod/notificationChannels/8812"
+  ]
+}

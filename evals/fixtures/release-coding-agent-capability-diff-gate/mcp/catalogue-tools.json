@@ -1,0 +1,16 @@
+{
+  "server": "https://catalogue-mcp.internal.example/mcp",
+  "recorded": "2026-10-06",
+  "tools": [
+    {
+      "name": "get_product",
+      "description": "Get one product by SKU.",
+      "sha256": "4c1f0e9a7d2b0c55e1a8f7b3c2d9e6a1b0f4c3d2e1a9b8c7d6e5f4a3b2c1d0e9"
+    },
+    {
+      "name": "check_stock",
+      "description": "Stock level for a SKU at the warehouse.",
+      "sha256": "9a8b7c6d5e4f3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b"
+    }
+  ]
+}

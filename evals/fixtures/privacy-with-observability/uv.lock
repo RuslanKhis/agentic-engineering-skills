@@ -1,0 +1,22 @@
+version = 1
+revision = 3
+requires-python = ">=3.11, <3.14"
+
+[[package]]
+name = "google-adk"
+version = "2.12.0"
+source = { registry = "https://pypi.org/simple" }
+
+[[package]]
+name = "opentelemetry-instrumentation-google-genai"
+version = "0.4b0"
+source = { registry = "https://pypi.org/simple" }
+
+[[package]]
+name = "travel-desk-agent"
+version = "0.2.0"
+source = { editable = "." }
+dependencies = [
+    { name = "google-adk", extra = ["bigquery-analytics"] },
+    { name = "opentelemetry-instrumentation-google-genai" },
+]

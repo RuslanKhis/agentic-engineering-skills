@@ -1,0 +1,23 @@
+{
+  "title": "Support assistant - agent overview",
+  "backend": "observe-vendor",
+  "exported": "2026-10-20",
+  "panels": [
+    {
+      "title": "Model calls by provider",
+      "query": "count(spans) where gen_ai.system exists group by gen_ai.system"
+    },
+    {
+      "title": "Tokens by model",
+      "query": "sum(gen_ai.usage.input_tokens + gen_ai.usage.output_tokens) group by gen_ai.request.model where gen_ai.system = 'gcp.vertex.agent'"
+    },
+    {
+      "title": "Tool latency p95",
+      "query": "p95(duration) where gen_ai.system = 'gcp.vertex.agent' and name starts_with 'execute_tool' group by gcp.vertex.agent.tool_name"
+    },
+    {
+      "title": "Agent invocations",
+      "query": "count(spans) where name starts_with 'invoke_agent' and gen_ai.system exists"
+    }
+  ]
+}

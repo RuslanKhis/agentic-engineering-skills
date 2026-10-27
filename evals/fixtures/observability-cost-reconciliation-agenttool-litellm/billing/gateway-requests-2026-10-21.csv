@@ -1,0 +1,12 @@
+time_utc,request_id,model,status,prompt_tokens,completion_tokens,reasoning_tokens,billed
+04:12:03,gw-81a0,o-reasoner-2,200,1840,5310,4870,yes
+04:12:19,gw-81a4,o-mini-2,200,151200,9930,0,yes
+04:12:31,gw-81a9,o-mini-2,200,158400,10120,0,yes
+04:12:44,gw-81b0,o-mini-2,200,154900,9800,0,yes
+04:12:58,gw-81b3,o-mini-2,200,155500,9990,0,yes
+04:13:10,gw-81b8,o-reasoner-2,200,3120,4980,4410,yes
+04:13:24,gw-81c1,o-reasoner-2,500,1310,0,0,yes
+04:13:27,gw-81c2,o-reasoner-2,200,1310,2950,2610,yes
+04:13:49,gw-81c9,o-reasoner-2,200,1680,3215,2790,yes
+04:14:21,gw-81d0,o-reasoner-2,504,4410,0,0,yes
+04:14:24,gw-81d1,o-reasoner-2,200,4410,6020,5190,yes

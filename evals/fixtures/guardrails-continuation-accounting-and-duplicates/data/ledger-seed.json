@@ -1,0 +1,28 @@
+{
+  "exported_at": "2026-10-25T18:40:00Z",
+  "attempts": [
+    {"attempt_id": "a-01", "identity": "case-01:generation", "stage": "generation", "status": "succeeded", "started_at": "2026-10-25T16:02:00Z"},
+    {"attempt_id": "a-02", "identity": "case-02:generation", "stage": "generation", "status": "succeeded", "started_at": "2026-10-25T16:04:00Z"},
+    {"attempt_id": "a-03", "identity": "case-03:generation", "stage": "generation", "status": "failed", "started_at": "2026-10-25T16:07:00Z", "error": "provider 400: schema rejected"},
+    {"attempt_id": "a-04", "identity": "case-01:review", "stage": "review", "status": "succeeded", "started_at": "2026-10-25T16:20:00Z"},
+    {"attempt_id": "a-05", "identity": "case-05:generation", "stage": "generation", "status": "interrupted", "started_at": "2026-10-25T16:31:00Z", "error": "worker restarted"},
+    {"attempt_id": "a-06", "identity": "case-07:generation", "stage": "generation", "status": "succeeded", "started_at": "2026-10-25T16:40:00Z"},
+    {"attempt_id": "a-07", "identity": "case-07:review", "stage": "review", "status": "no_response", "started_at": "2026-10-25T17:55:00Z", "error": "read timeout after 120 s"}
+  ],
+  "reservations": [
+    {"reservation_id": "r-01", "attempt_id": "a-01", "amount_cents": 110, "state": "settled"},
+    {"reservation_id": "r-02", "attempt_id": "a-02", "amount_cents": 110, "state": "settled"},
+    {"reservation_id": "r-03", "attempt_id": "a-03", "amount_cents": 110, "state": "released"},
+    {"reservation_id": "r-04", "attempt_id": "a-04", "amount_cents": 60, "state": "settled"},
+    {"reservation_id": "r-05", "attempt_id": "a-05", "amount_cents": 110, "state": "open"},
+    {"reservation_id": "r-06", "attempt_id": "a-06", "amount_cents": 110, "state": "settled"},
+    {"reservation_id": "r-07", "attempt_id": "a-07", "amount_cents": 60, "state": "open"}
+  ],
+  "receipts": [
+    {"receipt_id": "rc-9001", "reservation_id": "r-01", "amount_cents": 96},
+    {"receipt_id": "rc-9002", "reservation_id": "r-02", "amount_cents": 41},
+    {"receipt_id": "rc-9004", "reservation_id": "r-04", "amount_cents": 52},
+    {"receipt_id": "rc-9006", "reservation_id": "r-06", "amount_cents": 104}
+  ],
+  "provider_balance": {"observed_at": "2026-10-25T08:00:00Z", "remaining_cents": 1560, "source": "provider billing page"}
+}

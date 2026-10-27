@@ -1,0 +1,79 @@
+{
+  "tools": [
+    {
+      "name": "get_points_balance",
+      "description": "Points balance for a member.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "member_id": {
+            "type": "string",
+            "pattern": "^LC[0-9]{8}$"
+          }
+        },
+        "required": [
+          "member_id"
+        ]
+      }
+    },
+    {
+      "name": "list points history",
+      "description": "Recent points transactions for a member.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "member_id": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          }
+        },
+        "required": [
+          "member_id"
+        ]
+      }
+    },
+    {
+      "name": "start_points_adjustment",
+      "description": "Begin a points adjustment; returns adjustment_handle.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "member_id": {
+            "type": "string"
+          },
+          "delta": {
+            "type": "integer"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "member_id",
+          "delta",
+          "reason"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "confirm_points_adjustment_for_member_after_customer_service_review_and_supervisor_sign_off",
+      "description": "Confirm an adjustment by its handle.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "adjustment_handle": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "adjustment_handle"
+        ]
+      }
+    }
+  ]
+}

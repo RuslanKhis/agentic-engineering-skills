@@ -1,0 +1,20 @@
+name: nightly
+on:
+  schedule:
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+jobs:
+  agent-evals:
+    runs-on: ubuntu-24.04
+    env:
+      GOOGLE_API_KEY: ${{ secrets.NIGHTLY_GEMINI_KEY }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - run: pip install -e .
+      - run: echo "agent evals to be added"

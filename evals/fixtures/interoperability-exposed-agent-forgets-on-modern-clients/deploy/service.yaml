@@ -1,0 +1,17 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: warranty-triage-mcp
+  annotations:
+    run.googleapis.com/ingress: internal
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "2"
+        autoscaling.knative.dev/maxScale: "2"
+    spec:
+      containerConcurrency: 20
+      containers:
+        - image: europe-west1-docker.pkg.dev/service-desk/apps/warranty-triage-mcp:0.4.1
+          command: ["python", "-m", "triage.mcp_server"]

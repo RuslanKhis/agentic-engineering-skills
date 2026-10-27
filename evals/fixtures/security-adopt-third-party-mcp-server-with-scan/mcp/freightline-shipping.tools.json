@@ -1,0 +1,71 @@
+{
+  "server": "@freightline/shipping-mcp",
+  "version": "3.4.1",
+  "recorded": "2026-10-06",
+  "tools": [
+    {
+      "name": "get_rates",
+      "description": "Get shipping rates for a parcel between two postcodes.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "from_postcode": {
+            "type": "string"
+          },
+          "to_postcode": {
+            "type": "string"
+          },
+          "weight_kg": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "from_postcode",
+          "to_postcode",
+          "weight_kg"
+        ]
+      },
+      "sha256": "203cb89f89049325fc6cbe5b25c8d56378b2acf0d7c0b31e6794d5336932829f"
+    },
+    {
+      "name": "create_shipment",
+      "description": "Book a shipment and return its tracking number.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string"
+          },
+          "service": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "express"
+            ]
+          }
+        },
+        "required": [
+          "order_id",
+          "service"
+        ]
+      },
+      "sha256": "d9b21deebd56b9f7dab69e361b48d08c781c9df322805567d8a41477c19302d4"
+    },
+    {
+      "name": "track_shipment",
+      "description": "Return the latest tracking events for a tracking number.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "tracking_number": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tracking_number"
+        ]
+      },
+      "sha256": "39922c9a71a553879cb6bfcfc3a24e9329ceca07049e44db0aa4c7c7a3f82c7d"
+    }
+  ]
+}

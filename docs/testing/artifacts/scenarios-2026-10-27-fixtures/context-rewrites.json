@@ -1,0 +1,54 @@
+{
+ "router-builds-at-poc-depth": {
+  "before": "The journeys fixture support agent with T-201: a three-hour proof of concept for a sales demo that cancels an order through a staging API with fake orders, to be productionised later if sales likes it. ADK is not installed.",
+  "after": "Our support assistant repository with ticket tickets/T-201.md: a three-hour proof of concept for a sales demo that cancels an order through a staging API with fake orders, to be productionised later if sales likes it. ADK is not installed."
+ },
+ "router-flags-underestimated-ticket": {
+  "before": "The journeys fixture support agent with T-202: per-customer Gmail connection estimated at 1-2 hours of agent-assisted human effort, for a 30-customer pilot in three weeks. ADK is not installed.",
+  "after": "Our support assistant repository with ticket tickets/T-202.md: per-customer Gmail connection estimated at 1-2 hours of agent-assisted human effort, for a 30-customer pilot in three weeks. ADK is not installed."
+ },
+ "engineer-ends-with-checkpoint-after-contract-delta": {
+  "before": "A five-ticket proof of concept (save and forget a language preference, streamed replies, a journey check, a review presentation). Implementing G01 shows that forgetting must also clear a cached copy in session state, which the design's C2 does not say, and that forget should be a soft delete kept 30 days. The person says the work took about six hours against an estimate of 2-3. ADK is not installed.",
+  "after": "A five-ticket proof of concept under docs/tickets/support/ (save and forget a reply language, streamed replies, honest failed replies, a journey check, a review presentation). While implementing G01 I found that forgetting must also clear the copy of the language cached in session state, which the design's C2 does not say, and we decided forget should be a soft delete kept for 30 days. The work took me about six hours against the 2-3 hour estimate. ADK is not installed."
+ },
+ "guardrails-continuation-accounting-and-duplicates": {
+  "before": "Supply a persistent campaign ledger, counted transport and known failed, interrupted and no-response attempts. The approval covers one review continuation, not upstream generation or a larger cohort. An open reservation becomes an unknown-charge hold; a delayed receipt later settles it twice. The observed provider balance is stale, and one earlier request settled below its conservative reserve. Competing admissions share the last allowed slot.",
+  "after": "Our review-campaign runner keeps a persistent ledger of attempts, reservations and provider receipts (data/ holds the latest export and the receipts that arrived after it) and talks to the provider through a transport that the tests replace with a counting fake. Some earlier attempts failed, were interrupted or got no response. The approval we have covers one review continuation, not upstream generation or a larger cohort. The provider balance on file was read before the last session. No real provider calls are allowed."
+ },
+ "skill-description-optimisation-out-of-scope": {
+  "before": "A copy of this repository with evals/activation.json; no model credentials for batch runs; the user answers questions.",
+  "after": "Our fork of the skills collection, checked out with the two skill packages we change, their activation cases and the package validator; no model credentials for batch selection runs; the user answers questions."
+ },
+ "system-design-review-existing-proposal": {
+  "before": "The proposal uses a browser chat client, a Python ADK service on Cloud Run, a shared document index and an external booking API. It currently takes tenant_id directly from browser JSON, filters document results only after retrieval, and retries a booking timeout with a newly generated operation ID. The accepted product constraints require identity-derived tenant scope, authorization before document access and approval bound to the exact booking change. The provider's replay and reconciliation support remains unknown. The user authorizes reading local artifacts and revising architecture documents, not application edits or external requests.",
+  "after": "The proposal is docs/architecture/proposal.md: a browser chat client, a Python ADK service on Cloud Run, a shared document index and an external booking API, with prototype code under app/ and web/. The accepted product constraints are in docs/architecture/constraints.md. Whether the booking provider supports replaying a request or looking up an operation's outcome is still unknown. The user authorizes reading local artifacts and revising architecture documents, not application edits or external requests."
+ },
+ "system-design-runtime-and-release-review": {
+  "before": "React, OIDC and PostgreSQL are accepted. Three replicas persist conversation events but send only the last 20 events to the model, which the proposal calls history deletion. Exports use replica-local temporary disk. Tool results are paired by tool name, any final-response event marks success, and reconnect resubmits the message. Per-process session locks and immediate reservation release on browser disconnect are proposed. A gradual SDK rollout will change the session storage format. Only a design review is authorized.",
+  "after": "React, OIDC and PostgreSQL are accepted. The runtime proposal for the reporting assistant, including the planned SDK upgrade, is docs/architecture/reporting-assistant.md. Only a design review is authorized."
+ },
+ "system-design-practical-handoff": {
+  "before": "The accepted pilot uses individual preferences; a future group-account preference question is outside this release. Verified login supplies the user ID. No source tree, selected ADK version or cloud credentials have been provided. Local implementation/testing is the intended next phase, while this request authorizes documentation only. Optional third-party planning skills are not installed in this fixture.",
+  "after": "The accepted pilot uses individual preferences; a future group-account preference question is outside this release. Verified login supplies the user ID. No source tree, selected ADK version or cloud credentials have been provided. Local implementation/testing is the intended next phase, while this request authorizes documentation only. Optional third-party planning skills are not installed here."
+ },
+ "system-design-scope-gate-time-boxed": {
+  "before": "A greenfield workspace with five labelled development cases, five unlabelled holdout cases, a local plan PDF pack and a $25 model allowance. The user authorizes local documentation only. No implementation, installation or cloud actions are authorized.",
+  "after": "A greenfield workspace with five labelled development cases, five unlabelled holdout cases, a local plan pack (hand-made text extracts in local-plan/; the PDFs are not in the workspace) and a $25 model allowance. The user authorizes local documentation only. No implementation, installation or cloud actions are authorized."
+ },
+ "designer-phase-gate-plan-versus-code": {
+  "before": "Plan, design and tickets from the plan-in-progress fixture with every phase-1 ticket verified_local; plan_status.py --gate passes on the records. In the code, the merge of G03 reintroduced the session-state cache that G01's evidence says C2 removed; app/tools/export.py changed but is in no ticket's touches; G02's contract_deltas withdraws C5 (bulk delete) yet bulk_delete is still in the agent's tools list; G02's manual OAuth consent item is ticked with no confirmation. Local reading only; no edits to code.",
+  "after": "The design, plan and tickets are under docs/ (docs/architecture/support.md, docs/plans/support.md, docs/tickets/support/), and every phase-1 ticket is verified_local. The plan records the commit phase 1 started from; this copy of the repository has no git history. Local reading only; no edits to code."
+ },
+ "designer-checkpoint-settles-the-agenda": {
+  "before": "Design, plan and tickets as in the plan-in-progress fixture: G01 verified_local with a contract delta on C2, an open soft-delete ruling, actual 6 h against 2-3 h; phase capacity 10 h.",
+  "after": "The design, plan and tickets are under docs/ (docs/architecture/support.md, docs/plans/support.md, docs/tickets/support/). G01 is verified_local; its ticket records a contract delta on C2, an open ruling on soft delete, and actual 6 h against an estimate of 2-3 h. Phase capacity is now 10 h."
+ },
+ "designer-tickets-get-journey-goal-and-lint": {
+  "before": "A pilot plan with four implementation goals and a production-approval presentation goal that depends on them directly; no journey goal exists. The schedule block records goal types.",
+  "after": "A pilot plan in docs/plans/claims.md with its design in docs/architecture/claims.md; the schedule block records goal types. No tickets have been written yet."
+ },
+ "designer-weekly-status-from-plan-evidence": {
+  "before": "The plan-in-progress fixture with a git history; the last update went out on 2026-10-18.",
+  "after": "The design, plan and tickets are under docs/ (this copy of the repository has no git history). The last update went out on 2026-10-18 and is saved as docs/status/2026-10-18.md."
+ }
+}

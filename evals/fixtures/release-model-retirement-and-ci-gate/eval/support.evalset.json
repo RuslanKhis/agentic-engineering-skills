@@ -1,0 +1,1502 @@
+{
+ "eval_set_id": "support-v1",
+ "name": "support regression",
+ "eval_cases": [
+  {
+   "eval_id": "case-01",
+   "conversation": [
+    {
+     "invocation_id": "inv-01",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Where is my order HO-10442?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-02",
+   "conversation": [
+    {
+     "invocation_id": "inv-02",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "I want a refund for HO-10442, the jacket ripped"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       },
+       {
+        "name": "issue_refund",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-03",
+   "conversation": [
+    {
+     "invocation_id": "inv-03",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "How long does express delivery take?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-04",
+   "conversation": [
+    {
+     "invocation_id": "inv-04",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Can I return a gift card?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-05",
+   "conversation": [
+    {
+     "invocation_id": "inv-05",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "What orders have I placed?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "list_my_orders",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-06",
+   "conversation": [
+    {
+     "invocation_id": "inv-06",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "My parcel arrived damaged, what now?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-07",
+   "conversation": [
+    {
+     "invocation_id": "inv-07",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Change my password please"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-08",
+   "conversation": [
+    {
+     "invocation_id": "inv-08",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Refund 300 euros on HO-10518"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-09",
+   "conversation": [
+    {
+     "invocation_id": "inv-09",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Is HO-10518 shipped yet?"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-10",
+   "conversation": [
+    {
+     "invocation_id": "inv-10",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Cancel my order HO-10518"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-11",
+   "conversation": [
+    {
+     "invocation_id": "inv-11",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Where is my order HO-10442? (variant 1)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-12",
+   "conversation": [
+    {
+     "invocation_id": "inv-12",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "I want a refund for HO-10442, the jacket ripped (variant 1)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       },
+       {
+        "name": "issue_refund",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-13",
+   "conversation": [
+    {
+     "invocation_id": "inv-13",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "How long does express delivery take? (variant 1)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-14",
+   "conversation": [
+    {
+     "invocation_id": "inv-14",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Can I return a gift card? (variant 1)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-15",
+   "conversation": [
+    {
+     "invocation_id": "inv-15",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "What orders have I placed? (variant 1)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "list_my_orders",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-16",
+   "conversation": [
+    {
+     "invocation_id": "inv-16",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "My parcel arrived damaged, what now? (variant 1)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-17",
+   "conversation": [
+    {
+     "invocation_id": "inv-17",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Change my password please (variant 1)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-18",
+   "conversation": [
+    {
+     "invocation_id": "inv-18",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Refund 300 euros on HO-10518 (variant 1)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-19",
+   "conversation": [
+    {
+     "invocation_id": "inv-19",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Is HO-10518 shipped yet? (variant 1)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-20",
+   "conversation": [
+    {
+     "invocation_id": "inv-20",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Cancel my order HO-10518 (variant 1)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-21",
+   "conversation": [
+    {
+     "invocation_id": "inv-21",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Where is my order HO-10442? (variant 2)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-22",
+   "conversation": [
+    {
+     "invocation_id": "inv-22",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "I want a refund for HO-10442, the jacket ripped (variant 2)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       },
+       {
+        "name": "issue_refund",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-23",
+   "conversation": [
+    {
+     "invocation_id": "inv-23",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "How long does express delivery take? (variant 2)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-24",
+   "conversation": [
+    {
+     "invocation_id": "inv-24",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Can I return a gift card? (variant 2)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-25",
+   "conversation": [
+    {
+     "invocation_id": "inv-25",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "What orders have I placed? (variant 2)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "list_my_orders",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-26",
+   "conversation": [
+    {
+     "invocation_id": "inv-26",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "My parcel arrived damaged, what now? (variant 2)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-27",
+   "conversation": [
+    {
+     "invocation_id": "inv-27",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Change my password please (variant 2)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-28",
+   "conversation": [
+    {
+     "invocation_id": "inv-28",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Refund 300 euros on HO-10518 (variant 2)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-29",
+   "conversation": [
+    {
+     "invocation_id": "inv-29",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Is HO-10518 shipped yet? (variant 2)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-30",
+   "conversation": [
+    {
+     "invocation_id": "inv-30",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Cancel my order HO-10518 (variant 2)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-31",
+   "conversation": [
+    {
+     "invocation_id": "inv-31",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Where is my order HO-10442? (variant 3)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-32",
+   "conversation": [
+    {
+     "invocation_id": "inv-32",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "I want a refund for HO-10442, the jacket ripped (variant 3)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       },
+       {
+        "name": "issue_refund",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-33",
+   "conversation": [
+    {
+     "invocation_id": "inv-33",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "How long does express delivery take? (variant 3)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-34",
+   "conversation": [
+    {
+     "invocation_id": "inv-34",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Can I return a gift card? (variant 3)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-35",
+   "conversation": [
+    {
+     "invocation_id": "inv-35",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "What orders have I placed? (variant 3)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "list_my_orders",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-36",
+   "conversation": [
+    {
+     "invocation_id": "inv-36",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "My parcel arrived damaged, what now? (variant 3)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-37",
+   "conversation": [
+    {
+     "invocation_id": "inv-37",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Change my password please (variant 3)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "search_help",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-38",
+   "conversation": [
+    {
+     "invocation_id": "inv-38",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Refund 300 euros on HO-10518 (variant 3)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-39",
+   "conversation": [
+    {
+     "invocation_id": "inv-39",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Is HO-10518 shipped yet? (variant 3)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  },
+  {
+   "eval_id": "case-40",
+   "conversation": [
+    {
+     "invocation_id": "inv-40",
+     "user_content": {
+      "role": "user",
+      "parts": [
+       {
+        "text": "Cancel my order HO-10518 (variant 3)"
+       }
+      ]
+     },
+     "intermediate_data": {
+      "tool_uses": [
+       {
+        "name": "lookup_order",
+        "args": {}
+       }
+      ]
+     },
+     "final_response": {
+      "role": "model",
+      "parts": [
+       {
+        "text": "(reference reply omitted)"
+       }
+      ]
+     }
+    }
+   ],
+   "session_input": {
+    "app_name": "support",
+    "user_id": "cust-ana",
+    "state": {}
+   }
+  }
+ ]
+}
