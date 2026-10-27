@@ -138,5 +138,5 @@ Labels follow [evidence labels](operating-rules.md#evidence-labels). This skill'
 Report skipped/inapplicable checks and why. An implementation is ready for its
 stated scope only when the changed invariants have evidence and pending cloud
 or production work is explicit. See [compatibility.md](compatibility.md) for
-provenance and [skill-validation.md](skill-validation.md) for this package's
+provenance and skill-validation.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/protect-adk-sensitive-data/skill-validation.md`) for this package's
 dated creation and subsequent recheck results.

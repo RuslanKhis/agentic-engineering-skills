@@ -81,7 +81,7 @@ real parallel scheduling/state, loop exit, callback substitutions/chains, stale
 state after a failed later turn and structured output, not real Gemini quality.
 Their explicit version gate fails on an unsupported SDK instead of silently
 skipping tests. See [compatibility.md](compatibility.md) for versions and
-[validation-results.md](validation-results.md) for the actual creation-time checks.
+validation-results.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-workflow-design/validation-results.md`) for the actual creation-time checks.
 
 ## Completion report
 

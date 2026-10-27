@@ -6,7 +6,7 @@ Inspect declared and locked Python/ADK/GenAI/auth/provider versions and the sele
 
 The reusable inspector and public-text adapter require Python 3.11+ and use only the standard library. Before using SDK-shaped adapters, verify the actual pinned event, ToolContext, callback and session contracts. If the target version lacks a required interface, identify it and stop that dependent implementation/live check; propose a compatible local adaptation or an explicitly approved version change. A version different from the historical baseline is unverified, not automatically unsupported. Do not claim compatibility with “latest ADK”.
 
-The source baseline was Python 3.11, google-adk 2.8.0, google-genai 2.23.0, google-cloud-secret-manager 2.30.0, google-auth 2.58.0, httpx 0.28.1, Firebase Admin 7.5.0 and grpcio 1.83.1. The source requirements range for grpcio and its resolved snapshot are different facts. The original offline acceptance used pytest 9.1.1. Newly packaged helper/agent checks have their own versions in [skill-validation.md](skill-validation.md).
+The source baseline was Python 3.11, google-adk 2.8.0, google-genai 2.23.0, google-cloud-secret-manager 2.30.0, google-auth 2.58.0, httpx 0.28.1, Firebase Admin 7.5.0 and grpcio 1.83.1. The source requirements range for grpcio and its resolved snapshot are different facts. The original offline acceptance used pytest 9.1.1. Newly packaged helper/agent checks have their own versions in skill-validation.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-tool-auth-and-secrets/skill-validation.md`).
 
 ## Rule provenance and limits
 

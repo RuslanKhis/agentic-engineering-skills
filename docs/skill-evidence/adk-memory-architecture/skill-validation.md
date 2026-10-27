@@ -1,5 +1,7 @@
 # Skill package validation
 
+> Maintainer record, moved out of `skills/adk-memory-architecture/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 Initial validation: 15 September 2026. The implementation-depth recheck on
 16 September 2026 is recorded at the end. This record concerns the reusable
 skill; historical application acceptance is qualified in

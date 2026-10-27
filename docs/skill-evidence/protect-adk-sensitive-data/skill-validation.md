@@ -1,5 +1,7 @@
 # Skill creation validation — 15 September 2026
 
+> Maintainer record, moved out of `skills/protect-adk-sensitive-data/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 This creation record is preserved as dated evidence. The later
 [depth recheck](#depth-recheck--16-september-2026) records new resources, gaps
 found and fresh checks; the original counts below are not current suite totals.

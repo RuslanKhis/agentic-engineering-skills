@@ -216,4 +216,4 @@ capacity, retained/soft-deleted storage, pending operations and delayed charges;
 an empty visible VPC is neither proof of all-project cleanup nor a billing cap.
 
 Find the implementation tests and dated evidence for these lessons in
-[provenance.md](provenance.md).
+provenance.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-memory-architecture/provenance.md`).

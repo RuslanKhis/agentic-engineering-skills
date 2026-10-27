@@ -1,5 +1,7 @@
 # Skill verification record
 
+> Maintainer record, moved out of `skills/adk-sql-agent-engineering/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 Initial validation: 15 September 2026. The first sections preserve that package's results; the dated depth-review section below records the 16 September revision. Neither is a new cloud deployment or live companion campaign.
 
 ## Environment

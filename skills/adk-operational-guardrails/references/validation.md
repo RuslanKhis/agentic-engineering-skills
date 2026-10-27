@@ -55,7 +55,7 @@ If latency matters, measure from submission to meaningful content and final comp
 
 Report exact commands, versions, passed/failed/skipped counts and remaining manual steps. Label each claim as [evidence labels](operating-rules.md#evidence-labels) defines: current offline (`offline` or `local`), `historical` live, current `live`, mocked (`local (mocked)`) or unverified production design (`guidance`). Record source identity where possible. Any authorised cleanup must independently confirm removal of owned resources and preserve existing resources; absence of created resources makes lifecycle testing not applicable, not passed.
 
-Skill maintainers: run the official structural validator, test every helper's help/dry-run, check internal links/frontmatter/unfinished scaffold text, copy the whole skill to a clean temporary workspace and exercise the scenarios in [forward cases](../tests/forward-cases.md). Recheck existing implementation and second invocation before claiming portability. Exact validation records live in [validation results](validation-results.md).
+Skill maintainers: run the official structural validator, test every helper's help/dry-run, check internal links/frontmatter/unfinished scaffold text, copy the whole skill to a clean temporary workspace and exercise the scenarios in [forward cases](../tests/forward-cases.md). Recheck existing implementation and second invocation before claiming portability. Exact validation records live in validation results (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-operational-guardrails/validation-results.md`).
 
 ## Laptop recheck — 16 September 2026
 

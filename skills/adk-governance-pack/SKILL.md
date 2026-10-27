@@ -48,60 +48,22 @@ a supporting tool for the client's counsel.
 
 ## Screen the jurisdictions first
 
-Before drafting anything, decide which regimes apply, using
-[jurisdiction screen](references/jurisdiction-screen.md). Take each fact
-from the record (next section) with its ID, or from the user as
-`source: <role>, <date>`:
+Before drafting anything, decide which regimes apply: read
+[jurisdiction screen](references/jurisdiction-screen.md) and establish its
+facts from the record (next section) with their IDs, or from the user as
+`source: <role>, <date>`. Its rules hold for every pack:
 
-- where the client is established and carries on business;
-- where the data subjects are: users, employees, applicants, customers,
-  people named in records;
-- where processing happens: hosting, the model's processing region (from
-  the model page, which can differ from where the endpoint is offered),
-  logs, grounding, abuse monitoring, telemetry, and the consultancy's own
-  staff in Australia who build, test, review traces or support it;
-- where in the country the people are, when it matters: the Canadian
-  province (Quebec, Ontario, Alberta, BC), and for a NSW agency any
-  recipient outside NSW;
-- the client type: private company; Australian Commonwealth agency; NSW
-  agency or other state or local government; UK central government; US
-  federal agency or contractor; New Zealand public sector; Singapore public
-  agency; Canadian federal institution or Ontario ministry;
-- the contract vehicle for a NSW agency (ICTA or Core&) and its value;
-- the sector: finance, health, insurance, credit, employment, education,
-  children's services;
-- the decision effects: does an output decide, or feed a decision about, a
-  person's job, money, credit, housing, insurance, health, education, a
-  benefit or access to a service?
-
-Then apply these rules:
-
-- **The order is always Australia, United States, EU, UK, New Zealand,
-  Singapore, Canada.** Lists, tables, sections and the front matter follow
-  it.
-- **Write only the sections whose regime is triggered, and record a reason
-  for every regime that is not.** The regulatory memo's "Jurisdiction
-  screen" table has a row for each of the seven regimes; the
-  proof-of-concept note gives each a line in its Classification section. A
-  screen with only the first four rows fails the checker until it gains
-  rows for New Zealand, Singapore and Canada.
-- **Record the result in every draft's front matter**, for example
-  `jurisdictions: [au, eu]`, using the codes `au`, `us`, `eu`, `uk`, `nz`,
-  `sg`, `ca` in that order. Name Canada as "Canada" or "Quebec", never "CA"
-  (California). The checker fails a draft whose list is missing, empty or
-  out of order, or that carries a regime section whose code is not listed.
-- **An unknown fact is a `gap:` line, and the regime stays in scope until it
-  is resolved.** Over-including is safer: counsel can strike a section out,
-  but cannot review one that was never written.
-- **Only the EU has an AI Act.** The other six regimes' sections screen
-  which existing laws apply and assign no risk tier: the US sections screen
-  state AI and automated-decision laws, sector laws and FTC claims; the
-  Australian, UK, New Zealand, Singapore and Canadian sections screen
-  privacy, consumer, employment, sector and government rules.
-- **A NSW or Commonwealth agency client** adds the NSW or Commonwealth
-  material inside the `au` sections (no new code), sets
-  `counsel_required: yes`, and gets draft answers to the official forms
-  (Draft each document, step 5).
+- The order is always Australia, United States, EU, UK, New Zealand,
+  Singapore, Canada (codes `au`, `us`, `eu`, `uk`, `nz`, `sg`, `ca`), in
+  every list, table and front matter.
+- Every draft's front matter records the result as `jurisdictions: [...]`,
+  and the screen table has a row, with its reason, for each of the seven
+  regimes.
+- Write only the sections whose regime is triggered. An unknown fact is a
+  `gap:` line and keeps the regime in scope.
+- Only the EU has an AI Act. A NSW or Commonwealth agency client adds its
+  material inside the `au` sections, sets `counsel_required: yes` and gets
+  draft answers to the official forms (Draft each document, step 5).
 
 ## Read the record first
 
@@ -206,14 +168,14 @@ Copy each template into `docs/governance/<topic>/` under its own name
 `government-form-answers-<form>.md`), delete the regime sections whose code
 is not in `jurisdictions:` and the regime bullets and rows for those regimes
 inside shared sections (Summary, Roles, Applicable dates, Screening), and
-fill it in this order, because later ones cite earlier ones. When Australia is in scope only through the
-consultancy's own handling, the Australian sections are scoped to that
-handling: write `n/a:` with the reason for the client's own APP 1.7 and
-sector rows, let the inventory describe the consultancy's handling for its
-own privacy policy, and skip the Guidance for AI Adoption mapping, which is
-for Australian clients. For a NSW agency the APP sections work the same way:
-they cover the consultancy's handling outside the s 7B(5) State contract
-exemption, and the agency's own handling goes in the NSW sections.
+fill it in this order, because later ones cite earlier ones. Scope the
+Australian (APP) sections by case:
+
+| When | The APP sections cover | Also |
+| --- | --- | --- |
+| Australia is in scope only through the consultancy's own handling | That handling only | Write `n/a:` with the reason for the client's own APP 1.7 and sector rows; the inventory describes the consultancy's handling for its own privacy policy; skip the Guidance for AI Adoption mapping, which is for Australian clients |
+| The client is a NSW agency | The consultancy's handling outside the s 7B(5) State contract exemption | The agency's own handling goes in the NSW sections |
+| Any other pack with `au` in scope | The client's handling | Nothing extra |
 
 1. **Regulatory memo** ([template](assets/regulatory-memo-template.md)):
    the jurisdiction screen first, then roles in every regime in scope, then

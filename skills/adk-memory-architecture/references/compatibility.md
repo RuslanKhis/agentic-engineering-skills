@@ -29,7 +29,7 @@ contains these versions (selected from 120 distributions):
 
 The helper uses the Python standard library and requires Python 3.11+. The
 skill's own tests require pytest; their actual environment is recorded in
-[skill-validation.md](skill-validation.md). These are separate environments.
+skill-validation.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-memory-architecture/skill-validation.md`). These are separate environments.
 Plain Markdown remains usable without running the helper.
 
 ## Verify the target before applying SDK details

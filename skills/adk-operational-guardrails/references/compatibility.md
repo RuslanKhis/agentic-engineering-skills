@@ -7,7 +7,7 @@ Read before adopting an ADK-specific API, selecting a dependency version or clai
 | Scope | Exact baseline | What it establishes |
 | --- | --- | --- |
 | Historical companion offline + local live model/browser verification, 13 September 2026 | Python 3.11.4, macOS arm64; `google-adk==2.8.0`, `google-genai==2.23.0`, `google-cloud-pubsub==2.39.0`, `google-api-python-client==2.197.0` | The bounded local behaviours described in [evidence](evidence.md); not a cloud deployment |
-| Skill helper/template and fixture checks | See [validation results](validation-results.md) for commands, date and exact installed versions | Only the checks actually recorded there; no newly executed live campaign |
+| Skill helper/template and fixture checks | See validation results (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-operational-guardrails/validation-results.md`) for commands, date and exact installed versions | Only the checks actually recorded there; no newly executed live campaign |
 
 The companion declares ADK, Pub/Sub and API client pins but does not pin the transitive `google-genai` version. Therefore the same requirements file can resolve a different environment. Do not silently treat historical and current installed versions as equivalent.
 

@@ -1,5 +1,7 @@
 # Provenance and scope of the rules
 
+> Maintainer record, moved out of `skills/deploy-adk-on-google-cloud/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 This skill adapts Chapter 3 of *Agentic Engineering* and its MIT-licensed companion implementation. The source snapshot reviewed for skill creation is `c909d7e5d285ae582abb3899bbe162fa55f075dd`. The resources linked below are provenance; the installed skill does not require the manuscript or companion repository to operate. No verified public book-sales URL was available, so none is invented.
 
 ## Rule-to-evidence map

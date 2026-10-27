@@ -386,47 +386,13 @@ contract IDs they prove.
 
 Finish with dependency-ordered goals for useful end-to-end behavior, grouped into
 phases: phase 1 fits the stated capacity, phase 2 graduates or hardens the result,
-and a later list holds deferred items with their triggers. Where someone's
-decision stands between phases (approval to build, approval to productionise, a
-results review after the production build), add a **presentation goal** at that
-boundary: type presentation, `Primary skill: adk-presenter`, one goal per audience
-the review needs (business, technical), estimated in human hours because preparing
-and giving it is hands-on work, with the review date as a calendar wait on the
-goals that depend on the decision. The approval goal before the build is the first
-goal of phase 1 and depends on nothing but the design; the proof-of-concept review
-goal closes phase 1's build, followed by the teardown goal when its resources are
-not carried forward; the results review goal closes the production phase and is
-followed by an optional case-study goal when the result may be shared. Each review
-of built work waits for a **journey goal** (type journey, `Primary skill:
-adk-agent-evaluation`, Playwright as companion for a web interface) that runs the
-design's journey end to end and every `pass_to_pass` test; tickets that pass one
-at a time do not show the whole path works. For a client engagement, a **statement
-of work goal** (`Primary skill: adk-system-designer`, read [engagement
-scoping](references/engagement-scoping.md)) precedes or accompanies the approval
-presentation, and its signature is a calendar wait on the build; when people other
-than the builders will use or run the result, a **rollout goal** (`adk-presenter`,
-rollout pack) and an **operations handover goal** (`adk-agent-observability`) come
-before production go-live and the results review. A presentation goal's acceptance
-is that the outline passes the presenter's deck check and every claim cites
-evidence recorded in this plan; the goal cannot complete before the goals whose
-evidence it presents. Each goal needs a stable ID, phase, estimate, the contracts
-it proves and decisions it implements (by ID), bounded changes and integration
-points, the resources it creates (each with idle cost, cleanup command and
-verification), a `Primary skill` and `Supporting skills` line, prerequisites,
-acceptance cases that cite those contracts, status, unresolved blockers and its
-own one-line run prompt; a goal that creates or changes a web component also names
-its companion skills, the design system it follows and the security rule IDs its
-acceptance proves.
-
-A phase whose resources are not carried forward (a POC after its review, a
-pilot that stops, a disposable environment) ends with a **teardown goal**
-placed after the review goal and counted in the phase's hours,
-`Primary skill: deploy-adk-on-google-cloud`, that runs the recorded cleanup
-commands, checks dependants and retention, and reads the billing report;
-its acceptance is absent-or-retained-with-owner per resource, as
-[delivery profiles](references/delivery-profiles.md#split-the-plan-into-phases)
-describes. At MVP and above, the same resources are instead owned by a cost
-contract and a decommission item in the Later list.
+and a later list holds deferred items with their triggers. Write them from the
+[implementation plan](assets/implementation-plan-template.md): its "Goals and
+dependencies" section says where the presentation, journey, teardown, statement
+of work, rollout and operations handover goals sit, with their primary skills
+and acceptance, and its goal entry lists every field a goal carries (a web
+component goal adds companion skills, design system and security rule IDs).
+Read that section before writing the first goal.
 
 When the scope gate records personal data, decisions about people (hiring, credit,
 education, access to services) or a regulated domain, or the profile is MVP, pilot

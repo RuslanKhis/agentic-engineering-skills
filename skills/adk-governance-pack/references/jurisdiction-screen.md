@@ -48,7 +48,7 @@ a section counsel strikes out costs less than missing one.
 | Who at the consultancy can see personal data, and from where: build, test, evaluation sets, log and trace review, support, incidents | Australian staff access is a restricted transfer for EU and UK data, an s 11 agent or IPP 12 fact for New Zealand data, a Transfer Limitation Obligation transfer for Singapore data, an s 17 flow for Quebec data and an s 19(2) fact for a NSW agency's data, and brings the consultancy's own Privacy Act position into scope | Design operations and access decisions; SOW support terms |
 | Client type: private company; Australian Commonwealth agency (non-corporate Commonwealth entity); NSW public sector agency (DCS-2026-02 entity types: departments, executive agencies, separate agencies, statutory bodies, state owned corporations, public financial and non-financial corporations, advisory entities); other state agency; local council; UK central government department or arm's-length body; US federal agency or contractor; New Zealand public service department, Crown entity or local authority; Singapore ministry, organ of state or statutory board; Canadian federal institution, Ontario ministry or provincial agency | Government clients carry mandatory assessments and forms (DTA, NSW AIAF, ATRS, Canada's AIA) and public-law duties | Brief stakeholders |
 | Contract vehicle and value: NSW ICTA or Core&, value against $150,000 (including GST) and $1 million (excluding GST), Digital Assurance Framework above $5 million; Commonwealth contract terms | GIPA contracts register; ICTA clause 6.11 AI clauses and model-change notice; s 7B(5) State contract exemption; s 95B | SOW; brief stakeholders; `agency:` |
-| Sector: finance, health, insurance, credit, employment, education, telecommunications marketing | Sector statutes and regulators | Brief context |
+| Sector: finance, health, insurance, credit, employment, education, children's services, telecommunications marketing | Sector statutes and regulators | Brief context |
 | Decision effects: does an output decide, or feed a decision about, a person's job, money, credit, housing, insurance, health, education, a benefit or access to a service? Is a person's review measured? Is any decision made by the system alone? | Automated-decision rules (APP 1.7, GDPR and UK GDPR, US state laws, Quebec s 12.1) and the accuracy and fairness duties of the others; counsel triggers | Design contracts (C IDs), plan M records |
 | Province or state of the people: Quebec, Ontario, Alberta, BC; NSW and other Australian states | Canada chooses the privacy law flow by flow; NSW s 19(2) reaches any recipient outside NSW | Brief §4 data register; design users |
 | Channel: consumer-facing chat, voice, outbound messages, public web | Chatbot disclosure, consumer law, marketing rules | Design channels |
@@ -68,6 +68,12 @@ a section counsel strikes out costs less than missing one.
 | `au` NSW government client | The client is a NSW public sector agency or state owned corporation, or the consultancy works under a NSW State contract | Not a separate code: the `au` sections add the NSW material from [Australia](australia.md) (AIAF registration and assessment, the PPIP and HRIP Acts with s 19(2), Part 6A, GIPA, the State Records Act 1998, the NSW Cyber Security Policy, ICTA clause 6.11), the memo's "Australia: Government client" section and government form answers from [AU government crosswalks](au-government-crosswalks.md). The consultancy's acts under the State contract fall under s 7B(5); its other acts stay under the APPs (`counsel:`). Always `counsel_required: yes` |
 | `au` Commonwealth client | The client is a non-corporate Commonwealth entity (corporate entities opt in) | DTA policy v2.1 and tool v1.0; the Agencies Privacy Code PIA; s 95B contract terms; government form answers from the crosswalks. Always `counsel_required: yes` |
 
+**Only the EU has an AI Act.** The other six regimes' sections screen which
+existing laws apply and assign no risk tier: the US sections screen state AI
+and automated-decision laws, sector laws and FTC claims; the Australian, UK,
+New Zealand, Singapore and Canadian sections screen privacy, consumer,
+employment, sector and government rules.
+
 **A public website or chat reachable from anywhere** does not by itself put
 every country in scope. Record whether the client offers its services to,
 or monitors, people there (language, currency, delivery, marketing). Where
@@ -82,6 +88,10 @@ transfer as `counsel:`.
 
 ## Record the result
 
+- **Sections.** Write only the sections whose regime is triggered, and
+  record a reason for every regime that is not. Over-including is safer:
+  counsel can strike a section out, but cannot review one that was never
+  written.
 - **Front matter.** Every draft carries `jurisdictions: [<codes>]` in the
   order above. The checker fails a draft whose list is missing, empty,
   out of order or holds an unknown code, and fails a regime section whose

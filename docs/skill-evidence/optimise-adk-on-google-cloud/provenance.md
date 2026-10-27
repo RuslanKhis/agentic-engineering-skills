@@ -1,5 +1,7 @@
 # Provenance and scope
 
+> Maintainer record, moved out of `skills/optimise-adk-on-google-cloud/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 This skill translates updated Chapter 4 Parts 1, 2 and 3 into conditional engineering
 actions. Its editorial sources are
 `chapter-04-cloud-optimization/manuscript/CHAPTER-04-PART-1-UPDATED.md`,

@@ -178,6 +178,14 @@ call), `custom_metadata` (the dict passed as `RunConfig.custom_metadata`),
    `search_memory` itself and states that memory is unavailable; do not
    subclass `PreloadMemoryTool`, which needs private ADK calls. A
    write-then-read test under one scope proves the scope fields agree.
+
+   Do not rely on entry metadata in recall results: the ADK 2.8.0
+   `MemoryEntry` schema supports metadata, but the inspected Memory Bank
+   search adapter (`vertex_ai_memory_bank_service.py`) drops it; inspect the
+   installed version before depending on it. The companion's resource body
+   fixed fact TTL at 24 hours, so changing `MEMORY_TTL_SECONDS` alone did not
+   update it.
+
 6. `BaseMemoryService` has no delete method in 2.8.0 nor in 2.12.0 (installed
    package, read 2026-10-23: `add_session_to_memory`, `add_events_to_memory`,
    `add_memory`, `search_memory` only), so forgetting

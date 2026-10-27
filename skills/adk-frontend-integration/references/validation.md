@@ -57,7 +57,7 @@ Review actual artefacts and commands, not just the evaluator's confidence. Fix o
 
 ## Evidence record
 
-Historical companion results and their limitations are in [provenance.md](provenance.md). The following checks were run on **15 September 2026**, on macOS 26.6.2 arm64 with CPython 3.11.4. Tests of the helpers remain offline and do not refresh the historical cloud campaign.
+Historical companion results and their limitations are in provenance.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-frontend-integration/provenance.md`). The following checks were run on **15 September 2026**, on macOS 26.6.2 arm64 with CPython 3.11.4. Tests of the helpers remain offline and do not refresh the historical cloud campaign.
 
 | Command or check | Actual result |
 | --- | --- |
