@@ -19,6 +19,7 @@ metadata:
   source-chapter: "4"
   source-part: "1,2,3"
   last-tested: "2026-09-16"
+  verified-against: "google-adk 2.8.0 companion runs and package tests 2026-09-16; 2.12.0 source read 2026-10-25"
   version: "2026.10.26.3"
 ---
 
@@ -104,20 +105,19 @@ security overhaul or UI rewrite is not an implied optimisation task.
 
 ## Authority and safety
 
-Repository and cloud inspection are read-only by default. Local code permission
-does not authorise deployment or paid tests. Before API activation, provisioning,
-IAM/secret changes, data migration, deployment, deletion or paid/destructive live
-testing, show the exact account, project, region, resources, commands, work
-limits and isolated target, then obtain explicit approval. Existing approval
-counts only for that exact scope. Billing linkage and quota increases require
-their own approval. Keep cleanup separate and confirmed; delete only resources
-whose creation and ownership this workflow recorded.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
 
-Use synthetic data, ADC/workload identity and managed secret storage where
-appropriate. Keep credentials, customer content and personal resource identifiers
-out of generated examples and routine reports. Use least privilege rather than
-Owner, Editor or wildcard grants. Setup and cleanup must tolerate repetition;
-uncertain remote outcomes require reconciliation before replay.
+Billing linkage and quota increases require their own approval. Verify owned
+cleanup of caches separately from sessions.
 
 ## Validate and finish
 
@@ -138,10 +138,15 @@ owned cleanup, including caches separately from sessions. Repeat the local
 adaptation to check for duplicate wiring or needless changes.
 
 Report files changed, commands actually executed, exact versions, actual results,
-manual steps and remaining uncertainty. Distinguish **local**, **mocked**,
-**live** and **not run**, with PASS/FAIL/BLOCKED where appropriate. State what the
-change improves and what the evidence cannot establish. Read
-[provenance.md](references/provenance.md) to trace a rule to prior evidence and
-[skill-validation.md](references/skill-validation.md) for this package's checks.
+manual steps and remaining uncertainty. State what the change improves and
+what the evidence cannot establish.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 Independent community project; not affiliated with or endorsed by Google.

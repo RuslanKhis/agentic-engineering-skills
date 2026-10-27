@@ -1,5 +1,7 @@
 # Skill validation results
 
+> Maintainer record, moved out of `skills/adk-workflow-design/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 Initial validation: **15 September 2026**. The depth-review checks of
 **16 September 2026** are recorded below. These results concern this skill, separately from
 historical companion evidence in [provenance.md](provenance.md). No live Google

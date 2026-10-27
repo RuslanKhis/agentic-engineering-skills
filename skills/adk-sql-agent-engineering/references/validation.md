@@ -68,11 +68,11 @@ Count diagnostics separately from acceptance samples. Preserve failures and samp
 
 ## Report format
 
-For each changed boundary, report the relevant files, command, exit status, assertion and evidence class. Then list absent prerequisites and untested claims. Use these labels consistently:
+For each changed boundary, report the relevant files, command, exit status, assertion and evidence label. Then list absent prerequisites and untested claims. Use [evidence labels](operating-rules.md#evidence-labels) consistently:
 
-- **LIVE VERIFIED:** real service exercised in the named environment and bounded sample.
-- **OFFLINE VERIFIED:** local execution, with each model/database/HTTP substitute named.
-- **NOT RUN:** no evidence for this run; explain the missing prerequisite or scope.
-- **PRODUCTION PRINCIPLE:** recommended design requiring target-specific implementation and validation.
+- `live`: real service exercised in the named environment and bounded sample.
+- `offline` or `local (mocked)`: local execution, with each model/database/HTTP substitute named (a SQLite substitute or provider double is `local (mocked)`).
+- `not run`: no evidence for this run; explain the missing prerequisite or scope.
+- `guidance`: recommended design requiring target-specific implementation and validation. Earlier campaigns marked LIVE VERIFIED, OFFLINE VERIFIED or PRODUCTION PRINCIPLE in this skill's references are `historical` or `guidance` for a new target.
 
 Valid skill Markdown alone does not establish agent behaviour. Forward-test greenfield implementation, adaptation of custom code, missing prerequisites, an approval-bound operation, a near-miss request and a repeat invocation. Give independent evaluators only the skill, fixture and realistic request; inspect their actual changes and results.

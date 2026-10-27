@@ -1,5 +1,7 @@
 # Provenance and evidence limits
 
+> Maintainer record, moved out of `skills/adk-frontend-integration/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 Evidence reviewed: **16 September 2026**. The source companion is the MIT-licensed [Agentic Engineering repository](https://github.com/RuslanKhis/agentic-engineering-adk-gcp). Paths below are relative to its `chapter-05-frontend-integration/` directory. They identify provenance; installing or using this skill does not require that repository, the manuscript, or this conversation. Preserve applicable MIT notices when redistributing adapted source code.
 
 This reference records historical companion evidence, not validation results for the new skill or the user's project. “Offline” means the stated application or SDK boundary ran with its external model, provider transport, or command boundary replaced. It does not mean Google Cloud was exercised.

@@ -113,10 +113,12 @@ Hand these to `adk-agent-evaluation` once the seam tests pass:
 
 ## Evidence tiers for the report
 
-| Tier | What it covers here |
+Labels follow [evidence labels](operating-rules.md#evidence-labels).
+
+| Label | What it covers here |
 | --- | --- |
-| Source verified | Behaviour read in the named google-adk file at the pinned version |
-| Local | Inventory and card reports, manifest diffs, unit tests of fakes |
-| Mocked | Scripted-model Runner tests against fake MCP servers and A2A peers |
-| Live | An approved exchange with the real server or peer, with date, versions and identity named |
-| Not run | Anything above that was not executed on the target |
+| `offline (source read)` | Behaviour read in the named google-adk file at the pinned version |
+| `offline` | Inventory and card reports, manifest diffs, unit tests of fakes |
+| `local (mocked)` | Scripted-model Runner tests against fake MCP servers and A2A peers |
+| `live` | An approved exchange with the real server or peer, with date, versions and identity named |
+| `not run` | Anything above that was not executed on the target |

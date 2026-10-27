@@ -119,17 +119,24 @@ where those contracts matter, while replacing all provider transports.
 
 ## Evidence labels and completion
 
-- **Fresh offline:** commands and result counts from this task, with doubles and
-  limitations named. Syntax checks are not integration tests.
-- **Fresh live:** new approved calls with exact backend/versions/target, bounded
-  call/time/cost envelope and cleanup evidence. Omit this label if none ran.
-- **Historical live:** dated companion evidence, scoped to its actual workflow.
-  It does not validate today's target, new asset or a modified provider adapter.
-- **Production guidance:** requirements/adaptations not yet established by the
-  target's tests, including identity, durability, residency and detector accuracy.
+Labels follow [evidence labels](operating-rules.md#evidence-labels). This skill's references still say "fresh offline",
+"fresh live", "historical live" and "production guidance"; they map as below.
+
+- `offline` or `local (mocked)` (fresh offline): commands and result counts from
+  this task, with doubles and limitations named. Syntax checks are not
+  integration tests.
+- `live` (fresh live): new approved calls with exact backend/versions/target,
+  bounded call/time/cost envelope and cleanup evidence. Omit this label if none
+  ran.
+- `historical` (historical live): dated companion evidence, scoped to its actual
+  workflow. It does not validate today's target, new asset or a modified
+  provider adapter.
+- `guidance` (production guidance): requirements/adaptations not yet
+  established by the target's tests, including identity, durability, residency
+  and detector accuracy.
 
 Report skipped/inapplicable checks and why. An implementation is ready for its
 stated scope only when the changed invariants have evidence and pending cloud
 or production work is explicit. See [compatibility.md](compatibility.md) for
-provenance and [skill-validation.md](skill-validation.md) for this package's
+provenance and skill-validation.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/protect-adk-sensitive-data/skill-validation.md`) for this package's
 dated creation and subsequent recheck results.

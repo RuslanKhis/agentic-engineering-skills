@@ -15,6 +15,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "10"
   last-tested: "2026-09-16"
+  verified-against: "google-adk 2.8.0 companion run 2026-09-13; 2.12.0 offline scripted-model trial 2026-10-25"
   version: "2026.10.26.3"
 ---
 
@@ -84,9 +85,18 @@ Reuse project modules rather than replacing the project with a sample applicatio
 
 ## 4. Obtain approval at the consequential boundary
 
-Repository and cloud inspection are read-only by default. Local code generation does not authorise deployment. Before enabling APIs, creating billable resources, changing IAM, creating secrets, migrating data, deploying, deleting resources or running paid/destructive tests, present the **exact project, region/location, resource names, commands, limits and cleanup scope**, and obtain explicit approval. Apply an existing approval only to its recorded scope; ask again only when that scope changes.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
 
-Finish the local code, plan and offline checks so approval is for a concrete operation. Missing credentials should still allow offline work. Use an isolated test target and a bounded campaign for approved live tests. Keep cleanup separate, confirm it explicitly, and delete only resources created by this operation with matching ownership records. Do not adopt pre-existing resources by relabelling them. Detailed procedures are in the [lifecycle runbook](references/lifecycle-runbook.md); apply the boundaries in [execution safety](references/execution-safety.md#cloud-lifecycle).
+Use a bounded campaign for approved live tests. Detailed procedures are in the [lifecycle runbook](references/lifecycle-runbook.md); apply the boundaries in [execution safety](references/execution-safety.md#cloud-lifecycle).
 
 ## 5. Validate and report
 
@@ -96,6 +106,14 @@ At minimum, an implementation needs a correct supported answer, invalid/unsuppor
 
 [scripts/check_results.py](scripts/check_results.py) compares sanitised fixture aggregates using explicit aliases and exact finite decimals. Its `--dry-run` checks shapes only. It does not establish routing, authorisation, live connectivity, ranking order or SQL safety; assert those at the application boundary.
 
-Complete the report with files changed, commands and exit results, exact environment, assertions passed/failed, manual prerequisites and unverified behaviour. Separate **LIVE VERIFIED**, **OFFLINE VERIFIED**, **NOT RUN** and **PRODUCTION PRINCIPLE**. Do not generalise a small sample to an SLA or universal SQL correctness. The skill's own validation and provenance are recorded in [references/compatibility.md](references/compatibility.md) and [references/verification-record.md](references/verification-record.md).
+Complete the report with files changed, commands and exit results, exact environment, assertions passed/failed, manual prerequisites and unverified behaviour. A production principle stated but not exercised is `guidance`. Do not generalise a small sample to an SLA or universal SQL correctness. The skill's tested versions are in [references/compatibility.md](references/compatibility.md).
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 This is an independent community project and is not affiliated with or endorsed by Google.

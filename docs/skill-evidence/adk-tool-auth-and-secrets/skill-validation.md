@@ -1,5 +1,7 @@
 # Skill validation record
 
+> Maintainer record, moved out of `skills/adk-tool-auth-and-secrets/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 This records package checks, separate from the historical companion evidence.
 
 ## Depth recheck — 16 September 2026

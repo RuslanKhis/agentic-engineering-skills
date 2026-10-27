@@ -71,14 +71,16 @@ A live afternoon establishes only that the path works for that version, project 
 
 ## Completion report
 
-| Evidence | Supports |
-| --- | --- |
-| Source inspection and the two helpers | Which signals, gates and exporters exist in configuration; no runtime guarantee |
-| In-memory exporter tests | Span and metric counts, content gating and the admin lock under the fixture contract |
-| Mocked exporter wiring | Provider ownership, request-driven reader selection, flush on shutdown |
-| Approved live check | Only the observed project, version, traffic and sample |
-| Production principle | A requirement without a test in this change |
+Labels follow [evidence labels](operating-rules.md#evidence-labels).
 
-List unverified items explicitly: pinned version differing from 2.8.0, the token-usage metric name emitted by the installed semconv package, dashboards keyed on span names across a schema-version change, any content gate whose effective value could not be read from configuration, and Online Monitor or BigQuery behaviour not exercised live. Separate **local**, **mocked**, **live** and **not run**.
+| Label | Evidence | Supports |
+| --- | --- | --- |
+| `offline` | Source inspection and the two helpers | Which signals, gates and exporters exist in configuration; no runtime guarantee |
+| `local` | In-memory exporter tests | Span and metric counts, content gating and the admin lock under the fixture contract |
+| `local (mocked)` | Mocked exporter wiring | Provider ownership, request-driven reader selection, flush on shutdown |
+| `live` | Approved live check | Only the observed project, version, traffic and sample |
+| `guidance` | Production principle | A requirement without a test in this change |
+
+List unverified items explicitly: pinned version differing from 2.8.0, the token-usage metric name emitted by the installed semconv package, dashboards keyed on span names across a schema-version change, any content gate whose effective value could not be read from configuration, and Online Monitor or BigQuery behaviour not exercised live (`not run`).
 
 Independent community project; not affiliated with or endorsed by Google.

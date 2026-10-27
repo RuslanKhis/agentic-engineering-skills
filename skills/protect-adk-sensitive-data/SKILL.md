@@ -17,6 +17,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "8"
   last-tested: "2026-09-16"
+  verified-against: "google-adk 2.8.0 managed-service run 2026-09-14; 2.12.0 source read 2026-10-24"
   version: "2026.10.26.3"
 ---
 
@@ -97,20 +98,19 @@ the gateway, and an audit request authorises inspection and recommendations.
 
 ## Consequential operations
 
-Repository and cloud inspection are read-only by default. Local implementation
-can proceed when requested; permission to generate code is not permission to
-deploy. Before API enablement, resource creation, IAM changes, secrets, data
-migration, deployment, deletion or paid live tests, present the **exact project,
-region, resource names, commands, ownership scope and bounded cost/call/time
-plan**, and obtain explicit approval covering those actions. Existing approval
-counts only if it covers that concrete scope. Missing approval leaves those
-actions pending while offline preparation continues.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
 
-Prefer ADC/workload identity and existing secret-management conventions. Never
-print or embed credentials, use Owner/Editor to bypass access failures, or
-silently change global CLI/ADC configuration. Keep cleanup a separate confirmed
-operation scoped to resources created by this workflow. Use an ownership journal
-and idempotent reconciliation; permission denied is not proof of absence.
+Local implementation can proceed when requested; permission denied is not
+proof of absence.
 
 ## Validate and finish
 
@@ -127,8 +127,17 @@ protection fake alone does **not** make an ADK application offline: replace the
 model/runner too and prevent network egress in the test harness.
 
 Report changed files, mode/policy decisions, exact commands and results,
-declared/installed versions, and remaining actions. Label evidence **fresh
-offline**, **fresh live**, **historical live**, or **production guidance**. Do not
-turn an unrun check into a pass or dated results into a release guarantee. Stop
+declared/installed versions, and remaining actions. Do not turn an unrun check
+into a pass or dated results into a release guarantee.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
+
+Stop
 once the authorised change and applicable checks are complete; leave unsupported
 claims and separately approved operations explicitly pending.

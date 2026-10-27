@@ -153,8 +153,8 @@ def changelog_section(root: Path, version: str, today: dt.date) -> str:
         body = "\n".join(f"- {s}" for s in subjects if s) or "- No commits since the previous release."
         since = f"Changes since {previous[0]}:\n\n"
     else:
-        body = ("- First tagged release. Earlier changes are recorded in the README under "
-                "Compatibility & Checks.")
+        body = ("- First tagged release. Earlier changes are recorded in the testing log, "
+                "docs/testing/index.md.")
         since = ""
     when = f"{today.day} {today:%B %Y}"
     return f"## {version} · {when}\n\n{since}{body}\n"

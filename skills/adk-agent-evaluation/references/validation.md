@@ -24,7 +24,7 @@ enforcement, PDF/OCR/image handling, production storage, authentication or indep
 semantic source review. Fixture expectations are AI-authored and provisional.
 Three authored evaluation scenarios remain unexecuted. No paid inference ran.
 
-Initial checks completed on 15 September 2026; the 16 September depth review is recorded separately below. These are results for the packaged skill, separate from the historical ADK integration evidence in [compatibility.md](compatibility.md) and [provenance.md](provenance.md).
+Initial checks completed on 15 September 2026; the 16 September depth review is recorded separately below. These are results for the packaged skill, separate from the historical ADK integration evidence in [compatibility.md](compatibility.md) and provenance.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-agent-evaluation/provenance.md`).
 
 ## Synthetic document-review controls — 27 September 2026
 

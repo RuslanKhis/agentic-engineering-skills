@@ -11,7 +11,7 @@
 | Runtime SDK | `google-cloud-aiplatform[agent_engines]==1.153.1` |
 | Resolved integration libraries | `google-genai==2.23.0`, `fastapi==0.141.1`, `pydantic==2.13.5` |
 | Model/backend | `gemini-3.5-flash`, enterprise mode with global inference; hosting region configured separately |
-| Live evidence dates | 13–14 September 2026; see [evidence.md](evidence.md) for scope |
+| Live evidence dates | 13–14 September 2026; see evidence.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/deploy-adk-on-google-cloud/evidence.md`) for scope |
 
 The example guides allow Python 3.11–3.13; that range is not a claim that every Python/OS combination was tested. Direct version pins are not a transitive lock. Availability of a model, backend, region or SDK contract must be rechecked when adopting the pattern later. Never use the phrase “latest ADK” as a compatibility promise.
 
@@ -51,4 +51,4 @@ Read the three Python fields separately: `python.interpreter` is the process run
 
 With a selected mode and all of `--project`, `--region`, `--account`, the helper prints read-only `gcloud` argument arrays for project, billing, enabled-API and applicable build-identity checks. It never runs them. Inspect the arrays before executing only the intended reads. Project-level reads have no region scope; regional reads include the selected region. API listings still require comparison with the mode's actual dependencies, and neither a plan nor a successful lookup establishes model access.
 
-The helper deliberately reports only constrained metadata and configuration presence. It is not a secret scanner, environment resolver, lockfile resolver, Terraform parser or full source audit. Review its coverage/limits and inspect the remaining relevant files without printing sensitive contents. [skill-validation.md](skill-validation.md) records the environments actually used to test this package, separately from the chapter's cloud evidence.
+The helper deliberately reports only constrained metadata and configuration presence. It is not a secret scanner, environment resolver, lockfile resolver, Terraform parser or full source audit. Review its coverage/limits and inspect the remaining relevant files without printing sensitive contents. skill-validation.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/deploy-adk-on-google-cloud/skill-validation.md`) records the environments actually used to test this package, separately from the chapter's cloud evidence.

@@ -1,5 +1,7 @@
 # Validation of this skill package
 
+> Maintainer record, moved out of `skills/deploy-adk-on-google-cloud/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 This record concerns the portable skill and its offline helper, not another cloud campaign. Creation uses the existing repository environment without changing its packages. Historical Google Cloud evidence is described separately in [evidence.md](evidence.md).
 
 ## Environment

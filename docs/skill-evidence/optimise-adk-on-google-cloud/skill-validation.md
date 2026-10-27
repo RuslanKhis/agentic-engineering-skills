@@ -1,5 +1,7 @@
 # Skill package validation
 
+> Maintainer record, moved out of `skills/optimise-adk-on-google-cloud/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 Updated on 16 September 2026. The current Parts 1–3 package passes 135 local
 tests after the three depth reviews. A context-window extension on 6 October
 2026 added five files and 15 standard-library tests; its checks are recorded in

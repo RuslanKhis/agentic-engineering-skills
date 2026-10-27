@@ -155,4 +155,4 @@ failed/not-run labels for dependent gates after a stop. Before teardown, export
 all known worker/probe executions, including the final audit-export execution.
 Use [failure-recovery.md](failure-recovery.md) for narrow diagnostics and
 continuation rules instead of rebuilding the entire environment after each
-failure. Source/evidence anchors are in [provenance.md](provenance.md).
+failure. Source/evidence anchors are in provenance.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-memory-architecture/provenance.md`).

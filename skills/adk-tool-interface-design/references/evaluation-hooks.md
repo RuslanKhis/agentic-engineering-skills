@@ -58,8 +58,8 @@ Provide, in the completion report:
   documented error branch with the expected next action.
 - The budget to beat: current calls per task, result tokens per task,
   declaration tokens per request.
-- Which observations were **offline simulated** (scripted model), **live
-  verified** (real model, approved run) and **not run**.
+- Which observations were `local (mocked)` (scripted model), `live` (real
+  model, approved run) and `not run`.
 
 `adk-agent-evaluation` turns these into a labelled set, runs the real model
 within an approved budget, and reports selection and parameter accuracy with

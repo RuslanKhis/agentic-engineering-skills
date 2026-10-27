@@ -191,15 +191,16 @@ read, not provoked.)
 
 ## Completion report
 
-State files changed, the exact commands and their output, and separate:
+State files changed, the exact commands and their output, and label each
+result as [evidence labels](operating-rules.md#evidence-labels) defines:
 
-| Evidence | What it supports |
+| Label | What it supports here |
 | --- | --- |
-| Source verified | Behaviour read in the named ADK file at the pinned version |
-| Local | Inventory and card reports, manifest diffs, unit tests |
-| Mocked | Scripted-model Runner tests against fake servers and peers |
-| Live | Approved exchanges on a named date and version |
-| Not run | Anything above that was not executed on the target |
+| `offline (source read)` | Behaviour read in the named ADK file at the pinned version |
+| `offline` | Inventory and card reports, manifest diffs, unit tests without the SDK |
+| `local (mocked)` | Scripted-model Runner tests against fake servers and peers |
+| `live` | Approved exchanges on a named date and version |
+| `not run` | Anything above that was not executed on the target |
 
 Each finding carries its `file:line`, the boundary, the contract gap, the
 observable check, the evidence label and the owning skill

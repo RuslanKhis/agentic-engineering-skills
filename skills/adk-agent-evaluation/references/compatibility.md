@@ -19,6 +19,8 @@ The following versions describe the **13 September 2026 companion verification**
 
 The recorded dependency resolution contained 113 distributions. It is an environment snapshot, not a hash-locked installer. A dated scan retained an accepted NLTK 3.10.3 advisory; acceptance was not a patch or a clean scan. Review the target's current dependency policy and advisory state instead of installing this archived resolution unquestioningly.
 
+Do not import the companion example's fixture IDs, model and region choices, call counts, lexical thresholds or local storage lifetime as universal requirements, nor its demo identity fallback into production. The durable lesson is to choose a meaningful boundary, preserve failed and incomplete evidence, and state whether validation used real services, substituted boundaries or inspection alone.
+
 New skill-helper, clean-workspace and forward-test results belong in [validation.md](validation.md). Their interpreter and results are separate from this historical live integration. A standard-library helper passing locally establishes neither ADK runtime compatibility nor provider access. No new live compatibility claim follows from packaging this skill.
 
 ## Inspect the target before changing it

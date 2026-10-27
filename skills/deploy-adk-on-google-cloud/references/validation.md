@@ -63,11 +63,11 @@ Verify model/backend and runtime identity independently of deployer access. For 
 
 Model availability in a region is a paid, single-request probe, not a listing: one minimal `POST https://LOCATION-aiplatform.googleapis.com/v1/projects/PROJECT/locations/LOCATION/publishers/google/MODEL:generateContent` with the runtime's credentials returns 200 when the model serves there and 404 when it does not; any other status is inconclusive and needs its own diagnosis. Probe only the exact model and location the deployment will use, count it in the model budget, and do not switch regions silently on a 404 (Google's `agent-platform-inference` skill, read 21 October 2026; vendor guidance, confirm against the current docs).
 
-Use explicit evidence labels:
+Use [evidence labels](operating-rules.md#evidence-labels):
 
-- **Local real component:** actual server/SDK/session store, with precise external boundaries identified.
-- **Mocked provider/model:** validates orchestration and assertions, not Google Cloud availability or model behaviour.
-- **Live verified:** names the approved target privately, date, source/version, actual request and observed result.
-- **Not run:** states the untested branch and practical implication.
+- `local`: actual server/SDK/session store, with precise external boundaries identified.
+- `local (mocked)`: a mocked provider or model validates orchestration and assertions, not Google Cloud availability or model behaviour.
+- `live`: names the approved target privately, date, source/version, actual request and observed result.
+- `not run`: states the untested branch and practical implication.
 
 Report latency only if measured under an agreed acceptance condition. Production scaling, durability, tenant authorisation and arbitrary-failure retry guarantees require dedicated tests beyond this skill's historical evidence.

@@ -30,7 +30,7 @@ Review publication remained a local mock. Live counter enforcement was not indep
 
 Atomic multi-scope reservation/settlement; authenticated identity; stable business-operation IDs; durable review/outbox; authorised reviewer transitions; provider idempotency/reconciliation; versioned billing controls and explicit reset; simulation-first emergency operations are production designs from the updated chapter. Implement and test them against the target architecture before claiming them.
 
-The bundled invocation guard is newly adapted from the pre-execution principle. Its own offline tests establish only its stated local asynchronous contract. It is not copied ADK event instrumentation and does not turn the production designs into implemented services. New skill tests and independent fixture exercises are recorded separately in [validation results](validation-results.md).
+The bundled invocation guard is newly adapted from the pre-execution principle. Its own offline tests establish only its stated local asynchronous contract. It is not copied ADK event instrumentation and does not turn the production designs into implemented services. New skill tests and independent fixture exercises are recorded separately in validation results (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-operational-guardrails/validation-results.md`).
 
 ## Depth review — 16 September 2026
 

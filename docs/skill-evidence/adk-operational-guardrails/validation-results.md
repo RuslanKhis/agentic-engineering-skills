@@ -1,5 +1,7 @@
 # Validation records
 
+> Maintainer record, moved out of `skills/adk-operational-guardrails/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 ## Baseline — 15 September 2026
 
 The skill was developed and tested locally on macOS 26.6.2 arm64 with CPython 3.11.4. Current project virtual environment: `google-adk==2.8.0`, `google-genai==2.19.0`, `google-cloud-pubsub==2.39.0`, `google-api-python-client==2.197.0`, `PyYAML==6.0.3`. No dependency versions were changed. Historical live evidence used `google-genai==2.23.0` and is recorded separately in [compatibility](compatibility.md).

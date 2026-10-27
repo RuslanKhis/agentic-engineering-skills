@@ -36,7 +36,7 @@ Decide which signals an ADK agent emits, where they go, what the numbers mean an
 4. Find every provider setup: `maybe_set_otel_providers`, `get_gcp_exporters`, `--otel_to_cloud`, `GoogleADKInstrumentor().instrument()`, `TracerProvider(...)` or `set_tracer_provider` in application code, and every plugin on the `App` or `Runner`: `BigQueryAgentAnalyticsPlugin`, `LoggingPlugin`, `DebugLoggingPlugin`, `AutoTracingPlugin`. Note any `RunConfig(telemetry=TelemetryConfig(...))`.
 5. Find the logging level in production configuration and whether `google_adk.*` loggers run at `DEBUG` (full prompts in logs, documented behaviour).
 6. Inventory existing dashboards, alerting policies, log sinks, BigQuery datasets and where sessions are stored (`SESSION_SERVICE_URI`, Agent Runtime sessions, a database), because debugging ends at a stored session.
-7. Run the two helpers on a saved session export with an available Python 3.11+ interpreter after resolving `SKILL_DIR` to this skill's directory. They read the file only; they never import the project or call a provider.
+7. Run the two helpers on a saved session export with an available Python 3.11+ interpreter ([interpreters](references/operating-rules.md#helper-scripts-and-interpreters)) after resolving `SKILL_DIR` to this skill's directory. They read the file only; they never import the project or call a provider.
 
 ```bash
 python "$SKILL_DIR/scripts/invocation_summary.py" --session ./saved_session.json --format json
@@ -78,6 +78,17 @@ Division of labour with Google's cloud skills: this skill decides which ADK sign
 
 Enabling `telemetry.googleapis.com`, Cloud Trace, Cloud Monitoring and Cloud Logging APIs, granting writer roles (`roles/telemetry.tracesWriter` or `roles/telemetry.writer`, `roles/logging.logWriter`, `roles/monitoring.metricWriter`; vendor guidance 2026-09-30), creating BigQuery datasets or tables (Storage Write API is billed), creating log sinks, enabling Online Monitors (each judge call is billed) and turning on content capture are consequential. Present project, host, principal, estimated volume and cost ceiling, obtain approval, and record what was enabled. Reading an existing trace or session with the user's own access is not.
 
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
+
 ## Validate and finish
 
 Read [validation](references/validation.md). Three checks are observable without a cloud project:
@@ -86,6 +97,14 @@ Read [validation](references/validation.md). Three checks are observable without
 2. `invocation_summary.py` over a saved session with a streamed call, asserting the input and output token totals equal the final chunk, not the sum of chunks.
 3. `events_to_eval_set.py --select tool_error --dry-run` over the same session, asserting the case count, the redaction counts and an empty `structural_problems` list.
 
-Live checks (spans in Trace Explorer, metric descriptors in Cloud Monitoring, rows in BigQuery, an alert firing on a synthetic failure) need an approved project and principal. Report what was inspected, which gates were effective, which tests ran and what remains unverified, separating **local**, **mocked**, **live** and **not run**. Record every URL with its page date; semantic convention names and Google Cloud consoles change faster than this skill.
+Live checks (spans in Trace Explorer, metric descriptors in Cloud Monitoring, rows in BigQuery, an alert firing on a synthetic failure) need an approved project and principal. Report what was inspected, which gates were effective, which tests ran and what remains unverified. Record every URL with its page date; semantic convention names and Google Cloud consoles change faster than this skill.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 Independent community project; not affiliated with or endorsed by Google.

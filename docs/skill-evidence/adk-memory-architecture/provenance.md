@@ -1,5 +1,7 @@
 # Provenance and evidence limits
 
+> Maintainer record, moved out of `skills/adk-memory-architecture/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 This skill adapts the author-owned Chapter 6 implementation and revised
 manuscript of *Agentic Engineering*, under the repository's MIT licence. The
 included [licence](../LICENSE) preserves that notice. No external source code or

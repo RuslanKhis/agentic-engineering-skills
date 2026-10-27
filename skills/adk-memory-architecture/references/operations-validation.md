@@ -66,4 +66,4 @@ Complete this phase when another operator can tell what happened, which assertio
 
 Complete cleanup when every owned target is absent, terminal/inactive or explicitly pending with an owner and next action. Never convert unknown inventory or retained billable data into an all-clear.
 
-Historical outcomes, source anchors and unverified hosted gates are recorded in [provenance.md](provenance.md). They do not certify the current target.
+Historical outcomes, source anchors and unverified hosted gates are recorded in provenance.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-memory-architecture/provenance.md`). They do not certify the current target.

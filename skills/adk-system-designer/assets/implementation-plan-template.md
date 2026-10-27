@@ -96,23 +96,40 @@ this table into the project's AGENTS.md; afterwards keep only the link.
 Use stable IDs and readable names. State may be proposed, ready, blocked,
 in progress or complete. Ready describes resolved prerequisites, not new authority.
 Each implementation goal is a useful end-to-end slice. Leave dependent future
-goals coarse when an unresolved decision could change their scope. A
-presentation goal sits at each phase boundary that needs someone's decision
-(`Primary skill: adk-presenter`, one per audience); it depends on the goals
-whose evidence it presents, and the decision date is a calendar wait that the
-next phase's goals depend on. Before each presentation goal that presents
-built work sits a journey goal (type journey, `Primary skill:
-adk-agent-evaluation`, with Playwright as companion for a web interface) that
-runs the design's journey end to end and every `pass_to_pass` test; passing
-tickets one at a time does not show that the whole path works. A phase whose resources are not carried
-forward ends with a teardown goal (`Primary skill:
-deploy-adk-on-google-cloud`) that runs every cleanup command recorded under
-**Resources created**, checks dependants and retention, and reads the billing
-report; its acceptance lists each resource as absent, or retained with a
-reason and an owner.
-For a client engagement, a statement of work goal precedes or accompanies
-the approval presentation (its signature a wait on the build); rollout and
-operations handover goals precede production go-live and the results review.
+goals coarse when an unresolved decision could change their scope. A presentation goal (type presentation, `Primary skill: adk-presenter`) sits
+at each phase boundary that needs someone's decision (approval to build,
+approval to productionise, a results review after the production build), one
+goal per audience the review needs (business, technical), estimated in human
+hours because preparing and giving it is hands-on work. It depends on the goals
+whose evidence it presents and cannot complete before them; its acceptance is
+that the outline passes the presenter's deck check and every claim cites
+evidence recorded in this plan. The decision date is a calendar wait that the
+next phase's goals depend on. The approval goal before the build is the first
+goal of phase 1 and depends on nothing but the design; the proof-of-concept
+review goal closes phase 1's build, followed by the teardown goal when its
+resources are not carried forward; the results review goal closes the
+production phase and is followed by an optional case-study goal when the result
+may be shared. Before each presentation goal that presents built work sits a
+journey goal (type journey, `Primary skill: adk-agent-evaluation`, with
+Playwright as companion for a web interface) that runs the design's journey
+end to end and every `pass_to_pass` test; passing tickets one at a time does
+not show that the whole path works. A phase whose resources are not carried
+forward (a POC after its review, a pilot that stops, a disposable environment)
+ends with a teardown goal (`Primary skill: deploy-adk-on-google-cloud`), placed
+after the review goal and counted in the phase's hours, that runs every cleanup
+command recorded under **Resources created**, checks dependants and retention,
+and reads the billing report; its acceptance lists each resource as absent, or
+retained with a reason and an owner, as
+[delivery profiles](../references/delivery-profiles.md#split-the-plan-into-phases)
+describes. At MVP and above, the same resources are instead owned by a cost
+contract and a decommission item in the Later list.
+For a client engagement, a statement of work goal (`Primary skill:
+adk-system-designer`, read
+[engagement scoping](../references/engagement-scoping.md)) precedes or
+accompanies the approval presentation, its signature a calendar wait on the
+build. When people other than the builders will use or run the result, a
+rollout goal (`adk-presenter`, rollout pack) and an operations handover goal
+(`adk-agent-observability`) precede production go-live and the results review.
 
 ### G01 — <first useful behavior or precise decision>
 

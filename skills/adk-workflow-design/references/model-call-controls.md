@@ -140,4 +140,4 @@ credentials. Keep offline model traffic from reaching the network. Require:
 These checks establish local enforcement at the tested SDK boundary. Live model
 quality, browser usability, provider billing and distributed recovery require
 separate evidence. The grounding is the chapter's audited transport and regression
-suite, summarised in [provenance.md](provenance.md); the source checkout is optional.
+suite, summarised in provenance.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-workflow-design/provenance.md`); the source checkout is optional.

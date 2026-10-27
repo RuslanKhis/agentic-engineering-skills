@@ -213,4 +213,4 @@ It does not establish every distributed-store retention or key-rollout scenario.
 
 For memory handoff details use [memory-bank.md](memory-bank.md); for telemetry
 capture/schema/loss use [bigquery.md](bigquery.md). Evidence and unimplemented
-extensions remain qualified in [provenance.md](provenance.md).
+extensions remain qualified in provenance.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-memory-architecture/provenance.md`).

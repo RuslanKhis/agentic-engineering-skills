@@ -284,6 +284,15 @@ class PackageValidationTests(unittest.TestCase):
         self.assertEqual([], report.errors)
         self.assertEqual(1, len(report.warnings))
 
+    def test_word_budget_is_only_a_warning(self):
+        self.write_skill("word " * 2500)
+        self.assertEqual([], validate_repository(self.root).warnings)
+        self.write_skill("word " * 2501)
+        report = validate_repository(self.root)
+        self.assertEqual([], report.errors)
+        self.assertEqual(1, len(report.warnings))
+        self.assertIn("2501 words", report.warnings[0])
+
     def test_cli_exit_status_distinguishes_success_and_failure(self):
         with redirect_stdout(io.StringIO()):
             self.assertEqual(0, main(["--root", str(self.root)]))

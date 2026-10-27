@@ -40,12 +40,14 @@ Stop when the approved sample or budget ends. Reconcile uncertain calls before a
 
 Provide the affected files, exact commands, test counts/results and compatibility observed. Separate the following claims:
 
-| Evidence | What it supports |
-| --- | --- |
-| Source or syntax inspection | The implementation shape or parseability; no execution guarantee |
-| Offline provider doubles | The exercised orchestration and failure path under the fixture contract |
-| Offline ADK HTTP/session test | The tested wrapper/client plumbing with substituted model responses |
-| Approved live test | Only the observed provider/model, version, credentials mode and workflow |
-| Production principle | A requirement or recommendation still needing implementation and validation |
+Labels follow [evidence labels](operating-rules.md#evidence-labels).
+
+| Label | Evidence | What it supports |
+| --- | --- | --- |
+| `offline` | Source or syntax inspection | The implementation shape or parseability; no execution guarantee |
+| `offline` | Offline provider doubles | The exercised orchestration and failure path under the fixture contract |
+| `local (mocked)` | Offline ADK HTTP/session test | The tested wrapper/client plumbing with substituted model responses |
+| `live` | Approved live test | Only the observed provider/model, version, credentials mode and workflow |
+| `guidance` | Production principle | A requirement or recommendation still needing implementation and validation |
 
 Record partial scans, missing prerequisites, unsupported APIs, unexecuted branches, remaining manual steps and any task-owned state that remains. A second invocation should reuse the existing implementation and state rather than creating a parallel solution.

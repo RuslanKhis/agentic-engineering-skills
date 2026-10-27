@@ -1,8 +1,8 @@
 # The ticket lifecycle
 
-Read when carrying out a goal from a plan that has ticket files, when a ticket's
-Evidence starts with a `Progress:` block, or when the user runs several tickets
-at once. A plan's tickets are worked on across many sessions; this keeps each
+Read before starting and again before finishing any ticket or plan goal, when
+a ticket's Evidence starts with a `Progress:` block, or when the user runs
+several tickets at once. A plan's tickets are worked on across many sessions; this keeps each
 session small while the plan, not the session, holds the big picture.
 
 ## Start or resume
@@ -18,6 +18,36 @@ session small while the plan, not the session, holds the big picture.
    building on unfinished work.
 4. Run the `pass_to_pass` tests once before changing anything, so a later
    failure can be told apart from one that was already there.
+
+## Check the estimate before editing
+
+A ticket's estimate is human hours with a coding agent: hands-on plus review
+and verify. Before editing, compare the work the acceptance cases need with
+that estimate. If it is clearly larger (for example the high end would at least
+double, or a calendar wait such as provider verification appears), say so
+first. Build the largest useful slice that fits, and propose the remainder as
+a new ticket with its own estimate instead of silently expanding the scope.
+Write the human effort still owed for this change into the ticket's Evidence
+and repeat it in the final message: hours to review and verify it, what to
+check, and any step only a person can do (credentials, console setup,
+approvals).
+
+## Resources that charge
+
+When a ticket creates a resource that charges while provisioned (a database
+instance, a deployed vector index, a managed RAG database, minimum instances,
+a reservation, a load balancer), write the deletion script beside the script
+that creates it, in the same change: it deletes only what this ticket owns,
+dependants before owners, refuses to run without the approved scope, and is
+tested at least by a dry run. Record each such resource in the Evidence
+section as one line, `<resource>: <absent | retained: reason | unknown>;
+cleanup: <command>; verified: <how, when>`. When the ticket asks for a price
+and the pricing page cannot be read in this session, leave the placeholder,
+say so in Evidence and keep that acceptance item open; never fill it from
+memory. A teardown goal or ticket completes only when the
+resource list and, once it has caught up, the billing report show the
+resources gone; a delete command returning successfully is where
+verification starts.
 
 ## Stop before the acceptance cases pass
 
@@ -39,8 +69,8 @@ when the ticket completes.
 
 ## Finish
 
-1. Write the Evidence as the main instructions say, including `actual:` with
-   the human hours the person reports. Ask once if they have not said; write
+1. Write the Evidence and status as [Evidence and status](#evidence-and-status)
+   says, including `actual:` with the human hours the person reports. Ask once if they have not said; write
    `not reported` rather than guessing. A manual verification item is
    recorded as `manual: <check> — confirmed by <person>, <date>` only when
    that person says they did it, otherwise `owed`; never tick it for them
@@ -61,6 +91,35 @@ when the ticket completes.
    items it lists, not with the next ticket: the remaining tickets may rest on
    a contract that has just changed. Otherwise end with the next ready ticket,
    or the resume prompt for an interrupted one.
+
+## Evidence and status
+
+Write actual evidence and status into the ticket's Evidence section or the
+plan's goal entry, using the tiers and outcomes of
+[evidence labels](operating-rules.md#evidence-labels):
+
+- one line for each design contract the goal cites: its ID, the tier reached
+  (`offline`, `local`, `live` or `release`) and the acceptance cases that
+  showed it;
+- one line for each security rule it cites (ID, tier reached, acceptance
+  cases);
+- the companion skills loaded, with their pins;
+- a numbered measurement record (`M<n>`: value, baseline, window, sample,
+  method, owner, build) for every figure a pilot or production run produced,
+  and an incident record (`I<n>`) for every incident, so that `adk-presenter`
+  can cite them;
+- an `actual:` line with the human hours the person reports (or
+  `not reported`), and the human effort still owed (see the estimate section).
+
+Set the ticket's status with the template's vocabulary (`verified_local` when
+every acceptance case that can run offline has run here; `in_progress` with
+the owed run named in Evidence when the SDK-tier cases are written but the SDK
+is absent in this session; `verified_live` after the authorised run; `done`
+when the owner accepts; `blocked` only for a decision or dependency outside
+the ticket), and end with the run prompt for the next ready goal or ticket,
+unless step 4 of Finish calls for the designer's checkpoint prompt: a contract
+delta, an open ruling, an overrun, a blocked ticket or an orphaned contract
+needs a decision.
 
 ## Run tickets in parallel
 

@@ -1,6 +1,6 @@
 # Troubleshooting and boundary tests
 
-Use this reference for a failed integration, missing or duplicated output, cancellation, or a latency question. Diagnose the target's selected JSON or AG-UI contract before changing transport, dependencies or infrastructure. These procedures and acceptance targets are guidance; historical verified behaviour and its limits are recorded in [provenance.md](provenance.md). A successful new test establishes only the boundary it actually exercises.
+Use this reference for a failed integration, missing or duplicated output, cancellation, or a latency question. Diagnose the target's selected JSON or AG-UI contract before changing transport, dependencies or infrastructure. These procedures and acceptance targets are guidance; historical verified behaviour and its limits are recorded in provenance.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-frontend-integration/provenance.md`). A successful new test establishes only the boundary it actually exercises.
 
 ## Locate the first divergent boundary
 

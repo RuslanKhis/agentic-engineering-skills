@@ -19,6 +19,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "cross-cutting"
   sources-reviewed: "2026-10-15"
+  verified-against: "not applicable: business discovery; runs no ADK code"
   version: "2026.10.26.3"
 ---
 

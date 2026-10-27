@@ -1,5 +1,7 @@
 # Provenance and evidence limits
 
+> Maintainer record, moved out of `skills/adk-agent-evaluation/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 This skill translates Chapter 7, *Testing Your Agent — Evaluating a Probabilistic System*, from *Agentic Engineering* into an independent evaluation workflow.
 
 The installed skill does not require the manuscript or companion repository. Origin file names below identify the evidence behind a rule; they are not paths that must exist in a user's project. Apply the rule to the target's own architecture and validate the change there.

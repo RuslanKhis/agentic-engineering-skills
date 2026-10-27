@@ -1,5 +1,7 @@
 # Provenance and evidence boundaries
 
+> Maintainer record, moved out of `skills/adk-workflow-design/references/` on 2026-10-27 so the installed skill does not ship it. Relative links below resolve against that directory.
+
 This skill derives from Chapter 0 of *Agentic Engineering*, its companion code,
 independent execution work and the revised manuscript. The source is the author's
 [MIT-licensed companion repository](https://github.com/RuslanKhis/agentic-engineering-adk-gcp).

@@ -12,7 +12,7 @@ The installed Chapter 0 environment inspected during skill creation contained
 GenAI **2.22.0**, despite its audit requirements pinning 2.23.0. Dependency
 declarations, installed packages and historical results are distinct facts.
 The skill-creation checks and their exact environments are recorded in
-[validation-results.md](validation-results.md).
+validation-results.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-workflow-design/validation-results.md`).
 
 The September 16 depth review retained these pins. Its new runtime recipes target
 ADK 2.8.0 specifically, including a callback-chain quirk and retained-state hazard;

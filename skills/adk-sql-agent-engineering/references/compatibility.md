@@ -8,7 +8,7 @@ The recorded companion environment was Python **3.11.4**, `google-adk` **2.8.0**
 
 Live verification on 13 September 2026 used Gemini `gemini-3.5-flash` through Vertex AI's global endpoint and BigQuery in `US`. Router configuration was MINIMAL thinking/1,000 output tokens; author LOW/8,192. These are historical tested settings, not mandated models, current availability claims or a recommendation to change the target's configuration.
 
-The skill's two read-only helpers are framework-independent standard-library Python. The inspector's no-follow directory scan requires POSIX file-descriptor support; unsupported platforms return a clear error and should use the manual inspection workflow. Their tests do not import ADK or authenticate to Google Cloud. Their exact tested interpreter and agent environment appear in [verification-record.md](verification-record.md). No behavioural portability claim is made for an agent product or OS not tested there.
+The skill's two read-only helpers are framework-independent standard-library Python. The inspector's no-follow directory scan requires POSIX file-descriptor support; unsupported platforms return a clear error and should use the manual inspection workflow. Their tests do not import ADK or authenticate to Google Cloud. Their exact tested interpreter and agent environment appear in verification-record.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-sql-agent-engineering/verification-record.md`). No behavioural portability claim is made for an agent product or OS not tested there.
 
 For another ADK/SDK version, inspect installed callback, workflow, output-schema and event APIs; use official versioned documentation if source is insufficient. Test actual outbound serialisation and READY/refusal round trips. If the needed API is missing or the contract fails, stop that implementation path with the exact mismatch. Preserve the project's pin and offer a compatible adaptation or a separately approved dependency change. Unknown compatibility is not a proven incompatibility, but it is not a pass.
 
@@ -45,7 +45,7 @@ The source is the MIT-licensed `RuslanKhis/agentic-engineering-adk-gcp` reposito
 - **Recorded failed gate:** that follow-up retained an overall scoped FAIL for first-answer responsiveness. All five warm generated first answers and one of five warm reviewed first answers missed the agreed five-second limit; generated warm final median was 14.1667 seconds. Correctness and call-count improvements did not satisfy that gate. This is historical evidence, not a requirement to optimise every future implementation for that threshold.
 - **Recorded offline:** final companion suite, 178 tests passed with 41 warnings. Model/database/HTTP doubles validate their boundaries, not live service operation. The printed corrected chapter SQL separately passed an offline fixture replay on 15 September.
 - **Not established:** universal parameterisation of generated SQL (one of six candidates used literal dates), complete SQL sandboxing, latency SLA, live timeout recovery, fresh-project API activation, tenant isolation, semantic follow-ups, repair, caches, managed data-agent/MCP branches or production analytics export.
-- **New skill validation:** see [verification-record.md](verification-record.md); no fresh live cloud campaign is implied.
+- **New skill validation:** see verification-record.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-sql-agent-engineering/verification-record.md`); no fresh live cloud campaign is implied.
 
 The historical sub-five-second and approximately 80% fast-path anecdotes from another system are excluded from the skill's acceptance claims. No public book URL was available in the source, so no publication link is invented. This community project is independent of Google.
 
@@ -75,7 +75,7 @@ One useful limit found during review: the companion's offline demo and independe
 
 ## Portable ADK asset versus historical environment
 
-The optional [offline contract asset](../assets/test_adk_contract.py) is adapted from the companion's real SDK-boundary test pattern. It bundles synthetic fixtures and requires no companion import. Its current execution results and exact environment are recorded separately in [verification-record.md](verification-record.md).
+The optional [offline contract asset](../assets/test_adk_contract.py) is adapted from the companion's real SDK-boundary test pattern. It bundles synthetic fixtures and requires no companion import. Its current execution results and exact environment are recorded separately in verification-record.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/adk-sql-agent-engineering/verification-record.md`).
 
 The environment available for the 16 September package work has Python 3.11.4, ADK 2.8.0, GenAI 2.19.0, Pydantic 2.13.4 and google-auth 2.57.0. These differ from the historical live stack above. Running an offline asset there neither reruns the old live campaign nor establishes the whole application on that alternative stack. Dependencies were preserved; do not install these versions merely to satisfy an example.
 

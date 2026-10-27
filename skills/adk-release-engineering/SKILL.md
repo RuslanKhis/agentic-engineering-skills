@@ -20,7 +20,7 @@ This skill complements Google's `agents-cli` deploy skill (three-stage pipeline,
 
 1. Record the pinned `google-adk` and `google-genai` versions. Behaviour below is for **2.8.0**; [compatibility](references/compatibility.md) lists what changed through 2.11.0 and which hosting features are Pre-GA.
 2. Inventory every release reference: model IDs (agent, fallback, judge), prompt sources (constants, `instruction=` literals, `prompts/` trees, any registry), tool declarations, eval sets (`*.evalset.json`, `*.test.json`) and eval configs (`test_config.json`, `criteria`), Dockerfiles, Cloud Build and GitHub workflows, deploy commands, requirement pins and secret references. Classify each model ID as **pinned** (dated or stable ID) or **alias** (`-latest`, `-preview`, `-exp`, or the unset ADK default). An alias is a release event you did not schedule.
-3. Run the inventory helper with an available Python 3.11+ interpreter after resolving `SKILL_DIR` to this skill's directory. It reads source and manifests only; it never imports the project, calls a provider or prints prompt text (hashes only).
+3. Run the inventory helper with an available Python 3.11+ interpreter ([interpreters](references/operating-rules.md#helper-scripts-and-interpreters)) after resolving `SKILL_DIR` to this skill's directory. It reads source and manifests only; it never imports the project, calls a provider or prints prompt text (hashes only).
 
 ```bash
 python "$SKILL_DIR/scripts/inventory_release_refs.py" --project .
@@ -58,10 +58,29 @@ Modes compose. A deprecation notice is (c) then (d) then a changelog row in (a).
 
 ## Permissions and data boundaries
 
-Inspection is read-only. Present the exact project, service or Agent Runtime resource, revision, traffic percentages, eval set, case count, repeat count, model and judge IDs and a cost ceiling, then obtain approval before: changing traffic, deploying to production, running paid eval cohorts, rotating or re-pinning secrets, or archiving revisions (archived Agent Runtime revisions cannot be restored). Reuse approval already given for that exact scope. Keep prompt text, traces and secret values out of manifests, changelogs, CI logs and this skill's outputs; record hashes and version numbers.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
+
+For a release, present the exact project, service or Agent Runtime resource, revision, traffic percentages, eval set, case count, repeat count, model and judge IDs and a cost ceiling, then obtain approval before: changing traffic, deploying to production, running paid eval cohorts, rotating or re-pinning secrets, or archiving revisions (archived Agent Runtime revisions cannot be restored). Reuse approval already given for that exact scope. Keep prompt text, traces and secret values out of manifests, changelogs, CI logs and this skill's outputs; record hashes and version numbers.
 
 ## Validate and finish
 
-Read [validation](references/validation.md). Observable without a live model: the manifest round trip (every component has a version or hash, none `unknown` at release time), the gate's NOT RUN behaviour (an empty CSV or a skipped job fails the check), the changelog row for the release, and a rollback rehearsal in a non-production target that restores the whole unit. Report what was inspected, which tier ran, and what remains unverified, separating **local**, **mocked**, **live** and **not run**. Record every URL with its page date; lifecycle dates and Pre-GA surfaces change faster than this skill.
+Read [validation](references/validation.md). Observable without a live model: the manifest round trip (every component has a version or hash, none `unknown` at release time), the gate's NOT RUN behaviour (an empty CSV or a skipped job fails the check), the changelog row for the release, and a rollback rehearsal in a non-production target that restores the whole unit. Report what was inspected, which tier ran, and what remains unverified. Record every URL with its page date; lifecycle dates and Pre-GA surfaces change faster than this skill.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 Independent community project; not affiliated with or endorsed by Google.

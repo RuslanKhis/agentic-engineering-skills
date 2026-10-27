@@ -24,7 +24,7 @@ the installed DLP SDK. No dependency was
 upgraded, downgraded or installed. Native SDK observations come from pinned
 source and offline tests, not a fresh provider integration of the new adapter.
 Its strict response-presence checks require a benign/PII live canary before
-activation. See [skill-validation.md](skill-validation.md) for dated outcomes.
+activation. See skill-validation.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/protect-adk-sensitive-data/skill-validation.md`) for dated outcomes.
 
 Core instructions use open Markdown and the helper/asset use Python. The
 optional `agents/openai.yaml` permits automatic invocation in Codex; removing it

@@ -20,6 +20,7 @@ metadata:
   source-book: "Agentic Engineering"
   source-chapter: "cross-cutting"
   sources-reviewed: "2026-10-26"
+  verified-against: "not applicable: writes portability plans; google-adk 2.13.0 source read 2026-10-26"
   version: "2026.10.26.3"
 ---
 

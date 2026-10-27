@@ -17,6 +17,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "6"
   last-tested: "2026-09-16"
+  verified-against: "google-adk 2.8.0 offline SDK checks 2026-09-16; 2.12.0 installed source read 2026-10-23"
   version: "2026.10.26.3"
 ---
 
@@ -36,7 +37,7 @@ manager and dependency pins. The book and companion repository are not required.
 2. Use the target's existing interpreter for the project's tests (when none at
    hand meets the project's `requires-python`, run them on the newest
    available one, say so, and install nothing), and any Python 3.11 or later
-   for this skill's helpers, as adk-engineer states. Optionally run the bounded, read-only
+   for this skill's helpers, as [interpreter rules](references/operating-rules.md#helper-scripts-and-interpreters) state. Optionally run the bounded, read-only
    [inspector](scripts/inspect_project.py):
    `"$PYTHON" "$SKILL_DIR/scripts/inspect_project.py" --project "$PROJECT_DIR"`.
    Set these variables to the selected interpreter, installed skill directory
@@ -123,21 +124,20 @@ retrieval, protection, probes or cleanup, use
 
 ## Permission and lifecycle
 
-Inspection is read-only by default. Before enabling APIs, creating resources or
-secrets, changing IAM, migrating data, deploying, deleting, increasing quotas or
-running paid/destructive tests, show the exact project, regions, resources,
-identities, commands and bounded work allowance, then obtain explicit approval.
-Code-generation permission is not deployment permission. Reuse an existing
-approval only for its exact scope; continue independent offline work while a
-required decision is pending. Never use Owner, Editor or wildcard grants as a
-troubleshooting shortcut.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
 
 Read [operations-validation.md](references/operations-validation.md) before
-cloud work, recovery or cleanup. Use isolated test targets and synthetic data,
-idempotent setup and an ownership journal. Cleanup is separate, requires
-confirmation, and may target only resources created by this workflow. Shared
-regional RAG infrastructure is outside routine corpus cleanup. Bound retries,
-polling and total elapsed work, with screening in place throughout recovery.
+cloud work, recovery or cleanup. Shared regional RAG infrastructure is outside
+routine corpus cleanup. Keep screening in place throughout recovery.
 
 ## Validate and report
 
@@ -151,15 +151,21 @@ polling and total elapsed work, with screening in place throughout recovery.
 2. Inspect the second invocation: no duplicate files, configuration churn,
    repeated side effects or untracked operations. For production additions,
    test worker loss, lease expiry and late writes at the relevant seam.
-3. Run live acceptance only within approved scope. Report each phase as
-   **passed**, **failed**, **blocked** or **not run**. Separate local doubles,
-   real managed services from a local API, and deployed hosted behaviour.
-   A target deployment is certified by its own acceptance run.
+3. Run live acceptance only within approved scope. Report each phase with
+   its tier and outcome, keeping local doubles (`local (mocked)`), real
+   managed services called from a local API (`live (provider)`) and deployed
+   hosted behaviour (`live (hosted)`) apart. A target deployment is
+   certified by its own acceptance run.
 4. Finish with files changed, commands actually executed and exit/results,
    exact versions, evidence type, unverified behaviour and precise manual or
    approval steps. For an audit, pair each gap with a concrete remedy and test.
-   Use [provenance.md](references/provenance.md) when the origin of a rule
-   matters; [skill-validation.md](references/skill-validation.md) records this
-   package's own checks and limits.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 Independent community project; not affiliated with or endorsed by Google.

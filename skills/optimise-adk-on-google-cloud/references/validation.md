@@ -269,4 +269,4 @@ the selected integration and lifecycle details.
 Use [forward-cases.json](../tests/forward-cases.json) to exercise an agent on
 independent temporary fixtures. Judge the resulting files, commands and reports,
 not whether the response repeats this document. Package validation results and
-their environment limits are recorded in [skill-validation.md](skill-validation.md).
+their environment limits are recorded in skill-validation.md (kept outside the installed skill, in the source repository's `docs/skill-evidence/optimise-adk-on-google-cloud/skill-validation.md`).
