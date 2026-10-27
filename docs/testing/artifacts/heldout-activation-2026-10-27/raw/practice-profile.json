@@ -1,0 +1,66 @@
+{
+ "short": "practice-profile",
+ "round": 1,
+ "model": "claude-opus-5-5",
+ "created": "2026-10-27T07:16:24+00:00",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-opus-5-5",
+  "--output-format",
+  "json",
+  "--system-prompt",
+  "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+  "--tools",
+  "",
+  "--safe-mode",
+  "--disable-slash-commands",
+  "--no-session-persistence",
+  "--strict-mcp-config",
+  "--setting-sources",
+  "",
+  "(prompt on stdin)"
+ ],
+ "cwd": "fresh empty temporary directory (tempfile.TemporaryDirectory)",
+ "system": "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+ "prompt": "The coding assistant is used by developers who build AI agents in Python with Google's Agent Development Kit, usually hosted on Google Cloud. Their requests may or may not mention that stack.\n\nHere is one kind of help the assistant can give:\n\n<brief>\nAn AI consultant who works across many client engagements wants to keep a personal record of each employer's or client's background (their business and targets, regulations, stakeholders, the kinds of data they hold, their systems, tech stack and policies) and the lessons learned on earlier projects, stored outside any code repository so their assistant can reuse it on later projects. They want to set it up by answering questions or by importing their own documents, and to review, update or export it.\n</brief>\n\nWrite three requests a developer might type to the assistant:\n- two that need exactly this kind of help;\n- one that sounds related but actually needs a different kind of help.\n\nWrite as real developers do: vary the tone (terse, chatty, frustrated, formal); make some vague and some full of detail that does not matter; mention their own project, code or deadline where natural. Do not reuse the wording of the brief. For the third request, say in plain words what kind of help it actually needs instead.\n\nAnswer with JSON only, in exactly this shape:\n{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"elsewhere\", \"text\": \"...\", \"needs_instead\": \"...\"}\n]}",
+ "reply_text": "{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"ok so I just wrapped a 4-month ADK build for a regional insurer and I keep forgetting stuff between gigs. can you help me start a personal notes thing (NOT in the repo, the client owns that) where I capture who they are: claims + underwriting business, the state insurance regs they kept bringing up, who the actual decision makers were vs the loud ones, PII/PHI they hold, their GCP setup (Vertex, BigQuery, VPC-SC everywhere), and what went wrong with our eval pipeline. Just interview me, I'll answer. Next engagement starts Monday and I want you to be able to pull this up later.\"},\n {\"kind\": \"fits\", \"text\": \"I have a folder of old SOWs, kickoff decks and retro docs from three previous clients (~/Documents/clients). Can you import those into some kind of per-client profile kept outside any project dir, so in future sessions you already know each org's stack, compliance constraints, stakeholders and lessons learned? Also want to be able to look over what you extracted, fix wrong bits, and export a client's profile to markdown if I need to hand it to a colleague.\"},\n {\"kind\": \"elsewhere\", \"text\": \"Our ADK agent for the retail client needs to remember each shopper's preferences and past orders across sessions. Right now it forgets everything when the session ends. We're on Cloud Run with Firestore available. How do I wire this up properly? Demo is Thursday.\", \"needs_instead\": \"Implementing persistent long-term memory inside the ADK agent itself (e.g. a MemoryService / session service backed by Firestore or Vertex AI Memory Bank) for end users, not a personal knowledge base about the developer's clients.\"}\n]}",
+ "reply_model": "claude-opus-5-5",
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 1049,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 584,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1049,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 584,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1049,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1049
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "cost_usd": 0.02008,
+ "duration_s": 10.2
+}

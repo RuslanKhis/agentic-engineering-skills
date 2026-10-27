@@ -1,0 +1,2487 @@
+{
+ "schema": "activation-results/1",
+ "created": "2026-10-27T07:22:40+00:00",
+ "backend": "claude-cli",
+ "model": "claude-haiku-5-5",
+ "seed": "20261027",
+ "batch_size": 14,
+ "repeats": 1,
+ "only": null,
+ "split": "dev",
+ "commit": "c9381552816ba34159fc11022885d9406d711790",
+ "catalogue_sha256": "3295a5a6cc395a7221006b47fa820bd8ec039305ce1547b53ab33fe817cac398",
+ "corpus_sha256": "e57980b8cbe6233842beba622aa3ae22814ae08cd99033b17bf0c5a03a42a2ea",
+ "skill_count": 26,
+ "case_count": 154,
+ "grading": "8 October 2026 rules; see scripts/run_activation.py",
+ "batches": [
+  {
+   "repeat": 1,
+   "batch": 1,
+   "cases": [
+    "observability-eval-handoff-positive",
+    "security-approval-mechanics-near-miss",
+    "workflow-content-safeguards-positive",
+    "memory-history-trimming-near-miss",
+    "observability-handover-positive",
+    "memory-positive",
+    "frontend-session-ownership-positive",
+    "workflow-near-miss",
+    "instructions-positive",
+    "frontend-near-miss",
+    "sensitive-data-oauth-token-near-miss",
+    "workflow-subagent-description-near-miss",
+    "observability-positive",
+    "instructions-exemplar-measure-near-miss"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 10006,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 3696,
+    "output_tokens_details": {
+     "thinking_tokens": 2391
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 10006,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 3696,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 10006,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 10006
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0038494,
+   "duration_s": 16.2,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 2,
+   "cases": [
+    "security-confirmation-tiering-positive",
+    "presenter-positive",
+    "presenter-case-study-positive",
+    "model-output-config-positive",
+    "frontend-design-system-positive",
+    "instructions-templating-positive",
+    "tool-interface-near-miss",
+    "evaluation-exemplar-measure-positive",
+    "evaluation-near-miss",
+    "practice-profile-positive",
+    "system-designer-deploy-near-miss",
+    "sensitive-data-logs-not-governance-positive",
+    "auth-pasted-secret-near-miss",
+    "sql-positive"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 10034,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 3161,
+    "output_tokens_details": {
+     "thinking_tokens": 1965
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 10034,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 3161,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 10034,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 10034
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0035875,
+   "duration_s": 14.6,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 3,
+   "cases": [
+    "system-designer-positive",
+    "evaluation-quality-iteration-positive",
+    "system-designer-capacity-positive",
+    "discovery-market-research-near-miss",
+    "system-designer-feature-near-miss",
+    "practice-profile-agent-memory-near-miss",
+    "presenter-rollout-ui-near-miss",
+    "portability-new-gcp-design-near-miss",
+    "fastapi-backend-client-positive",
+    "tool-interface-repeated-calls-near-miss",
+    "memory-ingestion-positive",
+    "auth-positive",
+    "security-near-miss",
+    "sensitive-data-near-miss"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9886,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 2586,
+    "output_tokens_details": {
+     "thinking_tokens": 1384
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9886,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 2586,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9886,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9886
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0032704,
+   "duration_s": 12.3,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 4,
+   "cases": [
+    "sensitive-data-governance-near-miss",
+    "guardrails-near-miss",
+    "governance-pack-quebec-ontario-hr-positive",
+    "evaluation-ci-gate-near-miss",
+    "sql-scoped-history-near-miss",
+    "fastapi-backend-cross-user-tool-near-miss",
+    "sensitive-data-positive",
+    "governance-pack-us-hiring-positive",
+    "release-positive",
+    "evaluation-expert-labelling-positive",
+    "evaluation-write-cases-positive",
+    "designer-sow-positive",
+    "frontend-tool-widgets-positive",
+    "auth-cross-user-tool-positive"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9990,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 2762,
+    "output_tokens_details": {
+     "thinking_tokens": 1507
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9990,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 2762,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9990,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9990
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0033792,
+   "duration_s": 13.5,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 5,
+   "cases": [
+    "designer-next-ticket-near-miss",
+    "governance-pack-redact-logs-near-miss",
+    "deploy-positive",
+    "optimise-context-window-positive",
+    "guardrails-approved-payment-replay-near-miss",
+    "portability-model-fallback-near-miss",
+    "model-output-near-miss",
+    "presenter-governance-near-miss",
+    "interoperability-mcp-positive",
+    "evaluation-expert-labelling-near-miss",
+    "api-positive",
+    "portability-deploy-cloud-run-near-miss",
+    "practice-profile-import-positive",
+    "practice-profile-host-memory-near-miss"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9797,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 2727,
+    "output_tokens_details": {
+     "thinking_tokens": 1475
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9797,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 2727,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9797,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9797
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0033231,
+   "duration_s": 12.1,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 6,
+   "cases": [
+    "presenter-value-report-positive",
+    "designer-checkpoint-positive",
+    "fastapi-backend-migrations-positive",
+    "practice-profile-knowledge-base-near-miss",
+    "governance-pack-nsw-agency-chatbot-positive",
+    "fastapi-backend-plain-crud-near-miss",
+    "observability-near-miss",
+    "observability-budget-enforcement-near-miss",
+    "model-output-positive",
+    "fastapi-backend-documents-positive",
+    "guardrails-payment-approval-positive",
+    "optimise-near-miss",
+    "governance-pack-uk-bank-chatbot-positive",
+    "optimise-history-trimming-positive"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9931,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 3273,
+    "output_tokens_details": {
+     "thinking_tokens": 2066
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9931,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 3273,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9931,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9931
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0036229,
+   "duration_s": 14.0,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 7,
+   "cases": [
+    "governance-pack-threat-model-near-miss",
+    "security-positive",
+    "presenter-value-report-near-miss",
+    "fastapi-backend-drive-near-miss",
+    "workflow-positive",
+    "deploy-near-miss",
+    "release-choose-model-near-miss",
+    "portability-boundaries-positive",
+    "evaluation-positive",
+    "engineer-near-miss",
+    "discovery-positive",
+    "governance-pack-au-hr-positive",
+    "portability-azure-a2a-near-miss",
+    "fastapi-backend-stream-near-miss"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9909,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 2241,
+    "output_tokens_details": {
+     "thinking_tokens": 992
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9909,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 2241,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9909,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9909
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0031025000000000002,
+   "duration_s": 10.9,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 8,
+   "cases": [
+    "api-payment-approval-near-miss",
+    "memory-prompt-only-near-miss",
+    "optimise-positive",
+    "evaluation-exemplar-edit-near-miss",
+    "portability-lock-in-writeup-positive",
+    "model-output-deprecation-near-miss",
+    "guardrails-approval-card-near-miss",
+    "release-write-cases-near-miss",
+    "governance-pack-questionnaire-positive",
+    "practice-profile-summarise-near-miss",
+    "governance-pack-website-privacy-policy-near-miss",
+    "security-mcp-positive",
+    "portability-migration-build-near-miss",
+    "governance-pack-auckland-singapore-retailer-positive"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9896,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1372,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9896,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1372,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9896,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9896
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0026654,
+   "duration_s": 7.9,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 9,
+   "cases": [
+    "system-designer-scope-gate-positive",
+    "discovery-no-idea-positive",
+    "memory-cross-session-recall-positive",
+    "api-approved-payment-replay-positive",
+    "system-designer-generic-near-miss",
+    "governance-pack-release-gate-near-miss",
+    "auth-cross-user-route-near-miss",
+    "instructions-exemplar-edit-positive",
+    "portability-ticket-positive",
+    "fastapi-backend-cross-user-record-positive",
+    "engineer-positive",
+    "auth-near-miss",
+    "presenter-eval-report-near-miss",
+    "frontend-approval-card-positive"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 10004,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 2896,
+    "output_tokens_details": {
+     "thinking_tokens": 1747
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 10004,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 2896,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 10004,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 10004
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.003449,
+   "duration_s": 13.2,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 10,
+   "cases": [
+    "api-model-failover-near-miss",
+    "interoperability-a2a-positive",
+    "security-mcp-wiring-near-miss",
+    "guardrails-confirmation-tiering-near-miss",
+    "presenter-rollout-positive",
+    "tool-interface-toolset-positive",
+    "presenter-near-miss",
+    "guardrails-positive",
+    "memory-near-miss",
+    "discovery-near-miss",
+    "fastapi-backend-session-endpoints-near-miss",
+    "memory-sql-analytics-near-miss",
+    "governance-pack-positive",
+    "designer-sow-commercial-near-miss"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9933,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1369,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9933,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1369,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9933,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9933
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0026713,
+   "duration_s": 7.2,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 11,
+   "cases": [
+    "interoperability-near-miss",
+    "release-ci-gate-positive",
+    "governance-pack-commonwealth-dta-positive",
+    "sql-near-miss",
+    "designer-change-request-positive",
+    "tool-interface-positive",
+    "deploy-release-canary-near-miss",
+    "system-designer-review-positive",
+    "release-near-miss",
+    "api-near-miss",
+    "optimise-cross-session-recall-near-miss",
+    "frontend-positive",
+    "instructions-near-miss",
+    "observability-handover-deploy-near-miss"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9895,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1324,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9895,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1324,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9895,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9895
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0026412,
+   "duration_s": 6.8,
+   "attempts": 1
+  }
+ ],
+ "cases": [
+  {
+   "id": "observability-eval-handoff-positive",
+   "skill": "adk-agent-observability",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-observability",
+   "supporting": [
+    "adk-agent-evaluation",
+    "protect-adk-sensitive-data"
+   ],
+   "reason": "Pulling thumbs-down traces from BigQuery Agent Analytics into eval cases is observability work, building the regression set is evaluation work, and removing personal data is sensitive-data redaction.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-approval-mechanics-near-miss",
+   "skill": "adk-agent-security",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-operational-guardrails",
+   "supporting": [
+    "safe-api-tool-calls"
+   ],
+   "reason": "Pausing for human approval with a persisted pending request and resuming after the decision is the confirmation and resume flow, and a transfer is a write whose approved execution must run exactly once.",
+   "grade": "PASS"
+  },
+  {
+   "id": "workflow-content-safeguards-positive",
+   "skill": "adk-workflow-design",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-workflow-design",
+   "supporting": [],
+   "reason": "Adding in-code consistency checks and warning triage to the drafting pipeline is workflow control flow and event handling, not prompt wording.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-history-trimming-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Trimming the history sent per turn to reduce latency, with before-and-after measurement, is a measured in-session context optimisation.",
+   "grade": "PASS"
+  },
+  {
+   "id": "observability-handover-positive",
+   "skill": "adk-agent-observability",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-observability",
+   "supporting": [
+    "adk-tool-auth-and-secrets"
+   ],
+   "reason": "An operations handover with support tiers, alert ownership and a postmortem template is observability's handover and postmortem scope, and moving secrets to the client's team touches credential custody.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "A per-user preference saved only with explicit consent, kept across restarts, isolated by user and erasable is memory design under consent, identity and erasure boundaries.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-session-ownership-positive",
+   "skill": "adk-frontend-integration",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-frontend-integration",
+   "supporting": [
+    "adk-fastapi-backend"
+   ],
+   "reason": "Ownership of the session listing and run_sse continuation endpoints belongs to the frontend-integration skill, while replacing the browser-sent user_id with a verified principal and owner-filtering is backend work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "workflow-near-miss",
+   "skill": "adk-workflow-design",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Adding governed retrieval over policy documents with entitlement-based filtering is RAG and identity-boundary work, and orchestration is left unchanged.",
+   "grade": "PASS"
+  },
+  {
+   "id": "instructions-positive",
+   "skill": "adk-agent-instructions",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-instructions",
+   "supporting": [],
+   "reason": "Fixing sub-agent routing descriptions, restructuring a bloated root instruction and testing the rendered prompt against fixture state are instruction design and change-test tasks.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-near-miss",
+   "skill": "adk-frontend-integration",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Changing message bubble styling and mobile spacing is an isolated UI styling tweak, which the frontend skill explicitly excludes and no other skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sensitive-data-oauth-token-near-miss",
+   "skill": "protect-adk-sensitive-data",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [],
+   "reason": "Keeping a delegated OAuth access token in the credential store and out of state and events is tool credential handling, which the skill covers directly.",
+   "grade": "PASS"
+  },
+  {
+   "id": "workflow-subagent-description-near-miss",
+   "skill": "adk-workflow-design",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-instructions",
+   "supporting": [],
+   "reason": "Rewriting sub-agent descriptions so the coordinator routes correctly is explicitly within the instruction skill's sub-agent routing scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "observability-positive",
+   "skill": "adk-agent-observability",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-observability",
+   "supporting": [],
+   "reason": "Adding tracing, metrics to separate model, tool and session-loading time, and a latency alert is production telemetry and alerting work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "instructions-exemplar-measure-near-miss",
+   "skill": "adk-agent-instructions",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-evaluation",
+   "supporting": [],
+   "reason": "Comparing old and new few-shot exemplars on a labelled development set, categorising errors and choosing the winner is a measured evaluation loop.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-confirmation-tiering-positive",
+   "skill": "adk-agent-security",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-security",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "The request is a whole-agent threat model of an agent that reads untrusted email and can act, covering prompt injection and which tools need confirmation, with approval mechanics as a secondary need.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-positive",
+   "skill": "adk-presenter",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-presenter",
+   "supporting": [],
+   "reason": "A leadership decision deck for the production-funding decision, plus a technical version, from recorded proof-of-concept evidence, matches the presenter skill directly.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-case-study-positive",
+   "skill": "adk-presenter",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-presenter",
+   "supporting": [],
+   "reason": "A public case study built from the recorded production results and the approvals needed to share them fits the presenter skill's public case study output.",
+   "grade": "PASS"
+  },
+  {
+   "id": "model-output-config-positive",
+   "skill": "adk-model-and-output-contracts",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-model-and-output-contracts",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "Choosing Flash models, per-agent thinking settings and a 429 fallback is model selection and FallbackModel work, and verifying each change calls for a measured evaluation.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-design-system-positive",
+   "skill": "adk-frontend-integration",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-frontend-integration",
+   "supporting": [],
+   "reason": "The design system for shadcn, tool-timeline and approval UI states, and mid-answer error display are all explicitly owned by the frontend integration skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "instructions-templating-positive",
+   "skill": "adk-agent-instructions",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-instructions",
+   "supporting": [],
+   "reason": "Adding a state placeholder and a JSON example to the instruction, and explaining templating and optional placeholders, is prompt design and state templating work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "tool-interface-near-miss",
+   "skill": "adk-tool-interface-design",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "safe-api-tool-calls",
+   "supporting": [],
+   "reason": "Timeouts with double charges on retry are a selective retry, deadline and idempotent-write problem in an external API tool.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-exemplar-measure-positive",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-evaluation",
+   "supporting": [],
+   "reason": "Measuring whether changed exemplars improve decisions on a labelled dev set, with error categories and an untouched holdout, is the evaluation loop itself.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-near-miss",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "A standalone date-formatting helper with no agent, model, tool or runner behaviour is a non-agent unit test, which no skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-positive",
+   "skill": "practice-profile",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "practice-profile",
+   "supporting": [],
+   "reason": "Storing client defaults outside the repositories and binding this repo to Acme is the practice profile's set-up and bind action.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-deploy-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Deploying an existing ADK service to Cloud Run with rollout checks and an endpoint report is a deployment lifecycle task.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sensitive-data-logs-not-governance-positive",
+   "skill": "protect-adk-sensitive-data",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "protect-adk-sensitive-data",
+   "supporting": [
+    "adk-agent-observability"
+   ],
+   "reason": "Redacting PII from agent logs is sensitive-data boundary work, and the log pipeline into Cloud Logging brings in observability.",
+   "grade": "PASS"
+  },
+  {
+   "id": "auth-pasted-secret-near-miss",
+   "skill": "adk-tool-auth-and-secrets",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "protect-adk-sensitive-data",
+   "supporting": [],
+   "reason": "Detecting and masking pasted API keys and card numbers before the model, session history and logs is sensitive-data screening.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sql-positive",
+   "skill": "adk-sql-agent-engineering",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-sql-agent-engineering",
+   "supporting": [],
+   "reason": "Building a natural-language analytics agent with reviewed templates, selective schemas and read-only controlled execution is squarely the SQL agent skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "The request asks for requirements discussion, architecture challenge and a captured design for an ADK application on GCP before implementation, which is the system designer's remit.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-quality-iteration-positive",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-evaluation",
+   "supporting": [
+    "adk-agent-instructions"
+   ],
+   "reason": "Error analysis on a labelled development set with re-measurement and a protected holdout is the evaluation loop, and the prompt and exemplar edits fall to the instructions skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-capacity-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Scoping an MVP to a two-week team window and deciding what ships first and what follows is explicitly within the system designer's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "discovery-market-research-near-miss",
+   "skill": "adk-discovery",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "A market-sizing report on the Australian advertising technology industry is market research, which no catalogue skill covers and which is not an ADK task.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-feature-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "An explicitly saved user preference with a forget action and local tests is a memory task that must enforce consent and erasure boundaries, and the existing design and deployment stay untouched.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-agent-memory-near-miss",
+   "skill": "practice-profile",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Cross-session remembering of customer preferences in an ADK agent is the core memory and continuity work the memory architecture skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-rollout-ui-near-miss",
+   "skill": "adk-presenter",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-frontend-integration",
+   "supporting": [],
+   "reason": "Adding an AI disclosure banner and a report-a-problem control to the agent's chat interface is interface and agent UI state work, not a styling tweak.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-new-gcp-design-near-miss",
+   "skill": "adk-portability-planning",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Designing a new ADK application on GCP for a team is a new-application design task for the system designer.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-client-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-fastapi-backend",
+   "supporting": [
+    "adk-frontend-integration"
+   ],
+   "reason": "A typed client generated from the FastAPI OpenAPI contract is backend API-contract work, and the React consumption side touches the frontend integration skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "tool-interface-repeated-calls-near-miss",
+   "skill": "adk-tool-interface-design",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-operational-guardrails",
+   "supporting": [],
+   "reason": "Stopping repeated identical tool calls and capping model calls per invocation are invocation limits and repeated-tool protection, which the guardrails skill owns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-ingestion-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Per-page ingestion triage of scans, tables and drawings with OCR or vision routing is explicitly listed as document preparation for retrieval under the memory architecture skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "auth-positive",
+   "skill": "adk-tool-auth-and-secrets",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [],
+   "reason": "Moving OAuth credential selection behind verified caller identity and testing refresh and disconnect ownership is tool credential and cross-user access control.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-near-miss",
+   "skill": "adk-agent-security",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "protect-adk-sensitive-data",
+   "supporting": [],
+   "reason": "Redacting customer social security numbers before they reach logs from an agent is sensitive-data boundary work on logged output.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sensitive-data-near-miss",
+   "skill": "protect-adk-sensitive-data",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Cloud Armor rate limiting for a public marketing website involves no ADK application, and the protect-adk-sensitive-data skill explicitly excludes Cloud Armor WAF configuration.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sensitive-data-governance-near-miss",
+   "skill": "protect-adk-sensitive-data",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "A DPIA input pack and a records-of-processing entry are privacy impact inputs and processing records, which the governance pack drafts for a DPO.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-near-miss",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "safe-api-tool-calls",
+   "supporting": [],
+   "reason": "Adding a timeout and bounded transient-error retries to one external HTTP call is the selective-retry and deadline work this skill covers, and the caller's invocation controls are excluded.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-quebec-ontario-hr-positive",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "Drafting governance papers for a client's counsel, including whether Quebec's Law 25 applies, is the governance pack's jurisdiction screening and paper drafting.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-ci-gate-near-miss",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-release-engineering",
+   "supporting": [],
+   "reason": "Wiring an eval gate into CI with repeat, judge-cost and pass-threshold policy is the CI gate work that the release-engineering skill owns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sql-scoped-history-near-miss",
+   "skill": "adk-sql-agent-engineering",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Recalling a returning user's history from BigQuery with user scoping and erasure is scoped cross-session history, which the memory architecture skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-cross-user-tool-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "adk-fastapi-backend"
+   ],
+   "reason": "Binding a tool's user identity to the verified caller so a model argument cannot read another user's orders is tool-hop ownership, and the FastAPI verified-principal dependency supports it.",
+   "grade": "PARTIAL"
+  },
+  {
+   "id": "sensitive-data-positive",
+   "skill": "protect-adk-sensitive-data",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "protect-adk-sensitive-data",
+   "supporting": [],
+   "reason": "Keeping customer emails out of model requests, events and telemetry with screening boundaries and synthetic canary tests is sensitive-data boundary work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-us-hiring-positive",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "Drafting the papers a general counsel needs on US law for a resume screener, based on the design and backtest evidence, is the governance pack's work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "release-positive",
+   "skill": "adk-release-engineering",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-release-engineering",
+   "supporting": [
+    "adk-model-and-output-contracts"
+   ],
+   "reason": "Migrating across a model retirement with re-baselining and pinned judge IDs is model-version migration in a release, and choosing the replacement Gemini model is model selection and lifecycle.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-expert-labelling-positive",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-evaluation",
+   "supporting": [],
+   "reason": "Running an SME labelling session for a gold set and checking inter-rater agreement and judge calibration against those labels is the labelling work this skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-write-cases-positive",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-evaluation",
+   "supporting": [],
+   "reason": "Writing evaluation cases with graders and a trustworthy judge rubric is the live evaluation-set work of this skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-sow-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Turning the discovery brief, design and plan into a client statement of work is the proposal and SOW output this skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-tool-widgets-positive",
+   "skill": "adk-frontend-integration",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-frontend-integration",
+   "supporting": [],
+   "reason": "Fixing duplicated tool-rendered widgets and browser refresh after state changes is the A2UI widget pipeline and agent-to-browser contract work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "auth-cross-user-tool-positive",
+   "skill": "adk-tool-auth-and-secrets",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [],
+   "reason": "Making a lookup_invoices tool act only for the verified caller, rather than trusting a model-supplied customer_id, is tool-hop ownership enforcement.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-next-ticket-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "The request names no ADK or agent work, and the ticket's content is not visible to the selector, so no catalogue skill can be matched.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-redact-logs-near-miss",
+   "skill": "adk-governance-pack",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "protect-adk-sensitive-data",
+   "supporting": [],
+   "reason": "Redacting PII from agent logs before they reach Cloud Logging is sensitive-data boundary work, which this skill covers and which the observability skill excludes.",
+   "grade": "PASS"
+  },
+  {
+   "id": "deploy-positive",
+   "skill": "deploy-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Preparing an existing ADK service for Cloud Run, covering runtime identity, packaging and configuration, is deployment work, and the request explicitly stops short of authorising deployment.",
+   "grade": "PASS"
+  },
+  {
+   "id": "optimise-context-window-positive",
+   "skill": "optimise-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-tool-interface-design"
+   ],
+   "reason": "Trimming and summarising in-session history to cut per-turn latency and cost is an optimisation task, and shaping the 200 KB BigQuery tool results is the result-size concern that the tool interface skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-approved-payment-replay-near-miss",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "safe-api-tool-calls",
+   "supporting": [],
+   "reason": "Preventing a retry from submitting the same approved payment twice is an idempotent-write and confirmation problem in an external API tool, which this skill owns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-model-fallback-near-miss",
+   "skill": "adk-portability-planning",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-model-and-output-contracts",
+   "supporting": [],
+   "reason": "Falling back from Gemini to Claude on a 429 is a model failover decision, which the model-and-output-contracts skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "model-output-near-miss",
+   "skill": "adk-model-and-output-contracts",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "safe-api-tool-calls",
+   "supporting": [],
+   "reason": "Adding backoff retries and an idempotency key to a timing-out payments tool is selective retry and idempotency work on an external call.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-governance-near-miss",
+   "skill": "adk-presenter",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "Drafting an AI impact assessment and system card for counsel before a production decision is exactly what the governance pack produces.",
+   "grade": "PASS"
+  },
+  {
+   "id": "interoperability-mcp-positive",
+   "skill": "adk-agent-interoperability",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-interoperability",
+   "supporting": [
+    "adk-tool-auth-and-secrets",
+    "adk-agent-security"
+   ],
+   "reason": "Connecting to GitHub and Postgres MCP servers with read-only tool filtering is MCP consumption wiring, per-user token refresh falls under tool auth, and checking that tool lists are unchanged since review is MCP pinning policy.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-expert-labelling-near-miss",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Setting up a Label Studio annotation project for an image classifier's training data is non-agent labelling work, and the evaluation skill covers only labelling for agent behaviour.",
+   "grade": "PASS"
+  },
+  {
+   "id": "api-positive",
+   "skill": "safe-api-tool-calls",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "safe-api-tool-calls",
+   "supporting": [],
+   "reason": "Stopping a refund retry from creating a second refund and reporting uncertain outcomes honestly is a safe external-API adapter problem with an ambiguous write outcome.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-deploy-cloud-run-near-miss",
+   "skill": "adk-portability-planning",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Deploying an ADK agent to Cloud Run is a first deployment, which this skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-import-positive",
+   "skill": "practice-profile",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "practice-profile",
+   "supporting": [],
+   "reason": "Importing named Markdown documents into a client profile for Acme is the practice profile's import action.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-host-memory-near-miss",
+   "skill": "practice-profile",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Editing the coding agent's host memory file ~/.claude/CLAUDE.md is explicitly outside the practice profile skill, and no other catalogue skill covers it.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-value-report-positive",
+   "skill": "adk-presenter",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-presenter",
+   "supporting": [],
+   "reason": "The monthly value report to the sponsor with a stop, continue or scale call is explicitly in adk-presenter's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-checkpoint-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-engineer",
+   "supporting": [
+    "adk-memory-architecture"
+   ],
+   "reason": "The checkpoint covers a multi-ticket ADK build whose scope changed, and redefining forgetting a preference involves memory erasure boundaries.",
+   "grade": "FAIL"
+  },
+  {
+   "id": "fastapi-backend-migrations-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Application data and migrations beside ADK's session tables are named as part of adk-fastapi-backend's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-knowledge-base-near-miss",
+   "skill": "practice-profile",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Loading documents into an agent's knowledge base for retrieval is governed RAG and document preparation, which adk-memory-architecture covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-nsw-agency-chatbot-positive",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "Drafting AIAF answers and privacy and legal papers before a pilot for a NSW agency is adk-governance-pack's purpose.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-plain-crud-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "A FastAPI CRUD service for an inventory system is not part of an ADK application, which the catalogue excludes from adk-fastapi-backend.",
+   "grade": "PASS"
+  },
+  {
+   "id": "observability-near-miss",
+   "skill": "adk-agent-observability",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Cloud Logging sinks and retention for GKE system logs are general cloud administration with no ADK agent involved.",
+   "grade": "PASS"
+  },
+  {
+   "id": "observability-budget-enforcement-near-miss",
+   "skill": "adk-agent-observability",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-operational-guardrails",
+   "supporting": [],
+   "reason": "Enforcing a cross-turn daily token allowance that refuses new turns is a token budget control in adk-operational-guardrails.",
+   "grade": "PASS"
+  },
+  {
+   "id": "model-output-positive",
+   "skill": "adk-model-and-output-contracts",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-model-and-output-contracts",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "Making output_schema reliable alongside tools is adk-model-and-output-contracts' remit, and proving which path the model took is a measured test over cases.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-documents-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "A list-and-delete endpoint for a user's own uploaded documents is an owner-filtered domain route, which adk-fastapi-backend covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-payment-approval-positive",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-operational-guardrails",
+   "supporting": [
+    "safe-api-tool-calls"
+   ],
+   "reason": "A durable human approval hold before a risky refund is adk-operational-guardrails' approval flow, and the approved write must run once, which safe-api-tool-calls governs.",
+   "grade": "PASS"
+  },
+  {
+   "id": "optimise-near-miss",
+   "skill": "optimise-adk-on-google-cloud",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Choosing between Cloud Run and Agent Runtime for a first deployment and planning it is deploy-adk-on-google-cloud's hosting decision work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-uk-bank-chatbot-positive",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "DPIA inputs and transfer facts for a UK bank's EU customers, supported from Australia, are privacy impact and jurisdiction papers in adk-governance-pack.",
+   "grade": "PASS"
+  },
+  {
+   "id": "optimise-history-trimming-positive",
+   "skill": "optimise-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Trimming or summarising in-session history to cut latency and token cost, with a measured saving, is an optimisation covered by optimise-adk-on-google-cloud.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-threat-model-near-miss",
+   "skill": "adk-governance-pack",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-security",
+   "supporting": [],
+   "reason": "A whole-agent threat model with an adversarial suite for an agent that reads untrusted customer email and can issue refunds is exactly what adk-agent-security covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-positive",
+   "skill": "adk-agent-security",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-security",
+   "supporting": [],
+   "reason": "A pre-launch security review asking what poisoned emails or tool results could make the agent do is a whole-agent injection and excessive-agency review, which this skill owns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-value-report-near-miss",
+   "skill": "adk-presenter",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-observability",
+   "supporting": [],
+   "reason": "Token spend and latency dashboards built from BigQuery traces fall under observability's dashboards, token accounting and BigQuery Agent Analytics, not the Looker Studio scaffolding that Google's agents-cli skills handle.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-drive-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [],
+   "reason": "Letting each user connect their own Google Drive is delegated OAuth consent and per-user credential handling at the tool, which this skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "workflow-positive",
+   "skill": "adk-workflow-design",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-workflow-design",
+   "supporting": [],
+   "reason": "Running two fetches concurrently and ensuring a failed branch cannot yield a successful summary is parallel orchestration and runtime control flow, which adk-workflow-design owns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "deploy-near-miss",
+   "skill": "deploy-adk-on-google-cloud",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Designing how a saved language preference persists across conversations, with no deployment changes, is cross-session memory design that adk-memory-architecture handles.",
+   "grade": "PASS"
+  },
+  {
+   "id": "release-choose-model-near-miss",
+   "skill": "adk-release-engineering",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-model-and-output-contracts",
+   "supporting": [],
+   "reason": "Choosing a Gemini model and thinking level for a strict JSON output contract is model selection and output-contract configuration, which this skill owns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-boundaries-positive",
+   "skill": "adk-portability-planning",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-portability-planning",
+   "supporting": [],
+   "reason": "Identifying provider-specific components and the replacement boundaries worth keeping for a stakeholder is the core of portability assessment, even though the answer is drawn from an existing document rather than a new plan file.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-positive",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-evaluation",
+   "supporting": [],
+   "reason": "Auditing an evaluation command's result handling and adding strict checks for missing cases, failed observations and metric thresholds is evaluation reliability and strict result checking.",
+   "grade": "PASS"
+  },
+  {
+   "id": "engineer-near-miss",
+   "skill": "adk-engineer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Changing a React spinner's colour is an isolated styling tweak on a frontend page with no ADK integration work, which no catalogue skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "discovery-positive",
+   "skill": "adk-discovery",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-discovery",
+   "supporting": [],
+   "reason": "Locating where AI pays off in the buying journey, choosing the first workflow and its measured outcome before any design is exactly the discovery stage.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-au-hr-positive",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "Drafting the Privacy Act papers for a DPO-style review of an ADK agent, with Australia screened first, is what the governance pack produces from the project's evidence.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-azure-a2a-near-miss",
+   "skill": "adk-portability-planning",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-interoperability",
+   "supporting": [],
+   "reason": "Connecting the agent to a remote A2A agent through agent cards and RemoteA2aAgent is A2A wiring across a process boundary, which this skill owns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-stream-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-frontend-integration",
+   "supporting": [],
+   "reason": "Streaming tool progress into the chat interface is an agent-to-browser streaming and tool-display contract, which this skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "api-payment-approval-near-miss",
+   "skill": "safe-api-tool-calls",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-operational-guardrails",
+   "supporting": [
+    "adk-frontend-integration"
+   ],
+   "reason": "Human approval that waits for review and resumes later is the approval flow owned by guardrails, and the manager's review interface sits in frontend integration.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-prompt-only-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-instructions",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "Rewriting the drafting prompt and exemplars is prompt wording owned by agent instructions, and measuring whether citation consistency improves calls for the evaluation loop.",
+   "grade": "PASS"
+  },
+  {
+   "id": "optimise-positive",
+   "skill": "optimise-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-fastapi-backend"
+   ],
+   "reason": "Reducing measured per-request overhead from repeatedly creating a client on Cloud Run is an optimisation task, and the process lifetime and user-isolation checks touch the FastAPI application shape.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-exemplar-edit-near-miss",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-instructions",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "Balancing few-shot exemplars and matching the required output format is exemplar design within prompt wording, and checking the classifier's effect on labelled cases belongs to evaluation.",
+   "grade": "PARTIAL"
+  },
+  {
+   "id": "portability-lock-in-writeup-positive",
+   "skill": "adk-portability-planning",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-portability-planning",
+   "supporting": [],
+   "reason": "Writing a separate portability plan on AWS, Azure or LangGraph alternatives for an existing GCP design, without changing code, is exactly this skill's purpose.",
+   "grade": "PASS"
+  },
+  {
+   "id": "model-output-deprecation-near-miss",
+   "skill": "adk-model-and-output-contracts",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-release-engineering",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "Migrating a model version with re-baselining, pinned IDs in the release manifest and rollback is release lifecycle work, and building the re-baselined eval suite draws on evaluation.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-approval-card-near-miss",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-frontend-integration",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "Approve and reject buttons and the post-rejection timeline are agent UI states and approval interface design, while the approval policy itself lies with guardrails.",
+   "grade": "PARTIAL"
+  },
+  {
+   "id": "release-write-cases-near-miss",
+   "skill": "adk-release-engineering",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-evaluation",
+   "supporting": [],
+   "reason": "Designing new eval cases for policy edge cases and a judge rubric is writing evaluation cases and the measurement loop.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-questionnaire-positive",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-governance-pack",
+   "supporting": [
+    "adk-presenter"
+   ],
+   "reason": "A system card and security questionnaire answers for a client CISO are governance papers that must cite evidence and flag what is only planned, and the questionnaire format is a governance pack output.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-summarise-near-miss",
+   "skill": "practice-profile",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Summarising a strategy document into bullet points is a general task that no catalogue skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-website-privacy-policy-near-miss",
+   "skill": "adk-governance-pack",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "A company website privacy policy page is general web content, not an ADK agent governance paper or any other catalogue skill's work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-mcp-positive",
+   "skill": "adk-agent-security",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-security",
+   "supporting": [
+    "adk-agent-interoperability"
+   ],
+   "reason": "Vetting, filtering and pinning third-party MCP tools and testing against poisoned tool descriptions is MCP supply-chain threat work, and the MCP wiring for three servers draws on interoperability.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-migration-build-near-miss",
+   "skill": "adk-portability-planning",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-portability-planning",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "Rewriting an ADK agent in LangGraph and deploying on AWS is building or migrating an application on another platform, which this skill's exclusions rule out, so the closest match is the portability planning skill for assessing it, with deployment noted as a separate concern.",
+   "grade": "FAIL"
+  },
+  {
+   "id": "governance-pack-auckland-singapore-retailer-positive",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "Privacy papers for a pilot requested by a privacy officer and DPO, including the cross-border support access from Sydney, are governance papers that screen applicable laws and cover transfer facts.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-scope-gate-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Scoping a proof of concept to the time and people available and planning what ships first and what follows is the designer's remit, and the use case is already chosen.",
+   "grade": "PASS"
+  },
+  {
+   "id": "discovery-no-idea-positive",
+   "skill": "adk-discovery",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-discovery",
+   "supporting": [],
+   "reason": "The firm has no use case yet, so the request calls for working from its business and KPIs to processes and a technology-fit ranking.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-cross-session-recall-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Cross-session memory scoped to each user, with consent and erasure on request, is the memory architecture skill's core task.",
+   "grade": "PASS"
+  },
+  {
+   "id": "api-approved-payment-replay-positive",
+   "skill": "safe-api-tool-calls",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "safe-api-tool-calls",
+   "supporting": [],
+   "reason": "The problem is an external payment write that must run exactly once after approval and report uncertain outcomes, which is the write-side safety of API tool calls.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-generic-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "The request is a conventional Django application with no ADK or agent component, which falls outside every skill in the catalogue.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-release-gate-near-miss",
+   "skill": "adk-governance-pack",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-release-engineering",
+   "supporting": [],
+   "reason": "A CI gate that blocks a prompt or model release when the evaluation score drops is an evaluation gate in the release lifecycle.",
+   "grade": "PASS"
+  },
+  {
+   "id": "auth-cross-user-route-near-miss",
+   "skill": "adk-tool-auth-and-secrets",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Adding an owner filter to a domain route that leaks other customers' records is an owner-filtered domain route fix, and the agent's tools are explicitly excluded.",
+   "grade": "PASS"
+  },
+  {
+   "id": "instructions-exemplar-edit-positive",
+   "skill": "adk-agent-instructions",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-instructions",
+   "supporting": [],
+   "reason": "Choosing the count, labels and order of few-shot exemplars and storing them as data with IDs is exemplar design within prompt-as-code.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-ticket-positive",
+   "skill": "adk-portability-planning",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-portability-planning",
+   "supporting": [],
+   "reason": "The user names this skill as the primary skill for the portability goal ticket, and its output is a portability plan document.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-cross-user-record-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Fixing a claims route and the shared verified-principal dependency so queries filter by the signed-in owner is backend route and principal work in an ADK web application.",
+   "grade": "PASS"
+  },
+  {
+   "id": "engineer-positive",
+   "skill": "adk-engineer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-engineer",
+   "supporting": [
+    "adk-memory-architecture",
+    "adk-frontend-integration"
+   ],
+   "reason": "The change spans memory of a customer's language preference and displaying responses in the web app, so the engineering starting point routes to the memory and frontend specialists.",
+   "grade": "PASS"
+  },
+  {
+   "id": "auth-near-miss",
+   "skill": "adk-tool-auth-and-secrets",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "This is a styling change to an existing sign-in page, which the frontend skill explicitly excludes, and no other skill covers visual design.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-eval-report-near-miss",
+   "skill": "adk-presenter",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-evaluation",
+   "supporting": [],
+   "reason": "Auditing evaluation result files with strict checks to find ignored tool failures and the real pass rate is evaluation result verification.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-approval-card-positive",
+   "skill": "adk-frontend-integration",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-frontend-integration",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "The approve/reject card, CopilotKit chat and tool timeline are agent UI states for approvals, while the confirmation and resume flow behind the rejection belongs to guardrails.",
+   "grade": "PASS"
+  },
+  {
+   "id": "api-model-failover-near-miss",
+   "skill": "safe-api-tool-calls",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-model-and-output-contracts",
+   "supporting": [
+    "adk-memory-architecture"
+   ],
+   "reason": "Model failover via FallbackModel is the model-contracts skill's remit, while recording which model answered each turn is session/state tracking, which may need the memory skill's state handling.",
+   "grade": "PASS"
+  },
+  {
+   "id": "interoperability-a2a-positive",
+   "skill": "adk-agent-interoperability",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-interoperability",
+   "supporting": [
+    "safe-api-tool-calls"
+   ],
+   "reason": "Choosing A2A versus a direct API call, agent cards and task states for a remote Java agent fall under interoperability, and the failure handling for the external call touches safe-api-tool-calls.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-mcp-wiring-near-miss",
+   "skill": "adk-agent-security",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-interoperability",
+   "supporting": [],
+   "reason": "Consuming an MCP server over streamable HTTP with tool_filter, prefixes and clean shutdown is exactly the MCP consumption wiring this skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-confirmation-tiering-near-miss",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-security",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "Assessing which tools an injected page could abuse is whole-agent threat modelling, and deciding which actions need human review is handled by the guardrails skill's approval mechanics.",
+   "grade": "PARTIAL"
+  },
+  {
+   "id": "presenter-rollout-positive",
+   "skill": "adk-presenter",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-presenter",
+   "supporting": [],
+   "reason": "A go-live rollout pack with user guide, training, staff messages and adoption metrics is explicitly within the presenter skill's rollout-pack scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "tool-interface-toolset-positive",
+   "skill": "adk-tool-interface-design",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-tool-interface-design",
+   "supporting": [
+    "adk-agent-interoperability"
+   ],
+   "reason": "Deciding which of 40 tools to expose, naming, filtering and shaping results for context size is tool interface design, while the MCP server wiring involves interoperability.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-near-miss",
+   "skill": "adk-presenter",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-frontend-integration",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "A streamed-reply demo mode in the ADK React frontend is agent-to-browser UI work, and removing login for a public demo raises access-control concerns that may need the guardrails or security review.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-positive",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-operational-guardrails",
+   "supporting": [
+    "adk-tool-interface-design"
+   ],
+   "reason": "Stopping repeated tool calls and enforcing a model-call allowance across an invocation are invocation limits and repeated-tool protection, which this skill covers; the terminal-failure return shape may also need tool interface guidance.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Tuning a database buffer cache for an unrelated inventory application is general database administration, which no skill in the catalogue covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "discovery-near-miss",
+   "skill": "adk-discovery",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [
+    "adk-presenter"
+   ],
+   "reason": "The architecture and implementation plan for a use case that is already chosen is the system designer's job, and the plan-level outcome and checkout measure may need the presenter's evidence framing.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-session-endpoints-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-fastapi-backend",
+   "supporting": [
+    "adk-frontend-integration"
+   ],
+   "reason": "Rejecting continuation of sessions the caller does not own concerns the agent's run/session endpoints and ownership checks, which the frontend-integration skill owns, while the error state in the chat is UI work for that same skill.",
+   "grade": "FAIL"
+  },
+  {
+   "id": "memory-sql-analytics-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-sql-agent-engineering",
+   "supporting": [],
+   "reason": "Natural-language analytics that turn questions into reviewed, read-only BigQuery queries is the core scope of the SQL agent engineering skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-positive",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "Drafting the EU AI Act classification and DPIA inputs for a client's DPO and legal reviewers from project evidence is exactly the governance pack's purpose.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-sow-commercial-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Negotiating a master services agreement and payment terms with procurement is commercial and legal work outside every skill's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "interoperability-near-miss",
+   "skill": "adk-agent-interoperability",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-workflow-design",
+   "supporting": [
+    "adk-agent-instructions"
+   ],
+   "reason": "Splitting into writer and reviewer sub-agents with a bounded loop and session-state handoff is orchestration control flow, and the sub-agent descriptions for routing fall under instructions.",
+   "grade": "PASS"
+  },
+  {
+   "id": "release-ci-gate-positive",
+   "skill": "adk-release-engineering",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-release-engineering",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "Wiring an eval gate into CI with threshold, repeat and cost policy is release engineering, and the gate's flakiness and regression checks depend on the evaluation harness.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-commonwealth-dta-positive",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "Drafting the DTA AI impact assessment and transparency statement for a Commonwealth department's assessing officer is exactly the governance-paper work this skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sql-near-miss",
+   "skill": "adk-sql-agent-engineering",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Reviewing indexes for a hand-written reporting query is ordinary SQL tuning with no ADK agent involved, which the SQL agent skill explicitly excludes.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-change-request-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Writing a change request against a signed SOW and revising goals and estimates is covered by the system designer's proposal, statement of work and change request scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "tool-interface-positive",
+   "skill": "adk-tool-interface-design",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-tool-interface-design",
+   "supporting": [],
+   "reason": "Fixing tool docstrings and parameter declarations so the model picks the right tool and arguments is the model-facing tool interface work this skill owns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "deploy-release-canary-near-miss",
+   "skill": "deploy-adk-on-google-cloud",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-release-engineering",
+   "supporting": [
+    "adk-agent-observability"
+   ],
+   "reason": "A canary rollout to 10% with eval comparison and rollback on regression is release lifecycle work, and comparing error rates draws on production telemetry.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-review-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [
+    "adk-agent-security"
+   ],
+   "reason": "Reviewing a proposed architecture before implementation and defining failure-case validation fits the system designer, and tenant isolation and retry-on-booking risks touch security and safe API calls.",
+   "grade": "PASS"
+  },
+  {
+   "id": "release-near-miss",
+   "skill": "adk-release-engineering",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [
+    "adk-tool-auth-and-secrets"
+   ],
+   "reason": "A first Cloud Run deployment with a service account and session database is hosting and deployment work, and the service account identity touches credential handling.",
+   "grade": "PASS"
+  },
+  {
+   "id": "api-near-miss",
+   "skill": "safe-api-tool-calls",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Reviewing a local SQLite query plan and suggesting an index is ordinary database tuning with no ADK agent or external API involved.",
+   "grade": "PASS"
+  },
+  {
+   "id": "optimise-cross-session-recall-near-miss",
+   "skill": "optimise-adk-on-google-cloud",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "Recalling past conversations scoped per user with deletion is memory design enforcing identity and erasure boundaries, and the guardrails skill is not needed here so this is a single-skill case beyond the memory choice.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-positive",
+   "skill": "adk-frontend-integration",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-frontend-integration",
+   "supporting": [
+    "adk-tool-auth-and-secrets"
+   ],
+   "reason": "Connecting an ADK agent to CopilotKit with streaming, failure handling after partial answers and conversation ownership is frontend integration, and verifying caller ownership of tool data touches tool-hop auth.",
+   "grade": "PASS"
+  },
+  {
+   "id": "instructions-near-miss",
+   "skill": "adk-agent-instructions",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-agent-evaluation",
+   "supporting": [],
+   "reason": "Error analysis by category on a labelled development set, one change per iteration and a holdout report is the measured evaluation improvement loop.",
+   "grade": "PASS"
+  },
+  {
+   "id": "observability-handover-deploy-near-miss",
+   "skill": "adk-agent-observability",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Moving and redeploying the Cloud Run service into a different GCP project is hosting and deployment lifecycle work.",
+   "grade": "PASS"
+  }
+ ],
+ "summary": {
+  "overall": {
+   "PASS": 147,
+   "PARTIAL": 4,
+   "FAIL": 3,
+   "ERROR": 0
+  },
+  "by_repeat": {
+   "1": {
+    "PASS": 147,
+    "PARTIAL": 4,
+    "FAIL": 3,
+    "ERROR": 0
+   }
+  },
+  "by_split": {
+   "dev": {
+    "PASS": 147,
+    "PARTIAL": 4,
+    "FAIL": 3,
+    "ERROR": 0
+   }
+  },
+  "not_pass": {
+   "designer-checkpoint-positive": [
+    "FAIL"
+   ],
+   "evaluation-exemplar-edit-near-miss": [
+    "PARTIAL"
+   ],
+   "fastapi-backend-cross-user-tool-near-miss": [
+    "PARTIAL"
+   ],
+   "fastapi-backend-session-endpoints-near-miss": [
+    "FAIL"
+   ],
+   "guardrails-approval-card-near-miss": [
+    "PARTIAL"
+   ],
+   "guardrails-confirmation-tiering-near-miss": [
+    "PARTIAL"
+   ],
+   "portability-migration-build-near-miss": [
+    "FAIL"
+   ]
+  }
+ }
+}

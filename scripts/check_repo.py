@@ -12,6 +12,10 @@ import sys
 import unittest
 
 
+# dev cases may inform description edits; heldout cases are only ever measured.
+SPLITS = ("dev", "heldout")
+
+
 def _unique_object(pairs):
     result = {}
     for key, value in pairs:
@@ -27,6 +31,7 @@ def validate_cases(root: Path) -> list[str]:
     errors: list[str] = []
     seen: set[str] = set()
     coverage = {name: set() for name in names}
+    heldout = {name: set() for name in names}
     for filename in ("activation.json", "scenarios.json"):
         try:
             data = json.loads((root / "evals" / filename).read_text(),
@@ -56,10 +61,12 @@ def validate_cases(root: Path) -> list[str]:
                     errors.append(f"{cid}: expected installed skill name and boolean should_trigger")
                 else:
                     coverage[skill].add(trigger)
+                    if case.get("split") == "heldout":
+                        heldout[skill].add(trigger)
                 if not isinstance(case.get("rationale"), str) or not case["rationale"].strip():
                     errors.append(f"{cid}: rationale must be nonempty text")
-                if "split" in case and case["split"] not in ("train", "held-out"):
-                    errors.append(f"{cid}: split must be \"train\" or \"held-out\" when present")
+                if case.get("split") not in SPLITS:
+                    errors.append(f"{cid}: split must be \"dev\" or \"heldout\"")
             else:
                 primary = case.get("expected_primary")
                 if "expected_primary" not in case or (primary is not None and
@@ -77,6 +84,8 @@ def validate_cases(root: Path) -> list[str]:
     for name, labels in sorted(coverage.items()):
         if labels != {False, True}:
             errors.append(f"{name}: activation cases need a positive and a near-miss negative")
+        if heldout[name] != {False, True}:
+            errors.append(f"{name}: heldout activation cases need a positive and a near-miss negative")
     return errors
 
 

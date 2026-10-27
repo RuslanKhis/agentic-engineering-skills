@@ -1,0 +1,66 @@
+{
+ "short": "guardrails",
+ "round": 1,
+ "model": "claude-opus-5-5",
+ "created": "2026-10-27T07:16:10+00:00",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-opus-5-5",
+  "--output-format",
+  "json",
+  "--system-prompt",
+  "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+  "--tools",
+  "",
+  "--safe-mode",
+  "--disable-slash-commands",
+  "--no-session-persistence",
+  "--strict-mcp-config",
+  "--setting-sources",
+  "",
+  "(prompt on stdin)"
+ ],
+ "cwd": "fresh empty temporary directory (tempfile.TemporaryDirectory)",
+ "system": "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+ "prompt": "The coding assistant is used by developers who build AI agents in Python with Google's Agent Development Kit, usually hosted on Google Cloud. Their requests may or may not mention that stack.\n\nHere is one kind of help the assistant can give:\n\n<brief>\nA developer's agent sometimes gets stuck calling the same thing again and again or takes far too many steps, and the bill grows. They want hard caps per request and per user, a spending allowance that winds the service down in stages when it runs out, and a point where a person must sign off on certain risky actions before they happen, with a lasting record of who approved what and the ability to continue afterwards.\n</brief>\n\nWrite three requests a developer might type to the assistant:\n- two that need exactly this kind of help;\n- one that sounds related but actually needs a different kind of help.\n\nWrite as real developers do: vary the tone (terse, chatty, frustrated, formal); make some vague and some full of detail that does not matter; mention their own project, code or deadline where natural. Do not reuse the wording of the brief. For the third request, say in plain words what kind of help it actually needs instead.\n\nAnswer with JSON only, in exactly this shape:\n{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"elsewhere\", \"text\": \"...\", \"needs_instead\": \"...\"}\n]}",
+ "reply_text": "{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"ok so our ADK support agent on Cloud Run burned through like $1,400 in Vertex tokens over the weekend because one session got stuck calling lookup_order_status over and over (I counted 212 calls in the trace, same args every time). I need guardrails before the Thursday launch: a max number of tool calls / LLM turns per request, a daily cap per user, and some kind of monthly budget where when we're at 80% it switches to flash-lite, at 95% it turns off the expensive tools, and at 100% it just returns a polite 'try later'. Where do I hook this in ADK? before_model_callback? A plugin? Code examples please, we're on google-adk 1.x with Python 3.12.\"},\n {\"kind\": \"fits\", \"text\": \"Need a human-approval step in our ADK agent for anything that issues refunds over $200 or deletes customer records. Agent should pause, someone on the ops team approves or rejects in our internal dashboard (could be hours later), and then the run picks up where it left off. Also compliance wants a permanent log of who approved what and when — thinking Firestore or BigQuery. While we're at it, I want hard limits on steps per invocation, since the planner sometimes loops. How would you structure this?\"},\n {\"kind\": \"elsewhere\", \"text\": \"Our GCP bill jumped this month and finance is asking me which of our ADK agents are responsible. We have 4 agents on Agent Engine and a couple on Cloud Run, all sharing one project. How do I break down the Vertex AI spend per agent and maybe set up a budget alert email so this doesn't surprise us again?\", \"needs_instead\": \"Cost attribution and reporting on Google Cloud (resource labels, billing export to BigQuery, Cloud Billing budget alerts). This is about observing and reporting spend, not enforcing runtime caps, staged shutdown or approval steps inside the agent.\"}\n]}",
+ "reply_model": "claude-opus-5-5",
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 1030,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 646,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1030,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 646,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1030,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1030
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "cost_usd": 0.021168,
+ "duration_s": 10.5
+}

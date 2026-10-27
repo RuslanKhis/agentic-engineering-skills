@@ -1,0 +1,66 @@
+{
+ "short": "presenter",
+ "round": 1,
+ "model": "claude-opus-5-5",
+ "created": "2026-10-27T07:16:11+00:00",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-opus-5-5",
+  "--output-format",
+  "json",
+  "--system-prompt",
+  "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+  "--tools",
+  "",
+  "--safe-mode",
+  "--disable-slash-commands",
+  "--no-session-persistence",
+  "--strict-mcp-config",
+  "--setting-sources",
+  "",
+  "(prompt on stdin)"
+ ],
+ "cwd": "fresh empty temporary directory (tempfile.TemporaryDirectory)",
+ "system": "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+ "prompt": "The coding assistant is used by developers who build AI agents in Python with Google's Agent Development Kit, usually hosted on Google Cloud. Their requests may or may not mention that stack.\n\nHere is one kind of help the assistant can give:\n\n<brief>\nAn AI agent project has results and someone senior must now make a call: approve a pilot, go to production, or keep funding it. The engineer needs a slide outline whose claims are backed by the project's evidence, what to say, likely tough questions and a one-page memo. After launch they may instead need user guides, training, launch announcements, or a regular report to the sponsor on what the agent has delivered for its cost.\n</brief>\n\nWrite three requests a developer might type to the assistant:\n- two that need exactly this kind of help;\n- one that sounds related but actually needs a different kind of help.\n\nWrite as real developers do: vary the tone (terse, chatty, frustrated, formal); make some vague and some full of detail that does not matter; mention their own project, code or deadline where natural. Do not reuse the wording of the brief. For the third request, say in plain words what kind of help it actually needs instead.\n\nAnswer with JSON only, in exactly this shape:\n{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"elsewhere\", \"text\": \"...\", \"needs_instead\": \"...\"}\n]}",
+ "reply_text": "{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"ok so our claims-triage agent (ADK, running on Cloud Run, Gemini 2.5 Flash) finished its 6-week pilot with the ops team. I've got the eval results in evals/pilot_summary.csv, the BigQuery cost export, and a doc of feedback from the adjusters. VP of Operations decides next Thursday whether we go to prod for all three regions. Can you help me put together a deck outline where every claim points back to an actual number from those files, talking points for me, the questions she's likely to grill me on (she always asks about error rates on edge cases and who's on the hook when it's wrong), and a one-page memo she can read beforehand?\"},\n {\"kind\": \"fits\", \"text\": \"Agent's been live for 3 months now. Sponsor wants a monthly update on value vs spend — tickets deflected, hours saved, GCP bill, that kind of thing. We have the Vertex AI usage logs and the Zendesk export. Need a template for this report plus a draft of the October one. Keep it short, he doesn't read past page one.\"},\n {\"kind\": \"elsewhere\", \"text\": \"Our ADK agent's costs are way higher than what I put in the pilot proposal and finance is asking questions. Looking at the traces, it seems like the planner sub-agent is calling the search tool 4-5 times per request and re-sending the full conversation history each time. Can you look at agents/planner.py and figure out how to cut down the token usage without tanking answer quality?\", \"needs_instead\": \"Technical cost optimization: debugging the agent's tool-calling loop and context handling in code to reduce token spend, not preparing a decision deck or stakeholder report.\"}\n]}",
+ "reply_model": "claude-opus-5-5",
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 1037,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 570,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1037,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 570,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1037,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1037
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "cost_usd": 0.019704,
+ "duration_s": 9.5
+}

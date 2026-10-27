@@ -1,0 +1,66 @@
+{
+ "short": "api",
+ "round": 1,
+ "model": "claude-opus-5-5",
+ "created": "2026-10-27T07:16:30+00:00",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-opus-5-5",
+  "--output-format",
+  "json",
+  "--system-prompt",
+  "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+  "--tools",
+  "",
+  "--safe-mode",
+  "--disable-slash-commands",
+  "--no-session-persistence",
+  "--strict-mcp-config",
+  "--setting-sources",
+  "",
+  "(prompt on stdin)"
+ ],
+ "cwd": "fresh empty temporary directory (tempfile.TemporaryDirectory)",
+ "system": "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+ "prompt": "The coding assistant is used by developers who build AI agents in Python with Google's Agent Development Kit, usually hosted on Google Cloud. Their requests may or may not mention that stack.\n\nHere is one kind of help the assistant can give:\n\n<brief>\nAn AI agent's helper functions call unreliable external HTTP services such as payments or bookings. The developer faces timeouts, uncertainty about when to retry, writes that may have happened twice (a double charge), and needs any action a user has approved to run exactly once and any declined action never to run at all.\n</brief>\n\nWrite three requests a developer might type to the assistant:\n- two that need exactly this kind of help;\n- one that sounds related but actually needs a different kind of help.\n\nWrite as real developers do: vary the tone (terse, chatty, frustrated, formal); make some vague and some full of detail that does not matter; mention their own project, code or deadline where natural. Do not reuse the wording of the brief. For the third request, say in plain words what kind of help it actually needs instead.\n\nAnswer with JSON only, in exactly this shape:\n{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"elsewhere\", \"text\": \"...\", \"needs_instead\": \"...\"}\n]}",
+ "reply_text": "{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"ugh. our ADK travel agent has a `book_hotel` tool that POSTs to the partner booking API, and that API randomly hangs for 30s+ then times out. I wrapped it in tenacity with 3 retries and now QA found two duplicate reservations for the same guest. Partner docs mention an `Idempotency-Key` header but I'm not sure what to key it on: session id? tool call id? Also the confirm step happens in a previous turn (user says 'yes book it'), so how do I make sure the booking fires once even if the agent re-invokes the tool after a Cloud Run restart? Demo is Thursday, please help.\"},\n {\"kind\": \"fits\", \"text\": \"Looking for a design review. We have a payments agent built on Google ADK, deployed to Agent Engine. Flow: the LLM proposes a charge, we surface it to the user for approval via a confirmation event, and only on approval does `charge_card()` call Stripe-like provider (actually an internal gateway, ~2% 504 rate). Requirements from compliance: an approved charge must settle exactly once; a rejected or abandoned one must never hit the gateway, even if the model hallucinates a second tool call later. Currently approval state lives in session.state which feels fragile. What's a sound pattern here (persisting intents in Firestore? an outbox? reconciling ambiguous timeouts by querying the gateway)? Python 3.12, happy to restructure.\"},\n {\"kind\": \"elsewhere\", \"text\": \"my ADK agent keeps getting 429 RESOURCE_EXHAUSTED from Gemini when a bunch of users hit it at once, the whole tool loop just dies. should I add retries? backoff? where do I even hook that in with the Runner\", \"needs_instead\": \"Help handling rate limits/quota on the Gemini model calls themselves (retry/backoff config for the LLM client, quota increases, concurrency limiting), not exactly-once execution of side-effecting external tool calls.\"}\n]}",
+ "reply_model": "claude-opus-5-5",
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 1005,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 676,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1005,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 676,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1005,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1005
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "cost_usd": 0.021567999999999997,
+ "duration_s": 10.9
+}
