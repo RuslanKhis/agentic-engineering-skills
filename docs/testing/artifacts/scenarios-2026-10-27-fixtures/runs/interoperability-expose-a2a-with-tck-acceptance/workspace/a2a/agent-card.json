@@ -1,0 +1,59 @@
+{
+  "name": "warranty_triage",
+  "description": "Classifies warranty claims by product, fault category and urgency.",
+  "version": "0.3.0",
+  "supportedInterfaces": [
+    {
+      "url": "https://triage.service-desk.example",
+      "protocolBinding": "JSONRPC",
+      "protocolVersion": "1.0"
+    }
+  ],
+  "capabilities": {
+    "streaming": false
+  },
+  "securitySchemes": {
+    "partner_oauth": {
+      "oauth2SecurityScheme": {
+        "description": "OAuth 2.0 client credentials issued by the service-desk authorization server",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://auth.service-desk.example/oauth2/token",
+            "scopes": {
+              "triage:invoke": "Submit warranty claims for triage"
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityRequirements": [
+    {
+      "schemes": {
+        "partner_oauth": {
+          "list": ["triage:invoke"]
+        }
+      }
+    }
+  ],
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain"],
+  "skills": [
+    {
+      "id": "triage_warranty_claim",
+      "name": "Triage warranty claim",
+      "description": "Reads a warranty claim, identifies the product by serial number, assigns a fault category (battery, motor, frame, display, other) and an urgency from 1 to 3, and records the triage.",
+      "tags": ["warranty", "triage"],
+      "examples": ["Claim C-1042: serial EB-2291-0042, battery will not hold charge."],
+      "securityRequirements": [
+        {
+          "schemes": {
+            "partner_oauth": {
+              "list": ["triage:invoke"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

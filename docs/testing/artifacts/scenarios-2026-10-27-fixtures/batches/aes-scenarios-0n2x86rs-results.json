@@ -1,0 +1,1239 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T10:48:10+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/int1/aes-scenarios-0n2x86rs",
+ "commit": "384e987b4c00477f347605c8d62c9ee4a3715568",
+ "scenarios_sha256": "f0b1726a3259e084ed3ed850f6da5be02cc17c5a8aae2b5eecdf84f5be4558d0",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "observability-cost-reconciliation-agenttool-litellm",
+   "expected_primary": "adk-agent-observability",
+   "fixture_status": "repo-fixture",
+   "note": "invocation_summary.py cannot be run without a shell.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-observability",
+    "optimise-adk-on-google-cloud",
+    "adk-operational-guardrails",
+    "adk-model-and-output-contracts",
+    "adk-tool-interface-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": null,
+   "status": "judge-error",
+   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "final_chars": 6095,
+   "files": [],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 37.6,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 11,
+    "total_cost_usd": 0.21279489999999998,
+    "duration_ms": 36509,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-observability"
+    ],
+    "skill_files_read": [
+     "adk-agent-observability/scripts/invocation_summary.py",
+     "adk-agent-observability/references",
+     "adk-agent-observability/references/signals-and-schema.md",
+     "adk-agent-observability/references/validation.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-observability": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 4
+     },
+     "optimise-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-operational-guardrails": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-model-and-output-contracts": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-tool-interface-design": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 9,
+    "catalogue": [
+     "adk-agent-observability",
+     "adk-model-and-output-contracts",
+     "adk-operational-guardrails",
+     "adk-tool-interface-design",
+     "optimise-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-observability": true,
+    "optimise-adk-on-google-cloud": false,
+    "adk-operational-guardrails": false,
+    "adk-model-and-output-contracts": false,
+    "adk-tool-interface-design": false
+   }
+  },
+  {
+   "id": "observability-agent-runtime-latency-and-alerts",
+   "expected_primary": "adk-agent-observability",
+   "fixture_status": "repo-fixture",
+   "note": "The offline invocation summary needs a shell; the agent can only read the export or propose the command.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-observability",
+    "optimise-adk-on-google-cloud",
+    "protect-adk-sensitive-data",
+    "deploy-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": null,
+   "status": "judge-error",
+   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "final_chars": 3080,
+   "files": [
+    "deploy/agent_engine.env",
+    "docs/observability.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 87.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 21,
+    "total_cost_usd": 0.3379441,
+    "duration_ms": 85861,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-observability"
+    ],
+    "skill_files_read": [
+     "adk-agent-observability/references/slo-and-alerting.md",
+     "adk-agent-observability/references/export-paths.md",
+     "adk-agent-observability/references/signals-and-schema.md",
+     "adk-agent-observability/references/operating-rules.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-observability": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 4
+     },
+     "optimise-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "protect-adk-sensitive-data": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 19,
+    "catalogue": [
+     "adk-agent-observability",
+     "deploy-adk-on-google-cloud",
+     "optimise-adk-on-google-cloud",
+     "protect-adk-sensitive-data",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-observability": true,
+    "optimise-adk-on-google-cloud": false,
+    "protect-adk-sensitive-data": false,
+    "deploy-adk-on-google-cloud": false
+   }
+  },
+  {
+   "id": "release-coding-agent-capability-diff-gate",
+   "expected_primary": "adk-release-engineering",
+   "fixture_status": "repo-fixture",
+   "note": "The agent has no shell; helper scripts it names can only be proposed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-release-engineering",
+    "adk-agent-security",
+    "adk-agent-interoperability",
+    "adk-agent-evaluation",
+    "deploy-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": null,
+   "status": "judge-error",
+   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "final_chars": 3410,
+   "files": [
+    ".github/CODEOWNERS",
+    ".github/workflows/capability-gate.yml",
+    "ci/__init__.py",
+    "ci/capability_gate.py",
+    "tests/test_capability_gate.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 87.1,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 20,
+    "total_cost_usd": 0.2831456,
+    "duration_ms": 85869,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-release-engineering"
+    ],
+    "skill_files_read": [
+     "adk-release-engineering/references/ci-eval-gates.md",
+     "adk-agent-security/references/validation.md",
+     "adk-agent-security/scripts/inspect_security_surface.py"
+    ],
+    "skill_md_loaded": {
+     "adk-release-engineering": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 2
+     },
+     "adk-agent-interoperability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 18,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-interoperability",
+     "adk-agent-security",
+     "adk-release-engineering",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-release-engineering": true,
+    "adk-agent-security": false,
+    "adk-agent-interoperability": false,
+    "adk-agent-evaluation": false,
+    "deploy-adk-on-google-cloud": false
+   }
+  },
+  {
+   "id": "release-model-retirement-and-ci-gate",
+   "expected_primary": "adk-release-engineering",
+   "fixture_status": "repo-fixture",
+   "note": "The agent has no shell; helper scripts it names can only be proposed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-release-engineering",
+    "adk-agent-evaluation",
+    "adk-model-and-output-contracts",
+    "deploy-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": null,
+   "status": "judge-error",
+   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "final_chars": 3001,
+   "files": [
+    ".github/workflows/ci.yml",
+    "app/triage.py",
+    "docs/release/model-upgrade-2026-11.md",
+    "eval/README.md",
+    "eval/ci-expectations.json",
+    "eval/test_config.json",
+    "evals_live/__init__.py",
+    "evals_live/test_ci_gate.py",
+    "tests/test_release_gate.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 159.8,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 42,
+    "total_cost_usd": 0.49681859999999994,
+    "duration_ms": 158702,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-release-engineering"
+    ],
+    "skill_files_read": [
+     "adk-release-engineering/references/ci-eval-gates.md",
+     "adk-release-engineering/references/model-migration.md",
+     "adk-release-engineering/assets/eval-gate.github-actions.yml",
+     "adk-agent-evaluation/assets/evaluation-expectations.json",
+     "adk-release-engineering/assets/model-upgrade-checklist.md",
+     "adk-model-and-output-contracts/assets/model-lifecycle-2026-10-01.json",
+     "adk-agent-evaluation/scripts/check_eval_results.py"
+    ],
+    "skill_md_loaded": {
+     "adk-release-engineering": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 4
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 2
+     },
+     "adk-model-and-output-contracts": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 40,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-model-and-output-contracts",
+     "adk-release-engineering",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-release-engineering": true,
+    "adk-agent-evaluation": false,
+    "adk-model-and-output-contracts": false,
+    "deploy-adk-on-google-cloud": false
+   }
+  },
+  {
+   "id": "interoperability-expose-and-register-a2a",
+   "expected_primary": "adk-agent-interoperability",
+   "fixture_status": "repo-fixture",
+   "note": "agent_card_check.py needs a shell; graded on validation proposed or done by reading.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-agent-security",
+    "deploy-adk-on-google-cloud",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": null,
+   "status": "judge-error",
+   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "final_chars": 65,
+   "files": [
+    "research_agent/a2a_app.py",
+    "research_agent/a2a_auth.py",
+    "tests/test_a2a_exposure.py"
+   ],
+   "agent": {
+    "exit": 1,
+    "timed_out": false,
+    "seconds": 58.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": true,
+    "num_turns": 17,
+    "total_cost_usd": 0.22890660000000002,
+    "duration_ms": 56880,
+    "terminal_reason": "api_error",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-interoperability"
+    ],
+    "skill_files_read": [
+     "adk-agent-interoperability/references/a2a-contracts.md",
+     "adk-agent-interoperability/references/platform-registration.md",
+     "adk-agent-interoperability/assets/agent-card-1.0.example.json",
+     "adk-agent-interoperability/assets/agent-card.template.json"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-interoperability": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 4
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-workflow-design": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 15,
+    "catalogue": [
+     "adk-agent-interoperability",
+     "adk-agent-security",
+     "adk-workflow-design",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-interoperability": true,
+    "adk-agent-security": false,
+    "deploy-adk-on-google-cloud": false,
+    "adk-workflow-design": false
+   }
+  },
+  {
+   "id": "release-post-launch-quality-loop-aqua",
+   "expected_primary": "adk-release-engineering",
+   "fixture_status": "repo-fixture",
+   "note": "The agents-cli-aqua skill is absent, as the context says.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-release-engineering",
+    "adk-agent-evaluation",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": null,
+   "status": "judge-error",
+   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "final_chars": 65,
+   "files": [],
+   "agent": {
+    "exit": 1,
+    "timed_out": false,
+    "seconds": 2.4,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": true,
+    "num_turns": 1,
+    "total_cost_usd": 0,
+    "duration_ms": 797,
+    "terminal_reason": "api_error",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-release-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 0,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-observability",
+     "adk-engineer",
+     "adk-release-engineering",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": false,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-release-engineering": false,
+    "adk-agent-evaluation": false,
+    "adk-agent-observability": false
+   }
+  },
+  {
+   "id": "release-bigquery-analytics-score-gate-and-drift",
+   "expected_primary": "adk-release-engineering",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-release-engineering",
+    "adk-agent-observability",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": null,
+   "status": "judge-error",
+   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "final_chars": 65,
+   "files": [],
+   "agent": {
+    "exit": 1,
+    "timed_out": false,
+    "seconds": 2.5,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": true,
+    "num_turns": 1,
+    "total_cost_usd": 0,
+    "duration_ms": 873,
+    "terminal_reason": "api_error",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-release-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 0,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-observability",
+     "adk-engineer",
+     "adk-release-engineering",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": false,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-release-engineering": false,
+    "adk-agent-observability": false,
+    "adk-agent-evaluation": false
+   }
+  },
+  {
+   "id": "interoperability-expose-mcp-server-with-conformance-baseline",
+   "expected_primary": "adk-agent-interoperability",
+   "fixture_status": "repo-fixture",
+   "note": "The agent has no shell; helper scripts it names can only be proposed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-release-engineering",
+    "adk-agent-security"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": null,
+   "status": "judge-error",
+   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "final_chars": 65,
+   "files": [],
+   "agent": {
+    "exit": 1,
+    "timed_out": false,
+    "seconds": 2.3,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": true,
+    "num_turns": 1,
+    "total_cost_usd": 0,
+    "duration_ms": 626,
+    "terminal_reason": "api_error",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-agent-interoperability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-release-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 0,
+    "catalogue": [
+     "adk-agent-interoperability",
+     "adk-agent-security",
+     "adk-release-engineering",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": false,
+   "skill_md_loaded": {
+    "adk-agent-interoperability": false,
+    "adk-release-engineering": false,
+    "adk-agent-security": false
+   }
+  }
+ ]
+}

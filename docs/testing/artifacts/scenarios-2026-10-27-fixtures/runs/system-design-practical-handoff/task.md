@@ -1,0 +1,6 @@
+Design our ADK support assistant and write a plan another coding session can pick up. We're keeping React, OIDC, PostgreSQL and Cloud Run. Users should be able to save a reply language and delete it, replies should stream, and failures should be shown honestly. What's the first thing worth building locally? No code or deploying yet; we might use Matt Pocock's skills later.
+
+---
+Situation (from the person asking): The accepted pilot uses individual preferences; a future group-account preference question is outside this release. Verified login supplies the user ID. No source tree, selected ADK version or cloud credentials have been provided. Local implementation/testing is the intended next phase, while this request authorizes documentation only. Optional third-party planning skills are not installed here.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

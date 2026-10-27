@@ -1,0 +1,1102 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T10:46:43+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/des2/aes-scenarios-_302xhmm",
+ "commit": "a08979f4fc2ab93fb69c1eb3afc73a0f2cefedd3",
+ "scenarios_sha256": "9eb9beab586c28c7be0df27b60a4f68cd86512ef3f0b4949f5dd98a0e0e7f4bb",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "designer-production-cost-contract",
+   "expected_primary": "adk-system-designer",
+   "fixture_status": "repo-fixture",
+   "note": "Completed proof-of-concept plan and design; no cost contract yet.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-operational-guardrails",
+    "adk-sql-agent-engineering",
+    "deploy-adk-on-google-cloud",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.2671,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Writes a cost contract with the six fields: a ceiling at the stated volume split into variable per-request work and the fixed while-provisioned resources, scope, the billing export as authority, an enforcement stop that acts without a person (admission control and max_llm_calls for model work, maximum bytes billed and a daily quota for BigQuery, maximum instances for the host), what degrades first, and the goal that reads the first live bill.",
+     "verdict": "PASS",
+     "quote": "fixed ≤ $300 (assumed split), variable allowance A = $1,000, reserve $200. Average request ≤ $0.05 and p95 ≤ $0.15 (placeholders until G01). Scope: project, billing month",
+     "quote_found": true,
+     "reason": "The C9 contract has a ceiling split into fixed and variable, scope, the billing export as authority, automatic stops (max_llm_calls, maximum_bytes_billed, quota, max-instances), degrade tiers, and G15 reads the first live bill.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "States that a billing budget alert is evidence and not enforcement, and does not present it as the cap.",
+     "verdict": "PASS",
+     "quote": "The Cloud Billing export reports spend hours to a day late, and a budget alert only notifies, so neither can stop a request.",
+     "quote_found": true,
+     "reason": "It explicitly treats the budget alert as notification and not the cap, using it only to ratchet limits tighter.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Requires labels for environment, team and application on every owned resource, set in deployment code, so the export can be attributed to this application.",
+     "verdict": "PASS",
+     "quote": "Every owned resource carries `env`, `team`, `app` labels set in the deployment code (G02/A1)",
+     "quote_found": true,
+     "reason": "Labels for environment, team and app on every owned resource are set in code, and the export is sliced by them.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Puts a recurring cost review with a date trigger and a decommission item (dependants and retention included) in the Later table, and lists each while-provisioned resource with its idle cost and owner on the goal that creates it.",
+     "verdict": "FAIL",
+     "quote": "Later: recurring cost review, decommission, production hardening | carried into the plan | none removed",
+     "quote_found": true,
+     "reason": "The design lists each while-provisioned resource with idle cost and owner, but the visible Later content is only a carry-over line; the date trigger and the decommission item with dependants and retention are not shown, and the plan is truncated.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Keeps design-only scope: no provisioning, no budget creation, no live price lookups presented as retrieved.",
+     "verdict": "PASS",
+     "quote": "Prices were not retrieved; the PoC figure is cited, the rest are placeholders the creating goal fills as its first acceptance item.",
+     "quote_found": false,
+     "reason": "The work is design only, with no provisioning, and the prices are labelled placeholders or an assumption (the $1.30/£ rate).",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 4,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3868,
+   "files": [
+    "docs/architecture/claims-production.md",
+    "docs/architecture/claims.md",
+    "docs/plans/claims-production.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 736.5,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 25,
+    "total_cost_usd": 1.6741309,
+    "duration_ms": 735269,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-system-designer"
+    ],
+    "skill_files_read": [
+     "adk-system-designer/references/delivery-profiles.md",
+     "adk-system-designer/references/design-decisions.md",
+     "adk-system-designer/references/resource-costs.md",
+     "adk-system-designer/references/gcp-decisions.md",
+     "adk-system-designer/references/failure-review.md",
+     "adk-operational-guardrails/references/cost-controls.md",
+     "adk-system-designer/assets/implementation-plan-template.md",
+     "adk-system-designer/references/security-baseline.md",
+     "adk-system-designer/references/waf-review.md"
+    ],
+    "skill_md_loaded": {
+     "adk-system-designer": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 8
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-operational-guardrails": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-sql-agent-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 23,
+    "catalogue": [
+     "adk-agent-observability",
+     "adk-engineer",
+     "adk-operational-guardrails",
+     "adk-sql-agent-engineering",
+     "adk-system-designer",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-system-designer": true,
+    "adk-engineer": false,
+    "adk-operational-guardrails": false,
+    "adk-sql-agent-engineering": false,
+    "deploy-adk-on-google-cloud": false,
+    "adk-agent-observability": false
+   }
+  },
+  {
+   "id": "designer-checkpoint-settles-the-agenda",
+   "expected_primary": "adk-system-designer",
+   "fixture_status": "repo-fixture",
+   "note": "No shell: plan_status.py and check_schedule.py cannot be run in the workspace.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.174,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Runs plan_status.py and treats its CHECKPOINT lines as the agenda, settling each with the user.",
+     "verdict": "FAIL",
+     "quote": "I could not run `plan_status.py`, `check_schedule.py` or `check_tickets.py`: Bash is disabled in this session.",
+     "quote_found": true,
+     "reason": "It named the command and built the agenda from records, but did not settle items with the user; it proceeded on assumptions and recorded questions.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Revises C2 in place keeping its ID with a revised G01 note, and updates the tickets, acceptance items and pass_to_pass lists that cite C2.",
+     "verdict": "PASS",
+     "quote": "I revised the C2 row in place and kept its ID.",
+     "quote_found": true,
+     "reason": "C2 was revised in place with a revised-G01 note; G01 and G06 cite C2 and G04 (citing C2, with G01/A3 in its pass_to_pass) was left consistent, and the agent reviewed citing tickets.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 3,
+     "assertion": "Turns the ruling into a numbered decision or rejects it and marks the ruling line settled or rejected.",
+     "verdict": "PASS",
+     "quote": "D4 Forget is a hard delete (checkpoint 2026-10-27, **provisional**: assumed because nobody could answer).",
+     "quote_found": true,
+     "reason": "The ruling was rejected with a numbered decision D4, and the G01 ruling line is marked 'rejected: checkpoint 2026-10-27'.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Re-estimates the unfinished tickets, reruns check_schedule.py, proposes moving the cut line without cutting the floor, updates the change table and Resume here, and ends with the next prompt.",
+     "verdict": "PASS",
+     "quote": "Next prompt:\n\n```text\n/adk-engineer Carry out docs/tickets/support/G06.md.\n```",
+     "quote_found": true,
+     "reason": "It re-estimated G02 and left G03/G04 as they were, named check_schedule.py as not runnable, moved the cut line while keeping the floor, updated the change log and Resume here, and ended with the next prompt.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    }
+   ],
+   "passed": 3,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.75,
+   "unstable": [
+    1,
+    2,
+    4
+   ],
+   "final_chars": 2460,
+   "files": [
+    "docs/architecture/support.md",
+    "docs/plans/support.md",
+    "docs/tickets/support/G01.md",
+    "docs/tickets/support/G02.md",
+    "docs/tickets/support/G03.md",
+    "docs/tickets/support/G04.md",
+    "docs/tickets/support/G05.md",
+    "docs/tickets/support/G06.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 117.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 25,
+    "total_cost_usd": 0.34114940000000005,
+    "duration_ms": 115864,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [
+     "adk-system-designer/references/checkpoint.md"
+    ],
+    "skill_md_loaded": {
+     "adk-system-designer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-memory-architecture": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 24,
+    "catalogue": [
+     "adk-engineer",
+     "adk-memory-architecture",
+     "adk-system-designer",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-system-designer": false,
+    "adk-engineer": false,
+    "adk-memory-architecture": false
+   }
+  },
+  {
+   "id": "designer-tickets-get-journey-goal-and-lint",
+   "expected_primary": "adk-system-designer",
+   "fixture_status": "repo-fixture",
+   "note": "No shell: check_schedule.py and check_tickets.py cannot be run in the workspace.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-agent-evaluation",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0551,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Adds a journey goal of type journey with primary skill adk-agent-evaluation before the presentation goal and makes the presentation depend on it, so check_schedule.py passes.",
+     "verdict": "FAIL",
+     "quote": "",
+     "quote_found": false,
+     "reason": "No journey goal was added and the plan was not changed; the files written are only G01.md and G03.md.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Writes one ticket per goal including type, touches and pass_to_pass, and runs check_tickets.py from the project root.",
+     "verdict": "FAIL",
+     "quote": "I wrote two tickets, G01 and G03. I couldn't run `check_tickets.py` because Bash is disabled in this session, so the tickets are unlinted.",
+     "quote_found": true,
+     "reason": "Only two of the goals got tickets, not one per goal, and the linter was not run.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Fixes every check_tickets.py error before handing over and reports any warnings it leaves, such as a companion without a pin.",
+     "verdict": "FAIL",
+     "quote": "I expect it to flag `protect-adk-sensitive-data` and `adk-fastapi-backend` as not installed.",
+     "quote_found": true,
+     "reason": "The linter was not run and no errors were fixed; it names expected errors without fixing them, and it does not report the react-router missing-pin warning as a warning left.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 0,
+   "total": 3,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2365,
+   "files": [
+    "docs/tickets/claims/G01.md",
+    "docs/tickets/claims/G03.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 42.6,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 9,
+    "total_cost_usd": 0.1843912,
+    "duration_ms": 41440,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [
+     "adk-system-designer/assets/ticket-template.md"
+    ],
+    "skill_md_loaded": {
+     "adk-system-designer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-presenter": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 8,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-engineer",
+     "adk-presenter",
+     "adk-system-designer",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-system-designer": false,
+    "adk-engineer": false,
+    "adk-agent-evaluation": false,
+    "adk-presenter": false
+   }
+  },
+  {
+   "id": "designer-weekly-status-from-plan-evidence",
+   "expected_primary": "adk-system-designer",
+   "fixture_status": "repo-fixture",
+   "note": "No git history and no shell: plan_status.py --weekly cannot be run in the workspace.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0633,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Runs plan_status.py --weekly --since 2026-10-18 rather than restating figures by hand.",
+     "verdict": "PASS",
+     "quote": "I couldn't run it, because I had no shell tool in this session. The draft is built by hand from the plan and the five tickets, so the script's own numbers weren't cross-checked.",
+     "quote_found": true,
+     "reason": "Per the grader notes, naming the command and saying it was not run passes; the agent names plan_status.py --weekly and says it wasn't run and the figures came from the records by hand.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Reports hours spent, remaining and projected against capacity, the next ready goals, and a RAID log with the overrun as an issue and the outside decision as a dependency.",
+     "verdict": "PASS",
+     "quote": "8.5 of 14 h spent (G01 6 h against 2-3 h estimated; G02 2.5 h so far, from the ticket records). Remaining estimate 5-9 h",
+     "quote_found": true,
+     "reason": "The draft reports spent, remaining and projected hours against capacity, next goals (G02, G03), and a risks/issues table with the G01 overrun as an issue and the review date D3 as a dependency.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Adds no figure that is not in the plan or tickets and keeps assumptions labelled.",
+     "verdict": "FAIL",
+     "quote": "Remaining estimate 5-9 h (re-estimated from the plan's estimates less G02 hours already spent; Ana to confirm)",
+     "quote_found": true,
+     "reason": "The agent's own 5-9 h remaining figure and the 13.5-17.5 h projection are not in the plan or tickets (the reference gives 6-11 h remaining and 12-17 h projected), and the 20 h raw allowance and 17.5 h overrun figures are also derived; the assumption is labelled but the figures are invented.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 3,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2469,
+   "files": [
+    "docs/status/2026-10-27.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 48.7,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 16,
+    "total_cost_usd": 0.5575545000000001,
+    "duration_ms": 47442,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "update-config"
+    ],
+    "skill_files_read": [
+     "adk-system-designer/references/checkpoint.md",
+     "adk-system-designer/scripts/plan_status.py"
+    ],
+    "skill_md_loaded": {
+     "adk-system-designer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 2
+     },
+     "adk-presenter": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 14,
+    "catalogue": [
+     "adk-presenter",
+     "adk-system-designer",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-system-designer": false,
+    "adk-presenter": false
+   }
+  },
+  {
+   "id": "designer-sow-from-plan",
+   "expected_primary": "adk-system-designer",
+   "fixture_status": "repo-fixture",
+   "note": "No shell: check_sow.py and check_schedule.py cannot be run in the workspace.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1272,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Reads engagement-scoping.md and fills the SOW template; every deliverable lists plan goal IDs and every phase-1 goal belongs to one deliverable.",
+     "verdict": "PASS",
+     "quote": "| DL3 | Team-scoped handler queue, claim history and the daily spend stop | G03, G04 | 1 | AC5, AC6 |",
+     "quote_found": true,
+     "reason": "Engagement-scoping.md and the template were read, and each deliverable lists goal IDs; DL1-DL4 cover G01-G06 once each.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Copies hours from the schedule check and multiplies by the £95 rate the user gave; invents no other rate and states run cost separately from the cost ledger.",
+     "verdict": "PASS",
+     "quote": "| 1 | G01–G06 | 21-33 | £95 | £1,995.00–£3,135.00 |",
+     "quote_found": true,
+     "reason": "Hours match the schedule and use only the user's £95 rate; run cost is stated separately as an estimate, with no invented rate.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Writes acceptance criteria with a comparator threshold, case count, who agreed the cases, method and date, never 'the agent answers correctly'.",
+     "verdict": "PASS",
+     "quote": "| AC1 | A notification returns a draft with a type and urgency | ≥ 90% of cases return both fields | 40† gold notifications agreed with the two team leads by 2026-11-13† | `python -m unittest tests.test_draft`",
+     "quote_found": true,
+     "reason": "Criteria give a threshold, case count, who agreed the cases, method and date, with no 'answers correctly' wording.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Lists each wait and prerequisite as a client dependency with an owner and a date, and runs check_sow.py to exit 0.",
+     "verdict": "FAIL",
+     "quote": "`check_schedule.py` and `check_sow.py` were not run (no shell in this session).",
+     "quote_found": true,
+     "reason": "W1 and W2 are listed with owners and dates, but check_sow.py was not run to exit 0, so the assertion fails as written.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    3
+   ],
+   "final_chars": 2309,
+   "files": [
+    "docs/engagement/claims/sow.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 76.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 13,
+    "total_cost_usd": 0.27374590000000004,
+    "duration_ms": 74876,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-system-designer"
+    ],
+    "skill_files_read": [
+     "adk-system-designer/references/engagement-scoping.md",
+     "adk-system-designer/assets/statement-of-work-template.md"
+    ],
+    "skill_md_loaded": {
+     "adk-system-designer": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-presenter": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 11,
+    "catalogue": [
+     "adk-engineer",
+     "adk-presenter",
+     "adk-system-designer",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-system-designer": true,
+    "adk-engineer": false,
+    "adk-presenter": false
+   }
+  }
+ ]
+}

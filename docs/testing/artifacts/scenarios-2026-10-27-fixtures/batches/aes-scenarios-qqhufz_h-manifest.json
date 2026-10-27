@@ -1,0 +1,153 @@
+{
+ "created": "2026-10-27T10:33:08+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-ae683dff62ffe485e",
+ "commit": "1e1a99626ba7c3a089c2536e36f5faf2a6e80216",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "router-resumes-accepted-goal",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-plan"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/router-resumes-accepted-goal/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Running the suite after the change needs a shell, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-system-designer",
+    "adk-memory-architecture",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "memory-ingestion-scan-detection",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/memory-ingestion-scan-detection/inventory.json"
+    },
+    {
+     "from": "evals/graders/memory-ingestion-scan-detection/make_pack.py"
+    },
+    {
+     "from": "evals/graders/memory-ingestion-scan-detection/situation.md"
+    }
+   ],
+   "note": "The pack is generated for this scenario by a judge-only script, so it is not the memory skill's demonstration fixture.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-memory-architecture",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "inventory.json",
+    "make_pack.py",
+    "situation.md"
+   ]
+  },
+  {
+   "id": "memory-local-document-completeness",
+   "status": "repo-fixture",
+   "copy": [
+    {
+     "from": "skills/adk-memory-architecture/assets/document-coverage.json",
+     "to": "document-coverage.json"
+    }
+   ],
+   "note": "document-coverage.json is the memory skill's own worked example (allow-listed): the agent can read the same file in the installed skill.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-memory-architecture"
+   ],
+   "grader_files": []
+  },
+  {
+   "id": "memory-third-party-service-silent-empty-and-supersede",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/memory-third-party-service-silent-empty-and-supersede/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The adapter tests need google-adk, which is absent, so they skip.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-memory-architecture",
+    "safe-api-tool-calls",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "existing-agents-cli-focused-memory",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/existing-agents-cli-focused-memory/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The google-agents-cli-* skills named in available_skills are external and not installed.",
+   "skills_missing": [
+    "google-agents-cli-workflow",
+    "google-agents-cli-adk-code"
+   ],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "engineer-agents-cli-focused-memory-1-11",
+   "status": "repo-fixture",
+   "copy": [
+    {
+     "from": "evals/fixtures/existing-agents-cli-focused-memory",
+     "to": "."
+    }
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-agents-cli-focused-memory-1-11/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The google-agents-cli-* skills named in available_skills are external and not installed.",
+   "skills_missing": [
+    "google-agents-cli-adk-code",
+    "google-agents-cli-workflow",
+    "google-agents-cli-eval"
+   ],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

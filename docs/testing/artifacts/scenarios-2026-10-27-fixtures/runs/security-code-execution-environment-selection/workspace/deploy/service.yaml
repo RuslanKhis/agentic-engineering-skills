@@ -1,0 +1,33 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: upload-analyst
+  labels:
+    cloud.googleapis.com/location: europe-west4
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "4"
+    spec:
+      serviceAccountName: upload-analyst@fjord-uw-prod.iam.gserviceaccount.com
+      containerConcurrency: 4
+      timeoutSeconds: 600
+      containers:
+        - image: europe-west4-docker.pkg.dev/fjord-uw-prod/apps/upload-analyst:0.6.2
+          env:
+            - name: GOOGLE_CLOUD_PROJECT
+              value: fjord-uw-prod
+            - name: GOOGLE_CLOUD_LOCATION
+              value: europe-west4
+            - name: GOOGLE_GENAI_USE_VERTEXAI
+              value: "true"
+            # Replace both ids with the sandbox created in europe-west4; the app refuses to start otherwise.
+            - name: SANDBOX_RESOURCE_NAME
+              value: projects/fjord-uw-prod/locations/europe-west4/reasoningEngines/REPLACE_ME/sandboxEnvironments/REPLACE_ME
+            - name: REPORT_ALLOWED_DOMAINS
+              value: fjord.example
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi

@@ -1,0 +1,1278 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T10:35:49+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/eng2/aes-scenarios-2uag1495",
+ "commit": "a08979f4fc2ab93fb69c1eb3afc73a0f2cefedd3",
+ "scenarios_sha256": "76cc58209b52b266590115ca86245a4b5d66c59da538a6bbba23e0cc8c7a41f5",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "engineer-writes-progress-block-when-stopping",
+   "expected_primary": "adk-engineer",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0696,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Writes a Progress block at the head of Evidence naming the finished items with their checks, the item in hand, the next step, uncommitted files with the worktree, and the re-verify commands.",
+     "verdict": "PASS",
+     "quote": "Progress:\n  - done: A1 written, not run.",
+     "quote_found": true,
+     "reason": "The Progress block at the head of Evidence includes done items with checks, in hand, next, uncommitted files with worktree note, and re-verify commands.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Leaves status in_progress rather than verified_local.",
+     "verdict": "PASS",
+     "quote": "status: in_progress",
+     "quote_found": true,
+     "reason": "Ticket frontmatter status is in_progress, not verified_local.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Ends with the prompt /adk-engineer Resume docs/tickets/support/G02.md from its Progress block.",
+     "verdict": "PASS",
+     "quote": "`/adk-engineer Resume docs/tickets/support/G02.md from its Progress block.`",
+     "quote_found": true,
+     "reason": "The final answer ends with the exact resume prompt.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 3,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2155,
+   "files": [
+    "app/stream.py",
+    "docs/tickets/support/G02.md",
+    "tests/test_stream.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 46.5,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 14,
+    "total_cost_usd": 0.1936278,
+    "duration_ms": 45216,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [
+     "adk-engineer/references/ticket-lifecycle.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-frontend-integration": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [
+     {
+      "tool": "Glob",
+      "input": "{\"pattern\": \"**/*\", \"path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/eng2/aes-scenarios-2uag1495/engineer-writes-progress-block-when-stopping\"}"
+     }
+    ],
+    "tool_calls": 13,
+    "catalogue": [
+     "adk-engineer",
+     "adk-frontend-integration",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-frontend-integration": false
+   }
+  },
+  {
+   "id": "engineer-parallel-tickets-with-overlapping-touches",
+   "expected_primary": "adk-engineer",
+   "fixture_status": "repo-fixture",
+   "note": "plan_status.py needs a shell; comparing touches by hand satisfies the first assertion.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-system-designer",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.14,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Runs plan_status.py or compares touches and says the two tickets both write web/src/chat/Message.tsx, so they are not safe to run in parallel.",
+     "verdict": "PASS",
+     "quote": "G02's `touches` includes `web/src/chat/`, which contains G03's `Message.tsx`, so both tickets write that file. The `parallel_safe: yes` flags were wrong.",
+     "quote_found": true,
+     "reason": "It compared touches by hand, identified the shared Message.tsx, and concluded the tickets are not parallel-safe; it also said plan_status.py was not run.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Proposes running them one after the other (or splitting the shared file into its own ticket) and corrects parallel_safe.",
+     "verdict": "PASS",
+     "quote": "I set `parallel_safe: no` on both tickets and built G02 first, then G03, in this checkout, uncommitted.",
+     "quote_found": true,
+     "reason": "It corrected parallel_safe to no on both tickets and sequenced G02 before G03.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Describes the worktree-per-ticket and merge-with-pass_to_pass procedure for tickets that do qualify, without committing or merging on the person's behalf.",
+     "verdict": "FAIL",
+     "quote": "The directory also isn't a git repo, so the `../wt-G02` and `../wt-G03` worktrees couldn't be created.",
+     "quote_found": true,
+     "reason": "It mentions worktrees only as something it couldn't create, and never describes the worktree-per-ticket and merge-with-pass_to_pass procedure for qualifying tickets.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 3,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2679,
+   "files": [
+    "app/server.py",
+    "app/stream.py",
+    "docs/tickets/support/G02.md",
+    "docs/tickets/support/G03.md",
+    "tests/test_stream.py",
+    "web/src/chat/ChatPanel.tsx",
+    "web/src/chat/Message.test.tsx",
+    "web/src/chat/Message.tsx",
+    "web/src/chat/stream.ts"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 112.1,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 38,
+    "total_cost_usd": 0.35768049999999996,
+    "duration_ms": 110942,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [
+     "adk-engineer/references/ticket-lifecycle.md",
+     "adk-system-designer/scripts/plan_status.py",
+     "adk-frontend-integration/references/agent-ui-states.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-system-designer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-frontend-integration": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 37,
+    "catalogue": [
+     "adk-engineer",
+     "adk-frontend-integration",
+     "adk-system-designer",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-system-designer": false,
+    "adk-frontend-integration": false
+   }
+  },
+  {
+   "id": "chosen-test-first-workflow",
+   "expected_primary": "safe-api-tool-calls",
+   "fixture_status": "repo-fixture",
+   "note": "The tdd skill the user chose is external and not installed by the runner.",
+   "skills_missing": [
+    "tdd"
+   ],
+   "skills_installed": [
+    "adk-engineer",
+    "safe-api-tool-calls"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0783,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Combines the user's selected development process with API-safety domain guidance.",
+     "verdict": "FAIL",
+     "quote": "no test-first skill is installed. Only `adk-engineer` and `safe-api-tool-calls` are, so I followed test-first manually",
+     "quote_found": true,
+     "reason": "No skills were loaded; the agent followed test-first manually and did not combine the selected skill with API-safety guidance (it mentions safe-api-tool-calls only as installed).",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Reproduces the accepted-write/lost-response defect with a meaningful failing test before applying the fix.",
+     "verdict": "FAIL",
+     "quote": "I traced the first test by hand against the old code instead of running it. The retry creates a second refund, `re_0002`, so it should fail before the fix.",
+     "quote_found": true,
+     "reason": "A meaningful test was written, but the failure was never actually demonstrated before the fix; it was only hand-traced.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Preserves trusted operation identity and payload binding across permitted retries or reconciliation.",
+     "verdict": "FAIL",
+     "quote": "replay_key = operation_id",
+     "quote_found": true,
+     "reason": "The stable key is reused across retries, but operation identity and payload binding are not otherwise handled (no reconciliation or lookup, and the tool-level uuid issue is not addressed).",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Checks stored effects and provider attempts, including uncertainty, rather than asserting only response wording.",
+     "verdict": "FAIL",
+     "quote": "self.assertEqual(len(provider.refunds), 1)",
+     "quote_found": true,
+     "reason": "Tests check provider refunds and the stored state, but not uncertainty: the adapter still marks exhausted-timeout operations failed with no uncertain state.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 5,
+     "assertion": "Preserves existing interfaces and avoids a redundant project-planning process or unrelated workflow adoption.",
+     "verdict": "PASS",
+     "quote": "The adapter then returns the same `RefundResult(True, original_id)` as before.",
+     "quote_found": true,
+     "reason": "Signatures and the response shape are unchanged, and no planning workflow or unrelated process was added.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 6,
+     "assertion": "Reports the actual local tests without implying that a live refund was executed.",
+     "verdict": "PASS",
+     "quote": "I couldn't run any tests. The shell tool is disabled in this session, so nothing has been run, including the new tests.",
+     "quote_found": true,
+     "reason": "The agent honestly reports that no tests were run and implies no live refund.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 6,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.94,
+   "unstable": [
+    4
+   ],
+   "final_chars": 1982,
+   "files": [
+    "app/refund_adapter.py",
+    "tests/test_refund_adapter.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 28.5,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 13,
+    "total_cost_usd": 0.1046167,
+    "duration_ms": 27333,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "safe-api-tool-calls": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 12,
+    "catalogue": [
+     "adk-engineer",
+     "safe-api-tool-calls",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": false,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "safe-api-tool-calls": false
+   }
+  },
+  {
+   "id": "guardrails-continuation-accounting-and-duplicates",
+   "expected_primary": "adk-operational-guardrails",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-operational-guardrails",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.176,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Blocks duplicate dispatch for failed, interrupted and no-response identities, including after restart, with zero underlying sends.",
+     "verdict": "PASS",
+     "quote": "if request.case_id not in config[\"cohort\"] or previous:\n        if _covering_approval(ledger, approvals, config, request, reserve) is None:\n            return Decision(False, \"needs an approval covering this case and stage\")",
+     "quote_found": true,
+     "reason": "Any identity with a prior failed, interrupted or no-response attempt is refused unless an approval covers it, and the tests check zero sends; no restart-specific test was added and nothing was run.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Counts a permitted distinct continuation within both its stage allocation and original shared campaign send/time/spending envelope; competing admission cannot spend the last slot twice.",
+     "verdict": "FAIL",
+     "quote": "Admission and the send aren't atomic across processes. That's fine for one runner but not for concurrent ones.",
+     "quote_found": true,
+     "reason": "Stage allocations are now enforced, but the agent admits that admit-then-reserve stays check-then-act, so competing admissions can still both take the last slot.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Preserves consumed calls and unknown holds durably; reservation-to-hold-to-settlement transitions and duplicate receipts encumber each amount exactly once.",
+     "verdict": "PASS",
+     "quote": "Settling is now idempotent on `receipt_id` and rejects receipts for unknown reservations.",
+     "quote_found": true,
+     "reason": "No-response reservations stay open and are counted as holds, and receipts are deduplicated by receipt_id, so each amount is counted once.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Reports settled charges, reservations, unknown holds, observed balance and remaining allowance separately; stale balance or one cheap charge does not release holds or lower an unverified bound.",
+     "verdict": "FAIL",
+     "quote": "return min(envelope_cents - self.committed_cents(), balance[\"remaining_cents\"] - since_observed)",
+     "quote_found": true,
+     "reason": "Allowance is a single combined figure; there is no report that shows settled charges, reservations, holds, observed balance and remaining allowance separately.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Reuses existing authority for the exact covered operation and stops expanded paid scope before dispatch without seeking redundant approval for local repair.",
+     "verdict": "PASS",
+     "quote": "It now has to match the stage and case, and it stops after `max_requests` and `max_spend_cents`. APR-0031 therefore allows exactly one `case-07` review request and nothing else.",
+     "quote_found": true,
+     "reason": "The existing approval is reused for the exact covered operation, expanded paid scope is refused before dispatch, and no new approval is requested.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2789,
+   "files": [
+    "campaign/admission.py",
+    "campaign/dispatch.py",
+    "campaign/ledger.py",
+    "tests/test_dispatch.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 104.1,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 25,
+    "total_cost_usd": 0.28246620000000006,
+    "duration_ms": 102985,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-operational-guardrails": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-workflow-design": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 24,
+    "catalogue": [
+     "adk-operational-guardrails",
+     "adk-workflow-design",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": false,
+   "skill_md_loaded": {
+    "adk-operational-guardrails": false,
+    "adk-workflow-design": false
+   }
+  },
+  {
+   "id": "guardrails-escalation-two-sided-calibration",
+   "expected_primary": "adk-operational-guardrails",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-operational-guardrails",
+    "adk-agent-evaluation",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0771,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Moves the deterministic must-escalate rules out of the instruction into a require_confirmation callable or before_tool_callback, and proves with a scripted-model Runner test that the model cannot bypass them.",
+     "verdict": "FAIL",
+     "quote": "`decide_claim` now refuses a claim that falls under those rules.",
+     "quote_found": true,
+     "reason": "Rules were moved into code inside the tool, but there is no scripted-model Runner test proving the model cannot bypass them; only direct tool-call unit tests exist.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Builds labelled cases with a reviewed expected lane and reports missed-escalation and over-escalation rates separately, refusing to tune against the raw escalation rate alone.",
+     "verdict": "FAIL",
+     "quote": "Measuring the real rate. There are no labelled cases and no model access. I'd label the 40 claims for expected lane",
+     "quote_found": true,
+     "reason": "No labelled cases were built and missed/over-escalation rates are not reported separately; this was left undone.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Treats missed escalations as the gate and over-escalation as the usefulness target, and keeps the dashboard rate as a drift signal only.",
+     "verdict": "FAIL",
+     "quote": "The rate is only a proxy, so I'd also track how many escalations reviewers approve unchanged and how many decided claims get overturned.",
+     "quote_found": true,
+     "reason": "It treats the rate as a proxy but does not frame missed escalations as the gate and over-escalation as the usefulness target, nor explicitly keep the dashboard as a drift signal only.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Reports live-model rates as not run.",
+     "verdict": "PASS",
+     "quote": "I couldn't run anything: the session has no shell and no model. The tests and the new prompt are unexecuted.",
+     "quote_found": true,
+     "reason": "It states that live-model behaviour was not run and no rates were measured.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2885,
+   "files": [
+    "expense_agent/prompts.py",
+    "expense_agent/rules.py",
+    "expense_agent/tools.py",
+    "tests/test_tools.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 51.1,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 17,
+    "total_cost_usd": 0.1571697,
+    "duration_ms": 49957,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-operational-guardrails": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 16,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-observability",
+     "adk-operational-guardrails",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": false,
+   "skill_md_loaded": {
+    "adk-operational-guardrails": false,
+    "adk-agent-evaluation": false,
+    "adk-agent-observability": false
+   }
+  },
+  {
+   "id": "guardrails-unanswered-approval-and-screening-placement",
+   "expected_primary": "adk-operational-guardrails",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-operational-guardrails",
+    "adk-agent-security",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0876,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Rejects an approval request that is still unanswered when the next invocation starts, records the rejection, and makes a late answer start a new request rather than authorise the old call; tests it with a scripted model.",
+     "verdict": "FAIL",
+     "quote": "There is no end-to-end test of the expired-confirmation flow in `server.py`.",
+     "quote_found": true,
+     "reason": "Expiry rejection is recorded, but no scripted-model Runner test was written, and it uses a TTL (an unanswered request not expired within 15 min would still be answerable), not rejection at next invocation start.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Makes the approval rule fail closed on arguments it cannot read (missing, malformed, non-object, NaN) by routing to manual review.",
+     "verdict": "FAIL",
+     "quote": "return amount_cents > APPROVAL_THRESHOLD_CENTS",
+     "quote_found": true,
+     "reason": "refund_needs_approval is unchanged and still fails open on missing, malformed, non-object, or NaN arguments.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Moves the screen that must prevent an effect to a blocking position before the agent and keeps a rejected output's completed tool events while substituting a static data-free message.",
+     "verdict": "FAIL",
+     "quote": "The screen runs inline in after_model_callback, before ADK dispatches any tool call in the response.",
+     "quote_found": true,
+     "reason": "The screen is moved inline in the plugin, not to a blocking position before the agent, and a flagged response is replaced rather than keeping completed tool events; tool-only responses are not screened.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Keeps the gate in code and reports the Runner tests as not run.",
+     "verdict": "PASS",
+     "quote": "I can't run the tests: Bash is disabled in this session, so none of the changes have been executed.",
+     "quote_found": true,
+     "reason": "The approval gate stays in code and the answer explicitly reports tests as not run.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2833,
+   "files": [
+    "app/approval_policy.py",
+    "app/screening.py",
+    "app/server.py",
+    "tests/test_approval_policy.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 55.6,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 19,
+    "total_cost_usd": 0.17868009999999998,
+    "duration_ms": 54506,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-operational-guardrails"
+    ],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-operational-guardrails": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 0
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-frontend-integration": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 17,
+    "catalogue": [
+     "adk-agent-security",
+     "adk-frontend-integration",
+     "adk-operational-guardrails",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-operational-guardrails": true,
+    "adk-agent-security": false,
+    "adk-frontend-integration": false
+   }
+  }
+ ]
+}

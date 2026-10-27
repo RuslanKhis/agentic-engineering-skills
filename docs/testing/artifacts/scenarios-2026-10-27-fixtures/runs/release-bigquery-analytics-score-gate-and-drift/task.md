@@ -1,0 +1,6 @@
+Our production sessions end up in BigQuery's agent_events table. I want a nightly job that scores yesterday's sessions with Google's BigQuery Agent Analytics SDK and stops the next release if they fail. Tell me what each exit code means and what happens if BigQuery is down. Also a monthly report on how much real traffic our golden questions still cover and which ones have stopped telling us anything. Offline only.
+
+---
+Situation (from the person asking): An ADK 2.12 agent with the BigQuery Agent Analytics plugin, a golden_questions table of 40 reviewed questions, a release record with pins, and a CI workflow that runs unit tests only. No BigQuery access, no SDK installed.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

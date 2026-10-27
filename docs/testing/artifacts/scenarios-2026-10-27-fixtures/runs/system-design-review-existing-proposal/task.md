@@ -1,0 +1,6 @@
+Can you go through the architecture proposal in this repo with me and fix the design? Each customer must only see their own documents, booking changes need approval, and we need to cope when the booking API's reply gets lost. Just the design for now; don't touch the code.
+
+---
+Situation (from the person asking): The proposal is docs/architecture/proposal.md: a browser chat client, a Python ADK service on Cloud Run, a shared document index and an external booking API, with prototype code under app/ and web/. The accepted product constraints are in docs/architecture/constraints.md. Whether the booking provider supports replaying a request or looking up an operation's outcome is still unknown. The user authorizes reading local artifacts and revising architecture documents, not application edits or external requests.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

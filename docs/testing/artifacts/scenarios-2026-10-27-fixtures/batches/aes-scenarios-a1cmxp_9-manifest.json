@@ -1,0 +1,109 @@
+{
+ "created": "2026-10-27T10:28:32+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-ae683dff62ffe485e",
+ "commit": "a08979f4fc2ab93fb69c1eb3afc73a0f2cefedd3",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "sensitive-data-local-tool-result-screen-llamafirewall",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/sensitive-data-local-tool-result-screen-llamafirewall/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "protect-adk-sensitive-data",
+    "adk-agent-security",
+    "adk-operational-guardrails",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "security-gate-default-deny-and-call-provenance",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/security-gate-default-deny-and-call-provenance/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "adk-operational-guardrails",
+    "adk-tool-interface-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "security-adopt-third-party-mcp-server-with-scan",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/security-adopt-third-party-mcp-server-with-scan/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "adk-agent-interoperability",
+    "adk-release-engineering"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "mcp-rug-pull-runtime-pin-and-mcp-ids",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/mcp-rug-pull-runtime-pin-and-mcp-ids/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "adk-agent-interoperability",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "security-review-with-atlas-and-cosai-ids",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/security-review-with-atlas-and-cosai-ids/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "adk-operational-guardrails",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

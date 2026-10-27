@@ -1,0 +1,52 @@
+name: redteam
+# Approved live garak run against the ADK agent (Runner, tools, confirmation gate), Gemini on Vertex AI only.
+# Providers are the fakes in tests/fakes.py: no payment or mail call leaves the runner.
+on:
+  workflow_dispatch:
+    inputs:
+      approval_ref:
+        description: "Approval ticket for this paid run (model, probe modules, cost ceiling recorded there)"
+        required: true
+      probe_spec:
+        description: "garak --spec value, e.g. probes.latentinjection"
+        required: true
+        default: "probes.latentinjection"
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  garak:
+    runs-on: ubuntu-latest
+    environment: live-eval
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: projects/482216093311/locations/global/workloadIdentityPools/ci/providers/github
+          service_account: live-eval@harbour-support-eval.iam.gserviceaccount.com
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - run: pip install -r redteam/requirements-garak.txt
+      - name: garak against the agent
+        env:
+          GOOGLE_GENAI_USE_VERTEXAI: "true"
+          GOOGLE_CLOUD_PROJECT: harbour-support-eval
+          GOOGLE_CLOUD_LOCATION: europe-west4
+          PYTHONPATH: ${{ github.workspace }}
+          XDG_DATA_HOME: ${{ runner.temp }}/garak-data
+          REDTEAM_SIDECAR: ${{ runner.temp }}/sidecar.jsonl
+          PROBE_SPEC: ${{ inputs.probe_spec }}
+        run: |
+          # exit code deliberately ignored: garak exits 0 on hits; the gate step decides
+          garak --target_type function --target_name redteam.garak_target#run_agent \
+            --spec "$PROBE_SPEC" --generations 1 \
+            --report_prefix "ci-${{ github.run_id }}-${{ github.run_attempt }}" || echo "garak exited $?"
+      - name: Gate
+        run: |
+          python -I redteam/check_garak.py \
+            --xdg-data-home "${{ runner.temp }}/garak-data" \
+            --prefix "ci-${{ github.run_id }}-${{ github.run_attempt }}" \
+            --sidecar "${{ runner.temp }}/sidecar.jsonl"

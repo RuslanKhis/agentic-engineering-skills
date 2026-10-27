@@ -1,0 +1,8 @@
+{
+  "name": "support-assistant-evals",
+  "private": true,
+  "description": "Nightly agent evals. Promptfoo is pinned exactly; bump it as its own change.",
+  "devDependencies": {
+    "promptfoo": "0.124.1"
+  }
+}

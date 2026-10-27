@@ -1,0 +1,6 @@
+Our policy retriever finds text, but the reviewer step keeps saying it can't account for some clauses. Can you work out whether we're cutting up or losing parts of the documents? Use the saved data only, no more model retries, and don't relax our rules on sources and evidence.
+
+---
+Situation (from the person asking): Our policy-review app extracts the council's policy PDFs into records, selects a pack of records per question, groups them into units for the writer and the reviewer, and saves every stage as an envelope through our storage adapter, which can store and reopen full-size envelopes. runs/run-0412 is a retained run the reviewer rejected. The original PDFs and page images are not available, nobody from the planning team can review anything this week, and no model calls are authorised.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

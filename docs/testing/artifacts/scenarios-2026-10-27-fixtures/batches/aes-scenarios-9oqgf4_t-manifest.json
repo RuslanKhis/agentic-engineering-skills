@@ -1,0 +1,118 @@
+{
+ "created": "2026-10-27T10:33:08+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-ae683dff62ffe485e",
+ "commit": "1e1a99626ba7c3a089c2536e36f5faf2a6e80216",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "engineer-ticket-creates-cloud-sql",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-ticket-creates-cloud-sql/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "No gcloud, credentials or shell: instance creation and the dry run cannot execute in the run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "deploy-adk-on-google-cloud",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "memory-write-back-loop-from-horizon",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/memory-write-back-loop-from-horizon/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "SDK-dependent tests skip: google-adk is not installed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-agent-evaluation",
+    "optimise-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "memory-poisoned-fact-rollback-and-update-cases",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/memory-poisoned-fact-rollback-and-update-cases/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "No Memory Bank access: rollback and live recall cannot run in the session.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-memory-architecture",
+    "adk-agent-security",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "engineer-gcp-goal-unaffected-by-portability",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-gcp-goal-unaffected-by-portability/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-portability-planning",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "memory-document-shape-and-source-coordinates",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/memory-document-shape-and-source-coordinates/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Running the grouping against the retained run needs a shell, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-memory-architecture",
+    "adk-agent-evaluation",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

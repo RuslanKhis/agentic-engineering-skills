@@ -1,0 +1,111 @@
+{
+ "exit": 1,
+ "timed_out": false,
+ "seconds": 2.2,
+ "model": "claude-sonnet-5-5",
+ "max_turns": 30,
+ "tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "subtype": "success",
+ "is_error": true,
+ "num_turns": 1,
+ "total_cost_usd": 0,
+ "duration_ms": 657,
+ "terminal_reason": "api_error",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-sonnet-5-5",
+  "--output-format",
+  "stream-json",
+  "--verbose",
+  "--setting-sources",
+  "project,local",
+  "--strict-mcp-config",
+  "--no-session-persistence",
+  "--max-turns",
+  "30",
+  "--tools",
+  "Read,Write,Edit,Glob,Grep,Skill",
+  "--permission-mode",
+  "dontAsk",
+  "--permission-prompts",
+  "none",
+  "--allowedTools",
+  "Read(./**),Write(./**),Edit(./**),Skill",
+  "--max-budget-usd",
+  "3.0"
+ ],
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "skills_loaded": [],
+ "skill_files_read": [],
+ "skill_md_loaded": {
+  "adk-engineer": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  },
+  "adk-agent-interoperability": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  },
+  "adk-frontend-integration": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  },
+  "adk-agent-security": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  }
+ },
+ "permission_denials": [],
+ "tool_calls": 0,
+ "catalogue": [
+  "adk-agent-interoperability",
+  "adk-agent-security",
+  "adk-engineer",
+  "adk-frontend-integration",
+  "deep-research",
+  "design",
+  "design-sync",
+  "dataviz",
+  "update-config",
+  "verify",
+  "debug",
+  "code-review",
+  "simplify",
+  "batch",
+  "fewer-permission-prompts",
+  "doctor",
+  "loop",
+  "schedule",
+  "claude-api",
+  "workflow-authoring",
+  "run",
+  "run-skill-generator",
+  "plugin-authoring"
+ ],
+ "catalogue_check": {
+  "missing": [],
+  "leaked": []
+ }
+}

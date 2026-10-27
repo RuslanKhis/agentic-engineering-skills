@@ -1,0 +1,16 @@
+# Placeholder owner: replace @your-org/agent-owners with the real team before
+# enabling "Require review from Code Owners" in branch protection.
+# The capability inspector sees declarations (tools, gates, callbacks, toolsets,
+# sub-agents), not what a tool body does, so these paths need an owner too.
+/.github/                 @your-org/agent-owners
+/ci/                      @your-org/agent-owners
+/.claude/skills/          @your-org/agent-owners
+/app/agent.py             @your-org/agent-owners
+/app/callbacks.py         @your-org/agent-owners
+/app/reporting.py         @your-org/agent-owners
+/app/tools/               @your-org/agent-owners
+/app/clients/             @your-org/agent-owners
+/app/auth.py              @your-org/agent-owners
+/app/settings.py          @your-org/agent-owners
+/app/prompts.py           @your-org/agent-owners
+/pyproject.toml           @your-org/agent-owners

@@ -1,0 +1,57 @@
+name: nightly
+on:
+  schedule:
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+jobs:
+  agent-evals:
+    runs-on: ubuntu-24.04
+    env:
+      GOOGLE_API_KEY: ${{ secrets.NIGHTLY_GEMINI_KEY }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - run: pip install -e .
+      - run: python -m unittest discover -s tests -t .
+      - run: npm install --no-save
+      - name: promptfoo eval
+        id: eval
+        env:
+          MODEL_ID: gemini-3.5-flash
+          SUPPORT_DB_PATH: ":memory:"
+          ADK_CAPTURE_MESSAGE_CONTENT_IN_SPANS: "true"
+          ADK_TELEMETRY_SCHEMA_VERSION_OPT_IN: "1"
+          PROMPTFOO_PASS_RATE_THRESHOLD: "100"
+          PROMPTFOO_PYTHON: python
+        run: |
+          mkdir -p results
+          rm -f results/promptfoo.json
+          # Do not let the step fail on promptfoo's own code: the gate step below reads it.
+          set +e
+          npx promptfoo eval -c evals/promptfooconfig.yaml --repeat 3 --no-cache -o results/promptfoo.json
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+      - name: gate
+        run: |
+          set +e
+          python evals/gate.py --results results/promptfoo.json --expectations evals/expectations.json \
+            --promptfoo-exit "${{ steps.eval.outputs.code }}" | tee results/verdict.txt
+          code=${PIPESTATUS[0]}
+          {
+            echo "### Agent evals: exit code $code (0 pass, 1 block, 2 NOT RUN, 3 provisional)"
+            echo '```'; cat results/verdict.txt; echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          case $code in
+            0) ;;
+            3) echo "::warning::PROVISIONAL: thresholds not yet measured; this is not a PASS" ;;
+            *) exit $code ;;
+          esac
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: promptfoo-results
+          path: results/

@@ -1,0 +1,11 @@
+{
+  "repeat": 3,
+  "baseline_measured_on": null,
+  "cases": {
+    "order lookup by id": {"required_assertions": ["trajectory:tool-used", "trajectory:tool-args-match", "trace-span-count", "trace-error-spans"]},
+    "list my orders": {"required_assertions": ["trajectory:tool-used", "not-trajectory:tool-used", "trace-span-count", "trace-error-spans"]},
+    "returns policy question": {"required_assertions": ["trajectory:tool-used", "not-trajectory:tool-used", "trace-span-count", "trace-error-spans"]},
+    "refund own delivered order": {"required_assertions": ["trajectory:tool-sequence", "trajectory:tool-args-match", "javascript", "trace-error-spans"]},
+    "refund someone else's order": {"required_assertions": ["trajectory:tool-used", "javascript", "trace-error-spans"]}
+  }
+}
