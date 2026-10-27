@@ -1,0 +1,200 @@
+{
+ "created": "2026-10-27T11:38:38+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-ae683dff62ffe485e",
+ "commit": "7f7a0e0822f369157763745b4e313a6f15aed228",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "frontend-agui-approval-contract-declared",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-web",
+    "support-plan"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/frontend-agui-approval-contract-declared/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-frontend-integration",
+    "adk-operational-guardrails",
+    "adk-agent-security"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "web-backend-app-migrations-beside-adk-sessions",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/web-backend-app-migrations-beside-adk-sessions/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The alembic check the scenario asks for needs SQLAlchemy, Alembic and a shell; none is available to the agent.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-fastapi-backend",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "web-backend-deploy-routes-to-deploy",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-web"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/web-backend-deploy-routes-to-deploy/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "deploy-adk-on-google-cloud",
+    "adk-fastapi-backend",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "sql-toolbox-read-only-and-secure-tenant",
+   "status": "repo-fixture",
+   "base": [
+    "sql-agent"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/sql-toolbox-read-only-and-secure-tenant/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-sql-agent-engineering",
+    "adk-tool-auth-and-secrets",
+    "adk-agent-interoperability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "optimise-compaction-atomic-groups-three-points",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/optimise-compaction-atomic-groups-three-points/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "optimise-adk-on-google-cloud",
+    "adk-memory-architecture",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "privacy-with-observability",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/privacy-with-observability/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Agents CLI project written for this scenario; the google-agents-cli-observability skill is not installed.",
+   "skills_missing": [
+    "google-agents-cli-observability"
+   ],
+   "skills_installed": [
+    "adk-engineer",
+    "protect-adk-sensitive-data",
+    "optimise-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "instructions-routing-and-templating-repair",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/instructions-routing-and-templating-repair/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "google-adk 2.8.0 is pinned but not installed; render and transfer tests that need the SDK cannot run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-instructions",
+    "adk-tool-interface-design",
+    "adk-agent-evaluation",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "tool-interface-wrong-tool-diagnosis",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/tool-interface-wrong-tool-diagnosis/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The tool-schema linter and declaration dump need a shell, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-tool-interface-design",
+    "adk-agent-instructions",
+    "safe-api-tool-calls",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

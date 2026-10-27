@@ -1,9 +1,9 @@
 {
  "spend_usd": {
-  "agent": 26.92,
-  "judge": 8.99
+  "agent": 28.77,
+  "judge": 9.7
  },
- "spend_total_usd": 35.91,
+ "spend_total_usd": 38.48,
  "batches": [
   "eng1",
   "eng2",
@@ -16,7 +16,8 @@
   "int1",
   "int2",
   "eval1",
-  "eval2"
+  "eval2",
+  "spread1"
  ],
  "by_skill": {
   "adk-engineer": {
@@ -88,6 +89,62 @@
    "total": 72,
    "unstable": 9,
    "loaded": 11
+  },
+  "adk-frontend-integration": {
+   "scenarios": 1,
+   "passed": 0,
+   "total": 4,
+   "unstable": 1,
+   "loaded": 1
+  },
+  "adk-fastapi-backend": {
+   "scenarios": 1,
+   "passed": 1,
+   "total": 4,
+   "unstable": 0,
+   "loaded": 1
+  },
+  "deploy-adk-on-google-cloud": {
+   "scenarios": 1,
+   "passed": 3,
+   "total": 4,
+   "unstable": 0,
+   "loaded": 1
+  },
+  "adk-sql-agent-engineering": {
+   "scenarios": 1,
+   "passed": 2,
+   "total": 4,
+   "unstable": 1,
+   "loaded": 1
+  },
+  "optimise-adk-on-google-cloud": {
+   "scenarios": 1,
+   "passed": 2,
+   "total": 4,
+   "unstable": 0,
+   "loaded": 1
+  },
+  "protect-adk-sensitive-data": {
+   "scenarios": 1,
+   "passed": 2,
+   "total": 6,
+   "unstable": 1,
+   "loaded": 0
+  },
+  "adk-agent-instructions": {
+   "scenarios": 1,
+   "passed": 1,
+   "total": 4,
+   "unstable": 0,
+   "loaded": 1
+  },
+  "adk-tool-interface-design": {
+   "scenarios": 1,
+   "passed": 1,
+   "total": 4,
+   "unstable": 0,
+   "loaded": 1
   }
  },
  "scenarios": [
@@ -577,6 +634,36 @@
    "judge_cost": 0.1078,
    "turns": 15,
    "seconds": 74.7
+  },
+  {
+   "id": "instructions-routing-and-templating-repair",
+   "batch": "spread1",
+   "status": "graded",
+   "expected_primary": "adk-agent-instructions",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    2,
+    3,
+    4
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 2,
+   "skills_loaded": [
+    "adk-agent-instructions"
+   ],
+   "agent_cost": 0.2534722,
+   "judge_cost": 0.0936,
+   "turns": 20,
+   "seconds": 67.0
   },
   {
    "id": "interoperability-consume-enterprise-mcp-server-registration-and-sso",
@@ -1332,6 +1419,69 @@
    "seconds": 50.5
   },
   {
+   "id": "web-backend-app-migrations-beside-adk-sessions",
+   "batch": "spread1",
+   "status": "graded",
+   "expected_primary": "adk-fastapi-backend",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    1,
+    3,
+    4
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 1,
+   "skills_loaded": [
+    "adk-fastapi-backend"
+   ],
+   "agent_cost": 0.1779633,
+   "judge_cost": 0.0835,
+   "turns": 22,
+   "seconds": 47.0
+  },
+  {
+   "id": "frontend-agui-approval-contract-declared",
+   "batch": "spread1",
+   "status": "graded",
+   "expected_primary": "adk-frontend-integration",
+   "passed": 0,
+   "total": 4,
+   "unstable": [
+    1
+   ],
+   "failed": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "votes": {
+    "A1": "FPF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 1,
+   "skills_loaded": [
+    "adk-frontend-integration"
+   ],
+   "agent_cost": 0.1926099,
+   "judge_cost": 0.0732,
+   "turns": 19,
+   "seconds": 49.1
+  },
+  {
    "id": "engineer-agents-cli-focused-memory-1-11",
    "batch": "mem1",
    "status": "graded",
@@ -1844,6 +1994,38 @@
    "seconds": 151.3
   },
   {
+   "id": "sql-toolbox-read-only-and-secure-tenant",
+   "batch": "spread1",
+   "status": "graded",
+   "expected_primary": "adk-sql-agent-engineering",
+   "passed": 2,
+   "total": 4,
+   "unstable": [
+    2
+   ],
+   "failed": [
+    3,
+    4
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 1,
+   "skills_loaded": [
+    "adk-sql-agent-engineering",
+    "adk-tool-auth-and-secrets"
+   ],
+   "agent_cost": 0.4431285,
+   "judge_cost": 0.1459,
+   "turns": 30,
+   "seconds": 127.5
+  },
+  {
    "id": "designer-checkpoint-settles-the-agenda",
    "batch": "des2",
    "status": "graded",
@@ -2173,6 +2355,126 @@
    "judge_cost": 0.1066,
    "turns": 17,
    "seconds": 119.5
+  },
+  {
+   "id": "tool-interface-wrong-tool-diagnosis",
+   "batch": "spread1",
+   "status": "graded",
+   "expected_primary": "adk-tool-interface-design",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    1,
+    3,
+    4
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 0,
+   "skills_loaded": [
+    "adk-tool-interface-design"
+   ],
+   "agent_cost": 0.13019139999999998,
+   "judge_cost": 0.0797,
+   "turns": 16,
+   "seconds": 37.4
+  },
+  {
+   "id": "web-backend-deploy-routes-to-deploy",
+   "batch": "spread1",
+   "status": "graded",
+   "expected_primary": "deploy-adk-on-google-cloud",
+   "passed": 3,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    3
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "PPP"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 3,
+   "skills_loaded": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "agent_cost": 0.27850020000000003,
+   "judge_cost": 0.0879,
+   "turns": 24,
+   "seconds": 79.0
+  },
+  {
+   "id": "optimise-compaction-atomic-groups-three-points",
+   "batch": "spread1",
+   "status": "graded",
+   "expected_primary": "optimise-adk-on-google-cloud",
+   "passed": 2,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    2,
+    3
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "PPP"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 1,
+   "skills_loaded": [
+    "optimise-adk-on-google-cloud"
+   ],
+   "agent_cost": 0.24833880000000003,
+   "judge_cost": 0.0743,
+   "turns": 22,
+   "seconds": 58.7
+  },
+  {
+   "id": "privacy-with-observability",
+   "batch": "spread1",
+   "status": "graded",
+   "expected_primary": "protect-adk-sensitive-data",
+   "passed": 2,
+   "total": 6,
+   "unstable": [
+    2
+   ],
+   "failed": [
+    1,
+    2,
+    4,
+    6
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFP",
+    "A3": "PPP",
+    "A4": "FFF",
+    "A5": "PPP",
+    "A6": "FFF"
+   },
+   "primary_loaded": false,
+   "primary_how": null,
+   "primary_files_read": 0,
+   "skills_loaded": [],
+   "agent_cost": 0.13343190000000002,
+   "judge_cost": 0.073,
+   "turns": 16,
+   "seconds": 40.4
   },
   {
    "id": "chosen-test-first-workflow",

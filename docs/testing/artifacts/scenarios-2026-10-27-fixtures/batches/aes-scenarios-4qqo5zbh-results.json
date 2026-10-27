@@ -1,0 +1,1770 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T11:47:50+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/spread1/aes-scenarios-4qqo5zbh",
+ "commit": "7f7a0e0822f369157763745b4e313a6f15aed228",
+ "scenarios_sha256": "08bdfd0448ee19392db60de134e5699ca35943f4d306f794b168ae661b5138c7",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "frontend-agui-approval-contract-declared",
+   "expected_primary": "adk-frontend-integration",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-frontend-integration",
+    "adk-operational-guardrails",
+    "adk-agent-security"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0732,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Names the two AG-UI approval contracts, diagnoses the mismatch between a 1.0 client that expects interrupt outcomes answered by resume and a middleware answering with tool messages, and makes the ticket declare one contract.",
+     "verdict": "FAIL",
+     "quote": "The approval contract in use is the older tool-message one, not the 1.0 interrupt/resume one.",
+     "quote_found": true,
+     "reason": "It names both contracts and declares one in the ticket, but it does not diagnose the mismatch; it says the code should not cause the refusal.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Either keeps the flag off and the tool-message answer, or turns emit_interrupt_outcome on and moves the client to resume, and writes the test that a tool-message answer under the flag returns INTERRUPT_RESUME_REQUIRED.",
+     "verdict": "FAIL",
+     "quote": "Wire-level tests: flag off, a tool message resumes the run; flag on, a tool message returns `INTERRUPT_RESUME_REQUIRED`. I couldn't write these without the SDK.",
+     "quote_found": true,
+     "reason": "The agent keeps the flag off, but it did not write the required INTERRUPT_RESUME_REQUIRED test; the one it wrote only asserts that the flag is False.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Uses ADKAgent.from_app with resumability for the paused position rather than the deprecated fire-and-forget constructor path, and strips client-supplied app: and user: state keys.",
+     "verdict": "FAIL",
+     "quote": "agent = ADKAgent(\n        adk_agent=root_agent,",
+     "quote_found": true,
+     "reason": "The deprecated direct constructor is still used, with no from_app or ResumabilityConfig, and no stripping of client-supplied app:/user: state keys.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Keeps the backend confirmation gate as the control (adk-operational-guardrails) and treats the UI decision as permission, not completion; SDK tests reported as not run.",
+     "verdict": "FAIL",
+     "quote": "It skips when the SDK isn't installed. I didn't run it.",
+     "quote_found": true,
+     "reason": "It reports the tests as not run, but it never states that the backend confirmation gate is the control or that the UI decision is only permission, not completion.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 0,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    1
+   ],
+   "final_chars": 2537,
+   "files": [
+    "app/agui.py",
+    "docs/tickets/support/G06.md",
+    "tests/test_agui_contract.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 49.1,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 19,
+    "total_cost_usd": 0.1926099,
+    "duration_ms": 47976,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-frontend-integration"
+    ],
+    "skill_files_read": [
+     "adk-frontend-integration/references/ag-ui.md"
+    ],
+    "skill_md_loaded": {
+     "adk-frontend-integration": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-operational-guardrails": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 17,
+    "catalogue": [
+     "adk-agent-security",
+     "adk-frontend-integration",
+     "adk-operational-guardrails",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-frontend-integration": true,
+    "adk-operational-guardrails": false,
+    "adk-agent-security": false
+   }
+  },
+  {
+   "id": "web-backend-app-migrations-beside-adk-sessions",
+   "expected_primary": "adk-fastapi-backend",
+   "fixture_status": "repo-fixture",
+   "note": "The alembic check the scenario asks for needs SQLAlchemy, Alembic and a shell; none is available to the agent.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-fastapi-backend",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0835,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Excludes ADK's five session tables from Alembic with a separate schema or an include_object filter, and prefixes application tables.",
+     "verdict": "FAIL",
+     "quote": "I kept `saved_answers` rather than adding an `app_` prefix.",
+     "quote_found": true,
+     "reason": "The include_object filter excludes ADK tables, but application tables were not prefixed, so the assertion is only half met.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Runs migrations as a job rather than at instance start, and leaves ADK's schema to adk migrate session.",
+     "verdict": "PASS",
+     "quote": "Run migrations as a release step or Cloud Run job, not at instance start:",
+     "quote_found": true,
+     "reason": "README directs migrations to run as a job, create_all was removed from startup, and ADK's schema is left to `adk migrate session`.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Tests that alembic check is clean on a database that holds ADK's tables and that those tables are unchanged.",
+     "verdict": "FAIL",
+     "quote": "metadata.create_all(self.engine)  # production schema comes from Alembic",
+     "quote_found": true,
+     "reason": "No test checks that alembic check is clean on a database with ADK tables or that those tables are unchanged.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Filters saved answers by the verified principal and returns the unknown-ID 404 body for another user's record.",
+     "verdict": "FAIL",
+     "quote": "I left it alone because it is outside the migrations request. I'd fix it before shipping.",
+     "quote_found": true,
+     "reason": "The agent noticed the missing per-user filter but did not fix it.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2497,
+   "files": [
+    "README.md",
+    "alembic.ini",
+    "app/db.py",
+    "migrations/env.py",
+    "migrations/script.py.mako",
+    "migrations/versions/0001_create_saved_answers.py",
+    "pyproject.toml",
+    "tests/test_saved_answers.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 47.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 22,
+    "total_cost_usd": 0.1779633,
+    "duration_ms": 45777,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-fastapi-backend"
+    ],
+    "skill_files_read": [
+     "adk-fastapi-backend/references/data-and-migrations.md"
+    ],
+    "skill_md_loaded": {
+     "adk-fastapi-backend": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-memory-architecture": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 20,
+    "catalogue": [
+     "adk-fastapi-backend",
+     "adk-memory-architecture",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-fastapi-backend": true,
+    "adk-memory-architecture": false
+   }
+  },
+  {
+   "id": "web-backend-deploy-routes-to-deploy",
+   "expected_primary": "deploy-adk-on-google-cloud",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "deploy-adk-on-google-cloud",
+    "adk-fastapi-backend",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0879,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Leads with deploy-adk-on-google-cloud and reads its frontend-hosting reference for topology A rather than restarting backend design.",
+     "verdict": "PASS",
+     "quote": "Skills loaded\n\ndeploy-adk-on-google-cloud",
+     "quote_found": true,
+     "reason": "The agent loaded the deploy skill, read its frontend-hosting reference, and changed no application code, so it did not redesign the backend.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Keeps one process per container with an explicit request timeout and concurrency, and no Firebase Hosting rewrite on run or stream paths.",
+     "verdict": "PASS",
+     "quote": "One process per container: no --workers.",
+     "quote_found": true,
+     "reason": "The Dockerfile runs a single process, the deploy command sets --concurrency=10 and --timeout=300, and no Firebase Hosting rewrite is used.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Uses IAP's signed assertion with the Cloud Run audience form and treats the audience as a fact the first live run confirms.",
+     "verdict": "FAIL",
+     "quote": "Confirm the exact audience string for direct Cloud Run IAP in the IAP signed-headers documentation before setting it, then redeploy with the variable set.",
+     "quote_found": true,
+     "reason": "The agent uses the IAP signed assertion and defers the audience, but it never names the Cloud Run audience form and does not treat the first live run as what confirms it.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Presents the exact project, region and commands for approval and reports the live deployment as not run.",
+     "verdict": "PASS",
+     "quote": "# Cloud Run + IAP deployment runbook (pilot) — NOT YET EXECUTED",
+     "quote_found": true,
+     "reason": "The runbook gives the project harbour-support-dev, region europe-west2 and the exact gcloud commands for approval, and states the deployment was not run.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2582,
+   "files": [
+    ".dockerignore",
+    ".gcloudignore",
+    "Dockerfile",
+    "deploy/RUNBOOK.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 79.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 24,
+    "total_cost_usd": 0.27850020000000003,
+    "duration_ms": 77887,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "deploy-adk-on-google-cloud"
+    ],
+    "skill_files_read": [
+     "deploy-adk-on-google-cloud/references/cloud-run.md",
+     "deploy-adk-on-google-cloud/references/frontend-hosting.md",
+     "deploy-adk-on-google-cloud/references/production.md"
+    ],
+    "skill_md_loaded": {
+     "deploy-adk-on-google-cloud": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 3
+     },
+     "adk-fastapi-backend": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-frontend-integration": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 22,
+    "catalogue": [
+     "adk-fastapi-backend",
+     "adk-frontend-integration",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "deploy-adk-on-google-cloud": true,
+    "adk-fastapi-backend": false,
+    "adk-frontend-integration": false
+   }
+  },
+  {
+   "id": "sql-toolbox-read-only-and-secure-tenant",
+   "expected_primary": "adk-sql-agent-engineering",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-sql-agent-engineering",
+    "adk-tool-auth-and-secrets",
+    "adk-agent-interoperability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1459,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Sets readOnly: true on the BigQuery source (writeMode blocked, allowedDatasets) and explains that the lock is enforced by Toolbox's dry-run statement-type check, not by the prompt or a SELECT string check.",
+     "verdict": "PASS",
+     "quote": "`readOnly: true` (Toolbox dry-runs and rejects non-SELECT), `allowedDatasets:\n  [sales]`",
+     "quote_found": true,
+     "reason": "readOnly and allowedDatasets are set and the ticket explains the lock as Toolbox's dry-run check; writeMode is left at its default of blocked rather than set explicitly, which is acceptable.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Removes or justifies the free-form bigquery-execute-sql tool, citing its page's developer-assistant note, and replaces the templateParameter table name with a basic parameter or an allowedValues-bound one.",
+     "verdict": "PASS",
+     "quote": "The free-form bigquery-execute-sql tool was removed: a customer-facing agent gets reviewed\n  # templates only",
+     "quote_found": true,
+     "reason": "The free-form tool is removed and the table template parameter is bound with allowedValues; the justification does not cite the page's developer-assistant note, but the tool was removed rather than justified.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 3,
+     "assertion": "Binds tenant_id as a secure parameter in code from the verified assertion, strips it from the model-facing declaration, and adds a test that a model-supplied tenant_id returns a tool error.",
+     "verdict": "FAIL",
+     "quote": "I used a client-side bound parameter instead of Toolbox's `secure: true`",
+     "quote_found": true,
+     "reason": "tenant_id is bound client-side rather than as a secure parameter, and the test of a model-supplied tenant_id checks check_tool_call and the double raising ValueError, not a Toolbox tool error.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Adds the CTE-DELETE, writing-UDF and COMMIT-chaining fixtures as fail-closed negative cases against the Toolbox double, reports the live Toolbox steps as not run, and hands the assertion verification to adk-tool-auth-and-secrets.",
+     "verdict": "FAIL",
+     "quote": "for sql in self.BYPASSES[:1] + self.BYPASSES[2:]:",
+     "quote_found": true,
+     "reason": "The writing-UDF fixture is excluded from the test loop, and the assertion-verification work was implemented directly in portal/identity.py rather than handed to adk-tool-auth-and-secrets.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    2
+   ],
+   "final_chars": 2907,
+   "files": [
+    "analytics/portal_agent.py",
+    "docs/tickets/G03.md",
+    "portal/identity.py",
+    "portal/server.py",
+    "portal/tenant.py",
+    "tests/test_portal_tenant_and_readonly.py",
+    "tools.yaml"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 127.5,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 30,
+    "total_cost_usd": 0.4431285,
+    "duration_ms": 126382,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-sql-agent-engineering",
+     "adk-tool-auth-and-secrets"
+    ],
+    "skill_files_read": [
+     "adk-sql-agent-engineering/references/acceptance-and-extensions.md",
+     "adk-agent-interoperability/references/mcp-consumption.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-sql-agent-engineering": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-tool-auth-and-secrets": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 0
+     },
+     "adk-agent-interoperability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 27,
+    "catalogue": [
+     "adk-agent-interoperability",
+     "adk-engineer",
+     "adk-sql-agent-engineering",
+     "adk-tool-auth-and-secrets",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-sql-agent-engineering": true,
+    "adk-tool-auth-and-secrets": true,
+    "adk-agent-interoperability": false
+   }
+  },
+  {
+   "id": "optimise-compaction-atomic-groups-three-points",
+   "expected_primary": "optimise-adk-on-google-cloud",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "optimise-adk-on-google-cloud",
+    "adk-memory-architecture",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0743,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Treats a function call and its responses as an atomic group that is kept or dropped together and writes the test that a trimmed history never carries a call without its result or a result without its call.",
+     "verdict": "PASS",
+     "quote": "Every function call and its result lie between two turn starts, so cutting only here keeps them together.",
+     "quote_found": true,
+     "reason": "The trimmer cuts only at turn starts so calls and results stay together, and tests assert no split pair across all cut sizes.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Names the three compaction points (inside the run, before persisting, as maintenance over stored history) with a budget and a test for each.",
+     "verdict": "FAIL",
+     "quote": "Two mechanisms run, at different points.",
+     "quote_found": true,
+     "reason": "It names only two points, not three (no maintenance over stored history), and no per-point budget and test.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Measures with the retained-history accounting rather than guessing, and keeps the static instruction prefix intact.",
+     "verdict": "FAIL",
+     "quote": "I assumed keeping more than 24 items in a request is acceptable.",
+     "quote_found": true,
+     "reason": "No retained-history measurement was done, and the summariser's system_instruction prefix mutation was not addressed or kept intact.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Reports model-dependent checks as not run.",
+     "verdict": "PASS",
+     "quote": "There is no model access, so summary quality wasn't tested. The checklist is at the end of `docs/compaction.md`.",
+     "quote_found": true,
+     "reason": "It states that model-dependent checks and real-stack checks were not run, and that nothing was executed.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2590,
+   "files": [
+    "app/plugins/trimming.py",
+    "docs/compaction.md",
+    "tests/test_trimming.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 58.7,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 22,
+    "total_cost_usd": 0.24833880000000003,
+    "duration_ms": 57587,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "optimise-adk-on-google-cloud"
+    ],
+    "skill_files_read": [
+     "optimise-adk-on-google-cloud/references/context-window.md"
+    ],
+    "skill_md_loaded": {
+     "optimise-adk-on-google-cloud": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-memory-architecture": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 20,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-memory-architecture",
+     "optimise-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "optimise-adk-on-google-cloud": true,
+    "adk-memory-architecture": false,
+    "adk-agent-evaluation": false
+   }
+  },
+  {
+   "id": "privacy-with-observability",
+   "expected_primary": "protect-adk-sensitive-data",
+   "fixture_status": "repo-fixture",
+   "note": "Agents CLI project written for this scenario; the google-agents-cli-observability skill is not installed.",
+   "skills_missing": [
+    "google-agents-cli-observability"
+   ],
+   "skills_installed": [
+    "adk-engineer",
+    "protect-adk-sensitive-data",
+    "optimise-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.073,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Uses data-boundary guidance as the primary specialist and optional observability guidance only for the configured telemetry paths.",
+     "verdict": "FAIL",
+     "quote": "",
+     "quote_found": false,
+     "reason": "No skills were loaded or recorded, so no data-boundary guidance was used as primary specialist.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Inspects trace spans/events, completion uploads and analytics export independently.",
+     "verdict": "FAIL",
+     "quote": "I couldn't inspect the installed plugin to confirm which config option (a content formatter or event filter) turns this off",
+     "quote_found": true,
+     "reason": "It looked at the completion upload and noticed the analytics plugin, but did not inspect the analytics export in depth or fix it; coverage of the three paths was not independent.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 3,
+     "assertion": "Does not treat a disabled trace-capture setting as proof that all prompt-content export is disabled.",
+     "verdict": "PASS",
+     "quote": "Your setting is `NO_CONTENT`, which is not `\"false\"`, so the hook turned on and wrote completions",
+     "quote_found": true,
+     "reason": "It recognized that the disabled capture setting did not stop completion uploads.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Tests a synthetic canary against each forbidden export payload while retaining the approved timing and error metadata.",
+     "verdict": "FAIL",
+     "quote": "They use made-up values only.",
+     "quote_found": true,
+     "reason": "Tests only cover env configuration for the upload hook, with no synthetic canary checked against payloads, and the analytics payload is untested; the tests were also not run.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Does not load the optimization specialist merely because traces and timing appear in the request.",
+     "verdict": "PASS",
+     "quote": "",
+     "quote_found": false,
+     "reason": "No skills were loaded, so the optimization specialist was not loaded.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 6,
+     "assertion": "Reports the tested local export boundaries and leaves live export verification explicitly unverified.",
+     "verdict": "FAIL",
+     "quote": "I have no shell tool in this session, so I haven't run them.",
+     "quote_found": true,
+     "reason": "It admits tests were not run and flags existing data and the analytics path as open, but does not report tested local export boundaries or explicitly mark live export verification as unverified.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 6,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.94,
+   "unstable": [
+    2
+   ],
+   "final_chars": 2036,
+   "files": [
+    "app/app_utils/telemetry.py",
+    "tests/unit/test_tools_and_telemetry.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 40.4,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 16,
+    "total_cost_usd": 0.13343190000000002,
+    "duration_ms": 39211,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "protect-adk-sensitive-data": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "optimise-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [
+     {
+      "tool": "Glob",
+      "input": "{\"pattern\": \"**/bigquery_agent_analytics_plugin.py\", \"path\": \"/\"}"
+     }
+    ],
+    "tool_calls": 15,
+    "catalogue": [
+     "adk-engineer",
+     "optimise-adk-on-google-cloud",
+     "protect-adk-sensitive-data",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": false,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "protect-adk-sensitive-data": false,
+    "optimise-adk-on-google-cloud": false
+   }
+  },
+  {
+   "id": "instructions-routing-and-templating-repair",
+   "expected_primary": "adk-agent-instructions",
+   "fixture_status": "repo-fixture",
+   "note": "google-adk 2.8.0 is pinned but not installed; render and transfer tests that need the SDK cannot run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-instructions",
+    "adk-tool-interface-design",
+    "adk-agent-evaluation",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0936,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Rewrites the sub-agent descriptions so each differentiates its peers and names the conditions for delegation in the coordinator instruction, without re-describing the transfer mechanism.",
+     "verdict": "PASS",
+     "quote": "does not handle refund or cancellation requests, which belong to refunds_agent.",
+     "quote_found": true,
+     "reason": "Descriptions were rewritten to differentiate peers, and the coordinator instruction names delegation conditions (\"Choose the colleague by what the customer wants to happen\") without re-describing the transfer mechanism.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Explains that 2.8.0 templating treats identifier-like braces as state variables, and moves the JSON example into an InstructionProvider or optional placeholders rather than relying on an escape that only exists from 2.10.0.",
+     "verdict": "FAIL",
+     "quote": "I replaced it with a literal `\"<order id if the customer gave one>\"`. The JSON example now renders as written.",
+     "quote_found": true,
+     "reason": "It fixed the JSON by removing the braces and used optional placeholders, but the final answer never explains that 2.8.0 treats identifier-like braces as state variables, nor that the escape exists only from 2.10.0, and it did not use an InstructionProvider.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Adds a contract test that renders the instruction against fixture state and asserts no unresolved placeholders, and a scripted-model check that the transfer call targets the intended sub-agent.",
+     "verdict": "FAIL",
+     "quote": "no test shows which agent a model actually picks, since no credentials are available.",
+     "quote_found": true,
+     "reason": "The render test uses a mirrored regex copy rather than the SDK, and there is no scripted-model transfer check; only description-text contract tests were added.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Hands the measured routing-accuracy comparison to adk-agent-evaluation and separates rendered, mocked and not-run evidence in the report.",
+     "verdict": "FAIL",
+     "quote": "`ROUTING_CASES` is a labelled set ready for a live evaluation that checks the `transfer_to_agent` target.",
+     "quote_found": true,
+     "reason": "The report separates not-run work, but it does not hand the routing-accuracy comparison to adk-agent-evaluation and does not distinguish rendered, mocked and not-run evidence.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2795,
+   "files": [
+    "app/agent.py",
+    "app/prompts.py",
+    "tests/test_prompts.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 67.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 20,
+    "total_cost_usd": 0.2534722,
+    "duration_ms": 65805,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-instructions"
+    ],
+    "skill_files_read": [
+     "adk-agent-instructions/references/routing-and-descriptions.md",
+     "adk-agent-instructions/references/adk-instruction-mechanics.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-instructions": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-tool-interface-design": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-workflow-design": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 18,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-instructions",
+     "adk-tool-interface-design",
+     "adk-workflow-design",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-instructions": true,
+    "adk-tool-interface-design": false,
+    "adk-agent-evaluation": false,
+    "adk-workflow-design": false
+   }
+  },
+  {
+   "id": "tool-interface-wrong-tool-diagnosis",
+   "expected_primary": "adk-tool-interface-design",
+   "fixture_status": "repo-fixture",
+   "note": "The tool-schema linter and declaration dump need a shell, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-tool-interface-design",
+    "adk-agent-instructions",
+    "safe-api-tool-calls",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0797,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Runs the read-only linter and dumps the live declarations before editing, recording byte sizes as the baseline.",
+     "verdict": "FAIL",
+     "quote": "I didn't take a before/after dump of the tool declarations or run a scripted-model test.",
+     "quote_found": true,
+     "reason": "The linter and dump were not run and no byte-size baseline was recorded; the agent only asked the user to run the linter.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Rewrites docstrings as the whole interface (purpose, when and when not, one line per parameter with format, return structure with status values) and renames generic parameters, noting that 2.8.0 sends no per-parameter descriptions.",
+     "verdict": "PASS",
+     "quote": "On ADK 2.8.0 the docstring is the whole description and no per-parameter text reaches the model",
+     "quote_found": true,
+     "reason": "Docstrings were rewritten with purpose, when and when not, and a format per parameter; parameters were renamed to query and order_id; the 2.8.0 limitation was noted. Return status values are documented, though the orders tools' docstrings are fairly compact.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Changes the bare-string return to a status dict with an actionable error branch and adds a scripted-model Runner test asserting the designed tool and arguments.",
+     "verdict": "FAIL",
+     "quote": "`search_help`: it returns a bare string. I left it alone because `test_help_search_returns_text` asserts on the string.",
+     "quote_found": false,
+     "reason": "The bare-string return was not changed to a status dict, and no scripted-model Runner test was added.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Leaves retry and idempotency behaviour to safe-api-tool-calls and hands selection-accuracy measurement to adk-agent-evaluation.",
+     "verdict": "FAIL",
+     "quote": "I'd build a labelled set from prompts like \"where's my order HO-10442?\" and \"show my processing orders\" and run it through `adk-agent-evaluation`.",
+     "quote_found": true,
+     "reason": "Selection-accuracy measurement was handed to adk-agent-evaluation, but retry and idempotency were never handed to safe-api-tool-calls.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3010,
+   "files": [
+    "app/tools/orders.py",
+    "tests/test_tools.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 37.4,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 16,
+    "total_cost_usd": 0.13019139999999998,
+    "duration_ms": 36314,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-tool-interface-design"
+    ],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-tool-interface-design": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 0
+     },
+     "adk-agent-instructions": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "safe-api-tool-calls": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 14,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-instructions",
+     "adk-tool-interface-design",
+     "safe-api-tool-calls",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-tool-interface-design": true,
+    "adk-agent-instructions": false,
+    "safe-api-tool-calls": false,
+    "adk-agent-evaluation": false
+   }
+  }
+ ]
+}
