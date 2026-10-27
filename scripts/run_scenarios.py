@@ -13,8 +13,8 @@ evals/graders/) is copied beside the workspace, never into it, and only the
 judge sees it.
 
 The ``claude-cli`` agent runs headless with project and local settings only
-(no user-level skills, settings or CLAUDE.md), no MCP servers and
-``--permission-mode dontAsk --permission-prompts none``: only the allow rules
+(no user-level skills, settings or CLAUDE.md), no MCP servers, auto-memory off
+and ``--permission-mode dontAsk --permission-prompts none``: only the allow rules
 the runner passes (reads, edits and writes under the workspace, and the Skill
 tool) are granted, and every other tool call, including any read outside the
 workspace, is refused without asking. A coding agent receives the scenario
@@ -75,6 +75,9 @@ AGENT_TOOLS = "Read,Write,Edit,Glob,Grep,Skill"
 SCOPED_RULES = {"Read": "Read(./**)", "Glob": "Read(./**)", "Grep": "Read(./**)",
                 "Edit": "Edit(./**)", "Write": "Write(./**)", "Skill": "Skill"}
 SETTING_SOURCES = "project,local"
+# Auto-memory names a per-workspace directory under ~/.claude/projects/ that Claude Code
+# lets the agent read despite dontAsk; switch it off so nothing outside the workspace is read.
+AGENT_ENV = {"CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"}
 EVIDENCE_LIMIT = 150_000
 FILE_LIMIT = 30_000
 SKILL_PATH = re.compile(r"\.claude/skills/([^/]+)/(.*)$")
@@ -290,6 +293,7 @@ def confinement(tools: str, skill_install: str) -> dict:
     rules, unconfined = allow_rules(tools)
     return {"setting_sources": SETTING_SOURCES, "permission_mode": "dontAsk", "permission_prompts": "none",
             "allowed": rules, "unconfined_tools": unconfined, "skill_install": skill_install,
+            "environment": dict(AGENT_ENV),
             "confined_to_workspace": not unconfined}
 
 
@@ -368,7 +372,7 @@ def run_agent(run_dir: Path, entry: dict, model: str, max_turns: int, timeout: f
     add_dir = skills_parent(case_dir, skill_install) if skill_install == "add-dir" else None
     command = agent_command(model, max_turns, tools, budget, add_dir)
     env = os.environ.copy()
-    env.update(AGENTIC_ENGINEERING_HOME=str(case_dir / "home"), AES_FIELD_NOTES="off")
+    env.update(AGENTIC_ENGINEERING_HOME=str(case_dir / "home"), AES_FIELD_NOTES="off", **AGENT_ENV)
     started, timed_out = time.monotonic(), False
     try:
         proc = runner(command, input=(case_dir / "task.md").read_text(),

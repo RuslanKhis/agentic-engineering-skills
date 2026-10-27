@@ -186,7 +186,9 @@ sibling directory passed with `--add-dir` instead, so a glob of the workspace
 does not list them. The `claude-cli` agent runs headless with
 `--setting-sources project,local` (no user-level skills, settings or
 `CLAUDE.md`; `~/.claude/skills` does not reach the catalogue),
-`--strict-mcp-config`, and `--permission-mode dontAsk --permission-prompts none`
+`--strict-mcp-config`, auto-memory switched off
+(`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`; otherwise the agent may read its own
+memory directory under `~/.claude/projects/`), and `--permission-mode dontAsk --permission-prompts none`
 with the allow rules `Read(./**)`, `Edit(./**)`, `Write(./**)` and `Skill`:
 reads, globs and writes outside the workspace are refused, not merely left
 unanswered. A bare `Glob` or `Grep` rule would reach `~/.claude`, so the runner

@@ -355,6 +355,7 @@ class AgentAndJudgeTests(unittest.TestCase):
             self.assertEqual(record["permission_denials"][0]["tool"], "Read")
             self.assertIn("dontAsk", record["command"])
             self.assertTrue(seen["env"]["AGENTIC_ENGINEERING_HOME"].startswith(str(run_dir)))
+            self.assertEqual(seen["env"]["CLAUDE_CODE_DISABLE_AUTO_MEMORY"], "1")
             case = cases[0]
             pending = scen.judge_case(run_dir, case, "files", "human", 60)
             self.assertEqual(pending["status"], "awaiting-judge")
