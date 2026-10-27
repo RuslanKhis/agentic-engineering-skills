@@ -22,8 +22,8 @@ regime references they produced: [Australia](australia.md),
 ## The order never changes
 
 Australia, United States, EU, United Kingdom, New Zealand, Singapore,
-Canada. The consultancy is in Australia, so Australia is screened first even
-when the client is not. Every list, table and front-matter value keeps this
+Canada, whatever the client's location and wherever the consultancy is
+based. Every list, table and front-matter value keeps this
 order: `jurisdictions: [au, us, eu, uk, nz, sg, ca]`, with the codes that are
 in scope only. Name Canada as "Canada" or "Quebec", never "CA", which US
 sections use for California.
@@ -32,6 +32,42 @@ The screen covers seven regimes. A screen written before New Zealand,
 Singapore and Canada were added, with four rows, fails the checker until it
 gains their three rows, each with the reason it is or is not in scope: a
 regime left out without a reason is the failure the screen exists to stop.
+
+## Where the consultancy is
+
+The consultancy's home is where its staff and systems that can see project
+data are. The references and templates are written for a consultancy in
+Australia. That is the default, used when nothing says otherwise.
+
+1. If the repository is bound to a practice profile whose `kind` is
+   `employer`, take the home from the countries of staff in its "Sector and
+   jurisdictions" section. Cite it as `source: practice profile <org>,
+   reviewed <date>`.
+2. A `kind: client` profile describes the client, not the consultancy. Do
+   not take the home from it.
+3. If the user names the home, take it from the user with
+   `source: <role>, <date>`.
+4. Otherwise the home is Australia. Record it in the memo's facts as
+   `assumption: consultancy home Australia (default)`.
+
+When the home is not Australia:
+
+- **The `au` row's consultancy trigger does not apply.** Australia is in
+  scope only through the client or the data subjects.
+- **Read the Australian wording as the actual home.** Wherever a reference or
+  template says "consultancy access from Australia", "Australian staff
+  access" or "Sydney access", read it as access from the home. Keep the
+  transfer rows, naming the actual country.
+- **If the home is one of the other six regimes,** that regime is in scope
+  through the consultancy's own handling, the way Australia is by default.
+  Whether its law reaches that handling is `counsel:`.
+- **If the home is outside the seven regimes,** this pack has no reference
+  for its law. Write `gap: consultancy home <country> not covered by this
+  pack`, set `counsel_required: yes`, and still write the transfer rows for
+  the regimes in scope.
+
+The home never removes a jurisdiction that the project record brings in
+through the client or the data subjects.
 
 ## Facts to establish
 
@@ -45,7 +81,7 @@ a section counsel strikes out costs less than missing one.
 | Where the client is established and carries on business | Establishment brings a regime's privacy law in on its own | Brief stakeholders; SOW parties |
 | Where the data subjects are: users, employees, applicants, customers, people named in records | Most regimes follow the people, not the servers | Brief §4 data register; design users |
 | Where processing happens: hosting region, the model's processing region (from the model page, which can differ from where the endpoint is offered), logs, grounding, abuse monitoring, telemetry sinks, backups | Transfers and overseas disclosure | Design hosting and model decisions (D IDs) |
-| Who at the consultancy can see personal data, and from where: build, test, evaluation sets, log and trace review, support, incidents | Australian staff access is a restricted transfer for EU and UK data, an s 11 agent or IPP 12 fact for New Zealand data, a Transfer Limitation Obligation transfer for Singapore data, an s 17 flow for Quebec data and an s 19(2) fact for a NSW agency's data, and brings the consultancy's own Privacy Act position into scope | Design operations and access decisions; SOW support terms |
+| Who at the consultancy can see personal data, and from where: build, test, evaluation sets, log and trace review, support, incidents (the home, [above](#where-the-consultancy-is)) | Staff access from the home (Australia by default) is a restricted transfer for EU and UK data, an s 11 agent or IPP 12 fact for New Zealand data, a Transfer Limitation Obligation transfer for Singapore data, an s 17 flow for Quebec data and an s 19(2) fact for a NSW agency's data, and brings the consultancy's own position under the home's law into scope | Design operations and access decisions; SOW support terms |
 | Client type: private company; Australian Commonwealth agency (non-corporate Commonwealth entity); NSW public sector agency (DCS-2026-02 entity types: departments, executive agencies, separate agencies, statutory bodies, state owned corporations, public financial and non-financial corporations, advisory entities); other state agency; local council; UK central government department or arm's-length body; US federal agency or contractor; New Zealand public service department, Crown entity or local authority; Singapore ministry, organ of state or statutory board; Canadian federal institution, Ontario ministry or provincial agency | Government clients carry mandatory assessments and forms (DTA, NSW AIAF, ATRS, Canada's AIA) and public-law duties | Brief stakeholders |
 | Contract vehicle and value: NSW ICTA or Core&, value against $150,000 (including GST) and $1 million (excluding GST), Digital Assurance Framework above $5 million; Commonwealth contract terms | GIPA contracts register; ICTA clause 6.11 AI clauses and model-change notice; s 7B(5) State contract exemption; s 95B | SOW; brief stakeholders; `agency:` |
 | Sector: finance, health, insurance, credit, employment, education, children's services, telecommunications marketing | Sector statutes and regulators | Brief context |
@@ -58,7 +94,7 @@ a section counsel strikes out costs less than missing one.
 
 | Regime | In scope when any of these holds | Notes |
 | --- | --- | --- |
-| `au` Australia | The client is established or carries on business in Australia; data subjects are in Australia; or the consultancy's staff or systems handle personal information for the project | When only the consultancy's own handling brings it in, the Australian sections cover that handling (the consultancy's APP entity status, APP 8 and 11, notifiable data breaches) and say so: the client's own APP 1.7 and sector rows are `n/a:` with the reason, the inventory describes the consultancy's handling for its own privacy policy, and the Guidance for AI Adoption mapping is skipped. Whether the Privacy Act reaches that handling is `counsel:` |
+| `au` Australia | The client is established or carries on business in Australia; data subjects are in Australia; or the consultancy's home is Australia (the default) and its staff or systems handle personal information for the project | When only the consultancy's own handling brings it in, the Australian sections cover that handling (the consultancy's APP entity status, APP 8 and 11, notifiable data breaches) and say so: the client's own APP 1.7 and sector rows are `n/a:` with the reason, the inventory describes the consultancy's handling for its own privacy policy, and the Guidance for AI Adoption mapping is skipped. Whether the Privacy Act reaches that handling is `counsel:` |
 | `us` United States | The client is established or does business in the US; the data subjects include US residents (consumers, employees or applicants); the client is a US federal agency or contractor | Data merely stored or routed in the US does not bring state privacy laws in; it is a transfer question for the other regimes |
 | `eu` EU | The client is established in the EU; the system offers goods or services to, or monitors, people in the EU; the system is placed on the EU market or its output is used in the EU (AI Act) | GDPR territorial scope (Article 3) and AI Act scope (Article 2) are `counsel:` conclusions; record the facts |
 | `uk` United Kingdom | The client is established in the UK; the system offers goods or services to, or monitors, people in the UK; the client is a UK central government department or in-scope arm's-length body | UK GDPR territorial scope is a `counsel:` conclusion; a UK pack with EU users keeps the EU sections as well |

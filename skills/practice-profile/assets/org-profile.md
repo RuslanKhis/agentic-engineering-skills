@@ -22,7 +22,7 @@ An empty section is fine; the skills fall back to their own defaults or ask. -->
 
 ## Sector and jurisdictions
 
-<!-- Sector in a regulator's words; countries of customers and staff; regulators; certifications. Read by adk-governance-pack, adk-system-designer, adk-discovery. -->
+<!-- Sector in a regulator's words; countries of customers and staff; regulators; certifications. Read by adk-governance-pack (for an employer, the staff countries are the consultancy's home in the jurisdiction screen), adk-system-designer, adk-discovery. -->
 
 ## Stakeholders and decision norms
 
