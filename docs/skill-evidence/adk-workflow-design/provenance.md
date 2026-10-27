@@ -87,11 +87,11 @@ project-wide deletion commands and campaign-specific quotas were not copied.
 Read google/adk-recipes at commit be63596 (2026-10-20; Apache-2.0):
 `core/python/ambient-expense-agent/expense_agent/{agent,fast_api_app}.py` and
 `README.md`, and `core/python/long-horizon-harness/AGENTS.md` ("ADK Callback
-Wiring"). Imported as vendor-sample facts into [orchestration.md](orchestration.md)
+Wiring"). Imported as vendor-sample facts into [orchestration.md](../../../skills/adk-workflow-design/references/orchestration.md)
 (the deterministic-first graph with the pause on the review node and Pub/Sub
-trigger delivery) and [callbacks.md](callbacks.md) (the per-stage chain written
+trigger delivery) and [callbacks.md](../../../skills/adk-workflow-design/references/callbacks.md) (the per-stage chain written
 down as the contract). Nothing was copied or executed.
 
 ## Durable-execution review — 23 October 2026
 
-Read google/adk-docs `docs/runtime/resume.md` (raw, main, 2026-10-23); temporalio/ai-integrations commit bb179c3 (MIT) `python/google_adk/README.md`, `pyproject.toml`, `tests/` (listing, `Replayer` usage, `histories/`); dbos-inc/dbos-google-adk commit 288757e (MIT) `README.md`, `pyproject.toml`, `tests/test_dbos_plugin.py`; PyPI metadata for `temporalio-google-adk` 0.0.1 and `dbos-google-adk` 0.1.0. Imported into [runtime.md](runtime.md) ("Resume and durable execution are different promises"); nothing executed, nothing copied.
+Read google/adk-docs `docs/runtime/resume.md` (raw, main, 2026-10-23); temporalio/ai-integrations commit bb179c3 (MIT) `python/google_adk/README.md`, `pyproject.toml`, `tests/` (listing, `Replayer` usage, `histories/`); dbos-inc/dbos-google-adk commit 288757e (MIT) `README.md`, `pyproject.toml`, `tests/test_dbos_plugin.py`; PyPI metadata for `temporalio-google-adk` 0.0.1 and `dbos-google-adk` 0.1.0. Imported into [runtime.md](../../../skills/adk-workflow-design/references/runtime.md) ("Resume and durable execution are different promises"); nothing executed, nothing copied.

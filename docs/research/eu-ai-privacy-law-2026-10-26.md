@@ -880,7 +880,7 @@ to "written to be cited by section." with:
 > with the Annex III obligations from 2 December 2027 (Art. 113(c),
 > checked 2026-10-26). Since the Omnibus, Article 27(4) lets the FRIA
 > cross-reference or include the relevant parts of the GDPR DPIA, so the
-> [DPIA input pack](privacy-and-records.md) is written to be cited by
+> [DPIA input pack](../../skills/adk-governance-pack/references/privacy-and-records.md) is written to be cited by
 > section, and the impact assessment carries the FRIA crosswalk (Article
 > 27(1)(a) to (f) to pack sections).
 
@@ -1009,14 +1009,14 @@ existed on 26 October 2026."
 >   million on 8 October 2026 for fully automated deactivations and an
 >   inadequate notice. For Annex III high-risk systems, AI Act Article 86
 >   adds a deployer duty to explain; see [the AI Act
->   reference](eu-ai-act.md).
+>   reference](../../skills/adk-governance-pack/references/eu-ai-act.md).
 
 **Lines 92-93.** Replace with:
 
 > - AI Act Article 4a (Omnibus) permits special-category data for bias
 >   detection only where strictly necessary and under all its conditions,
 >   in addition to the GDPR; the records of processing must state why. See
->   [the AI Act reference](eu-ai-act.md).
+>   [the AI Act reference](../../skills/adk-governance-pack/references/eu-ai-act.md).
 
 **After line 137**, add two sections:
 
@@ -1127,7 +1127,7 @@ Act Art 73 if high-risk>".
 
 - Line 23: `sources-reviewed: "2026-10-26"` once the reference edits land.
 - Lines 97-102, step 2: add "and the transfers and processor sections"
-  after "read [privacy and records](references/privacy-and-records.md)".
+  after "read [privacy and records](../../skills/adk-governance-pack/references/privacy-and-records.md)".
 - Line 124: change "whether a DPIA or FRIA is required" to "whether a
   DPIA or FRIA is required, whether Article 22 applies, the transfer
   mechanism".

@@ -664,7 +664,7 @@ header only).
   repository, one directory per org").
 - Layout block: `imports.md`; `profile.md` 200 lines at most.
 - `init`: ask interview, import or both; interview by
-  [the interview](references/interview.md) (new reference holding the
+  [the interview](../../skills/practice-profile/references/interview.md) (new reference holding the
   question bank and the asking rules); core first, deep on request; replace
   "leading each section with a recommended answer" with the menu rule for
   facts and the recommended-answer rule for conventions.
@@ -815,7 +815,7 @@ near-miss "Summarise this strategy document" (no skill).
   data-and-effects default and the floor; procurement lead times become
   calendar waits; jurisdictions feed residency.
 - `adk-governance-pack`, in "Read the record first": "If the engineer keeps
-  a practice profile, read [practice profile](references/practice-profile.md):
+  a practice profile, read [practice profile](../../skills/practice-profile/references/practice-profile.md):
   its jurisdictions, regulators, reviewer roles, AI-policy approvals,
   consultation bodies and floor are org context. Use them to add checks,
   name reviewers in `for:` and propose waits; cite them as `source:

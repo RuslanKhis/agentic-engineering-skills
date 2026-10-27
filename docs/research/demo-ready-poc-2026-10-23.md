@@ -103,7 +103,7 @@ Make the frontend skill the single home and point to it from the designer and th
 
    > Read when a proof of concept will be shown to people who did not build it. A demo-ready build adds a domain story, seeded fictional data dated to the run, a scripted golden path with a replay mode, the app shell and an "About this assistant" page to the handover fundamentals. Build only screens that work; list the rest under "production adds". Replay is always labelled: the header badge and the narration both say it is a replay of a live run, with its date and build.
 
-   Add one line to the skill's step 5 (validate and report): "When the POC will be demoed, run [demo readiness](references/demo-readiness.md) and report each Must item."
+   Add one line to the skill's step 5 (validate and report): "When the POC will be demoed, run [demo readiness](../../skills/adk-frontend-integration/references/demo-readiness.md) and report each Must item."
 
 2. **One row in the designer's handover table (`web-app-defaults.md`):**
 

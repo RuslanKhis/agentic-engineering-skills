@@ -4,7 +4,7 @@
 
 ## Baseline — 15 September 2026
 
-The skill was developed and tested locally on macOS 26.6.2 arm64 with CPython 3.11.4. Current project virtual environment: `google-adk==2.8.0`, `google-genai==2.19.0`, `google-cloud-pubsub==2.39.0`, `google-api-python-client==2.197.0`, `PyYAML==6.0.3`. No dependency versions were changed. Historical live evidence used `google-genai==2.23.0` and is recorded separately in [compatibility](compatibility.md).
+The skill was developed and tested locally on macOS 26.6.2 arm64 with CPython 3.11.4. Current project virtual environment: `google-adk==2.8.0`, `google-genai==2.19.0`, `google-cloud-pubsub==2.39.0`, `google-api-python-client==2.197.0`, `PyYAML==6.0.3`. No dependency versions were changed. Historical live evidence used `google-genai==2.23.0` and is recorded separately in [compatibility](../../../skills/adk-operational-guardrails/references/compatibility.md).
 
 ## Commands and actual results
 
@@ -46,7 +46,7 @@ Two independent Codex agents received only the copied skill, clean fixture proje
 
 - The structural validator rejected top-level `compatibility`; moved that information into supported `metadata` and the compatibility reference. Final validator passes.
 - The first optional ADK cap test hit a one-second incidental test timeout during cold framework setup. Increased only the non-deadline fixture allowance to ten seconds; the dedicated 20ms stalled-model deadline assertion remains. Four integration tests then passed. This is a test-fixture correction, not evidence for a production latency claim.
-- The greenfield trial initially failed from cold SDK imports and a test searching descriptions rather than schema properties. Its first workaround imported private workflow/provider modules. Review rejected that coupling. Added guidance to [runtime bounds](runtime-bounds.md) about public startup preparation, unchanged invocation limits and honest cold-start scope; the second pass removed private eager imports and used a public runner callback that dispatches zero model/tool work during preparation.
+- The greenfield trial initially failed from cold SDK imports and a test searching descriptions rather than schema properties. Its first workaround imported private workflow/provider modules. Review rejected that coupling. Added guidance to [runtime bounds](../../../skills/adk-operational-guardrails/references/runtime-bounds.md) about public startup preparation, unchanged invocation limits and honest cold-start scope; the second pass removed private eager imports and used a public runner callback that dispatches zero model/tool work during preparation.
 
 The final greenfield cold CLI checks succeeded, but full process times were 3.363s and 1.908s, explicitly including imports/startup. Separate prepared invocations took 0.0157s and 0.0055s; these small offline observations do not establish real-model latency. No 150ms cold-process guarantee is claimed.
 

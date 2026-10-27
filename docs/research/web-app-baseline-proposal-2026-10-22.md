@@ -226,7 +226,7 @@ In the scope-gate list (the bullets that open **Conduct the design conversation*
 
 In **Make the recommendation implementable**, after the paragraph about the seven cross-framework specialists, add:
 
-> When the design gives the agent its own web interface or an HTTP API, read [web application defaults](references/web-app-defaults.md) for the default stack, layout and companion skills, and record each deviation as a decision. Then read [the security baseline](references/security-baseline.md), list the components the design creates and record each rule's depth and status once in the design.
+> When the design gives the agent its own web interface or an HTTP API, read [web application defaults](../../skills/adk-system-designer/references/web-app-defaults.md) for the default stack, layout and companion skills, and record each deviation as a decision. Then read [the security baseline](../../skills/adk-system-designer/references/security-baseline.md), list the components the design creates and record each rule's depth and status once in the design.
 
 In **Deliver and hand off**, extend the goal-field list ("Each goal needs a stable ID, phase, estimate, …") with:
 

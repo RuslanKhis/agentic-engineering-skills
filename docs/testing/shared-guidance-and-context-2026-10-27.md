@@ -156,8 +156,11 @@ remaining skill-specific sentence was checked to hold the same rule.
   - source or CHANGELOG reads only: instructions, interoperability (apart
     from its offline MCP conformance run on 2.12.0), observability, security,
     model-contracts, release and tool-interface.
-- **Open finding.** Guardrails' `last-tested: 2026-10-22` has no recorded
-  test on that date. It was left alone because another branch owns it.
+- **Open finding, since resolved.** Guardrails' `last-tested: 2026-10-22`
+  looked unrecorded. It is recorded:
+  [generative-ai-agents-alignment-2026-10-22.md](generative-ai-agents-alignment-2026-10-22.md)
+  has a guardrails inspector fix with its test and a guardrails trial on
+  that date, so the metadata stands.
 
 ## D. Context cost
 

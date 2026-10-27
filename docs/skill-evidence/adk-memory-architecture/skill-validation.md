@@ -234,7 +234,7 @@ acceptance or prove exhaustive coverage of every production failure.
 
 ## Local-document coverage controls — 27 September 2026
 
-The [local-document reference](local-document-coverage.md), synthetic extracted
+The [local-document reference](../../../skills/adk-memory-architecture/references/local-document-coverage.md), synthetic extracted
 page pack and standard-library scorer make missing supplements, incomplete
 tables, empty extraction and unviewed visual material observable. The package
 suite passed **29 tests** on Python 3.12.9, including **13 new coverage controls**:
@@ -253,9 +253,9 @@ policy is claimed. The main skill's SDK `last-tested` date remains unchanged.
 ## Ingestion and retrieval controls — 6 October 2026
 
 Two references and two standard-library helpers were added after the
-planning-assignment retrospective: [document ingestion](document-ingestion.md)
+planning-assignment retrospective: [document ingestion](../../../skills/adk-memory-architecture/references/document-ingestion.md)
 with a four-PDF fixture of real bytes and a per-page qualification report, and
-[retrieval strategy](retrieval-strategy.md) with a synthetic gold set, heading
+[retrieval strategy](../../../skills/adk-memory-architecture/references/retrieval-strategy.md) with a synthetic gold set, heading
 units, SQLite FTS5 BM25, deterministic reference lookup, one bounded second
 round, reciprocal rank fusion and a sufficiency report. The package suite
 passed **57 tests with 1 skip** on Python 3.12.9 (the skip is the optional
