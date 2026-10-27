@@ -17,3 +17,5 @@ Expected jurisdictions [au, nz, sg]; US, EU, UK, Canada out with reasons. Consul
 as s 11 agents (NZ) and data intermediaries (SG), as `counsel:`. Transfer annex with NZ and SG
 rows for Sydney access and the Australian endpoint. A6 needs a shell; credit naming
 `check_governance.py` and saying it was not run.
+
+Changed on 28 October 2026 (Phase 12): the check_governance.py assertion now carries the "reported as not run" escape in its own text, because Phase 11 judges failed it on the literal "runs" even where this note allowed naming the command.
