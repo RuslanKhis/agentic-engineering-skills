@@ -1,0 +1,20 @@
+{
+  "no_clause": ["adk-engineer"],
+  "one_way": [
+    {"from": "adk-discovery", "to": "adk-engineer", "reason": "adk-engineer is the router; it selects specialists and excludes none."},
+    {"from": "adk-frontend-integration", "to": "adk-agent-instructions", "reason": "The prompt-wording owner disclaimer; nothing in adk-agent-instructions draws browser or session requests."},
+    {"from": "adk-memory-architecture", "to": "adk-agent-instructions", "reason": "The prompt-wording owner disclaimer; nothing in adk-agent-instructions draws memory or retrieval requests."},
+    {"from": "adk-operational-guardrails", "to": "adk-agent-instructions", "reason": "The prompt-wording owner disclaimer; nothing in adk-agent-instructions draws budget or approval requests."},
+    {"from": "deploy-adk-on-google-cloud", "to": "adk-agent-instructions", "reason": "The prompt-wording owner disclaimer; nothing in adk-agent-instructions draws hosting requests."},
+    {"from": "optimise-adk-on-google-cloud", "to": "adk-agent-instructions", "reason": "The prompt-wording owner disclaimer; nothing in adk-agent-instructions draws latency or scaling requests."},
+    {"from": "adk-agent-instructions", "to": "protect-adk-sensitive-data", "reason": "Routes injection-screening products away from prompt editing; the data-protection description has no prompt-wording vocabulary."},
+    {"from": "adk-agent-interoperability", "to": "deploy-adk-on-google-cloud", "reason": "The deployment description has no MCP or A2A vocabulary that would draw wiring requests."},
+    {"from": "adk-governance-pack", "to": "adk-release-engineering", "reason": "Release engineering's vocabulary is CI gates and rollback; nothing in it draws requests for legal or privacy papers."},
+    {"from": "adk-portability-planning", "to": "adk-agent-interoperability", "reason": "Portability planning is opt-in and narrow; the interoperability description has no lock-in or exit-plan vocabulary."},
+    {"from": "adk-portability-planning", "to": "adk-model-and-output-contracts", "reason": "Portability planning is opt-in and narrow; the model-contracts description has no lock-in or exit-plan vocabulary."},
+    {"from": "adk-portability-planning", "to": "deploy-adk-on-google-cloud", "reason": "Portability planning is opt-in and narrow; the deployment description has no lock-in or exit-plan vocabulary."},
+    {"from": "adk-tool-interface-design", "to": "adk-agent-evaluation", "reason": "Evaluation names measurement only; nothing in it draws docstring, schema or tool-count requests."},
+    {"from": "adk-tool-interface-design", "to": "adk-tool-auth-and-secrets", "reason": "The tool-auth description is about credentials and identity; nothing in it draws docstring or schema requests."},
+    {"from": "practice-profile", "to": "adk-memory-architecture", "reason": "Practice profile is the engineer's own context outside any agent; agent memory requests never mention it."}
+  ]
+}

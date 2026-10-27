@@ -92,6 +92,8 @@ change crosses its boundary. Before any edit, tell the user in one line:
 If the engineer keeps a practice profile, read
 [practice profile](references/practice-profile.md) next and apply the org's
 lessons tagged with that specialist and its stack conventions.
+When the request's words fit two rows, [ownership](references/ownership.md)
+names the owner of each contested topic and the neighbours that defer to it.
 
 | Request concerns | Specialist skill |
 | --- | --- |
@@ -104,7 +106,7 @@ lessons tagged with that specialist and its stack conventions.
 | Measured latency, cost, concurrency, startup or scaling problems; long sessions, context growth per turn or cache misses; a history trimming or summariser plugin, or a request rejected for a dangling function call | `optimise-adk-on-google-cloud` |
 | Browser interfaces and the agent's run and stream API: JSON or SSE contracts, AG-UI, CopilotKit, agent UI states and the interface's design system, or interface widgets that tools render beside the reply (A2UI cards, tables, charts) | `adk-frontend-integration` |
 | HTTP routes beyond the agent's run and stream API: domain data and migrations, the API contract or generated client, errors, CORS or headers in an ADK web application | `adk-fastapi-backend` |
-| Conversation state, cross-session memory, document retrieval or history | `adk-memory-architecture` |
+| Conversation state, cross-session memory, document retrieval, or past conversations recalled in a later session (in-session history trimming is `optimise-adk-on-google-cloud`) | `adk-memory-architecture` |
 | Agent behaviour tests, evaluation datasets, replay or result auditing | `adk-agent-evaluation` |
 | Decisions or answers are wrong on a labelled set; error analysis, one change per iteration, model comparison | `adk-agent-evaluation` (quality iteration) |
 | Instruction text: prompt structure, state templating, tool-use guidance, sub-agent descriptions for routing, prompt versioning | `adk-agent-instructions` |
@@ -121,6 +123,7 @@ lessons tagged with that specialist and its stack conventions.
 | Setting up (by interview or by importing company Markdown the user names), binding, updating, reviewing or exporting the engineer's own practice profile: employer or client context and lessons carried across projects, kept outside the repository (not an agent's memory) | `practice-profile` |
 | A client proposal, statement of work, change request or data-and-access request letter built from the design and plan | `adk-system-designer` (engagement scoping) |
 | A go-live rollout pack: user guide, quick-reference card, training plan, rollout messages, AI disclosure text, adoption metrics, hypercare exit test | `adk-presenter` (rollout pack) |
+| The monthly value report to the sponsor after launch: outcome against the brief's baseline, adoption, cost per outcome, incidents, and a stop, continue or scale call | `adk-presenter` (value report) |
 | Handing an agent's operation to a client's IT team (support tiers, RACI, alert ownership, access transfer) or a blameless postmortem for an agent incident | `adk-agent-observability` (handover) |
 | Papers for a client's legal, privacy or security reviewers: which of Australian (including NSW and Commonwealth government), US, EU, UK, New Zealand, Singapore and Canadian privacy and AI law applies, a regulatory memo (EU AI Act classification where the EU applies), AI impact assessment, privacy impact inputs (PIA, DPIA or US risk assessment), transfer facts, system card, records of processing, security questionnaire answers | `adk-governance-pack` |
 | Vendor lock-in, an exit plan, or what moving to AWS or Azure or another agent framework would involve for an accepted GCP and ADK design: a separate portability assessment, not a migration | `adk-portability-planning` |

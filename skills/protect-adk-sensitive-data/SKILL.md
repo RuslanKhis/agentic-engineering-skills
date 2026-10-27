@@ -1,6 +1,16 @@
 ---
 name: protect-adk-sensitive-data
-description: Inspect, implement or review sensitive-data boundaries in Python Google ADK agents using Sensitive Data Protection (SDP), Model Armor, strict tool contracts and guarded response release. Use for PII or credential exposure in prompts, tool calls, session history, logs or streamed answers, and for planning these controls and their cloud prerequisites. Do not activate for generic ADK setup, ordinary authentication work without a data-boundary concern, Cloud Armor WAF configuration, unrelated infrastructure cleanup, or non-agent document redaction.
+description: >-
+  Inspect, implement or review sensitive-data boundaries in Python Google ADK
+  agents using Sensitive Data Protection (SDP), Model Armor, strict tool
+  contracts and guarded response release. Use for PII or credential exposure
+  in prompts, tool calls, session history, logs or streamed answers, and for
+  planning these controls and their cloud prerequisites. Do not activate for
+  generic ADK setup, credential custody or OAuth tokens kept out of events
+  (adk-tool-auth-and-secrets), whole-agent threat models (adk-agent-security),
+  telemetry pipelines and alerts (adk-agent-observability), governance or
+  privacy-impact papers (adk-governance-pack), Cloud Armor WAF configuration,
+  unrelated infrastructure cleanup, or non-agent document redaction.
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

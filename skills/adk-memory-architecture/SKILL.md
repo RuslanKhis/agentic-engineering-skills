@@ -2,13 +2,15 @@
 name: adk-memory-architecture
 description: >-
   Design, implement, adapt or audit memory and retrieval in Python Google ADK
-  agents. Select and combine conversation sessions/state, governed RAG,
-  Agent Platform Memory Bank and scoped BigQuery history; enforce identity,
-  consent, retention, replay and erasure boundaries. Use for agent memory,
-  knowledge retrieval or cross-session continuity work. Do not activate for
-  general database administration, arbitrary SQL generation, deployment alone,
-  prompt-only editing (adk-agent-instructions owns prompt wording) or
-  non-agent caching.
+  agents. Select and combine conversation sessions/state, governed RAG, Agent
+  Platform Memory Bank and scoped BigQuery history; enforce identity, consent,
+  retention, replay and erasure boundaries. Use for agent memory, knowledge
+  retrieval or cross-session continuity work. Do not activate for general
+  database administration, natural-language SQL agents
+  (adk-sql-agent-engineering), trimming or summarising in-session history for
+  latency or tokens (optimise-adk-on-google-cloud), duplicate external writes
+  on retry (safe-api-tool-calls), deployment alone, prompt-only editing
+  (adk-agent-instructions owns prompt wording) or non-agent caching.
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

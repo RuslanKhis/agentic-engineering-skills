@@ -1,6 +1,20 @@
 ---
 name: adk-agent-evaluation
-description: "Build, adapt or audit a Python ADK agent's testing strategy: deterministic tool and Runner tests, live evaluation sets, simulated conversations, conformance replay and strict result checks. Use for agent behaviour, regression coverage or evaluation reliability, and for improving wrong decisions through a labelled development set, error analysis or model escalation, and for labelling with subject-matter experts: session plan, failure taxonomy, inter-rater agreement and judge calibration against their labels. Do not activate for ordinary non-agent unit tests, standalone model benchmarks, deployment, or cloud cleanup alone."
+description: >-
+  Build, adapt or audit a Python ADK agent's testing strategy: deterministic
+  tool and Runner tests, live evaluation sets, simulated conversations,
+  conformance replay and strict result checks. Use for agent behaviour,
+  regression coverage or evaluation reliability, for improving wrong decisions
+  through a labelled development set and error analysis that measures each
+  prompt, exemplar or model change, and for labelling with subject-matter
+  experts: session plan, failure taxonomy, inter-rater agreement and judge
+  calibration against their labels. Do not activate for non-agent unit tests,
+  standalone model benchmarks, deployment or cleanup alone, prompt wording or
+  exemplar design (adk-agent-instructions), model settings
+  (adk-model-and-output-contracts), wiring eval gates into CI
+  (adk-release-engineering), production telemetry (adk-agent-observability),
+  adversarial suites (adk-agent-security) or presenting results
+  (adk-presenter).
 license: MIT
 metadata:
   author: Ruslan Khissamiyev
@@ -41,7 +55,7 @@ Planning a production suite can stop at a reviewable design with cases, budgets 
 
 Load additional implementation detail only for the relevant branch:
 
-- **Wrong decisions or answers, prompt or exemplar design, output-schema sizing, model escalation:** [quality iteration](references/quality-iteration.md) runs the labelled-set, error-analysis, one-change loop and measures decision quality before further controls are added. Run and categorise errors before editing code; the first change targets the largest category. For example, two outputs that miss an applicable policy and one condition that contradicts its own reason put retrieval first and a consistency check second.
+- **Wrong decisions or answers, or measuring a prompt, exemplar, output-schema or model change:** [quality iteration](references/quality-iteration.md) runs the labelled-set, error-analysis, one-change loop and measures decision quality before further controls are added. The wording and exemplar design themselves are adk-agent-instructions' work; this loop measures them. Run and categorise errors before editing code; the first change targets the largest category. For example, two outputs that miss an applicable policy and one condition that contradicts its own reason put retrieval first and a consistency check second.
 - **Labels that do not exist yet, expert time to plan, or criteria that keep changing:** [expert review](references/expert-review.md) runs the session with the [session plan](assets/expert-session-plan.md) and [labelling guide](assets/labelling-guide.md), writes the [gold set](assets/gold-set-schema.md) and checks it with [label_agreement.py](scripts/label_agreement.py) (Cohen's kappa, disagreements to adjudicate, criteria drift, judge TPR and TNR). Read it before quality iteration when the development set has no reviewed labels.
 - **Setup, project/provider changes or access failures:** [environment and troubleshooting](references/environment-and-troubleshooting.md) gives configuration tracing, API-state reconciliation and scoped cleanup checks.
 - **Grading with a third-party scorer or store (MLflow, deepeval, Opik):** [provider compatibility](references/provider-compatibility.md) for what their ADK scorers record and how to keep results honest; `adk-agent-observability`'s export paths for keeping traces and telemetry in-house.

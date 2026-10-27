@@ -1,21 +1,19 @@
 ---
 name: adk-governance-pack
 description: >-
-  Draft the governance papers a client's legal, privacy and security
-  reviewers ask for about a Google ADK agent, from its brief, design and
-  plan evidence. It first screens which privacy and AI laws apply, in the
-  order Australia (with NSW and Commonwealth agencies), United States, EU,
-  UK, New Zealand, Singapore, Canada, then drafts a regulatory memo, an
-  impact assessment (ISO/IEC 42005, NIST AI RMF), privacy impact inputs
-  (PIA or DPIA), transfer facts, a system card, processing records,
-  security questionnaire answers and draft answers for DTA and NSW AIAF
-  forms. Every statement cites evidence or is flagged for counsel; drafts
-  that support the client's lawyer, not legal advice. Use before a pilot or
-  production decision, or when a DPO, counsel or CISO asks for these
-  papers. Do not activate to build redaction, screening or logging
-  controls (protect-adk-sensitive-data), to threat-model or harden the agent
-  (adk-agent-security), for release gates (adk-release-engineering), or to
-  present results (adk-presenter).
+  Draft the governance papers a client's legal, privacy and security reviewers
+  ask for about a Google ADK agent, from the project's evidence. It first
+  screens which privacy and AI laws apply (Australia with NSW and Commonwealth
+  agencies, United States, EU, UK, New Zealand, Singapore, Canada, in that
+  order), then drafts a regulatory memo, an impact assessment (ISO/IEC 42005,
+  NIST AI RMF), privacy impact inputs (PIA or DPIA), transfer facts, a system
+  card, processing records, security questionnaire answers and DTA and NSW
+  AIAF form answers. Each statement cites evidence or is flagged for counsel;
+  not legal advice. Use before a pilot or production decision, or when a DPO,
+  counsel or CISO asks. Do not activate to build redaction, screening or
+  logging controls (protect-adk-sensitive-data), to threat-model or harden the
+  agent (adk-agent-security), for release gates (adk-release-engineering), or
+  to present results (adk-presenter).
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

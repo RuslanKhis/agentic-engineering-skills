@@ -72,14 +72,14 @@ would be required. Decide approve or refuse on that weighing.
 WHAT YOU RECEIVE (list the inputs by label)
 - case facts, from the application form and drawings, each with a source ID
 - operative policy text found for each material issue, or "none found"
-- two exemplar decisions showing the expected structure and tone
+- exemplar decisions from other cases showing the expected structure and tone
 
 HOW TO ANSWER (the schema, sized to the decision)
 decision, reasons[{issue, policy_ids, finding}], conditions[{purpose, text}],
 uncertainties[{issue, what_is_missing}]
 
 EXEMPLARS
-<two labelled decisions from other cases, trimmed to reasons and conditions>
+<labelled decisions from other cases, chosen as adk-agent-instructions describes>
 ```
 
 Positive instructions carry the behaviour; a prohibition is kept only where
@@ -99,25 +99,29 @@ A prompt that has grown past a thousand words of constraints is a signal to
 restart from the skeleton above: list the constraints, move each one into
 code, an exemplar or the schema, and keep only the judgment.
 
-## Use the labelled cases as exemplars, not as answers
+## Keep each case's own label out of its prompt
 
 Labelled reasons and conditions show the model what an officer's reasons
-look like: structure, tone, how a policy criterion is cited, how a condition
-is worded. Use them as exemplars for unseen cases. For a development case,
-select exemplars with leave-one-out so the case under evaluation never sees
-its own label:
+look like, so they make good exemplars for unseen cases. Which exemplars,
+how many, in what order and in what format is prompt design: adk-agent-instructions
+owns it (its exemplars reference), and treats the count as a variable to
+measure, not a fixed number. This loop owns two things: a development case
+never sees its own label, and an exemplar change is one iteration, measured
+on the development set like any other change:
 
 ```python
-def exemplars_for(case_id, labelled, n=2):
-    """Pick n labelled decisions from other cases; never the case under test."""
+def exemplars_for(case_id, labelled, n):
+    """Pick n labelled exemplars from other cases; never the case under test.
+
+    n and the candidate order belong to the prompt version under test.
+    """
     return [c for c in labelled if c["id"] != case_id][:n]
 ```
 
-Trim exemplars to the parts whose shape matters: reasons and conditions, with
-the case-specific facts shortened. Choose exemplars whose issues resemble the
-current case when the set is large enough to allow it. This is distinct from
-leaking outcomes: the holdout cases have no label in the system at all, and a
-development case never sees its own.
+Record the exemplar IDs and count with the prompt version in each
+iteration's entry, so error analysis can attribute a bias to an exemplar.
+This is distinct from leaking outcomes: the holdout cases have no label in
+the system at all, and a development case never sees its own.
 
 Where a library of standard conditions exists, supply it as data with stable
 IDs and let the model select and adapt; conditions written free from nothing
