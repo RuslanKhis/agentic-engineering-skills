@@ -17,6 +17,34 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## The last defects from the Phase 10 triage · 28 October 2026
+
+The workflow-design description now names checkpoint reuse after a changed
+input, a checkpoint too large for its store, multi-day approval waits across
+restarts (ADK resume or a durable engine), draft consistency checks and
+warning-only corrections, which its body already routed (763 to 944
+characters; two ownership rows record the split with evaluation, guardrails
+and safe-api). Deploy hands the Agent Identity decision to
+adk-tool-auth-and-secrets and gives the install step for a missing
+google/skills or Agents CLI skill. Ten shell-dependent scenario assertions
+carry a "reported as not run" escape, one rollback assertion now agrees with
+the release skill, and two screen-placement scenarios follow the ownership
+map.
+
+**Results.** Sonnet 5.5 activation: dev 344 PASS, 10 PARTIAL, 2 FAIL on 178
+cases (332/10/2 on the 172 Phase 10 ran, against 331/12/1; both FAILs are
+existing designer-versus-engineer and parked-label cases, and the workflow
+skill was never chosen for `designer-checkpoint-positive`); held-out 155 of
+156, the one PARTIAL a near-miss the workflow skill already took before. The
+workflow skill now loads in 7 of 7 workflow scenarios (2 of 7 before) and
+they pass 12 of 33 assertions (8 before). Four governance packs and the
+rollout pack ran for the first time (21 of 31). Triage: 4 skill-defect, 4
+assertion, 28 variance rows; two new suspected gaps (workflow's mode table
+does not route a checkpoint over its storage limit; guardrails' human-review
+row does not name unanswered approvals). Spend was $11.70 of a $12 cap; four
+governance packs and the re-runs of the changed assertions stayed unrun.
+[Last defects record](last-defects-2026-10-28.md).
+
 ## Skill defects from the scenario triage · 28 October 2026
 
 Twelve of the thirteen suspected skill defects from the scenario triage were
