@@ -1,0 +1,52 @@
+# MCP Toolbox for Databases configuration for the customer portal agent.
+sources:
+  fernhill-bq:
+    kind: bigquery
+    project: fernhill-analytics
+    location: EU
+    # Read-only at the source: Toolbox dry-runs every statement and rejects anything but SELECT
+    # (writeMode defaults to "blocked"). Do not add writeMode: allowed; the server refuses to start.
+    readOnly: true
+    allowedDatasets:
+      - sales
+
+tools:
+  # The free-form bigquery-execute-sql tool was removed: a customer-facing agent gets reviewed
+  # templates only, and the tenant filter below cannot be applied to model-written SQL.
+  customer-revenue:
+    kind: bigquery-sql
+    source: fernhill-bq
+    description: >-
+      Monthly net revenue for the signed-in customer from a sales table. Use table "invoices_summary"
+      for invoiced revenue or "credit_summary" for credits. The customer is fixed by the portal.
+    statement: |
+      SELECT month, net_revenue_gbp
+      FROM `fernhill-analytics.sales.{{.table}}`
+      WHERE customer_id = @tenant_id
+        AND month BETWEEN @start_month AND @end_month
+      ORDER BY month
+    templateParameters:
+      - name: table
+        type: string
+        description: Table to read.
+        # Template parameters are pasted into the SQL text, so only these two names are accepted.
+        allowedValues:
+          - invoices_summary
+          - credit_summary
+    parameters:
+      # Bound by the portal backend (analytics/portal_agent.py), never supplied by the model.
+      # On toolbox-adk >= 1.4.0 and a server that supports it, add `secure: true` here and use
+      # secure_params= in the client (needs a pin change, so not done in G03).
+      - name: tenant_id
+        type: string
+        description: The signed-in customer's account ID. Set by the portal.
+      - name: start_month
+        type: string
+        description: First month, YYYY-MM-01.
+      - name: end_month
+        type: string
+        description: Last month, YYYY-MM-01.
+
+toolsets:
+  customer-portal:
+    - customer-revenue

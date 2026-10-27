@@ -1,0 +1,53 @@
+{
+  "provenance": {
+    "method": "hand-read of the uncompressed PDF content streams (Grep over the raw files); qualify_ingestion.py was NOT executed (no shell in this session) and no PDF library was used",
+    "ocr_executed": false,
+    "visual_review_executed": false,
+    "thresholds": {"min_chars": 200, "min_alnum_ratio": 0.5, "min_vector_ops": 8, "status": "skill defaults; 4 pages is too few to calibrate"},
+    "char_counts": "approximate (counted by eye from the string operands), not extractor output"
+  },
+  "pages": [
+    {
+      "document": "01-design-code-dc7.pdf", "page": 1,
+      "approx_chars": 860, "alnum_ratio_est": "~0.8", "image_count": 0, "vector_drawing_ops": 0,
+      "density": "text", "table_candidate": false, "drawing_candidate": false,
+      "written_dimensions": ["0.6 m", "2.5 m"], "scale_statements": [],
+      "route": "text", "text_origin": "native",
+      "notes": "Prose policy DC7. Cites Table C1 of the Borough Transport SPD (see 03-cycle-parking-table.pdf)."
+    },
+    {
+      "document": "02-local-plan-p12.pdf", "page": 1,
+      "approx_chars": 41, "alnum_ratio_est": "~0.97", "image_count": 1, "vector_drawing_ops": 0,
+      "density": "low_density", "table_candidate": false, "drawing_candidate": false,
+      "written_dimensions": [], "scale_statements": [],
+      "route": "ocr_or_vision", "text_origin": "native (running header only); body not read",
+      "notes": "Text layer is only the header 'Example Borough Local Plan 2019 - page 12'. Body is one grayscale raster (160x112 px) stretched over 720x504 pt. Scan. Never pass as a text page. Raster is very coarse (about 16 px/inch at print size): expect OCR/vision to read it badly; ask for a higher-resolution source."
+    },
+    {
+      "document": "03-cycle-parking-table.pdf", "page": 1,
+      "approx_chars": 450, "alnum_ratio_est": "~0.8", "image_count": 0, "vector_drawing_ops": 12,
+      "density": "text", "table_candidate": true, "drawing_candidate": false,
+      "written_dimensions": ["2.5 m"], "scale_statements": [],
+      "route": "both", "text_origin": "native",
+      "notes": "Ruled table (6 horizontal + 6 vertical rules, 5 columns, 4 data rows) with 'Note b' below. Each cell is a separate text run, so rebuild rows from coordinates before asking for values; join 'see note b' to the note. The stock script's table heuristic may not fire on this page ('Table C1' has no digit); route set by reading it."
+    },
+    {
+      "document": "04-rear-elevation.pdf", "page": 1,
+      "approx_chars": 100, "alnum_ratio_est": "~0.9", "image_count": 0, "vector_drawing_ops": 16,
+      "density": "low_density", "table_candidate": false, "drawing_candidate": true,
+      "written_dimensions": ["3.2 m", "4 m"], "scale_statements": ["Scale 1:100 @ A3"],
+      "route": "both", "text_origin": "native (title, labels, dimensions, scale)",
+      "notes": "Vector drawing: rear elevation, new garden room, existing house. Written: '3.2 m to eaves'; scale bar 0-2-4 m; 'Scale 1:100 @ A3'. Page is 842x595 pt (A4 landscape), not A3, and the bar is about 45 pt/m, which is not 1:100 at 1:1 print. Treat scale as unreliable: use written dimensions only; any pixel-derived value is a pixel_estimate with its scale assumption."
+    }
+  ],
+  "summary": {
+    "pages": 4,
+    "low_density_pages": [["02-local-plan-p12.pdf", 1], ["04-rear-elevation.pdf", 1]],
+    "image_only_pages": [],
+    "table_candidates": [["03-cycle-parking-table.pdf", 1]],
+    "drawing_candidates": [["04-rear-elevation.pdf", 1]],
+    "reading_order_anomalies": [],
+    "estimated_visual_pass_images": 3,
+    "unresolved_evidence": [["02-local-plan-p12.pdf", 1, "body unread until OCR/vision runs"]]
+  }
+}

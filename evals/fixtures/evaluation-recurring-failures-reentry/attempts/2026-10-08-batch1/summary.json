@@ -1,0 +1,19 @@
+{
+ "batch": "2026-10-08-batch1",
+ "cohort": "A (6 development cases, fixed 2026-10-06)",
+ "code_version": "71c0d4a",
+ "writer": {"model": "gemini-3.5-flash", "prompt": "writer-v5", "schema": "draft-v4"},
+ "review": {"model": "gemini-3.5-flash", "prompt": "review-v3"},
+ "local_tests": "28 passed",
+ "results": [
+  {"case": "PA-2026-0141", "stage_failed": "review", "finding": "Policy T2 parking not addressed although the application states parking"},
+  {"case": "PA-2026-0144", "stage_failed": "review", "finding": "Policy T2 parking not addressed"},
+  {"case": "PA-2026-0146", "stage_failed": "review", "finding": "Table T2.1 not considered for a 4-bedroom house"},
+  {"case": "PA-2026-0149", "stage_failed": "review", "finding": "Policy T2 parking not addressed"},
+  {"case": "PA-2026-0152", "stage_failed": "review", "finding": "Policy ENV3 not considered"},
+  {"case": "PA-2026-0158", "stage_failed": "review", "finding": "Policy T2 crossover splay not addressed"}
+ ],
+ "passed": 0,
+ "charged_usd": 3.86,
+ "diagnosis_at_the_time": "Writer only received LP-H4: the retrieval step passed the first policy document only. Fixed in 9be22f1 (all policy documents passed)."
+}

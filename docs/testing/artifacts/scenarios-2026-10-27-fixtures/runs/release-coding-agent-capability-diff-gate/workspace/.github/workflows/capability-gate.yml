@@ -1,0 +1,97 @@
+name: capability-gate
+
+# pull_request_target runs this file from the base branch, so a pull request
+# cannot edit its own gate. Nothing from the pull request is imported or run:
+# the inspector only parses its source as data.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, labeled]
+
+permissions:
+  contents: read
+  pull-requests: write   # remove a stale approval label on a new push
+
+concurrency:
+  group: capability-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+env:
+  APPROVAL_LABEL: capability-approved
+  INSPECTOR: .claude/skills/adk-agent-security/scripts/inspect_security_surface.py
+
+jobs:
+  gate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Trusted checkout (base branch tip, holds the inspector and gate script)
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: trusted
+          persist-credentials: false
+
+      - name: Untrusted checkout (pull request head, read as data only)
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: head
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Fetch base history for the merge base
+        working-directory: head
+        run: git fetch --no-tags origin ${{ github.event.pull_request.base.sha }}
+
+      - name: Compare capabilities, base against head
+        id: compare
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          MB=$(git -C head merge-base "$BASE_SHA" HEAD)
+          git -C head worktree add -q "$PWD/mb" "$MB"
+          git -C head diff --name-only "$MB" HEAD > changed.txt
+          # -I: do not load modules from the working directory
+          python -I "trusted/$INSPECTOR" --project mb > base.json || true
+          set +e
+          python -I "trusted/$INSPECTOR" --project head --compare base.json > head.json
+          echo "status=$?" >> "$GITHUB_OUTPUT"
+
+      - name: Decide
+        id: decide
+        run: |
+          set +e
+          python -I trusted/ci/capability_gate.py --report head.json \
+            --status "${{ steps.compare.outputs.status }}" --changed-files changed.txt
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          [ "$code" -ne 2 ]   # NOT RUN fails the job
+
+      - name: A new push voids an earlier approval
+        if: github.event.action == 'synchronize' && steps.decide.outputs.code == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh pr edit ${{ github.event.pull_request.number }} --repo "$GITHUB_REPOSITORY" --remove-label "$APPROVAL_LABEL" || true
+
+      - name: Require a code owner's approval label
+        if: steps.decide.outputs.code == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          # The most recent apply of the label must come from someone with
+          # maintain or admin rights; a coding agent's token has neither.
+          actor=$(gh api "repos/$REPO/issues/$PR/events" --paginate \
+            --jq "[.[] | select(.event==\"labeled\" and .label.name==\"$APPROVAL_LABEL\")] | last | .actor.login // empty")
+          if [ -z "$actor" ]; then
+            echo "::error::Capability change needs the '$APPROVAL_LABEL' label from a code owner."; exit 1
+          fi
+          perm=$(gh api "repos/$REPO/collaborators/$actor/permission" --jq .permission)
+          case "$perm" in
+            admin|maintain) echo "Approved by $actor ($perm)." ;;
+            *) echo "::error::'$APPROVAL_LABEL' was applied by $actor ($perm), who is not a code owner."; exit 1 ;;
+          esac

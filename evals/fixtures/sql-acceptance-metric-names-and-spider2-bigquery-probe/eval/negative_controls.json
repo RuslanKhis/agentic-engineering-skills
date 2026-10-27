@@ -1,0 +1,14 @@
+[
+  {
+    "id": "nc-q04-wales-700",
+    "case": "q04-invoices-per-region-september",
+    "note": "Wales changed from 200 to 700; every other row correct. The oracle must fail this.",
+    "rows": [
+      {"region": "Midlands", "invoices": 412},
+      {"region": "North", "invoices": 388},
+      {"region": "Scotland", "invoices": 203},
+      {"region": "South", "invoices": 455},
+      {"region": "Wales", "invoices": 700}
+    ]
+  }
+]

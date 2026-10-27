@@ -1,0 +1,13 @@
+{
+ "stage": "review",
+ "saved_at": "2026-10-22T15:03:12+00:00",
+ "meta": {"usage": {"prompt_tokens": 2890, "completion_tokens": 260, "cost_usd": 0.19}, "prompt": "review-v4", "model": "gemini-3.5-flash"},
+ "payload": {
+  "verdict": "accept",
+  "claims": [
+   {"reason_id": "R1", "support": "supported", "span_ids": ["APP-FORM@1:p1:3", "LP-H4@2024:p31:2", "LP-H4@2024:p31:3"]},
+   {"reason_id": "R2", "support": "supported", "span_ids": ["TS@1:p1:2", "TS@1:p1:3", "LP-ENV3@2024:p58:2"]}
+  ],
+  "findings": []
+ }
+}

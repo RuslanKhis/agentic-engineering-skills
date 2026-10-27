@@ -1,0 +1,129 @@
+{
+ "created": "2026-10-27T10:29:09+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-ae683dff62ffe485e",
+ "commit": "a08979f4fc2ab93fb69c1eb3afc73a0f2cefedd3",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "designer-production-cost-contract",
+   "status": "repo-fixture",
+   "base": [
+    "claims-docs"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/designer-production-cost-contract/situation.md"
+    }
+   ],
+   "note": "Completed proof-of-concept plan and design; no cost contract yet.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-operational-guardrails",
+    "adk-sql-agent-engineering",
+    "deploy-adk-on-google-cloud",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "designer-checkpoint-settles-the-agenda",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-plan"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/designer-checkpoint-settles-the-agenda/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "No shell: plan_status.py and check_schedule.py cannot be run in the workspace.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "designer-tickets-get-journey-goal-and-lint",
+   "status": "repo-fixture",
+   "base": [
+    "claims-docs"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/designer-tickets-get-journey-goal-and-lint/situation.md"
+    }
+   ],
+   "note": "No shell: check_schedule.py and check_tickets.py cannot be run in the workspace.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-agent-evaluation",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "designer-weekly-status-from-plan-evidence",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-plan"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/designer-weekly-status-from-plan-evidence/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "No git history and no shell: plan_status.py --weekly cannot be run in the workspace.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "designer-sow-from-plan",
+   "status": "repo-fixture",
+   "base": [
+    "claims-docs"
+   ],
+   "grader": [
+    {
+     "from": "evals/graders/designer-sow-from-plan/situation.md"
+    }
+   ],
+   "note": "No shell: check_sow.py and check_schedule.py cannot be run in the workspace.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

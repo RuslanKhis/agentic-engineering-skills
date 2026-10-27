@@ -1,0 +1,32 @@
+{
+ "stage": "review",
+ "saved_at": "2026-10-17T10:40:02+00:00",
+ "meta": {
+  "attempt": "a1-review",
+  "draft_revision": "r1",
+  "frame_sha256": "7333842ac96c10678be4535602255095850eb776f1085ef55940b5ce3fe4c82a",
+  "invocation_id": "e-PA-2026-0152-r1-review",
+  "images": [],
+  "usage": {
+   "prompt_tokens": 2950,
+   "completion_tokens": 260,
+   "cost_usd": 0.19
+  }
+ },
+ "payload": {
+  "verdict": "accept",
+  "claims": [
+   {
+    "reason_id": "R1",
+    "support": "supported",
+    "span_ids": [
+     "DAS@1:p1:1",
+     "LP-H4@2024:p31:4"
+    ]
+   }
+  ],
+  "findings": [
+   "Gap on the raised floor level is acknowledged; not decisive for a ground-floor bathroom."
+  ]
+ }
+}

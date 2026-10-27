@@ -1,0 +1,20 @@
+{
+ "batch": "2026-10-21-batch3",
+ "cohort": "A (6 development cases, fixed 2026-10-06)",
+ "code_version": "c41e8b0",
+ "writer": {"model": "gemini-3.5-flash", "prompt": "writer-v7", "schema": "draft-v6 (condition templates as an enum)"},
+ "review": {"model": "gemini-3.5-flash", "prompt": "review-v4"},
+ "request_timeout_s": 120,
+ "local_tests": "34 passed",
+ "results": [
+  {"case": "PA-2026-0141", "stage_failed": "writer", "error": "provider returned 400"},
+  {"case": "PA-2026-0144", "stage_failed": "writer", "error": "provider returned 400"},
+  {"case": "PA-2026-0146", "stage_failed": "writer", "error": "deadline exceeded after 120 s; no response"},
+  {"case": "PA-2026-0149", "stage_failed": "writer", "error": "provider returned 400"},
+  {"case": "PA-2026-0152", "stage_failed": "writer", "error": "deadline exceeded after 120 s; no response"},
+  {"case": "PA-2026-0158", "stage_failed": "writer", "error": "provider returned 400"}
+ ],
+ "passed": 0,
+ "charged_usd": "unknown: four 400s are not billed; two timed-out calls have no usage receipt",
+ "diagnosis_at_the_time": "Gateway instability. Batch stopped by the two-failure stop rule."
+}

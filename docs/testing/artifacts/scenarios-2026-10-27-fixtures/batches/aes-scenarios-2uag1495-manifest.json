@@ -1,0 +1,211 @@
+{
+ "created": "2026-10-27T10:28:31+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-ae683dff62ffe485e",
+ "commit": "a08979f4fc2ab93fb69c1eb3afc73a0f2cefedd3",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "engineer-writes-progress-block-when-stopping",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-plan"
+   ],
+   "copy": [
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/app/store.py",
+     "to": "app/store.py"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/app/preferences.py",
+     "to": "app/preferences.py"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/app/server.py",
+     "to": "app/server.py"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/app/prompts.py",
+     "to": "app/prompts.py"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/tests/test_preferences.py",
+     "to": "tests/test_preferences.py"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/docs/tickets/support/G01.md",
+     "to": "docs/tickets/support/G01.md"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/docs/architecture/support.md",
+     "to": "docs/architecture/support.md"
+    },
+    {
+     "from": "evals/fixtures/engineer-parallel-tickets-with-overlapping-touches/web",
+     "to": "web"
+    }
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-writes-progress-block-when-stopping/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "engineer-parallel-tickets-with-overlapping-touches",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-plan"
+   ],
+   "copy": [
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/app/store.py",
+     "to": "app/store.py"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/app/preferences.py",
+     "to": "app/preferences.py"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/app/server.py",
+     "to": "app/server.py"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/app/prompts.py",
+     "to": "app/prompts.py"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/tests/test_preferences.py",
+     "to": "tests/test_preferences.py"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/docs/tickets/support/G01.md",
+     "to": "docs/tickets/support/G01.md"
+    },
+    {
+     "from": "evals/fixtures/engineer-resumes-from-progress-block/docs/architecture/support.md",
+     "to": "docs/architecture/support.md"
+    },
+    {
+     "from": "evals/fixtures/engineer-writes-progress-block-when-stopping/AGENTS.md",
+     "to": "AGENTS.md"
+    }
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-parallel-tickets-with-overlapping-touches/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "plan_status.py needs a shell; comparing touches by hand satisfies the first assertion.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-system-designer",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "chosen-test-first-workflow",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/chosen-test-first-workflow/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The tdd skill the user chose is external and not installed by the runner.",
+   "skills_missing": [
+    "tdd"
+   ],
+   "skills_installed": [
+    "adk-engineer",
+    "safe-api-tool-calls"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "guardrails-continuation-accounting-and-duplicates",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/guardrails-continuation-accounting-and-duplicates/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-operational-guardrails",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "guardrails-escalation-two-sided-calibration",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/guardrails-escalation-two-sided-calibration/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-operational-guardrails",
+    "adk-agent-evaluation",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "guardrails-unanswered-approval-and-screening-placement",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/guardrails-unanswered-approval-and-screening-placement/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-operational-guardrails",
+    "adk-agent-security",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

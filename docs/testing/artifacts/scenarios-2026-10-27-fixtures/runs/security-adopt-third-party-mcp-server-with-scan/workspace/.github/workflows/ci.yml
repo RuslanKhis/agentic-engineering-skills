@@ -1,0 +1,49 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: python:3.12-slim
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -e .
+      - run: python -m unittest discover -s tests -t .
+  mcp-definitions:
+    runs-on: ubuntu-latest
+    container: nikolaik/python-nodejs:python3.12-nodejs22-slim
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -e .
+      - name: Freightline tool definitions match the recorded manifest
+        run: python scripts/check_mcp_definitions.py
+  mcp-scan:
+    # Snyk Agent Scan of the pinned Freightline server. Evidence beside the allow-list and the
+    # definition check above, never instead of them. Independent of the other jobs.
+    runs-on: ubuntu-latest
+    container: nikolaik/python-nodejs:python3.12-nodejs22-slim
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned scanner
+        run: pip install snyk-agent-scan==0.6.9
+      - name: Snyk Agent Scan (0 pass, 1 block, anything else NOT RUN)
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          if [ -z "$SNYK_TOKEN" ]; then
+            echo "::error::SNYK_TOKEN missing (fork PR or unset secret): scan NOT RUN"
+            exit 1
+          fi
+          # The scanner executes the commands in the config, so it runs only in this ephemeral
+          # container, on a config that tests/test_mcp_scan_config.py ties to app/agent.py.
+          rc=0
+          snyk-agent-scan scan --ci --dangerously-run-mcp-servers mcp-scan/freightline-shipping.json || rc=$?
+          case "$rc" in
+            0) echo "scan passed" ;;
+            1) echo "::error::scan found risks or operational failures: blocked"; exit 1 ;;
+            *) echo "::error::scan NOT RUN (exit $rc)"; exit 1 ;;
+          esac

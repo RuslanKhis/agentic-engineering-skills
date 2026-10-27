@@ -1,0 +1,43 @@
+{
+  "assumptions": [
+    "Q: For invalid citations (h06, h16), should secondary dimensions assess the supplied text or only authenticated evidence? Assumed: the supplied text, with support forced to unsupported because the citation cannot be authenticated.",
+    "Q: For the pixel case (h12), is the claim an unsupported value or a contradicted method claim? Assumed: the observation asserts that the pixel line establishes the depth, which is a method claim the selected 'not to scale' note contradicts, so contradicted. The alternative reading is unsupported with contrary_evidence none.",
+    "Q: For h07, does the selected sentence govern a TEN party? Assumed: the rule is the right one (applicable) but the selection drops the exception, so it is incomplete and the full source contradicts the observation."
+  ],
+  "judgments": [
+    {"case_id": "h01", "source_identity": "valid", "span_completeness": "incomplete", "applicability": "applicable", "contrary_evidence": "none", "support": "unsupported",
+     "rationale": "The quote occurs in door-p1 but is only the form question. The answer '1.1 m.' is on the same page and not selected, so the cited span does not justify the value."},
+    {"case_id": "h02", "source_identity": "valid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "none", "support": "supported",
+     "rationale": "The exact sentence about U1's material is quoted and states the observation."},
+    {"case_id": "h03", "source_identity": "valid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "contradiction", "support": "contradicted",
+     "rationale": "The selected log says 62 C at 07:00. The observation says 58 C. The cited span itself contradicts it (the 58 C contractor sheet is not case evidence here)."},
+    {"case_id": "h04", "source_identity": "valid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "none", "support": "supported",
+     "rationale": "The span keeps both question and answer, '1.1 m.' for door D2, and matches the observation."},
+    {"case_id": "h05", "source_identity": "valid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "none", "support": "supported",
+     "rationale": "The written dimension 4.5 m is quoted. The case asks for the written value, not a measured one, so the not-to-scale caveat does not undercut it."},
+    {"case_id": "h06", "source_identity": "invalid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "none", "support": "unsupported",
+     "rationale": "Source ID stage-p9 does not exist in the registry (the real one is stage-p1). The quoted text is a whole unit and would be on point, but the citation cannot be authenticated, so it cannot support the claim."},
+    {"case_id": "h07", "source_identity": "valid", "span_completeness": "incomplete", "applicability": "applicable", "contrary_evidence": "contradiction", "support": "contradicted",
+     "rationale": "The selection drops the exception. The full rule lets events with a temporary event notice continue until 23:00, and this party holds one, so 'must stop by 21:00' is wrong for it."},
+    {"case_id": "h08", "source_identity": "valid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "none", "support": "supported",
+     "rationale": "The inspection page states the stage floor is sprung oak. The observation repeats it, which answers the describe-the-stage request within the evidence."},
+    {"case_id": "h09", "source_identity": "valid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "none", "support": "unsupported",
+     "rationale": "The field is '[not recorded]', so no value is established. 58 C appears only in another source that is not case evidence. Missing evidence is not contradiction."},
+    {"case_id": "h10", "source_identity": "valid", "span_completeness": "complete", "applicability": "not_applicable", "contrary_evidence": "none", "support": "unsupported",
+     "rationale": "The quote is real and complete but concerns U1's material, not its capacity. The 20 litres line is on the page and was not selected."},
+    {"case_id": "h11", "source_identity": "valid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "none", "support": "supported",
+     "rationale": "The rota says the hall is unlocked at 08:30 on Saturdays. 'Opened at half past eight in the morning' is a faithful paraphrase."},
+    {"case_id": "h12", "source_identity": "valid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "contradiction", "support": "contradicted",
+     "rationale": "The sketch says it is not to scale and no pixel-to-metre factor is given (metres_per_pixel is null). So the claim that the 180-pixel line establishes 4.5 m is contradicted as a method claim. The 4.5 m figure comes from the written label, not the pixels. See the assumption on the alternative label."},
+    {"case_id": "h13", "source_identity": "valid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "none", "support": "supported",
+     "rationale": "The full rule with its exception is quoted. A party holding a temporary event notice may continue until 23:00."},
+    {"case_id": "h14", "source_identity": "valid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "unresolved", "support": "unresolved",
+     "rationale": "The selected log says 62 C, but the contractor sheet in the additional context says 58 C for the same boiler and time. Neither has precedence and neither is a verified correction, so the conflict is unresolved."},
+    {"case_id": "h15", "source_identity": "valid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "contradiction", "support": "contradicted",
+     "rationale": "The selected complete rule itself includes the temporary event notice exception, so 'without exception' is contradicted."},
+    {"case_id": "h16", "source_identity": "invalid", "span_completeness": "complete", "applicability": "applicable", "contrary_evidence": "none", "support": "unsupported",
+     "rationale": "The quote is attributed to stage-p1 (the hall inspection), where it does not occur. It exists only in door-p1. The mismatched citation cannot be authenticated, so it is rejected even though the fact is true elsewhere."},
+    {"case_id": "h17", "source_identity": "valid", "span_completeness": "complete", "applicability": "not_applicable", "contrary_evidence": "none", "support": "unsupported",
+     "rationale": "The surveyor-name line is real and complete but says nothing about the clear opening. The right document does not make this field relevant."}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+ "run_id": "PA-2026-0181-r1",
+ "case_id": "PA-2026-0181",
+ "writer": {
+  "model": "gemini-3.5-flash",
+  "prompt": "writer-v7"
+ },
+ "review": {
+  "status": "not run"
+ },
+ "export": {
+  "status": "not run"
+ }
+}

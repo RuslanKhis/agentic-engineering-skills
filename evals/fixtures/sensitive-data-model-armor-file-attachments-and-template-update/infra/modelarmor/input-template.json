@@ -1,0 +1,21 @@
+{
+  "name": "projects/lindqvist-claims-prod/locations/europe-west4/templates/claims-input",
+  "filterConfig": {
+    "raiSettings": {
+      "raiFilters": [
+        {"filterType": "HARASSMENT", "confidenceLevel": "MEDIUM_AND_ABOVE"},
+        {"filterType": "HATE_SPEECH", "confidenceLevel": "MEDIUM_AND_ABOVE"},
+        {"filterType": "DANGEROUS", "confidenceLevel": "MEDIUM_AND_ABOVE"},
+        {"filterType": "SEXUALLY_EXPLICIT", "confidenceLevel": "MEDIUM_AND_ABOVE"}
+      ]
+    },
+    "piAndJailbreakFilterSettings": {"filterEnforcement": "ENABLED", "confidenceLevel": "MEDIUM_AND_ABOVE"},
+    "maliciousUriFilterSettings": {"filterEnforcement": "ENABLED"},
+    "sdpSettings": {"basicConfig": {"filterEnforcement": "ENABLED"}}
+  },
+  "templateMetadata": {
+    "logTemplateOperations": true,
+    "logSanitizeOperations": false,
+    "multiLanguageDetection": {"enableMultiLanguageDetection": false}
+  }
+}

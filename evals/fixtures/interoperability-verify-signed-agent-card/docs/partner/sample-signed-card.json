@@ -1,0 +1,35 @@
+{
+  "protocolVersion": "1.0",
+  "name": "Warranty agent",
+  "description": "Coverage and repair options for a serial number.",
+  "url": "https://partner.example/a2a/warranty",
+  "version": "3.1.0",
+  "capabilities": {
+    "streaming": true
+  },
+  "defaultInputModes": [
+    "text/plain"
+  ],
+  "defaultOutputModes": [
+    "text/plain"
+  ],
+  "skills": [
+    {
+      "id": "coverage",
+      "name": "Coverage check",
+      "description": "Is this serial covered?",
+      "tags": [
+        "warranty"
+      ]
+    }
+  ],
+  "signatures": [
+    {
+      "protected": "eyJhbGciOiJFUzI1NiIsImtpZCI6ImNhcmQtMjAyNi0xMCIsInR5cCI6IkpPU0UiLCJqa3UiOiJodHRwczovL2Nkbi5wYXJ0bmVyLWFzc2V0cy5leGFtcGxlL2p3a3MuanNvbiJ9",
+      "signature": "MEUCIQDx3y0v4m1bJ9oGk7cA2sYkq0lq8v1pX7c3m9aQh1zZ2wIgW4p8k2Yt0cR6m5aJ1vQ9fL3sD7eN2bH4kT8uX0yC6gE",
+      "header": {
+        "kid": "card-2026-10"
+      }
+    }
+  ]
+}

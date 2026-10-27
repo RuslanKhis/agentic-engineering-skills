@@ -1,0 +1,11 @@
+release: 2026.10.20
+model: gemini-3.5-flash-002
+judge_model: gemini-3.5-pro-001
+prompt_sha256:
+  ROOT_INSTRUCTION: 6b1f3e2d0c9a8b7f6e5d4c3b2a1908f7e6d5c4b3a2918f7e6d5c4b3a29180f7e
+eval_sets:
+  - eval/support.evalset.json (34 cases)
+gates:
+  pull_request: scripted-model Runner tests + adk eval replay (C5)
+  promotion: none beyond the PR gate
+production_quality: weekly review owned by Priya (C6), not yet automated

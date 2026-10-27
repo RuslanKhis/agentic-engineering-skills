@@ -1,0 +1,22 @@
+{
+ "date": "2026-10-21",
+ "model": "gemini-3.5-flash",
+ "judge_model": "default",
+ "num_runs": 1,
+ "passed": 37,
+ "total": 40,
+ "failures": [
+  {
+   "eval_id": "booking-06-move",
+   "reason": "tool trajectory mismatch: expected get_my_bookings, search_slots, book_slot, cancel_booking; got search_slots, get_my_bookings, book_slot, cancel_booking"
+  },
+  {
+   "eval_id": "booking-14-move",
+   "reason": "tool trajectory mismatch: expected ..., book_slot, cancel_booking; got ..., cancel_booking, book_slot"
+  },
+  {
+   "eval_id": "booking-31-status",
+   "reason": "final_response_match_v2 0.62 below 0.8"
+  }
+ ]
+}

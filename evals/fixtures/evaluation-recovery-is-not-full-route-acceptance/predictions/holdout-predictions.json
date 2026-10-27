@@ -1,0 +1,12 @@
+{
+ "generated": "2026-10-24",
+ "workflow_version": "v14",
+ "source": "assembled from saved writer and review checkpoints; PA-2026-0141 from the recovered continuation",
+ "predictions": [
+  {"case_id": "PA-2026-0141", "decision": "approve", "reasons": ["The 3.6 m projection is within the 4.0 m limit for terraces (H4)."], "conditions": [], "gaps": []},
+  {"case_id": "PA-2026-0158", "decision": "approve", "reasons": ["Splay waived in writing (T2); parking meets Table T2.1."], "conditions": [], "gaps": []},
+  {"case_id": "PA-2026-0177", "decision": "refuse", "reasons": ["Harm to protected oak T1 cannot be ruled out (ENV3)."], "conditions": [], "gaps": ["T1 root protection area not calculated."]},
+  {"case_id": "PA-2026-0190", "decision": "approve_with_conditions", "reasons": ["Side window within 10 m of No. 42 (H4)."], "conditions": ["Window W4 obscure-glazed and non-opening below 1.7 m."], "gaps": []},
+  {"case_id": "PA-2026-0193", "decision": "refuse", "reasons": ["Extension within 3.8 m of a protected oak without a method statement (ENV3)."], "conditions": [], "gaps": []}
+ ]
+}

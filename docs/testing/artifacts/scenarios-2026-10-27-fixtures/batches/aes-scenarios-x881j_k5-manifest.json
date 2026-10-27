@@ -1,0 +1,142 @@
+{
+ "created": "2026-10-27T10:28:31+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-ae683dff62ffe485e",
+ "commit": "a08979f4fc2ab93fb69c1eb3afc73a0f2cefedd3",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "security-review-untrusted-content-with-write-tools",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/security-review-untrusted-content-with-write-tools/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Running the read-only security inspector needs a shell, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "protect-adk-sensitive-data",
+    "adk-operational-guardrails",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "security-code-execution-environment-selection",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/security-code-execution-environment-selection/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-agent-security",
+    "deploy-adk-on-google-cloud",
+    "adk-tool-interface-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "security-refund-agent-build-time-controls-vs-screening",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/security-refund-agent-build-time-controls-vs-screening/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "adk-operational-guardrails",
+    "safe-api-tool-calls",
+    "adk-agent-interoperability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "security-adversarial-suite-ported-goal-classes",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/security-adversarial-suite-ported-goal-classes/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "adk-agent-evaluation",
+    "adk-operational-guardrails"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "security-red-team-a2a-exposed-agent-with-pyrit",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/security-red-team-a2a-exposed-agent-with-pyrit/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "adk-agent-interoperability",
+    "adk-agent-evaluation",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "security-garak-ci-gate-on-adk-runner",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/security-garak-ci-gate-on-adk-runner/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "adk-agent-evaluation",
+    "adk-release-engineering"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

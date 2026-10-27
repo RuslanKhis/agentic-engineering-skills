@@ -1,0 +1,1140 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T10:47:04+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/mem2/aes-scenarios-9oqgf4_t",
+ "commit": "1e1a99626ba7c3a089c2536e36f5faf2a6e80216",
+ "scenarios_sha256": "f0b1726a3259e084ed3ed850f6da5be02cc17c5a8aae2b5eecdf84f5be4558d0",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "engineer-ticket-creates-cloud-sql",
+   "expected_primary": "adk-memory-architecture",
+   "fixture_status": "repo-fixture",
+   "note": "No gcloud, credentials or shell: instance creation and the dry run cannot execute in the run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "deploy-adk-on-google-cloud",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1525,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Writes the deletion script beside the creation script in the same change, deleting only the instance this ticket owns, refusing to run without the approved scope, and tests it at least by a dry run.",
+     "verdict": "FAIL",
+     "quote": "Baseline `pass_to_pass` tests, `tests.test_sessions`, `bash -n` and both dry runs.",
+     "quote_found": true,
+     "reason": "The delete script was written beside the create script, scoped and refusing without confirmation, but no dry run or other test of it was executed, so the 'tests it at least by a dry run' requirement is not met.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Records the instance in the Evidence section with its cleanup command and current state (absent, retained, or unknown) rather than only the creation command's success.",
+     "verdict": "PASS",
+     "quote": "support-sessions-dev (Cloud SQL, PostgreSQL 16, db-custom-1-3840, 10 GB SSD,\n  private IP, europe-west2): absent; cleanup: `PROJECT_ID=harbour-support-dev\n  CONFIRM_DELETE=support-sessions-dev deploy/delete_sessions_db.sh`; verified:\n  not created in this session",
+     "quote_found": true,
+     "reason": "Evidence records the instance with state absent, a cleanup command and the reason it was not created.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Notes that backups and point-in-time recovery retention outlive the instance and that the teardown ticket must check them.",
+     "verdict": "FAIL",
+     "quote": "Deleting the instance removes its data; sessions are lost.",
+     "quote_found": true,
+     "reason": "Nothing in the ticket, README or final answer notes that backups or point-in-time recovery retention outlive the instance or that G06 must check them.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Does not delete the instance in this ticket and does not treat a successful create as proof of cost; names the billing readback as the teardown ticket's verification.",
+     "verdict": "FAIL",
+     "quote": "Lifetime owned by G06.",
+     "quote_found": true,
+     "reason": "The instance was not deleted and the price was flagged unconfirmed, but the billing readback is not named as G06's verification; only the instances list absence check appears.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3041,
+   "files": [
+    "app/server.py",
+    "app/settings.py",
+    "deploy/README.md",
+    "deploy/create_sessions_db.sh",
+    "deploy/delete_sessions_db.sh",
+    "deploy/deploy.sh",
+    "docs/tickets/support/G03.md",
+    "tests/test_sessions.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 101.9,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 29,
+    "total_cost_usd": 0.3307271,
+    "duration_ms": 100737,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [
+     "adk-engineer/references/ticket-lifecycle.md",
+     "adk-memory-architecture/references/sessions-state.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-memory-architecture": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-tool-auth-and-secrets": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 28,
+    "catalogue": [
+     "adk-engineer",
+     "adk-memory-architecture",
+     "adk-tool-auth-and-secrets",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-memory-architecture": false,
+    "deploy-adk-on-google-cloud": false,
+    "adk-tool-auth-and-secrets": false
+   }
+  },
+  {
+   "id": "memory-write-back-loop-from-horizon",
+   "expected_primary": "adk-memory-architecture",
+   "fixture_status": "repo-fixture",
+   "note": "SDK-dependent tests skip: google-adk is not installed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-agent-evaluation",
+    "optimise-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.3222,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Chooses an after_agent_callback write-back scoped by the trusted user and site, throttled, and names the Horizon recipe's loop (throttled flush, background judge fork, pre-compaction flush, nightly consolidation) as a pattern to lift rather than copying its code.",
+     "verdict": "FAIL",
+     "quote": "Not adopted wholesale. Used ideas: save through a tool, content screening, small bounded facts, throttled flush.",
+     "quote_found": true,
+     "reason": "It uses an after_agent_callback scoped by user and names the Horizon loop's elements, but it never actually throttles the flush (it drains the outbox every turn, with only a bounded retry count), and it rejects most of the loop rather than lifting it as a pattern.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Adds what the recipe lacks: consent per topic, correction and erasure by label or revision, and a test that a memory-service failure is observable rather than an empty result.",
+     "verdict": "PASS",
+     "quote": "test_recall_failure_is_not_an_empty_result_and_does_not_log_content",
+     "quote_found": true,
+     "reason": "It adds per-topic consent, correction and deletion by fact id, and tests that a failure surfaces as MemoryUnavailable rather than an empty result.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Treats written memory as an untrusted-input boundary (content scan before write) and keeps exact user settings in a profile record, not semantic memory.",
+     "verdict": "FAIL",
+     "quote": "Three topics only: `answer_style`, `kit`, `site_note`",
+     "quote_found": true,
+     "reason": "Content screening before write is present, but exact settings such as units and language are saved as semantic memory (answer_style, e.g. 'I want metric torque values') rather than in a separate profile record.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Writes scripted-model Runner tests for cross-user denial and forgetting, reported as not run without the SDK, and does not change the google-adk pin.",
+     "verdict": "FAIL",
+     "quote": "28 tests in `tests/test_memory_controls.py` and `tests/test_memory_adk.py`",
+     "quote_found": true,
+     "reason": "The tests call the controls directly and use SimpleNamespace stubs rather than scripted-model Runner tests, so cross-user denial and forgetting are not tested through a Runner; the unchanged pin is not shown either.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3656,
+   "files": [
+    "docs/memory-design.md",
+    "fieldline/agent.py",
+    "fieldline/memory_adk.py",
+    "fieldline/memory_controls.py",
+    "fieldline/services.py",
+    "tests/test_memory_adk.py",
+    "tests/test_memory_controls.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 356.6,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 26,
+    "total_cost_usd": 0.8806044000000001,
+    "duration_ms": 355453,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-memory-architecture"
+    ],
+    "skill_files_read": [
+     "adk-memory-architecture/references/memory-bank.md",
+     "adk-memory-architecture/references/integration-recipes.md",
+     "adk-memory-architecture/references/operating-rules.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-memory-architecture": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 3
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "optimise-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [
+     {
+      "tool": "Glob",
+      "input": "{\"pattern\": \"**/google/adk/memory/base_memory_service.py\", \"path\": \"/usr/local/lib\"}"
+     }
+    ],
+    "tool_calls": 24,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-engineer",
+     "adk-memory-architecture",
+     "optimise-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-memory-architecture": true,
+    "adk-agent-evaluation": false,
+    "optimise-adk-on-google-cloud": false
+   }
+  },
+  {
+   "id": "memory-poisoned-fact-rollback-and-update-cases",
+   "expected_primary": "adk-memory-architecture",
+   "fixture_status": "repo-fixture",
+   "note": "No Memory Bank access: rollback and live recall cannot run in the session.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-memory-architecture",
+    "adk-agent-security",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1893,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Explains that Memory Bank's consolidation updates a memory the new address contradicts and that the test is a knowledge-update case where the new value wins and the old is not surfaced.",
+     "verdict": "FAIL",
+     "quote": "the `delivery_details` topic now tells consolidation to update the single current address rather than add a second one.",
+     "quote_found": true,
+     "reason": "It sets the topic to update and adds a knowledge-update case, but it never explains that Memory Bank consolidation updates a contradicted memory, and it admits that newest-wins is not enforced or proven.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Rolls the poisoned memory back to its previous revision by target_revision_id and labels generated revisions by data source so the injection's revisions can be listed and erased.",
+     "verdict": "PASS",
+     "quote": "client.agent_engines.memories.rollback(name=memory_name, target_revision_id=target.name.rsplit(\"/\", 1)[-1])",
+     "quote_found": true,
+     "reason": "Rollback is done by target_revision_id, and generated revisions are labelled by source, session and run date so they can be listed; the answer calls the rollback unverified, but the mechanism is implemented.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Adds knowledge-update and abstention cases to the gold set structured by the five memory abilities, measured before and after.",
+     "verdict": "FAIL",
+     "quote": "g07–g11 have none, so they show `no_output` until someone runs them live.",
+     "quote_found": true,
+     "reason": "Knowledge-update and abstention cases were added, but nothing was measured before or after, so the 'measured before and after' requirement is not met.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Keeps memory as an untrusted-input boundary with screening before write-back, and reports the live Memory Bank calls as not run.",
+     "verdict": "PASS",
+     "quote": "skips any session whose text addresses the assistant (e.g. \"SYSTEM NOTE FOR ASSISTANT\")",
+     "quote_found": true,
+     "reason": "The nightly job screens sessions before write-back, memory is treated as granting no authority, and the answer says the live calls were not run (no shell, cloud steps not done).",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    1
+   ],
+   "final_chars": 3689,
+   "files": [
+    "README.md",
+    "eval/memory_gold.jsonl",
+    "eval/score_recall.py",
+    "jobs/__init__.py",
+    "jobs/memory_repair.py",
+    "jobs/nightly_generate.py",
+    "pinecrest/agent.py",
+    "pinecrest/memory_config.py",
+    "pinecrest/memory_policy.py",
+    "tests/test_memory_safety.py",
+    "tests/test_score_recall.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 178.4,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 31,
+    "total_cost_usd": 0.47829419999999995,
+    "duration_ms": 177168,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-memory-architecture"
+    ],
+    "skill_files_read": [
+     "adk-memory-architecture/references/memory-bank.md",
+     "adk-memory-architecture/references/retrieval-strategy.md"
+    ],
+    "skill_md_loaded": {
+     "adk-memory-architecture": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 29,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-security",
+     "adk-memory-architecture",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-memory-architecture": true,
+    "adk-agent-security": false,
+    "adk-agent-evaluation": false
+   }
+  },
+  {
+   "id": "engineer-gcp-goal-unaffected-by-portability",
+   "expected_primary": "adk-memory-architecture",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-portability-planning",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0924,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Routes G02 to adk-memory-architecture and builds it as the plan describes on GCP and Google ADK.",
+     "verdict": "PASS",
+     "quote": "`claims/server.py`: passes `VertexAiMemoryBankService` on the existing `AGENT_ENGINE_ID` to the Runner",
+     "quote_found": true,
+     "reason": "Loaded adk-memory-architecture and built the plan's route: Memory Bank service on the Runner, PreloadMemoryTool, after_agent_callback with a consent check, InMemoryMemoryService tests, with honest reporting that nothing was run.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Does not load adk-portability-planning for G02.",
+     "verdict": "PASS",
+     "quote": "### Skills loaded\n\nadk-memory-architecture",
+     "quote_found": true,
+     "reason": "Only adk-memory-architecture was loaded; adk-portability-planning was not.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Adds no adapter, abstraction layer or provider-neutral wrapper that G02's acceptance items do not ask for, even though G07 exists.",
+     "verdict": "PASS",
+     "quote": "G07 (the portability write-up) is untouched.",
+     "quote_found": true,
+     "reason": "The new code uses ADK and GCP services directly. The MemorySettings Protocol in claims/memory.py is a small test seam for the consent check, not a provider-neutral wrapper, and nothing was added for portability.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 3,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2027,
+   "files": [
+    "claims/agent.py",
+    "claims/firestore_repo.py",
+    "claims/memory.py",
+    "claims/server.py",
+    "docs/plans/claims.md",
+    "tests/test_memory.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 62.2,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 22,
+    "total_cost_usd": 0.2527013,
+    "duration_ms": 61008,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-memory-architecture"
+    ],
+    "skill_files_read": [
+     "adk-memory-architecture/SKILL.md",
+     "adk-memory-architecture/references/memory-bank.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-memory-architecture": {
+      "loaded": true,
+      "how": "read",
+      "other_files_read": 1
+     },
+     "adk-portability-planning": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [
+     {
+      "tool": "Glob",
+      "input": "{\"pattern\": \"**/site-packages/google/adk/agents/context.py\", \"path\": \"/Users/ruslankhissamiyev\"}"
+     }
+    ],
+    "tool_calls": 21,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-engineer",
+     "adk-memory-architecture",
+     "adk-portability-planning",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-memory-architecture": true,
+    "adk-portability-planning": false,
+    "adk-agent-evaluation": false
+   }
+  },
+  {
+   "id": "memory-document-shape-and-source-coordinates",
+   "expected_primary": "adk-memory-architecture",
+   "fixture_status": "repo-fixture",
+   "note": "Running the grouping against the retained run needs a shell, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-memory-architecture",
+    "adk-agent-evaluation",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1116,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Keeps document/version/page/hierarchy and cell occurrence identities unambiguous despite equal text or local numbering.",
+     "verdict": "FAIL",
+     "quote": "Key units by `(document, tuple(clause_path))`. Test: 4.2(a) and 4.3(a) give different units.",
+     "quote_found": true,
+     "reason": "It diagnosed the identity collisions and dropped cells but only proposed remedies without changing anything, so identities were not kept unambiguous.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Distinguishes physical-page adjacency from selected-pack order and preserves clause/header/note qualifications during grouping or splitting.",
+     "verdict": "FAIL",
+     "quote": "Resolve continuations through `continues`/`continued_by` record IDs, independent of pack\n   order, and append the record ID and page.",
+     "quote_found": true,
+     "reason": "It identified the pack-order versus adjacency problem and the dropped qualifications, but it did not implement the grouping or splitting fix.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 3,
+     "assertion": "Classifies missing operative input or unsupported image/shape before generation, without blaming a reviewer that cannot see the missing policy.",
+     "verdict": "FAIL",
+     "quote": "The reviewer was right to reject the draft, and I didn't treat these corrections as a pass.",
+     "quote_found": true,
+     "reason": "It does recognize the reviewer was right and the missing page-17 input, but it treats it as a retrieval issue needing a separate look and does not classify missing operative input/unsupported image before generation as a gate.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Tests complete representation and actual-sized storage/reopen without truncation and keeps unavailable real extraction/visual evidence explicit.",
+     "verdict": "FAIL",
+     "quote": "Bash was disabled in this session, so I couldn't execute anything.",
+     "quote_found": true,
+     "reason": "No complete-representation or actual-sized storage round trip was run; it only reasoned that storage has no size limit, although it did keep the missing PDF and image evidence explicit.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Changes the earliest affected producer and invalidates parser/representation-dependent descendants while preserving eligible upstream artifacts and failed originals.",
+     "verdict": "FAIL",
+     "quote": "No fixes. The remedies are in `analysis/FINDINGS.md`",
+     "quote_found": true,
+     "reason": "It changed no producer and did not name grouping as the earliest affected producer or list which descendant envelopes to invalidate while keeping the failed original.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 0,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.8,
+   "unstable": [
+    1,
+    2,
+    3
+   ],
+   "final_chars": 3174,
+   "files": [
+    "analysis/FINDINGS.md",
+    "analysis/audit_run.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 106.8,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 22,
+    "total_cost_usd": 0.29540459999999996,
+    "duration_ms": 105651,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-memory-architecture"
+    ],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-memory-architecture": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-workflow-design": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 20,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-memory-architecture",
+     "adk-workflow-design",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-memory-architecture": true,
+    "adk-agent-evaluation": false,
+    "adk-workflow-design": false
+   }
+  }
+ ]
+}

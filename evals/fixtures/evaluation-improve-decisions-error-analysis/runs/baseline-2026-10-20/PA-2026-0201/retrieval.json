@@ -1,0 +1,10 @@
+{
+ "queries": [
+  "Convert the integral garage to a bedroom"
+ ],
+ "retrieved": [
+  "LP-H4",
+  "LP-T2"
+ ],
+ "k": 2
+}

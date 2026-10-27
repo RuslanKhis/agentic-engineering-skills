@@ -1,0 +1,15 @@
+[project]
+name = "claims-helper"
+version = "0.2.0"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+  "google-adk>=2.12.0,<3",
+  "google-cloud-aiplatform[agent-engines]>=1.120.0,<2",
+  "opentelemetry-exporter-gcp-trace>=1.9.0,<2",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3.0,<9"]
+
+[tool.agents-cli]
+manifest = "agents-cli-manifest.yaml"

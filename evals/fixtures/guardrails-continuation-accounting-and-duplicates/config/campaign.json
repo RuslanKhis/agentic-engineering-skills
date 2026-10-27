@@ -1,0 +1,9 @@
+{
+  "campaign_id": "planning-review-2026-10",
+  "cohort": ["case-01", "case-02", "case-03", "case-04", "case-05", "case-06", "case-07", "case-08"],
+  "envelope": {"max_sends": 20, "max_minutes": 90, "spend_cents": 1600},
+  "stages": {
+    "generation": {"spend_cents": 1000, "max_sends": 10, "reserve_cents": 110},
+    "review": {"spend_cents": 600, "max_sends": 10, "reserve_cents": 60}
+  }
+}

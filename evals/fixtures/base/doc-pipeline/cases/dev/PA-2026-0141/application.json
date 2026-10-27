@@ -1,0 +1,16 @@
+{
+  "case_id": "PA-2026-0141",
+  "address": "12 Linnet Row, Eastmere",
+  "proposal": "Single-storey rear extension to a terraced house",
+  "documents": [
+    {"doc_id": "APP-FORM", "version": "1", "title": "Application form", "pages": [
+      {"page": 1, "text": "Site: 12 Linnet Row, Eastmere\nDwelling: mid-terrace, 3 bedrooms\nProposal: single-storey rear extension, kitchen\nParking: one off-street space, unchanged"}
+    ]},
+    {"doc_id": "DAS", "version": "1", "title": "Design and access statement", "pages": [
+      {"page": 1, "text": "The extension projects 3.6 m beyond the original rear wall.\nWalls in buff brick to match the house; flat roof 3.1 m high.\nNo windows face the neighbours."}
+    ]},
+    {"doc_id": "NBR-1", "version": "1", "title": "Neighbour comment, 10 Linnet Row", "pages": [
+      {"page": 1, "text": "We are worried about light to our kitchen window.\nThe kitchen is our main living room."}
+    ]}
+  ]
+}

@@ -1,0 +1,9 @@
+{
+ "note": "end-to-end wall-clock per case on earlier uninterrupted runs (v12-v13)",
+ "runs": [
+  {"run_id": "PA-2026-0141-r2", "version": "v12", "seconds": 412},
+  {"run_id": "PA-2026-0158-r2", "version": "v12", "seconds": 388},
+  {"run_id": "PA-2026-0177-r3", "version": "v13", "seconds": 455},
+  {"run_id": "PA-2026-0152-r2", "version": "v13", "seconds": 371}
+ ]
+}

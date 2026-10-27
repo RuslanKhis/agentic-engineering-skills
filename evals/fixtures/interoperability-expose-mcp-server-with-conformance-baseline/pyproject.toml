@@ -1,0 +1,9 @@
+[project]
+name = "paper-research-agent"
+version = "0.6.0"
+requires-python = ">=3.11"
+dependencies = [
+  "google-adk==2.12.0",
+  "mcp>=2.0,<3",
+  "uvicorn==0.37.0",
+]

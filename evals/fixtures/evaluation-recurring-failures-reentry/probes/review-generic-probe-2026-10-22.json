@@ -1,0 +1,13 @@
+{
+ "probe": "review route, small generic JSON request through the controlled transport",
+ "date": "2026-10-22",
+ "request": {
+  "url": "https://gateway.example.invalid/v1/chat/completions",
+  "model": "gemini-3.5-flash",
+  "response_format": {"type": "json_schema", "json_schema": {"name": "ping", "strict": true, "schema": {
+   "type": "object", "required": ["ok"], "properties": {"ok": {"type": "boolean"}}}}}
+ },
+ "response": {"status": 200, "body": {"choices": [{"message": {"content": "{\"ok\": true}"}}],
+   "usage": {"prompt_tokens": 18, "completion_tokens": 4}}},
+ "conclusion_at_the_time": "Gateway accepts structured output; batch 3 failures were transient."
+}

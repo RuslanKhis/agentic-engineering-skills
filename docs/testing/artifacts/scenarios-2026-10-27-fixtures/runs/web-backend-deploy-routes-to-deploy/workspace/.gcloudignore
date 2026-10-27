@@ -1,0 +1,12 @@
+.git
+.claude
+.env
+.env.*
+*.db
+*.sqlite*
+**/__pycache__
+tests
+docs
+deploy
+web/node_modules
+web/dist

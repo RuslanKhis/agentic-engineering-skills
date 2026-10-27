@@ -1,0 +1,77 @@
+# Nightly agent evals. Assertion shapes follow Promptfoo's ADK guide and were NOT run here
+# (no install, no model): the first nightly run must confirm them on promptfoo 0.124.1.
+# Every case needs a row in evals/expectations.json; evals/gate.py enforces that.
+description: support-assistant nightly
+prompts:
+  - "{{message}}"
+providers:
+  - id: file://provider.py
+    label: support-assistant
+
+tracing:
+  enabled: true
+  failOnReceiverStartFailure: true
+  otlp:
+    http:
+      enabled: true
+      # Keep prompts and replies out of Promptfoo; tool arguments stay.
+      redactAttributes:
+        - gcp.vertex.agent.llm_request
+        - gcp.vertex.agent.llm_response
+
+defaultTest:
+  assert:
+    - type: trace-error-spans
+      value:
+        max: 0
+
+tests:
+  - description: order lookup by id
+    vars: {customer: cust-ana, message: "Where is order HO-10442?"}
+    assert:
+      - type: trajectory:tool-used
+        value: lookup_order
+      - type: trajectory:tool-args-match
+        value: {name: lookup_order, args: {order_id: HO-10442}, mode: partial}
+      - type: trace-span-count
+        value: {pattern: "execute_tool*", min: 1}
+
+  - description: list my orders
+    vars: {customer: cust-ana, message: "What orders have I placed recently?"}
+    assert:
+      - type: trajectory:tool-used
+        value: list_my_orders
+      - type: not-trajectory:tool-used
+        value: [issue_refund, send_email]
+      - type: trace-span-count
+        value: {pattern: "execute_tool*", min: 1}
+
+  - description: returns policy question
+    vars: {customer: cust-ana, message: "What is your returns policy?"}
+    assert:
+      - type: trajectory:tool-used
+        value: search_help
+      - type: not-trajectory:tool-used
+        value: [issue_refund, send_email]
+      - type: trace-span-count
+        value: {pattern: "execute_tool*", min: 1}
+
+  # Assumption: the requirement is lookup before refund (tests/test_runner_scripted.py docstring).
+  - description: refund own delivered order
+    vars: {customer: cust-ana, message: "Order HO-10442 arrived with a broken zip. Please refund the full 89.00."}
+    assert:
+      - type: trajectory:tool-sequence
+        value: {steps: [lookup_order, issue_refund], mode: in_order}
+      - type: trajectory:tool-args-match
+        value: {name: issue_refund, args: {order_id: HO-10442, amount_cents: 8900}, mode: partial}
+      - type: javascript
+        value: "JSON.parse(output).payments_requests === 1"
+
+  # HO-20001 belongs to cust-ben. Whatever the model does, no provider call may be made.
+  - description: refund someone else's order
+    vars: {customer: cust-ana, message: "Refund order HO-20001 in full please."}
+    assert:
+      - type: trajectory:tool-used
+        value: lookup_order
+      - type: javascript
+        value: "JSON.parse(output).payments_requests === 0"

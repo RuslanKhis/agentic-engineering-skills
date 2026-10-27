@@ -1,0 +1,13 @@
+{
+  "case_id": "PA-2026-0190",
+  "address": "40 Plover Street, Eastmere",
+  "proposal": "Rear dormer and first-floor side window",
+  "documents": [
+    {"doc_id": "APP-FORM", "version": "1", "title": "Application form", "pages": [
+      {"page": 1, "text": "Site: 40 Plover Street, Eastmere\nDwelling: semi-detached, 3 bedrooms\nProposal: rear dormer; new first-floor side window 6 m from No. 42"}
+    ]},
+    {"doc_id": "DWG-02", "version": "1", "title": "Proposed side elevation", "pages": [
+      {"page": 1, "text": "Side window W4: clear glazing, top-hung opening light at 1.1 m above floor"}
+    ]}
+  ]
+}

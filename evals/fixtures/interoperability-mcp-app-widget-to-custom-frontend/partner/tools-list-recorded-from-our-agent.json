@@ -1,0 +1,36 @@
+{
+  "recorded": "2026-10-23",
+  "client": "our ADK agent",
+  "tools": [
+    {
+      "name": "get_sales_figures",
+      "description": "Monthly sales figures for a region.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "region"
+        ]
+      }
+    },
+    {
+      "name": "get_chart_text",
+      "description": "Sales trend for a region as a text table.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "region"
+        ]
+      }
+    }
+  ]
+}

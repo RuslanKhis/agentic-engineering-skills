@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: refunds-agent
+  namespace: support
+spec:
+  replicas: 3
+  selector:
+    matchLabels: {app: refunds-agent}
+  template:
+    metadata:
+      labels: {app: refunds-agent}
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "refunds-agent"
+        dapr.io/app-port: "8080"
+        dapr.io/config: "tracing"
+    spec:
+      serviceAccountName: refunds-agent
+      containers:
+        - name: app
+          image: europe-west2-docker.pkg.dev/harbour-support/apps/refunds-agent:2026.10.20
+          ports: [{containerPort: 8080}]
+          env:
+            - {name: SESSION_DB_URL, valueFrom: {secretKeyRef: {name: refunds-db, key: url}}}

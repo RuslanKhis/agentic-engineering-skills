@@ -1,0 +1,12 @@
+{
+ "stage": "constraints",
+ "saved_at": "2026-10-17T10:40:02+00:00",
+ "meta": {},
+ "payload": {
+  "address": "8 Heron Way, Eastmere",
+  "layers_version": "gis-2026-09",
+  "constraints": [
+   "Flood Zone 2"
+  ]
+ }
+}

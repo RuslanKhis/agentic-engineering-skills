@@ -1,0 +1,9 @@
+case_id,predicted_decision,reference_decision,agree,reference_by
+PA-2026-0141,approve,approve,yes,J. Okoro
+PA-2026-0144,approve_with_conditions,approve_with_conditions,yes,J. Okoro
+PA-2026-0146,approve_with_conditions,approve,no,J. Okoro
+PA-2026-0149,refuse,refuse,yes,J. Okoro
+PA-2026-0152,approve,approve,yes,J. Okoro
+PA-2026-0158,approve,approve,yes,J. Okoro
+PA-2026-0163,approve,refuse,no,J. Okoro
+PA-2026-0177,refuse,refuse,yes,J. Okoro

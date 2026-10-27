@@ -1,0 +1,114 @@
+{
+ "id": "sess-2026-10-21-0412",
+ "app_name": "research",
+ "user_id": "u-strategy-07",
+ "events": [
+  {
+   "author": "user",
+   "content": {
+    "role": "user",
+    "parts": [
+     {
+      "text": "Size the EU market for refurbished e-bikes and list sources."
+     }
+    ]
+   }
+  },
+  {
+   "author": "research_lead",
+   "model_version": "o-reasoner-2",
+   "usage_metadata": {
+    "prompt_token_count": 1840,
+    "candidates_token_count": 5310,
+    "thoughts_token_count": 4870,
+    "total_token_count": 7150
+   },
+   "content": {
+    "role": "model",
+    "parts": [
+     {
+      "function_call": {
+       "name": "literature_scout",
+       "args": {
+        "request": "EU refurbished e-bike market sources 2024-2026"
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "author": "research_lead",
+   "content": {
+    "role": "user",
+    "parts": [
+     {
+      "function_response": {
+       "name": "literature_scout",
+       "response": {
+        "result": "Five sources summarised (omitted)."
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "author": "research_lead",
+   "model_version": "o-reasoner-2",
+   "usage_metadata": {
+    "prompt_token_count": 3120,
+    "candidates_token_count": 4980,
+    "thoughts_token_count": 4410,
+    "total_token_count": 8100
+   },
+   "content": {
+    "role": "model",
+    "parts": [
+     {
+      "function_call": {
+       "name": "numbers_analyst",
+       "args": {
+        "request": "Market size 2026 from the five sources"
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "author": "research_lead",
+   "content": {
+    "role": "user",
+    "parts": [
+     {
+      "function_response": {
+       "name": "numbers_analyst",
+       "response": {
+        "result": "EUR 1.1-1.4 bn, assumptions listed (omitted)."
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "author": "research_lead",
+   "model_version": "o-reasoner-2",
+   "usage_metadata": {
+    "prompt_token_count": 4410,
+    "candidates_token_count": 6020,
+    "thoughts_token_count": 5190,
+    "total_token_count": 10430
+   },
+   "content": {
+    "role": "model",
+    "parts": [
+     {
+      "text": "The EU market is about EUR 1.1-1.4 bn in 2026 (sources 1-5)."
+     }
+    ]
+   }
+  }
+ ]
+}

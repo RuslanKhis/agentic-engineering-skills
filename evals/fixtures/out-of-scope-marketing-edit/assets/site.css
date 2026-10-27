@@ -1,0 +1,8 @@
+:root { --ink: #12212e; --sea: #1f6f8b; --sand: #f6f1e7; }
+body { margin: 0; font-family: system-ui, sans-serif; color: var(--ink); background: var(--sand); }
+.hero { padding: 4rem 1.5rem; background: var(--sea); color: white; text-align: center; }
+.tagline { font-size: 1.25rem; }
+.cta { display: inline-block; margin-top: 1rem; padding: .75rem 1.5rem; background: white; color: var(--sea);
+       border-radius: .5rem; text-decoration: none; font-weight: 600; }
+.features { display: grid; gap: 1.5rem; padding: 2rem 1.5rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+.contact, footer { padding: 1.5rem; text-align: center; }

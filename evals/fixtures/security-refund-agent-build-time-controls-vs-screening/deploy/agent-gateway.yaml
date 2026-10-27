@@ -1,0 +1,15 @@
+# Agent Gateway route for the refund agent (applied by the platform team).
+# Screening (Model Armor templates, semantic governance policies) is available on the gateway
+# but not configured for this route yet.
+name: refund-assistant
+backend:
+  cloudRun:
+    service: refund-assistant
+    region: europe-west1
+auth:
+  iap: required
+screening:
+  modelArmor:
+    promptTemplate: ""
+    responseTemplate: ""
+  semanticGovernancePolicies: []

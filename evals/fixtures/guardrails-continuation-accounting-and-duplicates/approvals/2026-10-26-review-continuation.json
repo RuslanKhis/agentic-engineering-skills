@@ -1,0 +1,13 @@
+{
+  "approval_id": "APR-0031",
+  "approved_by": "Dana Okafor (campaign owner)",
+  "approved_at": "2026-10-26T09:12:00Z",
+  "scope": {
+    "campaign_id": "planning-review-2026-10",
+    "stage": "review",
+    "case_ids": ["case-07"],
+    "max_requests": 1,
+    "max_spend_cents": 60
+  },
+  "note": "One review continuation for case-07 after the lost response. Not a new generation run and not more cases."
+}

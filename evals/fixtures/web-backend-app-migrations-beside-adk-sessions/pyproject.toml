@@ -1,0 +1,16 @@
+[project]
+name = "support-assistant"
+version = "0.6.0"
+requires-python = ">=3.11"
+dependencies = [
+  "google-adk[database]==2.12.0",
+  "google-genai==2.21.0",
+  "fastapi==0.118.0",
+  "uvicorn==0.37.0",
+  "httpx==0.28.1",
+  "sqlalchemy==2.0.43",
+  "psycopg[binary]==3.2.10",
+]
+
+[tool.setuptools.packages.find]
+include = ["app*"]

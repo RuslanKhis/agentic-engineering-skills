@@ -1,0 +1,10 @@
+{
+ "run_id": "PA-2026-0163-r3",
+ "case_id": "PA-2026-0163",
+ "route": "served (pipeline/adk_app.py)",
+ "source": {"spans": 27, "sha256": "4be1c09d7a2f5e3318e0c6b5d0f1a9c2e7b84d3f6a1c0e9b2d5f8a7c6e3b1d04", "parser": "pdf-lines-v3"},
+ "writer": {"model": "gemini-3.5-flash", "prompt": "writer-v7", "schema": "draft-v5", "temperature": 1.0},
+ "review": {"model": "gemini-3.5-flash", "prompt": "review-v4", "schema": "review-v2"},
+ "outcome": "writer rejected by citation check; review and export not run",
+ "charged_usd": 0.42
+}

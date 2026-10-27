@@ -1,0 +1,8 @@
+{
+ "run_id": "PA-2026-0177-r2",
+ "case_id": "PA-2026-0177",
+ "previous": "PA-2026-0177-r1 (same draft, same rejection; files not kept)",
+ "writer": {"model": "gemini-3.5-flash", "prompt": "writer-v7", "charged_usd": 0.41},
+ "review": {"model": "gemini-3.5-flash", "prompt": "review-v4", "checks": "pipeline/coverage_check.py", "charged_usd": 0.24},
+ "export": {"status": "failed", "error": "review did not accept the draft"}
+}

@@ -1,0 +1,6 @@
+Our draft step keeps getting the decisions wrong on the five labelled cases. Make the decisions better. Don't call the model; use the saved outputs and the labels.
+
+---
+Situation (from the person asking): The five labelled development cases are under cases/dev/, with the officer's labels in labels/dev-labels.json. The saved baseline outputs and retrieval traces are under runs/baseline-2026-10-20/. The writer prompt is pipeline/prompts.py and retrieval is pipeline/retrieval.py. cases/holdout/ holds five unlabelled holdout cases. No provider calls are allowed in this session; tests/doubles.py is a scripted model double.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

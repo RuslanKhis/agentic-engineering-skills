@@ -1,0 +1,6 @@
+Can you do ticket G03? Each customer should only get their own revenue figures through MCP Toolbox, the warehouse has to be read-only at the database end, and the model must never get to pick the customer ID.
+
+---
+Situation (from the person asking): An ADK agent using ToolboxToolset against a tools.yaml with a free-form bigquery-execute-sql tool, a bigquery-sql template whose table name is a templateParameter, a tenant_id ordinary parameter the instruction tells the model to read from the user's message, and a server that decodes an IAP assertion without verifying it. No network; toolbox-adk and google-adk not installed.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

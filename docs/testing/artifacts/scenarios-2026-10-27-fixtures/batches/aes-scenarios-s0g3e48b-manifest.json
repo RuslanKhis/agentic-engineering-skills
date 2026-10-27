@@ -1,0 +1,202 @@
+{
+ "created": "2026-10-27T11:22:25+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-ae683dff62ffe485e",
+ "commit": "9b08d86fe48544e6971ac0e16e82dfe8b53a5c82",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "evaluation-preinference-contract-qualification",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-preinference-contract-qualification/situation.md"
+    },
+    {
+     "from": "evals/graders/evaluation-preinference-contract-qualification/basement-references.json"
+    }
+   ],
+   "tests": "pass",
+   "note": "google-adk is not installed, so the ADK route stays unverified; running the suite needs a shell.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-workflow-design",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [
+    "situation.md",
+    "basement-references.json"
+   ]
+  },
+  {
+   "id": "evaluation-bound-spans-versus-model-paraphrase",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-bound-spans-versus-model-paraphrase/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "google-adk is not installed; the served ADK route can only be reported as not run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-progressive-downstream-repair",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-progressive-downstream-repair/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "No shell: the agent can read the counters and saved runs but cannot execute the continuation.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-workflow-design",
+    "adk-operational-guardrails"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-reviewer-coverage-versus-uncertainty",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-reviewer-coverage-versus-uncertainty/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Retained drafts and reviews only; no provider calls and no domain expert.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-recurring-failures-reentry",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-recurring-failures-reentry/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Retained batch summaries and probes only; no provider calls.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-operational-guardrails"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-improve-decisions-error-analysis",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "remove": [
+    "cases/dev/PA-2026-0141"
+   ],
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-improve-decisions-error-analysis/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Re-measuring needs the scripted double run through a shell; without one the agent can only reason over the saved outputs.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-workflow-design",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-generalization-and-deliverable-budget",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-generalization-and-deliverable-budget/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Planning and report text only; no paid calls.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-operational-guardrails"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-recovery-is-not-full-route-acceptance",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-recovery-is-not-full-route-acceptance/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Assessment of saved results only; nothing that costs money may run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-operational-guardrails"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

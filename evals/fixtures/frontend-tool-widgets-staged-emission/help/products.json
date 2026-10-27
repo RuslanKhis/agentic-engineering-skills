@@ -1,0 +1,7 @@
+[
+  {"sku": "JK-210", "name": "Kestrel waterproof jacket", "tags": ["jacket", "waterproof", "hiking"], "price_cents": 12900, "weight_g": 410, "waterproof_mm": 20000, "rating": 4.6, "image_url": "/img/jk-210.jpg"},
+  {"sku": "JK-340", "name": "Fulmar insulated jacket", "tags": ["jacket", "insulated", "winter"], "price_cents": 15900, "weight_g": 620, "waterproof_mm": 10000, "rating": 4.4, "image_url": "/img/jk-340.jpg"},
+  {"sku": "JK-115", "name": "Tern packable shell", "tags": ["jacket", "waterproof", "packable", "running"], "price_cents": 8900, "weight_g": 230, "waterproof_mm": 15000, "rating": 4.2, "image_url": "/img/jk-115.jpg"},
+  {"sku": "BT-501", "name": "Ridge mid hiking boot", "tags": ["boot", "waterproof", "hiking"], "price_cents": 14500, "weight_g": 1180, "waterproof_mm": null, "rating": 4.7, "image_url": "/img/bt-501.jpg"},
+  {"sku": "PK-030", "name": "Corrie 30 l daypack", "tags": ["pack", "hiking"], "price_cents": 7400, "weight_g": 850, "waterproof_mm": null, "rating": 4.5, "image_url": "/img/pk-030.jpg"}
+]

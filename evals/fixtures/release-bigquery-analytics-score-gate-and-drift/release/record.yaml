@@ -1,0 +1,12 @@
+release: 2026.10.24
+google_adk: 2.12.0
+model: gemini-3.5-flash-002
+judge_model: none yet
+prompt_sha256:
+  ROOT_INSTRUCTION: 0d4e7c1a9b8f6e5d4c3b2a19087f6e5d4c3b2a19087f6e5d4c3b2a19087f6e5d
+analytics:
+  dataset: support_analytics
+  events_table: agent_events
+  golden_table: golden_questions
+gates:
+  pull_request: unit tests only

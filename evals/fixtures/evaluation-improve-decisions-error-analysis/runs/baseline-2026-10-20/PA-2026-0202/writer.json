@@ -1,0 +1,28 @@
+{
+ "stage": "writer",
+ "payload": {
+  "decision": "approve",
+  "reasons": [
+   {
+    "id": "R1",
+    "text": "The single-storey side extension is subordinate to the house (H4).",
+    "citations": [
+     "APP-FORM@1:p1:3",
+     "LP-H4@2024:p31:2"
+    ]
+   }
+  ],
+  "conditions": [],
+  "citations": [
+   {
+    "span_id": "APP-FORM@1:p1:3",
+    "quote": "Proposal: single-storey side extension, utility room"
+   }
+  ],
+  "conflicts": [],
+  "gaps": []
+ },
+ "meta": {
+  "errors": []
+ }
+}

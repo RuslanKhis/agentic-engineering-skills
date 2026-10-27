@@ -1,0 +1,11 @@
+{
+ "handed_in": "2026-10-12",
+ "generated_by": {"workflow_version": "v9", "code_version": "5d20b7e", "writer_prompt": "writer-v9", "retrieval_k": 2},
+ "predictions": [
+  {"case_id": "PA-2026-0231", "decision": "approve", "reasons": ["Rear extension acceptable in design (H4)."]},
+  {"case_id": "PA-2026-0232", "decision": "approve", "reasons": ["Parking meets Table T2.1."]},
+  {"case_id": "PA-2026-0233", "decision": "approve_with_conditions", "reasons": ["Method statement AMS-2 secured by condition (ENV3)."]},
+  {"case_id": "PA-2026-0234", "decision": "approve_with_conditions", "reasons": ["Visibility splays required by condition (T2)."]},
+  {"case_id": "PA-2026-0235", "decision": "approve", "reasons": ["Dormer subordinate to the roof (H4)."]}
+ ]
+}

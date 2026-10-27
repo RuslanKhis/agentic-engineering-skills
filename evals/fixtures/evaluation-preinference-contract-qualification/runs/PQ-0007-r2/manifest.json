@@ -1,0 +1,12 @@
+{
+ "run_id": "PQ-0007-r2",
+ "pack": "cases/qualification/basement-pack.json",
+ "route": "pipeline/adk_qualification.py (served)",
+ "qualification": {"version": "qual-v2", "model": "gemini-3.5-pro", "temperature": 1.0,
+                   "max_output_tokens": 16384, "thinking_level": "high"},
+ "note": "Re-run on the larger model with more thinking after r1 returned findings without labels.",
+ "started": "2026-10-22T14:40:51Z",
+ "outcome": "failed",
+ "error": "required passage D7-2024/p13/continuation is not cited; required passage D7-2024/p13/footnote is not cited",
+ "charged_usd": 1.12
+}

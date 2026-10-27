@@ -1,0 +1,10 @@
+$ gcloud services list --enabled --project support-prod-eu
+NAME                                 TITLE
+aiplatform.googleapis.com            Vertex AI API
+cloudbuild.googleapis.com            Cloud Build API
+cloudtrace.googleapis.com            Cloud Trace API
+iam.googleapis.com                   Identity and Access Management (IAM) API
+logging.googleapis.com               Cloud Logging API
+monitoring.googleapis.com            Cloud Monitoring API
+secretmanager.googleapis.com         Secret Manager API
+storage.googleapis.com               Cloud Storage

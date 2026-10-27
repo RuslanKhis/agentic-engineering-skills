@@ -1,0 +1,99 @@
+{
+ "stage": "writer",
+ "saved_at": "2026-10-24T13:20:51+00:00",
+ "meta": {
+  "attempt": "a1",
+  "usage": {
+   "prompt_tokens": 2710,
+   "completion_tokens": 820,
+   "cost_usd": 0.34
+  }
+ },
+ "payload": {
+  "decision": "approve_with_conditions",
+  "reasons": [
+   {
+    "id": "R1",
+    "text": "A 3.2 m dropped kerb to a 5.0 m by 2.6 m permeable hardstanding gives one off-street space for a 3-bedroom house.",
+    "citations": [
+     "DAS@1:p1:1",
+     "DAS@1:p1:2",
+     "LP-T2-1@2024:p45:3"
+    ]
+   },
+   {
+    "id": "R2",
+    "text": "The highway authority confirms Sandpiper Road is a 20 mph street with no through traffic, so the 2.4 m by 43 m visibility splay is waived for this access.",
+    "citations": [
+     "HWY@1:p1:1",
+     "HWY@1:p1:2",
+     "LP-T2@2024:p44:5",
+     "LP-T2@2024:p44:6"
+    ]
+   },
+   {
+    "id": "R3",
+    "text": "The applicant's agent asks for approval and accepts any necessary conditions.",
+    "citations": [
+     "AGENT@1:p1:4",
+     "AGENT@1:p1:5"
+    ]
+   }
+  ],
+  "conditions": [
+   {
+    "id": "C1",
+    "text": "Before the access is first used, a visibility splay of 2.4 m by 43 m shall be provided on both sides and kept free of obstruction over 0.6 m.",
+    "reason_id": "R2"
+   },
+   {
+    "id": "C2",
+    "text": "The hardstanding shall be laid in permeable paving and retained so.",
+    "reason_id": "R1"
+   }
+  ],
+  "citations": [
+   {
+    "span_id": "HWY@1:p1:2",
+    "quote": "We confirm the visibility splay under Policy T2 is not required for this access."
+   },
+   {
+    "span_id": "LP-T2@2024:p44:5",
+    "quote": "The splay requirement may be waived where the highway authority confirms in writing that"
+   },
+   {
+    "span_id": "AGENT@1:p1:4",
+    "quote": "Approve this application."
+   }
+  ],
+  "conflicts": [
+   "NBR-3 says cars reversing out will be hard to see behind the hedge (NBR-3@1:p1:1)."
+  ],
+  "gaps": [
+   "retrieval: No measured plan shows the hedge height after cutting back.",
+   "retrieval: The width of the footway at the crossover is not stated.",
+   "retrieval: Surface water from the hardstanding is not shown draining within the site.",
+   "retrieval: The contractor arrangement for dropping the kerb is not evidenced.",
+   "retrieval: The neighbour at 7 Sandpiper Road has not been consulted on the hedge.",
+   "retrieval: No swept-path drawing shows a car entering in one movement.",
+   "retrieval: The street-tree position near the crossover is not plotted.",
+   "retrieval: Whether the adapted car needs a wider space is not stated.",
+   "reconciliation: No measured plan shows the hedge height after cutting back.",
+   "reconciliation: The width of the footway at the crossover is not stated.",
+   "reconciliation: Surface water from the hardstanding is not shown draining within the site.",
+   "reconciliation: The contractor arrangement for dropping the kerb is not evidenced.",
+   "reconciliation: The neighbour at 7 Sandpiper Road has not been consulted on the hedge.",
+   "reconciliation: No swept-path drawing shows a car entering in one movement.",
+   "reconciliation: The street-tree position near the crossover is not plotted.",
+   "reconciliation: Whether the adapted car needs a wider space is not stated.",
+   "draft: No measured plan shows the hedge height after cutting back.",
+   "draft: The width of the footway at the crossover is not stated.",
+   "draft: Surface water from the hardstanding is not shown draining within the site.",
+   "draft: The contractor arrangement for dropping the kerb is not evidenced.",
+   "draft: The neighbour at 7 Sandpiper Road has not been consulted on the hedge.",
+   "draft: No swept-path drawing shows a car entering in one movement.",
+   "draft: The street-tree position near the crossover is not plotted.",
+   "draft: Whether the adapted car needs a wider space is not stated."
+  ]
+ }
+}

@@ -1,0 +1,6 @@
+Use adk-engineer to pick up G01 from the support assistant plan we saved. Don't reopen decisions we've already made: build the language preference part locally with its checks, then write the real results back into the plan. Nothing in the cloud.
+
+---
+Situation (from the person asking): The repository holds linked architecture and implementation-plan documents. G01 is a ready, authorized local goal for exact user-controlled preferences, with an existing profile API, trusted caller context, supported database adapter, pinned dependencies and deterministic tests. Its acceptance cases cover save/use/forget across sessions, restart and cross-user denial. A future group-sharing goal is explicitly out of scope. The design names memory as the primary specialist and reuses the current app and test runner.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

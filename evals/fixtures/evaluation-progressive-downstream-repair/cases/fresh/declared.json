@@ -1,0 +1,7 @@
+{
+ "declared_on": "2026-10-25",
+ "declared_by": "Morgan Hale",
+ "purpose": "fresh end-to-end cases through the normal route after the diagnostic continuation passes",
+ "cases": ["cases/fresh/PA-2026-0190", "cases/fresh/PA-2026-0193"],
+ "ceiling_usd_per_case": 0.8
+}

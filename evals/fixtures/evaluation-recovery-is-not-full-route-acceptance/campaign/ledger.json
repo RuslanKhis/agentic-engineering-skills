@@ -1,0 +1,13 @@
+{
+ "campaign": "autumn-validation",
+ "approved_by": "Morgan Hale (product owner)",
+ "approved_on": "2026-10-06",
+ "allowance_usd": 25.0,
+ "scope": "development and reference cases, writer and review stages; one fresh end-to-end case on the frozen version; holdout once at the end",
+ "entries": [
+  {"run_id": "PA-2026-0141-r4", "stage": "writer", "reserved_usd": 0.4, "charged_usd": 0.38, "state": "settled"},
+  {"run_id": "PA-2026-0141-r4", "stage": "review", "reserved_usd": 0.25, "charged_usd": null, "state": "reserved",
+   "note": "interrupted; provider status of op-91bd04e2 unknown"},
+  {"run_id": "PA-2026-0141-r4-cont1", "stage": "review", "reserved_usd": 0.25, "charged_usd": 0.21, "state": "settled"}
+ ]
+}

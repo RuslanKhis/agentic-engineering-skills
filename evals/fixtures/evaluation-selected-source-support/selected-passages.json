@@ -1,0 +1,264 @@
+{
+  "version": 1,
+  "scope": "Synthetic community-hall workshop documents, not real policy. Only selected sources and each case's additional_context_source_ids are evidence for that case; the remaining source registry is not case evidence.",
+  "sources": {
+    "stage-p1": {
+      "document": "Hall inspection",
+      "page": 1,
+      "text": "Stage floor: sprung oak.\nInspected by: Rowan."
+    },
+    "rota-p1": {
+      "document": "Caretaker rota",
+      "page": 1,
+      "text": "The hall is unlocked at 08:30 and locked at 22:00 on Saturdays."
+    },
+    "door-p1": {
+      "document": "Fire door survey",
+      "page": 1,
+      "text": "What is the clear opening of door D2?\nAnswer: 1.1 m.\nSurveyor: Okafor."
+    },
+    "music-p1": {
+      "document": "Synthetic music rule",
+      "page": 1,
+      "text": "Amplified music must stop by 21:00. Exception: events holding a temporary event notice may continue until 23:00."
+    },
+    "urn-p1": {
+      "document": "Kitchen inventory",
+      "page": 1,
+      "text": "Urn U1 is stainless steel.\nUrn U1 holds 20 litres."
+    },
+    "sketch-p1": {
+      "document": "Unscaled hall sketch",
+      "page": 1,
+      "text": "Written stage depth: 4.5 m.\nSketch not to scale.",
+      "visual_asset": "hall-sketch.svg"
+    },
+    "boiler-p1": {
+      "document": "Boiler log",
+      "page": 1,
+      "text": "Flow temperature at 07:00: 62 C."
+    },
+    "boiler-blank-p1": {
+      "document": "Uncompleted boiler log",
+      "page": 1,
+      "text": "Flow temperature at 07:00: [not recorded]."
+    },
+    "boiler-contractor-p1": {
+      "document": "Contractor boiler sheet",
+      "page": 1,
+      "text": "Flow temperature at 07:00: 58 C."
+    }
+  },
+  "cases": [
+    {
+      "case_id": "h01",
+      "context": "Report the clear opening of door D2 from the fire door survey.",
+      "observation": "Door D2 has a clear opening of 1.1 m.",
+      "selected_evidence": [
+        {
+          "source_id": "door-p1",
+          "quote": "What is the clear opening of door D2?"
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h02",
+      "context": "Report what Urn U1 is made of.",
+      "observation": "Urn U1 is stainless steel.",
+      "selected_evidence": [
+        {
+          "source_id": "urn-p1",
+          "quote": "Urn U1 is stainless steel."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h03",
+      "context": "Report the 07:00 flow temperature from the boiler log.",
+      "observation": "The flow temperature at 07:00 was 58 C.",
+      "selected_evidence": [
+        {
+          "source_id": "boiler-p1",
+          "quote": "Flow temperature at 07:00: 62 C."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h04",
+      "context": "Report the clear opening of door D2 from the fire door survey.",
+      "observation": "Door D2 has a clear opening of 1.1 m.",
+      "selected_evidence": [
+        {
+          "source_id": "door-p1",
+          "quote": "What is the clear opening of door D2?\nAnswer: 1.1 m."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h05",
+      "context": "Report the stage depth written on the sketch.",
+      "observation": "The written stage depth is 4.5 m.",
+      "selected_evidence": [
+        {
+          "source_id": "sketch-p1",
+          "quote": "Written stage depth: 4.5 m."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h06",
+      "context": "Report the stage floor, verifying the cited source identity.",
+      "observation": "Stage floor: sprung oak.",
+      "selected_evidence": [
+        {
+          "source_id": "stage-p9",
+          "quote": "Stage floor: sprung oak."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h07",
+      "context": "A Saturday party holds a temporary event notice. Apply the synthetic music rule.",
+      "observation": "Amplified music must stop by 21:00.",
+      "selected_evidence": [
+        {
+          "source_id": "music-p1",
+          "quote": "Amplified music must stop by 21:00."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h08",
+      "context": "Describe the inspected stage.",
+      "observation": "Stage floor: sprung oak.",
+      "selected_evidence": [
+        {
+          "source_id": "stage-p1",
+          "quote": "Stage floor: sprung oak."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h09",
+      "context": "Report the 07:00 flow temperature from the uncompleted log. No other record is available for this case.",
+      "observation": "The flow temperature at 07:00 was 58 C.",
+      "selected_evidence": [
+        {
+          "source_id": "boiler-blank-p1",
+          "quote": "Flow temperature at 07:00: [not recorded]."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h10",
+      "context": "Report the capacity of Urn U1.",
+      "observation": "Urn U1 holds 20 litres.",
+      "selected_evidence": [
+        {
+          "source_id": "urn-p1",
+          "quote": "Urn U1 is stainless steel."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h11",
+      "context": "Describe Saturday opening, using only the caretaker rota.",
+      "observation": "On Saturdays the hall is opened at half past eight in the morning.",
+      "selected_evidence": [
+        {
+          "source_id": "rota-p1",
+          "quote": "The hall is unlocked at 08:30 and locked at 22:00 on Saturdays."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h12",
+      "context": "Infer a physical stage depth from the sketch pixels. No pixel-to-metre scale is supplied.",
+      "observation": "The 180-pixel line establishes a stage depth of 4.5 m.",
+      "selected_evidence": [
+        {
+          "source_id": "sketch-p1",
+          "quote": "Sketch not to scale."
+        }
+      ],
+      "additional_context_source_ids": [],
+      "visual_measurement": {
+        "depth_pixels": 180,
+        "metres_per_pixel": null
+      }
+    },
+    {
+      "case_id": "h13",
+      "context": "A Saturday party holds a temporary event notice. Apply the synthetic music rule.",
+      "observation": "This party may keep amplified music on until 23:00.",
+      "selected_evidence": [
+        {
+          "source_id": "music-p1",
+          "quote": "Amplified music must stop by 21:00. Exception: events holding a temporary event notice may continue until 23:00."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h14",
+      "context": "These two records describe the same boiler and time. Neither has established precedence; neither is verified as a correction.",
+      "observation": "The flow temperature at 07:00 was 62 C.",
+      "selected_evidence": [
+        {
+          "source_id": "boiler-p1",
+          "quote": "Flow temperature at 07:00: 62 C."
+        }
+      ],
+      "additional_context_source_ids": [
+        "boiler-contractor-p1"
+      ]
+    },
+    {
+      "case_id": "h15",
+      "context": "State what the complete synthetic music rule requires.",
+      "observation": "All amplified music must stop by 21:00 without exception.",
+      "selected_evidence": [
+        {
+          "source_id": "music-p1",
+          "quote": "Amplified music must stop by 21:00. Exception: events holding a temporary event notice may continue until 23:00."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h16",
+      "context": "Report the clear opening of door D2, verifying the quoted span against its cited document.",
+      "observation": "Door D2 has a clear opening of 1.1 m.",
+      "selected_evidence": [
+        {
+          "source_id": "stage-p1",
+          "quote": "What is the clear opening of door D2?\nAnswer: 1.1 m."
+        }
+      ],
+      "additional_context_source_ids": []
+    },
+    {
+      "case_id": "h17",
+      "context": "Report the clear opening of door D2 from the fire door survey.",
+      "observation": "Door D2 has a clear opening of 1.1 m.",
+      "selected_evidence": [
+        {
+          "source_id": "door-p1",
+          "quote": "Surveyor: Okafor."
+        }
+      ],
+      "additional_context_source_ids": []
+    }
+  ]
+}

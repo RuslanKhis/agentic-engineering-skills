@@ -29,6 +29,14 @@ def skill_files() -> list[Path]:
             if p.is_file() and "__pycache__" not in p.parts]
 
 
+# Grader-side files no scenario lists, with the reason they stay out of skill packages.
+UNLISTED_ALLOWED = {
+    "evals/graders/evaluation-selected-source-support/source-support-expectations.json":
+        "labels for the evaluation skill's own worked example, read by its unit test; the scenario "
+        "now has its own pack and labels",
+}
+
+
 def grader_entries() -> dict[str, list[str]]:
     data = json.loads((ROOT / "evals" / "scenario-fixtures.json").read_text(encoding="utf-8"))
     return {cid: [item["from"] for item in entry.get("grader", [])]
@@ -45,9 +53,9 @@ class GraderMaterialTests(unittest.TestCase):
                 self.assertTrue((ROOT / path).is_file(), path)
 
     def test_every_grader_file_is_listed_for_a_scenario(self):
-        listed = {path for paths in grader_entries().values() for path in paths}
+        listed = {path for paths in grader_entries().values() for path in paths} | set(UNLISTED_ALLOWED)
         for path in sorted(GRADERS.rglob("*")):
-            if path.is_file():
+            if path.is_file() and "__pycache__" not in path.parts:
                 rel = path.relative_to(ROOT).as_posix()
                 self.assertIn(rel, listed, f"{rel} is not listed under grader in scenario-fixtures.json")
 
@@ -73,16 +81,21 @@ class GraderMaterialTests(unittest.TestCase):
                 with self.subTest(scenario=cid, source=item["from"]):
                     self.assertFalse(item["from"].startswith(("evals/graders", "evals/trials")))
 
-    def test_committed_ingestion_inventory_matches_its_generator(self):
-        script = ROOT / "skills/adk-memory-architecture/scripts/make_ingestion_fixture.py"
-        spec = importlib.util.spec_from_file_location("make_ingestion_fixture", script)
+    def test_committed_ingestion_pack_and_inventory_match_their_generator(self):
+        # The scenario has its own pack (not the memory skill's worked example); its
+        # generator is grader material, and both its outputs are committed.
+        script = GRADERS / "memory-ingestion-scan-detection" / "make_pack.py"
+        spec = importlib.util.spec_from_file_location("make_pack", script)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
+        committed_pack = ROOT / "evals" / "fixtures" / "memory-ingestion-scan-detection" / "pack"
         with tempfile.TemporaryDirectory() as tmp:
-            module.write_fixture(Path(tmp))
+            module.write_pack(Path(tmp) / "pack", Path(tmp) / "inventory.json")
             generated = (Path(tmp) / "inventory.json").read_bytes()
+            pdfs = {p.name: p.read_bytes() for p in (Path(tmp) / "pack").iterdir()}
         committed = (GRADERS / "memory-ingestion-scan-detection" / "inventory.json").read_bytes()
         self.assertEqual(generated, committed)
+        self.assertEqual(pdfs, {p.name: p.read_bytes() for p in committed_pack.iterdir()})
 
 
 if __name__ == "__main__":

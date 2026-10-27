@@ -1,0 +1,6 @@
+Our local policy retriever returns results but misses some answers. Diagnose the retained extraction and query observations, and add checks that expose missing evidence. Keep the existing retrieval and output limits; use offline fixtures only.
+
+---
+Situation (from the person asking): document-coverage.json holds the extracted page segments of our synthetic park-route policy and its related documents, and the test questions we run against the retriever with the sections a reviewer marked as needed to answer each; the retriever is never given those markings. No real PDF parsing or visual review is available in this session.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

@@ -1,0 +1,57 @@
+%PDF-1.5
+%«Ïè¢
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 1 /Kids [3 0 R] >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 842 595] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Times-Bold /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Length 783 >>
+stream
+BT /F2 13 Tf 1 0 0 1 60 560 Tm (Proposed rear elevation - 3 Example Mews) Tj ET
+0.8 w 0 G
+100 120 600 0.01 re S
+140 120 300 300 re S
+440 120 180 150 re S
+500 120 60 110 re S
+440 270 m 530 330 l 620 270 l S
+650 120 m 650 270 l S 644 120 m 656 120 l S 644 270 m 656 270 l S
+BT /F1 9 Tf 1 0 0 1 660 190 Tm (3.2 m to eaves) Tj ET
+0 g 100 70 45 6 re f 0 G 100 70 45 6 re S
+1 g 145 70 45 6 re f 0 G 145 70 45 6 re S
+0 g 190 70 45 6 re f 0 G 190 70 45 6 re S
+1 g 235 70 45 6 re f 0 G 235 70 45 6 re S
+0 g
+BT /F1 8 Tf 1 0 0 1 97 58 Tm (0) Tj ET
+BT /F1 8 Tf 1 0 0 1 187 58 Tm (2) Tj ET
+BT /F1 8 Tf 1 0 0 1 275 58 Tm (4 m) Tj ET
+BT /F1 9 Tf 1 0 0 1 100 40 Tm (Scale 1:100 @ A3) Tj ET
+BT /F1 9 Tf 1 0 0 1 470 200 Tm (New garden room) Tj ET
+BT /F1 9 Tf 1 0 0 1 220 300 Tm (Existing house) Tj ET
+
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000121 00000 n 
+0000000257 00000 n 
+0000000356 00000 n 
+0000000454 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+1288
+%%EOF

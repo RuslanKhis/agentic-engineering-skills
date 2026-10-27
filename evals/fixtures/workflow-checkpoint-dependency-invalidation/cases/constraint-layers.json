@@ -1,0 +1,24 @@
+{
+ "version": "gis-2026-09",
+ "layers": [
+  {
+   "name": "Eastmere Conservation Area",
+   "addresses": [
+    "4 Kestrel Close, Eastmere"
+   ]
+  },
+  {
+   "name": "Tree Preservation Order T/2019/07",
+   "addresses": [
+    "31 Wren Lane, Eastmere"
+   ]
+  },
+  {
+   "name": "Flood Zone 2",
+   "addresses": [
+    "31 Wren Lane, Eastmere",
+    "8 Heron Way, Eastmere"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+  "case_id": "refund-double-yes",
+  "risk": "duplicate refund when the customer confirms twice",
+  "source": "incident, week before 2026-10-27 (ticket reference: UNKNOWN, to be filled in)",
+  "expected_invariant": "one confirmed proposal produces at most one payments request and one stored refund",
+  "base_ref": "UNKNOWN: no git metadata in this workspace; fill in the known base commit",
+  "reference_fix": "UNKNOWN: fill in the merged fix commit",
+  "fail_to_pass": [
+    "tests.test_tools.RefundToolTests.test_second_issue_after_one_proposal_does_not_refund_twice",
+    "tests.test_runner_refunds.RefundRunnerTests.test_second_yes_does_not_refund_twice"
+  ],
+  "pass_to_pass": [
+    "tests.test_tools.RefundToolTests.test_proposal_then_issue_refunds_once",
+    "tests.test_tools.RefundToolTests.test_issue_without_proposal_pays_nothing",
+    "tests.test_tools.RefundToolTests.test_proposal_on_another_customers_order_is_refused",
+    "tests.test_tools.RefundToolTests.test_provider_rejection_is_reported",
+    "tests.test_runner_refunds.RefundRunnerTests.test_eligible_refund_is_paid_once",
+    "tests.test_runner_refunds.RefundRunnerTests.test_refund_on_another_customers_order_is_denied"
+  ],
+  "controls": [
+    "tests.test_runner_refunds.RefundRunnerTests.test_do_nothing_control_fails_the_double_yes_assertions"
+  ],
+  "validation": {
+    "base_run": "NOT RUN",
+    "reference_fix_run": "NOT RUN",
+    "status": "unvalidated"
+  },
+  "command": "python -m unittest discover -s tests -t ."
+}

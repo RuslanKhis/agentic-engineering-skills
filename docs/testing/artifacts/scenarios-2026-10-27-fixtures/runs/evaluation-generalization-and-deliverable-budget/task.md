@@ -1,0 +1,6 @@
+We're on workflow version N now, but the holdout predictions we handed in came from N-5. There's only enough budget left for about one holdout run. What should we spend it on? And can you draft that part of the report?
+
+---
+Situation (from the person asking): Version N (v14) is frozen and described in snapshots/v14/manifest.json; docs/workflow-versions.md lists the versions. The holdout predictions we handed in are in deliverables/. campaign/ledger.json is the campaign ledger, docs/adr/ holds the decisions made since then, and docs/report-draft.md is the report. No paid calls are run in this session: prepare the decision on what to spend the remaining budget on, and the report text.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

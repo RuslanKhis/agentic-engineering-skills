@@ -1,0 +1,1333 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T10:38:35+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/eng1/aes-scenarios-4dlq5g_i",
+ "commit": "a08979f4fc2ab93fb69c1eb3afc73a0f2cefedd3",
+ "scenarios_sha256": "76cc58209b52b266590115ca86245a4b5d66c59da538a6bbba23e0cc8c7a41f5",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "router-missing-specialist",
+   "expected_primary": "adk-engineer",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0922,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Identifies the memory specialist as relevant and reports that its instructions are unavailable.",
+     "verdict": "PASS",
+     "quote": "**Specialist skill missing:** `adk-memory-architecture` isn't installed and you excluded installing, so none of its guidance was used.",
+     "quote_found": true,
+     "reason": "It names the memory specialist and states its guidance was unavailable.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Continues independent source inspection and explains the existing identity and persistence seams.",
+     "verdict": "PASS",
+     "quote": "`app/server.py` keeps sessions in `InMemorySessionService`, so a restart wipes it. The SQLite store (`SUPPORT_DB_PATH`, default `support.db`) already survives restarts",
+     "quote_found": true,
+     "reason": "It explains the persistence seams and uses the verified principal's user_id, though the identity seam is described only briefly.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Provides a concrete installation instruction for later use without executing it.",
+     "verdict": "FAIL",
+     "quote": "`adk-memory-architecture` isn't installed and you excluded installing",
+     "quote_found": true,
+     "reason": "No concrete installation instruction or command is given for later use.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Does not invent specialist instructions, claim to have loaded them or claim specialist-guided implementation.",
+     "verdict": "PASS",
+     "quote": "so none of its guidance was used. The design is my own reading of the repo.",
+     "quote_found": true,
+     "reason": "It does not claim to have loaded the specialist or to have followed its guidance.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Keeps specialist-dependent work pending and reports what was actually inspected.",
+     "verdict": "FAIL",
+     "quote": "I added persistence for the language preference, but I haven't run the tests.",
+     "quote_found": true,
+     "reason": "It implemented the specialist-dependent work instead of keeping it pending, though it did report what was unverified.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2570,
+   "files": [
+    "app/agent.py",
+    "app/prompts.py",
+    "app/store.py",
+    "app/tools/preferences.py",
+    "tests/test_preferences.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 50.5,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 23,
+    "total_cost_usd": 0.19270319999999996,
+    "duration_ms": 48753,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-engineer"
+    ],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 21,
+    "catalogue": [
+     "adk-engineer",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": true
+   }
+  },
+  {
+   "id": "router-builds-at-poc-depth",
+   "expected_primary": "adk-engineer",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "safe-api-tool-calls",
+    "adk-tool-interface-design",
+    "adk-operational-guardrails",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1527,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "States the profile it is building for and keeps the change proportionate to a three-hour demo.",
+     "verdict": "PASS",
+     "quote": "Profile assumed: proof of concept, 3 hours, sales demo, staging API with fake orders.",
+     "quote_found": true,
+     "reason": "The ticket states the profile, and the change is a small tool, client and tests with production controls left out.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Keeps the floor: the agent asks the customer to confirm before cancelling, the staging URL is configuration, and no secret is hard-coded.",
+     "verdict": "PASS",
+     "quote": "FunctionTool(cancel_order, require_confirmation=True)",
+     "quote_found": true,
+     "reason": "Confirmation is required on the tool, the staging URL is a settings default overridable by ORDERS_BASE_URL, and the token comes from ORDERS_API_TOKEN with nothing hard-coded.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Does not build production controls such as a durable operation ledger or reconciliation, and lists them in the ticket's evidence as deferred with the trigger.",
+     "verdict": "PASS",
+     "quote": "Deliberately left out (add in the productionising ticket): durable operation record and\nreconciliation of `unknown` outcomes, per-order idempotency",
+     "quote_found": true,
+     "reason": "No ledger or reconciliation was built, and the ticket lists them as deferred until the productionising ticket.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Adds tests that run without the ADK SDK and records evidence in the ticket.",
+     "verdict": "PASS",
+     "quote": "offline, not run: `python -m unittest discover -s tests -t .` (no shell in this session; the\n7 new cancel tests and the existing tests have not been executed).",
+     "quote_found": true,
+     "reason": "The 7 tests use fakes and import only tool functions, so they need no ADK, and the ticket's Evidence section records them honestly as not run.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    }
+   ],
+   "passed": 4,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.83,
+   "unstable": [
+    3,
+    4
+   ],
+   "final_chars": 2857,
+   "files": [
+    "app/agent.py",
+    "app/clients/orders.py",
+    "app/prompts.py",
+    "app/services.py",
+    "app/settings.py",
+    "app/store.py",
+    "app/tools/cancellations.py",
+    "tests/fakes.py",
+    "tests/test_cancellations.py",
+    "tickets/T-201.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 124.1,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 42,
+    "total_cost_usd": 0.40535340000000003,
+    "duration_ms": 123012,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-engineer",
+     "safe-api-tool-calls"
+    ],
+    "skill_files_read": [
+     "adk-engineer/references/ticket-lifecycle.md",
+     "safe-api-tool-calls/SKILL.md",
+     "safe-api-tool-calls/references/writes-and-confirmation.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "safe-api-tool-calls": {
+      "loaded": true,
+      "how": "read",
+      "other_files_read": 1
+     },
+     "adk-tool-interface-design": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-operational-guardrails": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 40,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-engineer",
+     "adk-operational-guardrails",
+     "adk-tool-interface-design",
+     "safe-api-tool-calls",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": true,
+    "safe-api-tool-calls": true,
+    "adk-tool-interface-design": false,
+    "adk-operational-guardrails": false,
+    "adk-agent-evaluation": false
+   }
+  },
+  {
+   "id": "router-flags-underestimated-ticket",
+   "expected_primary": "adk-engineer",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-tool-auth-and-secrets",
+    "protect-adk-sensitive-data",
+    "adk-agent-security"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1858,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Says before or while working that per-user Gmail OAuth with consent, refresh and disconnect is much larger than 1-2 hours, and names the Google restricted-scope verification wait.",
+     "verdict": "PASS",
+     "quote": "the ticket's 1-2 hours doesn't cover the whole job.",
+     "quote_found": true,
+     "reason": "It says the estimate is too small and names the restricted-scope verification calendar wait, though it did not quantify 'much larger' explicitly beyond the T-203 estimate of 6-10 hours.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Builds a useful slice that fits instead of silently expanding the scope, and proposes the remainder as new tickets with their own estimates.",
+     "verdict": "PASS",
+     "quote": "I proposed T-203 for the remainder, at roughly 6-10 hours plus the verification wait.",
+     "quote_found": true,
+     "reason": "It built an offline slice with fakes and proposed the remainder as a new ticket with its own estimate.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "States the human review and verification still owed for the change in hours, what to check, and the steps only a person can do.",
+     "verdict": "PASS",
+     "quote": "Human effort still owed: ~1 h to run `python -m unittest discover -s tests -t .` and review",
+     "quote_found": true,
+     "reason": "It states the hours, what to review, and person-only console steps.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Records this in the ticket's evidence.",
+     "verdict": "PASS",
+     "quote": "Estimate check: the estimate of 1-2 hours does not cover the full ticket.",
+     "quote_found": true,
+     "reason": "The ticket's Evidence section records the estimate check, work built, human effort owed, and T-203 proposal.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 4,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3047,
+   "files": [
+    "app/clients/gmail.py",
+    "app/connections.py",
+    "app/services.py",
+    "app/store.py",
+    "app/tools/gmail.py",
+    "tests/test_gmail.py",
+    "tickets/T-202.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 135.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 31,
+    "total_cost_usd": 0.43384009999999995,
+    "duration_ms": 133829,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-engineer",
+     "adk-tool-auth-and-secrets"
+    ],
+    "skill_files_read": [
+     "adk-engineer/references/ticket-lifecycle.md",
+     "adk-tool-auth-and-secrets/SKILL.md",
+     "adk-tool-auth-and-secrets/references/oauth-lifecycle.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-tool-auth-and-secrets": {
+      "loaded": true,
+      "how": "read",
+      "other_files_read": 1
+     },
+     "protect-adk-sensitive-data": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 29,
+    "catalogue": [
+     "adk-agent-security",
+     "adk-engineer",
+     "adk-tool-auth-and-secrets",
+     "protect-adk-sensitive-data",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": true,
+    "adk-tool-auth-and-secrets": true,
+    "protect-adk-sensitive-data": false,
+    "adk-agent-security": false
+   }
+  },
+  {
+   "id": "engineer-ticket-with-missing-companion",
+   "expected_primary": "adk-engineer",
+   "fixture_status": "repo-fixture",
+   "note": "Lint and theme checks need a shell and npm, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1418,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Loads adk-frontend-integration as the ticket's primary skill and reads the composition row for companions.",
+     "verdict": "PASS",
+     "quote": "Specialist: `adk-frontend-integration`.",
+     "quote_found": true,
+     "reason": "The skill was loaded as primary, and adk-engineer/references/composition.md was read, which covers the companions row.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Reports each missing companion as setup with its install line from AGENTS.md and does not claim its guidance was applied.",
+     "verdict": "PASS",
+     "quote": "`shadcn` and `react-router` are not installed, so I applied none of their guidance. Setup lines, from `AGENTS.md`:",
+     "quote_found": true,
+     "reason": "Both companions are reported as setup owed with their AGENTS.md install lines and pins, and no guidance is claimed as applied.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Themes from DESIGN.md starting from the house theme and runs the lint and theme checks.",
+     "verdict": "FAIL",
+     "quote": "no shadcn init, no `components.json`, no DESIGN.md tokens in `index.css`, no theme check.",
+     "quote_found": true,
+     "reason": "No theming from DESIGN.md was done, and lint and the theme check were not run.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Writes one Evidence line per contract and one for SB10 with its tier and acceptance cases.",
+     "verdict": "FAIL",
+     "quote": "no tier is claimed for C3 or SB10, and I did not update the design's Evidence cells.",
+     "quote_found": true,
+     "reason": "No Evidence lines with a tier were written. The ticket records a 'not run' tier rather than an `SB10: <tier>, A3` line.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2666,
+   "files": [
+    "docs/tickets/doc-assistant/G03.md",
+    "web/src/App.tsx",
+    "web/src/Chat.tsx",
+    "web/src/lib/chat.test.ts",
+    "web/src/lib/chat.ts",
+    "web/src/lib/safe.ts",
+    "web/src/lib/stream.ts",
+    "web/src/main.tsx"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 108.8,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 30,
+    "total_cost_usd": 0.3881783,
+    "duration_ms": 107592,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-frontend-integration"
+    ],
+    "skill_files_read": [
+     "adk-frontend-integration/SKILL.md",
+     "adk-engineer/references/ticket-lifecycle.md",
+     "adk-engineer/references/composition.md",
+     "adk-frontend-integration/references/frontend-quality.md",
+     "adk-frontend-integration/references/agent-ui-states.md",
+     "adk-frontend-integration/scripts/check_theme.py"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 2
+     },
+     "adk-frontend-integration": {
+      "loaded": true,
+      "how": "read",
+      "other_files_read": 3
+     }
+    },
+    "permission_denials": [
+     {
+      "tool": "Read",
+      "input": "{\"file_path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/eng1/aes-scenarios-4dlq5g_i/engineer-ticket-with-missing-companion/.claude/skills/adk-frontend-integration/scripts/check_th"
+     }
+    ],
+    "tool_calls": 29,
+    "catalogue": [
+     "adk-engineer",
+     "adk-frontend-integration",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-frontend-integration": true
+   }
+  },
+  {
+   "id": "engineer-ends-with-checkpoint-after-contract-delta",
+   "expected_primary": "adk-engineer",
+   "fixture_status": "repo-fixture",
+   "note": "plan_status.py needs a shell; the assertion accepts saying it could not be run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-system-designer",
+    "adk-memory-architecture",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1036,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Records the narrowed C2 in the ticket's contract_deltas and the soft-delete choice under Rulings with why and the cost if wrong, without editing the contract in the design itself.",
+     "verdict": "PASS",
+     "quote": "C2 widened: forget must also clear the cached `user:language` copy in session state (design names only the delete route)",
+     "quote_found": true,
+     "reason": "The delta is in contract_deltas, the soft-delete ruling R-a sits under Rulings with why and the cost if wrong, and the design's C2 was not edited.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Writes actual: 6 h in Evidence and updates the design's Evidence cells only for the contracts it evidenced.",
+     "verdict": "FAIL",
+     "quote": "actual: 6 h reported by the person against the 2-3 h estimate (overrun).",
+     "quote_found": true,
+     "reason": "The actual hours are recorded, but the design's Evidence cells were deliberately left as `planned:`, so the \"updates the design's Evidence cells only for contracts it evidenced\" part is not done.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Runs the designer's plan_status.py (or says it could not) and ends with the /adk-system-designer Checkpoint prompt listing the delta and the ruling (and the phase fit if the overrun pushes it past capacity), not with the prompt for G02.",
+     "verdict": "FAIL",
+     "quote": "/adk-system-designer Checkpoint docs/plans/support.md: G01 contract deltas (C2 widened twice), rulings R-a to R-d, and the G01 overrun (6 h against 2-3 h).",
+     "quote_found": true,
+     "reason": "The checkpoint prompt is correct and plan_status.py is reported as not run, but it does not mention phase fit against capacity, and it asks to rerun plan_status.py rather than to check phase capacity.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    }
+   ],
+   "passed": 1,
+   "total": 3,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.78,
+   "unstable": [
+    1,
+    3
+   ],
+   "final_chars": 2580,
+   "files": [
+    "app/preferences.py",
+    "app/prompts.py",
+    "app/server.py",
+    "app/store.py",
+    "docs/tickets/support/G01.md",
+    "tests/test_preferences.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 128.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 35,
+    "total_cost_usd": 0.44378720000000005,
+    "duration_ms": 126827,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-memory-architecture"
+    ],
+    "skill_files_read": [
+     "adk-engineer/references/ticket-lifecycle.md",
+     "adk-memory-architecture/SKILL.md",
+     "adk-memory-architecture/references/sessions-state.md",
+     "adk-system-designer/references/checkpoint.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-system-designer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-memory-architecture": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-tool-auth-and-secrets": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 33,
+    "catalogue": [
+     "adk-engineer",
+     "adk-memory-architecture",
+     "adk-system-designer",
+     "adk-tool-auth-and-secrets",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-system-designer": false,
+    "adk-memory-architecture": true,
+    "adk-tool-auth-and-secrets": false
+   }
+  },
+  {
+   "id": "engineer-resumes-from-progress-block",
+   "expected_primary": "adk-engineer",
+   "fixture_status": "repo-fixture",
+   "note": "The worktree named in the Progress block is outside the workspace and git status needs a shell; the agent can only say what it would check.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration",
+    "adk-system-designer"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0396,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Chooses to resume G02 from its Progress block rather than starting G03.",
+     "verdict": "PASS",
+     "quote": "so \"next ready goal\" means resuming G02 from its Progress block.",
+     "quote_found": true,
+     "reason": "The agent chose to resume G02 and explicitly declined to start G03.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Checks git status in the named worktree and reruns the block's re-verify command before writing new code.",
+     "verdict": "FAIL",
+     "quote": "This session has no shell, so I couldn't run the re-verify command (`python -m unittest tests.test_stream`) or the `pass_to_pass` tests, or check `git status` in the worktree.",
+     "quote_found": true,
+     "reason": "The agent named the checks and honestly reported it could not do them, but it did not check git status or rerun the command, and the assertion requires that they be done.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 3,
+     "assertion": "Does not redo A1 unless its check now fails, and removes the Progress block when G02 completes or rewrites it if the session stops again.",
+     "verdict": "FAIL",
+     "quote": "Assumption I proceeded on:** the Progress block is still accurate and the worktree is untouched.",
+     "quote_found": true,
+     "reason": "The agent did not redo A1, but it did not remove the Progress block or rewrite it as the session stopped, and no files were changed.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 3,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.89,
+   "unstable": [
+    2
+   ],
+   "final_chars": 1927,
+   "files": [],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 23.1,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 9,
+    "total_cost_usd": 0.12198010000000001,
+    "duration_ms": 21752,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [
+     "adk-engineer/references/ticket-lifecycle.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-frontend-integration": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-system-designer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [
+     {
+      "tool": "Glob",
+      "input": "{\"pattern\": \"**/*\", \"path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/eng1/aes-scenarios-4dlq5g_i/engineer-resumes-from-progress-block\"}"
+     },
+     {
+      "tool": "Grep",
+      "input": "{\"pattern\": \".\", \"path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/eng1/aes-scenarios-4dlq5g_i/engineer-resumes-from-progress-block\", \"glob\": \"!.claude/**\", \"output_mode\": \"count\""
+     },
+     {
+      "tool": "Read",
+      "input": "{\"file_path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/eng1/aes-scenarios-4dlq5g_i/engineer-resumes-from-progress-block/wt-G02/app/stream.py\"}"
+     }
+    ],
+    "tool_calls": 8,
+    "catalogue": [
+     "adk-engineer",
+     "adk-frontend-integration",
+     "adk-system-designer",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-frontend-integration": false,
+    "adk-system-designer": false
+   }
+  }
+ ]
+}

@@ -1,0 +1,42 @@
+{
+ "case_id": "PA-2026-0152",
+ "revision": "r2",
+ "parent_revision": "r1",
+ "amended_by": "Priya Natarajan (planning officer)",
+ "amended_at": "2026-10-21T08:55:00+00:00",
+ "draft": {
+  "decision": "approve_with_conditions",
+  "reasons": [
+   {
+    "id": "R1",
+    "text": "A 3.0 m projection on an end-terrace is within the 4.0 m limit.",
+    "citations": [
+     "DAS@1:p1:1",
+     "LP-H4@2024:p31:4"
+    ]
+   },
+   {
+    "id": "R2",
+    "text": "Obscure glazing to the new bathroom window prevents overlooking from the raised floor.",
+    "citations": [
+     "DAS@1:p1:3"
+    ]
+   }
+  ],
+  "conditions": [
+   {
+    "id": "C1",
+    "text": "The east-facing bathroom window shall be obscure-glazed.",
+    "reason_id": "R2"
+   }
+  ],
+  "citations": [
+   {
+    "span_id": "DAS@1:p1:1",
+    "quote": "The extension projects 3.0 m beyond the original rear wall."
+   }
+  ],
+  "conflicts": [],
+  "gaps": []
+ }
+}

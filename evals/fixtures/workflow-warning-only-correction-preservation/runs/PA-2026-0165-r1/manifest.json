@@ -1,0 +1,32 @@
+{
+ "run_id": "PA-2026-0165-r1",
+ "case_id": "PA-2026-0165",
+ "code_version": "pipeline 0.9.4 (c41d0e7)",
+ "source": {
+  "spans": 34,
+  "sha256": "2b399110cadfb737d1dc8684e518b0e880be330a9b926a323ad52fce9c439dfa",
+  "parser": "json-lines-v2"
+ },
+ "writer": {
+  "attempt": "a1",
+  "model": "gemini-3.5-flash",
+  "prompt": "writer-v7",
+  "instructions_sha256": "cbd2595aa19785cb4f7c2660a3b9a768dc2e61fd773f34b6f78952e23edc2595",
+  "temperature": 1.0,
+  "status": "completed",
+  "warnings": 1,
+  "draft_revision": "r1"
+ },
+ "review": {
+  "attempt": "a1-review",
+  "model": "gemini-3.5-flash",
+  "prompt": "review-v4",
+  "instructions_sha256": "c403cd446cebd8d507079374d836a85f35018bbb38f5103611c2c4af96bac356",
+  "status": "completed",
+  "verdict": "reject",
+  "draft_revision": "r1"
+ },
+ "export": {
+  "status": "not run"
+ }
+}

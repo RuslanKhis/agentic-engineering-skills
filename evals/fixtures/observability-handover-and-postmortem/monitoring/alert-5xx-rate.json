@@ -1,0 +1,17 @@
+{
+  "displayName": "claims-intake 5xx rate > 2% for 10 min",
+  "conditions": [
+    {
+      "displayName": "5xx ratio",
+      "conditionThreshold": {
+        "filter": "resource.type=\"cloud_run_revision\" AND resource.labels.service_name=\"claims-intake\" AND metric.type=\"run.googleapis.com/request_count\" AND metric.labels.response_code_class=\"5xx\"",
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 0.02,
+        "duration": "600s"
+      }
+    }
+  ],
+  "notificationChannels": [
+    "projects/kestrel-claims-prod/notificationChannels/8812"
+  ]
+}

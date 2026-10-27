@@ -1,0 +1,14 @@
+{
+  "eval_cases": [
+    {
+      "prompt": {"role": "user", "parts": [{"text": "How do I get on the VPN from home?"}]},
+      "reference": {"role": "model", "parts": [{"text": "Install GlobalConnect from the Software Centre and sign in with your staff account (IT-012)."}]},
+      "intermediate_events": [{"function_call": {"name": "search_kb", "args": {"query": "vpn home"}}}]
+    },
+    {
+      "prompt": {"role": "user", "parts": [{"text": "My laptop is dead and won't turn on, please log it."}]},
+      "reference": {"role": "model", "parts": [{"text": "Try holding the power button for 15 seconds (IT-031); I have raised a hardware ticket."}]},
+      "intermediate_events": [{"function_call": {"name": "raise_ticket", "args": {"category": "hardware"}}}]
+    }
+  ]
+}

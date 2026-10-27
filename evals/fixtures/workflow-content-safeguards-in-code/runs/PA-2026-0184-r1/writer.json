@@ -1,0 +1,47 @@
+{
+ "stage": "writer",
+ "saved_at": "2026-10-24T15:02:13+00:00",
+ "meta": {
+  "attempt": "a1",
+  "usage": {
+   "prompt_tokens": 1990,
+   "completion_tokens": 410,
+   "cost_usd": 0.27
+  }
+ },
+ "payload": {
+  "decision": "refuse",
+  "reasons": [
+   {
+    "id": "R1",
+    "text": "No tree survey is supplied for works within the root protection area of the protected lime, so harm cannot be ruled out.",
+    "citations": [
+     "LP-ENV3@2024:p58:2",
+     "LP-ENV3@2024:p58:4"
+    ]
+   }
+  ],
+  "conditions": [
+   {
+    "id": "C1",
+    "text": "An arboricultural method statement shall be approved before works start.",
+    "reason_id": "R1"
+   },
+   {
+    "id": "C2",
+    "text": "Materials shall match the existing house.",
+    "reason_id": "R1"
+   }
+  ],
+  "citations": [
+   {
+    "span_id": "LP-ENV3@2024:p58:4",
+    "quote": "Where a tree survey is absent, the authority cannot conclude that harm is avoided."
+   }
+  ],
+  "conflicts": [],
+  "gaps": [
+   "draft: No tree survey is supplied."
+  ]
+ }
+}

@@ -1,0 +1,19 @@
+[project]
+name = "claims-agent"
+version = "2.0.1"
+requires-python = ">=3.11"
+dependencies = [
+  "google-adk[a2a]==2.12.0",
+  "a2a-sdk[http-server]==1.2.3",
+  "google-genai==2.21.0",
+  "fastapi==0.118.0",
+  "uvicorn==0.37.0",
+]
+
+[project.optional-dependencies]
+# Offline red-team tests only. Install in its own environment: PyRIT's dependency set is not
+# resolved against the pins above. The A2ATarget live campaign needs a different PyRIT, see redteam/README.md.
+redteam = ["pyrit==1.1.0"]
+
+[tool.setuptools.packages.find]
+include = ["claims*"]

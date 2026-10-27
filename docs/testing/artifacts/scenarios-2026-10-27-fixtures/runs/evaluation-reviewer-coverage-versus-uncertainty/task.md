@@ -1,0 +1,6 @@
+Our reviewer keeps rejecting drafts. Before we change the checker or pay for another retry, can you work out whether it's the reviewer or the writer that's getting it wrong? Keep the evidence behind each decision.
+
+---
+Situation (from the person asking): The rejected draft and the reviewer's output for PA-2026-0177 are under runs/PA-2026-0177-r2, and runs/PA-2026-0152-r1 is a case the reviewer accepted. The cases and their source documents are under cases/dev/, and the local plan is cases/local-plan.json. The review stage's automatic checks are in pipeline/coverage_check.py. No planning officer or tree specialist is available to adjudicate, and no provider calls are allowed.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

@@ -1,0 +1,29 @@
+{
+ "stage": "writer",
+ "payload": {
+  "decision": "refuse",
+  "reasons": [
+   {
+    "id": "R1",
+    "text": "Drawing 03 shows the extension projecting 4.2 m beyond the original rear wall, more than the 4.0 m H4 allows for a terrace, and no daylight evidence is supplied.",
+    "citations": [
+     "DWG-03@1:p1:2",
+     "LP-H4@2024:p31:4",
+     "LP-H4@2024:p31:5"
+    ]
+   }
+  ],
+  "conditions": [],
+  "citations": [
+   {
+    "span_id": "DWG-05@1:p1:2",
+    "quote": "Maximum height of extension: 4.2 m"
+   }
+  ],
+  "conflicts": [],
+  "gaps": []
+ },
+ "meta": {
+  "errors": []
+ }
+}

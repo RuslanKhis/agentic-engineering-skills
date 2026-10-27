@@ -1,0 +1,1986 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T11:47:15+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/eval2/aes-scenarios-gzyrevks",
+ "commit": "9b08d86fe48544e6971ac0e16e82dfe8b53a5c82",
+ "scenarios_sha256": "1884a7da11f8fea54fa931ff29e255089766b97960919ded8131c7531ce64e08",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "evaluation-incident-regression-fail-to-pass",
+   "expected_primary": "adk-agent-evaluation",
+   "fixture_status": "repo-fixture",
+   "note": "No git history in the workspace: the base and fix commits are named in docs/incidents/INC-0412.md. Runner tests skip without google-adk.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-system-designer",
+    "adk-release-engineering"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0988,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Writes a scripted-model Runner test that drives two confirmations and asserts exactly one stored refund, and lists it under fail_to_pass with the existing eligible-refund and foreign-order-denial tests under pass_to_pass.",
+     "verdict": "PASS",
+     "quote": "\"fail_to_pass\": [\n    \"tests.test_tools.RefundToolTests.test_second_issue_after_one_proposal_does_not_refund_twice\",\n    \"tests.test_runner_refunds.RefundRunnerTests.test_second_yes_does_not_refund_twice\"",
+     "quote_found": true,
+     "reason": "A scripted-model Runner test with two \"yes\" turns asserts one payment and one stored refund; it is listed under fail_to_pass and the two existing Runner tests are under pass_to_pass.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Requires two recorded runs before accepting the case: on the base commit the fail_to_pass test fails and the pass_to_pass tests pass; with the fix every listed test passes.",
+     "verdict": "PASS",
+     "quote": "1. On the base commit, both `fail_to_pass` tests must fail and all of `pass_to_pass` must pass.\n2. With the merged fix, every test in both lists must pass.",
+     "quote_found": true,
+     "reason": "It requires two recorded runs before CI accepts the case, with the expected outcomes on the base commit and with the fix.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "States the grading rule: resolved only when fail_to_pass is non-empty and every test in both lists passed; a skipped or missing fail_to_pass test fails the case and a skipped pass_to_pass test makes it NOT RUN, with no partial credit.",
+     "verdict": "PASS",
+     "quote": "It must be non-empty. Each test must pass, and a skip counts as a failure. ... A skip leaves it NOT RUN, not resolved. ... **No partial credit.**",
+     "quote_found": false,
+     "reason": "The grading rule is stated in full: non-empty fail_to_pass, a skipped fail_to_pass test fails the case, a skipped pass_to_pass test is NOT RUN, and there is no partial credit.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Records base_ref, reference_fix and both lists in the case metadata and reports any test it wrote but did not execute as not run.",
+     "verdict": "FAIL",
+     "quote": "\"base_ref\": \"UNKNOWN: no git metadata in this workspace; fill in the known base commit\",",
+     "quote_found": true,
+     "reason": "The metadata has base_ref and reference_fix fields but both are UNKNOWN, although the commits were named in docs/incidents/INC-0412.md, so the real values were not recorded; the not-run reporting is present, but the field values are not.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    3
+   ],
+   "final_chars": 3248,
+   "files": [
+    "tests/regressions/double_yes_refund.json",
+    "tests/test_runner_refunds.py",
+    "tests/test_tools.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 48.9,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 20,
+    "total_cost_usd": 0.2112037,
+    "duration_ms": 47853,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-evaluation"
+    ],
+    "skill_files_read": [
+     "adk-agent-evaluation/references/deterministic-tests.md",
+     "adk-agent-evaluation/references/evaluation-design.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-evaluation": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-system-designer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-release-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 18,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-release-engineering",
+     "adk-system-designer",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-evaluation": true,
+    "adk-system-designer": false,
+    "adk-release-engineering": false
+   }
+  },
+  {
+   "id": "evaluation-self-hosted-harnesses-mlflow-deepeval-opik",
+   "expected_primary": "adk-agent-evaluation",
+   "fixture_status": "repo-fixture",
+   "note": "Advisory and configuration; no model calls.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-agent-observability",
+    "adk-release-engineering",
+    "protect-adk-sensitive-data"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1025,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Rejects deepeval's instrument_google_adk because it requires CONFIDENT_API_KEY and exports to Confident AI, and sets DEEPEVAL_TELEMETRY_OPT_OUT and DEEPEVAL_DISABLE_DOTENV for any offline deepeval metric, passing an explicit pinned model.",
+     "verdict": "PASS",
+     "quote": "Set `DEEPEVAL_TELEMETRY_OPT_OUT=1` and `DEEPEVAL_DISABLE_DOTENV=1`, so a stray `.env` key can't turn uploads on.",
+     "quote_found": true,
+     "reason": "It rejects instrument_google_adk (exports to Confident AI, raises without CONFIDENT_API_KEY), sets both opt-outs, and requires an explicit Vertex-backed judge for every metric; \"pinned\" is only loosely covered by the assumption of a judge \"pinned by exact id\".",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Records an MLflow Feedback with error as NOT RUN, does not treat score 0.0/no from a judge scorer as a confirmed failure without ADK's eval status, and feeds actual_tool_calls from session events because tool_call_args are '{}' with content capture off.",
+     "verdict": "FAIL",
+     "quote": "Errors, missing values and unverified zeros are `not run` or `blocked`, never `fail`.",
+     "quote_found": true,
+     "reason": "It covers 0.0 not being a confirmed fail and actual_tool_calls from session events, but never mentions recording an MLflow Feedback with error as NOT RUN; it only records its own 'not run' outcome label.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Points Opik at a self-hosted server with OPIK_URL_OVERRIDE and turns off OPIK_SENTRY_ENABLE, OPIK_ANALYTICS_ENABLE and the server usage report; sets MLFLOW_DISABLE_TELEMETRY and uses a SQL backend for MLflow OTLP ingestion.",
+     "verdict": "PASS",
+     "quote": "Set `OPIK_SENTRY_ENABLE=false`, `OPIK_ANALYTICS_ENABLE=false` and `OPIK_ENABLE_LITELLM_MODELS_MONITORING=false`. On the server, set `OPIK_USAGE_REPORT_ENABLED=false`.",
+     "quote_found": true,
+     "reason": "It sets OPIK_URL_OVERRIDE, all three Opik opt-outs plus the server usage report, MLFLOW_DISABLE_TELEMETRY, and a SQL backend for MLflow.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Pins the judge model instead of MLflow's gemini-2.5-flash default, uses Vertex identity rather than a Gemini API key, and keeps scripted-model Runner tests and adk eval as primary evidence.",
+     "verdict": "FAIL",
+     "quote": "Give the scorers an explicit `threshold` and pin the judge model and sample count. The default judge is `gemini-2.5-flash` with five samples.",
+     "quote_found": true,
+     "reason": "It pins the judge and uses Vertex, but never contrasts Vertex identity with a Gemini API key, nor says scripted-model Runner tests and adk eval stay primary evidence.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    1
+   ],
+   "final_chars": 4950,
+   "files": [
+    "docs/eval-harness-plan.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 57.2,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 11,
+    "total_cost_usd": 0.2014472,
+    "duration_ms": 56053,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-evaluation"
+    ],
+    "skill_files_read": [
+     "adk-agent-evaluation/references/provider-compatibility.md",
+     "adk-agent-observability/references/export-paths.md",
+     "adk-agent-observability/references/signals-and-schema.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-evaluation": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 2
+     },
+     "adk-release-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "protect-adk-sensitive-data": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 9,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-observability",
+     "adk-release-engineering",
+     "protect-adk-sensitive-data",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-evaluation": true,
+    "adk-agent-observability": false,
+    "adk-release-engineering": false,
+    "protect-adk-sensitive-data": false
+   }
+  },
+  {
+   "id": "evaluation-judge-agreement-and-harness-bridge",
+   "expected_primary": "adk-agent-evaluation",
+   "fixture_status": "repo-fixture",
+   "note": "Computing alpha needs a shell; the agent can write the script and report it as not run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-release-engineering",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0687,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Reports Krippendorff's alpha at the ordinal level with the level recorded, explains what 1, 0 and negative values mean, and measures each judge against the human labels as well as against each other.",
+     "verdict": "FAIL",
+     "quote": "**Krippendorff's α at the ordinal level.** Record the level next to the figure, give a bootstrap CI over traces, and report nominal and interval as sensitivity checks.",
+     "quote_found": true,
+     "reason": "It recommends ordinal alpha and measuring each judge against humans, but never explains what 1, 0 and negative values mean and no figure was computed.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "States that the ADK agent can run under Inspect through agent_bridge with Gemini(model='inspect') and a placeholder API key, that streaming mode cannot be bridged, and that this was proven only without tool round trips under a real model.",
+     "verdict": "FAIL",
+     "quote": "an `LlmAgent` on `Gemini(model=\"inspect\")` runs under `inspect eval --model mockllm/model`. That spike used one function tool and a mock model. A real tool round trip was not exercised.",
+     "quote_found": true,
+     "reason": "It covers agent_bridge, Gemini(model='inspect'), the placeholder key, streaming not bridged and no tool round trip, but it never ties the proof to a real model and the 'Placeholder key' bullet gives no details beyond needing one.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 3,
+     "assertion": "Treats a NaN or missing reliability figure as not run rather than passed, and keeps ADK's own evaluators and scripted-model Runner tests as the primary evidence.",
+     "verdict": "FAIL",
+     "quote": "Judge-B's two failed calls (traces 018 and 043)** reported as incomplete, not silently dropped.",
+     "quote_found": true,
+     "reason": "Missing scores are handled as incomplete, but the answer doesn't state that a NaN/missing reliability figure counts as not run, and doesn't flag the '0' substitution as wrong; it does keep ADK evaluators and Runner tests primary.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Pins judge ids and rubric versions, and reports model-dependent runs as not run.",
+     "verdict": "FAIL",
+     "quote": "`judge-a.md` uses the floating alias `gemini-flash-latest`. Pin a dated version before comparing runs over time.",
+     "quote_found": true,
+     "reason": "It says to pin judge-a's id, but does not mention pinning rubric versions, and model-dependent runs are listed under 'Not done' rather than explicitly reported as not run.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 0,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    2
+   ],
+   "final_chars": 5405,
+   "files": [
+    "scripts/agreement_alpha.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 73.2,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 24,
+    "total_cost_usd": 0.6475094,
+    "duration_ms": 72075,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-evaluation",
+     "update-config"
+    ],
+    "skill_files_read": [
+     "adk-agent-evaluation/references/evaluation-design.md",
+     "adk-agent-evaluation/references/provider-compatibility.md",
+     "adk-agent-evaluation/scripts/label_agreement.py"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-evaluation": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 3
+     },
+     "adk-release-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 21,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-observability",
+     "adk-release-engineering",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-evaluation": true,
+    "adk-release-engineering": false,
+    "adk-agent-observability": false
+   }
+  },
+  {
+   "id": "evaluation-collateral-damage-no-op-control",
+   "expected_primary": "adk-agent-evaluation",
+   "fixture_status": "repo-fixture",
+   "note": "Standalone expense agent; Runner case tests skip without google-adk.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-agent-interoperability",
+    "adk-release-engineering"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.2539,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Diffs the start and end fixture across all tables and asserts the changed set equals the case's expected set, with any ignored bookkeeping table named and justified, rather than hashing only the tables the case is about.",
+     "verdict": "PASS",
+     "quote": "BOOKKEEPING = {\"audit_log\", \"sync_state\"}",
+     "quote_found": true,
+     "reason": "The grader snapshots and diffs all tables, requires the changed set to be limited to expenses/expense_lines plus named bookkeeping tables, and keeps audit_log actions as a check. Note the justification for ignoring bookkeeping is thin, but it is named and constrained.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Drills into expected tables at record and field level, ignoring volatile fields such as timestamps per assertion instead of dropping the table, and keeps the effective-mutation comparison because an add-then-delete detour nets out of a diff.",
+     "verdict": "PASS",
+     "quote": "VOLATILE = {(\"expenses\", \"created_at\"), (\"audit_log\", \"at\"), (\"sync_state\", \"updated_at\")}",
+     "quote_found": true,
+     "reason": "Volatile fields are ignored per column, not by dropping whole tables. Record- and field-level checks cover expenses and expense_lines, and the audit-action check catches change-and-restore detours that net out of a diff.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Runs a do-nothing scripted model through every case's graders and requires each action case to have at least one assertion that run fails; notes that collateral-damage assertions pass a no-op by construction.",
+     "verdict": "FAIL",
+     "quote": "A run that changes nothing must pass only the 5 non-filing cases (c07, c11, c19, c23, c26) and fail all 25 filing cases.",
+     "quote_found": true,
+     "reason": "The do-nothing control is implemented as an unchanged-database grade, not a do-nothing scripted model through the Runner, and it never notes that collateral-damage assertions pass a no-op by construction.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Records exact MCP server versions (package@version, image digest) in the live-run plan, treats a server change as a new baseline, and reports model-dependent checks as not run.",
+     "verdict": "FAIL",
+     "quote": "Pin the filesystem server to an exact version and the GitHub image to a `@sha256:` digest.",
+     "quote_found": true,
+     "reason": "The plan recommends pinning and records the reported version and digest, but it never treats a server change as a new baseline. It also never states that model-dependent checks are reported as not run, beyond the trial count, so the assertion is not fully met.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    3
+   ],
+   "final_chars": 4701,
+   "files": [
+    "README.md",
+    "docs/nightly-live-run.md",
+    "eval_cases/cases.json",
+    "tests/case_checks.py",
+    "tests/test_cases.py",
+    "tests/test_grader.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 151.3,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 29,
+    "total_cost_usd": 0.43401280000000003,
+    "duration_ms": 150299,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-evaluation"
+    ],
+    "skill_files_read": [
+     "adk-agent-evaluation/references/evaluation-design.md",
+     "adk-agent-evaluation/references/live-evaluations.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-evaluation": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-agent-interoperability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-release-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 27,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-interoperability",
+     "adk-release-engineering",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-evaluation": true,
+    "adk-agent-interoperability": false,
+    "adk-release-engineering": false
+   }
+  },
+  {
+   "id": "evaluation-tool-fault-matrix-and-resilience",
+   "expected_primary": "adk-agent-evaluation",
+   "fixture_status": "repo-fixture",
+   "note": "Standalone travel agent; the Environment Simulation test skips without google-adk.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-operational-guardrails",
+    "safe-api-tool-calls",
+    "adk-agent-instructions"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.223,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Builds one fault per tool per case with a no-fault twin, using InjectionConfig injected_error, injected_latency_seconds, and a non-empty injected_response for empty and corrupted (sentinel) results.",
+     "verdict": "PASS",
+     "quote": "kwargs[\"injected_error\"] = InjectedError(error_code=fault.injected[\"error_code\"], error_message=fault.injected[\"error_message\"])",
+     "quote_found": true,
+     "reason": "The matrix has 12 cases, one fault per tool per kind, plus a TWIN no-fault case. It uses injected_error, injected_latency_seconds, and non-empty injected_response containing the sentinel for corrupt and an empty flights list or missing booking_id for empty.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Asserts each fault actually fired before scoring, noting that an unconfigured tool name or unmatched match_args lets the real tool run.",
+     "verdict": "FAIL",
+     "quote": "A misspelt name configures nothing, so the real tool ran and the scripted reply made the test pass.",
+     "quote_found": true,
+     "reason": "Fault firing is asserted, but nothing says an unmatched match_args lets the real tool run; only the misspelt tool name is noted.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Scores honesty (sentinel not repeated, no false success), end-state completion with zero forbidden effects, and retry discipline by error class from the trajectory, with usage compared to the twin.",
+     "verdict": "PASS",
+     "quote": "calls to the faulted tool within `1 + retry_bound`; no same-argument retry after a non-retryable error; one idempotency key across `book_flight` calls",
+     "quote_found": true,
+     "reason": "The scorer checks honesty (sentinel, false claims), completion with forbidden-effect limits, and retry discipline by error class from the trajectory, and compares call counts to the twin.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Keeps any LLM judge pinned and secondary, treats a fault-free trace as NOT RUN rather than a neutral pass, and labels live runs as needing approval.",
+     "verdict": "PASS",
+     "quote": "Add a pinned judge only after calibrating it on labelled answers.",
+     "quote_found": true,
+     "reason": "The judge is optional and secondary, a fault that never fired is NOT RUN rather than a pass, and live Gemini runs are labelled as needing approval.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    }
+   ],
+   "passed": 3,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    4
+   ],
+   "final_chars": 4172,
+   "files": [
+    "README.md",
+    "docs/resilience-scoring.md",
+    "tests/fault_matrix.py",
+    "tests/resilience_score.py",
+    "tests/test_fault_matrix_runner.py",
+    "tests/test_resilience.py",
+    "tests/test_resilience_score.py",
+    "tests/test_tool_faults.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 238.9,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 30,
+    "total_cost_usd": 0.6161327,
+    "duration_ms": 237776,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-evaluation"
+    ],
+    "skill_files_read": [
+     "adk-agent-evaluation/references",
+     "adk-agent-evaluation/references/execution-evidence.md",
+     "adk-agent-evaluation/references/evaluation-design.md",
+     "adk-agent-evaluation/references/deterministic-tests.md",
+     "safe-api-tool-calls/SKILL.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-evaluation": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 4
+     },
+     "adk-operational-guardrails": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "safe-api-tool-calls": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-instructions": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 28,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-instructions",
+     "adk-operational-guardrails",
+     "safe-api-tool-calls",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-evaluation": true,
+    "adk-operational-guardrails": false,
+    "safe-api-tool-calls": false,
+    "adk-agent-instructions": false
+   }
+  },
+  {
+   "id": "evaluation-repeated-trials-pass-hat-k-and-end-state",
+   "expected_primary": "adk-agent-evaluation",
+   "fixture_status": "repo-fixture",
+   "note": "Standalone booking agent; evaluator tests skip without google-adk and model access.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-release-engineering",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1057,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Runs each case several times and reports the unbiased pass^k (C(c,k)/C(n,k)), refuses k above the trial count, keeps infrastructure failures out of the denominator but in the report, and defines success from the whole case, not one metric.",
+     "verdict": "PASS",
+     "quote": "return math.comb(c, k) / math.comb(n, k)",
+     "quote_found": true,
+     "reason": "Unbiased pass^k is implemented with a refusal when n<k, infra errors are excluded from the denominator but counted in the report, and the trial passes only if the whole end-state grade is clean.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Grades bookings by replaying the case's reference trajectory on a fresh backend copy and comparing end states, so a different correct order passes and an extra mutation fails, instead of loosening to ANY_ORDER.",
+     "verdict": "PASS",
+     "quote": "replay the case's reference `tool_uses` on a fresh seeded backend to get the target state",
+     "quote_found": true,
+     "reason": "The grader replays the reference on a fresh backend and compares diffs, so different read orders pass, extra mutations fail, and ANY_ORDER is not used.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Scores a run that stopped for any reason other than the agent or user finishing as zero, multiplies component results, and treats an undefined criterion as not evaluated.",
+     "verdict": "FAIL",
+     "quote": "",
+     "quote_found": false,
+     "reason": "Nothing scores non-finish stops (e.g. max-turn or timeout) as zero, multiplies component results, or treats undefined criteria as not evaluated.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Pins the judge and model ids in the gate's manifest and states that a judge change starts a new baseline; model-dependent runs reported as not run.",
+     "verdict": "FAIL",
+     "quote": "record the date and model ID with it",
+     "quote_found": true,
+     "reason": "No gate manifest pins judge and model ids, and no rule says a judge change starts a new baseline; only a vague note to record the model ID.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3341,
+   "files": [
+    "EVAL_RELIABILITY.md",
+    "tests/end_state.py",
+    "tests/reliability.py",
+    "tests/test_end_state.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 156.4,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 29,
+    "total_cost_usd": 0.4705217,
+    "duration_ms": 155242,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-evaluation"
+    ],
+    "skill_files_read": [
+     "adk-agent-evaluation/references/evaluation-design.md",
+     "adk-agent-evaluation/references/result-auditing.md",
+     "adk-agent-evaluation/references/deterministic-tests.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-evaluation": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 3
+     },
+     "adk-release-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 27,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-agent-observability",
+     "adk-release-engineering",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-evaluation": true,
+    "adk-release-engineering": false,
+    "adk-agent-observability": false
+   }
+  },
+  {
+   "id": "evaluation-underwriter-labelling-session",
+   "expected_primary": "adk-agent-evaluation",
+   "fixture_status": "repo-fixture",
+   "note": "Running scripts/label_agreement.py needs a shell; the helper's real output is with the judge.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-engineer",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md",
+    "label-agreement-output.txt"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1078,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Reads references/expert-review.md and names one quality decision-maker before planning the session.",
+     "verdict": "FAIL",
+     "quote": "Who is the quality decision-maker? Unknown; **not named, so I adjudicated nothing**",
+     "quote_found": true,
+     "reason": "The agent read expert-review.md but did not name a decision-maker before planning; it left the role as '<to be named; unresolved>'.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Runs scripts/label_agreement.py on the supplied files and reports kappa per criterion with the disagreements to adjudicate.",
+     "verdict": "FAIL",
+     "quote": "I did not run `label_agreement.py`. Please re-run the three commands in `docs/evaluation/README.md` to confirm the figures.",
+     "quote_found": true,
+     "reason": "The script was not run; kappa figures were computed by hand, though they match the real output and disagreements were listed.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Reports criteria drift from the mixed versions and asks for the older labels to be re-reviewed.",
+     "verdict": "PASS",
+     "quote": "Mensah's CLM-4101..4112 fraud labels are v01 and need re-review under v02 (the definition changed).",
+     "quote_found": true,
+     "reason": "It reports the v01/v02 drift on fraud_flags and calls for re-review of the older labels.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Does not report judge TPR or TNR as trustworthy without adjudicated labels on a held-out split with enough cases per class.",
+     "verdict": "PASS",
+     "quote": "so TPR and TNR are NOT REPORTED for all three criteria. There are only 24 cases, with 5–7 reference failures per criterion, against a minimum of 30 failures and 30 passes.",
+     "quote_found": true,
+     "reason": "It refuses to report judge TPR/TNR as trustworthy without adjudicated labels, a split and enough cases per class; the indicative figures are labelled as rough only.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3114,
+   "files": [
+    "docs/evaluation/README.md",
+    "docs/evaluation/labelling-session-plan.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 74.7,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 15,
+    "total_cost_usd": 0.2738367,
+    "duration_ms": 73540,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-evaluation"
+    ],
+    "skill_files_read": [
+     "adk-agent-evaluation/references/expert-review.md",
+     "adk-agent-evaluation/scripts/label_agreement.py",
+     "adk-agent-evaluation/assets/expert-session-plan.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-evaluation": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 3
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-presenter": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 13,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-engineer",
+     "adk-presenter",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-evaluation": true,
+    "adk-engineer": false,
+    "adk-presenter": false
+   }
+  },
+  {
+   "id": "evaluation-selected-source-support",
+   "expected_primary": "adk-agent-evaluation",
+   "fixture_status": "repo-fixture",
+   "note": "Its own community-hall pack (not the skill's worked example); expected labels are judge-only.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md",
+    "hall-support-expectations.json"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1016,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Rejects a true width observation cited only to the question and accepts it when the answer span is selected.",
+     "verdict": "PASS",
+     "quote": "\"case_id\": \"h01\", \"source_identity\": \"valid\", \"span_completeness\": \"incomplete\", ... \"support\": \"unsupported\"",
+     "quote_found": false,
+     "reason": "h01 is rejected because only the question was selected, and h04 is accepted with question and answer, as expected.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Separates valid identities from support, handles an omitted exception and rejects the unrelated half of a shared-excerpt pair.",
+     "verdict": "PASS",
+     "quote": "\"case_id\": \"h07\", \"source_identity\": \"valid\", \"span_completeness\": \"incomplete\", ... \"support\": \"contradicted\"",
+     "quote_found": false,
+     "reason": "h06 and h16 are marked invalid, h17 and h10 are not applicable and unsupported, h07 is contradicted for the omitted exception, h13 is supported, and h02 is supported; all of these match the expectations.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Accepts written dimensions while rejecting unsupported physical inference from unscaled pixels.",
+     "verdict": "FAIL",
+     "quote": "\"case_id\": \"h12\", ... \"contrary_evidence\": \"contradiction\", \"support\": \"contradicted\"",
+     "quote_found": false,
+     "reason": "h05 is correctly supported, but h12 is marked contradicted when the expected label is unsupported with no contrary evidence, so the pixel inference is rejected with the wrong label.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Distinguishes contradictions from absent evidence and records unresolved conflicting records.",
+     "verdict": "PASS",
+     "quote": "\"Missing evidence is not contradiction.\"",
+     "quote_found": false,
+     "reason": "h03 is contradicted, h09 is unsupported rather than contradicted, h14 is unresolved, and h15 is contradicted, all as expected.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Reports judgments and label disagreements as AI-only calibration evidence, without claiming independent human truth.",
+     "verdict": "FAIL",
+     "quote": "No second rater or human review.",
+     "quote_found": true,
+     "reason": "The answer notes that no human review took place, but it never frames the judgments as AI-only calibration evidence and says nothing about label disagreements.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 1763,
+   "files": [
+    ".adk-evidence/source-judgments.json"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 38.6,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 6,
+    "total_cost_usd": 0.1193476,
+    "duration_ms": 37464,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [],
+    "skill_files_read": [
+     "adk-agent-evaluation/references/source-support-calibration.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 5,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": false,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-evaluation": false
+   }
+  },
+  {
+   "id": "designer-names-google-product-skills",
+   "expected_primary": "adk-system-designer",
+   "fixture_status": "runnable",
+   "note": "No repository by design; finding-google-skills is not in this collection, so the router the context names is absent from the run.",
+   "skills_missing": [
+    "finding-google-skills"
+   ],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "deploy-adk-on-google-cloud",
+    "adk-agent-observability",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.3344,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Produces the design and phased plan with contracts, and keeps the conversation at design level without fetching, installing or running any Google product skill.",
+     "verdict": "PASS",
+     "quote": "Google's `finding-google-skills` router is installed, but I didn't run it. ... Nothing was installed or touched in the cloud.",
+     "quote_found": false,
+     "reason": "The agent produced the design and phased plan with contracts and did not fetch, install or run any Google product skill.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Writes google/skills:<name> entries with a purpose into the supporting skills of goals whose routes need a product provisioned, queried or administered, for example cloud-run-basics for the service, iam-helper-for-policy-management for the runtime identity bindings and cloud-run-alert-configuration once SLIs are decided.",
+     "verdict": "FAIL",
+     "quote": "**Primary skill:** `adk-presenter`. **Supporting:** none.",
+     "quote_found": true,
+     "reason": "The google/skills entries appear only in the design's routes table and as a single unconfirmed WAF mention in G15; the visible goals have no per-goal supporting-skill entries with a purpose such as cloud-run-basics or iam-helper.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Keeps this toolkit's specialist as the primary skill on every goal and never names a Google product skill as primary.",
+     "verdict": "PASS",
+     "quote": "| G11 Cloud Run, edge and data tier | 1 | implementation | 12–18 | G02, W1 | `deploy-adk-on-google-cloud` | blocked on W1 |",
+     "quote_found": true,
+     "reason": "Every goal has a toolkit specialist as primary skill and Google product skills appear only in the design's routes table, never as primary.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Leaves the product steps as execution-scope prerequisites and notes that adk-engineer will install or fetch the product skill when it carries out the goal.",
+     "verdict": "FAIL",
+     "quote": "None of these product skills is installed; installing them and the specialists the plan names is a setup step.",
+     "quote_found": true,
+     "reason": "The agent treats installation as a human setup step and never says adk-engineer will install or fetch the product skill when executing the goal.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3909,
+   "files": [
+    "docs/architecture/warranty-returns.md",
+    "docs/plans/warranty-returns.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 590.6,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 28,
+    "total_cost_usd": 1.5539977,
+    "duration_ms": 589408,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-system-designer"
+    ],
+    "skill_files_read": [
+     "adk-system-designer/references/delivery-profiles.md",
+     "adk-system-designer/references/implementation-handoff.md",
+     "adk-system-designer/assets/system-design-template.md",
+     "adk-system-designer/assets/implementation-plan-template.md",
+     "adk-system-designer/references/failure-review.md",
+     "adk-system-designer/references/security-baseline.md",
+     "adk-system-designer/references/gcp-decisions.md",
+     "adk-system-designer/references/waf-review.md",
+     "adk-system-designer/references/resource-costs.md",
+     "adk-system-designer/scripts/check_schedule.py",
+     "deploy-adk-on-google-cloud/references/compatibility.md",
+     "adk-system-designer/references/design-decisions.md"
+    ],
+    "skill_md_loaded": {
+     "adk-system-designer": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 11
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-tool-auth-and-secrets": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 26,
+    "catalogue": [
+     "adk-agent-observability",
+     "adk-engineer",
+     "adk-system-designer",
+     "adk-tool-auth-and-secrets",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-system-designer": true,
+    "adk-engineer": false,
+    "deploy-adk-on-google-cloud": false,
+    "adk-agent-observability": false,
+    "adk-tool-auth-and-secrets": false
+   },
+   "rejudged": true
+  }
+ ]
+}

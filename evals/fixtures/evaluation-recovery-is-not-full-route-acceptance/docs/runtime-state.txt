@@ -1,0 +1,10 @@
+$ git rev-parse --short HEAD
+3c9f0aa
+$ git status --short --ignored
+ M pipeline/stages.py
+?? pipeline/review_patch.py
+?? predictions/
+?? runs/PA-2026-0141-r4-cont1/
+!! pipeline/local_overrides.py
+!! .venv/
+(captured on the runtime laptop, 2026-10-24 16:45)

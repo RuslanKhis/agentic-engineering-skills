@@ -3,7 +3,9 @@
 
 Each selected scenario gets a fresh workspace under a temporary run directory
 (never inside this repository): the fixture listed for it in
-evals/scenario-fixtures.json (if any) and only the scenario's
+evals/scenario-fixtures.json (if any: shared base projects from
+evals/fixtures/base/, explicit copies, then the scenario's own overlay from
+evals/fixtures/<id>/, minus any listed removals) and only the scenario's
 ``available_skills`` that exist in skills/, copied (never symlinked, tests/
 left out) as Claude Code project skills in ``<workspace>/.claude/skills/``.
 With ``--skill-install add-dir`` they are copied to a sibling directory that
@@ -23,8 +25,9 @@ assertion PASS or FAIL from the agent's final answer, the files it wrote and
 the skills it loaded, quoting its evidence; it judges ``--judge-repeats``
 times (default 3) and each assertion takes the majority verdict, with
 disagreements flagged ``unstable``. Scenarios whose context describes
-fixtures that do not exist are reported as ``fixture-missing`` and never run
-against nothing.
+fixtures that do not exist are reported as ``fixture-missing``, and those
+marked ``not-representable`` (with a reason) cannot be built offline; neither
+is ever run against nothing.
 
 Subcommands::
 
@@ -66,8 +69,10 @@ from model_backends import (DEFAULT_MODEL, BackendError, call_model, canonical_j
 
 ROOT = Path(__file__).resolve().parents[1]
 GRADER_ROOT = "evals/graders/"
+FIXTURE_ROOT = "evals/fixtures"
 SCHEMA = "scenario-results/2"
-STATUSES = ("runnable", "repo-fixture", "fixture-missing")
+STATUSES = ("runnable", "repo-fixture", "fixture-missing", "not-representable")
+NOT_RUN = ("fixture-missing", "not-representable")
 SKILL_INSTALLS = ("project", "add-dir")
 AGENT_TOOLS = "Read,Write,Edit,Glob,Grep,Skill"
 # Path-scoped allow rules. Glob and Grep are governed by the Read rules, so they
@@ -123,20 +128,36 @@ def load_fixtures(root: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))["scenarios"] if path.exists() else {}
 
 
+def fixture_copies(case_id: str, entry: dict) -> list[dict]:
+    """The copies that build a workspace, in order: each shared base, explicit copies, the overlay.
+
+    ``base`` names directories under evals/fixtures/base/; ``overlay: true`` copies
+    evals/fixtures/<case id>/ last, so it adds or replaces files of the bases.
+    """
+    copies = [{"from": f"{FIXTURE_ROOT}/base/{name}", "to": "."} for name in entry.get("base", [])]
+    copies += list(entry.get("copy", []))
+    if entry.get("overlay"):
+        copies.append({"from": f"{FIXTURE_ROOT}/{case_id}", "to": "."})
+    return copies
+
+
 def classify(case: dict, fixtures: dict, root: Path) -> dict:
     entry = dict(fixtures.get(case["id"]) or {"status": "fixture-missing"})
     if entry.get("status") not in STATUSES:
         raise InputError(f"{case['id']}: unknown fixture status {entry.get('status')!r}")
+    if entry["status"] == "not-representable" and not entry.get("reason"):
+        raise InputError(f"{case['id']}: a not-representable scenario needs a reason")
     for item in entry.get("grader", []):
         if not item["from"].startswith(GRADER_ROOT):
             raise InputError(f"{case['id']}: grader material must live under {GRADER_ROOT}: {item['from']}")
     if entry["status"] == "repo-fixture":
-        absent = [c["from"] for c in entry.get("copy", []) if not (root / c["from"]).exists()]
-        if absent or not entry.get("copy"):
+        copies = fixture_copies(case["id"], entry)
+        absent = [c["from"] for c in copies if not (root / c["from"]).exists()]
+        if absent or not copies:
             entry = {"status": "fixture-missing", "partial": "listed fixture paths are absent: "
                      + ", ".join(absent or ["(none listed)"])}
     absent = [g["from"] for g in entry.get("grader", []) if not (root / g["from"]).is_file()]
-    if absent and entry["status"] != "fixture-missing":
+    if absent and entry["status"] not in NOT_RUN:
         entry = {"status": "fixture-missing", "partial": "listed grader material is absent: "
                  + ", ".join(absent)}
     if entry["status"] == "fixture-missing" and "partial" not in entry:
@@ -167,7 +188,7 @@ def format_list(cases: list[dict], fixtures: dict, root: Path) -> str:
     groups: dict[str, list[str]] = {status: [] for status in STATUSES}
     for case in cases:
         entry = classify(case, fixtures, root)
-        detail = entry.get("note") or entry.get("partial") or entry.get("needs") or ""
+        detail = entry.get("note") or entry.get("reason") or entry.get("partial") or entry.get("needs") or ""
         if entry["skills_missing"]:
             detail += f" [external skills absent: {', '.join(entry['skills_missing'])}]"
         groups[entry["status"]].append(
@@ -205,6 +226,27 @@ def install_skills(root: Path, names: list[str], parent: Path) -> list[str]:
     return installed
 
 
+def build_workspace(root: Path, case_id: str, fixture: dict, workspace: Path) -> None:
+    """Copy a scenario's bases, explicit copies and overlay into the workspace, then apply removals."""
+    for item in fixture_copies(case_id, fixture):
+        source, target = root / item["from"], (workspace / item["to"]).resolve()
+        if workspace.resolve() not in (target, *target.parents):
+            raise InputError(f"{case_id}: fixture target escapes the workspace")
+        if source.is_dir():
+            shutil.copytree(source, target, dirs_exist_ok=True,
+                            ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+        else:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+    for rel in fixture.get("remove", []):
+        target = (workspace / rel).resolve()
+        if workspace.resolve() not in target.parents:
+            raise InputError(f"{case_id}: fixture removal escapes the workspace")
+        if not target.exists():
+            raise InputError(f"{case_id}: fixture removes {rel}, which no base or overlay supplies")
+        shutil.rmtree(target) if target.is_dir() else target.unlink()
+
+
 def prepare(root: Path, cases: list[dict], fixtures: dict, tmp_root: Path | None,
             run_dir: Path | None = None, skill_install: str = "project") -> tuple[Path, dict]:
     if skill_install not in SKILL_INSTALLS:
@@ -221,21 +263,12 @@ def prepare(root: Path, cases: list[dict], fixtures: dict, tmp_root: Path | None
     entries = []
     for case in cases:
         entry = {"id": case["id"], **classify(case, fixtures, root)}
-        if entry["status"] != "fixture-missing":
+        if entry["status"] not in NOT_RUN:
             case_dir = run_dir / case["id"]
             workspace = case_dir / "workspace"
             workspace.mkdir(parents=True)
             (case_dir / "home").mkdir()
-            for item in fixtures.get(case["id"], {}).get("copy", []):
-                source, target = root / item["from"], (workspace / item["to"]).resolve()
-                if workspace.resolve() not in (target, *target.parents):
-                    raise InputError(f"{case['id']}: fixture target escapes the workspace")
-                if source.is_dir():
-                    shutil.copytree(source, target, dirs_exist_ok=True,
-                                    ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
-                else:
-                    target.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copy2(source, target)
+            build_workspace(root, case["id"], fixtures.get(case["id"], {}), workspace)
             fixture_files = tree_digest(workspace)
             grader = []
             for item in fixtures.get(case["id"], {}).get("grader", []):
@@ -297,11 +330,19 @@ def confinement(tools: str, skill_install: str) -> dict:
             "confined_to_workspace": not unconfined}
 
 
-def parse_transcript(lines: list[str]) -> dict:
-    """Summarise a stream-json transcript: final text, tool calls, skills loaded, refusals, usage."""
+SLASH_COMMAND = re.compile(r"^\s*/([a-z0-9][a-z0-9-]*)\b")
+
+
+def parse_transcript(lines: list[str], prompt: str = "") -> dict:
+    """Summarise a stream-json transcript: final text, tool calls, skills loaded, refusals, usage.
+
+    A prompt that starts with ``/<skill>`` is expanded by Claude Code into that skill's
+    instructions before the first turn; the stream does not echo it, so it is counted
+    from the prompt when the skill is in the session's catalogue.
+    """
     summary = {"final": "", "texts": [], "tool_calls": [], "skills_loaded": [], "skill_tool_calls": [],
-               "skill_md_reads": [], "skill_files_read": [], "result": None, "catalogue": None,
-               "permission_denials": []}
+               "skill_md_reads": [], "skill_files_read": [], "slash_commands": [], "result": None,
+               "catalogue": None, "permission_denials": []}
     for line in lines:
         try:
             event = json.loads(line)
@@ -338,7 +379,11 @@ def parse_transcript(lines: list[str]) -> dict:
                 for d in event.get("permission_denials") or []]
     if not summary["final"] and summary["texts"]:
         summary["final"] = summary["texts"][-1]
-    for key in ("skills_loaded", "skill_tool_calls", "skill_md_reads", "skill_files_read"):
+    command = SLASH_COMMAND.match(prompt or "")
+    if command and summary["catalogue"] is not None and command.group(1) in summary["catalogue"]:
+        summary["slash_commands"].append(command.group(1))
+        summary["skills_loaded"].insert(0, command.group(1))
+    for key in ("skills_loaded", "skill_tool_calls", "skill_md_reads", "skill_files_read", "slash_commands"):
         summary[key] = list(dict.fromkeys(summary[key]))
     return summary
 
@@ -347,11 +392,13 @@ def skill_md_loaded(summary: dict, installed: list[str]) -> dict[str, dict]:
     """Per installed skill: was its SKILL.md loaded (through the Skill tool or a Read), and how."""
     report = {}
     for name in installed:
+        via_slash = name in summary.get("slash_commands", [])
         via_tool = name in summary["skill_tool_calls"]
         via_read = name in summary["skill_md_reads"]
         files = [path for path in summary["skill_files_read"] if path.split("/", 1)[0] == name]
-        report[name] = {"loaded": via_tool or via_read,
-                        "how": "skill-tool" if via_tool else "read" if via_read else None,
+        report[name] = {"loaded": via_slash or via_tool or via_read,
+                        "how": ("slash-command" if via_slash else "skill-tool" if via_tool
+                                else "read" if via_read else None),
                         "other_files_read": len([f for f in files if f != f"{name}/SKILL.md"])}
     return report
 
@@ -374,15 +421,16 @@ def run_agent(run_dir: Path, entry: dict, model: str, max_turns: int, timeout: f
     env = os.environ.copy()
     env.update(AGENTIC_ENGINEERING_HOME=str(case_dir / "home"), AES_FIELD_NOTES="off", **AGENT_ENV)
     started, timed_out = time.monotonic(), False
+    task = (case_dir / "task.md").read_text()
     try:
-        proc = runner(command, input=(case_dir / "task.md").read_text(),
+        proc = runner(command, input=task,
                       cwd=workspace, env=env, capture_output=True, text=True, timeout=timeout)
         stdout, code = proc.stdout, proc.returncode
     except subprocess.TimeoutExpired as exc:
         stdout = exc.stdout.decode() if isinstance(exc.stdout, bytes) else (exc.stdout or "")
         code, timed_out = None, True
     (case_dir / "transcript.jsonl").write_text(stdout, encoding="utf-8")
-    summary = parse_transcript(stdout.splitlines())
+    summary = parse_transcript(stdout.splitlines(), task)
     (case_dir / "final.md").write_text(summary["final"], encoding="utf-8")
     installed = entry.get("skills_installed") or []
     record = {"exit": code, "timed_out": timed_out, "seconds": round(time.monotonic() - started, 1),
@@ -401,6 +449,14 @@ def run_agent(run_dir: Path, entry: dict, model: str, max_turns: int, timeout: f
 
 # ---------------------------------------------------------------- judge
 
+def clip(text: str, limit: int = FILE_LIMIT) -> str:
+    """Keep a long file's head and tail: tables and summaries often sit at the end of a document."""
+    if len(text) <= limit:
+        return text
+    head, tail = limit * 2 // 3, limit // 3
+    return f"{text[:head]}\n[... {len(text) - head - tail} characters omitted ...]\n{text[-tail:]}"
+
+
 def changed_files(case_dir: Path) -> dict[str, str]:
     workspace = case_dir / "workspace"
     before = json.loads((case_dir / "fixture-digest.json").read_text(encoding="utf-8"))
@@ -415,7 +471,7 @@ def changed_files(case_dir: Path) -> dict[str, str]:
             text = path.read_text(encoding="utf-8")
         except UnicodeDecodeError:
             text = f"(binary file, {path.stat().st_size} bytes)"
-        files[rel] = text if len(text) <= FILE_LIMIT else text[:FILE_LIMIT] + "\n[truncated]"
+        files[rel] = clip(text)
     return files
 
 
@@ -424,7 +480,9 @@ def evidence_text(case_dir: Path) -> tuple[str, dict]:
     agent = json.loads((case_dir / "agent.json").read_text()) if (case_dir / "agent.json").exists() else {}
     transcript = case_dir / "transcript.jsonl"
     if transcript.exists():
-        parsed = parse_transcript(transcript.read_text(encoding="utf-8").splitlines())
+        task = case_dir / "task.md"
+        parsed = parse_transcript(transcript.read_text(encoding="utf-8").splitlines(),
+                                  task.read_text(encoding="utf-8") if task.exists() else "")
         agent = {**agent, "skills_loaded": parsed["skills_loaded"],
                  "skill_files_read": parsed["skill_files_read"]}
     files = changed_files(case_dir)
@@ -446,7 +504,7 @@ def grader_text(case_dir: Path) -> str:
     parts = []
     for path in sorted(folder.glob("*")) if folder.is_dir() else []:
         text = path.read_text(encoding="utf-8", errors="replace")
-        text = text if len(text) <= FILE_LIMIT else text[:FILE_LIMIT] + "\n[truncated]"
+        text = clip(text)
         parts.append(f"### {path.name}\n\n```\n{text}\n```")
     return "\n\n".join(parts)
 
@@ -514,15 +572,19 @@ def judge_case(run_dir: Path, case: dict, backend: str, model: str, timeout: flo
         except BackendError as exc:
             parsed, errors = [], [f"reply 1: {exc}"]
     else:
+        costs: list = []
+
         def one(k):
             """One repeat; a reply that cannot be read is asked for once more."""
             problems = []
             for attempt in (1, 2):
                 try:
-                    text = caller(backend, prompt, JUDGE_SYSTEM, model, timeout).text
+                    reply = caller(backend, prompt, JUDGE_SYSTEM, model, timeout)
                 except BackendError as exc:
                     problems.append(f"repeat {k} attempt {attempt}: {exc}")
                     continue
+                text = reply.text
+                costs.append(getattr(reply, "cost_usd", None))
                 suffix = "" if attempt == 1 else "-retry"
                 (case_dir / f"judge-reply-{k}{suffix}.txt").write_text(text, encoding="utf-8")
                 try:
@@ -534,6 +596,8 @@ def judge_case(run_dir: Path, case: dict, backend: str, model: str, timeout: flo
             outcomes = list(pool.map(one, range(1, repeats + 1)))
         parsed = [rows for rows, _ in outcomes if rows is not None]
         errors = [problem for _, problems in outcomes for problem in problems]
+        known = [c for c in costs if isinstance(c, (int, float))]
+        record["judge_cost_usd"] = round(sum(known), 4) if known else None
     if not parsed:
         return {**record, "status": "judge-error", "error": "; ".join(errors), **facts}
     rows = majority(parsed)
@@ -553,10 +617,10 @@ def build_results(root: Path, run_dir: Path, manifest: dict, cases_by_id: dict, 
         case = cases_by_id[entry["id"]]
         row = {"id": entry["id"], "expected_primary": case["expected_primary"],
                "fixture_status": entry["status"], **{k: entry[k] for k in
-               ("note", "partial", "needs", "skills_missing", "skills_installed", "grader_files")
+               ("note", "reason", "partial", "needs", "skills_missing", "skills_installed", "grader_files")
                if k in entry}}
-        if entry["status"] == "fixture-missing":
-            row["status"] = "fixture-missing"
+        if entry["status"] in NOT_RUN:
+            row["status"] = entry["status"]
         else:
             row.update(graded.get(entry["id"]) or {"status": "not-run"})
             agent = row.get("agent") or {}
@@ -586,6 +650,10 @@ def format_results(results: dict) -> str:
         consulted = words.get(row.get("primary_consulted"), "-")
         lines.append(f"| {row['id']} | {row['status']} | {passed} | {unstable} | {agreement} "
                      f"| {loaded} | {consulted} |")
+    agent_cost = sum((row.get("agent") or {}).get("total_cost_usd") or 0 for row in results["cases"])
+    judge_cost = sum(row.get("judge_cost_usd") or 0 for row in results["cases"])
+    if agent_cost or judge_cost:
+        lines.append(f"\nCost: agent ${agent_cost:.2f}, judge ${judge_cost:.2f}")
     return "\n".join(lines)
 
 
@@ -646,10 +714,10 @@ def main(argv: list[str] | None = None) -> int:
             run_dir = args.run_dir.resolve()
             manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
         skill_install = manifest.get("skill_install", "project")
-        prepared = [e for e in manifest["scenarios"] if e["status"] != "fixture-missing"]
+        prepared = [e for e in manifest["scenarios"] if e["status"] not in NOT_RUN]
         for entry in manifest["scenarios"]:
-            if entry["status"] == "fixture-missing":
-                print(f"{entry['id']}: fixture-missing, not run", file=sys.stderr)
+            if entry["status"] in NOT_RUN:
+                print(f"{entry['id']}: {entry['status']}, not run", file=sys.stderr)
         if args.command == "prepare" or (args.command == "run" and args.backend == "files"):
             print(f"Run directory: {run_dir}\nFor each prepared scenario, work in <id>/workspace from "
                   "<id>/task.md and save the final answer as <id>/final.md; then run the judge step.")

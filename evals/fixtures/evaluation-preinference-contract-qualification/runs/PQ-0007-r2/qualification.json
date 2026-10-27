@@ -1,0 +1,16 @@
+{
+ "stage": "qualification",
+ "saved_at": "2026-10-22T14:42:09+00:00",
+ "meta": {"usage": {"prompt_tokens": 418, "completion_tokens": 2950, "thoughts_tokens": 6120, "cost_usd": 1.12},
+          "version": "qual-v2",
+          "errors": ["required passage D7-2024/p13/continuation is not cited",
+                     "required passage D7-2024/p13/footnote is not cited"]},
+ "payload": {"findings": [
+  {"statement": "A basement under the dwelling's own footprint may be approved under the prior-notice route; the passage is cut off after 'provided the excava-', so the condition attached to it is not visible.",
+   "support": "unresolved", "labels": ["D7-2024/p12/4.3(b)(ii)"]},
+  {"statement": "Table D7.1 assigns prior notice or full application by ground type; the note column refers to footnote 3, which is not in the passages.",
+   "support": "unresolved", "labels": ["D7-2024/p14/table-header", "D7-2024/p14/table-D7.1/c2"]},
+  {"statement": "Front lightwells must be covered by a flush grille.", "support": "supported",
+   "labels": ["D8-2024/p20/4.3(b)(ii)"]}
+ ]}
+}

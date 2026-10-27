@@ -1,0 +1,25 @@
+{
+ "review_status": "AI-authored against the pack's source text; no independent planning-domain review",
+ "label_convention_after_repair": "cells carry their row: D7-2024/p14/table-D7.1/r<row>/c<col>",
+ "valid": [
+  {"statement": "Under D7 4.3(b)(ii) a basement under the dwelling's own footprint may use the prior-notice route only if the excavation stays at least 1.0 m from any party wall; at 0.6 m a structural method statement is required before work starts.",
+   "support": "supported", "passages": ["d7-head", "d7-tail"], "qualifications": ["d7-fn3"]},
+  {"statement": "The 1.0 m party-wall distance applies under the prior-notice route as well as a full application (footnote 3).",
+   "support": "supported", "passages": ["d7-fn3"]},
+  {"statement": "Table D7.1 rows 1 and 2 give the prior-notice route and rows 3 and 4 a full application, each subject to footnote 3.",
+   "support": "supported", "passages": ["d7-tbl-head", "d7-c1", "d7-c2", "d7-c3", "d7-c4"], "qualifications": ["d7-fn3"]},
+  {"statement": "The cross-section on page 15 has not been reviewed; nothing in it is relied on.",
+   "support": "unresolved", "passages": ["d7-img"]}
+ ],
+ "invalid": [
+  {"control": "invalid label", "statement": "Prior notice applies.", "labels": ["D7-2024/p14/table-D7.1/c9"],
+   "must_fail_because": "label does not exist"},
+  {"control": "identity mutation", "statement": "A basement under the dwelling's own footprint may use the prior-notice route.",
+   "labels": ["D8-2024/p20/4.3(b)(ii)"], "must_fail_because": "same clause number in D8 is a different passage (lightwells)"},
+  {"control": "omitted qualification", "statement": "A basement under the dwelling's own footprint may be approved under the prior-notice route.",
+   "labels": ["D7-2024/p12/4.3(b)(ii)"], "must_fail_because": "drops the party-wall condition in the p13 continuation and footnote 3"},
+  {"control": "unsupported meaning", "statement": "Basements on the prior-notice route never need a structural method statement.",
+   "labels": ["D7-2024/p12/4.3(b)(ii)", "D7-2024/p13/continuation", "D7-2024/p13/footnote"],
+   "must_fail_because": "valid labels, but the passages say the opposite when the excavation is within 1.0 m"}
+ ]
+}

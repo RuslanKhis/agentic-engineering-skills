@@ -1,0 +1,18 @@
+{
+ "case_id": "PA-2026-0234",
+ "address": "27 Wren Court, Eastmere",
+ "proposal": "Widen vehicle crossover",
+ "documents": [
+  {
+   "doc_id": "APP-FORM",
+   "version": "1",
+   "title": "Application form",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Site: 27 Wren Court, Eastmere\nDwelling: semi-detached, 3 bedrooms\nProposal: widen crossover onto Wren Road (30 mph, through route)"
+    }
+   ]
+  }
+ ]
+}

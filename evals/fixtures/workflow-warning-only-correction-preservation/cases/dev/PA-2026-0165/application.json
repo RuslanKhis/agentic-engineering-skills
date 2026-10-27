@@ -1,0 +1,51 @@
+{
+ "case_id": "PA-2026-0165",
+ "address": "16 Plover Street, Eastmere",
+ "proposal": "Two-storey rear extension to a terraced house",
+ "documents": [
+  {
+   "doc_id": "APP-FORM",
+   "version": "1",
+   "title": "Application form",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Site: 16 Plover Street, Eastmere\nDwelling: mid-terrace, 3 bedrooms\nProposal: two-storey rear extension\nParking: on-street"
+    }
+   ]
+  },
+  {
+   "doc_id": "DAS",
+   "version": "1",
+   "title": "Design and access statement",
+   "pages": [
+    {
+     "page": 1,
+     "text": "The extension projects 3.9 m beyond the original rear wall.\nA first-floor side window faces No. 18 at 6 m; it will be obscure-glazed.\nThe garden ash tree is 6.5 m from the new footings."
+    }
+   ]
+  },
+  {
+   "doc_id": "NBR-2",
+   "version": "1",
+   "title": "Neighbour comment, 18 Plover Street",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Our measurements show the extension projecting 4.3 m, not 3.9 m.\nThe side window would look straight into our bedroom."
+    }
+   ]
+  },
+  {
+   "doc_id": "ARB",
+   "version": "1",
+   "title": "Arboricultural note",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Ash T1, not protected; root protection area radius 5.2 m.\nFootings at 6.5 m are outside the root protection area."
+    }
+   ]
+  }
+ ]
+}

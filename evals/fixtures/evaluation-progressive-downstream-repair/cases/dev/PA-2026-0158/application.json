@@ -1,0 +1,13 @@
+{
+  "case_id": "PA-2026-0158",
+  "address": "3 Kestrel Lane, Eastmere",
+  "proposal": "Convert garage to a home office and widen the vehicle crossover",
+  "documents": [
+    {"doc_id": "APP-FORM", "version": "1", "title": "Application form", "pages": [
+      {"page": 1, "text": "Site: 3 Kestrel Lane, Eastmere\nDwelling: detached, 4 bedrooms\nProposal: garage conversion to home office; crossover widened from 3.0 m to 4.8 m\nParking after works: two spaces side by side on the drive; cycle store in the rear garden"}
+    ]},
+    {"doc_id": "HWY", "version": "1", "title": "Highway authority letter", "pages": [
+      {"page": 1, "text": "Kestrel Lane is a 20 mph street serving 11 houses with no through traffic.\nThe authority confirms the visibility splay requirement can be waived for this crossover."}
+    ]}
+  ]
+}

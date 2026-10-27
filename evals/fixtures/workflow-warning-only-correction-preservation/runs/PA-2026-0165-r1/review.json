@@ -1,0 +1,55 @@
+{
+ "stage": "review",
+ "saved_at": "2026-10-23T08:15:02+00:00",
+ "meta": {
+  "attempt": "a1-review",
+  "draft_revision": "r1",
+  "frame_sha256": "b7dc36a4afae1aec12b398601603dc188680508307a333fb9ac126a810264a2e",
+  "invocation_id": "e-PA-2026-0165-r1-review",
+  "images": [
+   {
+    "path": "cases/dev/PA-2026-0165/drawings/rear-elevation.svg",
+    "sha256": "88376e0e1b5c3a21e472804b3eb09d0bcd40e56acd2ffaf0dca957793e8f64f2"
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 3120,
+   "completion_tokens": 300,
+   "cost_usd": 0.21
+  }
+ },
+ "payload": {
+  "verdict": "reject",
+  "claims": [
+   {
+    "reason_id": "R1",
+    "support": "unsupported",
+    "span_ids": [
+     "DAS@1:p1:1",
+     "NBR-2@1:p1:1",
+     "LP-H4@2024:p31:4"
+    ]
+   },
+   {
+    "reason_id": "R2",
+    "support": "supported",
+    "span_ids": [
+     "DAS@1:p1:2",
+     "LP-H4@2024:p31:7"
+    ]
+   },
+   {
+    "reason_id": "R3",
+    "support": "supported",
+    "span_ids": [
+     "ARB@1:p1:2"
+    ]
+   }
+  ],
+  "findings": [
+   "Citation DAS@1:p1:1 does not reproduce the span verbatim (final full stop missing).",
+   "R1 rests on 3.9 m while NBR-2 reports 4.3 m; above 4.0 m LP-H4 needs a daylight and outlook assessment, which is absent. The conflict is unresolved and decisive.",
+   "The drainage gap remains open; not decisive for the decision."
+  ]
+ }
+}

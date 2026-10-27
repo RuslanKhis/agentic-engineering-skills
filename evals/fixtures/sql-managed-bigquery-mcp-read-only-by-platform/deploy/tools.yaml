@@ -1,0 +1,20 @@
+# Configuration of our self-hosted MCP Toolbox service (analytics-toolbox on Cloud Run).
+sources:
+  fernhill-bq:
+    kind: bigquery
+    project: fernhill-analytics
+    location: EU
+
+tools:
+  execute_sql:
+    kind: bigquery-execute-sql
+    source: fernhill-bq
+    description: Run a BigQuery SQL query and return the rows.
+  list_table_ids:
+    kind: bigquery-list-table-ids
+    source: fernhill-bq
+    description: List the tables in a dataset.
+  get_table_info:
+    kind: bigquery-get-table-info
+    source: fernhill-bq
+    description: Show a table's schema.

@@ -1,0 +1,77 @@
+name: ci
+on:
+  pull_request:
+    types: [opened, synchronize, labeled]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write   # Workload Identity Federation for the live job only
+
+jobs:
+  unit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python -m unittest discover -s tests -t .
+      - name: Gate contract dry run (expectations valid, no model call)
+        run: |
+          printf 'eval_set_id,eval_id,metric_name,threshold,score,eval_status\n' > "${RUNNER_TEMP}/header.csv"
+          python .claude/skills/adk-agent-evaluation/scripts/check_eval_results.py \
+            --csv "${RUNNER_TEMP}/header.csv" --expectations eval/ci-expectations.json --dry-run
+
+  # Tier 2: real model calls, deterministic criteria only, 3 runs per case, no judge.
+  # Runs on the `run-live-eval` label, on merge to main and by hand. Not a required check until the
+  # baseline in docs/release/model-upgrade-2026-11.md is filled in (provisional gate).
+  live-eval:
+    needs: unit
+    if: >-
+      github.event_name != 'pull_request' ||
+      contains(github.event.pull_request.labels.*.name, 'run-live-eval')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: eval   # holds WIF_PROVIDER, EVAL_SERVICE_ACCOUNT, EVAL_PROJECT, EVAL_LOCATION (to be created by the owner)
+    env:
+      RESULTS_DIR: results/${{ github.sha }}
+      EVAL_NUM_RUNS: "3"
+      EVAL_MAX_CASES: "40"
+      EVAL_MAX_RUNS: "3"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.EVAL_SERVICE_ACCOUNT }}
+      - name: AgentEvaluator, 3 runs (writes the CSV, then asserts the mean)
+        env:
+          RUN_LIVE_EVAL: "1"
+          GOOGLE_GENAI_USE_VERTEXAI: "true"
+          GOOGLE_CLOUD_PROJECT: ${{ vars.EVAL_PROJECT }}
+          GOOGLE_CLOUD_LOCATION: ${{ vars.EVAL_LOCATION }}
+          EVAL_OUTPUT_CSV: ${{ env.RESULTS_DIR }}/ci.csv
+          # Payments and mail must be fakes/unconfigured; the example hosts in settings.py are .invalid.
+        run: |
+          mkdir -p "${RESULTS_DIR}"
+          python -m unittest evals_live.test_ci_gate || echo "AVERAGING_GATE_FAILED=1" >> "$GITHUB_ENV"
+      - name: Strict per-run gate (a missing CSV is NOT RUN and fails)
+        run: |
+          test -s "${RESULTS_DIR}/ci.csv" || { echo "::error::No CSV produced: eval NOT RUN"; exit 1; }
+          python .claude/skills/adk-agent-evaluation/scripts/check_eval_results.py \
+            --csv "${RESULTS_DIR}/ci.csv" --expectations eval/ci-expectations.json
+      - name: Fail if the averaging gate failed
+        if: env.AVERAGING_GATE_FAILED == '1'
+        run: exit 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-evidence-${{ github.sha }}
+          path: ${{ env.RESULTS_DIR }}

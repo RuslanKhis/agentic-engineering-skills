@@ -1,0 +1,11 @@
+{
+ "run_id": "PA-2026-0172-r1",
+ "failed_at": "2026-10-22T11:04:37+00:00",
+ "stage": "writer",
+ "error": "StoreLimitExceeded: writer checkpoint is 1056773 bytes; limit 1048576",
+ "provider_sends": {
+  "writer": 1,
+  "review": 0
+ },
+ "note": "The writer's response passed schema validation; the review was never dispatched."
+}

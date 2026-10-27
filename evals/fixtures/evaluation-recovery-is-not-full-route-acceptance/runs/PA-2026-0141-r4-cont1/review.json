@@ -1,0 +1,8 @@
+{
+ "stage": "review",
+ "saved_at": "2026-10-24T16:39:58+00:00",
+ "meta": {"usage": {"prompt_tokens": 2950, "completion_tokens": 240, "cost_usd": 0.21}},
+ "payload": {"verdict": "accept",
+  "claims": [{"reason_id": "R1", "support": "supported", "span_ids": ["DAS@1:p1:1", "LP-H4@2024:p31:4"]}],
+  "findings": []}
+}

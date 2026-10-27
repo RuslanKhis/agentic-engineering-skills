@@ -1,0 +1,12 @@
+{
+  "channels": [
+    {
+      "name": "projects/kestrel-claims-prod/notificationChannels/8812",
+      "type": "email",
+      "displayName": "Brightlane on-call",
+      "labels": {
+        "email_address": "oncall@brightlane-agency.example"
+      }
+    }
+  ]
+}

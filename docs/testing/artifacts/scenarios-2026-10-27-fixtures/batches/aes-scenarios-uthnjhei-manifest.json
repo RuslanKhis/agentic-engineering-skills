@@ -1,0 +1,136 @@
+{
+ "created": "2026-10-27T10:29:08+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-ae683dff62ffe485e",
+ "commit": "a08979f4fc2ab93fb69c1eb3afc73a0f2cefedd3",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "system-design-review-existing-proposal",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/system-design-review-existing-proposal/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Proposal, accepted constraints and prototype code; only architecture documents may change.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-tool-auth-and-secrets",
+    "safe-api-tool-calls",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "system-design-runtime-and-release-review",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/system-design-runtime-and-release-review/situation.md"
+    }
+   ],
+   "note": "Docs-only: the runtime proposal under review.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-frontend-integration",
+    "adk-memory-architecture",
+    "optimise-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "system-design-practical-handoff",
+   "status": "runnable",
+   "note": "No source tree by design; the accepted stack and authorisation are stated in the context.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-frontend-integration",
+    "adk-tool-auth-and-secrets",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": []
+  },
+  {
+   "id": "system-design-scope-gate-time-boxed",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/system-design-scope-gate-time-boxed/situation.md"
+    }
+   ],
+   "note": "Assignment pack: labelled and holdout cases, local plan text extracts; documentation only.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-agent-evaluation",
+    "adk-workflow-design",
+    "adk-operational-guardrails"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "designer-phase-gate-plan-versus-code",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-plan"
+   ],
+   "overlay": true,
+   "remove": [
+    "docs/tickets/support/G05.md"
+   ],
+   "grader": [
+    {
+     "from": "evals/graders/designer-phase-gate-plan-versus-code/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "No git history and no shell: plan_status.py --gate --base cannot be run in the workspace.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "designer-names-google-product-skills",
+   "status": "runnable",
+   "note": "No repository by design; finding-google-skills is not in this collection, so the router the context names is absent from the run.",
+   "skills_missing": [
+    "finding-google-skills"
+   ],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "deploy-adk-on-google-cloud",
+    "adk-agent-observability",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": []
+  }
+ ]
+}

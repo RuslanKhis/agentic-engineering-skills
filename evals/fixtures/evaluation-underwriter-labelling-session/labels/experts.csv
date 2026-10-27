@@ -1,0 +1,145 @@
+case_id,criterion,rater,label,critique,criteria_version,labelled_at
+CLM-4101,fraud_flags_correct,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4101,fraud_flags_correct,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4101,fast_track_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4101,fast_track_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4101,note_grounded,uw-mensah,pass,,v01,2026-10-14
+CLM-4101,note_grounded,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4102,fraud_flags_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4102,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4102,fast_track_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4102,fast_track_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4102,note_grounded,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4102,note_grounded,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4103,fraud_flags_correct,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4103,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4103,fast_track_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4103,fast_track_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4103,note_grounded,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4103,note_grounded,uw-castillo,pass,,v01,2026-10-14
+CLM-4104,fraud_flags_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4104,fraud_flags_correct,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4104,fast_track_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4104,fast_track_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4104,note_grounded,uw-mensah,pass,,v01,2026-10-14
+CLM-4104,note_grounded,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4105,fraud_flags_correct,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4105,fraud_flags_correct,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4105,fast_track_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4105,fast_track_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4105,note_grounded,uw-mensah,pass,,v01,2026-10-14
+CLM-4105,note_grounded,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4106,fraud_flags_correct,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4106,fraud_flags_correct,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4106,fast_track_correct,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4106,fast_track_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4106,note_grounded,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4106,note_grounded,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4107,fraud_flags_correct,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4107,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4107,fast_track_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4107,fast_track_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4107,note_grounded,uw-mensah,pass,,v01,2026-10-14
+CLM-4107,note_grounded,uw-castillo,pass,,v01,2026-10-14
+CLM-4108,fraud_flags_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4108,fraud_flags_correct,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4108,fast_track_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4108,fast_track_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4108,note_grounded,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4108,note_grounded,uw-castillo,pass,,v01,2026-10-14
+CLM-4109,fraud_flags_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4109,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4109,fast_track_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4109,fast_track_correct,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4109,note_grounded,uw-mensah,pass,,v01,2026-10-14
+CLM-4109,note_grounded,uw-castillo,pass,,v01,2026-10-14
+CLM-4110,fraud_flags_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4110,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4110,fast_track_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4110,fast_track_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4110,note_grounded,uw-mensah,pass,,v01,2026-10-14
+CLM-4110,note_grounded,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4111,fraud_flags_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4111,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4111,fast_track_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4111,fast_track_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4111,note_grounded,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4111,note_grounded,uw-castillo,pass,,v01,2026-10-14
+CLM-4112,fraud_flags_correct,uw-mensah,pass,,v01,2026-10-14
+CLM-4112,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-14
+CLM-4112,fast_track_correct,uw-mensah,fail,see claim fields,v01,2026-10-14
+CLM-4112,fast_track_correct,uw-castillo,fail,see claim fields,v01,2026-10-14
+CLM-4112,note_grounded,uw-mensah,pass,,v01,2026-10-14
+CLM-4112,note_grounded,uw-castillo,pass,,v01,2026-10-14
+CLM-4113,fraud_flags_correct,uw-mensah,fail,see claim fields,v02,2026-10-17
+CLM-4113,fraud_flags_correct,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4113,fast_track_correct,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4113,fast_track_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4113,note_grounded,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4113,note_grounded,uw-castillo,pass,,v01,2026-10-17
+CLM-4114,fraud_flags_correct,uw-mensah,fail,see claim fields,v02,2026-10-17
+CLM-4114,fraud_flags_correct,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4114,fast_track_correct,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4114,fast_track_correct,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4114,note_grounded,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4114,note_grounded,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4115,fraud_flags_correct,uw-mensah,pass,,v02,2026-10-17
+CLM-4115,fraud_flags_correct,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4115,fast_track_correct,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4115,fast_track_correct,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4115,note_grounded,uw-mensah,pass,,v01,2026-10-17
+CLM-4115,note_grounded,uw-castillo,pass,,v01,2026-10-17
+CLM-4116,fraud_flags_correct,uw-mensah,pass,,v02,2026-10-17
+CLM-4116,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4116,fast_track_correct,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4116,fast_track_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4116,note_grounded,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4116,note_grounded,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4117,fraud_flags_correct,uw-mensah,pass,,v02,2026-10-17
+CLM-4117,fraud_flags_correct,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4117,fast_track_correct,uw-mensah,pass,,v01,2026-10-17
+CLM-4117,fast_track_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4117,note_grounded,uw-mensah,pass,,v01,2026-10-17
+CLM-4117,note_grounded,uw-castillo,pass,,v01,2026-10-17
+CLM-4118,fraud_flags_correct,uw-mensah,fail,see claim fields,v02,2026-10-17
+CLM-4118,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4118,fast_track_correct,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4118,fast_track_correct,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4118,note_grounded,uw-mensah,pass,,v01,2026-10-17
+CLM-4118,note_grounded,uw-castillo,pass,,v01,2026-10-17
+CLM-4119,fraud_flags_correct,uw-mensah,fail,see claim fields,v02,2026-10-17
+CLM-4119,fraud_flags_correct,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4119,fast_track_correct,uw-mensah,pass,,v01,2026-10-17
+CLM-4119,fast_track_correct,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4119,note_grounded,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4119,note_grounded,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4120,fraud_flags_correct,uw-mensah,fail,see claim fields,v02,2026-10-17
+CLM-4120,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4120,fast_track_correct,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4120,fast_track_correct,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4120,note_grounded,uw-mensah,pass,,v01,2026-10-17
+CLM-4120,note_grounded,uw-castillo,pass,,v01,2026-10-17
+CLM-4121,fraud_flags_correct,uw-mensah,fail,see claim fields,v02,2026-10-17
+CLM-4121,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4121,fast_track_correct,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4121,fast_track_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4121,note_grounded,uw-mensah,pass,,v01,2026-10-17
+CLM-4121,note_grounded,uw-castillo,pass,,v01,2026-10-17
+CLM-4122,fraud_flags_correct,uw-mensah,fail,see claim fields,v02,2026-10-17
+CLM-4122,fraud_flags_correct,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4122,fast_track_correct,uw-mensah,pass,,v01,2026-10-17
+CLM-4122,fast_track_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4122,note_grounded,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4122,note_grounded,uw-castillo,fail,see claim fields,v01,2026-10-17
+CLM-4123,fraud_flags_correct,uw-mensah,fail,see claim fields,v02,2026-10-17
+CLM-4123,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4123,fast_track_correct,uw-mensah,pass,,v01,2026-10-17
+CLM-4123,fast_track_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4123,note_grounded,uw-mensah,fail,see claim fields,v01,2026-10-17
+CLM-4123,note_grounded,uw-castillo,pass,,v01,2026-10-17
+CLM-4124,fraud_flags_correct,uw-mensah,fail,see claim fields,v02,2026-10-17
+CLM-4124,fraud_flags_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4124,fast_track_correct,uw-mensah,pass,,v01,2026-10-17
+CLM-4124,fast_track_correct,uw-castillo,pass,,v01,2026-10-17
+CLM-4124,note_grounded,uw-mensah,pass,,v01,2026-10-17
+CLM-4124,note_grounded,uw-castillo,fail,see claim fields,v01,2026-10-17

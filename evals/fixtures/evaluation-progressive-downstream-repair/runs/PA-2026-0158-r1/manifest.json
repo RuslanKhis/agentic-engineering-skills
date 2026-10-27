@@ -1,0 +1,46 @@
+{
+ "run_id": "PA-2026-0158-r1",
+ "case_id": "PA-2026-0158",
+ "cohort": "autumn-validation cohort A (fixed 2026-10-06)",
+ "code_version": "a3f9e21",
+ "source": {
+  "spans": 29,
+  "sha256": "8daf8ee857a4f7ad2aa2d64bad6db3fcd98d08b85d0fcb1745811e3104b7ffb1",
+  "parser": "pdf-lines-v3",
+  "documents": [
+   "APP-FORM@1",
+   "HWY@1",
+   "LP-T2@2024",
+   "LP-T2-1@2024",
+   "LP-H4@2024",
+   "LP-ENV3@2024"
+  ]
+ },
+ "writer": {
+  "model": "gemini-3.5-flash",
+  "prompt": "writer-v7",
+  "schema": "draft-v5",
+  "temperature": 1.0,
+  "max_output_tokens": 8192,
+  "input_manifest": "source.json",
+  "status": "completed",
+  "sends": 1,
+  "charged_usd": 0.38
+ },
+ "review": {
+  "model": "gemini-3.5-flash",
+  "prompt": "review-v4",
+  "schema": "review-v2",
+  "temperature": 1.0,
+  "input_manifest": "writer.json",
+  "status": "completed",
+  "sends": 1,
+  "charged_usd": 0.22
+ },
+ "export": {
+  "status": "failed",
+  "error": "export: review cites spans the draft does not cite: ['HWY@1:p1:1', 'LP-T2@2024:p44:4', 'LP-T2@2024:p44:5', 'LP-T2@2024:p44:6']"
+ },
+ "transport": "OpenAI-compatible gateway, network on",
+ "finished": "2026-10-24T16:02:11Z"
+}

@@ -1,0 +1,17 @@
+{
+ "stage": "review",
+ "saved_at": "2026-10-23T11:20:52+00:00",
+ "meta": {"usage": {"prompt_tokens": 3390, "completion_tokens": 420, "cost_usd": 0.24}, "prompt": "review-v4", "model": "gemini-3.5-flash"},
+ "payload": {
+  "verdict": "reject",
+  "claims": [
+   {"reason_id": "R1", "support": "supported", "span_ids": ["APP-FORM@1:p1:3", "LP-H4@2024:p31:2", "LP-H4@2024:p31:3"]},
+   {"reason_id": "R2", "support": "unsupported", "span_ids": ["TS@1:p1:2", "LP-ENV3@2024:p58:2"]}
+  ],
+  "findings": [
+   "gaps listed although every source is accounted for; remove them",
+   "LP-ENV3 is cited but not applicable to this application",
+   "R2 relies on ENV3, which the application does not engage; every source is accounted for, so the refusal is not supported and the draft should be revised to approve."
+  ]
+ }
+}
