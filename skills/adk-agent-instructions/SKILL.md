@@ -1,7 +1,21 @@
 ---
 name: adk-agent-instructions
 license: MIT
-description: Design, review or repair the instructions of Python Google ADK agents, covering instruction structure and altitude, session-state templating, tool-use guidance inside the prompt, sub-agent descriptions for routing, few-shot exemplars, the instruction-versus-code division, model-generation prompt notes and prompt-as-code layout with change tests. Use when an agent follows its prompt poorly, over- or under-calls tools, routes to the wrong sub-agent, raises templating KeyErrors, or a prompt must move to a new model generation. Do not activate for the measured evaluation loop itself (adk-agent-evaluation), orchestration structure (adk-workflow-design), tool docstrings and parameter schemas (adk-tool-interface-design), output schemas or model configuration (adk-model-and-output-contracts), or prompt-injection screening products (protect-adk-sensitive-data).
+description: >-
+  Design, review or repair the instructions of Python Google ADK agents,
+  covering instruction structure and altitude, session-state templating,
+  tool-use guidance inside the prompt, sub-agent descriptions for routing,
+  few-shot exemplar design, the instruction-versus-code division,
+  model-generation prompt notes and prompt-as-code layout with change tests.
+  Use when an agent follows its prompt poorly, over- or under-calls tools,
+  routes to the wrong sub-agent, raises templating KeyErrors, or a prompt must
+  move to a new model generation. Do not activate for the measured evaluation
+  loop itself (adk-agent-evaluation), orchestration structure
+  (adk-workflow-design), tool docstrings and parameter schemas
+  (adk-tool-interface-design), output schemas or model configuration
+  (adk-model-and-output-contracts), releasing prompt versions
+  (adk-release-engineering), or prompt-injection screening products
+  (protect-adk-sensitive-data).
 metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering

@@ -113,6 +113,9 @@ def main(argv: list[str] | None = None) -> int:
     if not run_command("Skill packages", [sys.executable, "-B", str(root / "scripts/validate_skills.py"),
                                           "--root", str(root)], root):
         return 1
+    if not run_command("Skill boundaries", [sys.executable, "-B", str(root / "scripts/check_boundaries.py"),
+                                            "--root", str(root)], root):
+        return 1
     errors = validate_cases(root)
     if errors:
         print("\n".join(errors), file=sys.stderr)

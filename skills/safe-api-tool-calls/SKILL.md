@@ -1,7 +1,20 @@
 ---
 name: safe-api-tool-calls
 license: MIT
-description: Implement, adapt or review safe external API tools in Python and ADK projects, including selective retries, cooperative deadlines, idempotent writes and confirmation. Use for unreliable API calls, ambiguous write outcomes, unsafe tool replay or setup failures blocking ADK API verification. Do not activate for model-only tuning (adk-model-and-output-contracts owns model settings), general cloud deployment, UI-only changes or database query optimisation without an external-call safety problem.
+description: >-
+  Implement, adapt or review safe external API tools in Python and ADK
+  projects, including selective retries, cooperative deadlines, idempotent
+  writes and the write side of confirmation (a missing or rejected
+  confirmation never runs the side effect; an approved write runs once). Use
+  for unreliable API calls, ambiguous write outcomes, unsafe tool replay or
+  setup failures blocking ADK API verification. Do not activate for model-only
+  tuning (adk-model-and-output-contracts owns model settings), deciding which
+  actions need human approval (adk-operational-guardrails), session
+  continuation or memory (adk-memory-architecture), MCP or A2A connection
+  wiring (adk-agent-interoperability), tool docstrings or error wording for
+  the model (adk-tool-interface-design), general cloud deployment, UI-only
+  changes or database query optimisation without an external-call safety
+  problem.
 metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering

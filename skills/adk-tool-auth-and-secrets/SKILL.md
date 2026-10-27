@@ -1,6 +1,18 @@
 ---
 name: adk-tool-auth-and-secrets
-description: Implement or review authenticated Google ADK tools with verified user/session ownership, keyless GCP access, Secret Manager and delegated OAuth lifecycle controls. Use for tool credential selection, cross-user access bugs, consent/refresh/disconnect flows or credential exposure in agent events. Exclude generic sign-in UI, general IAM administration, model-key billing troubleshooting and content moderation without a tool-authentication boundary.
+description: >-
+  Implement or review authenticated Google ADK tools with verified
+  user/session ownership at the tool hop, keyless GCP access, Secret Manager
+  and delegated OAuth lifecycle controls. Use for tool credential selection,
+  cross-user access through a tool, consent/refresh/disconnect flows or
+  credential exposure in agent events. Do not activate for generic sign-in UI,
+  the verified-principal dependency or owner-filtered HTTP routes
+  (adk-fastapi-backend), the agent's session endpoints
+  (adk-frontend-integration), MCP or A2A connection wiring
+  (adk-agent-interoperability), whole-agent threat models
+  (adk-agent-security), screening content for PII or pasted secrets
+  (protect-adk-sensitive-data), general IAM administration or model-key
+  billing troubleshooting.
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

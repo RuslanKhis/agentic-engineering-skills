@@ -1,7 +1,20 @@
 ---
 name: adk-agent-interoperability
 license: MIT
-description: Connect, expose or audit Python Google ADK agents across process boundaries with MCP and A2A. Covers tool-source selection (FunctionTool, OpenAPIToolset, McpToolset, Toolbox, Application Integration), consuming MCP servers (connection params, lifecycle, tool_filter, tool_name_prefix, header_provider, caching, confirmation, SDK pin), exposing an agent as an MCP server, the sub-agents versus remote A2A topology decision, consuming a remote agent with RemoteA2aAgent (agent cards, task states, streaming, timeouts, error events), exposing with to_a2a or adk api_server --a2a and registering on Agent Runtime or Gemini Enterprise, and evaluating across boundaries. Use when an agent must call or be called by another service or framework, or to review MCP and A2A wiring. Do not activate for the MCP threat model (adk-agent-security), in-process orchestration (adk-workflow-design), OAuth plumbing (adk-tool-auth-and-secrets), one API call's retry policy (safe-api-tool-calls) or deployment (deploy-adk-on-google-cloud).
+description: >-
+  Connect, expose or audit Python Google ADK agents across process boundaries
+  with MCP and A2A: tool-source selection (FunctionTool, OpenAPIToolset,
+  McpToolset, Toolbox, Application Integration), consuming MCP servers
+  (connection, lifecycle, tool_filter, prefixes, headers, the confirmation
+  flag, SDK pin), exposing an agent as an MCP server, the sub-agents versus
+  remote A2A topology decision, consuming a remote agent with RemoteA2aAgent
+  (agent cards, task states, streaming, timeouts), exposing with to_a2a and
+  registering on Agent Runtime or Gemini Enterprise. Use when an agent must
+  call or be called by another service or framework, or to review MCP and A2A
+  wiring. Do not activate for the MCP threat model, allowlists or pinning
+  policy (adk-agent-security), in-process orchestration (adk-workflow-design),
+  OAuth plumbing (adk-tool-auth-and-secrets), one API call's retry policy
+  (safe-api-tool-calls) or deployment (deploy-adk-on-google-cloud).
 metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering

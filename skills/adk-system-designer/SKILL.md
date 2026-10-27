@@ -3,12 +3,14 @@ name: adk-system-designer
 description: >-
   Work through requirements and trade-offs with the user to design or review
   the system architecture of a Python Google ADK application on GCP, before
-  implementation. Use for a new application design, a substantial redesign,
-  or a cross-cutting architecture review, including scoping a proof of
-  concept, internal tool or MVP to the time and people available and planning
-  what ships first and what follows, and turning the design and plan into a
-  client proposal, statement of work or change request. For a focused memory,
-  workflow, frontend or deployment change, use that specialist directly.
+  implementation. Use for a new application design, a substantial redesign, or
+  a cross-cutting architecture review, including scoping a proof of concept,
+  internal tool or MVP to the time and people available and planning what
+  ships first and what follows, and turning the design and plan into a client
+  proposal, statement of work or change request. Do not activate before a use
+  case and its measure are chosen (adk-discovery), for a decision deck,
+  rollout pack or value report (adk-presenter), or for a focused memory,
+  workflow, frontend or deployment change (use that specialist directly).
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

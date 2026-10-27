@@ -1,6 +1,19 @@
 ---
 name: adk-model-and-output-contracts
-description: Design, harden or review what a Python Google ADK agent asks the model to emit and which model and settings produce it. Covers output_schema contracts and their validation, repair loops, output_schema together with tools, Gemini model selection and lifecycle, thinking_level and sampling configuration, and model failover. Use for structured output that arrives as prose, fenced JSON or invalid data, for designing a response schema, for choosing or escalating a Gemini model, for temperature or thinking settings, or for FallbackModel decisions. Do not activate for measuring agent quality on a labelled set (adk-agent-evaluation), SQL wire schemas (adk-sql-agent-engineering), prompt wording (adk-agent-instructions), tool parameter schemas (adk-tool-interface-design), hosting-level latency (optimise-adk-on-google-cloud) or budget and degradation policy (adk-operational-guardrails).
+description: >-
+  Design, harden or review what a Python Google ADK agent asks the model to
+  emit and which model and settings produce it: output_schema contracts and
+  their validation, repair loops, output_schema together with tools, Gemini
+  model selection and lifecycle, thinking_level and sampling configuration,
+  and model failover. Use for structured output that arrives as prose, fenced
+  JSON or invalid data, response-schema design, choosing or escalating a
+  Gemini model, or FallbackModel decisions. Do not activate for measuring
+  agent quality on a labelled set (adk-agent-evaluation), SQL wire schemas
+  (adk-sql-agent-engineering), prompt wording (adk-agent-instructions), tool
+  parameter schemas (adk-tool-interface-design), hosting-level latency
+  (optimise-adk-on-google-cloud), budget and degradation policy
+  (adk-operational-guardrails), external API retries (safe-api-tool-calls) or
+  executing a model migration in a release (adk-release-engineering).
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

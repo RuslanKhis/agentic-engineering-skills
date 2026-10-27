@@ -36,7 +36,7 @@ count as an experiment variable on the development set.
   class as the required output. The model copies structure before content.
 - **Never the case's own label.** A development case never sees its own
   answer; adk-agent-evaluation's `exemplars_for` helper selects from other
-  cases.
+  cases and takes the count from the prompt version, with no default.
 - **Trimmed to the parts whose shape matters.** Shorten case-specific facts;
   keep the reasoning structure and the output format.
 - **Ordered deliberately.** Random or deliberately balanced order avoids

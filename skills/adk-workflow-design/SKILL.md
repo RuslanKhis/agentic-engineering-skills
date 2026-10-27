@@ -1,6 +1,15 @@
 ---
 name: adk-workflow-design
-description: Select, implement or review Google ADK workflow control flow, event consumption, session-state handoffs and callback boundaries. Use when choosing between ordinary code, sequential, parallel, bounded-loop, graph or dynamic orchestration, or repairing those runtime contracts in an existing agent. Do not activate for unrelated UI edits, general LLM explanations, standalone cloud deployment, or implementing RAG, memory or SQL services.
+description: >-
+  Select, implement or review Google ADK workflow control flow, event
+  consumption, session-state handoffs and callback boundaries. Use when
+  choosing between ordinary code, sequential, parallel, bounded-loop, graph or
+  dynamic orchestration, or repairing those runtime contracts in an existing
+  agent. Do not activate for unrelated UI edits, general LLM explanations,
+  standalone cloud deployment, implementing RAG, memory or SQL services,
+  instruction wording or sub-agent descriptions (adk-agent-instructions),
+  remote A2A agents or MCP servers (adk-agent-interoperability), or an
+  injection threat model (adk-agent-security).
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

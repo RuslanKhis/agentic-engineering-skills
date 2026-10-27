@@ -1,7 +1,21 @@
 ---
 name: adk-agent-security
 license: MIT
-description: Threat-model, harden or review a Python Google ADK agent as a whole system against prompt injection, tool and MCP supply-chain compromise, excessive agency, insecure output handling and unsafe code execution. Covers the lethal-trifecta check per agent, injection-resistant structure (quarantined readers, plan-then-execute, before_tool_callback capability checks), MCP allowlists and pinning, tool tiering with confirmation, code-executor selection, an adversarial suite with deterministic forbidden-action assertions, and findings mapped to OWASP LLM and Agentic IDs. Use when an agent reads untrusted content and can act, before exposing MCP servers or code execution, or for a security review. Do not activate for PII or credential screening and Model Armor templates (protect-adk-sensitive-data), credential plumbing (adk-tool-auth-and-secrets), budgets and approval mechanics (adk-operational-guardrails), eval harness execution (adk-agent-evaluation) or document delimiting inside drafts (adk-workflow-design).
+description: >-
+  Threat-model, harden or review a whole Python Google ADK agent against
+  prompt injection, tool and MCP supply-chain compromise, excessive agency,
+  insecure output handling and unsafe code execution: the lethal-trifecta
+  check, injection-resistant structure, MCP allowlists and pinning, tool
+  tiering (which actions need confirmation), code-executor selection and an
+  adversarial suite with forbidden-action assertions, mapped to OWASP IDs. Use
+  when an agent reads untrusted content and can act, before exposing MCP
+  servers or code execution, or for a security review. Do not activate for PII
+  screening and Model Armor (protect-adk-sensitive-data), credential plumbing
+  (adk-tool-auth-and-secrets), approval mechanics and budgets
+  (adk-operational-guardrails), MCP or A2A wiring
+  (adk-agent-interoperability), eval harness runs (adk-agent-evaluation),
+  delimiting documents in drafts (adk-workflow-design) or questionnaire
+  answers (adk-governance-pack).
 metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering

@@ -1,6 +1,16 @@
 ---
 name: deploy-adk-on-google-cloud
-description: Select, implement, adapt or audit deployment of Python Google ADK agents on Cloud Run, Agent Runtime or GKE, including identity, packaging, browser validation, recovery and owned-resource cleanup. Use for ADK hosting decisions and deployment lifecycle work. Do not activate for general Kubernetes administration, non-ADK applications, prompt-only changes (adk-agent-instructions owns prompt wording), or RAG and memory design without a deployment task.
+description: >-
+  Select, implement, adapt or audit deployment of Python Google ADK agents on
+  Cloud Run, Agent Runtime or GKE, including identity, packaging, browser
+  validation, recovery and owned-resource cleanup. Use for ADK hosting
+  decisions and deployment lifecycle work. Do not activate for general
+  Kubernetes administration, non-ADK applications, canary, rollback or eval
+  gates of later releases (adk-release-engineering), measured performance
+  tuning (optimise-adk-on-google-cloud), telemetry and alerts
+  (adk-agent-observability), FastAPI routes and process shape
+  (adk-fastapi-backend), prompt-only changes (adk-agent-instructions owns
+  prompt wording), or RAG and memory design without a deployment task.
 license: MIT
 metadata:
   author: Ruslan Khissamiyev
