@@ -33,14 +33,14 @@ community report, source-verified).
    [compatibility](references/compatibility.md): 2.8.0 fences relayed
    sub-agent output, does not fence MCP tool descriptions (2.10.0), has no
    `ToolCallIntegrityPlugin` (2.11.0), predates the 2.12.0 fixes that keep
-   OAuth2 secrets off the serving endpoints and take the user id only from
-   an authenticated principal, and sits above the adk web and forged
+   OAuth2 secrets off the serving endpoints and take the A2A user id only
+   from an authenticated principal, and sits above the adk web and forged
    confirmation CVE ranges fixed by 2.7.0. Preserve the pin; propose an
    upgrade as a decision with the CHANGELOG entries it brings, and treat
    2.12.0 as the floor for an agent that serves several users over ADK's
    HTTP endpoints.
 3. Run the read-only inventory from this skill's directory with an available
-   Python 3.11+ interpreter:
+   Python 3.11+ interpreter ([interpreters](references/operating-rules.md#helper-scripts-and-interpreters)):
 
    ```bash
    python "$SKILL_DIR/scripts/inspect_security_surface.py" --project .
@@ -125,13 +125,24 @@ as a control; it is a hint the attacker can out-argue.
 
 ## Permissions and consequential operations
 
-Inspection is read-only. Adding a gate changes what the agent may do next and
-can block legitimate work; show the owner the tool tier table before merging.
-Before any live adversarial run, state the exact model, project, case count,
-cost ceiling and the egress controls of the test environment, and obtain
-approval; keep paid runs with `adk-agent-evaluation`. Never run adversarial
-cases against production data or identities. Red-team only systems you own or
-have written authorisation to test.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
+
+Adding a gate changes what the agent may do next and can block legitimate
+work; show the owner the tool tier table before merging. Before any live
+adversarial run, state the exact model, project, case count, cost ceiling and
+the egress controls of the test environment, and obtain approval; keep paid
+runs with `adk-agent-evaluation`. Never run adversarial cases against
+production data or identities. Red-team only systems you own or have written
+authorisation to test.
 
 ## Validate and finish
 
@@ -140,8 +151,16 @@ after with the finding counts that changed; the completed checklist; for each
 structural change a scripted-model Runner test in which the model attempts the
 forbidden action and the trusted boundary refuses it without mutation or
 disclosure; the adversarial suite run offline with its assertions; and, when
-approved, live results labelled vendor-measured or independent. Separate
-**source verified**, **local**, **mocked**, **live** and **not run** evidence.
+approved, live results labelled `vendor-measured` or independent. A fact read
+in the installed package is `offline (source read)`.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 Report files changed, commands with actual output, each finding's OWASP ID
 and owner, and the residual risk the structure still accepts. On a second

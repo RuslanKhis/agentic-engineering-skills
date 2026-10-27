@@ -21,7 +21,7 @@ Deliver a small integration change or an actionable review that bounds API work,
 3. Establish whether the operation reads state or changes it. For writes, find the provider's replay contract, the trusted business identity, payload binding, authorisation and existing durable storage. An HTTP method, a UUID or a prompt is not enough evidence of safe replay.
 4. Record the permitted attempts, complete operation budget, cancellation behaviour, result schema and validation command. Ask only for missing decisions that cannot be inferred from source or authoritative provider documentation. Continue independent offline work while external prerequisites remain unresolved.
 
-For a bounded, read-only inventory, resolve `SKILL_DIR` to this skill's installed directory and run the helper with an available Python 3.11+ interpreter. If none is available, inspect manually without changing the target's Python version:
+For a bounded, read-only inventory, resolve `SKILL_DIR` to this skill's installed directory and run the helper with an available Python 3.11+ interpreter ([interpreters](references/operating-rules.md#helper-scripts-and-interpreters)). If none is available, inspect manually without changing the target's Python version:
 
 ```bash
 python "$SKILL_DIR/scripts/inspect_project.py" --project . --dry-run
@@ -52,11 +52,18 @@ For ADK, test the real tool wrapper and chosen client/session path. Missing or r
 
 ## Permissions and consequential operations
 
-Inspection is read-only. Local implementation authority does not authorise deployment or live testing. Prepare a concrete plan before enabling APIs, creating billable resources, changing IAM, creating secrets, migrating data, deploying or deleting resources/data. Show the exact project, region, resource names and commands, expected effects and relevant cost/time limits; obtain explicit approval before execution. Preserve approval already granted for that exact scope; approval for another project or an earlier campaign does not transfer.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
 
-Paid or destructive tests require an explicitly approved isolated target and bounded calls, retries and duration. Use least privilege and existing ADC/workload identity where relevant; never expose credentials or use broad roles to bypass a blocked prerequisite. Keep configuration examples synthetic and configurable. Missing credentials should leave live work unverified while offline validation proceeds.
-
-Keep cleanup separate. Inventory what this task created, show the exact deletion commands and obtain confirmation. Delete only task-owned resources, then verify absence independently. Preserve pre-existing resources, shared APIs and credentials. A no-op setup repeat or an already-enabled API is not evidence of creating it successfully.
+Keep configuration examples synthetic and configurable.
 
 ## Validate and finish
 
@@ -66,6 +73,14 @@ For ADK HTTP/confirmation tests, live-call limit enforcement or latency diagnosi
 
 On a second invocation, inspect existing changes and recorded state, rerun the relevant checks, and avoid duplicating wrappers, configuration, keys or resources. If the pinned version cannot support the chosen implementation, identify the incompatible API and stop that path; adapt within the existing version or request a version decision rather than silently changing dependencies.
 
-Report files changed, commands and actual results, remaining actions, and unverified behaviour. Separate **offline simulated**, **live verified** and **not run** evidence. Measure successful retrieval separately from response time, including error responses. Never promote a mock payment, a source syntax check or a historical test into production integration proof.
+Report files changed, commands and actual results, remaining actions, and unverified behaviour. Measure successful retrieval separately from response time, including error responses. Never promote a mock payment, a source syntax check or a historical test into production integration proof.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 Independent community project; not affiliated with or endorsed by Google.

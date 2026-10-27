@@ -33,7 +33,7 @@ call. Every recommendation here pairs with an observable check.
    2.10.0), so parameter names and the docstring body carry the semantics.
    Preserve the pin; propose an upgrade as a decision, not a side effect.
 3. Run the read-only linter from this skill's directory with an available
-   Python 3.11+ interpreter:
+   Python 3.11+ interpreter ([interpreters](references/operating-rules.md#helper-scripts-and-interpreters)):
 
    ```bash
    python "$SKILL_DIR/scripts/lint_tool_schemas.py" --project . --max-tools 20
@@ -121,11 +121,21 @@ request setting, not prompt text; verify the enum in the pinned `google-genai`.
 
 ## Permissions and consequential operations
 
-Inspection and linting are read-only. Changing a docstring or schema changes
-what the model may do next; a tool that becomes easier to select is called
-more often. Before enabling live tests, show the exact model, project, case
-count and cost ceiling and obtain approval; keep paid runs with
-`adk-agent-evaluation`. Never widen an MCP allow-list to make a test pass, and
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
+
+Linting is read-only. Changing a docstring or schema changes what the model
+may do next; a tool that becomes easier to select is called more often. Before
+enabling live tests, show the exact model, project, case count and cost
+ceiling; keep paid runs with `adk-agent-evaluation`. Never widen an MCP allow-list to make a test pass, and
 never derive write or confirmation policy from server-supplied annotations.
 
 ## Validate and finish
@@ -139,10 +149,18 @@ hand the case set and budgets to `adk-agent-evaluation` as described in
 [evaluation hooks](references/evaluation-hooks.md); selection and parameter
 accuracy on a real model are its results, not this skill's.
 
-Report files changed, commands and actual output, and separate **source
-verified**, **offline simulated**, **live verified** and **not run** evidence.
-Label every threshold taken from a vendor as vendor-measured. On a second
-invocation, reread the existing declarations and tests before adding another
-wrapper, toolset or test double.
+Report files changed, commands and actual output. A fact read in the
+installed package is `offline (source read)` and a scripted-model run
+`local (mocked)`; every threshold taken from a vendor is `vendor-measured`. On
+a second invocation, reread the existing declarations and tests before adding
+another wrapper, toolset or test double.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 Independent community project; not affiliated with or endorsed by Google.

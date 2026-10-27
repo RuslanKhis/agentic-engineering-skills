@@ -132,6 +132,17 @@ evidence.
 
 ## Permissions and consequential operations
 
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
+
 Listing a server's tools, fetching a card and reading source are read-only.
 Connecting to a server or agent you did not start, registering an agent in
 Agent Registry or Gemini Enterprise, enabling an API, granting
@@ -147,9 +158,17 @@ reports before and after; a fake-server test per boundary that shows the
 agent handling a normal result, a timeout, an error and (for A2A) an
 `input-required` pause without acting on peer text as user authority; the
 contract table; and, when approved, a live exchange on the pinned versions
-labelled as such. Separate **source verified**, **local**, **mocked**,
-**live** and **not run** evidence. Report files changed, commands with
-actual output, each boundary's residual risk and the owning skill for each
-deferred concern.
+labelled as such. A fact read in the installed package is `offline (source
+read)` and a fake server is `local (mocked)`. Report files changed, commands
+with actual output, each boundary's residual risk and the owning skill for
+each deferred concern.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 Independent community project; not affiliated with or endorsed by Google.

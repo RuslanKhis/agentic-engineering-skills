@@ -20,7 +20,7 @@ Deliver a small instruction change or an actionable review that keeps the prompt
 2. List the session state keys the application actually writes (`output_key`, `tool_context.state`, callbacks, `App`/`Runner` setup) and compare them with every `{placeholder}`. A `{name}` with no writer raises `KeyError` at request time on google-adk 2.8.0; `{name?}` is the optional form. Read [ADK instruction mechanics](references/adk-instruction-mechanics.md) before touching templating, `static_instruction` or global instructions, and check the pinned version: backslash and `${var}` escapes are honoured only from 2.10.0.
 3. Read the tool docstrings and the sub-agent descriptions as the model sees them. The docstring is the tool description; the sub-agent `description` is rendered verbatim into the parent's transfer instructions. Tool docstrings and parameter schemas belong to adk-tool-interface-design; stay on the instruction side of that line.
 4. Find the existing tests and evaluation sets, and any recording of the rendered request (a `before_model_callback` or recording model). Without a rendered request, no claim about what the model received is verified.
-5. Run the bounded, read-only linter with an available Python 3.11+ interpreter, resolving `SKILL_DIR` to this skill's installed directory:
+5. Run the bounded, read-only linter with an available Python 3.11+ interpreter ([interpreters](references/operating-rules.md#helper-scripts-and-interpreters)), resolving `SKILL_DIR` to this skill's installed directory:
 
 ```bash
 python "$SKILL_DIR/scripts/instruction_lint.py" --project . --state-keys company,user:plan --dry-run
@@ -64,6 +64,27 @@ Evidence for an instruction change, in rising strength:
 - A hostile-document fixture whose embedded instructions leave the decision unchanged.
 - An evaluation run through adk-agent-evaluation with the prompt version recorded, showing the targeted category shrinking and no other category growing.
 
-A prompt diff is not evidence of improvement. Separate **offline rendered**, **mocked model**, **live evaluated** and **not run** in the report, name the ADK version the mechanics were checked against, and list anything unverified. Record the prompt version with every evaluation run so a regression can be traced to a text change.
+A prompt diff is not evidence of improvement. A rendered instruction is `offline (rendered)`, a scripted or recording model `local (mocked)` and an evaluation on a real model `live`. Name the ADK version the mechanics were checked against, and list anything unverified. Record the prompt version with every evaluation run so a regression can be traced to a text change.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
+
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
+
+A live evaluation run belongs to adk-agent-evaluation's approved plan.
 
 Independent community project; not affiliated with or endorsed by Google.

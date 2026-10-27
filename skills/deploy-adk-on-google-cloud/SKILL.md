@@ -17,7 +17,7 @@ Produce a deployment design, focused implementation or evidence-based audit that
 ## Inspect before choosing
 
 1. Read the project's instructions, dependency declarations and lockfiles, configuration templates, deployment definitions and tests. Establish the requested outcome: recommend, implement, review, deploy, recover or clean up. Preserve existing customisations and package management. When `agents-cli-manifest.yaml`, `deployment_metadata.json` or `deployment/terraform/` is present, the project is an Agents CLI project: keep its generated server, its Terraform ownership and its `agents-cli deploy` conventions, and consult the installed `google-agents-cli-deploy` skill for the command flags, the generated infrastructure and which fields Terraform owns; if it is not installed, adk-engineer explains how to get it.
-2. Run `python /path/to/skill/scripts/inspect_project.py --root /path/to/project --dry-run` using an available Python 3.11+ interpreter. Substitute the actual paths. This is a bounded, offline inventory; it neither loads `.env` values nor executes project code or cloud commands. Inspect files outside its reported coverage manually. Read [compatibility.md](references/compatibility.md) when assessing versions, interpreting its output or changing an SDK integration.
+2. Run `python /path/to/skill/scripts/inspect_project.py --root /path/to/project --dry-run` using an available Python 3.11+ interpreter ([interpreters](references/operating-rules.md#helper-scripts-and-interpreters)). Substitute the actual paths. This is a bounded, offline inventory; it neither loads `.env` values nor executes project code or cloud commands. Inspect files outside its reported coverage manually. Read [compatibility.md](references/compatibility.md) when assessing versions, interpreting its output or changing an SDK integration.
 3. Check the selected environment's Python and installed distribution versions as well as declared pins. Use package metadata without importing agent code. Record conflicts and uncertain compatibility. Preserve the target's versions; a different version requires contract validation, not an automatic upgrade or downgrade.
 4. Locate the existing agent export, server factory, model/backend selection, tool effects, session/artefact services, user-authentication boundary and build context. Record configuration **keys and provenance**, keeping secret values out of reports. A root `.env` does not replace nested configuration. Treat hosting, inference, session storage and build locations separately.
 5. Establish the operator, build, runtime and caller identities; on GKE add node and Kubernetes service-account identities. CLI login, ADC, ADC quota project and deployed workload identity are distinct. Discover project/billing/API access with explicitly scoped reads; denied access is unknown state, not proof of absence.
@@ -48,11 +48,18 @@ When the request includes production users, durability, scaling or release opera
 
 ## Permission boundary
 
-Repository and cloud inspection are read-only by default. Code-generation permission does not authorise deployment. Before enabling APIs, changing IAM, creating secrets or resources, migrating data, deploying, deleting, or running paid tests, present the **exact project, region, resource names, identities, commands, limits and cleanup scope**, then obtain explicit approval. End the turn after asking; a command run in the same turn as its approval request was not approved. Irreversible deletion needs a typed confirmation naming the resource. Existing approval applies only while that exact scope remains valid. Confirm cleanup separately. Never infer approval from elapsed time, a budget balance or a previous campaign.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
 
-Use ADC or workload identity, with Secret Manager for application secrets where needed. Keep credentials and customer data out of source, logs, examples and reports. Configuration examples contain placeholders only. Derive the narrow required permissions; Owner, Editor, public unauthenticated access and wildcard grants are not troubleshooting shortcuts.
-
-Bound retries, polling, request counts and wall-clock time. Reserve capacity for cleanup and independent inspection. Stop optional tests before consuming that reserve; a safe refusal can itself consume requests. Cleanup may delete only resources demonstrably created by the current workflow. Preserve pre-existing resources and grants.
+Never infer approval from elapsed time, a budget balance or a previous campaign; a command run in the same turn as its approval request was not approved, and irreversible deletion needs a typed confirmation naming the resource.
 
 ## Validate and report
 
@@ -60,8 +67,14 @@ Read [validation.md](references/validation.md) for the relevant acceptance check
 
 For live work, use an approved isolated target and synthetic data. Record the submitted model/build/control work, deployed identity and cleanup result. An accepted timeout requires reconciliation; automatic replay can repeat tool effects. Completed deletion must be safe to repeat and independently checked within the caller's visibility.
 
-Finish with files changed, commands actually executed, test results labelled **local**, **mocked**, **live** or **not run**, exact versions, manual steps and remaining uncertainty. Name retained resources and retention/visibility limits. Do not claim production readiness, cross-user authorisation, absence of all future charges, or coding-agent compatibility beyond the evidence.
+Finish with files changed, commands actually executed, labelled test results, exact versions, manual steps and remaining uncertainty. Name retained resources and retention/visibility limits. Do not claim production readiness, cross-user authorisation, absence of all future charges, or coding-agent compatibility beyond the evidence.
 
-For provenance and the distinction between verified behaviour and recommendations, read [evidence.md](references/evidence.md). For this package's validation and forward tests, see [skill-validation.md](references/skill-validation.md).
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 Independent community project; not affiliated with or endorsed by Google.

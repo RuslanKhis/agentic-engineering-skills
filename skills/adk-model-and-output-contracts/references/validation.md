@@ -47,12 +47,14 @@ A live check needs an approved project, backend, model, location, request count 
 
 ## Completion report
 
-| Evidence | Supports |
-| --- | --- |
-| Source inspection and the two helpers | Shape of configuration and schema; no runtime guarantee |
-| Scripted-model tests | Save path, repair loop, path selection and config serialisation under the fixture contract |
-| Development-set run (adk-agent-evaluation) | Measured quality of a model and settings version on labelled cases |
-| Approved live check | Only the observed model, backend, version and sample |
-| Production principle | A requirement without a test in this change |
+Labels follow [evidence labels](operating-rules.md#evidence-labels).
+
+| Label | Evidence | Supports |
+| --- | --- | --- |
+| `offline` | Source inspection and the two helpers | Shape of configuration and schema; no runtime guarantee |
+| `local (mocked)` | Scripted-model tests | Save path, repair loop, path selection and config serialisation under the fixture contract |
+| `live` | Development-set run (adk-agent-evaluation) | Measured quality of a model and settings version on labelled cases |
+| `live` | Approved live check | Only the observed model, backend, version and sample |
+| `guidance` | Production principle | A requirement without a test in this change |
 
 List unverified items explicitly: unresolved runtime model strings, backend not determinable from code, pinned version differing from 2.8.0, lifecycle table age, and any claim about provider acceptance of a schema that was not captured on the wire.

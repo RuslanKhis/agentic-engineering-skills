@@ -41,33 +41,15 @@ Follow its design system for UI work. Treat its security rule IDs (`SB03`)
 like contracts. Read its linked design and plan,
 dependencies, acceptance cases and execution scope, and preserve settled
 choices; restart discovery only for a material new gap. For "the next ready
-goal", pick the first goal whose prerequisites are complete. On finishing, write
-actual evidence and status into the ticket's Evidence section or the plan's goal
-entry, one line for each design contract the goal cites (its ID, the tier
-reached (offline: no SDK, policy and tool functions on duck-typed inputs;
-local: the real Runner with a scripted model or a local backend; live: an
-authorised call; release: the promoted build), and the acceptance cases that
-showed it), one line for each security rule it cites (ID, tier reached,
-acceptance cases), the companion skills loaded with their pins, with a
-numbered measurement record (`M<n>`: value, baseline, window, sample,
-method, owner, build) for every figure a pilot or production
-run produced and an incident record (`I<n>`) for every incident, so that
-`adk-presenter` can cite them, an `actual:` line with the human hours the
-person reports (or `not reported`), set the ticket's status with the template's
-vocabulary (`verified_local` when every acceptance case that can run offline
-has run here; `in_progress` with the owed run named in Evidence when the
-SDK-tier cases are written but the SDK is absent in this session; `verified_live`
-after the authorised run; `done` when the owner accepts; `blocked` only for a
-decision or dependency outside the ticket), and end with the run prompt for the next
-ready goal or ticket. For a plan with tickets, read
+goal", pick the first goal whose prerequisites are complete. Read
 [the ticket lifecycle](references/ticket-lifecycle.md) before starting and
-before finishing: it covers resuming from a `Progress:` block, updating the
-design's Evidence cells, running the designer's `plan_status.py`, and ending
-with the designer's checkpoint prompt instead of the next ticket when a
-contract delta, an open ruling, an overrun, a blocked ticket or an orphaned
-contract needs a decision. When the session must stop before the acceptance
-cases pass, write the `Progress:` block first.
-When there is none, end instead with the prompt for the most useful follow-up: the
+again before finishing any ticket or plan goal: it covers resuming from a
+`Progress:` block, checking the estimate, resources that charge and their
+teardown, the Evidence lines and status to write, updating the design's
+Evidence cells, and whether to end with the next ticket's prompt or the
+designer's checkpoint prompt. When the session must stop before the
+acceptance cases pass, write the `Progress:` block first.
+Without a ticket, end with the prompt for the most useful follow-up: the
 verification still owed (for example the SDK tests marked not run) or the new
 ticket the change uncovered, written so the user can paste it.
 
@@ -179,23 +161,10 @@ section.
 mapping and the rules that stay ours.
 
 Specialists refer to `$SKILL_DIR` when running their helper scripts; it means
-the directory that contains that specialist's `SKILL.md`. Helper output kept as
-evidence goes in `.adk-evidence/` at the project root (create it and add it to
-`.gitignore`); the helpers never scan it, nor the installed skill folders. The helpers need
-Python 3.11 or later; if the project's interpreter is older, use any available
-3.11+ interpreter for the helper only, without changing the project. When no
-interpreter at hand meets the project's `requires-python`, run the project's
-tests with the newest one available, say which one ran and that it is below
-the pin, and install nothing; the tests the pin matters for are reported as
-not run. When the only interpreter that meets the pin lacks the project's
-test runner, run what the standard library runner can collect there, the
-rest on the older interpreter, and report both runs by interpreter; write
-new tests so the standard library runner can collect them (`unittest`-style
-classes, which pytest collects as well, so a project's pytest job is
-unaffected) when that is the runner that will see them; the command for a
-`tests/` directory without `__init__.py` is
-`PYTHONPATH=. python -m unittest discover -s tests`, since `discover -t .`
-refuses a start directory that is not a package.
+the directory that contains that specialist's `SKILL.md`. Before running a
+helper on a project whose Python is older than 3.11, or the project's tests
+when no interpreter meets its `requires-python`, read
+[helper scripts and interpreters](references/operating-rules.md#helper-scripts-and-interpreters).
 
 ## Apply the guidance
 
@@ -216,32 +185,6 @@ before any irreversible or outside-visible effect on real people or money. Name 
 specialist controls you deliberately left out in the Evidence section, with
 the later goal or trigger that would add them, instead of building them or
 dropping them silently.
-
-When a ticket creates a resource that charges while provisioned (a database
-instance, a deployed vector index, a managed RAG database, minimum instances,
-a reservation, a load balancer), write the deletion script beside the script
-that creates it, in the same change: it deletes only what this ticket owns,
-dependants before owners, refuses to run without the approved scope, and is
-tested at least by a dry run. Record each such resource in the Evidence
-section as one line, `<resource>: <absent | retained: reason | unknown>;
-cleanup: <command>; verified: <how, when>`. When the ticket asks for a price
-and the pricing page cannot be read in this session, leave the placeholder,
-say so in Evidence and keep that acceptance item open; never fill it from
-memory. A teardown goal or ticket completes only when the
-resource list and, once it has caught up, the billing report show the
-resources gone; a delete command returning successfully is where
-verification starts.
-
-A ticket's estimate is human hours with a coding agent: hands-on plus review
-and verify. Before editing, compare the work the acceptance cases need with
-that estimate. If it is clearly larger (for example the high end would at least
-double, or a calendar wait such as provider verification appears), say so
-first. Build the largest useful slice that fits, and propose the remainder as
-a new ticket with its own estimate instead of silently expanding the scope.
-Write the human effort still owed for this change into the ticket's Evidence
-and repeat it in the final message: hours to review and verify it, what to
-check, and any step only a person can do (credentials, console setup,
-approvals).
 
 When the request asks for a document a person will read (a review, a migration
 plan, a changelog entry), write that deliverable first, then make the code
@@ -285,4 +228,13 @@ set and one measurement, and hand the measured comparison to
 Finish with the requested explanation or the change made, validation actually
 performed, and any unresolved decision or unverified behaviour. Naming a
 specialist is the start of the work, not its completion.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
+
 With a practice profile, offer its harvest ([practice profile](references/practice-profile.md), step 5).

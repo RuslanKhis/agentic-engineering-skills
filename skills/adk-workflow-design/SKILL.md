@@ -93,24 +93,20 @@ design decisions.
 
 ## Authority and external work
 
-Repository/cloud inspection is read-only by default. Code-generation permission
-does not authorise deployment or paid model calls. Before API activation, IAM or
-secret changes, data migration, provisioning, deployment, deletion or live paid
-tests, present exact project/account, region, model, resource IDs, commands,
-request/retry limits, execution window and cleanup plan; obtain explicit approval.
-Reuse an approval only when it already covers those exact operations and scope.
-Billing linkage, upgrades and quota increases need separate approval.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
 
-Use synthetic data and short-lived ADC/workload identity where applicable. Keep
-credentials out of code, model inputs/results, session state and reports; use
-placeholder-only environment examples. Use least privilege, never Owner/Editor
-or wildcard grants as a shortcut. Read [external-validation.md](references/external-validation.md)
-only when real-service acceptance or cloud prerequisites are in scope.
-
-Keep cleanup separate from setup. Obtain confirmation for deletion, target only
-resources this task created, retain an ownership inventory, and make setup and
-cleanup repeatable. Prepare reviewable commands before seeking approval. Missing
-approval leaves consequential work pending; it does not stop safe local checks.
+Present the execution window with the request and retry limits. Read
+[external-validation.md](references/external-validation.md) only when
+real-service acceptance or cloud prerequisites are in scope.
 
 ## Validate and finish
 
@@ -140,11 +136,17 @@ enforcement point: a transport cap is enforced where the HTTP attempt is made,
 with a callback counter as the observer.
 
 Report changed files, exact commands and versions, actual outcomes, warnings,
-manual prerequisites and outstanding work. Separate PASS/FAIL/BLOCKED/NOT RUN/N/A
-for offline execution, live behaviour, browser functionality, latency and cleanup
-as applicable; use INCONCLUSIVE when observations leave a threshold open.
-Historical companion results are provenance for the rule, and the pass for the
-target project. Read [provenance.md](references/provenance.md) only to trace a rule
-or assess the scope of that prior evidence.
+manual prerequisites and outstanding work, giving an outcome for offline
+execution, live behaviour, browser functionality, latency and cleanup as
+applicable. Historical companion results are provenance for the rule, not the
+pass for the target project.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 This is an independent community project, not affiliated with or endorsed by Google.

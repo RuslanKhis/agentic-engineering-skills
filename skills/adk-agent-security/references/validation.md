@@ -119,15 +119,16 @@ scenario, with and without screening layers, as a measurement on your system.
 
 ## Completion report
 
-State files changed, the exact commands and their results, and separate:
+State files changed, the exact commands and their results, and label each
+result as [evidence labels](operating-rules.md#evidence-labels) defines:
 
-| Evidence | What it supports |
+| Label | What it supports here |
 | --- | --- |
-| Source verified | Behaviour read in the named ADK file at the pinned version |
-| Local | Inventory diff, hash comparison, unit tests of gates and validators |
-| Mocked | Scripted-model Runner tests with backend fakes and denied egress |
-| Live | Approved red-team or `adk eval` runs on a named model and date |
-| Not run | Anything above that was not executed on the target |
+| `offline (source read)` | Behaviour read in the named ADK file at the pinned version |
+| `offline` | Inventory diff, hash comparison, unit tests of gates and validators |
+| `local (mocked)` | Scripted-model Runner tests with backend fakes and denied egress |
+| `live` | Approved red-team or `adk eval` runs on a named model and date |
+| `not run` | Anything above that was not executed on the target |
 
 Each finding in the report carries its `file:line`, OWASP LLM or ASI
 identifier, enforcement point, observable check, evidence label and owning

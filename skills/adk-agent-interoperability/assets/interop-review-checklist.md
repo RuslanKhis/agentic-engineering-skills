@@ -4,7 +4,8 @@ Copy into the target's docs and fill one row per boundary. A boundary is any
 `McpToolset`, `OpenAPIToolset`, `ToolboxToolset`,
 `ApplicationIntegrationToolset`, `RemoteA2aAgent`, `to_a2a`, `to_mcp_server`
 or `agent.json`. Each row needs an owner, an observable check and an evidence
-tier (source verified, local, mocked, live, not run).
+label (`offline (source read)`, `offline`, `local (mocked)`, `live`,
+`not run`), as the skill's operating rules define them.
 
 ## Boundary register
 

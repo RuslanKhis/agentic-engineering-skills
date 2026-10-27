@@ -64,15 +64,32 @@ Load additional implementation detail only for the relevant branch:
 
 ## Authorisation and data boundaries
 
-Inspection is read-only by default. Permission to implement tests is not permission to make paid calls or deploy them. Before enabling APIs, creating billable resources, changing IAM, creating secrets, migrating data, deploying, deleting or running paid/destructive tests, show the exact project, region, resources, commands, isolated test target and work limits, then obtain explicit approval. Reuse approval already given for that exact scope; a different target or expanded scope needs a new decision. Continue independent offline work while approval is pending.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
 
-Use synthetic or properly de-identified fixtures. Prefer ADC/workload identity and managed secret storage where relevant; never use Owner, Editor or broad wildcard grants to bypass a failure. Keep provisioning idempotent. Cleanup is a separate, confirmed operation limited to resources owned by this skill's recorded run. Never delete shared project resources to obtain a clean test.
+Permission to implement tests is not permission to make paid calls or deploy them; name the isolated test target and work limits in every request. Never delete shared project resources to obtain a clean test.
 
 ## Validate and report
 
 1. Run the project's meaningful offline checks with external access prevented where hermeticity is claimed. Validate eval/config schemas with its pinned ADK models. Check guards and effects, not just expected strings. Keep failing regressions when diagnosing a real defect.
-2. For approved live work, follow the planned preflight/canary and cohort protocol within its bounds; include a paid preflight only when covered by that plan. Preserve a fixed cohort's cases, attempts and stop rules. Retain case/trial/metric counts and versioned criteria. Count a skipped paid test, a missing score, a zero-case conformance run and a bare successful process exit as NOT RUN. The result-auditing reference documents the bundled read-only [CSV checker](scripts/check_eval_results.py).
+2. For approved live work, follow the planned preflight/canary and cohort protocol within its bounds; include a paid preflight only when covered by that plan. Preserve a fixed cohort's cases, attempts and stop rules. Retain case/trial/metric counts and versioned criteria. Count a skipped paid test, a missing score, a zero-case conformance run and a bare successful process exit as `not run`. The result-auditing reference documents the bundled read-only [CSV checker](scripts/check_eval_results.py).
 3. Check a second invocation for duplicate writes, duplicate test registration and needless configuration churn. Run only newly justified checks after a passing validation; retain failed observations instead of rerunning to green.
-4. Report files changed, commands and exit/results, actual versions, what used real providers, what used doubles, what remains unverified, and any precise manual action or approval needed. Distinguish implementing a test from executing it successfully. Use [provenance.md](references/provenance.md) when explaining the evidence behind this skill; the target project's results come from its own runs.
+4. Report files changed, commands and exit/results, actual versions, what used real providers, what used doubles, what remains unverified, and any precise manual action or approval needed. Distinguish implementing a test from executing it successfully. The target project's results come from its own runs.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 The skill's own checks and limitations are recorded in [validation.md](references/validation.md). Independent community project; not affiliated with or endorsed by Google.

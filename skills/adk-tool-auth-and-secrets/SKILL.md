@@ -18,7 +18,7 @@ The skill is self-contained. The book and companion repository are optional prov
 
 ## Inspect and choose
 
-1. Read project instructions, dependency declarations/locks, gateway, tool schemas, identity verification, credential index/store, exports and relevant tests. Preserve the package manager, pinned Python/ADK versions and existing architecture. Never import application modules merely to inspect them: import side effects can initialise clients or read credentials. Note whether the `google-adk` pin is below 2.12.0, the release that stops OAuth2 secrets reaching the serving endpoints and takes the user id only from an authenticated principal ([compatibility and evidence](references/compatibility-and-evidence.md)).
+1. Read project instructions, dependency declarations/locks, gateway, tool schemas, identity verification, credential index/store, exports and relevant tests. Preserve the package manager, pinned Python/ADK versions and existing architecture. Never import application modules merely to inspect them: import side effects can initialise clients or read credentials. Note whether the `google-adk` pin is below 2.12.0, the release that stops OAuth2 secrets reaching the serving endpoints (its user-id fix covers A2A requests only; the HTTP routes still take a caller-supplied user id) ([compatibility and evidence](references/compatibility-and-evidence.md)).
 2. Optionally run `python scripts/inspect_project.py "$TARGET_PROJECT"` from this skill's directory. It reads bounded source/manifests and emits locations and static observations, not a security verdict. Use its `--help` for limits and a version expectation. Inspect relevant code at the reported locations without dumping secret values, `.env` files or raw logs.
 3. Record the requested operation (review/recommend, implement/fix, or verify), identities at each hop, credential owner, permitted destinations/scopes, persistent stores, replicas, chosen model/backend and which external systems are real or mocked. Infer existing choices before asking; ask only about missing decisions that affect identity, custody, approval or compatibility.
 4. Select the required credential branch below. If several apply, handle their shared boundary within this one skill. Explain a short plan before broad changes. Inspection is complete when the principal, credential owner and applicable branch are known, or their unresolved questions are explicitly recorded.
@@ -45,14 +45,31 @@ The optional [public-text adapter](assets/public_text.py) is a complete, small s
 
 ## Permission and execution boundaries
 
-Repository and cloud inspection are read-only by default; secret-payload reads, token minting and live model/provider calls are separate actions. Before API activation, IAM changes, secret writes, provisioning, data migration, deployment, deletion or paid live tests, present the exact project, applicable region/global scope, resources, identities, commands, limits and cleanup targets. Obtain explicit approval unless that exact plan is already explicitly authorised in the current task. Code-generation permission does not authorise deployment. Historical book campaigns grant no permission for a new target.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
 
-Use isolated test targets, keyless ADC/workload identity, least privilege, bounded retries and idempotent setup. Stop on an unapproved target or exhausted budget. Keep cleanup separate, confirm its exact plan, and target only resources recorded as created by this skill invocation; preserve pre-existing resources. Never use Owner/Editor or wildcard grants to bypass a failure. No credential values, service-account keys or personal resource identifiers belong in generated examples or reports.
+Secret-payload reads, token minting and live model/provider calls are separate actions, each needing its own approval.
 
 ## Validate and report
 
 Follow [validation](references/validation.md) for the selected branch. Start with deterministic identity/credential/provider tests, then real ADK orchestration with only the model boundary substituted where possible. Run paid/live checks only under the approved isolated plan. Check replay, user isolation, later invocation/restart and failure handling when affected; add relevant canaries for credential exposure. Verify repeated execution preserves existing state. A static inspector finding is a review lead, not a proved exploit or a passing control.
 
-Report changed files, exact commands and exit/test results; distinguish newly run offline tests, new live checks, historical evidence and unverified requirements. Include remaining manual steps, production gaps, version limits, created-resource inventory and confirmed cleanup status where applicable. Do not label a partially validated live integration complete.
+Report changed files, exact commands and exit/test results, remaining manual steps, production gaps, version limits, created-resource inventory and confirmed cleanup status where applicable. Do not label a partially validated live integration complete.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 Independent community project; not affiliated with or endorsed by Google. Provenance and measured limits: [compatibility and evidence](references/compatibility-and-evidence.md).

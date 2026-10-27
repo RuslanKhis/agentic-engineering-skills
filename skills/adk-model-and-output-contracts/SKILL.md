@@ -20,7 +20,7 @@ Decide what the model is asked to emit, which model and settings produce it, and
 2. Find every model reference: string literals, `model=` arguments, `Gemini(...)`, `LiteLlm(...)`, `FallbackModel(...)`, `-latest` aliases and the agent default (`LlmAgent.DEFAULT_MODEL` is `gemini-3.5-flash` in 2.8.0).
 3. Find `generate_content_config`, `planner`, `output_schema`, `output_key`, `mode` and `tools` on each `LlmAgent`. Note which agents combine `output_schema` with `tools`.
 4. Identify the backend: `GOOGLE_GENAI_USE_ENTERPRISE` (the deprecated spelling `GOOGLE_GENAI_USE_VERTEXAI` still works with a `DeprecationWarning` in 2.8.0), project and location, or an API key. The backend decides how a schema is enforced ([output schema and tools](references/output-schema-and-tools.md)). In an Agents CLI project (`agents-cli-manifest.yaml` present) the scaffold writes `GOOGLE_GENAI_USE_ENTERPRISE=true` and `gemini-3.8-flash`; consult the installed `google-agents-cli-adk-code` skill (`references/adk-python.md`) for those conventions; if it is not installed, adk-engineer explains how to get it.
-5. Run the two helpers with an available Python 3.11+ interpreter after resolving `SKILL_DIR` to this skill's directory. They read source only; they never import the project or call a provider.
+5. Run the two helpers with an available Python 3.11+ interpreter ([interpreters](references/operating-rules.md#helper-scripts-and-interpreters)) after resolving `SKILL_DIR` to this skill's directory. They read source only; they never import the project or call a provider.
 
 ```bash
 python "$SKILL_DIR/scripts/audit_model_config.py" --project . --dry-run
@@ -60,6 +60,27 @@ Read [validation](references/validation.md). Three checks are observable without
 2. A request-capture test (a `before_model_callback` or a transport double) showing which config field carried the schema (`response_schema` plus `response_mime_type` in 2.8.0) and whether the tools list contains `set_model_response`, so the native or workaround path is known rather than assumed.
 3. A development-set comparison through adk-agent-evaluation reporting schema validity, answer accuracy, executable or actionable accuracy and wrong-valid-schema separately, with finish reason and thought tokens recorded per run.
 
-Live model calls, model switches in production and new quota or endpoint settings are consequential: present model, backend, project, location, request count and cost ceiling and obtain approval first. Keep configuration examples synthetic. Report what was inspected, what the helpers found, which tests ran and what remains unverified, separating **offline simulated**, **live verified** and **not run**. Record every URL with its page date; model availability and defaults change faster than this skill.
+<!-- shared:consequential-operations-brief -->
+Inspection is read-only, and code generation authorises no deployment, paid
+call or live test. Before any consequential operation (an API, billing or
+quota change, a billable resource, a secret, IAM, a data migration, a
+deployment, a deletion, or a paid or destructive test), read
+[consequential operations](references/operating-rules.md#consequential-operations),
+present the exact scope and limits, obtain explicit approval and end the turn
+to wait for it. Cleanup is a separate confirmed operation on resources this
+workflow created.
+<!-- /shared:consequential-operations-brief -->
+
+Live model calls, model switches in production and new quota or endpoint settings are among them: present model, backend, project, location, request count and cost ceiling. Keep configuration examples synthetic.
+
+Report what was inspected, what the helpers found, which tests ran and what remains unverified. A scripted-model test is `local (mocked)`. Record every URL with its page date; model availability and defaults change faster than this skill.
+
+<!-- shared:evidence-labels-brief -->
+Label each result with its tier (`offline`, `local`, `live` or `release`) and
+outcome (`pass`, `fail`, `blocked` or `not run`) as
+[evidence labels](references/operating-rules.md#evidence-labels) defines them;
+earlier, vendor and documentation-only results are `historical`,
+`vendor-measured` or `guidance`, never this session's evidence.
+<!-- /shared:evidence-labels-brief -->
 
 Independent community project; not affiliated with or endorsed by Google.
