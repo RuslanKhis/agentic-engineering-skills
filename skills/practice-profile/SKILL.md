@@ -21,7 +21,7 @@ metadata:
   source-chapter: "cross-cutting"
   sources-reviewed: "2026-10-26"
   verified-against: "not applicable: keeps the engineer's practice profile; runs no ADK code"
-  version: "2026.10.27"
+  version: "2026.10.28"
 ---
 
 # Practice profile

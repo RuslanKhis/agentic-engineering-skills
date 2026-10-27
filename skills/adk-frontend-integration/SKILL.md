@@ -21,7 +21,7 @@ metadata:
   source-chapter: "5"
   last-tested: "2026-09-16"
   verified-against: "google-adk 2.8.0 companion evidence 2026-09-16; 2.12.0 gateway tested offline 2026-10-26"
-  version: "2026.10.27"
+  version: "2026.10.28"
 ---
 
 # ADK frontend integration

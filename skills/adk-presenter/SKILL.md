@@ -21,7 +21,7 @@ metadata:
   source-chapter: "cross-cutting"
   sources-reviewed: "2026-10-15"
   verified-against: "not applicable: writes presentations from recorded evidence; runs no ADK code"
-  version: "2026.10.27"
+  version: "2026.10.28"
 ---
 
 # ADK presenter

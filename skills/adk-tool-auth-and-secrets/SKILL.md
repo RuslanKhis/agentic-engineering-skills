@@ -20,7 +20,7 @@ metadata:
   source-chapter: "09"
   validation-date: "2026-09-16"
   verified-against: "google-adk 2.8.0 offline and live tests 2026-09-16; 2.12.0 CHANGELOG and source read 2026-10-24"
-  version: "2026.10.27"
+  version: "2026.10.28"
 ---
 
 # Secure ADK tool authentication and credentials

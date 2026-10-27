@@ -21,7 +21,7 @@ metadata:
   source-chapter: "cross-cutting"
   sources-reviewed: "2026-10-26"
   verified-against: "not applicable: drafts governance papers; runs no ADK code"
-  version: "2026.10.27"
+  version: "2026.10.28"
 ---
 
 # ADK governance pack

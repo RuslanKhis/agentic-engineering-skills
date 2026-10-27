@@ -21,7 +21,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "cross-framework"
   verified-against: "google-adk 2.8.0 source and adk-python main CHANGELOG, 2026-10-07"
-  version: "2026.10.27"
+  version: "2026.10.28"
 ---
 
 # ADK agent observability

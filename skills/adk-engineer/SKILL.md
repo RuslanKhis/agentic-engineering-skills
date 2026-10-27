@@ -14,7 +14,7 @@ metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   verified-against: "not applicable: routes to specialists and runs no ADK code"
-  version: "2026.10.27"
+  version: "2026.10.28"
 ---
 
 # ADK engineer

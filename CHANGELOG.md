@@ -3,6 +3,58 @@
 One section per tagged release, newest first. Pin a release with
 `npx skills@latest add RuslanKhis/agentic-engineering-skills#v<version> --skill '*'`.
 
+## 2026.10.28 · 28 October 2026
+
+Changes since v2026.10.27:
+
+- **Skill fixes found by scenario runs.** The skill defects confirmed by
+  scenario triage were fixed across evaluation, guardrails, memory, release,
+  interoperability, observability, deploy and workflow design.
+  - Screen placement and the Prompt Guard 2 section now live in
+    protect-adk-sensitive-data; adk-agent-security keeps a threat-model view
+    with pointers, and guardrails points there.
+  - adk-workflow-design's description now names checkpoints, reusing saved
+    stages, oversized checkpoints, multi-day approval waits (ADK resume or a
+    durable engine), draft consistency checks and warning-only corrections.
+    The skill loaded in 7 of 7 workflow scenarios, up from 2.
+  - deploy-adk-on-google-cloud hands the Agent Identity decision to
+    adk-tool-auth-and-secrets and gives the `npx skills@latest add
+    google/skills --skill <name>` step where it used to point at adk-engineer.
+  - Guardrails routes unanswered approvals and unreadable approval arguments
+    to their section of `human-review.md`.
+- **Routing.** Three routing gaps got owners in `ownership.md` (model 429s,
+  a multi-area feature in an existing app, `output_key` `{key}` handoffs),
+  plus rows for checkpoint and resume ownership. Activation (Sonnet, two
+  repeats): dev 344 PASS / 10 PARTIAL / 2 FAIL on 178 cases, held-out 155 /
+  1 / 0 on 78 cases. One designer-versus-engineer case remains unstable on
+  main as well.
+- **Governance pack.** The consultancy's home now comes from an employer
+  profile's staff countries, Australia by default and recorded as an
+  assumption; a client profile never sets it.
+- **Evaluation harness (maintainers).**
+  - Grader answers and trial oracles moved out of skill packages into
+    `evals/graders/`; only the judge sees them.
+  - Scenario workspaces are composed from shared bases and overlays; every
+    scenario has a fixture.
+  - Scenario agents are confined to their workspace, auto-memory is off,
+    skill loading is recorded and the judge votes three times.
+  - Activation cases have a held-out split generated from neutral briefs.
+  - The API-key backend and the activation workflow were removed; runs use
+    the claude CLI.
+  - A shell-enabled mode scrubs cloud, SSH and token variables, redirects
+    tool config to empty per-case paths, keeps Bash in the workspace and is
+    recorded as unconfined.
+- **Scenario evidence.** 77 scenarios were run and triaged
+  (`docs/testing/scenario-fixtures-2026-10-27.md`), then the defect fixes
+  were measured (`skill-defect-fixes-2026-10-27.md`,
+  `last-defects-2026-10-28.md`) and a first shell-enabled run was recorded
+  (`shell-run-2026-10-28.md`): with a shell, 12 of 17 shell-dependent
+  assertions passed by actually running the helper, and the four new
+  governance packs passed 22 of 23 assertions. One run per scenario, so
+  single verdicts are indicative.
+- About 100 links in moved maintainer records and research notes were
+  repaired.
+
 ## 2026.10.27 · 27 October 2026
 
 Changes since v2026.10.26.3:

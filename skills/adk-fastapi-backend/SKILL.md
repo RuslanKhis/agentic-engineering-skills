@@ -19,7 +19,7 @@ metadata:
   source-book: Agentic Engineering
   last-tested: "2026-10-23"
   verified-against: "google-adk 2.12.0 scratch-app and runtime-contract tests, 2026-10-23"
-  version: "2026.10.27"
+  version: "2026.10.28"
 ---
 
 # ADK FastAPI backend
