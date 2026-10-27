@@ -17,6 +17,38 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## Measured routing, clearer boundaries and one set of conventions · 27 October 2026
+
+Five changes landed together.
+- **Activation is measured.** `scripts/run_activation.py` measures skill
+  selection from descriptions. `scripts/run_scenarios.py` runs a scenario
+  in a throwaway workspace and has a judge grade its assertions. A manual
+  GitHub workflow runs activation through the Anthropic API.
+- **Contested topics have one owner.** `adk-engineer/references/ownership.md`
+  names the owner of each contested topic, such as approval, replay, session
+  ownership, history, exemplars and CI gates. Descriptions now exclude each
+  other in both directions, and `check_boundaries.py` keeps it that way.
+- **Shared guidance has one source.** The evidence labels, permissions,
+  interpreter, confirmation and verified-principal guidance come from a
+  single copy in `shared/`. `sync_shared.py` keeps every skill's copy
+  identical.
+- **Every skill records what it was verified against.**
+  [docs/compatibility.md](../compatibility.md) gathers the versions in one
+  table. Maintainer records moved to `docs/skill-evidence/`.
+- **The 48 helpers share one convention** for flags and exit codes:
+  [helper conventions](../helper-conventions.md).
+
+The README was cut from 3,849 to 446 lines. Its per-skill detail, journeys
+and this testing log moved to `docs/` verbatim.
+
+**Results.** With Sonnet 5.5 the 114 original cases gained no new failures:
+three cases that were unstable before now pass every time. The full
+154-case set scored 298 PASS, 9 PARTIAL and 1 FAIL over two repeats.
+Measuring also found a real gap: document ingestion was missing from the
+memory description, and it has been added. It also found that 126 of 152
+scenarios lack fixtures, and that two skills ship grader-side files.
+[Integration and activation record](quality-phases-2026-10-27.md).
+
 ## Practice profile: an interview or your own documents · 26 October 2026
 
 The practice profile can now be filled in two ways: a short interview, or

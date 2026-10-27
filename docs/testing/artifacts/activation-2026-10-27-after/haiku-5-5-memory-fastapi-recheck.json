@@ -1,0 +1,869 @@
+{
+ "schema": "activation-results/1",
+ "created": "2026-10-27T06:40:32+00:00",
+ "backend": "claude-cli",
+ "model": "claude-haiku-5-5",
+ "seed": "20261027",
+ "batch_size": 14,
+ "repeats": 3,
+ "only": [
+  "adk-memory-architecture",
+  "adk-fastapi-backend"
+ ],
+ "commit": "1737aa09de5c5443e61fd5f7ad68343fdff06793",
+ "catalogue_sha256": "3295a5a6cc395a7221006b47fa820bd8ec039305ce1547b53ab33fe817cac398",
+ "corpus_sha256": "1d43aab454fb016590f24655fce07ef688b0afb8ba5844e129aaa36328a0f32a",
+ "skill_count": 26,
+ "case_count": 16,
+ "grading": "8 October 2026 rules; see scripts/run_activation.py",
+ "batches": [
+  {
+   "repeat": 1,
+   "batch": 1,
+   "cases": [
+    "fastapi-backend-cross-user-record-positive",
+    "fastapi-backend-documents-positive",
+    "memory-positive",
+    "memory-sql-analytics-near-miss",
+    "fastapi-backend-plain-crud-near-miss",
+    "fastapi-backend-stream-near-miss",
+    "memory-prompt-only-near-miss",
+    "fastapi-backend-session-endpoints-near-miss"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9441,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 2315,
+    "output_tokens_details": {
+     "thinking_tokens": 1593
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9441,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 2315,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9441,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9441
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0030459,
+   "duration_s": 11.2,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 2,
+   "cases": [
+    "fastapi-backend-client-positive",
+    "memory-cross-session-recall-positive",
+    "memory-history-trimming-near-miss",
+    "fastapi-backend-migrations-positive",
+    "memory-near-miss",
+    "fastapi-backend-cross-user-tool-near-miss",
+    "fastapi-backend-drive-near-miss",
+    "memory-ingestion-positive"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9437,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1609,
+    "output_tokens_details": {
+     "thinking_tokens": 951
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9437,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1609,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9437,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9437
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0026921000000000002,
+   "duration_s": 7.6,
+   "attempts": 1
+  },
+  {
+   "repeat": 2,
+   "batch": 1,
+   "cases": [
+    "fastapi-backend-migrations-positive",
+    "memory-positive",
+    "fastapi-backend-drive-near-miss",
+    "memory-sql-analytics-near-miss",
+    "fastapi-backend-cross-user-tool-near-miss",
+    "memory-near-miss",
+    "fastapi-backend-documents-positive",
+    "fastapi-backend-stream-near-miss"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9404,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1721,
+    "output_tokens_details": {
+     "thinking_tokens": 1075
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9404,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1721,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9404,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9404
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0027415,
+   "duration_s": 8.7,
+   "attempts": 1
+  },
+  {
+   "repeat": 2,
+   "batch": 2,
+   "cases": [
+    "memory-history-trimming-near-miss",
+    "fastapi-backend-cross-user-record-positive",
+    "memory-ingestion-positive",
+    "fastapi-backend-client-positive",
+    "fastapi-backend-plain-crud-near-miss",
+    "fastapi-backend-session-endpoints-near-miss",
+    "memory-cross-session-recall-positive",
+    "memory-prompt-only-near-miss"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9475,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1946,
+    "output_tokens_details": {
+     "thinking_tokens": 1231
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9475,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1946,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9475,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9475
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0028682000000000004,
+   "duration_s": 10.0,
+   "attempts": 1
+  },
+  {
+   "repeat": 3,
+   "batch": 1,
+   "cases": [
+    "memory-prompt-only-near-miss",
+    "memory-positive",
+    "fastapi-backend-plain-crud-near-miss",
+    "fastapi-backend-session-endpoints-near-miss",
+    "fastapi-backend-documents-positive",
+    "fastapi-backend-client-positive",
+    "fastapi-backend-cross-user-record-positive",
+    "fastapi-backend-drive-near-miss"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9435,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1902,
+    "output_tokens_details": {
+     "thinking_tokens": 1160
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9435,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1902,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9435,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9435
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.0028382000000000004,
+   "duration_s": 9.3,
+   "attempts": 1
+  },
+  {
+   "repeat": 3,
+   "batch": 2,
+   "cases": [
+    "memory-sql-analytics-near-miss",
+    "memory-history-trimming-near-miss",
+    "fastapi-backend-cross-user-tool-near-miss",
+    "memory-ingestion-positive",
+    "memory-near-miss",
+    "memory-cross-session-recall-positive",
+    "fastapi-backend-stream-near-miss",
+    "fastapi-backend-migrations-positive"
+   ],
+   "model": "claude-haiku-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 9444,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1504,
+    "output_tokens_details": {
+     "thinking_tokens": 763
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 9444,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1504,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 9444,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 9444
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.002641,
+   "duration_s": 7.9,
+   "attempts": 1
+  }
+ ],
+ "cases": [
+  {
+   "id": "fastapi-backend-cross-user-record-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 1,
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "The request is about an owner-filtered domain route (claims) and the shared verified-principal dependency in a FastAPI app around an ADK agent, which is exactly that skill's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-documents-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 1,
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Listing and deleting a user's uploaded documents is a domain route over application data in an ADK web application, which this skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 1,
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "A consent-based, persistent, per-user preference that must survive restarts and be changeable or erasable is cross-session memory with identity, consent and erasure boundaries.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-sql-analytics-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 1,
+   "primary": "adk-sql-agent-engineering",
+   "supporting": [],
+   "reason": "Natural-language analytics that produce reviewed, read-only BigQuery queries is the core scope of an ADK SQL agent.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-plain-crud-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 1,
+   "primary": "none",
+   "supporting": [],
+   "reason": "A generic FastAPI CRUD service for an inventory system has no ADK agent involved, and the catalogue excludes FastAPI work unrelated to an ADK application.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-stream-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 1,
+   "primary": "adk-frontend-integration",
+   "supporting": [],
+   "reason": "Streaming tool progress into the chat interface during an agent run is an agent-to-browser streaming and tool-display concern.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-prompt-only-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 1,
+   "primary": "adk-agent-instructions",
+   "supporting": [],
+   "reason": "Rewriting the drafting prompt and its exemplars to improve policy citation is prompt wording and few-shot exemplar design, which this skill owns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-session-endpoints-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 1,
+   "primary": "adk-frontend-integration",
+   "supporting": [
+    "adk-fastapi-backend"
+   ],
+   "reason": "Rejecting continuation of unowned sessions on the run endpoint and showing an error state in the chat falls under the agent's session endpoints and UI error states, while the ownership check depends on the verified-principal dependency in the backend.",
+   "grade": "PARTIAL"
+  },
+  {
+   "id": "fastapi-backend-client-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 1,
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "The request concerns the public OpenAPI contract and generated client of the FastAPI backend, which that skill explicitly covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-cross-session-recall-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 1,
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Cross-session continuity scoped to a user, with forget-on-request, is memory design that enforces identity and erasure boundaries.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-history-trimming-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 1,
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Trimming in-session history to cut per-turn tokens and latency, with before-and-after measurement, is a measured ADK optimisation.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-migrations-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 1,
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Application data and migrations kept beside ADK's session tables fall under that skill's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 1,
+   "primary": "none",
+   "supporting": [],
+   "reason": "Buffer cache tuning for an unrelated inventory database is general database administration outside any ADK agent skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-cross-user-tool-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 1,
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "adk-fastapi-backend"
+   ],
+   "reason": "Binding a tool to the verified user at the tool hop prevents cross-user access, and the verified-caller dependency comes from the FastAPI backend.",
+   "grade": "PARTIAL"
+  },
+  {
+   "id": "fastapi-backend-drive-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 1,
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [],
+   "reason": "Per-user Google Drive connection through delegated OAuth, including consent and disconnect, is covered by that skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-ingestion-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 1,
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Per-page ingestion triage of scans, tables and drawings with OCR or vision routing and coverage reporting is document preparation for retrieval, which that skill explicitly covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-migrations-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 2,
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Application tables and migrations beside ADK's session tables are explicitly within the FastAPI backend skill's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 2,
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "A preference saved across restarts with explicit consent, user isolation and erasure is cross-session memory with consent and erasure boundaries.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-drive-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 2,
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [],
+   "reason": "Each user connecting their own Google Drive is delegated OAuth and consent/disconnect lifecycle for an agent tool.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-sql-analytics-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 2,
+   "primary": "adk-sql-agent-engineering",
+   "supporting": [],
+   "reason": "Natural-language analytics that produce reviewed, read-only BigQuery queries is the SQL agent skill's core purpose.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-cross-user-tool-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 2,
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "adk-fastapi-backend"
+   ],
+   "reason": "Binding a tool to the verified caller so it cannot read another user's data is tool-hop ownership, and the verified-principal dependency sits in the FastAPI skill.",
+   "grade": "PARTIAL"
+  },
+  {
+   "id": "memory-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 2,
+   "primary": "none",
+   "supporting": [],
+   "reason": "Database buffer cache tuning for an unrelated inventory application is general database administration, which no skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-documents-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 2,
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "A list and delete endpoint for a user's own uploads is an owner-filtered domain route in an ADK web application.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-stream-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 2,
+   "primary": "adk-frontend-integration",
+   "supporting": [],
+   "reason": "Streaming tool progress into the chat UI while the agent runs is agent-to-browser streaming and tool display work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-history-trimming-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 2,
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Trimming or summarising in-session history to cut latency and context growth, with measured before-and-after timings, is the optimisation skill's stated scope, and the memory skill explicitly excludes it.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-cross-user-record-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 2,
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Fixing a domain route that returns another user's records through the shared verified-principal dependency and owner-filtered queries is exactly this skill's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-ingestion-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 2,
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Per-page ingestion triage of scans, tables and drawings with OCR or vision routing is listed under this skill's document-preparation-for-retrieval scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-client-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 2,
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "The public OpenAPI contract and generated client are part of this skill's scope for the FastAPI backend of an ADK application.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-plain-crud-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 2,
+   "primary": "none",
+   "supporting": [],
+   "reason": "The request is a generic FastAPI CRUD service for an inventory system with no ADK agent involved, which the backend skill explicitly excludes.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-session-endpoints-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 2,
+   "primary": "adk-frontend-integration",
+   "supporting": [
+    "adk-fastapi-backend"
+   ],
+   "reason": "Ownership of the run, stream and session endpoints and the error state after a failed continuation belong to the frontend-integration skill, while the verified-principal check that enforces ownership comes from the backend skill.",
+   "grade": "PARTIAL"
+  },
+  {
+   "id": "memory-cross-session-recall-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 2,
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Cross-session user-scoped memory with identity boundaries and erasure on request is this skill's core scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-prompt-only-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 2,
+   "primary": "adk-agent-instructions",
+   "supporting": [],
+   "reason": "Rewriting the drafting prompt and few-shot exemplars to improve policy citation is prompt design that this skill owns, with retrieval and storage excluded from the change.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-prompt-only-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 3,
+   "primary": "adk-agent-instructions",
+   "supporting": [],
+   "reason": "The request is to rewrite the drafting prompt and exemplars to make policy citations more consistent, which is prompt wording and exemplar design, and the user has ruled out changes to retrieval or storage.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 3,
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "A language preference saved with explicit consent, kept across restarts, isolated per user and erasable is cross-session memory with consent, isolation and erasure boundaries.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-plain-crud-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 3,
+   "primary": "none",
+   "supporting": [],
+   "reason": "A FastAPI CRUD service for an inventory system is not tied to a Google ADK application, which the FastAPI skill explicitly excludes.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-session-endpoints-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 3,
+   "primary": "adk-frontend-integration",
+   "supporting": [
+    "adk-fastapi-backend"
+   ],
+   "reason": "Owning the agent's session continuation endpoint and showing an error state in the chat falls under frontend integration, and the verified-principal ownership check draws on the backend skill.",
+   "grade": "PARTIAL"
+  },
+  {
+   "id": "fastapi-backend-documents-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 3,
+   "primary": "adk-fastapi-backend",
+   "supporting": [
+    "adk-memory-architecture"
+   ],
+   "reason": "Listing and deleting a user's own uploaded documents is an owner-filtered domain route, and deleting them from the retrieval store also involves erasure boundaries.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-client-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 3,
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Generating and syncing a typed client from the FastAPI service is covered by the skill's public OpenAPI contract and generated client scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-cross-user-record-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 3,
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Fixing a domain route and the shared principal dependency so claims queries are filtered by the signed-in owner is exactly the owner-filtered route and verified-principal work this skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-drive-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 3,
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [],
+   "reason": "Letting each user connect their own Google Drive to an agent tool is delegated OAuth and per-user credential handling at the tool hop.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-sql-analytics-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 3,
+   "primary": "adk-sql-agent-engineering",
+   "supporting": [],
+   "reason": "The request is a natural-language analytics agent that generates reviewed, read-only BigQuery queries, which is the core of adk-sql-agent-engineering.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-history-trimming-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 3,
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Trimming in-session history to cut per-turn latency, with before-and-after measurement, is a measured ADK optimisation covered by optimise-adk-on-google-cloud.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-cross-user-tool-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 3,
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "adk-fastapi-backend"
+   ],
+   "reason": "Binding a tool to the verified caller so the model cannot choose another user's ID is tool-hop ownership, and the verified-principal dependency that supplies that caller lives in the FastAPI backend skill.",
+   "grade": "PARTIAL"
+  },
+  {
+   "id": "memory-ingestion-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 3,
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Per-page ingestion triage of scans, tables and drawings with OCR or vision routing is document preparation for retrieval, which adk-memory-architecture explicitly covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-near-miss",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 3,
+   "primary": "none",
+   "supporting": [],
+   "reason": "Database buffer cache tuning for an unrelated inventory application is general database administration, which no skill covers and the request itself rules out as ADK work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-cross-session-recall-positive",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 3,
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Cross-session memory of a user's preferences and trips, scoped by identity and with erasure on request, is squarely adk-memory-architecture's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-stream-near-miss",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 3,
+   "primary": "adk-frontend-integration",
+   "supporting": [],
+   "reason": "Streaming tool progress into a chat interface while the agent runs is an agent-to-browser streaming and tool display concern handled by adk-frontend-integration.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-migrations-positive",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 3,
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Migrations for application tables kept beside ADK's session tables in the same Postgres are application data work in the FastAPI backend skill.",
+   "grade": "PASS"
+  }
+ ],
+ "summary": {
+  "overall": {
+   "PASS": 42,
+   "PARTIAL": 6,
+   "FAIL": 0,
+   "ERROR": 0
+  },
+  "by_repeat": {
+   "1": {
+    "PASS": 14,
+    "PARTIAL": 2,
+    "FAIL": 0,
+    "ERROR": 0
+   },
+   "2": {
+    "PASS": 14,
+    "PARTIAL": 2,
+    "FAIL": 0,
+    "ERROR": 0
+   },
+   "3": {
+    "PASS": 14,
+    "PARTIAL": 2,
+    "FAIL": 0,
+    "ERROR": 0
+   }
+  },
+  "not_pass": {
+   "fastapi-backend-cross-user-tool-near-miss": [
+    "PARTIAL",
+    "PARTIAL",
+    "PARTIAL"
+   ],
+   "fastapi-backend-session-endpoints-near-miss": [
+    "PARTIAL",
+    "PARTIAL",
+    "PARTIAL"
+   ]
+  }
+ }
+}

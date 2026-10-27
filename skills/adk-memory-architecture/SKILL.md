@@ -5,7 +5,9 @@ description: >-
   agents. Select and combine conversation sessions/state, governed RAG, Agent
   Platform Memory Bank and scoped BigQuery history; enforce identity, consent,
   retention, replay and erasure boundaries. Use for agent memory, knowledge
-  retrieval or cross-session continuity work. Do not activate for general
+  retrieval, preparing documents for retrieval (per-page ingestion triage of
+  scans, tables and drawings, OCR or vision routing, coverage checks) or
+  cross-session continuity work. Do not activate for general
   database administration, natural-language SQL agents
   (adk-sql-agent-engineering), trimming or summarising in-session history for
   latency or tokens (optimise-adk-on-google-cloud), duplicate external writes
