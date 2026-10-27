@@ -20,3 +20,5 @@ for companions; A2 report each companion as setup owed with the AGENTS.md instal
 no claim of their guidance; A3 theme from the house DESIGN.md plus the overrides and run
 (or, with no shell, state as not run) lint and `check_theme.py`; A4 Evidence lines per
 contract (C3) and `SB10: <tier>, A3` with its acceptance case.
+
+Changed on 28 October 2026 (Phase 11): A3 and A4 now carry their own no-shell escape in the assertion text, because judges graded the run steps literally despite the note above. A3 still needs the theming itself (house theme plus the petrol overrides); only the lint and `check_theme.py` runs may be reported as not run. A4 needs a tier on every Evidence line, with the outcome `not run` where nothing could be run; an SB10 line without a tier is still a FAIL.

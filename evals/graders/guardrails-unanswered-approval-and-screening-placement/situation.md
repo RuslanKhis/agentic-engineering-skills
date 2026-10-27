@@ -21,3 +21,5 @@ Workspace = support-assistant base + overlay.
   message). Incident note: a flagged reply had already called `send_email`.
 - A4: the gate in code; Runner tests reported as not run. Existing stdlib tests pass
   (`tests/test_approval_policy.py`, base tool and auth tests).
+
+Changed on 28 October 2026 (Phase 11): protect-adk-sensitive-data is now installed for this scenario. It owns where a screen runs (`references/boundaries.md`, "Where a screen runs"; `skills/adk-engineer/references/ownership.md`), so A3's rule is in a skill the agent can load.

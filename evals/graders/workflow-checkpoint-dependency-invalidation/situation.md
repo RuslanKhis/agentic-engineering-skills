@@ -47,3 +47,5 @@ Bases: doc-pipeline. Overlay adds a resume path, a constraints stage and three r
   diagnostic response never feeds production.
 - A5: positive controls (PA-2026-0141-r3 reused with zero sends) and counted sends; no
   exactly-once claim from hashes alone.
+
+Changed on 28 October 2026 (Phase 11): A5 now carries its own no-shell escape in the assertion text, because judges graded the run step literally despite the note above. In a run without a shell, credit positive-control and send-count tests written and reported as not run; a claim that the step ran, with no output to show for it, is still a FAIL.

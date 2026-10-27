@@ -69,7 +69,7 @@
         "Rejects each changed-input/config/schema/code/projection checkpoint and invalidates its affected descendants before dispatch while preserving the unaffected branch control.",
         "Rejects stale reviews after draft/frame/invocation/image changes and prevents a concurrent changed draft from committing an old review.",
         "Retains immutable originals and separately linked continuations; diagnostic edited responses cannot become authoritative producer or publication evidence.",
-        "Exercises positive reuse controls and actual boundary effects, without claiming exactly-once execution from hashes or framework checkpoints."
+        "Exercises positive reuse controls and actual boundary effects (in a run without a shell, writes those tests and reports them as not run rather than passed), without claiming exactly-once execution from hashes or framework checkpoints."
       ]
     },
     {
@@ -962,7 +962,7 @@
       "assertions": [
         "Names deploy-adk-on-google-cloud as the specialist and treats the google/skills entry as a product skill to operate the mechanism, not as a replacement for the deployment decisions.",
         "Reports that cloud-run-basics is not installed and shows the npx skills add google/skills --skill cloud-run-basics command, without fabricating that skill's instructions.",
-        "Completes the local work that does not depend on it: packaging, identity choice, ingress setting implied by the load balancer, local tests and the deployment readback plan.",
+        "Completes the local work that does not depend on it: packaging, identity choice, ingress setting implied by the load balancer, local tests (run, or, in a run without a shell, written and reported as not run) and the deployment readback plan.",
         "Keeps private-by-default ingress, scoped --project and --region flags and platform identity even if a product skill's examples would deploy public or set global gcloud config.",
         "Records the provisioning step as an execution-scope prerequisite in the Evidence section rather than running gcloud mutations without approval."
       ]
@@ -1049,7 +1049,7 @@
         "States that the generated Terraform and the imperative deploy must not own the same engine, so the dev engine recorded in deployment_metadata.json is either imported into Terraform or left out of the pilot, and does not propose applying Terraform over it.",
         "Treats Agent Identity as the project's default identity, names the baseline roles with the documented versus CLI-granted difference, and keeps the identity decision with adk-tool-auth-and-secrets.",
         "Says that deploy --dry-run makes read-only cloud calls and exits non-zero on a definite problem, so it is a check to run once credentials are approved, not a local preview, and records it as not run.",
-        "Leaves telemetry content capture off as the CLI sets it and records the deployment readback, rollback (redeploy, since Agent Runtime has no revision rollback) and the cost ledger rows for the engine."
+        "Leaves telemetry content capture off as the CLI sets it and records the deployment readback, a rollback that does not depend on Agents CLI (redeploy the previous known-good source: Agents CLI 1.11.0 exposes no revision or traffic flags, and Agent Runtime revisions and traffic splitting are Pre-GA, to rehearse before relying on them) and the cost ledger rows for the engine."
       ]
     },
     {
@@ -1239,7 +1239,7 @@
       "context": "An ADK 2.12 project pinning mcp 2.x, one LlmAgent with two tools, a scripted model available for tests, Node 22 on the CI runner, no cloud credentials.",
       "expected_primary": "adk-agent-interoperability",
       "assertions": [
-        "Serves the agent with to_mcp_server over streamable HTTP, commits the tool manifest from the inventory helper, and keeps the tool's description a capability statement without the instruction.",
+        "Serves the agent with to_mcp_server over streamable HTTP, commits the tool manifest from the inventory helper (or, in a run without a shell, names the inventory helper command that produces it and reports the manifest as not generated), and keeps the tool's description a capability statement without the instruction.",
         "Adds the pinned conformance command with --requirements for the revision the server speaks and an expected-failures baseline whose entries name the fixture-dependent scenarios or checks with reasons, run with a scripted model so no credentials are needed.",
         "Explains that a baseline entry that starts passing makes the run exit 1, so the baseline shrinks on purpose, and places the check in the pull-request tier.",
         "Does not widen the server to fixture tools, resources or prompts to make the suite green, and records the approval gate for MCP callers as not satisfiable by an MCP host."
@@ -1431,7 +1431,7 @@
       "assertions": [
         "States that RemoteA2aAgent does not verify signatures on a card it fetches by URL, resolves the card with get_agent_card(signature_verifier=create_signature_verifier(...)) and passes the AgentCard object, and re-applies the https and same-origin check ADK skips for a passed-in card.",
         "Builds the key provider on the out-of-band key set, not on the card's jku; allows asymmetric algorithms only; raises a PyJWTError subclass for an unknown kid so rotation keeps working; and fails closed when verification fails.",
-        "Runs agent_card_check.py with --require-signature and --key-host and reads its findings (alg, kid, typ, jku origin, unprotected header, fields the signature does not cover), saying the helper does not verify the signature itself.",
+        "Runs agent_card_check.py with --require-signature and --key-host and reads its findings (alg, kid, typ, jku origin, unprotected header, fields the signature does not cover), or, in a run without a shell, names that command, reports it as not run and reads the same findings from the card; either way it says the helper does not verify the signature itself.",
         "Treats a verified card's text as untrusted data for prompts and leaves bearer-token plumbing to adk-tool-auth-and-secrets."
       ]
     },
@@ -1515,7 +1515,7 @@
         "adk-agent-evaluation"
       ],
       "context": "Python ADK 2.12 agent on Cloud Run with fetch_url, read_contract and send_email tools, a scripted-model Runner harness, no Hugging Face token, no model access and no network in the session.",
-      "expected_primary": "adk-agent-security",
+      "expected_primary": "protect-adk-sensitive-data",
       "assertions": [
         "Places PromptGuard in after_tool_callback on the projected result, chunks it to the 512-token window rather than relying on the scanner's truncation, and loads the classifier once from pre-provisioned weights.",
         "Calls scan_async or the scanner directly, and maps any non-SUCCESS status or unconfigured role to an unknown verdict that withholds the result.",
@@ -1633,6 +1633,7 @@
       "available_skills": [
         "adk-operational-guardrails",
         "adk-agent-security",
+        "protect-adk-sensitive-data",
         "adk-frontend-integration"
       ],
       "context": "An ADK 2.12 agent with require_confirmation on the refund tool, a Model Armor output screen configured to run beside the model call, no network in the session.",
@@ -1756,8 +1757,8 @@
       "assertions": [
         "Loads adk-frontend-integration as the ticket's primary skill and reads the composition row for companions.",
         "Reports each missing companion as setup with its install line from AGENTS.md and does not claim its guidance was applied.",
-        "Themes from DESIGN.md starting from the house theme and runs the lint and theme checks.",
-        "Writes one Evidence line per contract and one for SB10 with its tier and acceptance cases."
+        "Themes from DESIGN.md starting from the house theme and runs the lint and theme checks, or, in a run without a shell, names those checks and reports them as not run.",
+        "Writes one Evidence line per contract and one for SB10 with its tier and acceptance cases; a check that could not be run is recorded with its tier and the outcome not run, never left without a tier."
       ]
     },
     {
@@ -1789,7 +1790,7 @@
       "expected_primary": "adk-engineer",
       "assertions": [
         "Chooses to resume G02 from its Progress block rather than starting G03.",
-        "Checks git status in the named worktree and reruns the block's re-verify command before writing new code.",
+        "Checks git status in the named worktree and reruns the block's re-verify command before writing new code, or, in a run without a shell, says both checks are owed, reports them as not run and builds on the worktree's files rather than claiming they were checked.",
         "Does not redo A1 unless its check now fails, and removes the Progress block when G02 completes or rewrites it if the session stops again."
       ]
     },
@@ -2091,7 +2092,7 @@
       "assertions": [
         "Reads references/value-report.md and writes one page from assets/value-report-template.md, not a deck.",
         "Cites an M or I record for every figure and keeps estimates on lines opening with Estimate.",
-        "Runs scripts/check_value_report.py and reports the missing baseline and the stale August window rather than hiding them.",
+        "Runs scripts/check_value_report.py (or, in a run without a shell, names it and reports it as not run) and reports the missing baseline and the stale August window rather than hiding them.",
         "Ends with a stop, continue or scale call naming the brief's decider and the figure or threshold it rests on."
       ]
     },
@@ -2364,12 +2365,12 @@
       "expected_primary": "adk-portability-planning",
       "assertions": [
         "Reads the design and the plan before writing.",
-        "Writes docs/portability/claims.md from the skill's template with every required section.",
+        "Writes docs/portability/claims.md from the skill's template with every required section; a value that needs a shell (the design hash) is marked not computed rather than left out or invented.",
         "Classifies each component as shared logic, a replaceable adapter, provider-specific by choice or an expensive dependency, citing the design's IDs.",
         "Assesses cloud, agent framework, model, service and deployment portability separately, each assessed or marked not a concern with a reason.",
         "Compares the AWS and Azure alternatives and a small set of agent frameworks, with ADK first, citing official sources with their read dates.",
         "Gives relative effort as small, medium, large, very large or unknown with stated drivers, sizing by the largest driver, and invents no hours, prices or dates.",
-        "Runs check_portability.py with --design and --plan and fixes its errors before finishing.",
+        "Runs check_portability.py with --design and --plan and fixes its errors before finishing, or, in a run without a shell, names that command with both flags and reports it as not run.",
         "Leaves the design and every other goal unchanged and writes no application code, Terraform, IAM policy or Kubernetes manifest."
       ]
     },

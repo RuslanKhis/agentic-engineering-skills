@@ -20,3 +20,5 @@ Workspace = support-assistant + support-plan bases + overlay:
 
 
 Changed after the first run (triage): the worktree now sits at `wt-G02/` inside the workspace with the uncommitted `app/stream.py` (it still emits `completed` after `failed` when the event source raises) and `tests/test_stream.py` (A1's test only). Resuming means continuing from those files, not writing a new `app/stream.py` in the main checkout.
+
+Changed on 28 October 2026 (Phase 11): A2 now carries its own no-shell escape in the assertion text, because judges graded the run step literally despite the note above. In a run without a shell, credit saying git status in `wt-G02/` and the re-verify command are owed, reporting them as not run, and building on the worktree's files; a claim that the step ran, with no output to show for it, is still a FAIL.

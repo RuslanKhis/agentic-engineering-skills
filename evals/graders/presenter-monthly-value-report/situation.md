@@ -24,3 +24,5 @@ A3 needs a shell to run the checker; credit a report that names the missing base
 stale August window as problems (and says the checker was not run) rather than hiding them.
 A4: the call must name Helen Okafor and rest on a figure or threshold (e.g. M2 13 minutes vs the
 15-minute threshold); a "scale" call is wrong while the counter-metric is unmeasured for September.
+
+Changed on 28 October 2026 (Phase 11): A3 now carries its own no-shell escape in the assertion text, because judges graded the run step literally despite the note above. In a run without a shell, credit naming `check_value_report.py`, reporting it as not run, and naming both problems (M2's missing baseline field and the August-only M3 window); a claim that the step ran, with no output to show for it, is still a FAIL.

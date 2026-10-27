@@ -25,6 +25,9 @@ reads manifest, metadata and Terraform first; A3 Agent Identity default, baselin
 documented vs CLI-granted difference, identity decision with adk-tool-auth-and-secrets; A4
 `deploy --dry-run` makes read-only cloud calls and exits non-zero on a definite problem — a check
 to run once credentials are approved, recorded as not run; A5 content capture off, deployment
-readback, rollback by redeploy (no revision rollback on Agent Runtime), cost ledger rows.
+readback, a rollback that does not depend on Agents CLI (redeploy the previous known-good
+source), cost ledger rows.
 
 Original context (unchanged).
+
+Changed on 28 October 2026 (Phase 11): A5 said Agent Runtime has no revision rollback, which contradicts adk-release-engineering `references/staged-rollout.md` ("Agent Runtime: revisions and manual traffic split (Pre-GA)"): the platform documents immutable revisions and a manual traffic split as Pre-GA, while Agents CLI 1.11.0 exposes no revision or traffic flags and its deploy skill still says there is no revision rollback. A5 now asks for a rollback that does not depend on Agents CLI (redeploy the previous known-good source); an answer that also names Pre-GA revisions as something to rehearse passes, and one that relies on `agents-cli` for a revision rollback fails.
