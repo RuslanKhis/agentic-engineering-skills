@@ -3,13 +3,13 @@
 
 The profile root is ${AGENTIC_ENGINEERING_HOME:-~/.agentic-engineering}.
 Subcommands:
-  resolve --repo PATH            which org this repository is bound to
-  bind --repo PATH --org SLUG    bind a repository to an org (or `none`)
+  resolve --project PATH         which org this repository is bound to
+  bind --project PATH --org SLUG bind a repository to an org (or `none`)
   init [--org SLUG --kind K]     create missing files from templates; never overwrites
-  brief --repo PATH --for SKILL  print only the sections that skill reads, for the bound org
+  brief --project PATH --for SKILL  print only the sections that skill reads, for the bound org
   check [--org SLUG]             frontmatter, size caps, staleness, line age, secret and personal-data scan
   scan FILE... | -               scan proposed text before it is written
-  extract --repo PATH FILE|DIR...  number, screen and envelope documents the user named for import;
+  extract --project PATH FILE|DIR...  number, screen and envelope documents the user named for import;
                                  withheld and flagged lines are reported by kind and line, never shown
   verify-candidates CANDIDATES --source FILE...
                                  keep only candidate rows whose quote is on the cited, unflagged line
@@ -1209,6 +1209,24 @@ def cmd_snapshot(args) -> int:
     return OK
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
+def project(parser: argparse.ArgumentParser, text: str = "repository directory (default: .)") -> None:
+    parser.add_argument("--project", dest="repo", default=".", help=text)
+    parser.add_argument("--repo", dest="repo", action=Deprecated, note="use --project")
+
+
 def main(argv: list[str] | None = None) -> int:
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--root", help=f"profile root (default ${ROOT_ENV} or {DEFAULT_ROOT})")
@@ -1216,10 +1234,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(dest="command", required=True)
     p = sub.add_parser("resolve", parents=[common])
-    p.add_argument("--repo", default=".")
+    project(p)
     p.set_defaults(func=cmd_resolve)
     p = sub.add_parser("bind", parents=[common])
-    p.add_argument("--repo", default=".")
+    project(p)
     p.add_argument("--org", required=True)
     p.set_defaults(func=cmd_bind)
     p = sub.add_parser("init", parents=[common])
@@ -1228,7 +1246,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--confidentiality", default="private")
     p.set_defaults(func=cmd_init)
     p = sub.add_parser("brief", parents=[common])
-    p.add_argument("--repo", default=".")
+    project(p)
     p.add_argument("--for", dest="reader", required=True, choices=sorted(READERS))
     p.add_argument("--tags", nargs="*", default=[])
     p.set_defaults(func=cmd_brief)
@@ -1240,7 +1258,7 @@ def main(argv: list[str] | None = None) -> int:
     p.set_defaults(func=cmd_scan)
     p = sub.add_parser("extract", parents=[common],
                        help="screen documents the user named; prints numbered lines in nonce envelopes")
-    p.add_argument("--repo", default=".", help="repository whose bound org receives the import")
+    project(p, "repository whose bound org receives the import")
     p.add_argument("--list", action="store_true", help="print the manifest only; no document text")
     p.add_argument("--format", choices=("text", "json"), default="text",
                    help="json prints each line as a JSON string (for a read-only subagent)")

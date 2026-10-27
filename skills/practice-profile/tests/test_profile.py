@@ -165,15 +165,23 @@ class InitAndBindTests(ProfileTestCase):
         self.assertEqual(run("init", "--org", "acme", root=self.root).returncode, 2)
 
     def test_no_root_means_continue_without_profile(self):
-        result = run("resolve", "--repo", str(self.repo), root=self.root)
+        result = run("resolve", "--project", str(self.repo), root=self.root)
         self.assertEqual(result.returncode, 4)
-        brief = run("brief", "--repo", str(self.repo), "--for", "adk-discovery", root=self.root)
+        brief = run("brief", "--project", str(self.repo), "--for", "adk-discovery", root=self.root)
         self.assertEqual(brief.returncode, 4)
         self.assertNotIn("##", brief.stdout)
 
+    def test_repo_is_a_deprecated_alias_for_project(self):
+        self.init_org()
+        run("bind", "--project", str(self.repo), "--org", "acme", root=self.root)
+        old = run("resolve", "--repo", str(self.repo), root=self.root)
+        self.assertEqual(old.returncode, 0)
+        self.assertEqual(old.stdout, run("resolve", "--project", str(self.repo), root=self.root).stdout)
+        self.assertIn("--repo is deprecated; use --project", old.stderr)
+
     def test_unbound_repo_asks_and_lists_orgs(self):
         self.init_org()
-        result = run("resolve", "--repo", str(self.repo), root=self.root)
+        result = run("resolve", "--project", str(self.repo), root=self.root)
         self.assertEqual(result.returncode, 3)
         self.assertIn("ask the user", result.stdout)
         self.assertIn("acme", result.stdout)
@@ -181,45 +189,45 @@ class InitAndBindTests(ProfileTestCase):
     def test_bind_resolve_rebind_and_subdirectory(self):
         self.init_org()
         self.init_org("globex", "employer")
-        self.assertEqual(run("bind", "--repo", str(self.repo), "--org", "acme", root=self.root).returncode, 0)
-        result = run("resolve", "--repo", str(self.repo / "src"), root=self.root)
+        self.assertEqual(run("bind", "--project", str(self.repo), "--org", "acme", root=self.root).returncode, 0)
+        result = run("resolve", "--project", str(self.repo / "src"), root=self.root)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn("org: acme", result.stdout)
-        run("bind", "--repo", str(self.repo), "--org", "globex", root=self.root)
+        run("bind", "--project", str(self.repo), "--org", "globex", root=self.root)
         bindings = (self.root / "bindings.md").read_text()
         self.assertEqual(bindings.count(str(self.repo)), 1, bindings)
-        self.assertIn("org: globex", run("resolve", "--repo", str(self.repo), root=self.root).stdout)
+        self.assertIn("org: globex", run("resolve", "--project", str(self.repo), root=self.root).stdout)
 
     def test_longest_binding_wins(self):
         self.init_org()
         self.init_org("globex", "employer")
-        run("bind", "--repo", str(self.base / "code"), "--org", "globex", root=self.root)
-        run("bind", "--repo", str(self.repo), "--org", "acme", root=self.root)
-        self.assertIn("org: acme", run("resolve", "--repo", str(self.repo), root=self.root).stdout)
+        run("bind", "--project", str(self.base / "code"), "--org", "globex", root=self.root)
+        run("bind", "--project", str(self.repo), "--org", "acme", root=self.root)
+        self.assertIn("org: acme", run("resolve", "--project", str(self.repo), root=self.root).stdout)
         other = self.base / "code" / "other"
         other.mkdir()
-        self.assertIn("org: globex", run("resolve", "--repo", str(other), root=self.root).stdout)
+        self.assertIn("org: globex", run("resolve", "--project", str(other), root=self.root).stdout)
 
     def test_bind_none_opts_out_and_unknown_org_is_refused(self):
         self.init_org()
-        self.assertEqual(run("bind", "--repo", str(self.repo), "--org", "initech", root=self.root).returncode, 2)
-        run("bind", "--repo", str(self.repo), "--org", "none", root=self.root)
-        result = run("resolve", "--repo", str(self.repo), root=self.root)
+        self.assertEqual(run("bind", "--project", str(self.repo), "--org", "initech", root=self.root).returncode, 2)
+        run("bind", "--project", str(self.repo), "--org", "none", root=self.root)
+        result = run("resolve", "--project", str(self.repo), root=self.root)
         self.assertEqual(result.returncode, 5)
-        self.assertEqual(run("brief", "--repo", str(self.repo), "--for", "adk-discovery",
+        self.assertEqual(run("brief", "--project", str(self.repo), "--for", "adk-discovery",
                              root=self.root).returncode, 5)
 
     def test_bindings_with_extra_content_are_rejected(self):
         self.init_org()
         with (self.root / "bindings.md").open("a") as handle:
             handle.write(f"| {self.repo} | acme | 2026-10-25 | uses europe-west2 |\n")
-        self.assertEqual(run("resolve", "--repo", str(self.repo), root=self.root).returncode, 2)
+        self.assertEqual(run("resolve", "--project", str(self.repo), root=self.root).returncode, 2)
 
     def test_environment_variable_sets_root(self):
         self.init_org()
-        run("bind", "--repo", str(self.repo), "--org", "acme", root=self.root)
+        run("bind", "--project", str(self.repo), "--org", "acme", root=self.root)
         env = dict(os.environ, AGENTIC_ENGINEERING_HOME=str(self.root))
-        result = subprocess.run([sys.executable, "-I", "-B", str(SCRIPT), "resolve", "--repo", str(self.repo)],
+        result = subprocess.run([sys.executable, "-I", "-B", str(SCRIPT), "resolve", "--project", str(self.repo)],
                                 capture_output=True, text=True, env=env)
         self.assertIn("org: acme", result.stdout)
 
@@ -229,10 +237,10 @@ class BriefTests(ProfileTestCase):
         super().setUp()
         self.org_dir = self.init_org()
         self.fill_profile_v2()
-        run("bind", "--repo", str(self.repo), "--org", "acme", root=self.root)
+        run("bind", "--project", str(self.repo), "--org", "acme", root=self.root)
 
     def brief(self, reader, *extra, today=TODAY):
-        return run("brief", "--repo", str(self.repo), "--for", reader, *extra, root=self.root, today=today)
+        return run("brief", "--project", str(self.repo), "--for", reader, *extra, root=self.root, today=today)
 
     def test_each_reader_gets_only_its_sections(self):
         expected = {
@@ -482,7 +490,7 @@ class ImportTestCase(ProfileTestCase):
         super().setUp()
         self.org_dir = self.init_org()
         self.fill_profile_v2()
-        run("bind", "--repo", str(self.repo), "--org", "acme", root=self.root)
+        run("bind", "--project", str(self.repo), "--org", "acme", root=self.root)
         self.docs = self.repo / "docs" / "client"
         self.docs.mkdir(parents=True)
 
@@ -492,7 +500,7 @@ class ImportTestCase(ProfileTestCase):
         return path
 
     def extract(self, *files, repo=None):
-        return run("extract", "--repo", str(repo or self.repo), *[str(f) for f in files], root=self.root)
+        return run("extract", "--project", str(repo or self.repo), *[str(f) for f in files], root=self.root)
 
 
 class ExtractTests(ImportTestCase):
@@ -578,7 +586,7 @@ class ExtractTests(ImportTestCase):
 
     def test_list_reads_no_content(self):
         path = self.doc("strategy.md", STRATEGY)
-        result = run("extract", "--repo", str(self.repo), "--list", str(path), root=self.root)
+        result = run("extract", "--project", str(self.repo), "--list", str(path), root=self.root)
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("FILE strategy.md", result.stdout)
         self.assertNotIn("Germany", result.stdout)
@@ -606,7 +614,7 @@ class ExtractTests(ImportTestCase):
         self.assertEqual(result.returncode, 3)
         self.assertIn("run bind first", result.stderr)
         self.assertNotIn("Germany", result.stdout)
-        run("bind", "--repo", str(other), "--org", "none", root=self.root)
+        run("bind", "--project", str(other), "--org", "none", root=self.root)
         self.assertEqual(self.extract(path, repo=other).returncode, 5)
 
     def test_files_under_the_profile_root_are_refused(self):
@@ -721,7 +729,7 @@ class ExportTests(ImportTestCase):
         self.init_org("globex", "employer")
         other = self.base / "code" / "globex-app"
         other.mkdir()
-        run("bind", "--repo", str(other), "--org", "globex", root=self.root)
+        run("bind", "--project", str(other), "--org", "globex", root=self.root)
         result = run("export", "--org", "acme", "--out", str(other / "brief.md"), root=self.root)
         self.assertEqual(result.returncode, 2)
         self.assertFalse((other / "brief.md").exists())
@@ -743,7 +751,7 @@ class ExportTests(ImportTestCase):
         self.init_org("globex", "employer")
         other = self.base / "code" / "globex-app"
         other.mkdir()
-        run("bind", "--repo", str(other), "--org", "globex", root=self.root)
+        run("bind", "--project", str(other), "--org", "globex", root=self.root)
         second = self.extract(target, repo=other)
         self.assertEqual(second.returncode, 0, second.stdout + second.stderr)
         self.assertIn("exported from org acme", second.stdout)

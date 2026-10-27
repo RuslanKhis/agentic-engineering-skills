@@ -24,7 +24,7 @@ project, not affiliated with or endorsed by Google.
    lockfiles and test configuration. Preserve its package manager, Python and ADK
    versions. Use the existing interpreter; do not install or change dependencies
    merely to make this skill's examples fit.
-2. Optionally run `python /path/to/skill/scripts/inspect_project.py /path/to/package`
+2. Optionally run `python "$SKILL_DIR/scripts/inspect_project.py" --project /path/to/package`
    with the target interpreter. Substitute resolved paths; do not assume the
    skill is in the target's working directory. `--dry-run` inventories recognised
    root metadata paths without reading their contents. The normal report reads
@@ -110,7 +110,7 @@ behavioural canary showing blocked data never reaches a model, persisted event,
 log or side effect. For callback changes use the actual pinned ADK runner with
 an injected model and provider doubles, not just direct callback calls.
 
-Run `python -B -m unittest discover -s /path/to/skill/tests -v` to check the bundled
+Run `python -B -m unittest discover -s "$SKILL_DIR/tests" -v` to check the bundled
 resources when adapting them. The optional SDK adapter tests require the target's
 existing DLP SDK; report skips explicitly. These tests make no provider calls. A local
 protection fake alone does **not** make an ADK application offline: replace the

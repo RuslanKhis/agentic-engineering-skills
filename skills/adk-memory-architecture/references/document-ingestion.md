@@ -39,7 +39,7 @@ The report is an input, not a log entry. Store it beside the case so the
 officer, the reviewer stage and the drafting model can all see which pages
 were read as text, which were rendered, and which were never read at all.
 Exit code 0 means a report was produced; the report itself is information.
-Exit 2 means the PDF route is blocked because `pypdf` is absent: supply the
+Exit 2 means an invalid inventory, or the PDF route is blocked because `pypdf` is absent: supply the
 inventory from the extractor the project already uses.
 
 ## Route scanned and low-density pages

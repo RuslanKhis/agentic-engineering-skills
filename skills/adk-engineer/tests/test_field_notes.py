@@ -64,6 +64,11 @@ class Cli(unittest.TestCase):
         self.assertIn("<email>", note["happened"])
         self.assertIn("home paths 1", result.stdout)
 
+    def test_project_root_is_a_deprecated_alias_for_project(self):
+        result = self.add("--project-root", str(self.project))
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--project-root is deprecated; use --project", result.stderr)
+
     def test_json_input_with_unknown_key_is_rejected_and_nothing_written(self):
         payload = json.dumps({"skill": "adk-engineer", "kind": "other", "said": "x", "happened": "y",
                               "transcript": "everything the user typed"})

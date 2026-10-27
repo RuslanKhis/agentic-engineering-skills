@@ -31,11 +31,11 @@ full; this file adds the steps.
 
 ## The pipeline
 
-1. **Extract.** For a directory, run `profile.py extract --repo . --list DIR`
+1. **Extract.** For a directory, run `profile.py extract --project . --list DIR`
    and confirm the list with the user first. Then:
 
    ```bash
-   python3 "$SKILL_DIR/scripts/profile.py" extract --repo . docs/client/strategy.md docs/client/ai-policy.md
+   python3 "$SKILL_DIR/scripts/profile.py" extract --project . docs/client/strategy.md docs/client/ai-policy.md
    ```
 
    It writes nothing. It prints a manifest (bytes, lines, a 12-character

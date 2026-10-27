@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import re
 import stat
+import sys
 try:
     import tomllib
 except ModuleNotFoundError:  # Python < 3.11
@@ -252,10 +253,23 @@ class Inventory:
                     self.inspect(path, relative)
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, epilog="Reads only bounded source/manifests; skips secrets, dependency directories and symlinks. Signals are not a safety verdict.")
+    parser = argparse.ArgumentParser(description=__doc__, epilog="Reads only bounded source/manifests; skips secrets, dependency directories and symlinks. Signals are not a safety verdict. Exit 0: complete scan; 2: bad arguments; 3: partial scan.")
     parser.add_argument("--project", required=True, help="project directory to inspect without executing code")
-    parser.add_argument("--dry-run", action="store_true", help="perform the same read-only scan and report no changes")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     parser.add_argument("--max-files", type=positive, default=500, help="maximum eligible files, including lock names (default: 500)")
     parser.add_argument("--max-entries", type=positive, default=10000, help="stop at this total directory-entry count, including exclusions; reaching the cap is conservatively partial (default: 10000)")
     parser.add_argument("--max-bytes", type=positive, default=262144, help="maximum bytes read per source file (default: 262144)")
@@ -275,7 +289,7 @@ def main():
         inventory.result[field].sort(key=lambda item: json.dumps(item, sort_keys=True))
     inventory.result["lockfiles"].sort()
     print(json.dumps(inventory.result, indent=2, sort_keys=True))
-    return 1 if inventory.result["partial"] else 0
+    return 3 if inventory.result["partial"] else 0
 
 
 if __name__ == "__main__":

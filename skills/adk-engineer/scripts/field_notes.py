@@ -481,11 +481,26 @@ def cmd_mark(args) -> int:
     return 0
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     common = argparse.ArgumentParser(add_help=False)
     common.add_argument("--notes", type=Path, help="log file (default: the shared home log, then the project fallback)")
-    common.add_argument("--project-root", type=Path, default=Path.cwd(), help="project whose name is redacted")
+    common.add_argument("--project", type=Path, default=Path.cwd(),
+                        help="project whose name is redacted and whose fallback log is used (default: cwd)")
+    common.add_argument("--project-root", dest="project", type=Path, action=Deprecated, note="use --project")
     common.add_argument("--redact", action="append", default=[], help="another term to redact (repeatable)")
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -514,7 +529,7 @@ def main(argv=None) -> int:
     marker.set_defaults(func=cmd_mark)
 
     args = parser.parse_args(argv)
-    args.project_root = args.project_root.resolve()
+    args.project_root = args.project.resolve()
     try:
         return args.func(args)
     except InputError as exc:

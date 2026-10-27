@@ -60,7 +60,7 @@ lint that text with `--prompt-file` before reporting no templating findings. Its
 density, prohibitions, contradictions, tool-name mentions) are regular
 expressions for a reviewer to confirm. For a prompt file the tool list is
 unknown, so backticked names are listed under `tools_mentioned` instead of
-being judged against `tools=`. A partial scan (exit code 1) names the
+being judged against `tools=`. A partial scan (exit code 3) names the
 limit reached; inspect the omitted area by hand.
 
 ## Completion report

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Bounded, read-only ADK inventory. Never imports target code or reads .env."""
+"""Bounded, read-only ADK inventory. Never imports target code or reads .env.
+
+Exit codes: 0 inspected; 1 --require-adk-version does not match; 2 invalid
+arguments or project directory; 3 some files could not be read or parsed.
+"""
 
 import argparse
 import ast
@@ -314,7 +318,7 @@ def inspect(
     output["complete"] = not output["errors"]
     if dry_run:
         output["project_contents_read"] = False
-        return output, 0 if output["complete"] else 2
+        return output, 0 if output["complete"] else 3
     installed = {}
     for package in PACKAGES:
         try:
@@ -330,7 +334,7 @@ def inspect(
     }
     output["compatibility"] = "not-requested"
     if not output["complete"]:
-        return output, 2
+        return output, 3
     if required_adk:
         specs = [
             d["specifier"]
@@ -347,14 +351,14 @@ def inspect(
             "exact-adk-match" if matches else "reconciliation-required"
         )
         if not matches:
-            # Say which condition failed, so exit 3 is actionable.
+            # Say which condition failed, so exit 1 is actionable.
             if not specs:
                 output["compatibility_reason"] = "no google-adk declaration found in the inspected manifests"
             elif installed["google-adk"] != required_adk:
                 output["compatibility_reason"] = "installed google-adk differs from the required version"
             else:
                 output["compatibility_reason"] = "a google-adk declaration is not an exact pin of the required version"
-            return output, 3
+            return output, 1
     return output, 0
 
 
@@ -386,7 +390,7 @@ def main(argv=None):
     parser.add_argument(
         "--require-adk-version",
         type=version_argument,
-        help="Return 3 unless installed and declared ADK match this exact version",
+        help="Return 1 unless installed and declared ADK match this exact version",
     )
     parser.add_argument(
         "--exclude-dir",

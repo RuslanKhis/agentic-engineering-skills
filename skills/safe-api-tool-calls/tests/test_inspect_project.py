@@ -32,13 +32,13 @@ class InspectionTests(unittest.TestCase):
 
     def scan(self, *args):
         result = self.run_cli(*args)
-        self.assertIn(result.returncode, (0, 1), result.stderr)
+        self.assertIn(result.returncode, (0, 3), result.stderr)
         return result, json.loads(result.stdout)
 
     def test_help_and_invalid_arguments(self):
         result = self.run_cli("--help", project=False)
         self.assertEqual(result.returncode, 0)
-        self.assertIn("--dry-run", result.stdout)
+        self.assertNotIn("--dry-run", result.stdout)
         self.assertEqual(self.run_cli(project=False).returncode, 2)
         for option in ("--max-files", "--max-bytes", "--max-depth", "--max-entries"):
             for value in ("0", "-1", "not-a-number"):
@@ -100,15 +100,15 @@ class InspectionTests(unittest.TestCase):
         self.write("a.py", "a = 1\n")
         self.write("b.py", "b = 2\n")
         result, data = self.scan("--max-files", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertEqual(data["files_inspected"], 1)
         self.assertIn("file_count_limit", {item["reason"] for item in data["issues"]})
         result, data = self.scan("--max-bytes", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertTrue(all(item["reason"] == "file_size_limit" for item in data["issues"]))
         self.write("one/two/hidden.py", "pass\n")
         result, data = self.scan("--max-depth", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertIn({"path": "one/two", "reason": "depth_limit"}, data["issues"])
 
     def test_symlinks_are_skipped(self):
@@ -117,7 +117,7 @@ class InspectionTests(unittest.TestCase):
         (self.root / "link.py").symlink_to(outside)
         (self.root / "directory").symlink_to(self.root, target_is_directory=True)
         result, data = self.scan()
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertEqual(data["signals"], [])
         self.assertEqual({item["reason"] for item in data["issues"]}, {"symlink_skipped"})
         self.assertEqual(self.run_cli("--project", str(self.root / "directory")).returncode, 2)
@@ -127,7 +127,7 @@ class InspectionTests(unittest.TestCase):
             self.write(f"ignored-{index}.bin", "irrelevant")
         self.write("tool.py", "import httpx\nhttpx.AsyncClient()\n")
         result, data = self.scan("--max-entries", "5")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertEqual(data["directory_entries_seen"], 5)
         self.assertEqual(data["files_inspected"], 0)
         self.assertEqual(data["issues"], [{"path": ".", "reason": "entry_count_limit"}])
@@ -137,7 +137,7 @@ class InspectionTests(unittest.TestCase):
         self.write("a/first.py", "pass\n")
         self.write("b/second.py", "pass\n")
         result, data = self.scan("--max-entries", "3")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertEqual(data["issues"], [{"path": "a", "reason": "entry_count_limit"}])
         self.assertEqual(data["directory_entries_seen"], 3)
 
@@ -147,7 +147,7 @@ class InspectionTests(unittest.TestCase):
         self.write("pyproject.toml", f"[{marker}\n")
         (self.root / "binary.py").write_bytes(b"\xff")
         result, data = self.scan()
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn(marker, result.stdout + result.stderr)
         self.assertEqual(len(data["issues"]), 3)
 
@@ -155,7 +155,7 @@ class InspectionTests(unittest.TestCase):
         for value in ('"httpx==0.28"', '[42]'):
             self.write("pyproject.toml", f"[project]\ndependencies = {value}\n")
             result, data = self.scan()
-            self.assertEqual(result.returncode, 1)
+            self.assertEqual(result.returncode, 3)
             self.assertEqual(data["issues"], [{"path": "pyproject.toml", "reason": "malformed_file"}])
 
     def test_unreadable_source_is_reported_without_exception_text(self):
@@ -165,7 +165,7 @@ class InspectionTests(unittest.TestCase):
             result, data = self.scan()
             if result.returncode == 0:
                 self.skipTest("the test process can read files without permission bits")
-            self.assertEqual(result.returncode, 1)
+            self.assertEqual(result.returncode, 3)
             self.assertIn({"path": "locked.py", "reason": "unreadable_file"}, data["issues"])
             self.assertNotIn(str(self.root), result.stdout + result.stderr)
         finally:

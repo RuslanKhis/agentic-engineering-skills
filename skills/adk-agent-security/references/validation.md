@@ -22,13 +22,13 @@ it can be attached to a review. `adk_pins` must show
 
 When a coding agent writes a pull request, gate what the production agent can
 do: run the inspector on the base commit's tree, save its JSON, then run it on
-the head with `--compare base.json`. It exits 3 and lists `capability_changes`
+the head with `--compare base.json`. It exits 1 and lists `capability_changes`
 when any agent gained or lost a tool, a gate changed on a tool
 (`require_confirmation` removed, a callback dropped), a toolset's filter,
 confirmation or transport changed, a sub-agent or code executor changed, or a
 guard finding count rose (`write_tool_without_gate`, `mcp_unfiltered`,
 `trifecta_present`, `egress_capable_tool`, `workflow_graph_unread`); require a
-human review label for that merge. Exit 3 takes precedence over 1. Exit 1 means
+human review label for that merge. Exit 1 takes precedence over 3. Exit 3 means
 no listed change but an area the inspector could not read, named in
 `unread_paths`: a `Workflow` graph, whose function nodes it names but does not
 read, is always unread, so block only when one of the pull request's changed
@@ -46,8 +46,8 @@ git worktree add -q /tmp/base "$BASE"
 python /tmp/inspect.py --project /tmp/base > base.json || true
 python /tmp/inspect.py --project . --compare base.json > head.json; status=$?
 changed=$(git diff --name-only "$BASE"...HEAD)
-if [ $status -eq 3 ]; then exit 1                     # capability changed: needs the review label
-elif [ $status -eq 1 ]; then
+if [ $status -eq 1 ]; then exit 1                     # capability changed: needs the review label
+elif [ $status -eq 3 ]; then
   python -c 'import json,sys; u=set(json.load(open("head.json"))["unread_paths"]); sys.exit(1 if u & set(sys.argv[1:]) else 0)' $changed
 elif [ $status -ne 0 ]; then exit 2; fi               # NOT RUN
 ```

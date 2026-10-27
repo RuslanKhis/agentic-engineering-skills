@@ -58,13 +58,13 @@ without demonstrable finite positive bounds. It does not prove correctness,
 security, all data flows or environment readiness.
 
 ```bash
-python /path/to/skill/scripts/inspect_project.py --help
-python /path/to/skill/scripts/inspect_project.py --project . --dry-run
-python /path/to/skill/scripts/inspect_project.py --project .
-python /path/to/skill/scripts/inspect_project.py --project . --require-adk-version 2.8.0
+python "$SKILL_DIR/scripts/inspect_project.py" --help
+python "$SKILL_DIR/scripts/inspect_project.py" --project . --dry-run
+python "$SKILL_DIR/scripts/inspect_project.py" --project .
+python "$SKILL_DIR/scripts/inspect_project.py" --project . --require-adk-version 2.8.0
 ```
 
-Use the installed skill's path in place of `/path/to/skill`. Paths supplied at
+Resolve `SKILL_DIR` to the installed skill's directory. Paths supplied at
 runtime are configurable; no local machine path is embedded in the helper.
 `--dry-run` lists intended reads without reading source/configuration contents.
 All modes are read-only and safe to repeat. Source string literals and environment
@@ -74,9 +74,9 @@ irrelevant directory names using repeatable `--exclude-dir NAME`. Exclusions app
 at every depth and are recorded in output; review their coverage before relying
 on results. An incomplete scan is never a clean bill of health.
 
-Exit codes: **0** inspection/plan completed (findings still need review), **2**
-invalid input or incomplete inspection, **3** the explicitly required ADK version
-does not match the installed version or declarations need reconciliation.
+Exit codes: **0** inspection/plan completed (findings still need review), **1**
+the explicitly required ADK version does not match the installed version or
+declarations need reconciliation, **2** invalid input, **3** incomplete inspection.
 The compatibility option accepts only an exact numeric version. It does not
 install packages or reinterpret an unresolved range as an exact lock.
 

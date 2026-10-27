@@ -332,22 +332,35 @@ def check_events(events, expected):
             "scope": "saved_event_consistency_only", "network_calls": 0, "writes": 0}
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv=None):
     parser = Parser(description=__doc__, epilog=(
         "Input: one complete JSON array of ADK events (snake_case or camelCase), "
         "up to 8 MiB/2000 events; expectation contract up to 64 KiB. "
         "Exactly one invocation, one call per declared tool and one STOP answer. "
-        "No SSE parsing or live requests. Exit 0: accepted; 2: invalid input; "
-        "3: acceptance failed. Errors omit input values and paths."))
+        "No SSE parsing or live requests. Exit 0: accepted; 1: acceptance failed; "
+        "2: invalid arguments or input. Errors omit input values and paths."))
     parser.add_argument("--events", required=True, help="Saved event-array JSON file.")
     parser.add_argument("--expect", required=True, help="Version-1 expectation JSON; see references/validation.md.")
-    parser.add_argument("--dry-run", action="store_true", help="Explicit synonym for the always read-only validation.")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     args = parser.parse_args(argv)
     try:
         result = check_events(read_json(args.events, MAX_BYTES), read_json(args.expect, 65536))
     except Rejected as error:
         print(json.dumps({"verdict": "FAIL", "reason": str(error), "network_calls": 0, "writes": 0}))
-        return 3
+        return 1
     except (InvalidInput, RecursionError, OverflowError):
         print(json.dumps({"verdict": "INVALID", "reason": "invalid_or_unsupported_input",
                           "network_calls": 0, "writes": 0}))

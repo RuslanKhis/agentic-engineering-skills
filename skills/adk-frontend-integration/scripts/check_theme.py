@@ -11,7 +11,7 @@ default chart palette), plus the Geist font import or stack and the default
 Python 3.11+; standard library only. Read-only: no writes, network, shell or
 project code; never reads .env files; inputs are size-bounded.
 Exit codes: 0 no defaults remain; 1 defaults remain; 2 invalid input.
---dry-run has exactly the same read-only effect.
+--dry-run is a deprecated no-op kept for old commands.
 """
 
 from __future__ import annotations
@@ -291,11 +291,24 @@ class SafeArgumentParser(argparse.ArgumentParser):
         self.exit(2, "error: invalid arguments; use --help for the accepted interface.\n")
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = SafeArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--project", type=Path, help="Project directory containing components.json (tailwind.css field).")
     parser.add_argument("--css", type=Path, help="Theme CSS file; relative paths resolve against --project when given.")
-    parser.add_argument("--dry-run", action="store_true", help="Same read-only check; never writes or runs project code.")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     parser.add_argument("--json", action="store_true", help="Print a JSON report instead of text.")
     args = parser.parse_args(argv)
 

@@ -397,24 +397,43 @@ def compatibility(inspector, mode):
     return result, all(result[name]["status"] == "matches_recorded_baseline" for name in baseline)
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv=None):
     parser = SafeParser(description=__doc__, epilog=(
         "Always offline and read-only: no cloud commands, installs, imports of project code, or writes. "
         "JSON reports declarations, not installed versions or proven compatibility. Lockfiles and .env contents "
         "are never read. Filename hints do not establish an architecture. Exit 0: inspection completed "
-        "(possibly unverified); 2: invalid input, unreadable/invalid manifest, or exceeded hard limit; "
-        "3: --require-baseline evidence gate not met. Use a stable project tree during inspection."))
-    parser.add_argument("--root", required=True, help="Project directory; inspect bounded nonsymlink manifests beneath it.")
+        "(possibly unverified); 1: --require-baseline evidence gate not met; 2: invalid arguments or "
+        "project directory; 3: inspection stopped (unreadable or invalid manifest, or a hard limit). "
+        "Use a stable project tree during inspection."))
+    parser.add_argument("--project", help="Project directory; inspect bounded nonsymlink manifests beneath it.")
+    parser.add_argument("--root", dest="project", action=Deprecated, note="use --project")
     parser.add_argument("--mode", choices=("auto", "application", "cloud-run", "agent-runtime", "gke"), default="auto",
                         help="Agent Runtime adds SDK and GenAI declaration gates; GKE adds only the SDK gate. Auto retains the ADK-only gate.")
-    parser.add_argument("--dry-run", action="store_true", help="Explicit synonym for the default offline, read-only inspection.")
-    parser.add_argument("--require-baseline", action="store_true", help="Exit 3 unless required packages have unconditional exact recorded pins.")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
+    parser.add_argument("--require-baseline", action="store_true", help="Exit 1 unless required packages have unconditional exact recorded pins.")
     args = parser.parse_args(argv)
+    if args.project is None:
+        parser.error("the following arguments are required: --project")
+    supplied_root = Path(args.project).expanduser()
+    if supplied_root.is_symlink() or not supplied_root.is_dir():
+        print(json.dumps({"error": "Project must be an existing nonsymlink directory.", "network_calls": 0, "writes": 0}),
+              file=sys.stderr)
+        return 2
     inspector = None
     try:
-        supplied_root = Path(args.root).expanduser()
-        if supplied_root.is_symlink() or not supplied_root.is_dir():
-            raise InspectionError("Root must be an existing nonsymlink directory.")
         inspector = Inspector(supplied_root.resolve(strict=True))
         inspector.scan()
         packages, baseline_ok = compatibility(inspector, args.mode)
@@ -446,11 +465,11 @@ def main(argv=None):
             ],
         }
         print(json.dumps(result, indent=2, sort_keys=True))
-        return 3 if args.require_baseline and not baseline_ok else 0
+        return 1 if args.require_baseline and not baseline_ok else 0
     except (InspectionError, OSError, ValueError, RecursionError) as error:
         message = str(error) if isinstance(error, InspectionError) else "Project inspection failed; input details omitted."
         print(json.dumps({"error": message, "network_calls": 0, "writes": 0}), file=sys.stderr)
-        return 2
+        return 3
     finally:
         if inspector is not None:
             inspector.close()

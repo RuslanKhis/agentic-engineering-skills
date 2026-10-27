@@ -33,7 +33,7 @@ class InventoryTests(unittest.TestCase):
 
     def scan(self, *args):
         result = self.run_cli(*args)
-        self.assertIn(result.returncode, (0, 1), result.stderr)
+        self.assertIn(result.returncode, (0, 3), result.stderr)
         return result, json.loads(result.stdout)
 
     def signals(self, data):
@@ -45,7 +45,7 @@ class InventoryTests(unittest.TestCase):
     def test_help_and_invalid_arguments(self):
         result = self.run_cli("--help", project=False)
         self.assertEqual(result.returncode, 0)
-        self.assertIn("--dry-run", result.stdout)
+        self.assertNotIn("--dry-run", result.stdout)
         self.assertIn("--lifecycle", result.stdout)
         self.assertEqual(self.run_cli(project=False).returncode, 2)
         self.assertEqual(self.run_cli("--project", str(self.root / "absent")).returncode, 2)
@@ -243,21 +243,21 @@ c = LlmAgent(name="c", model="gemini-3.8-flash", instruction=f"templated {{ctx}}
         self.write("a.py", "a = 1\n")
         self.write("b.py", "b = 2\n")
         result, data = self.scan("--max-files", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertIn("file_count_limit", {item["reason"] for item in data["issues"]})
         result, data = self.scan("--max-bytes", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertTrue(all(item["reason"] == "file_size_limit" for item in data["issues"]))
         self.write("one/two/hidden.py", "pass\n")
         result, data = self.scan("--max-depth", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertIn({"path": "one/two", "reason": "depth_limit"}, data["issues"])
         private = "PRIVATE_SOURCE_TEXT"
         self.write("bad.py", f"def {private}(\n")
         self.write("broken.evalset.json", f"{{{private}")
         self.write("pyproject.toml", f"[{private}\n")
         result, data = self.scan()
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn(private, result.stdout + result.stderr)
         self.assertEqual({item["reason"] for item in data["issues"]}, {"malformed_file"})
         self.assertEqual(len(data["issues"]), 3)
@@ -272,14 +272,14 @@ c = LlmAgent(name="c", model="gemini-3.8-flash", instruction=f"templated {{ctx}}
         self.assertEqual(data["skipped"], [{"path": "inventory.json", "reason": "skipped_empty"}])
         self.write("broken.json", "{")
         result, data = self.scan()
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertEqual(data["issues"], [{"path": "broken.json", "reason": "malformed_file"}])
 
     def test_eval_gate_template_writes_inventory_outside_the_scanned_project(self):
         text = WORKFLOW.read_text()
         self.assertNotIn("> inventory.json", text)
         self.assertNotIn('open("inventory.json")', text)
-        self.assertIn("--project . --dry-run > \"${RUNNER_TEMP}/inventory.json\"", text)
+        self.assertIn("--project . > \"${RUNNER_TEMP}/inventory.json\"", text)
         self.assertIn('os.environ["RUNNER_TEMP"]', text)
 
     def test_model_constants_resolve_within_and_across_modules(self):
@@ -318,14 +318,14 @@ g = LlmAgent(name="g", model=elsewhere.MODEL, instruction="Be short.")
         outside.write_text('MODEL = "gemini-3.8-flash"\n')
         (self.root / "link.py").symlink_to(outside)
         result, data = self.scan()
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertEqual(data["signals"], [])
         self.assertEqual({item["reason"] for item in data["issues"]}, {"symlink_skipped"})
         (self.root / "link.py").unlink()
         for index in range(12):
             self.write(f"ignored-{index}.bin", "irrelevant")
         result, data = self.scan("--max-entries", "5")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertEqual(data["directory_entries_seen"], 5)
         self.assertEqual(data["issues"], [{"path": ".", "reason": "entry_count_limit"}])
 

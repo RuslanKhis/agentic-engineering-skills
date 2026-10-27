@@ -168,7 +168,7 @@ work, and again after every retrieval change:
 Set `PYTHON` to an interpreter whose SQLite includes FTS5 and `SKILL_DIR` to
 this installed skill. The first command retrieves the fixture's own questions
 and prints the sufficiency report, problems, recall, precision and the listed
-irrelevant hits; exit 1 means invalid input. Raising `k`, the page cap or the
+irrelevant hits; exit 2 means invalid input. Raising `k`, the page cap or the
 call budget requires this measurement to show the current bounds caused a miss,
 consistent with the coverage pack.
 

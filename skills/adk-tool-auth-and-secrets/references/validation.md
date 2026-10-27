@@ -52,8 +52,8 @@ From this skill directory with Python 3.11+:
 
 ```bash
 python -m unittest discover -s tests -v
-python scripts/inspect_project.py --help
-python scripts/inspect_project.py . --dry-run
+python "$SKILL_DIR/scripts/inspect_project.py" --help
+python "$SKILL_DIR/scripts/inspect_project.py" --project .
 ```
 
 The package has no mandatory third-party dependency. Tests optionally check real installed ADK events; when absent, those checks are skipped and must be reported. The public-text canary assertions use synthetic events and never call a provider. Projection deliberately preserves a canary already in allowed final text, proving the documented redaction limit.
@@ -67,6 +67,6 @@ optional skips when ADK is absent; no provider calls are made.
 
 The inspector exits **0** for a completed static inventory, **2** for invalid input, unsupported Python or an incomplete inventory, and **3** when `--expect-adk X.Y.Z` cannot establish matching static pins. Incomplete inspection takes precedence over a pin mismatch. The expectation checks declarations/locks, including unresolved requirement directives; it does not check installed packages. `--help` reports configurable file/byte bounds; traversal also caps depth at 32 and visited entries at `min(100000, max(1000, max_files * 20))`. It skips hidden/dependency/data directories, environment files and symlinks. It is not a sandbox for a hostile process changing the filesystem concurrently.
 
-Also run the host's Agent Skill structural validator, validate internal links/metadata and copy the entire skill into a clean temporary directory. Run it there against fixtures with no book files. Use the repository's existing formatter/static checks when present; syntax compilation and behavioural tests are the baseline when no such tooling exists. The script's `--dry-run` is an explicit read-only run, not a provisioning preview.
+Also run the host's Agent Skill structural validator, validate internal links/metadata and copy the entire skill into a clean temporary directory. Run it there against fixtures with no book files. Use the repository's existing formatter/static checks when present; syntax compilation and behavioural tests are the baseline when no such tooling exists. The script only reads; its old `--dry-run` flag is a deprecated no-op, not a provisioning preview.
 
 Forward-test realistic requests independently: greenfield, customised project, missing prerequisites, an approval-required cloud operation, an unrelated near miss, and a repeated invocation. Give the evaluator only this package, the raw fixture and request. Retain actual actions/artifacts and limitations; a model-selected simulation is not a new live cloud test or evidence about other coding-agent products. Package execution results are recorded in [skill-validation.md](skill-validation.md).

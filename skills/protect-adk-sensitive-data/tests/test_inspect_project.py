@@ -31,7 +31,7 @@ class InspectProjectTests(unittest.TestCase):
     def run_cli(self, *args):
         output = io.StringIO()
         with contextlib.redirect_stdout(output):
-            code = inspector.main([str(self.project), *args])
+            code = inspector.main(["--project", str(self.project), *args])
         return code, output.getvalue()
 
     def codes(self, result, key="manual_review"):
@@ -159,7 +159,7 @@ google-genai = {workspace = true}
     def test_malformed_manifest_has_static_safe_error(self):
         self.write("pyproject.toml", 'private = "PRIVATE_TOKEN\n')
         code, output = self.run_cli()
-        self.assertEqual(code, 2)
+        self.assertEqual(code, 3)
         self.assertIn("invalid_toml", self.codes(json.loads(output), "errors"))
         self.assertNotIn("PRIVATE_TOKEN", output)
 
@@ -210,7 +210,7 @@ google-genai = {workspace = true}
         self.assertIn("constraint_inventory_limit_exceeded", self.codes(result, "errors"))
         (self.project / "requirements.txt").write_bytes(b"PRIVATE_TOKEN\xff")
         code, output = self.run_cli()
-        self.assertEqual(code, 2)
+        self.assertEqual(code, 3)
         self.assertNotIn("PRIVATE_TOKEN", output)
 
     def test_unconstrained_and_unresolved_values_do_not_imply_compatibility(self):
@@ -232,9 +232,20 @@ google-genai = {workspace = true}
         self.assertIn("root-only", output.getvalue())
         error = io.StringIO()
         with contextlib.redirect_stderr(error), self.assertRaises(SystemExit) as caught:
-            inspector.main([str(self.project), "--PRIVATE_TOKEN"])
+            inspector.main(["--project", str(self.project), "--PRIVATE_TOKEN"])
         self.assertEqual(caught.exception.code, 2)
         self.assertNotIn("PRIVATE_TOKEN", error.getvalue())
+
+    def test_positional_project_is_a_deprecated_alias_and_bad_targets_exit_two(self):
+        self.write("requirements.txt", "google-adk==2.8.0\n")
+        current = self.run_cli()
+        output, error = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(output), contextlib.redirect_stderr(error):
+            code = inspector.main([str(self.project)])
+        self.assertEqual((code, output.getvalue()), current)
+        self.assertIn("positional project directory is deprecated; use --project", error.getvalue())
+        with contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(inspector.main(["--project", str(self.project / "absent")]), 2)
 
     def test_older_interpreter_guard_gives_actionable_error(self):
         source = compile(SCRIPT.read_text(), str(SCRIPT), "exec")

@@ -210,4 +210,4 @@ def test_cli_reports_recall_and_rejects_bad_issues(tmp_path):
         "synthetic-local-plan:contents", "synthetic-local-plan:monitoring-framework"]
     bad = subprocess.run([sys.executable, "-I", "-B", str(SCRIPT), "--issues", '["", 3]'],
                          capture_output=True, text=True, check=False)
-    assert bad.returncode == 1 and "invalid input" in bad.stderr
+    assert bad.returncode == 2 and "invalid input" in bad.stderr

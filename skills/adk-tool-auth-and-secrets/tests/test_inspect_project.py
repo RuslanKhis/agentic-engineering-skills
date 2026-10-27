@@ -35,7 +35,7 @@ class InspectorTests(unittest.TestCase):
         output, errors = io.StringIO(), io.StringIO()
         with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
             try:
-                code = inspector.main([str(self.root), *args])
+                code = inspector.main(["--project", str(self.root), *args])
             except SystemExit as exc:
                 code = exc.code
         self.assertNotIn(CANARY, output.getvalue() + errors.getvalue())
@@ -46,7 +46,9 @@ class InspectorTests(unittest.TestCase):
         self.write("agent.py", "async def action(tool_context: ToolContext):\n    return None\n")
         before = {p.relative_to(self.root): p.read_bytes() for p in self.root.rglob("*") if p.is_file()}
         first = self.run_inspection("--expect-adk", "2.8.0")
-        self.assertEqual(first, self.run_inspection("--expect-adk", "2.8.0", "--dry-run"))
+        dry = self.run_inspection("--expect-adk", "2.8.0", "--dry-run")
+        self.assertEqual(first[:2], dry[:2])
+        self.assertIn("--dry-run is deprecated", dry[2])
         self.assertEqual(first, self.run_inspection("--expect-adk", "2.8.0"))
         self.assertEqual(first[0], 0)
         self.assertEqual(first[1]["adk_expectation"]["result"], "static_pins_match")
@@ -87,7 +89,7 @@ class InspectorTests(unittest.TestCase):
                    f"google-adk @ https://user:{CANARY}@example.invalid/wheel\n-r private.txt\n")
         self.write("private.txt", CANARY)
         code, result, _ = self.run_inspection("--expect-adk", "2.8.0")
-        self.assertEqual(code, 3)
+        self.assertEqual(code, 1)
         self.assertEqual(result["dependencies"][0]["constraint_kind"], "unknown")
         self.assertEqual(result["dependencies"][0]["numeric_versions"], [])
         self.assertEqual(result["counts"]["candidate_files"], 1)
@@ -134,14 +136,14 @@ firebase-admin = { version = "7.5.0" }
             with self.subTest(content=content):
                 self.write("requirements.txt", content)
                 code, result, _ = self.run_inspection("--expect-adk", "2.8.0")
-                self.assertEqual(code, 3)
+                self.assertEqual(code, 1)
                 self.assertEqual(result["adk_expectation"]["result"], "missing_different_or_unproven")
 
     def test_malformed_source_and_toml_use_fixed_diagnostics(self):
         self.write("bad.py", f"def {CANARY}(\n")
         self.write("pyproject.toml", f'key = "{CANARY}\n')
         code, result, _ = self.run_inspection("--expect-adk", "2.8.0")
-        self.assertEqual(code, 2)
+        self.assertEqual(code, 3)
         self.assertFalse(result["complete"])
         self.assertEqual({item["code"] for item in result["diagnostics"]},
                          {"PYTHON_PARSE_ERROR", "TOML_PARSE_ERROR"})
@@ -154,7 +156,7 @@ firebase-admin = { version = "7.5.0" }
                                (["--max-total-bytes", "7"], "TOTAL_BYTES_LIMIT")):
             with self.subTest(args=args):
                 code, result, _ = self.run_inspection(*args)
-                self.assertEqual(code, 2)
+                self.assertEqual(code, 3)
                 self.assertFalse(result["complete"])
                 self.assertIn(expected, {item["code"] for item in result["diagnostics"]})
 
@@ -162,7 +164,7 @@ firebase-admin = { version = "7.5.0" }
         for i in range(1002):
             self.write(f"ignored-{i}.json", "{}")
         code, result, _ = self.run_inspection("--max-files", "1")
-        self.assertEqual(code, 2)
+        self.assertEqual(code, 3)
         self.assertIn("TRAVERSAL_ENTRY_LIMIT", {item["code"] for item in result["diagnostics"]})
         self.assertLessEqual(result["counts"]["traversal_entries"], 1001)
 
@@ -176,8 +178,21 @@ firebase-admin = { version = "7.5.0" }
         with contextlib.redirect_stdout(output), self.assertRaises(SystemExit) as raised:
             inspector.main(["--help"])
         self.assertEqual(raised.exception.code, 0)
-        self.assertIn("--dry-run", output.getvalue())
+        self.assertNotIn("--dry-run", output.getvalue())
+        self.assertIn("--project", output.getvalue())
         self.assertIn("--expect-adk", output.getvalue())
+
+    def test_positional_project_is_a_deprecated_alias(self):
+        self.write("requirements.txt", "google-adk==2.8.0\n")
+        current = self.run_inspection()
+        output, errors = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(output), contextlib.redirect_stderr(errors):
+            code = inspector.main([str(self.root)])
+        self.assertEqual((code, json.loads(output.getvalue())), current[:2])
+        self.assertIn("positional project directory is deprecated; use --project", errors.getvalue())
+        with contextlib.redirect_stdout(io.StringIO()), self.assertRaises(SystemExit) as raised:
+            inspector.main(["--project", str(self.root), str(self.root)])
+        self.assertEqual(raised.exception.code, 2)
 
     def test_invalid_root_is_fixed_error(self):
         self.root.rmdir()

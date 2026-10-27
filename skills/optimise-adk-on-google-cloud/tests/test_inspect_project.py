@@ -33,7 +33,7 @@ class InspectProjectTests(unittest.TestCase):
     def run_helper(self, *args):
         environment = dict(os.environ, PATH="", PYTHONDONTWRITEBYTECODE="1")
         return subprocess.run(
-            [sys.executable, str(HELPER), "--root", str(self.root), *args],
+            [sys.executable, str(HELPER), "--project", str(self.root), *args],
             text=True, capture_output=True, env=environment, timeout=15,
         )
 
@@ -58,7 +58,7 @@ class InspectProjectTests(unittest.TestCase):
             text=True, capture_output=True, timeout=15,
         )
         self.assertEqual(result.returncode, 0)
-        for term in ("--dry-run", "--require-baseline", "Exit 0", "2:",
+        for term in ("--project", "--require-baseline", "Exit 0", "1:", "2:",
                      "3:", "offline", ".env", "application", "cloud-run", "agent-runtime", "gke"):
             self.assertIn(term, result.stdout)
         for mode in ("auto", "application", "cloud-run"):
@@ -99,7 +99,7 @@ class InspectProjectTests(unittest.TestCase):
                 self.assertIn("cloud_run_directory", report["architecture_hints"])
                 self.assertNotIn("other_hosting_directory_requires_scope_review", report["architecture_hints"])
                 self.assertNotIn("SECRET_", json.dumps(report))
-        report = self.report("--mode", "agent-runtime", "--require-baseline", expected=3)
+        report = self.report("--mode", "agent-runtime", "--require-baseline", expected=1)
         self.assertIn("no_declaration_found", report["packages"]["google-cloud-aiplatform"]["reasons"])
         self.assertIn("different_from_recorded_baseline", report["packages"]["google-genai"]["reasons"])
 
@@ -116,7 +116,7 @@ class InspectProjectTests(unittest.TestCase):
             with self.subTest(reason=reason):
                 self.write("requirements.txt", self.runtime_requirements(sdk=sdk))
                 before = self.snapshot()
-                report = self.report("--mode", "agent-runtime", "--require-baseline", expected=3)
+                report = self.report("--mode", "agent-runtime", "--require-baseline", expected=1)
                 self.assertIn(reason, report["packages"]["google-cloud-aiplatform"]["reasons"])
                 self.assertEqual(before, self.snapshot())
 
@@ -126,13 +126,13 @@ dependencies = ["google-adk==2.8.0", "google-genai==2.19.0"]
 [project.optional-dependencies]
 host = ["google-cloud-aiplatform[agent_engines]==1.153.1"]
 ''')
-        report = self.report("--mode", "agent-runtime", "--require-baseline", expected=3)
+        report = self.report("--mode", "agent-runtime", "--require-baseline", expected=1)
         self.assertIn("conditional_or_optional_declaration_requires_review",
                       report["packages"]["google-cloud-aiplatform"]["reasons"])
         (self.root / "pyproject.toml").unlink()
         self.write("requirements.txt", "google-adk==2.8.0\n-c constraints.txt\n")
         self.write("constraints.txt", "google-cloud-aiplatform==1.153.1\ngoogle-genai==2.19.0\n")
-        report = self.report("--mode", "agent-runtime", "--require-baseline", expected=3)
+        report = self.report("--mode", "agent-runtime", "--require-baseline", expected=1)
         for package in ("google-cloud-aiplatform", "google-genai"):
             self.assertIn("only_constraint_declarations_found", report["packages"][package]["reasons"])
 
@@ -142,7 +142,7 @@ host = ["google-cloud-aiplatform[agent_engines]==1.153.1"]
             with self.subTest(declaration=declaration):
                 self.write("requirements.txt", self.runtime_requirements(genai=declaration))
                 before = self.snapshot()
-                report = self.report("--mode", "agent-runtime", "--require-baseline", expected=3)
+                report = self.report("--mode", "agent-runtime", "--require-baseline", expected=1)
                 self.assertEqual(report["packages"]["google-genai"]["status"], "unverified")
                 self.assertTrue(self.report("--mode", "application", "--require-baseline")
                                 ["baseline_gate_passed"])
@@ -154,7 +154,7 @@ host = ["google-cloud-aiplatform[agent_engines]==1.153.1"]
         before = self.snapshot()
         for mode in ("agent-runtime", "gke"):
             with self.subTest(mode=mode):
-                report = self.report("--mode", mode, "--require-baseline", expected=3)
+                report = self.report("--mode", mode, "--require-baseline", expected=1)
                 sdk = report["packages"]["google-cloud-aiplatform"]
                 self.assertIn("adk_extra_conflicts_with_recorded_adk_baseline", sdk["reasons"])
                 self.assertEqual(sdk["declarations"][0]["known_extras"],
@@ -182,7 +182,7 @@ google-genai = "2.19.0"
 google-cloud-aiplatform = {version="1.153.1", extras=["adk", "SECRET_EXTRA"]}
 ''')
         result = self.run_helper("--mode", "agent-runtime", "--require-baseline")
-        self.assertEqual(result.returncode, 3, result.stderr)
+        self.assertEqual(result.returncode, 1, result.stderr)
         self.assertNotIn("SECRET_EXTRA", result.stdout + result.stderr)
         sdk = json.loads(result.stdout)["packages"]["google-cloud-aiplatform"]
         self.assertIn("declaration_not_an_exact_pin", sdk["reasons"])
@@ -205,7 +205,7 @@ google-cloud-aiplatform = {version="1.153.1", extras=["adk", "SECRET_EXTRA"]}
                 self.assertIsNone(report["packages"]["google-genai"]["recorded_baseline"])
                 self.assertEqual(before, self.snapshot())
                 runtime = self.report("--mode", "agent-runtime", "--require-baseline",
-                                      expected=0 if declaration == "google-genai==2.19.0" else 3)
+                                      expected=0 if declaration == "google-genai==2.19.0" else 1)
                 self.assertTrue(runtime["packages"]["google-genai"]["required_for_selected_mode"])
 
     def test_gke_missing_or_unverified_sdk_does_not_pass_or_rewrite(self):
@@ -221,7 +221,7 @@ google-cloud-aiplatform = {version="1.153.1", extras=["adk", "SECRET_EXTRA"]}
             with self.subTest(reason=reason):
                 self.write("requirements.txt", "google-adk==2.8.0\n" + sdk + "\n")
                 before = self.snapshot()
-                report = self.report("--mode", "gke", "--require-baseline", expected=3)
+                report = self.report("--mode", "gke", "--require-baseline", expected=1)
                 self.assertIn(reason, report["packages"]["google-cloud-aiplatform"]["reasons"])
                 self.assertFalse(report["baseline_gate_passed"])
                 self.assertEqual(before, self.snapshot())
@@ -232,13 +232,13 @@ dependencies = ["google-adk==2.8.0"]
 [project.optional-dependencies]
 host = ["google-cloud-aiplatform[agent-engines]==1.153.1"]
 ''')
-        report = self.report("--mode", "gke", "--require-baseline", expected=3)
+        report = self.report("--mode", "gke", "--require-baseline", expected=1)
         self.assertIn("conditional_or_optional_declaration_requires_review",
                       report["packages"]["google-cloud-aiplatform"]["reasons"])
         (self.root / "pyproject.toml").unlink()
         self.write("requirements.txt", "google-adk==2.8.0\n-c constraints.txt\n")
         self.write("constraints.txt", "google-cloud-aiplatform[agent-engines]==1.153.1\n")
-        report = self.report("--mode", "gke", "--require-baseline", expected=3)
+        report = self.report("--mode", "gke", "--require-baseline", expected=1)
         self.assertIn("only_constraint_declarations_found",
                       report["packages"]["google-cloud-aiplatform"]["reasons"])
 
@@ -295,6 +295,7 @@ host = ["google-cloud-aiplatform[agent-engines]==1.153.1"]
         second = self.run_helper("--dry-run")
         self.assertEqual(first.returncode, 0, first.stderr)
         self.assertEqual(first.stdout, second.stdout)
+        self.assertIn("--dry-run is deprecated", second.stderr)
         self.assertEqual(before, self.snapshot())
         self.assertFalse(marker.exists())
         self.assertFalse((self.root / "__pycache__").exists())
@@ -334,14 +335,14 @@ test = ["pydantic>=2.12,<3"]
             with self.subTest(reason=reason):
                 self.write("requirements.txt", text + "\n")
                 before = self.snapshot()
-                report = self.report("--require-baseline", expected=3)
+                report = self.report("--require-baseline", expected=1)
                 self.assertIn(reason, report["packages"]["google-adk"]["reasons"])
                 self.assertEqual(report["packages"]["google-adk"]["status"], "unverified")
                 self.assertEqual(before, self.snapshot())
 
     def test_optional_adk_does_not_satisfy_runtime_baseline(self):
         self.write("pyproject.toml", '[project.optional-dependencies]\ntest=["google-adk==2.8.0"]\n')
-        self.assertFalse(self.report("--require-baseline", expected=3)["baseline_gate_passed"])
+        self.assertFalse(self.report("--require-baseline", expected=1)["baseline_gate_passed"])
 
     def test_poetry_and_normalised_names(self):
         self.write("pyproject.toml", '''[tool.poetry.dependencies]
@@ -362,11 +363,11 @@ pydantic = ">=2.12,<3"
                          {"runtime", "constraint"})
         self.write("requirements.txt", "-c shared.txt\n")
         self.write("shared.txt", "google-adk==2.8.0\n")
-        report = self.report("--require-baseline", expected=3)
+        report = self.report("--require-baseline", expected=1)
         self.assertIn("only_constraint_declarations_found", report["packages"]["google-adk"]["reasons"])
         self.write("requirements.txt", "google-adk==2.8.0\n--constraint=shared.txt\n")
         self.write("shared.txt", "google-adk==2.7.0\n")
-        report = self.report("--require-baseline", expected=3)
+        report = self.report("--require-baseline", expected=1)
         self.assertIn("conflicting_exact_pins", report["packages"]["google-adk"]["reasons"])
 
     def test_secrets_urls_paths_and_unknown_arguments_are_never_echoed(self):
@@ -416,12 +417,12 @@ pydantic = ">=2.12,<3"
         (outside / "requirements.txt").write_text("SECRET_EXTERNAL_DATA\n")
         linked = Path(self.temp.name) / "root-link"
         linked.symlink_to(self.root, target_is_directory=True)
-        result = self.run_helper("--root", str(linked))
+        result = self.run_helper("--project", str(linked))
         self.assertEqual(result.returncode, 2)
         (self.root / "linked").symlink_to(outside, target_is_directory=True)
         self.write("requirements.txt", "-r linked/requirements.txt\n")
         result = self.run_helper()
-        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn("SECRET_", result.stdout + result.stderr)
 
     def test_unsafe_missing_and_nonregular_includes_fail_without_leaks(self):
@@ -438,7 +439,7 @@ pydantic = ">=2.12,<3"
             with self.subTest(include=include):
                 self.write("requirements.txt", "-r " + include + "\n")
                 result = self.run_helper()
-                self.assertEqual(result.returncode, 2)
+                self.assertEqual(result.returncode, 3)
                 self.assertNotIn("SECRET_", result.stdout + result.stderr)
 
     def test_invalid_manifest_and_utf8_errors_are_sanitised(self):
@@ -447,26 +448,26 @@ pydantic = ">=2.12,<3"
                         '[project]\ndependencies=[4]\n'):
             self.write("pyproject.toml", content)
             result = self.run_helper()
-            self.assertEqual(result.returncode, 2)
+            self.assertEqual(result.returncode, 3)
             self.assertNotIn("SECRET_", result.stdout + result.stderr)
         (self.root / "pyproject.toml").unlink()
         self.write("requirements.txt", "").write_bytes(b"SECRET_INVALID_UTF8\xff")
         result = self.run_helper()
-        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn("SECRET_", result.stdout + result.stderr)
 
     def test_depth_and_explicit_include_depth_are_bounded(self):
         self.write("requirements.txt", "google-adk==2.8.0\n")
         self.write("a/b/c/d/e/requirements.txt", "google-adk==9.8.7\n")
-        report = self.report("--require-baseline", expected=3)
+        report = self.report("--require-baseline", expected=1)
         self.assertTrue(report["coverage"]["depth_limit_reached"])
         self.write("requirements.txt", "-r a/b/c/d/e/requirements.txt\n")
-        self.assertEqual(self.run_helper().returncode, 2)
+        self.assertEqual(self.run_helper().returncode, 3)
 
     def test_per_file_aggregate_and_line_byte_limits(self):
         self.write("requirements.txt", "#" * 131073)
         result = self.run_helper()
-        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.returncode, 3)
         self.assertIn("byte limit", result.stderr)
         self.write("requirements.txt", "#" * 4097 + "\n")
         self.assertIn("line limit", self.run_helper().stderr)
@@ -474,7 +475,7 @@ pydantic = ">=2.12,<3"
         for number in range(9):
             self.write(f"requirements-{number}.txt", "# padding\n" * 12500)
         result = self.run_helper()
-        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.returncode, 3)
         self.assertIn("byte limit", result.stderr)
 
     def test_manifest_and_directory_entry_counts_are_bounded(self):
@@ -486,8 +487,16 @@ pydantic = ">=2.12,<3"
         for number in range(4097):
             self.write(f"ignored-{number}", "")
         result = self.run_helper()
-        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.returncode, 3)
         self.assertIn("Directory entry limit", result.stderr)
+
+    def test_root_is_a_deprecated_alias_for_project(self):
+        self.write("requirements.txt", "google-adk==2.8.0\n")
+        old = subprocess.run([sys.executable, str(HELPER), "--root", str(self.root)],
+                             text=True, capture_output=True, timeout=15)
+        self.assertEqual(old.returncode, 0, old.stderr)
+        self.assertIn("--root is deprecated; use --project", old.stderr)
+        self.assertEqual(json.loads(old.stdout), self.report())
 
 
 if __name__ == "__main__":

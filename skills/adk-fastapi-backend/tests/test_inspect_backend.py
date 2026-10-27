@@ -148,7 +148,7 @@ class InspectBackendTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as root:
             self.project(root, {"pyproject.toml": "[project\n"})
             code, out, _ = self.run_tool(root)
-            self.assertEqual(code, 4)
+            self.assertEqual(code, 3)
             self.assertIn("manifest_unparsed", json.loads(out)["project"]["warnings"])
 
 

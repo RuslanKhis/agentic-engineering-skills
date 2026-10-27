@@ -70,14 +70,14 @@ controller test.
 Using the selected existing Python interpreter and resolved skill path:
 
 ```sh
-python /path/to/skill/scripts/inspect_project.py --help
-python /path/to/skill/scripts/inspect_project.py /path/to/package --dry-run
-python /path/to/skill/scripts/inspect_project.py /path/to/package
-python -B -m unittest discover -s /path/to/skill/tests -v
+python "$SKILL_DIR/scripts/inspect_project.py" --help
+python "$SKILL_DIR/scripts/inspect_project.py" --project /path/to/package --dry-run
+python "$SKILL_DIR/scripts/inspect_project.py" --project /path/to/package
+python -B -m unittest discover -s "$SKILL_DIR/tests" -v
 ```
 
-The inspector is read-only in both modes. An exit-zero inventory is not a
-compatibility pass; review any unresolved metadata. Both assets are libraries,
+The inspector is read-only in both modes; exit 3 means some metadata could not be
+read. An exit-zero inventory is not a compatibility pass; review any unresolved metadata. Both assets are libraries,
 so `--help`/`--dry-run` do not apply. Inspector/controller tests use the standard
 library and fake provider functions. The optional regional adapter's tests use
 the target's existing `google-cloud-dlp` package for real message types while

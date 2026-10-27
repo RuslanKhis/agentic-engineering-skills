@@ -164,25 +164,26 @@ class CommandChecks(unittest.TestCase):
             second = self.run_cli("--session", str(path), "--dry-run", "--max-result-bytes", "20000")
             self.assertEqual((first.returncode, second.returncode), (0, 0))
             self.assertEqual(first.stdout, second.stdout)
+            self.assertIn("--dry-run is deprecated", second.stderr)
             self.assertEqual(json.loads(first.stdout)["source_format"], "session_object")
             self.assertNotIn(SECRET, first.stdout + first.stderr)
             self.assertEqual(before, {p.name: p.read_bytes() for p in root.iterdir()})
             path.write_text("{not json")
             malformed = self.run_cli("--session", str(path))
-            self.assertEqual(malformed.returncode, 1)
+            self.assertEqual(malformed.returncode, 2)
             self.assertEqual(json.loads(malformed.stdout)["verdict"], "MALFORMED")
             self.assertNotIn(directory, malformed.stdout + malformed.stderr)
             missing = self.run_cli("--session", str(root / "absent.json"))
-            self.assertEqual(missing.returncode, 1)
+            self.assertEqual(missing.returncode, 2)
             events = clean_session()["events"] + [SECRET]
             path.write_text(json.dumps(events))
             partial = self.run_cli("--session", str(path))
-            self.assertEqual(partial.returncode, 1)
+            self.assertEqual(partial.returncode, 3)
             self.assertEqual(json.loads(partial.stdout)["verdict"], "PARTIAL")
             self.assertNotIn(SECRET, partial.stdout + partial.stderr)
             link = root / "link.json"
             link.symlink_to(path)
-            self.assertEqual(self.run_cli("--session", str(link)).returncode, 1)
+            self.assertEqual(self.run_cli("--session", str(link)).returncode, 2)
 
 
 if __name__ == "__main__":

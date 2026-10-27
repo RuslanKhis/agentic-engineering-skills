@@ -414,8 +414,9 @@ def positive_int(value):
 
 def main(argv=None):
     parser = Parser(description=__doc__, epilog=(
-        "Exit 0: eval set written; 1: malformed input, no case selected, hook "
-        "failure or existing output without --force; 2: invalid arguments. The "
+        "Exit 0: eval set written; 1: no case selected or structural problems; 2: invalid "
+        "arguments, malformed input, hook failure, unwritable output or existing output "
+        "without --force; 3: malformed items skipped. The "
         "report names counts and the output file name only."))
     parser.add_argument("--session", required=True, help="Saved session export path.")
     parser.add_argument("--out", required=True, help="EvalSet JSON file to write (conventionally *.evalset.json).")
@@ -439,7 +440,7 @@ def main(argv=None):
 
     def fail(reason):
         print(json.dumps({"verdict": "MALFORMED", "reason": reason, "network_calls": 0, "writes": 0}))
-        return 1
+        return 2
 
     out_path = Path(args.out)
     if out_path.exists() and not args.force and not args.dry_run:
@@ -498,7 +499,9 @@ def main(argv=None):
             return fail("output_not_writable")
         report["writes"] = 1
     print(json.dumps(report, sort_keys=True))
-    return 0 if report["verdict"] == "INSPECTED" else 1
+    if report["verdict"] == "INSPECTED":
+        return 0
+    return 3 if report["verdict"] == "PARTIAL" and not problems else 1
 
 
 if __name__ == "__main__":

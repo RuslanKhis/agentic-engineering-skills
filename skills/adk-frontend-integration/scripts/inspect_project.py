@@ -3,8 +3,8 @@
 
 Python 3.11+; standard library only. No network, shell, writes, lockfile parsing,
 environment-file reads, dependency resolution, or target-interpreter activation.
-Exit codes: 0 inspection complete; 2 invalid input; 3 explicit tested-pin gate
-failed; 4 inspection incomplete. --dry-run has exactly the same read-only effect.
+Exit codes: 0 inspection complete; 1 explicit tested-pin gate failed; 2 invalid
+input; 3 inspection incomplete. --dry-run is a deprecated no-op kept for old commands.
 Use a trusted interpreter with -I -B to isolate Python's own startup behaviour.
 """
 
@@ -393,12 +393,25 @@ class SafeArgumentParser(argparse.ArgumentParser):
         self.exit(2, "error: invalid arguments; use --help for the accepted interface.\n")
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = SafeArgumentParser(description=__doc__)
     parser.add_argument("--project", required=True, type=Path, help="Existing project directory; symlink roots are refused.")
-    parser.add_argument("--dry-run", action="store_true", help="Same read-only inspection; never writes or runs project code.")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     parser.add_argument("--mode", choices=MODES, help="Select relevant reference Python pins for the optional strict gate.")
-    parser.add_argument("--require-tested-stack", action="store_true", help="Exit 3 for missing, different or unverified selected installed pins; requires --mode.")
+    parser.add_argument("--require-tested-stack", action="store_true", help="Exit 1 for missing, different or unverified selected installed pins; requires --mode.")
     args = parser.parse_args(argv)
     if args.require_tested_stack and not args.mode:
         parser.error("--require-tested-stack requires --mode")
@@ -423,9 +436,9 @@ def main(argv: list[str] | None = None) -> int:
                               "Node and client installed versions, cloud credentials and live integrations are not checked.",
                               "Use a trusted interpreter and a stable project tree; concurrent filesystem changes can make inspection incomplete."]}
     print(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=True))
-    if not scan["complete_within_scope"]:
-        return 4
-    return 3 if args.require_tested_stack and not gate["matches_reference_pins"] else 0
+    if args.require_tested_stack and not gate["matches_reference_pins"]:
+        return 1
+    return 0 if scan["complete_within_scope"] else 3
 
 
 if __name__ == "__main__":

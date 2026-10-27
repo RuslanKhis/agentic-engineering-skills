@@ -20,7 +20,7 @@ Use [troubleshooting.md](troubleshooting.md) for the concrete real-runner/model-
 
 ## Read-only helper checks
 
-From the installed skill directory, run both helpers' `--help`, then normal and `--dry-run` forms against synthetic fixtures. Inspect exit codes and JSON reports; repeat them and confirm no fixture or skill content changes. Invalid paths, oversize input and unsupported profiles must fail clearly without dumping payloads or credentials.
+From the installed skill directory, run both helpers' `--help`, then their normal forms against synthetic fixtures. Inspect exit codes and JSON reports; repeat them and confirm no fixture or skill content changes. Invalid paths, oversize input and unsupported profiles must fail clearly without dumping payloads or credentials.
 
 ```text
 python -m unittest discover -s tests -p 'test_*.py'

@@ -23,7 +23,7 @@ Decide what the model is asked to emit, which model and settings produce it, and
 5. Run the two helpers with an available Python 3.11+ interpreter after resolving `SKILL_DIR` to this skill's directory. They read source only; they never import the project or call a provider.
 
 ```bash
-python "$SKILL_DIR/scripts/audit_model_config.py" --project . --dry-run
+python "$SKILL_DIR/scripts/audit_model_config.py" --project .
 python -c 'from app.schemas import Decision; import json; print(json.dumps(Decision.model_json_schema()))' > .adk-evidence/decision.json
 python "$SKILL_DIR/scripts/check_response_schema.py" --schema .adk-evidence/decision.json --pydantic-json
 ```

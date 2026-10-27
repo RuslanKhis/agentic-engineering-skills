@@ -183,7 +183,7 @@ class CommandChecks(unittest.TestCase):
             self.assertNotIn(EMAIL, out.read_text())
             self.assertEqual(sorted(p.name for p in root.iterdir()), ["regressions.evalset.json", "session.json"])
             repeat = self.run_cli("--session", str(source), "--out", str(out), "--select", "tool_error")
-            self.assertEqual(repeat.returncode, 1)
+            self.assertEqual(repeat.returncode, 2)
             self.assertEqual(json.loads(repeat.stdout)["reason"], "output_exists_use_force")
             forced = self.run_cli("--session", str(source), "--out", str(out), "--select", "tool_error", "--force")
             self.assertEqual(forced.returncode, 0)
@@ -214,12 +214,12 @@ class CommandChecks(unittest.TestCase):
                 with self.subTest(function=function):
                     failed = self.run_cli("--session", str(source), "--out", str(root / f"{function}.json"),
                                           "--redact-hook", f"{HOOK_MODULE}:{function}", cwd=root)
-                    self.assertEqual(failed.returncode, 1)
+                    self.assertEqual(failed.returncode, 2)
                     self.assertEqual(json.loads(failed.stdout)["reason"], "invalid_or_unsupported_input")
                     self.assertFalse((root / f"{function}.json").exists())
             missing_hook = self.run_cli("--session", str(source), "--out", str(root / "m.json"),
                                         "--redact-hook", "no_such_module_xyz:f", cwd=root)
-            self.assertEqual(missing_hook.returncode, 1)
+            self.assertEqual(missing_hook.returncode, 2)
             self.assertEqual(json.loads(missing_hook.stdout)["reason"], "invalid_redact_hook")
             clean = {"events": [event("inv-1", "user", [{"text": "hi"}], 1.0),
                                 event("inv-1", "agent", [{"text": "hello"}], 2.0)]}
@@ -230,10 +230,10 @@ class CommandChecks(unittest.TestCase):
             self.assertFalse((root / "none.json").exists())
             source.write_text("{not json")
             malformed = self.run_cli("--session", str(source), "--out", str(root / "bad.json"))
-            self.assertEqual(malformed.returncode, 1)
+            self.assertEqual(malformed.returncode, 2)
             self.assertEqual(json.loads(malformed.stdout)["verdict"], "MALFORMED")
             self.assertFalse((root / "bad.json").exists())
-            self.assertEqual(self.run_cli("--session", str(root / "absent.json"), "--out", str(root / "a.json")).returncode, 1)
+            self.assertEqual(self.run_cli("--session", str(root / "absent.json"), "--out", str(root / "a.json")).returncode, 2)
             for name in root.iterdir():
                 if name.name.endswith(".pyc") or name.name == "__pycache__":
                     continue

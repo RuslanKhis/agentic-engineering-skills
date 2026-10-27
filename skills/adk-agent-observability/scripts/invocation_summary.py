@@ -441,41 +441,53 @@ def to_csv(result):
     return buffer.getvalue()
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv=None):
     parser = Parser(description=__doc__, epilog=(
         "Input: a saved session export (JSON object with an events list, a JSON "
         "event array, or JSONL events), up to 16 MiB/5000 events. Prices: a JSON "
         "object {\"currency\": \"USD\", \"per_million\": {\"<model_version>\": "
         "{\"input\": n, \"output\": n, \"cached_input\": n}, \"default\": {...}}}; "
-        "no prices are built in. Exit 0: inspected; 1: partial or malformed "
-        "input; 2: invalid arguments. Output contains counts, identifiers, tool "
+        "no prices are built in. Exit 0: inspected; 2: invalid arguments or "
+        "malformed input; 3: partial (items skipped). Output contains counts, identifiers, tool "
         "names, finish reasons and error codes only."))
     parser.add_argument("--session", required=True, help="Saved session export path.")
     parser.add_argument("--prices", help="Optional price table JSON (see epilog).")
     parser.add_argument("--format", choices=("json", "csv"), default="json",
                         help="Output format (default json).")
-    parser.add_argument("--dry-run", action="store_true",
-                        help="Explicit synonym for the always read-only inspection.")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     args = parser.parse_args(argv)
     try:
         prices = load_prices(read_bytes(args.prices, MAX_PRICE_BYTES)) if args.prices else None
     except (InvalidInput, RecursionError):
         print(json.dumps({"verdict": "MALFORMED", "reason": "invalid_price_table",
                           "network_calls": 0, "writes": 0}))
-        return 1
+        return 2
     try:
         events, source_format = load_events(read_bytes(args.session, MAX_BYTES))
         result = inspect_events(events, prices)
     except (InvalidInput, RecursionError, OverflowError):
         print(json.dumps({"verdict": "MALFORMED", "reason": "invalid_or_unsupported_input",
                           "network_calls": 0, "writes": 0}))
-        return 1
+        return 2
     result["source_format"] = source_format
     if args.format == "csv":
         sys.stdout.write(to_csv(result))
     else:
         print(json.dumps(result, sort_keys=True))
-    return 0 if result["verdict"] == "INSPECTED" else 1
+    return 0 if result["verdict"] == "INSPECTED" else 3
 
 
 if __name__ == "__main__":

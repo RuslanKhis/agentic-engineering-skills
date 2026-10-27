@@ -68,7 +68,7 @@ them. Attribute borrowed patterns and retain any required upstream licence.
 | Change | Evidence to include |
 | --- | --- |
 | Metadata, links or package layout | Package check and relevant invalid-package regression tests |
-| Helper script | A failing case for the defect, then the relevant test suite |
+| Helper script | A failing case for the defect, then the relevant test suite; flags, exit codes and documented commands follow [helper conventions](docs/helper-conventions.md) |
 | Skill description or routing | Positive and near-miss cases in `evals/activation.json`, and a contextual case (a `evals/scenarios.json` case whose `context` decides the route); trigger rates over repeated fresh sessions with a held-out split, as `docs/testing/skill-quality.md` describes; distinguish selection from execution; the description, the README's skill entry and `agents/openai.yaml`'s `short_description` kept consistent |
 | Implementation guidance | A representative task with an independent check of its output or effects |
 | SDK recipe | Exact tested versions and relevant runtime contract tests |

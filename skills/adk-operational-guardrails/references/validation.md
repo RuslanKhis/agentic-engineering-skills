@@ -8,7 +8,7 @@ From the installed skill folder, using the selected project interpreter, set `PR
 
 ```bash
 python scripts/inspect_project.py --help
-python scripts/inspect_project.py --project "$PROJECT_ROOT" --dry-run
+python scripts/inspect_project.py --project "$PROJECT_ROOT"
 python -m unittest discover -s tests -p 'test_*.py' -v
 ```
 

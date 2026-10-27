@@ -32,7 +32,7 @@ class InspectProjectTests(unittest.TestCase):
         environment = dict(os.environ)
         if empty_path:
             environment["PATH"] = ""
-        return subprocess.run([sys.executable, str(HELPER), "--root", str(self.root), *args],
+        return subprocess.run([sys.executable, str(HELPER), "--project", str(self.root), *args],
                               text=True, capture_output=True, env=environment, timeout=15)
 
     def output(self, *args, expected=0, **kwargs):
@@ -47,7 +47,7 @@ class InspectProjectTests(unittest.TestCase):
     def test_help_documents_contract_and_exit_codes(self):
         result = subprocess.run([sys.executable, str(HELPER), "--help"], text=True, capture_output=True, timeout=15)
         self.assertEqual(result.returncode, 0)
-        for term in ("--dry-run", "--require-baseline", "Exit 0", "2:", "3:", "offline", ".env"):
+        for term in ("--project", "--gcp-project", "--require-baseline", "Exit 0", "1:", "2:", "3:", "offline", ".env"):
             self.assertIn(term, result.stdout)
 
     def test_unsupported_python_gate_reports_required_version(self):
@@ -69,6 +69,7 @@ class InspectProjectTests(unittest.TestCase):
         second = self.run_helper("--mode", "cloud-run", "--dry-run")
         self.assertEqual(first.returncode, 0, first.stderr)
         self.assertEqual(first.stdout, second.stdout)
+        self.assertIn("--dry-run is deprecated", second.stderr)
         self.assertEqual(before, self.snapshot())
         self.assertNotIn("DO_NOT_EMIT", first.stdout + first.stderr)
         self.assertTrue(json.loads(first.stdout)["configuration_file_presence"]["dotenv"])
@@ -128,7 +129,7 @@ class InspectProjectTests(unittest.TestCase):
             with self.subTest(message=message):
                 path.write_bytes(content)
                 result = self.run_helper()
-                self.assertEqual(result.returncode, 2)
+                self.assertEqual(result.returncode, 3)
                 self.assertNotIn("SECRET_", result.stdout + result.stderr)
                 self.assertIn(message, result.stderr)
 
@@ -156,11 +157,11 @@ class InspectProjectTests(unittest.TestCase):
                 report = self.output("--mode", "cloud-run")
                 self.assertEqual(report["packages"]["google-adk"]["status"], "unverified")
                 self.assertIn(reason, report["packages"]["google-adk"]["reasons"])
-                self.output("--mode", "cloud-run", "--require-baseline", expected=3)
+                self.output("--mode", "cloud-run", "--require-baseline", expected=1)
 
     def test_runtime_requires_sdk_and_conditional_pins_need_review(self):
         self.write("requirements.txt", 'google-adk==2.8.0; python_version >= "3.11"\n')
-        report = self.output("--mode", "agent-runtime", "--require-baseline", expected=3)
+        report = self.output("--mode", "agent-runtime", "--require-baseline", expected=1)
         self.assertIn("conditional_or_optional_declaration_requires_review", report["packages"]["google-adk"]["reasons"])
         self.assertTrue(report["packages"]["google-cloud-aiplatform"]["required_for_selected_mode"])
 
@@ -169,7 +170,7 @@ class InspectProjectTests(unittest.TestCase):
             with self.subTest(option=option):
                 self.write("requirements.txt", "google-adk==2.8.0\n" + option + "constraints.txt\n")
                 self.write("constraints.txt", "google-adk==2.7.0\n")
-                report = self.output("--mode", "cloud-run", "--require-baseline", expected=3)
+                report = self.output("--mode", "cloud-run", "--require-baseline", expected=1)
                 self.assertIn("conflicting_exact_pins", report["packages"]["google-adk"]["reasons"])
                 self.write("constraints.txt", "google-adk==2.8.0\n")
                 self.output("--mode", "cloud-run", "--require-baseline")
@@ -177,7 +178,7 @@ class InspectProjectTests(unittest.TestCase):
     def test_constraint_alone_is_not_a_runtime_dependency(self):
         self.write("requirements.txt", "-c constraints.txt\n")
         self.write("constraints.txt", "google-adk==2.8.0\n")
-        report = self.output("--mode", "cloud-run", "--require-baseline", expected=3)
+        report = self.output("--mode", "cloud-run", "--require-baseline", expected=1)
         self.assertIn("only_constraint_declarations_found", report["packages"]["google-adk"]["reasons"])
 
     def test_sensitive_specifications_and_filenames_never_echo(self):
@@ -192,13 +193,13 @@ class InspectProjectTests(unittest.TestCase):
     def test_malformed_toml_errors_do_not_echo_secret(self):
         self.write("pyproject.toml", '[project]\ndependencies = ["SECRET_PARSE_VALUE"\n')
         result = self.run_helper()
-        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn("SECRET_PARSE_VALUE", result.stdout + result.stderr)
         self.assertIn("invalid TOML", result.stderr)
 
     def test_invalid_arguments_do_not_echo_secrets(self):
         for args in (("--mode", "SECRET_BAD_MODE"), ("--SECRET_BAD_FLAG",),
-                     ("--project", "SECRET_BAD_PROJECT", "--region", "us-central1", "--account", "reader@example.com", "--mode", "gke")):
+                     ("--gcp-project", "SECRET_BAD_PROJECT", "--region", "us-central1", "--account", "reader@example.com", "--mode", "gke")):
             result = self.run_helper(*args)
             self.assertEqual(result.returncode, 2)
             self.assertNotIn("SECRET_BAD", result.stdout + result.stderr)
@@ -223,7 +224,7 @@ class InspectProjectTests(unittest.TestCase):
             with self.subTest(include=include):
                 self.write("requirements.txt", "-r " + include + "\n")
                 result = self.run_helper()
-                self.assertEqual(result.returncode, 2)
+                self.assertEqual(result.returncode, 3)
                 self.assertNotIn("SECRET_", result.stdout + result.stderr)
 
     def test_include_cycle_is_bounded(self):
@@ -237,13 +238,13 @@ class InspectProjectTests(unittest.TestCase):
         report = self.output("--mode", "cloud-run", "--require-baseline")
         self.assertEqual(report["packages"]["google-adk"]["exact_pins"], ["2.8.0"])
         self.write("pyproject.toml", '[project.optional-dependencies]\ntest = ["google-adk==2.8.0"]\n')
-        report = self.output("--mode", "cloud-run", "--require-baseline", expected=3)
+        report = self.output("--mode", "cloud-run", "--require-baseline", expected=1)
         self.assertIn("conditional_or_optional_declaration_requires_review", report["packages"]["google-adk"]["reasons"])
 
     def test_depth_limit_is_visible_and_cannot_pass_baseline_gate(self):
         self.write("requirements.txt", "google-adk==2.8.0\n")
         self.write("a/b/c/d/e/requirements.txt", "google-adk==9.8.7\n")
-        report = self.output("--mode", "cloud-run", "--require-baseline", expected=3)
+        report = self.output("--mode", "cloud-run", "--require-baseline", expected=1)
         self.assertTrue(report["coverage"]["depth_limit_reached"])
         self.assertIn("inspection_depth_limit_reached", report["packages"]["google-adk"]["reasons"])
 
@@ -251,31 +252,31 @@ class InspectProjectTests(unittest.TestCase):
         path = self.write("requirements.txt", "google-adk==2.8.0\n")
         path.write_bytes(b"SECRET_INVALID_UTF8\xff")
         result = self.run_helper()
-        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn("SECRET_INVALID_UTF8", result.stderr)
         path.write_text("SECRET_UNREADABLE")
         path.chmod(0)
         try:
             if os.geteuid() != 0:
                 result = self.run_helper()
-                self.assertEqual(result.returncode, 2)
+                self.assertEqual(result.returncode, 3)
                 self.assertNotIn("SECRET_UNREADABLE", result.stderr)
         finally:
             path.chmod(0o600)
 
-    def test_missing_include_and_oversized_manifest_exit_two(self):
+    def test_missing_include_and_oversized_manifest_exit_three(self):
         self.write("requirements.txt", "-r SECRET_MISSING.txt\n")
         result = self.run_helper()
-        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn("SECRET_MISSING", result.stderr)
         self.write("requirements.txt", "#" * 131073)
-        self.assertEqual(self.run_helper().returncode, 2)
+        self.assertEqual(self.run_helper().returncode, 3)
 
     def test_manifest_count_limit(self):
         for index in range(65):
             self.write(f"requirements-{index}.txt", "google-adk==2.8.0\n")
         result = self.run_helper()
-        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.returncode, 3)
         self.assertIn("Manifest count limit", result.stderr)
 
     def test_missing_prerequisites_are_reported_without_execution(self):
@@ -296,7 +297,7 @@ class InspectProjectTests(unittest.TestCase):
     def test_targeted_plan_has_explicit_scopes_and_never_executes(self):
         for mode, count in (("cloud-run", 4), ("agent-runtime", 3), ("gke", 4)):
             with self.subTest(mode=mode):
-                report = self.output("--mode", mode, "--project", "sample-project-123", "--region", "us-central1", "--account", "reader@example.com", empty_path=True)
+                report = self.output("--mode", mode, "--gcp-project", "sample-project-123", "--region", "us-central1", "--account", "reader@example.com", empty_path=True)
                 commands = report["planned_read_only_cloud_commands"]
                 self.assertEqual(len(commands), count)
                 for command in commands:
@@ -310,14 +311,33 @@ class InspectProjectTests(unittest.TestCase):
 
     def test_partial_auto_and_unsafe_targets_are_rejected(self):
         for args in (
-            ("--project", "sample-project-123"),
-            ("--project", "sample-project-123", "--region", "us-central1", "--account", "reader@example.com"),
-            ("--mode", "gke", "--project", "sample-project-123", "--region", "global", "--account", "reader@example.com"),
-            ("--mode", "gke", "--project", "sample-project-123", "--region", "us-central1", "--account", "$(SECRET_COMMAND)@example.com"),
+            ("--gcp-project", "sample-project-123"),
+            ("--gcp-project", "sample-project-123", "--region", "us-central1", "--account", "reader@example.com"),
+            ("--mode", "gke", "--gcp-project", "sample-project-123", "--region", "global", "--account", "reader@example.com"),
+            ("--mode", "gke", "--gcp-project", "sample-project-123", "--region", "us-central1", "--account", "$(SECRET_COMMAND)@example.com"),
         ):
             result = self.run_helper(*args)
             self.assertEqual(result.returncode, 2)
             self.assertNotIn("SECRET_COMMAND", result.stderr)
+
+    def test_root_is_a_deprecated_alias_for_project(self):
+        self.write("requirements.txt", "google-adk==2.8.0\n")
+        old = subprocess.run([sys.executable, str(HELPER), "--root", str(self.root)],
+                             text=True, capture_output=True, timeout=15)
+        self.assertEqual(old.returncode, 0, old.stderr)
+        self.assertIn("--root is deprecated; use --project", old.stderr)
+        self.assertEqual(json.loads(old.stdout), self.output())
+
+    def test_project_is_a_directory_and_gcp_ids_need_gcp_project(self):
+        target = ("--region", "us-central1", "--account", "reader@example.com", "--mode", "gke")
+        for argv in (["--project", "sample-project-123", *target],
+                     ["--root", str(self.root), "--project", "sample-project-123", *target]):
+            with self.subTest(argv=argv[:2]):
+                result = subprocess.run([sys.executable, str(HELPER), *argv],
+                                        text=True, capture_output=True, timeout=15)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn("--gcp-project", result.stderr)
+                self.assertEqual(result.stdout, "")
 
 
 if __name__ == "__main__":

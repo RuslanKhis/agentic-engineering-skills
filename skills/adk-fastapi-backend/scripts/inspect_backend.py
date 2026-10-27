@@ -3,9 +3,9 @@
 
 Python 3.11+; standard library only. Reads manifests, uv.lock and bounded
 source text; never imports or runs project code, never reads .env files,
-never follows symlinks and makes no network calls. --dry-run has exactly the
-same read-only effect. Exit codes: 0 inspection complete; 2 invalid input;
-4 inspection incomplete (limits reached or files unreadable).
+never follows symlinks and makes no network calls. Exit codes: 0 inspection
+complete; 2 invalid input; 3 inspection incomplete (limits reached or files
+unreadable). --dry-run is a deprecated no-op kept for old commands.
 
 Findings are pointers for a person to read, not verdicts: a pattern match
 says where to look, and its absence proves nothing.
@@ -262,10 +262,23 @@ class SafeArgumentParser(argparse.ArgumentParser):
         self.exit(2, "error: invalid arguments; use --help for the accepted interface.\n")
 
 
+class Deprecated(argparse.Action):
+    """An old flag spelling that still works: hidden from --help, noted on stderr."""
+
+    def __init__(self, option_strings, dest, note, nargs=None, const=None, default=argparse.SUPPRESS, **kwargs):
+        self.note = note
+        super().__init__(option_strings, dest, nargs=nargs, const=const, default=default,
+                         help=argparse.SUPPRESS, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(f"{parser.prog}: {option_string} is deprecated; {self.note}", file=sys.stderr)
+        setattr(namespace, self.dest, self.const if self.nargs == 0 else values)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = SafeArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--project", required=True, type=Path, help="existing project directory (no symlink root)")
-    parser.add_argument("--dry-run", action="store_true", help="same read-only inspection")
+    parser.add_argument("--dry-run", action=Deprecated, nargs=0, const=True, default=False, note="this helper only reads, so it changes nothing")
     args = parser.parse_args(argv)
     try:
         info = args.project.lstat()
@@ -290,7 +303,7 @@ def main(argv: list[str] | None = None) -> int:
                               "Only uv.lock is read for resolved versions; other lockfiles are not parsed.",
                               "Project code is never imported, so runtime behaviour is not checked."]}
     print(json.dumps(output, indent=2, sort_keys=True))
-    return 0 if result["complete_within_scope"] else 4
+    return 0 if result["complete_within_scope"] else 3
 
 
 if __name__ == "__main__":

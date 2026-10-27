@@ -48,7 +48,7 @@ class LintTests(unittest.TestCase):
 
     def scan(self, *args):
         result = self.run_cli(*args)
-        self.assertIn(result.returncode, (0, 1), result.stderr)
+        self.assertIn(result.returncode, (0, 3), result.stderr)
         return result, json.loads(result.stdout)
 
     @staticmethod
@@ -266,11 +266,11 @@ class LintTests(unittest.TestCase):
         self.write("a.py", "a = 1\n")
         self.write("b.py", "b = 2\n")
         result, data = self.scan("--max-files", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertIn("file_count_limit", {i["reason"] for i in data["issues"]})
         self.write("bad.py", f"def {marker}(\n")
         result, data = self.scan()
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn(marker, result.stdout + result.stderr)
         self.assertIn({"path": "bad.py", "reason": "malformed_file"}, data["issues"])
         outside = Path(self.temp.name) / "outside.py"

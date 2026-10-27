@@ -434,7 +434,8 @@ class CheckThemeTests(unittest.TestCase):
         for extra in ((), ("--json",)):
             normal, _ = self.run_cli("--css", str(css), *extra)
             dry, _ = self.run_cli("--css", str(css), "--dry-run", *extra)
-            self.assertEqual((normal.returncode, normal.stdout, normal.stderr), (dry.returncode, dry.stdout, dry.stderr))
+            self.assertEqual((normal.returncode, normal.stdout), (dry.returncode, dry.stdout))
+            self.assertIn("--dry-run is deprecated", dry.stderr)
         self.assertEqual(sorted(p.name for p in self.root.iterdir()), before)
         self.assertEqual(css.read_text(encoding="utf-8"), STOCK_CSS)
 

@@ -18,6 +18,7 @@ import argparse
 import json
 from pathlib import Path
 import re
+import sys
 
 
 DEFAULT_MIN_CHARS = 200
@@ -189,14 +190,14 @@ def main() -> int:
     try:
         pages = inventory_from_pdf(args.pdf) if args.pdf else load_inventory(args.inventory)
     except RuntimeError as exc:
-        print(exc)
+        print(exc, file=sys.stderr)
         return 2
     try:
         report = qualify(pages, min_chars=args.min_chars, min_alnum_ratio=args.min_alnum_ratio,
                          min_vector_ops=args.min_vector_ops)
     except (ValueError, TypeError) as exc:
-        print(f"invalid inventory: {exc}")
-        return 1
+        print(f"invalid inventory: {exc}", file=sys.stderr)
+        return 2
     print(json.dumps(report, indent=2))
     return 0
 

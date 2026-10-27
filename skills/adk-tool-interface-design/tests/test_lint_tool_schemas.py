@@ -68,7 +68,7 @@ class LintTests(unittest.TestCase):
 
     def scan(self, *args):
         result = self.run_cli(*args)
-        self.assertIn(result.returncode, (0, 1), result.stderr)
+        self.assertIn(result.returncode, (0, 3), result.stderr)
         return result, json.loads(result.stdout)
 
     def findings(self, data, kind):
@@ -398,16 +398,16 @@ other = LlmAgent(name="other", tools=[pkg.tools.get_order])
         self.write("bad.py", f"def {marker}(\n")
         self.write("ok.py", CLEAN)
         result, data = self.scan()
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertIn({"path": "bad.py", "reason": "malformed_file"}, data["issues"])
         self.assertNotIn(marker, result.stdout + result.stderr)
         self.assertEqual(data["files_inspected"], 1)
         self.write("deep/one/two/hidden.py", "pass\n")
         result, data = self.scan("--max-depth", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertTrue(any(i["reason"] == "depth_limit" for i in data["issues"]))
         result, data = self.scan("--max-files", "1")
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertTrue(any(i["reason"] == "file_count_limit" for i in data["issues"]))
 
     def test_sensitive_and_excluded_paths_are_skipped(self):
@@ -419,7 +419,7 @@ other = LlmAgent(name="other", tools=[pkg.tools.get_order])
         outside.write_text(CLEAN)
         (self.root / "link.py").symlink_to(outside)
         result, data = self.scan()
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 3)
         self.assertNotIn(marker, result.stdout + result.stderr)
         self.assertEqual({i["reason"] for i in data["issues"]}, {"symlink_skipped"})
         self.assertEqual(data["files_inspected"], 1)
