@@ -17,6 +17,37 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## The first shell-enabled scenario run · 28 October 2026
+
+The scenario runner can now give the agent Bash. A shell cannot be confined
+to the workspace by path, so such a run is recorded as **unconfined**.
+Instead, the runner scrubs the agent's environment:
+- it removes `GOOGLE_`, `GCLOUD_`, `CLOUDSDK_`, `AWS_`, `AZURE_` and `ARM_`
+  variables, SSH agent and git-hosting tokens;
+- it points gcloud, AWS, Azure, Docker, kubectl, git, gh and npm
+  configuration at empty per-scenario paths;
+- it keeps HOME real, because the claude CLI does not log in without it.
+
+Shell commands and their output are recorded and shown to the judge. A
+smoke test in a scenario workspace showed gcloud with no account, project
+or credentials. Two runner defects found during the run were fixed: a
+`cd` moved the allow rules away from the workspace, and shell reads of
+skill files were not counted.
+
+**Results.** All four governance packs never run before were run, 22 of 23
+assertions, each running `check_governance.py` until every draft passed.
+Eleven scenarios with shell-dependent assertions were re-run: 31 of 48
+(18 before). Of the 17 shell-dependent rows, 12 now pass, each by actually
+running the helper, tests or git, and none through the not-run escape.
+Triage of 25 rows found no skill defect, 7 fixture, assertion or runner
+defects (five new ones for the owner) and 18 variance. An audit of 195
+shell commands found no network install, no cloud CLI call and no read of
+cloud or SSH credentials. It did find listings under the real home
+(`~/.claude/skills`, `~/.npm`), a `docker info` probe and reads of Claude
+Code's own spilled output. Spend was $14.58 of a $15 cap; about 27
+helper-dependent scenarios and the four earlier governance packs remain.
+[Shell run record](shell-run-2026-10-28.md).
+
 ## The last defects from the Phase 10 triage · 28 October 2026
 
 The workflow-design description now names checkpoint reuse after a changed
