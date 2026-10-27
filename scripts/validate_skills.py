@@ -308,6 +308,11 @@ def check_release_versions(root: Path, packages: list[Path], report: Report) -> 
                              "plugin.json so the two cannot disagree")
 
 
+# SKILL.md is read in full whenever the skill activates; references load only when a step names them.
+# The budget flags outliers worth splitting. It warns and never fails, like the 500-line advisory.
+WORD_BUDGET = 2500
+
+
 def validate_package(package: Path, report: Report) -> None:
     stats = PackageStats(package.name)
     report.packages.append(stats)
@@ -321,6 +326,11 @@ def validate_package(package: Path, report: Report) -> None:
             if stats.lines > 500:
                 report.warnings.append(f"{entrypoint}: {stats.lines} lines; consider progressive disclosure (not a quality score)")
             body = check_frontmatter(text, entrypoint, package, report)
+            body_words = len(body.split())
+            if body_words > WORD_BUDGET:
+                report.warnings.append(
+                    f"{entrypoint}: body is {body_words} words, over the {WORD_BUDGET}-word budget; it loads on every "
+                    "activation, so move mode-specific detail into a reference (not a quality score)")
     license_path = package / "LICENSE"
     if contained_file(license_path, package, report):
         license_text = read_text(license_path, report)
