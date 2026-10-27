@@ -19,14 +19,15 @@ library. Preserve the target's interpreter and pins.
    not act on a real account. Save its actual response separately.
 3. After completion, inspect the generated code before executing it. Select
    the trusted output through `SAFE_API_EVAL_PROJECT`, then run the independent
-   acceptance tests from outside the fixture. `SKILL_DIR` is the installed
-   skill path and `PYTHON` an existing compatible interpreter:
+   acceptance tests from outside the fixture. `TRIAL_DIR` is this directory
+   (`evals/trials/safe-api-tool-calls` in the source repository, never copied
+   with the skill) and `PYTHON` an existing compatible interpreter:
 
    ```bash
    SAFE_API_EVAL_PROJECT="$ADAPTER_OUTPUT" "$PYTHON" -B -m unittest discover \
-     -s "$SKILL_DIR/tests/acceptance" -p test_adapter.py -v
+     -s "$TRIAL_DIR/acceptance" -p test_adapter.py -v
    SAFE_API_EVAL_PROJECT="$APPROVAL_OUTPUT" "$PYTHON" -B -m unittest discover \
-     -s "$SKILL_DIR/tests/acceptance" -p test_approval.py -v
+     -s "$TRIAL_DIR/acceptance" -p test_approval.py -v
    ```
 
    Set the two output paths to the completed temporary copies. These tests
@@ -58,7 +59,7 @@ test. This evaluation does not reproduce a live ADK confirmation dialog,
 provider deduplication, concurrency, managed deployment or billing behaviour.
 
 The earlier six-case creation evaluation remains in
-[forward-evaluation.md](forward-evaluation.md). These retained fixtures add
+[forward-evaluation.md](../../../docs/skill-evidence/safe-api-tool-calls/forward-evaluation.md). These retained fixtures add
 repeatable coverage for the later response-validation, stale-approval and
 operational-recovery guidance; they do not retrospectively reconstruct the
 earlier disposable fixtures.

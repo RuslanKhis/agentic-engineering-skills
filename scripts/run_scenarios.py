@@ -4,7 +4,9 @@
 Each selected scenario gets a fresh workspace under a temporary run directory:
 the fixture listed for it in evals/scenario-fixtures.json (if any) and only the
 scenario's ``available_skills`` that exist in skills/, copied into
-``.claude/skills/``. A coding agent receives the scenario prompt plus the
+``.claude/skills/``. Grader material listed for the scenario (files under
+evals/graders/) is copied beside the workspace, never into it, and only the
+judge sees it. A coding agent receives the scenario prompt plus the
 context as the situation. A judge model then grades each assertion PASS or
 FAIL from the agent's final answer, the files it wrote and the skills it
 loaded, quoting its evidence. Scenarios whose context describes fixtures that
@@ -47,6 +49,7 @@ from model_backends import (DEFAULT_MODEL, BackendError, call_model, canonical_j
                             extract_json, git_commit, sha256_bytes)
 
 ROOT = Path(__file__).resolve().parents[1]
+GRADER_ROOT = "evals/graders/"
 SCHEMA = "scenario-results/1"
 STATUSES = ("runnable", "repo-fixture", "fixture-missing")
 AGENT_TOOLS = "Read,Write,Edit,Glob,Grep,Skill"
@@ -95,11 +98,18 @@ def classify(case: dict, fixtures: dict, root: Path) -> dict:
     entry = dict(fixtures.get(case["id"]) or {"status": "fixture-missing"})
     if entry.get("status") not in STATUSES:
         raise InputError(f"{case['id']}: unknown fixture status {entry.get('status')!r}")
+    for item in entry.get("grader", []):
+        if not item["from"].startswith(GRADER_ROOT):
+            raise InputError(f"{case['id']}: grader material must live under {GRADER_ROOT}: {item['from']}")
     if entry["status"] == "repo-fixture":
         absent = [c["from"] for c in entry.get("copy", []) if not (root / c["from"]).exists()]
         if absent or not entry.get("copy"):
             entry = {"status": "fixture-missing", "partial": "listed fixture paths are absent: "
                      + ", ".join(absent or ["(none listed)"])}
+    absent = [g["from"] for g in entry.get("grader", []) if not (root / g["from"]).is_file()]
+    if absent and entry["status"] != "fixture-missing":
+        entry = {"status": "fixture-missing", "partial": "listed grader material is absent: "
+                 + ", ".join(absent)}
     if entry["status"] == "fixture-missing" and "partial" not in entry:
         entry["needs"] = first_sentence(case["context"])
     installed = {p.parent.name for p in (root / "skills").glob("*/SKILL.md")}
@@ -177,6 +187,12 @@ def prepare(root: Path, cases: list[dict], fixtures: dict, tmp_root: Path | None
                     target.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copy2(source, target)
             fixture_files = tree_digest(workspace)
+            grader = []
+            for item in fixtures.get(case["id"], {}).get("grader", []):
+                target = case_dir / "grader" / Path(item["from"]).name
+                target.parent.mkdir(exist_ok=True)
+                shutil.copy2(root / item["from"], target)
+                grader.append(target.name)
             installed = []
             for name in case["available_skills"]:
                 if (root / "skills" / name / "SKILL.md").exists():
@@ -187,6 +203,7 @@ def prepare(root: Path, cases: list[dict], fixtures: dict, tmp_root: Path | None
             (case_dir / "fixture-digest.json").write_text(json.dumps(fixture_files, indent=1) + "\n",
                                                          encoding="utf-8")
             entry["skills_installed"] = installed
+            entry["grader_files"] = grader
         entries.append(entry)
     manifest = {"created": now(), "root": str(root), "commit": git_commit(root),
                 "scenarios": entries}
@@ -316,10 +333,23 @@ def evidence_text(case_dir: Path) -> tuple[str, dict]:
     return evidence, {"final_chars": len(final), "files": list(files), "agent": agent}
 
 
-def judge_prompt(case: dict, evidence: str) -> str:
+def grader_text(case_dir: Path) -> str:
+    """Grader-side files for the judge only; the agent's workspace never holds them."""
+    folder = case_dir / "grader"
+    parts = []
+    for path in sorted(folder.glob("*")) if folder.is_dir() else []:
+        text = path.read_text(encoding="utf-8", errors="replace")
+        text = text if len(text) <= FILE_LIMIT else text[:FILE_LIMIT] + "\n[truncated]"
+        parts.append(f"### {path.name}\n\n```\n{text}\n```")
+    return "\n\n".join(parts)
+
+
+def judge_prompt(case: dict, evidence: str, grader: str = "") -> str:
     assertions = "\n".join(f"A{i}: {text}" for i, text in enumerate(case["assertions"], 1))
+    material = ("## Grader material (withheld from the agent; use it to check the agent's work, "
+                f"never quote it as evidence)\n\n{grader}\n\n" if grader else "")
     return (f"## Request given to the agent\n\n{case['prompt']}\n\n## Situation\n\n{case['context']}\n\n"
-            f"## Assertions\n\n{assertions}\n\n## Evidence\n\n{evidence}\n\n"
+            f"## Assertions\n\n{assertions}\n\n{material}## Evidence\n\n{evidence}\n\n"
             f"Return one verdict for each of the {len(case['assertions'])} assertions as JSON.")
 
 
@@ -348,7 +378,7 @@ def parse_verdicts(text: str, case: dict, evidence: str) -> list[dict]:
 def judge_case(run_dir: Path, case: dict, backend: str, model: str, timeout: float) -> dict:
     case_dir = run_dir / case["id"]
     evidence, facts = evidence_text(case_dir)
-    prompt = judge_prompt(case, evidence)
+    prompt = judge_prompt(case, evidence, grader_text(case_dir))
     record = {"judge_backend": backend, "judge_model": model}
     if backend == "files":
         answer = case_dir / "judge-answer.json"

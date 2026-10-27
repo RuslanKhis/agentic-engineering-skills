@@ -35,12 +35,14 @@ the gate.
 
 Ingestion first. The memory skill ships four one-page PDFs (a text page, a
 header-only scan with an embedded image, a table page and a drawing with a
-scale bar) and the inventory its generator wrote:
+scale bar). The inventory its generator wrote is the answer key, so the skill
+does not ship it; regenerate it into a scratch directory:
 
 ```bash
-SKILL_DIR=skills/adk-memory-architecture
+SKILL_DIR=skills/adk-memory-architecture; SCRATCH="$(mktemp -d)"
+"$PYTHON" "$SKILL_DIR/scripts/make_ingestion_fixture.py" --output "$SCRATCH/pack"
 "$PYTHON" "$SKILL_DIR/scripts/qualify_ingestion.py" \
-  --inventory "$SKILL_DIR/assets/ingestion-fixture/inventory.json"
+  --inventory "$SCRATCH/pack/inventory.json"
 ```
 
 The report routes `scanned-page.pdf` to `ocr_or_vision`, `table-page.pdf` and

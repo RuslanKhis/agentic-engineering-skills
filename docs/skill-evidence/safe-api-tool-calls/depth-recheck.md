@@ -33,7 +33,7 @@ current documentation does not expand the tested version matrix.
 
 ## Retained forward evaluations
 
-[forward-cases.md](forward-cases.md) documents exact fixture inputs, requests,
+[forward-cases.md](../../../evals/trials/safe-api-tool-calls/forward-cases.md) documents exact fixture inputs, requests,
 independent acceptance checks and how to repeat the exercise in a clean copy.
 The two code fixtures deliberately start broken and are not production assets.
 Evaluators received a copied skill, their own fixture and its request. They did

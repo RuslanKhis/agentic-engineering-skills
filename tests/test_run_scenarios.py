@@ -42,11 +42,13 @@ def make_root(base: Path) -> Path:
         {"id": "broken-fixture", "prompt": "x", "expected_primary": None, "available_skills": ["alpha-skill"],
          "context": "c.", "assertions": ["a"]},
     ]
-    (base / "evals").mkdir()
+    (base / "evals" / "graders" / "with-seed").mkdir(parents=True)
+    (base / "evals" / "graders" / "with-seed" / "answers.json").write_text('{"fixed": "SECRET-ANSWER"}')
     (base / "evals" / "scenarios.json").write_text(json.dumps({"version": 1, "cases": cases}))
     (base / "evals" / "scenario-fixtures.json").write_text(json.dumps({"version": 1, "scenarios": {
         "empty-design": {"status": "runnable", "note": "n"},
-        "with-seed": {"status": "repo-fixture", "copy": [{"from": "fixtures/seed", "to": "."}]},
+        "with-seed": {"status": "repo-fixture", "copy": [{"from": "fixtures/seed", "to": "."}],
+                      "grader": [{"from": "evals/graders/with-seed/answers.json"}]},
         "broken-fixture": {"status": "repo-fixture", "copy": [{"from": "fixtures/absent", "to": "."}]},
     }}))
     return base
@@ -113,6 +115,33 @@ class PrepareTests(unittest.TestCase):
             statuses = {e["id"]: e["status"] for e in manifest["scenarios"]}
             self.assertEqual(statuses["imaginary-project"], "fixture-missing")
             self.assertEqual(manifest["scenarios"][0]["skills_installed"], ["alpha-skill"])
+
+    def test_grader_material_reaches_the_judge_but_not_the_workspace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            run_dir, manifest = scen.prepare(root, [cases[1]], scen.load_fixtures(root), Path(tmp) / "runs")
+            case_dir = run_dir / "with-seed"
+            self.assertEqual(manifest["scenarios"][0]["grader_files"], ["answers.json"])
+            self.assertTrue((case_dir / "grader/answers.json").exists())
+            workspace_text = "".join(p.read_text() for p in (case_dir / "workspace").rglob("*") if p.is_file())
+            self.assertNotIn("SECRET-ANSWER", workspace_text)
+            self.assertNotIn("SECRET-ANSWER", (case_dir / "task.md").read_text())
+            (case_dir / "final.md").write_text("Fixed.")
+            pending = scen.judge_case(run_dir, cases[1], "files", "human", 60)
+            self.assertEqual(pending["status"], "awaiting-judge")
+            prompt = (case_dir / "judge-prompt.md").read_text()
+            self.assertIn("SECRET-ANSWER", prompt.split("## Evidence")[0])
+            self.assertNotIn("SECRET-ANSWER", prompt.split("## Evidence")[1])
+
+    def test_grader_material_outside_evals_graders_is_refused(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            fixtures = {"with-seed": {"status": "repo-fixture", "copy": [{"from": "fixtures/seed", "to": "."}],
+                                      "grader": [{"from": "skills/beta-skill/SKILL.md"}]}}
+            with self.assertRaises(scen.InputError):
+                scen.classify(cases[1], fixtures, root)
 
     def test_fixture_cannot_escape_workspace(self):
         with tempfile.TemporaryDirectory() as tmp:
