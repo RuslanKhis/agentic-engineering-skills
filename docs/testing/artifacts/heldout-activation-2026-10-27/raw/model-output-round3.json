@@ -1,0 +1,66 @@
+{
+ "short": "model-output",
+ "round": 3,
+ "model": "claude-opus-5-5",
+ "created": "2026-10-27T10:12:48+00:00",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-opus-5-5",
+  "--output-format",
+  "json",
+  "--system-prompt",
+  "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+  "--tools",
+  "",
+  "--safe-mode",
+  "--disable-slash-commands",
+  "--no-session-persistence",
+  "--strict-mcp-config",
+  "--setting-sources",
+  "",
+  "(prompt on stdin)"
+ ],
+ "cwd": "fresh empty temporary directory (tempfile.TemporaryDirectory)",
+ "system": "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+ "prompt": "The coding assistant is used by developers who build AI agents in Python with Google's Agent Development Kit, usually hosted on Google Cloud. Their requests may or may not mention that stack.\n\nHere is one kind of help the assistant can give:\n\n<brief>\nA developer needs an agent to return data in a fixed machine-readable shape, but it sometimes answers with chatty text, wraps the data in markdown, or produces something that fails parsing. Separately or together, they must decide which Gemini model version and settings to use (how much reasoning, how much randomness), cope with a model version being retired, or switch to a backup model automatically when the main one is unavailable.\n</brief>\n\nWrite three requests a developer might type to the assistant:\n- two that need exactly this kind of help;\n- one that sounds related but actually needs a different kind of help.\n\nWrite as real developers do: vary the tone (terse, chatty, frustrated, formal); make some vague and some full of detail that does not matter; mention their own project, code or deadline where natural. Do not reuse the wording of the brief. For the third request, say in plain words what kind of help it actually needs instead.\n\nAnswer with JSON only, in exactly this shape:\n{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"elsewhere\", \"text\": \"...\", \"needs_instead\": \"...\"}\n]}",
+ "reply_text": "{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"our invoice-extraction agent (ADK, running on Cloud Run) is supposed to spit out JSON matching a pydantic schema but like 1 in 20 calls it comes back as ```json ... ``` fenced or with a 'Sure! Here is the extracted data:' preamble and json.loads blows up downstream. I've got output_schema set on the LlmAgent but I also have tools on it so I'm not sure that's even being honored?? Demo to the finance team is Thursday, need this rock solid. Also should I be lowering temperature for this or is that a myth\"},\n {\"kind\": \"fits\", \"text\": \"Got an email from GCP that the gemini flash version we pin in prod is being deprecated next quarter. Need to pick a replacement and ideally set things up so if the primary model returns 429/503 we fall back to a secondary instead of the whole agent erroring out. Also the newer models have thinking config — what budget makes sense for a routing agent that mostly just classifies tickets? Don't want latency to double.\"},\n {\"kind\": \"elsewhere\", \"text\": \"My ADK agent's JSON output looks fine in adk web but when I deploy to Agent Engine the session state that's supposed to hold the parsed result is just empty on the next turn. The model response itself is correct in the logs, it's the state that's lost. Any idea what's going on?\", \"needs_instead\": \"Debugging session/state persistence on Agent Engine (session service configuration, output_key and state writes across turns), not model output formatting or model selection.\"}\n]}",
+ "reply_model": "claude-opus-5-5",
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 1037,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 521,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1037,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 521,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1037,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1037
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "cost_usd": 0.018723999999999998,
+ "duration_s": 9.7
+}

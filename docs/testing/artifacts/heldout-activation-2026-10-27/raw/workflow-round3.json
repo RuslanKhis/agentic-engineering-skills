@@ -1,0 +1,66 @@
+{
+ "short": "workflow",
+ "round": 3,
+ "model": "claude-opus-5-5",
+ "created": "2026-10-27T10:12:48+00:00",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-opus-5-5",
+  "--output-format",
+  "json",
+  "--system-prompt",
+  "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+  "--tools",
+  "",
+  "--safe-mode",
+  "--disable-slash-commands",
+  "--no-session-persistence",
+  "--strict-mcp-config",
+  "--setting-sources",
+  "",
+  "(prompt on stdin)"
+ ],
+ "cwd": "fresh empty temporary directory (tempfile.TemporaryDirectory)",
+ "system": "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+ "prompt": "The coding assistant is used by developers who build AI agents in Python with Google's Agent Development Kit, usually hosted on Google Cloud. Their requests may or may not mention that stack.\n\nHere is one kind of help the assistant can give:\n\n<brief>\nAn AI agent is built from several steps or helper agents. The developer must decide how the steps are arranged (one after another, side by side, repeated until a condition holds, branching) or whether plain code would do, or fix what breaks where one step hands its results to the next through values saved in the conversation, or where hooks that run around model calls misbehave.\n</brief>\n\nWrite three requests a developer might type to the assistant:\n- two that need exactly this kind of help;\n- one that sounds related but actually needs a different kind of help.\n\nWrite as real developers do: vary the tone (terse, chatty, frustrated, formal); make some vague and some full of detail that does not matter; mention their own project, code or deadline where natural. Do not reuse the wording of the brief. For the third request, say in plain words what kind of help it actually needs instead.\n\nAnswer with JSON only, in exactly this shape:\n{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"elsewhere\", \"text\": \"...\", \"needs_instead\": \"...\"}\n]}",
+ "reply_text": "{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"ok so I've got a SequentialAgent: researcher -> summarizer -> formatter. researcher sets output_key=\\\"findings\\\" and summarizer's instruction uses {findings}. Half the time summarizer throws a KeyError on 'findings' or gets an empty string. Running on Agent Engine, Gemini 2.5 Flash. The researcher definitely produces text, I can see it in the trace. What am I missing? Demo is Thursday, pls help\"},\n {\"kind\": \"fits\", \"text\": \"Design question for our invoice-processing agent. Right now it's one big LlmAgent with 9 tools and it's flaky. I'm thinking of splitting it: extract fields, validate against the ERP, and if validation fails re-extract up to 3 times, then either auto-approve or route to a human-review sub-agent. Should the retry part be a LoopAgent with an escalate check, or should I just write a custom BaseAgent with plain Python control flow? Also the 'extract vendor info' and 'extract line items' steps don't depend on each other, so is ParallelAgent worth it there, or does it just complicate how state gets merged? Not looking for code yet, just a sane structure.\"},\n {\"kind\": \"elsewhere\", \"text\": \"My before_model_callback that redacts PII from the prompt works fine locally with adk web, but after deploying to Cloud Run the container crashes at startup with 'ModuleNotFoundError: No module named presidio_analyzer'. I've got it in requirements.txt in the agent folder. Using adk deploy cloud_run. Ugh.\", \"needs_instead\": \"Deployment/packaging help: getting dependencies into the Cloud Run build (where requirements.txt must sit for adk deploy, the build context, or a custom Dockerfile). The callback logic itself isn't the problem.\"}\n]}",
+ "reply_model": "claude-opus-5-5",
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 1017,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 626,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1017,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 626,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1017,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1017
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "cost_usd": 0.020664,
+ "duration_s": 10.2
+}

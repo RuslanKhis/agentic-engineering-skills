@@ -8,7 +8,8 @@ description: >-
   confirmation never runs the side effect; an approved write runs once). Use
   for unreliable API calls, ambiguous write outcomes, unsafe tool replay or
   setup failures blocking ADK API verification. Do not activate for model-only
-  tuning (adk-model-and-output-contracts owns model settings), deciding which
+  tuning or retries on the model's own 429 or quota errors
+  (adk-model-and-output-contracts owns model settings), deciding which
   actions need human approval (adk-operational-guardrails), session
   continuation or memory (adk-memory-architecture), MCP or A2A connection
   wiring (adk-agent-interoperability), tool docstrings or error wording for

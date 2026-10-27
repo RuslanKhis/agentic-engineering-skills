@@ -10,11 +10,11 @@ description: >-
   Use when an agent follows its prompt poorly, over- or under-calls tools,
   routes to the wrong sub-agent, raises templating KeyErrors, or a prompt must
   move to a new model generation. Do not activate for the measured evaluation
-  loop itself (adk-agent-evaluation), orchestration structure
-  (adk-workflow-design), tool docstrings and parameter schemas
+  loop (adk-agent-evaluation), orchestration or a key an earlier agent's
+  output_key never wrote (adk-workflow-design), tool docstrings and parameter schemas
   (adk-tool-interface-design), output schemas or model configuration
   (adk-model-and-output-contracts), releasing prompt versions
-  (adk-release-engineering), or prompt-injection screening products
+  (adk-release-engineering), or injection-screening products
   (protect-adk-sensitive-data).
 metadata:
   author: Ruslan Khissamiyev

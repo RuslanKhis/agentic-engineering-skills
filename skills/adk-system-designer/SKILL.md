@@ -9,8 +9,10 @@ description: >-
   ships first and what follows, and turning the design and plan into a client
   proposal, statement of work or change request. Do not activate before a use
   case and its measure are chosen (adk-discovery), for a decision deck,
-  rollout pack or value report (adk-presenter), or for a focused memory,
-  workflow, frontend or deployment change (use that specialist directly).
+  rollout pack or value report (adk-presenter), for a new feature in an
+  application whose design is already accepted (adk-engineer), or for a
+  focused memory, workflow, frontend or deployment change (use that
+  specialist directly).
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

@@ -1,0 +1,66 @@
+{
+ "short": "engineer",
+ "round": 3,
+ "model": "claude-opus-5-5",
+ "created": "2026-10-27T10:12:48+00:00",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-opus-5-5",
+  "--output-format",
+  "json",
+  "--system-prompt",
+  "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+  "--tools",
+  "",
+  "--safe-mode",
+  "--disable-slash-commands",
+  "--no-session-persistence",
+  "--strict-mcp-config",
+  "--setting-sources",
+  "",
+  "(prompt on stdin)"
+ ],
+ "cwd": "fresh empty temporary directory (tempfile.TemporaryDirectory)",
+ "system": "You write realistic test requests that software developers type to an AI coding assistant. Answer with JSON only.",
+ "prompt": "The coding assistant is used by developers who build AI agents in Python with Google's Agent Development Kit, usually hosted on Google Cloud. Their requests may or may not mention that stack.\n\nHere is one kind of help the assistant can give:\n\n<brief>\nA developer working on an AI agent project built with Google's Agent Development Kit in Python has a broad or many-sided request: a change that touches several parts at once (for example the interface, the server, the agent's helper functions and hosting), or a request where they simply do not know which specialist area it falls under. They want a general starting point that works out which kinds of expertise the job needs.\n</brief>\n\nWrite three requests a developer might type to the assistant:\n- two that need exactly this kind of help;\n- one that sounds related but actually needs a different kind of help.\n\nWrite as real developers do: vary the tone (terse, chatty, frustrated, formal); make some vague and some full of detail that does not matter; mention their own project, code or deadline where natural. Do not reuse the wording of the brief. For the third request, say in plain words what kind of help it actually needs instead.\n\nAnswer with JSON only, in exactly this shape:\n{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"fits\", \"text\": \"...\"},\n {\"kind\": \"elsewhere\", \"text\": \"...\", \"needs_instead\": \"...\"}\n]}",
+ "reply_text": "{\"requests\": [\n {\"kind\": \"fits\", \"text\": \"ok so product wants 'multi-language support' for our ADK support agent by end of sprint (friday!!). I honestly don't know where to even start. we have a React chat widget, a FastAPI server that wraps the runner, a bunch of tools that call our ticketing API and return English strings, and the whole thing deploys to Cloud Run via a GitHub Actions workflow. does this touch the prompts? the tools? the frontend? all of it? can you figure out what areas this actually involves and give me a plan before I start ripping things apart\"},\n {\"kind\": \"fits\", \"text\": \"Need to add per-user file uploads to our agent. Users drop a PDF in the web UI, the agent should be able to read it with a tool, files go to GCS, and it has to work in our Agent Engine deployment not just adk web locally. Not sure which pieces need changing or in what order. Break it down for me.\"},\n {\"kind\": \"elsewhere\", \"text\": \"my ADK agent keeps calling the search_orders tool twice in a row with the same args and I can't tell why. the tool is a plain python function returning a dict, model is gemini-2.5-flash. here's the instruction string and the tool def, what's making it loop?\", \"needs_instead\": \"Focused debugging of one agent's tool-calling behavior: looking at the instruction prompt, the tool definition and return value. It's a narrow, single-area problem, not a broad multi-part task that needs triage across specialties.\"}\n]}",
+ "reply_model": "claude-opus-5-5",
+ "usage": {
+  "input_tokens": 2,
+  "cache_creation_input_tokens": 1026,
+  "cache_read_input_tokens": 0,
+  "output_tokens": 495,
+  "output_tokens_details": {
+   "thinking_tokens": 0
+  },
+  "server_tool_use": {
+   "web_search_requests": 0,
+   "web_fetch_requests": 0
+  },
+  "service_tier": "standard",
+  "cache_creation": {
+   "ephemeral_1h_input_tokens": 1026,
+   "ephemeral_5m_input_tokens": 0
+  },
+  "inference_geo": "global",
+  "iterations": [
+   {
+    "input_tokens": 2,
+    "output_tokens": 495,
+    "cache_read_input_tokens": 0,
+    "cache_creation_input_tokens": 1026,
+    "cache_creation": {
+     "ephemeral_5m_input_tokens": 0,
+     "ephemeral_1h_input_tokens": 1026
+    },
+    "type": "message"
+   }
+  ],
+  "speed": "standard",
+  "fallback_credit": null
+ },
+ "cost_usd": 0.018116,
+ "duration_s": 9.2
+}
