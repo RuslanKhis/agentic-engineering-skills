@@ -1,6 +1,6 @@
 ---
 name: adk-agent-evaluation
-description: "Build, adapt or audit a Python ADK agent's testing strategy: deterministic tool and Runner tests, live evaluation sets, simulated conversations, conformance replay and strict result checks. Use for agent behaviour, regression coverage or evaluation reliability, and for improving wrong decisions through a labelled development set, error analysis, prompt and exemplar design or model escalation, and for labelling with subject-matter experts: session plan, failure taxonomy, inter-rater agreement and judge calibration against their labels. Do not activate for ordinary non-agent unit tests, standalone model benchmarks, deployment, or cloud cleanup alone."
+description: "Build, adapt or audit a Python ADK agent's testing strategy: deterministic tool and Runner tests, live evaluation sets, simulated conversations, conformance replay and strict result checks. Use for agent behaviour, regression coverage or evaluation reliability, and for improving wrong decisions through a labelled development set, error analysis or model escalation, and for labelling with subject-matter experts: session plan, failure taxonomy, inter-rater agreement and judge calibration against their labels. Do not activate for ordinary non-agent unit tests, standalone model benchmarks, deployment, or cloud cleanup alone."
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

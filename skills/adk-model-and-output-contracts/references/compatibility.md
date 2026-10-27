@@ -20,7 +20,7 @@ Read this before relying on any version-dependent behaviour in this skill. The p
 | `Gemini` options | `retry_options`, `client_kwargs`, `api_version`, `GOOGLE_GENAI_API_VERSION`; Vertex model paths force enterprise mode; 429 wrapped in `_ResourceExhaustedError` | `models/google_llm.py` |
 | Default model | `LlmAgent.DEFAULT_MODEL = "gemini-3.5-flash"` | `agents/llm_agent.py` |
 | Registry | `LLMRegistry.resolve` matches patterns; unknown `provider/model` raises with a LiteLLM install hint | `models/registry.py` |
-| Dependencies | `google-genai>=2.19,<3`; extensions `litellm>=1.84`, `anthropic>=0.78`, `openai>=2.20,<3` | `pyproject.toml` |
+| Dependencies | `google-genai>=2.19,<3`; extensions `litellm>=1.84` (no upper bound in 2.8.0; 2.13.0 caps it at `<1.106.3` after a compromised 1.107.0, see [failover and providers](failover-and-providers.md)), `anthropic>=0.78`, `openai>=2.20,<3` | `pyproject.toml` |
 | Absent | `FallbackModel`, `ADK_MAX_TOOL_ROUNDS`, `MAX_TOOL_ROUNDS_EXCEEDED` | not in 2.8.0 |
 
 ## Version table from the CHANGELOG (2.6.0 to 2.11.0)

@@ -1,6 +1,6 @@
 ---
 name: adk-operational-guardrails
-description: Implement, adapt or audit invocation limits, token budgets, repeated-tool protection, human approval and application cost controls in Python Google ADK agents. Use for runaway agent loops, cross-turn budget enforcement, risky actions awaiting review, or staged cost shutdown. Do not activate for a single HTTP retry policy, deployment alone, prompt-only editing (adk-agent-evaluation owns decision quality), or general cloud billing administration.
+description: Implement, adapt or audit invocation limits, token budgets, repeated-tool protection, human approval and application cost controls in Python Google ADK agents. Use for runaway agent loops, cross-turn budget enforcement, risky actions awaiting review, or staged cost shutdown. Do not activate for a single HTTP retry policy, deployment alone, prompt-only editing (adk-agent-instructions owns prompt wording), or general cloud billing administration.
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

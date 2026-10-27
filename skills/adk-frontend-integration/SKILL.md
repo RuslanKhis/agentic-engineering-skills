@@ -1,6 +1,6 @@
 ---
 name: adk-frontend-integration
-description: Implement, adapt, review or select a web interface for a Google ADK agent using a custom JSON API or AG-UI with CopilotKit, including gateways to managed Agent Runtime. Use for agent-to-browser contracts, session ownership, streaming text and tool displays, agent UI states (tool timeline, approvals, errors after a partial answer), setting up an ADK interface's design system from the house DESIGN.md with shadcn, and interface widgets that tools render beside the reply (A2UI). Do not activate for isolated styling tweaks to an existing page, agent prompting alone (adk-agent-evaluation owns decision quality), general cloud provisioning or non-ADK chat applications.
+description: Implement, adapt, review or select a web interface for a Google ADK agent using a custom JSON API or AG-UI with CopilotKit, including gateways to managed Agent Runtime. Use for agent-to-browser contracts, session ownership, streaming text and tool displays, agent UI states (tool timeline, approvals, errors after a partial answer), setting up an ADK interface's design system from the house DESIGN.md with shadcn, and interface widgets that tools render beside the reply (A2UI). Do not activate for isolated styling tweaks to an existing page, agent prompting alone (adk-agent-instructions owns prompt wording), general cloud provisioning or non-ADK chat applications.
 license: MIT
 metadata:
   author: Ruslan Khissamiyev
