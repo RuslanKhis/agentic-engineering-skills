@@ -50,9 +50,91 @@
    ],
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
-   "judge_cost_usd": null,
-   "status": "judge-error",
-   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "judge_cost_usd": 0.0684,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "States that AgentTool runs the sub-agent in a separate in-memory session, so the saved parent session omits the sub-agent's usage, and recommends aggregating by trace or switching to mode='single_turn'",
+     "verdict": "PASS",
+     "quote": "Each `AgentTool` runs its own `Runner` with a throwaway in-memory session and a new invocation id. A saved parent session has none of the child's model calls or usage.",
+     "quote_found": true,
+     "reason": "It states the separate in-memory session omission and recommends aggregating by trace, and its test compares against single_turn.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "States that on LiteLlm completion_tokens already include reasoning while ADK adds thoughts again, so output tokens are overstated",
+     "verdict": "PASS",
+     "quote": "On OpenAI-style routes `completion_tokens` already includes reasoning. The dashboard's output is therefore inflated by the reasoning tokens.",
+     "quote_found": true,
+     "reason": "It states completion_tokens includes reasoning while ADK adds thoughts again, overstating output.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "States that retried attempts and failed-but-billed calls are invisible to ADK usage and must be reconciled against gateway or billing records, reporting unknown rather than zero or a partial sum",
+     "verdict": "PASS",
+     "quote": "Report a trace's cost as **unknown** when any model call has no join key. Never report a partial sum.",
+     "quote_found": true,
+     "reason": "It says retried and failed calls are invisible to ADK, must be reconciled against gateway or billing records, and cost reported as unknown.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Notes that retry_options.attempts becomes LiteLLM num_retries and the attempt count must be measured",
+     "verdict": "PASS",
+     "quote": "`retry_options attempts=2` on the `LiteLlm` path becomes LiteLLM's `num_retries`. That is not \"2 attempts\".",
+     "quote_found": true,
+     "reason": "It notes the attempts-to-num_retries mapping and says the real attempt count must be measured, with a test.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Proposes offline scripted-model tests and quotes no price from memory",
+     "verdict": "PASS",
+     "quote": "All of these run offline, with a scripted `BaseLlm`, or a scripted `LiteLLMClient` subclass for the `LiteLlm` path.",
+     "quote_found": true,
+     "reason": "It proposes offline scripted-model tests and quotes no prices from memory.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 5,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
    "final_chars": 6095,
    "files": [],
    "agent": {
@@ -187,7 +269,8 @@
     "adk-operational-guardrails": false,
     "adk-model-and-output-contracts": false,
     "adk-tool-interface-design": false
-   }
+   },
+   "rejudged": true
   },
   {
    "id": "observability-agent-runtime-latency-and-alerts",
@@ -206,9 +289,78 @@
    ],
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
-   "judge_cost_usd": null,
-   "status": "judge-error",
-   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "judge_cost_usd": 0.0941,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Names the exact environment gates and their precedence, keeps span content off, and lists the APIs and IAM roles that must be enabled as an approval item rather than enabling them.",
+     "verdict": "FAIL",
+     "quote": "| `OTEL_SEMCONV_STABILITY_OPT_IN` | not set (keeps the prompt-bearing log event off) | absent |",
+     "quote_found": true,
+     "reason": "It names the env gates, keeps content off, and lists APIs and roles as approvals, but it gives no explicit precedence between the gates, and the env file was edited with telemetry set to true.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Explains the request-driven metric exporter on Agent Runtime and its tail-loss caveat, and uses the built-in reasoning_engine metrics plus gen_ai spans to separate model, tool and session time.",
+     "verdict": "FAIL",
+     "quote": "| Host latency | `aiplatform.googleapis.com/reasoning_engine/request_latencies` | built in |",
+     "quote_found": true,
+     "reason": "It uses reasoning_engine metrics and gen_ai spans, but never explains the request-driven metric exporter or its tail-loss caveat.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Defines a good/total SLI from a measured baseline with an error-budget alert, and runs the offline invocation summary on the saved session as the local evidence.",
+     "verdict": "FAIL",
+     "quote": "`invocation_summary.py` could not run in this session: no shell",
+     "quote_found": true,
+     "reason": "The SLO is defined from a placeholder rather than a measured baseline, and the offline summary was hand-computed, not run.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Hands any hosting-level optimisation to optimise-adk-on-google-cloud and content policy to protect-adk-sensitive-data.",
+     "verdict": "FAIL",
+     "quote": "",
+     "quote_found": false,
+     "reason": "There is no mention of optimise-adk-on-google-cloud or protect-adk-sensitive-data hand-offs in the answer or the docs.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 0,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    1
+   ],
    "final_chars": 3080,
    "files": [
     "deploy/agent_engine.env",
@@ -339,7 +491,8 @@
     "optimise-adk-on-google-cloud": false,
     "protect-adk-sensitive-data": false,
     "deploy-adk-on-google-cloud": false
-   }
+   },
+   "rejudged": true
   },
   {
    "id": "release-coding-agent-capability-diff-gate",
@@ -359,9 +512,94 @@
    ],
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
-   "judge_cost_usd": null,
-   "status": "judge-error",
-   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "judge_cost_usd": 0.0944,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "States that agents-shipgate 1.2.0 diff --application exits 0 whatever it finds and is advisory, so a gate must parse comparison_status and rows from --json and treat exit 2 as NOT RUN",
+     "verdict": "FAIL",
+     "quote": "It exits 0 whatever it finds, including added tools and partial comparisons. It only exits 2 when a ref can't be read. So it can't block anything.",
+     "quote_found": true,
+     "reason": "It states exit 0 and advisory, but the gate does not parse comparison_status and rows from --json; shipgate is not wired in at all.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "States that it does not compare require_confirmation, callbacks or McpToolset tool_filter, so a compared result with no rows is not evidence that capability is unchanged",
+     "verdict": "PASS",
+     "quote": "It reported no change when `require_confirmation` or the `before_tool_callback` was removed, or when the `McpToolset` filter was widened.",
+     "quote_found": true,
+     "reason": "States shipgate does not detect changes to these controls, though it does not explicitly say empty compared rows are not evidence.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 3,
+     "assertion": "Gates on inspect_security_surface.py run on the base tree and then on the head with --compare, which exits 3 and lists capability_changes (changed gates, callbacks, toolsets, sub-agents, tools, rising guard counts); requires a review label for that merge.",
+     "verdict": "FAIL",
+     "quote": "Exit 1 (capability changed) needs approval.\n  - Exit 3 (partial scan) needs approval only if a changed file is in `unread_paths`.",
+     "quote_found": true,
+     "reason": "Runs base then head with --compare and requires a label, but maps exit 1 as capability change and exit 3 as partial, contradicting the expected exit 3 for capability_changes.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "States that a Workflow graph's function nodes are not read by either tool: the inspector names them, marks the run partial, and they need hand review.",
+     "verdict": "FAIL",
+     "quote": "Your new `Workflow` is always unread, so blocking every PR on that would fail them all. A change to `app/reporting.py` does block.",
+     "quote_found": true,
+     "reason": "It notes the Workflow is unread, but does not state that the function nodes are named by the inspector and need hand review, and the gate passes unless the file changes.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 5,
+     "assertion": "Keeps the MCP definition pin (mcp_tool_inventory.py --diff --fail-on-diff) as a separate check from the binding diff",
+     "verdict": "FAIL",
+     "quote": "",
+     "quote_found": false,
+     "reason": "No mention of mcp_tool_inventory.py --diff --fail-on-diff or a separate MCP definition pin check.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.87,
+   "unstable": [
+    2,
+    4
+   ],
    "final_chars": 3410,
    "files": [
     ".github/CODEOWNERS",
@@ -501,7 +739,8 @@
     "adk-agent-interoperability": false,
     "adk-agent-evaluation": false,
     "deploy-adk-on-google-cloud": false
-   }
+   },
+   "rejudged": true
   },
   {
    "id": "release-model-retirement-and-ci-gate",
@@ -520,9 +759,76 @@
    ],
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
-   "judge_cost_usd": null,
-   "status": "judge-error",
-   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "judge_cost_usd": 0.136,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Runs the release inventory, pins the judge model explicitly because the 2.8.0 default retires, and records every model, prompt hash and eval set in a release manifest.",
+     "verdict": "FAIL",
+     "quote": "Judge model: unset. The ADK 2.8.0 judge default is `gemini-2.5-flash`, a model on the same retirement path. Plan below uses no judge in the gate",
+     "quote_found": true,
+     "reason": "It ran an inventory by hand and listed hashes to record, but it did not pin the judge model explicitly and wrote no release manifest recording all models, prompt hashes and eval set.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Designs the gate with pytest and AgentEvaluator or conformance replay as the failing step, explaining that adk eval returns exit code 0 on failures on every release through 2.12.0 and that the exit code is checked on the pinned version, with repeats, a cost ceiling and NOT RUN treated as failure to produce evidence.",
+     "verdict": "FAIL",
+     "quote": "`adk eval` exits 0 on failures in 2.8.0 (per the skill's source reading; not re-verified here). The gate does not use it.",
+     "quote_found": true,
+     "reason": "It has pytest-like AgentEvaluator, repeats, a cost ceiling and NOT RUN as failure, but it claims exit 0 only for 2.8.0, not through 2.12.0, and it never checks the exit code on the pinned version.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Plans the migration as a side-by-side comparison on the frozen development set with a holdout run once, handing the measurement to adk-agent-evaluation and the thinking and temperature settings to adk-model-and-output-contracts.",
+     "verdict": "FAIL",
+     "quote": "Side-by-side `gemini-3.8-flash` vs `gemini-3.5-flash`, frozen set, no prompt edits",
+     "quote_found": true,
+     "reason": "The side-by-side and a holdout run once are planned, but there is no hand-off of measurement to adk-agent-evaluation as a whole or of thinking and temperature settings to adk-model-and-output-contracts.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Describes the Cloud Run tagged-revision canary and the joint rollback bundle without executing any deployment.",
+     "verdict": "PASS",
+     "quote": "Deploy tagged revision with 0% traffic (`--no-traffic --tag`), set `MODEL_ID`, test the tag URL",
+     "quote_found": true,
+     "reason": "It describes the tagged revision canary and a rollback to the previous revision (image, prompt hash, model ID together) and executed no deployment.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
    "final_chars": 3001,
    "files": [
     ".github/workflows/ci.yml",
@@ -663,7 +969,8 @@
     "adk-agent-evaluation": false,
     "adk-model-and-output-contracts": false,
     "deploy-adk-on-google-cloud": false
-   }
+   },
+   "rejudged": true
   },
   {
    "id": "interoperability-expose-and-register-a2a",
@@ -683,7 +990,7 @@
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
    "judge_cost_usd": null,
-   "status": "judge-error",
+   "status": "agent-error",
    "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
    "final_chars": 65,
    "files": [
@@ -836,7 +1143,7 @@
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
    "judge_cost_usd": null,
-   "status": "judge-error",
+   "status": "agent-error",
    "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
    "final_chars": 65,
    "files": [],
@@ -977,7 +1284,7 @@
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
    "judge_cost_usd": null,
-   "status": "judge-error",
+   "status": "agent-error",
    "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
    "final_chars": 65,
    "files": [],
@@ -1118,7 +1425,7 @@
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
    "judge_cost_usd": null,
-   "status": "judge-error",
+   "status": "agent-error",
    "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
    "final_chars": 65,
    "files": [],

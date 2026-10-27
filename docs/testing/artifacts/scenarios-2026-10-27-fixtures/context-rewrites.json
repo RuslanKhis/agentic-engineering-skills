@@ -110,5 +110,10 @@
  "evaluation-selected-source-support": {
   "before": "Supply assets/source-support-cases.json and source-support-diagram.svg from the evaluation skill. The expected labels and any scorer outputs are held back by the person asking for grading and are not in the workspace. These are synthetic workshop documents with case-specific source scope.",
   "after": "The case pack is selected-passages.json, with the sketch it refers to in hall-sketch.svg: synthetic documents from a community-hall workshop, and each case has its own source scope. The expected labels and any scorer outputs are held back by the person asking and are not in the workspace."
+ },
+ "engineer-resumes-from-progress-block": {
+  "before": "Tickets under docs/tickets/support/. G02 (streamed replies) is in_progress and its Evidence starts with a Progress block: A1 done with its re-verify command, A2 in hand, uncommitted app/stream.py in worktree ../wt-G02. G03 is ready with no blockers left.",
+  "after": "Tickets under docs/tickets/support/. G02 (streamed replies) is in_progress and its Evidence starts with a Progress block: A1 done with its re-verify command, A2 in hand, uncommitted app/stream.py in the worktree checked out at wt-G02/ inside this folder. G03 is ready with no blockers left.",
+  "why": "triage: the worktree was outside the workspace, so the uncommitted work was unreachable; rewritten after the first run"
  }
 }

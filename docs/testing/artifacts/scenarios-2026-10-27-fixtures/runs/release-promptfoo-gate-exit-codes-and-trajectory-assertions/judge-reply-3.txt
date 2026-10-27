@@ -1,0 +1,5 @@
+{"verdicts":[{"assertion":"A1","verdict":"PASS","quote":"async for event in runner.run_async(","reason":"Provider runs the agent in process via run_async, returns tool calls and payments counts as output, and config uses tool-used, tool-args-match, tool-sequence and trace-span-count."}
+,{"assertion":"A2","verdict":"FAIL","quote":"| 1 BLOCK | An assertion failed, or Promptfoo exited 100. | red |","reason":"The gate maps its own codes (1 block, 2 NOT RUN) rather than 100 block, 0 pass, 1 NOT RUN, sets the threshold to 100 rather than a placeholder, and does not name a model-dependent tier."}
+,{"assertion":"A3","verdict":"FAIL","quote":"`--repeat 3` is a rule over rows (all must pass), not an estimator.","reason":"It does not use repeat-min-pass as an at-least-m-of-n rule and never addresses share keys or keeping results unshared."}
+,{"assertion":"A4","verdict":"FAIL","quote":"Assertion shapes follow Promptfoo's ADK guide and were NOT run here","reason":"It flags the Promptfoo guide as unverified, but does not state that the scripted Runner tests and adk eval are the primary evidence."}
+]}

@@ -47,9 +47,78 @@
    ],
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
-   "judge_cost_usd": null,
-   "status": "judge-error",
-   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "judge_cost_usd": 0.1081,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Rekeys the dashboards on gen_ai.provider.name, gen_ai.operation.name and gen_ai.agent.name and keeps the gcp.vertex.agent.* keys as ADK-specific joins, explaining that gen_ai.system was removed from the conventions.",
+     "verdict": "PASS",
+     "quote": "`dashboards/agent-overview.json` now keys on `gen_ai.operation.name`, `gen_ai.agent.name`, `gen_ai.tool.name` and `gen_ai.provider.name`.",
+     "quote_found": true,
+     "reason": "Dashboards were rekeyed on the three required keys and the answer explains that gen_ai.system was removed; the gcp.vertex.agent.* keys are not retained as ADK joins and the answer says the gcp tool_name key was not documented, a partial miss.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Plans the conventions' reference scenario and Weaver live-check as the drift check, diffing against the upstream expected-violation list for google-adk, and records that the scenario is pinned to 2.11.0 and patches ADK's native tool spans.",
+     "verdict": "FAIL",
+     "quote": "`app/semconv_drift.py` takes the dashboard JSON and a span export (a list of `{name, attributes}`).",
+     "quote_found": true,
+     "reason": "The drift check is a custom script, not the conventions' reference scenario with Weaver live-check, and it does not record the pin to 2.11.0 or tool span patching.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Emits judge scores as gen_ai.evaluation.result events parented to the evaluated span with the required and recommended attributes and the judge identity, reported as not run without the SDK.",
+     "verdict": "FAIL",
+     "quote": "The event carries the evaluated span's trace and span id, the score and label, and `support.judge.model` and `support.judge.rubric_version`.",
+     "quote_found": true,
+     "reason": "Events are emitted as log records with trace and span ids and the answer reports not run, but the required gen_ai.evaluation.name is present while recommended attributes such as the response id and explanation are missing, so the required and recommended set is not fully covered.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Labels every convention as Development status and does not promise the backend will keep the attribute names.",
+     "verdict": "FAIL",
+     "quote": "The event and its attributes are Development status in the GenAI conventions",
+     "quote_found": true,
+     "reason": "Development status is noted only for the evaluation event in a code docstring, not for every convention in the answer, and there is no warning that the backend may not keep the names.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    1
+   ],
    "final_chars": 2874,
    "files": [
     "app/eval_events.py",
@@ -176,7 +245,8 @@
     "adk-agent-observability": true,
     "adk-agent-evaluation": false,
     "adk-release-engineering": false
-   }
+   },
+   "rejudged": true
   },
   {
    "id": "interoperability-consume-enterprise-mcp-server-registration-and-sso",
@@ -193,9 +263,76 @@
    ],
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
-   "judge_cost_usd": null,
-   "status": "judge-error",
-   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "judge_cost_usd": 0.0954,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Registers through a hosted Client ID Metadata Document (HTTPS URL with a path, client_id equal to the URL, client_name and redirect_uris present) rather than dynamic registration, and says why DCR is only a fallback.",
+     "verdict": "FAIL",
+     "quote": "Ask for a pre-registered client id as fallback if (a) or\n   (b) is \"no\". Do not fall back to DCR.",
+     "quote_found": true,
+     "reason": "It uses a CIMD with HTTPS URL, client_id equal, client_name and redirect_uris, but it never explains why DCR is only a fallback; it simply forbids DCR.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Keys the stored credentials by the authorization server's issuer, validates a present iss in the authorization response against it, and places both in the credential index the tool-auth skill keeps.",
+     "verdict": "FAIL",
+     "quote": "Key the stored client state by issuer `https://auth.loyaltycloud.example`\n   (SEP-2352)",
+     "quote_found": true,
+     "reason": "It keys by issuer and checks iss, but never places both in the credential index the tool-auth skill keeps; the tool-auth skill was not loaded.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Uses Enterprise-Managed Authorization (token exchange at the IdP for an identity-assertion grant, presented as a JWT bearer grant to the resource authorization server) for signed-in users, and names the client-credentials profile as a draft for headless runs.",
+     "verdict": "PASS",
+     "quote": "the client-credentials profile is a draft;\n  confirm)",
+     "quote_found": true,
+     "reason": "It describes token exchange for an ID-JAG presented as a JWT bearer grant and names the client-credentials profile as a draft.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Records the mcp major version and the 2026-07-28 revision in the ticket, treats any server-minted state handle as data bound to the caller, keeps tool names inside the specification's character and length rules, and notes that schema keywords ADK's conversion drops must be checked in the recorded-definition test.",
+     "verdict": "FAIL",
+     "quote": "Agent: google-adk 2.12.0, `mcp>=2.1,<3` (pin kept; no upgrade needed).",
+     "quote_found": true,
+     "reason": "It records the pin, revision, handle binding and name rules, but never says schema keywords dropped by ADK's conversion must be checked in the recorded-definition test.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
    "final_chars": 3959,
    "files": [
     "docs/tickets/T-48.md"
@@ -316,7 +453,8 @@
     "adk-agent-interoperability": true,
     "adk-tool-auth-and-secrets": false,
     "adk-tool-interface-design": false
-   }
+   },
+   "rejudged": true
   },
   {
    "id": "release-promptfoo-gate-exit-codes-and-trajectory-assertions",
@@ -333,9 +471,76 @@
    ],
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
-   "judge_cost_usd": null,
-   "status": "judge-error",
-   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "judge_cost_usd": 0.1514,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Wraps the agent as an in-process Python provider that calls runner.run_async, returns session state and artifacts for deterministic assertions, and uses trajectory:tool-used, tool-args-match and tool-sequence plus trace-span-count on the native spans.",
+     "verdict": "PASS",
+     "quote": "async for event in runner.run_async(",
+     "quote_found": true,
+     "reason": "The provider runs in process via run_async and returns tool calls and fake counts, and the config uses tool-used, tool-args-match, tool-sequence and trace-span-count.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Maps exit code 100 to block, 0 to pass and 1 to NOT RUN, names PROMPTFOO_PASS_RATE_THRESHOLD as a placeholder until a baseline campaign sets it, and places the job in the model-dependent tier.",
+     "verdict": "FAIL",
+     "quote": "| 1 BLOCK | An assertion failed, or Promptfoo exited 100. | red |",
+     "quote_found": true,
+     "reason": "The gate maps its own codes (1 block, 2 NOT RUN, 3 provisional) rather than 100 block, 0 pass and 1 NOT RUN; the threshold is set to 100, and no model-dependent tier is named.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Treats repeat with repeat-min-pass as an observed at-least-m-of-n rule recorded beside the figure, not as an estimator, and keeps results unshared unless a share key is configured on purpose.",
+     "verdict": "FAIL",
+     "quote": "`--repeat 3` is a rule over rows (all must pass), not an estimator.",
+     "quote_found": true,
+     "reason": "It does not mention repeat-min-pass or an at-least-m-of-n rule recorded beside the figure, and it does not address result sharing or a share key.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Keeps the scripted-model Runner tests and adk eval as the primary evidence and labels the Promptfoo guide as vendor guidance to confirm on the installed version.",
+     "verdict": "FAIL",
+     "quote": "Assertion shapes follow Promptfoo's ADK guide and were NOT run here",
+     "quote_found": true,
+     "reason": "The guide is flagged as unverified, but scripted-Runner tests and adk eval are not named as the primary evidence.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
    "final_chars": 3352,
    "files": [
     ".github/workflows/nightly.yml",
@@ -464,7 +669,8 @@
     "adk-release-engineering": true,
     "adk-agent-evaluation": false,
     "adk-agent-observability": false
-   }
+   },
+   "rejudged": true
   },
   {
    "id": "interoperability-expose-a2a-with-tck-acceptance",
@@ -482,9 +688,76 @@
    ],
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
-   "judge_cost_usd": null,
-   "status": "judge-error",
-   "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
+   "judge_cost_usd": 0.158,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Writes the card with securitySchemes and protocolVersion, runs agent_card_check.py on it, and lists caching headers, extended-card authentication and cryptographic signature verification as manual checks the helper does not cover (it checks only a signed card's structure).",
+     "verdict": "FAIL",
+     "quote": "I did not run the card helper against the card.",
+     "quote_found": true,
+     "reason": "The card has securitySchemes, but protocolVersion sits only inside supportedInterfaces and the helper was not run. The doc's manual-check list does not state that signature verification is outside the helper's coverage.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Names the scoped TCK command against a local to_a2a instance as a planned verification with the requirement ids it proves and the ones deferred (authentication, scripted core operations), never pointing the TCK at Agent Runtime or a registered endpoint.",
+     "verdict": "PASS",
+     "quote": "Against a local instance only; never Agent Runtime or a registered endpoint.",
+     "quote_found": true,
+     "reason": "The doc gives a scoped TCK command against a local instance, names the ids expected to pass, and lists the deferred ids (core operations, AUTH-SERVER-002).",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "States that the TCK sends no authentication header, so AUTH-SERVER-002 is verified by the project's own test, and records the run's exit code and reports as the evidence to attach.",
+     "verdict": "PASS",
+     "quote": "**Fails by design**: the TCK sends no credential. A1 is the evidence",
+     "quote_found": true,
+     "reason": "The doc says the TCK sends no credential, names the project's own test as the evidence for AUTH-SERVER-002, and says to record the exit code and reports/compatibility.json.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Keeps the pins, adds the origin-pinning rule for any raw SDK client that calls the peer, and leaves registration as separate, approved work.",
+     "verdict": "FAIL",
+     "quote": "Registration (Agent Registry, Gemini Enterprise) not started; needs approval and the platform's own test call.",
+     "quote_found": true,
+     "reason": "Pins are kept and registration is left as separate work, but there is no origin-pinning rule for raw SDK clients calling the peer.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
    "final_chars": 3422,
    "files": [
     "a2a/agent-card.json",
@@ -611,7 +884,8 @@
     "adk-agent-interoperability": true,
     "adk-tool-auth-and-secrets": false,
     "adk-release-engineering": false
-   }
+   },
+   "rejudged": true
   },
   {
    "id": "interoperability-exposed-agent-forgets-on-modern-clients",
@@ -630,7 +904,7 @@
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
    "judge_cost_usd": null,
-   "status": "judge-error",
+   "status": "agent-error",
    "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
    "final_chars": 65,
    "files": [],
@@ -766,7 +1040,7 @@
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
    "judge_cost_usd": null,
-   "status": "judge-error",
+   "status": "agent-error",
    "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
    "final_chars": 65,
    "files": [],
@@ -908,7 +1182,7 @@
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
    "judge_cost_usd": null,
-   "status": "judge-error",
+   "status": "agent-error",
    "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
    "final_chars": 65,
    "files": [],
@@ -1049,7 +1323,7 @@
    "judge_backend": "claude-cli",
    "judge_model": "claude-sonnet-5-5",
    "judge_cost_usd": null,
-   "status": "judge-error",
+   "status": "agent-error",
    "error": "repeat 1 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 1 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 2 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 1: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney); repeat 3 attempt 2: claude -p reported an error: You've hit your session limit · resets 10:20pm (Australia/Sydney)",
    "final_chars": 65,
    "files": [],

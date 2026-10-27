@@ -1785,7 +1785,7 @@
         "adk-frontend-integration",
         "adk-system-designer"
       ],
-      "context": "Tickets under docs/tickets/support/. G02 (streamed replies) is in_progress and its Evidence starts with a Progress block: A1 done with its re-verify command, A2 in hand, uncommitted app/stream.py in worktree ../wt-G02. G03 is ready with no blockers left.",
+      "context": "Tickets under docs/tickets/support/. G02 (streamed replies) is in_progress and its Evidence starts with a Progress block: A1 done with its re-verify command, A2 in hand, uncommitted app/stream.py in the worktree checked out at wt-G02/ inside this folder. G03 is ready with no blockers left.",
       "expected_primary": "adk-engineer",
       "assertions": [
         "Chooses to resume G02 from its Progress block rather than starting G03.",
