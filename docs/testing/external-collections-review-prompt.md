@@ -404,8 +404,8 @@ adjust scenario cases in evals/scenarios.json (edit as text so inline arrays
 keep their shape); write a dated note under docs/research/ (scope, method,
 drift corrected, imported, routed, left out, limits) and a dated record under
 docs/testing/ with one fresh-agent trial per changed journey on a synthetic
-project, its ease rating and the frictions fixed; add a dated entry under
-the README's "Compatibility & Checks"; add or update the collection's
+project, its ease rating and the frictions fixed; add a dated entry at
+the top of docs/testing/index.md (the testing log); add or update the collection's
 row in docs/research/source-register.json (repository, commit read, date,
 licence as GitHub reports it, the note, the skills that cite it). Leave
 changes uncommitted.

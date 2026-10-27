@@ -5,8 +5,8 @@ session can use. The design explains decisions. The plan maps them to ADK and
 application components, GCP responsibilities, useful goals, relevant skills and
 observable acceptance checks.
 
-For the complete sequence of copyable prompts, follow the README's
-[design → tickets → implementation walkthrough](../../README.md#from-design-to-working-tickets).
+For the complete sequence of copyable prompts, follow the journeys guide's
+[design → tickets → implementation walkthrough](../journeys.md#from-design-to-working-tickets).
 This guide explains which document owns what, how a ticket carries the ADK
 guidance, and how to resume the work.
 
@@ -129,8 +129,8 @@ Read the installed workflow instructions and project setup first. These are
 suggested continuations using ordinary Markdown, not an automatic importer.
 Pass the actual architecture and plan paths explicitly, including when starting
 a fresh conversation. Run each stage as a separate chat request and review its
-output before continuing. The README shows [installation, local tracker setup
-and every handoff command](../../README.md#from-design-to-working-tickets).
+output before continuing. The journeys guide shows [installation, local tracker setup
+and every handoff command](../journeys.md#from-design-to-working-tickets).
 
 | State of the work | Next workflow | What to carry forward |
 | --- | --- | --- |
@@ -172,7 +172,7 @@ with dependencies. [Specification instructions](https://github.com/mattpocock/sk
 
 ### Where the documents and tickets live
 
-For the README's **local Markdown tracker** example:
+For the journeys guide's **local Markdown tracker** example:
 
 | Artifact | Example location | Its responsibility |
 | --- | --- | --- |
@@ -258,7 +258,7 @@ If a ticket needs clarification, ask its specialist to review the proposed
 approach and checks before implementation. If it reveals a consequential new
 requirement, return to `adk-system-designer` with the ticket and design paths;
 update the decision and affected tickets, then resume `implement` with the same
-ticket. See the README's [planning and implementation examples](../../README.md#from-design-to-working-tickets).
+ticket. See the journeys guide's [planning and implementation examples](../journeys.md#from-design-to-working-tickets).
 
 After individual tickets pass, run the combined application journey with
 `adk-agent-evaluation`. Keep local, live-model and hosted results explicit;

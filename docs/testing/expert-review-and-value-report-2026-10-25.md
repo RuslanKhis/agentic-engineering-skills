@@ -124,7 +124,7 @@ Frictions and fixes (same day):
 
 `.venv/bin/python scripts/check_repo.py` from the worktree root: 23
 packages valid, evaluation case structure valid, every helper suite passed
-(the new suites 17 and 22 tests). Totals are in the README entry.
+(the new suites 17 and 22 tests). Totals are in the [testing log](index.md) entry.
 
 ## Limits
 

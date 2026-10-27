@@ -23,7 +23,7 @@ command, and a skip note for platform registration. **One scenario case**
 `scripts/validate_skills.py` after the edits: **22 packages**, 0 errors,
 0 warnings; `git diff --check` clean; the interoperability package's tests
 re-run after the checker change. The full `scripts/check_repo.py` counts
-are in the README entry for this date.
+are in the [testing log](index.md) entry for this date.
 
 ## Fresh-agent trial
 

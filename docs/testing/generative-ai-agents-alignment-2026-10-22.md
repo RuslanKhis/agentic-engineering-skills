@@ -26,7 +26,7 @@ In the repository:
 
 `scripts/validate_skills.py` after the edits: **22 packages**, 0 errors,
 0 warnings; `git diff --check` clean. The full `scripts/check_repo.py`
-counts are in the README entry for this date. After the trial, one helper
+counts are in the [testing log](index.md) entry for this date. After the trial, one helper
 changed: the guardrails inspector now accepts a PEP 508 extras marker on
 the `google-adk` pin, with a test, and the package's `last-tested` moved to
 this date after its tests were re-run.
