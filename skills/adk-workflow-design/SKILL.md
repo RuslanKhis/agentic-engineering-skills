@@ -5,7 +5,9 @@ description: >-
   consumption, session-state handoffs and callback boundaries. Use when
   choosing between ordinary code, sequential, parallel, bounded-loop, graph or
   dynamic orchestration, or repairing those runtime contracts in an existing
-  agent. Do not activate for unrelated UI edits, general LLM explanations,
+  agent, including output_key handoffs where a later agent's {key}
+  placeholder stays literal or raises KeyError because an earlier agent
+  never wrote it. Do not activate for unrelated UI edits, general LLM explanations,
   standalone cloud deployment, implementing RAG, memory or SQL services,
   instruction wording or sub-agent descriptions (adk-agent-instructions),
   remote A2A agents or MCP servers (adk-agent-interoperability), or an

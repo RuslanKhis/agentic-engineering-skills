@@ -2,6 +2,7 @@
   "no_clause": ["adk-engineer"],
   "one_way": [
     {"from": "adk-discovery", "to": "adk-engineer", "reason": "adk-engineer is the router; it selects specialists and excludes none."},
+    {"from": "adk-system-designer", "to": "adk-engineer", "reason": "adk-engineer is the router; it selects specialists and excludes none."},
     {"from": "adk-frontend-integration", "to": "adk-agent-instructions", "reason": "The prompt-wording owner disclaimer; nothing in adk-agent-instructions draws browser or session requests."},
     {"from": "adk-memory-architecture", "to": "adk-agent-instructions", "reason": "The prompt-wording owner disclaimer; nothing in adk-agent-instructions draws memory or retrieval requests."},
     {"from": "adk-operational-guardrails", "to": "adk-agent-instructions", "reason": "The prompt-wording owner disclaimer; nothing in adk-agent-instructions draws budget or approval requests."},

@@ -1,0 +1,67 @@
+{
+  "note": "Round 3 (27 October 2026): replacements for six held-out cases read while editing descriptions for the 429, multi-area feature and output_key gaps; those six moved to dev.",
+  "moved_to_dev": [
+    "api-heldout-3",
+    "engineer-heldout-1",
+    "guardrails-heldout-3",
+    "model-output-heldout-3",
+    "frontend-heldout-3",
+    "workflow-heldout-1"
+  ],
+  "labels": [
+    {
+      "id": "api-heldout-4",
+      "skill": "safe-api-tool-calls",
+      "should_trigger": false,
+      "source": [
+        "api-round3.json",
+        3
+      ]
+    },
+    {
+      "id": "engineer-heldout-4",
+      "skill": "adk-engineer",
+      "should_trigger": true,
+      "source": [
+        "engineer-round3.json",
+        1
+      ]
+    },
+    {
+      "id": "guardrails-heldout-4",
+      "skill": "adk-operational-guardrails",
+      "should_trigger": false,
+      "source": [
+        "guardrails-round3.json",
+        3
+      ]
+    },
+    {
+      "id": "model-output-heldout-4",
+      "skill": "adk-model-and-output-contracts",
+      "should_trigger": false,
+      "source": [
+        "model-output-round3.json",
+        3
+      ]
+    },
+    {
+      "id": "frontend-heldout-4",
+      "skill": "adk-frontend-integration",
+      "should_trigger": false,
+      "source": [
+        "frontend-round3.json",
+        3
+      ]
+    },
+    {
+      "id": "workflow-heldout-4",
+      "skill": "adk-workflow-design",
+      "should_trigger": true,
+      "source": [
+        "workflow-round3.json",
+        1
+      ]
+    }
+  ]
+}

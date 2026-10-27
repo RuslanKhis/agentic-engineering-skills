@@ -1255,7 +1255,7 @@
       "prompt": "my ADK agent keeps getting 429 RESOURCE_EXHAUSTED from Gemini when a bunch of users hit it at once, the whole tool loop just dies. should I add retries? backoff? where do I even hook that in with the Runner",
       "should_trigger": false,
       "rationale": "held-out, generated from a neutral brief; belongs to adk-model-and-output-contracts (retry and failover on the model's own 429s).",
-      "split": "heldout"
+      "split": "dev"
     },
     {
       "id": "auth-heldout-1",
@@ -1335,7 +1335,7 @@
       "prompt": "ok so product wants 'saved conversations' in our support agent by end of sprint (friday). that means the React chat UI needs a history sidebar, the FastAPI backend needs endpoints to list/resume sessions, we probably have to swap InMemorySessionService for something persistent, and the whole thing runs on Cloud Run so idk if that changes anything with scaling. honestly not sure where to even begin or who on the team should own which piece. can you map out what's involved?",
       "should_trigger": true,
       "rationale": "held-out, generated from a neutral brief.",
-      "split": "heldout"
+      "split": "dev"
     },
     {
       "id": "engineer-heldout-2",
@@ -1423,7 +1423,7 @@
       "prompt": "our agent's replies are streaming fine in the browser but the agent keeps forgetting what the user said three turns ago once the session gets long. using VertexAiSessionService. is this a frontend thing? how do I fix it",
       "should_trigger": false,
       "rationale": "held-out, generated from a neutral brief; belongs to optimise-adk-on-google-cloud or adk-memory-architecture (history and session context in a long conversation).",
-      "split": "heldout"
+      "split": "dev"
     },
     {
       "id": "governance-pack-heldout-1",
@@ -1471,7 +1471,7 @@
       "prompt": "Our GCP bill jumped this month and finance is asking me which of our ADK agents are responsible. We have 4 agents on Agent Engine and a couple on Cloud Run, all sharing one project. How do I break down the Vertex AI spend per agent and maybe set up a budget alert email so this doesn't surprise us again?",
       "should_trigger": false,
       "rationale": "held-out, generated from a neutral brief; belongs to adk-agent-observability or none (per-agent cost attribution and billing alerts).",
-      "split": "heldout"
+      "split": "dev"
     },
     {
       "id": "instructions-heldout-1",
@@ -1567,7 +1567,7 @@
       "prompt": "My ADK agent returns perfectly valid JSON now (finally) but when I deploy it to Agent Engine the response I get back from the remote app is wrapped in some event structure and my frontend can't find the fields. Locally with adk web it looks fine. What am I missing?",
       "should_trigger": false,
       "rationale": "held-out, generated from a neutral brief; belongs to adk-frontend-integration or deploy-adk-on-google-cloud (reading Agent Runtime's event stream).",
-      "split": "heldout"
+      "split": "dev"
     },
     {
       "id": "observability-heldout-1",
@@ -1839,7 +1839,7 @@
       "prompt": "ok so I've got a SequentialAgent: researcher -> summarizer -> formatter. researcher sets output_key='research_notes', and summarizer's instruction has {research_notes} in it. But summarizer keeps getting the literal string or sometimes a KeyError about state. Running locally with adk web. Is output_key written before the next sub-agent starts, or am I missing something? Demo is Thursday, pls help",
       "should_trigger": true,
       "rationale": "held-out, generated from a neutral brief.",
-      "split": "heldout"
+      "split": "dev"
     },
     {
       "id": "workflow-heldout-2",
@@ -1856,6 +1856,78 @@
       "should_trigger": false,
       "rationale": "held-out, generated from a neutral brief; belongs to deploy-adk-on-google-cloud (runtime identity for Firestore).",
       "split": "heldout"
+    },
+    {
+      "id": "api-heldout-4",
+      "skill": "safe-api-tool-calls",
+      "prompt": "our payments agent keeps hitting 429s from the Vertex AI Gemini endpoint during peak hours and the whole conversation just dies with a ResourceExhausted error. I tried wrapping in tenacity but it still fails. Is there a way to bump the quota or should we be spreading across regions? Project is on us-central1 only right now.",
+      "should_trigger": false,
+      "rationale": "held-out, generated from a neutral brief (round 3, replacing a case read while editing descriptions); needs instead: Help with Vertex AI model quota and rate limits: requesting quota increases, using provisioned throughput or multi-region/global endpoints, and backoff for LLM ",
+      "split": "heldout"
+    },
+    {
+      "id": "engineer-heldout-4",
+      "skill": "adk-engineer",
+      "prompt": "ok so product wants 'multi-language support' for our ADK support agent by end of sprint (friday!!). I honestly don't know where to even start. we have a React chat widget, a FastAPI server that wraps the runner, a bunch of tools that call our ticketing API and return English strings, and the whole thing deploys to Cloud Run via a GitHub Actions workflow. does this touch the prompts? the tools? the frontend? all of it? can you figure out what areas this actually involves and give me a plan before I start ripping things apart",
+      "should_trigger": true,
+      "rationale": "held-out, generated from a neutral brief (round 3, replacing a case read while editing descriptions)",
+      "split": "heldout"
+    },
+    {
+      "id": "guardrails-heldout-4",
+      "skill": "adk-operational-guardrails",
+      "prompt": "my ADK agent is super slow and burns tokens because every turn it re-sends the whole 40-page policy doc in the system prompt. how do I stop that? context caching? RAG? something else? latency is like 9s per reply rn",
+      "should_trigger": false,
+      "rationale": "held-out, generated from a neutral brief (round 3, replacing a case read while editing descriptions); needs instead: Prompt/context optimization: moving the large document into Vertex AI context caching or a retrieval (RAG) tool to cut per-turn tokens and latency, not runtime ",
+      "split": "heldout"
+    },
+    {
+      "id": "model-output-heldout-4",
+      "skill": "adk-model-and-output-contracts",
+      "prompt": "My ADK agent's JSON output looks fine in adk web but when I deploy to Agent Engine the session state that's supposed to hold the parsed result is just empty on the next turn. The model response itself is correct in the logs, it's the state that's lost. Any idea what's going on?",
+      "should_trigger": false,
+      "rationale": "held-out, generated from a neutral brief (round 3, replacing a case read while editing descriptions); needs instead: Debugging session/state persistence on Agent Engine (session service configuration, output_key and state writes across turns), not model output formatting or mo",
+      "split": "heldout"
+    },
+    {
+      "id": "frontend-heldout-4",
+      "skill": "adk-frontend-integration",
+      "prompt": "our agent's replies are streaming to the browser fine but the actual content is garbage half the time — it calls search_catalog with the wrong params and then makes up product names. Gemini 2.5 Flash, ADK LlmAgent. how do I make it stop hallucinating??",
+      "should_trigger": false,
+      "rationale": "held-out, generated from a neutral brief (round 3, replacing a case read while editing descriptions); needs instead: Help with the agent's own behavior on the backend: improving the instruction prompt, tool descriptions and parameter schemas, model choice, and evaluating tool-",
+      "split": "heldout"
+    },
+    {
+      "id": "workflow-heldout-4",
+      "skill": "adk-workflow-design",
+      "prompt": "ok so I've got a SequentialAgent: researcher -> summarizer -> formatter. researcher sets output_key=\"findings\" and summarizer's instruction uses {findings}. Half the time summarizer throws a KeyError on 'findings' or gets an empty string. Running on Agent Engine, Gemini 2.5 Flash. The researcher definitely produces text, I can see it in the trace. What am I missing? Demo is Thursday, pls help",
+      "should_trigger": true,
+      "rationale": "held-out, generated from a neutral brief (round 3, replacing a case read while editing descriptions)",
+      "split": "heldout"
+    },
+    {
+      "id": "model-output-own-429-retry-positive",
+      "skill": "adk-model-and-output-contracts",
+      "prompt": "Gemini keeps returning 429 RESOURCE_EXHAUSTED at lunchtime and our ADK agent just errors out. Where do I set retries with backoff for the model calls, and should we move to the global endpoint or add a fallback model?",
+      "should_trigger": true,
+      "rationale": "Retries, location and failover for the model's own 429s belong to model contracts (ownership map).",
+      "split": "dev"
+    },
+    {
+      "id": "designer-existing-app-feature-near-miss",
+      "skill": "adk-system-designer",
+      "prompt": "Our ADK assistant's architecture was signed off last month and it's live. Product now wants saved conversations users can come back to. Work out what has to change in the React UI, the FastAPI layer, the session store and Cloud Run, and route each piece to the right specialist.",
+      "should_trigger": false,
+      "rationale": "A new feature in an application whose design is accepted is planned and routed by adk-engineer, not a new design (ownership map).",
+      "split": "dev"
+    },
+    {
+      "id": "instructions-output-key-handoff-near-miss",
+      "skill": "adk-agent-instructions",
+      "prompt": "In my SequentialAgent the drafter's instruction says {outline}, and the planner before it has output_key='outline', but the drafter sometimes sees the literal text {outline} and sometimes a KeyError. Why isn't the planner's output there yet?",
+      "should_trigger": false,
+      "rationale": "Whether the earlier agent wrote the key in time is an output_key handoff owned by adk-workflow-design; instructions owns template syntax only (ownership map).",
+      "split": "dev"
     }
   ]
 }
