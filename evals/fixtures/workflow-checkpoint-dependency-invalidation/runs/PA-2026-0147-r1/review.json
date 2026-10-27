@@ -1,0 +1,38 @@
+{
+ "stage": "review",
+ "saved_at": "2026-10-15T14:03:11+00:00",
+ "meta": {
+  "attempt": "a1-review",
+  "draft_revision": "r1",
+  "frame_sha256": "ac3d0aea70a4485496a5bc9081fa953b0690b2c51dd16d8e3be0ea8cf9bdbed1",
+  "invocation_id": "e-PA-2026-0147-r1-review",
+  "images": [],
+  "usage": {
+   "prompt_tokens": 2950,
+   "completion_tokens": 260,
+   "cost_usd": 0.19
+  }
+ },
+ "payload": {
+  "verdict": "accept",
+  "claims": [
+   {
+    "reason_id": "R1",
+    "support": "supported",
+    "span_ids": [
+     "DAS@1:p1:1",
+     "LP-H4@2024:p31:4"
+    ]
+   },
+   {
+    "reason_id": "R2",
+    "support": "supported",
+    "span_ids": [
+     "DAS@1:p1:3",
+     "ARB@1:p1:2"
+    ]
+   }
+  ],
+  "findings": []
+ }
+}

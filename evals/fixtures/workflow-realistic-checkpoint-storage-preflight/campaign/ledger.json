@@ -1,0 +1,16 @@
+{
+ "campaign": "autumn-validation",
+ "approved_by": "Morgan Hale (product owner)",
+ "approved_on": "2026-10-06",
+ "allowance_usd": 25.0,
+ "scope": "development cases under cases/dev, writer and review stages; holdout export once at the end",
+ "entries": [
+  {
+   "run_id": "PA-2026-0172-r1",
+   "stage": "writer",
+   "reserved_usd": 0.4,
+   "charged_usd": 0.01,
+   "state": "settled"
+  }
+ ]
+}

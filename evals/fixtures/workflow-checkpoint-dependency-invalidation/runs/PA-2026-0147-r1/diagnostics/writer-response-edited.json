@@ -1,0 +1,44 @@
+{
+ "note": "Hand-edited copy of the a1 writer response (3.8 m -> 4.6 m, 11 m -> 9 m) to see whether the review would still accept it against the amended DAS. Made by J. Okafor on 2026-10-20 while debugging; never sent to the provider.",
+ "based_on": "runs/PA-2026-0147-r1/writer.json#a1",
+ "draft": {
+  "decision": "approve_with_conditions",
+  "reasons": [
+   {
+    "id": "R1",
+    "text": "The 4.6 m projection suits a semi-detached house and keeps neighbours' light.",
+    "citations": [
+     "DAS@2:p1:1",
+     "LP-H4@2024:p31:4"
+    ]
+   },
+   {
+    "id": "R2",
+    "text": "The protected oak's root protection area (7.7 m) is clear of the works at 9 m.",
+    "citations": [
+     "DAS@2:p1:3",
+     "ARB@1:p1:2"
+    ]
+   }
+  ],
+  "conditions": [
+   {
+    "id": "C1",
+    "text": "Tree protection fencing at 7.7 m from oak T1 before works start.",
+    "reason_id": "R2"
+   }
+  ],
+  "citations": [
+   {
+    "span_id": "DAS@2:p1:1",
+    "quote": "The extension projects 4.6 m beyond the original rear wall."
+   },
+   {
+    "span_id": "ARB@1:p1:2",
+    "quote": "Root protection area radius 7.7 m."
+   }
+  ],
+  "conflicts": [],
+  "gaps": []
+ }
+}

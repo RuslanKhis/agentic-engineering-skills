@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="260" viewBox="0 0 400 260">
+<rect x="40" y="60" width="200" height="160" fill="none" stroke="black"/>
+<rect x="240" y="100" width="117" height="120" fill="none" stroke="black"/>
+<line x1="240" y1="235" x2="357" y2="235" stroke="black"/>
+<text x="268" y="250" font-size="12">3.9 m</text>
+<rect x="300" y="120" width="30" height="40" fill="#ddd" stroke="black"/>
+<text x="40" y="40" font-size="14">16 Plover Street - proposed rear elevation 1:100</text>
+</svg>

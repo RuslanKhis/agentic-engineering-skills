@@ -1,0 +1,17 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: support-assistant
+  annotations:
+    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "4"
+    spec:
+      serviceAccountName: support-assistant@harbour-support.iam.gserviceaccount.com
+      containerConcurrency: 20
+      timeoutSeconds: 120
+      containers:
+        - image: europe-west2-docker.pkg.dev/harbour-support/apps/support-assistant:2026.10.24

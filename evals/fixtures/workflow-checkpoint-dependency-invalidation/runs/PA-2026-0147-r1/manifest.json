@@ -1,0 +1,43 @@
+{
+ "run_id": "PA-2026-0147-r1",
+ "case_id": "PA-2026-0147",
+ "code_version": "pipeline 0.9.4 (c41d0e7)",
+ "source": {
+  "spans": 33,
+  "sha256": "df32f1d7765a475b089ffd696a0b381c9be112dfa51212d33137dfb735b18948",
+  "documents": [
+   "APP-FORM@1",
+   "DAS@1",
+   "ARB@1",
+   "LP-H4@2024",
+   "LP-T2@2024",
+   "LP-T2-1@2024",
+   "LP-ENV3@2024"
+  ],
+  "parser": "json-lines-v2"
+ },
+ "constraints": {
+  "layers_version": "gis-2026-09"
+ },
+ "writer": {
+  "attempt": "a1",
+  "model": "gemini-3.5-flash",
+  "temperature": 1.0,
+  "max_output_tokens": 8192,
+  "prompt": "writer-v7",
+  "instructions_sha256": "cbd2595aa19785cb4f7c2660a3b9a768dc2e61fd773f34b6f78952e23edc2595",
+  "schema_sha256": "7b6db3f6d63a41dfbd33401f7dd5d368b285f6495704803492e753ac5b055cb2",
+  "input": "source",
+  "draft_revision": "r1"
+ },
+ "review": {
+  "attempt": "a1-review",
+  "model": "gemini-3.5-flash",
+  "temperature": 1.0,
+  "prompt": "review-v4",
+  "instructions_sha256": "c403cd446cebd8d507079374d836a85f35018bbb38f5103611c2c4af96bac356",
+  "schema_sha256": "db54309423609e0445d29a8a4a9f0406975cc838b10c68a8395fa5a22960131f",
+  "input": "writer",
+  "draft_revision": "r1"
+ }
+}

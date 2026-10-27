@@ -1,0 +1,29 @@
+{
+ "case_id": "PA-2026-0152",
+ "address": "8 Heron Way, Eastmere",
+ "proposal": "Single-storey rear extension to a terraced house",
+ "documents": [
+  {
+   "doc_id": "APP-FORM",
+   "version": "1",
+   "title": "Application form",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Site: 8 Heron Way, Eastmere\nDwelling: end-terrace, 2 bedrooms\nProposal: single-storey rear extension, bathroom\nParking: on-street"
+    }
+   ]
+  },
+  {
+   "doc_id": "DAS",
+   "version": "1",
+   "title": "Design and access statement",
+   "pages": [
+    {
+     "page": 1,
+     "text": "The extension projects 3.0 m beyond the original rear wall.\nPitched roof, eaves 2.4 m; brick to match.\nFloor level raised 300 mm above existing."
+    }
+   ]
+  }
+ ]
+}

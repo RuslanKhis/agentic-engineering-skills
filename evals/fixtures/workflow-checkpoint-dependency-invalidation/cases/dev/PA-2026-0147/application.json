@@ -1,0 +1,40 @@
+{
+ "case_id": "PA-2026-0147",
+ "address": "31 Wren Lane, Eastmere",
+ "proposal": "Single-storey rear extension to a semi-detached house",
+ "documents": [
+  {
+   "doc_id": "APP-FORM",
+   "version": "1",
+   "title": "Application form",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Site: 31 Wren Lane, Eastmere\nDwelling: semi-detached, 4 bedrooms\nProposal: single-storey rear extension, family room\nParking: two spaces, unchanged"
+    }
+   ]
+  },
+  {
+   "doc_id": "DAS",
+   "version": "2",
+   "title": "Design and access statement (amended 2026-10-19)",
+   "pages": [
+    {
+     "page": 1,
+     "text": "The extension projects 4.6 m beyond the original rear wall.\nFlat roof 3.2 m high with a roof lantern; render to match.\nThe oak in the rear garden is 9 m from the new wall; no works within its root area."
+    }
+   ]
+  },
+  {
+   "doc_id": "ARB",
+   "version": "1",
+   "title": "Arboricultural note",
+   "pages": [
+    {
+     "page": 1,
+     "text": "Oak T1 (TPO T/2019/07), stem diameter 640 mm.\nRoot protection area radius 7.7 m.\nFoundations outside the RPA need no special design."
+    }
+   ]
+  }
+ ]
+}

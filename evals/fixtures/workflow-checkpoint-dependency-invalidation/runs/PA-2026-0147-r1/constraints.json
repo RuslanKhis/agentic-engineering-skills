@@ -1,0 +1,13 @@
+{
+ "stage": "constraints",
+ "saved_at": "2026-10-15T14:03:11+00:00",
+ "meta": {},
+ "payload": {
+  "address": "31 Wren Lane, Eastmere",
+  "layers_version": "gis-2026-09",
+  "constraints": [
+   "Tree Preservation Order T/2019/07",
+   "Flood Zone 2"
+  ]
+ }
+}

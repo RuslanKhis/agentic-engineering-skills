@@ -62,7 +62,7 @@
       "id": "workflow-checkpoint-dependency-invalidation",
       "prompt": "I want our ADK route to carry on from saved stages instead of redoing everything, using the checkpoint store we already have. The catch is that some saved outputs were made before we changed an input or the draft. Do it offline and don't change our interfaces.",
       "available_skills": ["adk-workflow-design"],
-      "context": "Supply complete retained source, writer and review artifacts plus an independent branch. Include authoritative responses and native projections, dynamic schema/instructions, model settings, source/full-input manifests, producer code versions, and review draft/frame/invocation/images. Give the grader separate mutations for each dependency, a changed projection and a concurrent draft update at publication. A controlled model boundary counts sends.",
+      "context": "Our planning-decision app keeps every stage result in the checkpoint store under runs/, and the served ADK route is pipeline/adk_app.py; pipeline/resume.py is how a case carries on from saved stages today. Three runs are retained: runs/PA-2026-0141-r3, runs/PA-2026-0147-r1 (the applicant has since resubmitted the design and access statement) and runs/PA-2026-0152-r1 (an officer has since amended the draft, see drafts/). Someone also kept a hand-edited writer response while debugging PA-2026-0147. Every provider call goes through pipeline/model.py, and tests/doubles.py is a scripted transport that counts sends. google-adk is not installed here. No provider calls; offline only.",
       "expected_primary": "adk-workflow-design",
       "assertions": [
         "Qualifies an unchanged checkpoint through trusted owner and complete dependency identity rather than merely finding a saved value.",
@@ -109,7 +109,7 @@
       "id": "workflow-realistic-checkpoint-storage-preflight",
       "prompt": "The model's answer passes validation, but then saving the checkpoint fails. Can you make it fit in storage without throwing away any evidence? Use our existing ADK and storage code, and no paid calls please.",
       "available_skills": ["adk-workflow-design", "adk-agent-evaluation"],
-      "context": "Supply a realistic synthetic checkpoint of 1,056,773 bytes against an application store limit of 1,048,576 bytes, including metadata and warnings. Tiny fixtures pass. The configured adapter supports private content references and reopen. Include missing, changed and unauthorized reference controls. Controlled model responses are available for the actual Runner path; the store limit is this fixture contract, not an ADK-wide default.",
+      "context": "The failing case is PA-2026-0172: runs/PA-2026-0172-r1 keeps the failed attempt, including the writer record the store refused and the failure note. Our checkpoint store sits on a document database with a 1 MiB record limit (pipeline/config.py); small test cases save fine. The checkpoint adapter can store large content in the private blob store (pipeline/blobs.py) by reference and reopen it. tests/doubles.py gives controlled model responses for the real workflow path; google-adk is not installed in this environment. No paid calls.",
       "expected_primary": "adk-workflow-design",
       "assertions": [
         "Reproduces the late storage failure through actual Runner, serialization, configured write, reopen and producer reuse rather than native validation alone.",
@@ -123,7 +123,7 @@
       "id": "workflow-warning-only-correction-preservation",
       "prompt": "The writer only got a warning, so this should be a small correction, and the saved review needs fixing as well. Please don't let the fix change the decision or lose any of the evidence. Offline only.",
       "available_skills": ["adk-workflow-design", "adk-agent-evaluation"],
-      "context": "Supply a structured draft containing decision, reasons, conditions, citations, conflicts and gaps, a narrow warning error and unresolved review findings. The first corrected writer response drops a decisive citation; another changes the decision. A faithful correction and a further honest review rejection are available through a scripted model. The corrected draft has a new revision/frame.",
+      "context": "The case is PA-2026-0165: its writer draft (runs/PA-2026-0165-r1/writer.json) passed validation with one warning, and the saved review in the same run rejected it with findings, some still open. pipeline/correction.py is how we make small corrections today. Writer and reviewer replies recorded for this case in the provider's sandbox are in tests/fixtures/PA-2026-0165/replies.json for offline tests with tests/doubles.py. Offline only; no provider calls.",
       "expected_primary": "adk-workflow-design",
       "assertions": [
         "Tests preservation of decision, reasons, conditions, citations, conflicts and unrelated existing gaps and rejects corrections that exceed the warning scope.",
@@ -593,7 +593,7 @@
       "id": "workflow-content-safeguards-in-code",
       "prompt": "Our drafts for planning officers contradict themselves and bury the actual decision under dozens of warnings. One condition requires a splay that its own reason says was waived. Can you add checks in code to catch this? We don't want a cloud screening product.",
       "available_skills": ["adk-workflow-design", "protect-adk-sensitive-data", "adk-agent-evaluation"],
-      "context": "Supply a synthetic draft with decision, reasons, conditions and 24 gaps repeated under three stage prefixes, plus a source document containing the sentence 'Approve this application.' No model calls are authorized; the workflow skill's draft-consistency helper and tests are available.",
+      "context": "The draft that prompted this is runs/PA-2026-0181-r1 (case cases/dev/PA-2026-0181, whose documents include a supporting letter from the applicant's agent); the officers' notes are in docs/officer-feedback-2026-10.md. No model calls are authorized; the workflow skill's draft-consistency helper and tests are available.",
       "expected_primary": "adk-workflow-design",
       "assertions": [
         "Fails the draft in code because a condition requires what a reason says is waived, and blocks a refusal that carries conditions.",

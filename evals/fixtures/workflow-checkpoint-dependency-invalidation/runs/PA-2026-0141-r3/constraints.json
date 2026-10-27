@@ -1,0 +1,10 @@
+{
+ "stage": "constraints",
+ "saved_at": "2026-10-16T09:12:40+00:00",
+ "meta": {},
+ "payload": {
+  "address": "12 Linnet Row, Eastmere",
+  "layers_version": "gis-2026-09",
+  "constraints": []
+ }
+}

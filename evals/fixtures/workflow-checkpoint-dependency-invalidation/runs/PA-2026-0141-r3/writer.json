@@ -1,0 +1,67 @@
+{
+ "stage": "writer",
+ "saved_at": "2026-10-16T09:12:40+00:00",
+ "meta": {
+  "attempt": "a1",
+  "draft_revision": "r1",
+  "raw_response": {
+   "id": "chatcmpl-PA-2026-0141-r3-a1",
+   "model": "gemini-3.5-flash",
+   "choices": [
+    {
+     "index": 0,
+     "finish_reason": "stop",
+     "message": {
+      "role": "assistant",
+      "content": "{\"decision\": \"approve\", \"reasons\": [{\"id\": \"R1\", \"text\": \"The 3.6 m projection is within the 4.0 m limit for terraced houses.\", \"citations\": [\"DAS@1:p1:1\", \"LP-H4@2024:p31:4\"]}, {\"id\": \"R2\", \"text\": \"Matching buff brick and a 3.1 m flat roof keep it subordinate.\", \"citations\": [\"DAS@1:p1:2\", \"LP-H4@2024:p31:2\"]}], \"conditions\": [], \"citations\": [{\"span_id\": \"DAS@1:p1:1\", \"quote\": \"The extension projects 3.6 m beyond the original rear wall.\"}, {\"span_id\": \"DAS@1:p1:2\", \"quote\": \"Walls in buff brick to match the house; flat roof 3.1 m high.\"}], \"conflicts\": [\"The neighbour at 10 Linnet Row is worried about light to a kitchen window (NBR-1@1:p1:1).\"], \"gaps\": []}"
+     }
+    }
+   ],
+   "usage": {
+    "prompt_tokens": 2310,
+    "completion_tokens": 540
+   }
+  },
+  "usage": {
+   "prompt_tokens": 2310,
+   "completion_tokens": 540,
+   "cost_usd": 0.31
+  }
+ },
+ "payload": {
+  "decision": "approve",
+  "reasons": [
+   {
+    "id": "R1",
+    "text": "The 3.6 m projection is within the 4.0 m limit for terraced houses.",
+    "citations": [
+     "DAS@1:p1:1",
+     "LP-H4@2024:p31:4"
+    ]
+   },
+   {
+    "id": "R2",
+    "text": "Matching buff brick and a 3.1 m flat roof keep it subordinate.",
+    "citations": [
+     "DAS@1:p1:2",
+     "LP-H4@2024:p31:2"
+    ]
+   }
+  ],
+  "conditions": [],
+  "citations": [
+   {
+    "span_id": "DAS@1:p1:1",
+    "quote": "The extension projects 3.6 m beyond the original rear wall."
+   },
+   {
+    "span_id": "DAS@1:p1:2",
+    "quote": "Walls in buff brick to match the house; flat roof 3.1 m high."
+   }
+  ],
+  "conflicts": [
+   "The neighbour at 10 Linnet Row is worried about light to a kitchen window (NBR-1@1:p1:1)."
+  ],
+  "gaps": []
+ }
+}

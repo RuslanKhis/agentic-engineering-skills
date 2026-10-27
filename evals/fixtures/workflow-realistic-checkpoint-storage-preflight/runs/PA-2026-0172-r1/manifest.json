@@ -1,0 +1,16 @@
+{
+ "run_id": "PA-2026-0172-r1",
+ "case_id": "PA-2026-0172",
+ "source": {
+  "spans": 5430,
+  "sha256": "7f11eb8012efcddfb6c83f2db60468d2c6e2ccda402b43ab21fb0eb9a7703e28"
+ },
+ "writer": {
+  "model": "gemini-3.5-flash",
+  "prompt": "writer-v7"
+ },
+ "review": {
+  "model": "gemini-3.5-flash",
+  "prompt": "review-v4"
+ }
+}

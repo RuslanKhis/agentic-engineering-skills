@@ -1,0 +1,107 @@
+{
+ "stage": "writer",
+ "saved_at": "2026-10-23T08:14:39+00:00",
+ "meta": {
+  "attempt": "a1",
+  "draft_revision": "r1",
+  "raw_response": {
+   "id": "chatcmpl-PA-2026-0165-a1",
+   "model": "gemini-3.5-flash",
+   "choices": [
+    {
+     "index": 0,
+     "finish_reason": "stop",
+     "message": {
+      "role": "assistant",
+      "content": "{\"decision\": \"approve_with_conditions\", \"reasons\": [{\"id\": \"R1\", \"text\": \"The 3.9 m projection is within the 4.0 m limit for terraced houses.\", \"citations\": [\"DAS@1:p1:1\", \"LP-H4@2024:p31:4\"]}, {\"id\": \"R2\", \"text\": \"The first-floor side window facing No. 18 at 6 m must be obscure-glazed and non-opening below 1.7 m.\", \"citations\": [\"DAS@1:p1:2\", \"LP-H4@2024:p31:7\", \"LP-H4@2024:p31:8\"]}, {\"id\": \"R3\", \"text\": \"The footings are outside the ash tree's root protection area.\", \"citations\": [\"ARB@1:p1:2\", \"DAS@1:p1:3\"]}], \"conditions\": [{\"id\": \"C1\", \"text\": \"The first-floor side window facing No. 18 shall be obscure-glazed and non-opening below 1.7 m above floor level, and retained so.\", \"reason_id\": \"R2\"}, {\"id\": \"C2\", \"text\": \"No footings shall be placed within 5.2 m of ash tree T1.\", \"reason_id\": \"R3\"}], \"citations\": [{\"span_id\": \"DAS@1:p1:1\", \"quote\": \"The extension projects 3.9 m beyond the original rear wall\"}, {\"span_id\": \"LP-H4@2024:p31:4\", \"quote\": \"Rear extensions on terraced dwellings should not project more than 4.0 m beyond the original\"}, {\"span_id\": \"LP-H4@2024:p31:7\", \"quote\": \"First-floor side windows facing a neighbour within 10 m must be obscure-glazed and non-opening\"}, {\"span_id\": \"ARB@1:p1:2\", \"quote\": \"Footings at 6.5 m are outside the root protection area.\"}], \"conflicts\": [\"NBR-2 measures the projection at 4.3 m (NBR-2@1:p1:1); the DAS states 3.9 m (DAS@1:p1:1).\"], \"gaps\": [\"No measured survey settles whether the projection is 3.9 m or 4.3 m.\", \"The drainage route to the public sewer is not shown.\"]}"
+     }
+    }
+   ],
+   "usage": {
+    "prompt_tokens": 2480,
+    "completion_tokens": 610,
+    "cost_usd": 0.33
+   }
+  },
+  "usage": {
+   "prompt_tokens": 2480,
+   "completion_tokens": 610,
+   "cost_usd": 0.33
+  },
+  "warnings": [
+   {
+    "code": "quote_not_verbatim",
+    "span_id": "DAS@1:p1:1",
+    "quote": "The extension projects 3.9 m beyond the original rear wall",
+    "span_text": "The extension projects 3.9 m beyond the original rear wall."
+   }
+  ]
+ },
+ "payload": {
+  "decision": "approve_with_conditions",
+  "reasons": [
+   {
+    "id": "R1",
+    "text": "The 3.9 m projection is within the 4.0 m limit for terraced houses.",
+    "citations": [
+     "DAS@1:p1:1",
+     "LP-H4@2024:p31:4"
+    ]
+   },
+   {
+    "id": "R2",
+    "text": "The first-floor side window facing No. 18 at 6 m must be obscure-glazed and non-opening below 1.7 m.",
+    "citations": [
+     "DAS@1:p1:2",
+     "LP-H4@2024:p31:7",
+     "LP-H4@2024:p31:8"
+    ]
+   },
+   {
+    "id": "R3",
+    "text": "The footings are outside the ash tree's root protection area.",
+    "citations": [
+     "ARB@1:p1:2",
+     "DAS@1:p1:3"
+    ]
+   }
+  ],
+  "conditions": [
+   {
+    "id": "C1",
+    "text": "The first-floor side window facing No. 18 shall be obscure-glazed and non-opening below 1.7 m above floor level, and retained so.",
+    "reason_id": "R2"
+   },
+   {
+    "id": "C2",
+    "text": "No footings shall be placed within 5.2 m of ash tree T1.",
+    "reason_id": "R3"
+   }
+  ],
+  "citations": [
+   {
+    "span_id": "DAS@1:p1:1",
+    "quote": "The extension projects 3.9 m beyond the original rear wall"
+   },
+   {
+    "span_id": "LP-H4@2024:p31:4",
+    "quote": "Rear extensions on terraced dwellings should not project more than 4.0 m beyond the original"
+   },
+   {
+    "span_id": "LP-H4@2024:p31:7",
+    "quote": "First-floor side windows facing a neighbour within 10 m must be obscure-glazed and non-opening"
+   },
+   {
+    "span_id": "ARB@1:p1:2",
+    "quote": "Footings at 6.5 m are outside the root protection area."
+   }
+  ],
+  "conflicts": [
+   "NBR-2 measures the projection at 4.3 m (NBR-2@1:p1:1); the DAS states 3.9 m (DAS@1:p1:1)."
+  ],
+  "gaps": [
+   "No measured survey settles whether the projection is 3.9 m or 4.3 m.",
+   "The drainage route to the public sewer is not shown."
+  ]
+ }
+}
