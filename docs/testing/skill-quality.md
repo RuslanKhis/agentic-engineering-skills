@@ -213,8 +213,9 @@ The judge (`--judge-backend claude-cli` or `files`) sees the assertions, the
 grader material, the final answer, the files the agent wrote and the skills it
 loaded, and returns PASS or FAIL with a quote; the runner records whether each
 quote occurs in the evidence. A model judge grades the same evidence
-`--judge-repeats` times (default 3, in parallel); each assertion takes PASS
-only on a strict majority, and the results record every vote, the agreement
+`--judge-repeats` times (default 3, in parallel; a reply that cannot be read is
+asked for once more); each assertion takes PASS only on a strict majority,
+and the results record every vote, the agreement
 and an `unstable` list of assertions whose votes differed. Read an unstable
 assertion's verdict as uncertain. With `--backend files`, `run` only prepares
 the workspaces for a person or another agent, and `judge --run-dir DIR`

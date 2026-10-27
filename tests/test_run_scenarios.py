@@ -303,6 +303,21 @@ class AgentAndJudgeTests(unittest.TestCase):
         same = scen.majority([rows("PASS")] * 3)[0]
         self.assertEqual((same["verdict"], same["agreement"], same["unstable"]), ("PASS", 1.0, False))
 
+    def test_unreadable_judge_reply_is_asked_for_once_more(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            run_dir, _ = scen.prepare(root, cases[:1], scen.load_fixtures(root), Path(tmp) / "runs")
+            replies = iter(['{"verdicts": [,}', verdicts("PASS", "PASS")])
+
+            def caller(backend, prompt, system, model, timeout):
+                return scen.call_model.__globals__["ModelReply"](text=next(replies), model=model)
+
+            graded = scen.judge_case(run_dir, cases[0], "claude-cli", "m", 60, repeats=1, caller=caller)
+            self.assertTrue((run_dir / "empty-design/judge-reply-1-retry.txt").exists())
+        self.assertEqual((graded["status"], graded["judge_repeats"], graded["passed"]), ("graded", 1, 2))
+        self.assertEqual(len(graded["judge_errors"]), 1)
+
     def test_judge_errors_on_every_repeat_are_reported(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = make_root(Path(tmp) / "repo")

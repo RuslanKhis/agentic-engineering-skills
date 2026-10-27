@@ -503,24 +503,33 @@ def judge_case(run_dir: Path, case: dict, backend: str, model: str, timeout: flo
         if not answer.exists():
             (case_dir / "judge-prompt.md").write_text(JUDGE_SYSTEM + "\n\n" + prompt, encoding="utf-8")
             return {**record, "status": "awaiting-judge", "judge_repeats": 1, **facts}
-        texts, errors = [answer.read_text(encoding="utf-8")], []
-    else:
-        def one(_):
-            try:
-                return caller(backend, prompt, JUDGE_SYSTEM, model, timeout).text, None
-            except BackendError as exc:
-                return None, str(exc)
-        with ThreadPoolExecutor(max_workers=repeats) as pool:
-            outcomes = list(pool.map(one, range(repeats)))
-        texts = [text for text, _ in outcomes if text is not None]
-        errors = [error for _, error in outcomes if error is not None]
-    parsed = []
-    for k, text in enumerate(texts, 1):
-        (case_dir / f"judge-reply-{k}.txt").write_text(text, encoding="utf-8")
+        text = answer.read_text(encoding="utf-8")
+        (case_dir / "judge-reply-1.txt").write_text(text, encoding="utf-8")
         try:
-            parsed.append(parse_verdicts(text, case, evidence))
+            parsed, errors = [parse_verdicts(text, case, evidence)], []
         except BackendError as exc:
-            errors.append(f"reply {k}: {exc}")
+            parsed, errors = [], [f"reply 1: {exc}"]
+    else:
+        def one(k):
+            """One repeat; a reply that cannot be read is asked for once more."""
+            problems = []
+            for attempt in (1, 2):
+                try:
+                    text = caller(backend, prompt, JUDGE_SYSTEM, model, timeout).text
+                except BackendError as exc:
+                    problems.append(f"repeat {k} attempt {attempt}: {exc}")
+                    continue
+                suffix = "" if attempt == 1 else "-retry"
+                (case_dir / f"judge-reply-{k}{suffix}.txt").write_text(text, encoding="utf-8")
+                try:
+                    return parse_verdicts(text, case, evidence), problems
+                except BackendError as exc:
+                    problems.append(f"repeat {k} attempt {attempt}: {exc}")
+            return None, problems
+        with ThreadPoolExecutor(max_workers=repeats) as pool:
+            outcomes = list(pool.map(one, range(1, repeats + 1)))
+        parsed = [rows for rows, _ in outcomes if rows is not None]
+        errors = [problem for _, problems in outcomes for problem in problems]
     if not parsed:
         return {**record, "status": "judge-error", "error": "; ".join(errors), **facts}
     rows = majority(parsed)
