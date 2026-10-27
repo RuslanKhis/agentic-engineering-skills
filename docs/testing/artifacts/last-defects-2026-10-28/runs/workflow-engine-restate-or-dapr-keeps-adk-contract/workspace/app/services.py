@@ -1,0 +1,43 @@
+"""Process-wide services the tools use. build_agent() configures them; tests configure fakes."""
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Protocol
+
+from app.clients.mail import MailClient
+from app.clients.payments import PaymentsClient
+from app.helpdesk import HelpIndex
+from app.store import Store
+
+
+class ReviewGateway(Protocol):
+    """The durable review engine as the app sees it. Both calls are safe to repeat for one op_id."""
+
+    def start(self, op_id: str) -> None: ...
+    def wake(self, op_id: str) -> None: ...
+
+
+@dataclass
+class Services:
+    store: Store
+    payments: PaymentsClient
+    mail: MailClient
+    help_index: HelpIndex
+    max_refund_cents: int = 20_000
+    reviews: "ReviewGateway | None" = None  # starts and wakes the durable review workflow
+    manager_emails: frozenset[str] = frozenset()
+    approval_days: int = 14
+
+
+_services: Services | None = None
+
+
+def configure(services: Services) -> None:
+    global _services
+    _services = services
+
+
+def get() -> Services:
+    if _services is None:
+        raise RuntimeError("services are not configured; call app.services.configure() first")
+    return _services

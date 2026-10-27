@@ -1,0 +1,6 @@
+Redwood Freight's General Counsel wants the governance papers for the applicant screener before the California pilot, and wants to know whether we can use it in New York City. Draft what they need from our docs.
+
+---
+Situation (from the person asking): An Australian agency built a resume screener for a California-headquartered client with warehouses in California and New York City; it scores and ranks applicants and marks some 'not recommended', which recruiters usually reject in bulk; an age impact ratio of 0.74 in the backtest; agency engineers in Sydney read an evaluation set of real past applications; pilot profile.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

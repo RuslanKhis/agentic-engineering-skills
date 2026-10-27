@@ -2,16 +2,19 @@
 name: adk-workflow-design
 description: >-
   Select, implement or review Google ADK workflow control flow, event
-  consumption, session-state handoffs and callback boundaries. Use when
+  consumption, session-state handoffs, callbacks and checkpoints. Use when
   choosing between ordinary code, sequential, parallel, bounded-loop, graph or
   dynamic orchestration, or repairing those runtime contracts in an existing
-  agent, including output_key handoffs where a later agent's {key}
-  placeholder stays literal or raises KeyError because an earlier agent
-  never wrote it. Do not activate for unrelated UI edits, general LLM explanations,
-  standalone cloud deployment, implementing RAG, memory or SQL services,
-  instruction wording or sub-agent descriptions (adk-agent-instructions),
-  remote A2A agents or MCP servers (adk-agent-interoperability), or an
-  injection threat model (adk-agent-security).
+  agent: output_key handoffs where a later agent's {key} placeholder stays
+  literal or raises KeyError, reusing saved stages after an input changed, a
+  checkpoint too large for its store, a run waiting days for approval across
+  restarts (ADK resume or a durable engine), draft consistency checks in code
+  and warning-only corrections. Do not activate for unrelated UI edits,
+  general LLM explanations, standalone cloud deployment, implementing RAG,
+  memory or SQL services, instruction wording or sub-agent descriptions
+  (adk-agent-instructions), remote A2A agents or MCP servers
+  (adk-agent-interoperability), or an injection threat model
+  (adk-agent-security).
 license: MIT
 metadata:
   author: Ruslan Khissamiyev

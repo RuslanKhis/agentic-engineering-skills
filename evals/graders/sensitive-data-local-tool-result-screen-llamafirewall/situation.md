@@ -14,3 +14,5 @@ pages), read_contract (client documents), send_email (`require_confirmation=True
   without ADK. No HF token, no network, no model access: PromptGuard weights cannot be fetched;
   the live detector run stays pending (A5) and the weights licence needs an owner decision.
 - LlamaFirewall is not a dependency.
+
+Changed on 28 October 2026 (Phase 11): `expected_primary` is now protect-adk-sensitive-data, which owns the local Prompt Guard 2 screen and screen placement (`references/boundaries.md`, "A local screen for tool results"); adk-agent-security keeps the threat-model view.

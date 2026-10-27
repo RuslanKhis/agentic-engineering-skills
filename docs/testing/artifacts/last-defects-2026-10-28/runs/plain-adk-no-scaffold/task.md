@@ -1,0 +1,6 @@
+Our ADK app calls two read tools one after the other even though they don't depend on each other. Can you run them at the same time before the summary step, and make sure we never report success if either one fails? Leave our package manager, public interfaces and deployment files as they are.
+
+---
+Situation (from the person asking): This is a plain ADK repository with requirements.txt, an existing unittest suite, custom HTTP serving code and no Agents CLI manifest. The optional Google skills are installed globally; the user has not adopted their generated-project lifecycle. Existing dependencies include a compatible ADK version and permit scripted-model offline Runner tests.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

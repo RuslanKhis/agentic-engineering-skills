@@ -487,8 +487,12 @@ alternative. The agent framework is not a concern; say why in the plan.
 
 Use this to decide which steps run in order, which can run together, and when
 a refinement loop should stop. It helps implement or repair the handoffs
-between agents, shared state and final results. Ask for a workflow design,
-a focused code change, or tests that show each step produces the required output.
+between agents, shared state and final results. It also covers carrying on
+from saved stages after an input changed, a checkpoint too large for its
+store, a run that waits days for approval across restarts (ADK resume or a
+durable engine), consistency checks on drafts and warning-only corrections.
+Ask for a workflow design, a focused code change, or tests that show each step
+produces the required output.
 
 **Invoke:** Claude Code `/adk-workflow-design` · Codex `$adk-workflow-design`
 

@@ -1,0 +1,6 @@
+The writer only got a warning, so this should be a small correction, and the saved review needs fixing as well. Please don't let the fix change the decision or lose any of the evidence. Offline only.
+
+---
+Situation (from the person asking): The case is PA-2026-0165: its writer draft (runs/PA-2026-0165-r1/writer.json) passed validation with one warning, and the saved review in the same run rejected it with findings, some still open. pipeline/correction.py is how we make small corrections today. Writer and reviewer replies recorded for this case in the provider's sandbox are in tests/fixtures/PA-2026-0165/replies.json for offline tests with tests/doubles.py. Offline only; no provider calls.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

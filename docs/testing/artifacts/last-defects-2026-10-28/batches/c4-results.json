@@ -1,0 +1,247 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T20:56:22+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/c4/aes-scenarios-qaxfmie8",
+ "commit": "19e51e3ce18c8556593c77e7bd137703afd74d26",
+ "scenarios_sha256": "10502802ecc331164cfb83cdbeac0a1f63828dfb4d93f99efbaca6887cba813c",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "presenter-rollout-pack-go-live",
+   "expected_primary": "adk-presenter",
+   "fixture_status": "repo-fixture",
+   "note": "check_rollout.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-presenter",
+    "adk-engineer",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1413,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Reads rollout-and-adoption.md rather than the deck references and writes docs/rollout/<topic>/rollout-pack.md.",
+     "verdict": "PASS",
+     "quote": "adk-presenter/references/rollout-and-adoption.md, adk-presenter/assets/rollout-pack-template.md",
+     "quote_found": true,
+     "reason": "It read the rollout reference and template (no deck references) and wrote docs/rollout/claims/rollout-pack.md.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Every will, won't and hands-over statement cites a contract; accuracy is stated only from an M record, in the measured voice.",
+     "verdict": "FAIL",
+     "quote": "Reports about wrong drafts reach you (C7); review changed drafts weekly. Harm, a changed claim or exposed data go to the Fenwick IT service desk as well.",
+     "quote_found": true,
+     "reason": "Accuracy is stated from M records, but the sponsor announcement says 'In the pilot, median triage time fell from 21 to 13 minutes' without an M cite, and some hands-over statements (e.g. incident routing to service desk) cite no contract.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Sets the AI disclosure status to applies with exact text shown before the first message, citing Article 50 from 2 August 2026.",
+     "verdict": "FAIL",
+     "quote": "Shown: on the first screen before the first draft is shown, as a permanent label above the draft in the draft view, and on the about page.",
+     "quote_found": true,
+     "reason": "Status applies and the exact text is shown before the first draft, but the section never cites Article 50 or the 2 August 2026 date.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Defines active user with a window against the assigned population, names the brief's counter-metric, maps report-a-problem to the feedback record categories, and gives numeric hypercare exit thresholds; check_rollout.py exits 0.",
+     "verdict": "PASS",
+     "quote": "Active user | A distinct opaque user_id with at least 1 completed invocation (a final response, not an error or abandoned turn) | analytics table (G07 usage reporting) | proposed 80% of assigned (not agreed, G2) | 7 days rolling",
+     "quote_found": true,
+     "reason": "It defines active user with a window against the assigned population, names re-routing as the counter-metric, maps report-a-problem to feedback categories, gives numeric exit thresholds marked proposed, and states check_rollout.py was not run.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    4
+   ],
+   "final_chars": 3193,
+   "files": [
+    "docs/rollout/claims/rollout-pack.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 82.7,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 13,
+    "total_cost_usd": 0.2424208,
+    "duration_ms": 81394,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-presenter"
+    ],
+    "skill_files_read": [
+     "adk-presenter/references/rollout-and-adoption.md",
+     "adk-presenter/assets/rollout-pack-template.md",
+     "adk-agent-observability/assets/feedback_record.schema.json"
+    ],
+    "skill_md_loaded": {
+     "adk-presenter": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-observability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 11,
+    "catalogue": [
+     "adk-agent-observability",
+     "adk-engineer",
+     "adk-presenter",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-presenter": true,
+    "adk-engineer": false,
+    "adk-agent-observability": false
+   }
+  }
+ ]
+}

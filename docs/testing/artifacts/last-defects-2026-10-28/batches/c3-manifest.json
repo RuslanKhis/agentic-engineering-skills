@@ -1,0 +1,89 @@
+{
+ "created": "2026-10-27T20:30:51+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-aaf094c4199329fd4",
+ "commit": "19e51e3ce18c8556593c77e7bd137703afd74d26",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "governance-pack-annex-iii-pilot",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/governance-pack-annex-iii-pilot/situation.md"
+    }
+   ],
+   "note": "check_governance.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-governance-pack",
+    "adk-engineer",
+    "adk-presenter",
+    "protect-adk-sensitive-data"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "governance-pack-au-hr-internal",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/governance-pack-au-hr-internal/situation.md"
+    }
+   ],
+   "note": "check_governance.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-governance-pack",
+    "adk-engineer",
+    "protect-adk-sensitive-data"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "governance-pack-uk-bank-chatbot",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/governance-pack-uk-bank-chatbot/situation.md"
+    }
+   ],
+   "note": "check_governance.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-governance-pack",
+    "adk-engineer",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "governance-pack-us-hiring-screener",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/governance-pack-us-hiring-screener/situation.md"
+    }
+   ],
+   "note": "check_governance.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-governance-pack",
+    "adk-engineer",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

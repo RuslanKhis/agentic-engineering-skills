@@ -1,0 +1,6 @@
+Our drafts for planning officers contradict themselves and bury the actual decision under dozens of warnings. One condition requires a splay that its own reason says was waived. Can you add checks in code to catch this? We don't want a cloud screening product.
+
+---
+Situation (from the person asking): The draft that prompted this is runs/PA-2026-0181-r1 (case cases/dev/PA-2026-0181, whose documents include a supporting letter from the applicant's agent); the officers' notes are in docs/officer-feedback-2026-10.md. No model calls are authorized; the workflow skill's draft-consistency helper and tests are available.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

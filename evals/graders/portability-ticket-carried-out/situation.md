@@ -17,3 +17,5 @@ Azure as targets and LangGraph as the framework to compare), a plan `docs/plans/
 | A6 relative effort words, no hours, prices or dates | |
 | A7 runs check_portability.py | no shell in the run: credit naming the command with `--design` and `--plan` and saying it was not run |
 | A8 design, other goals and code unchanged; no Terraform, IAM, manifests | workspace diff: only docs/portability/claims.md (and possibly G07's Evidence) may change |
+
+Changed on 28 October 2026 (Phase 11): A2 and A7 now carry their own no-shell escape in the assertion text. A2: the design hash needs `git hash-object`; credit a document with every template section whose hash field says it was not computed. A7: credit naming `check_portability.py` with `--design` and `--plan` and reporting it as not run.

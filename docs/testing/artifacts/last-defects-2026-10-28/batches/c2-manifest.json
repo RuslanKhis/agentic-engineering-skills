@@ -1,0 +1,32 @@
+{
+ "created": "2026-10-27T20:28:18+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-aaf094c4199329fd4",
+ "commit": "19e51e3ce18c8556593c77e7bd137703afd74d26",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "guardrails-unanswered-approval-and-screening-placement",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/guardrails-unanswered-approval-and-screening-placement/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-operational-guardrails",
+    "adk-agent-security",
+    "protect-adk-sensitive-data",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

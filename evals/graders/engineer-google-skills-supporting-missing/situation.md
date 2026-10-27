@@ -25,3 +25,5 @@ judge on whether the agent claims they ran), readback plan; A4 private ingress, 
 execution-scope prerequisite, no gcloud mutation run.
 
 Original context (unchanged).
+
+Changed on 28 October 2026 (Phase 11): A3 now carries its own no-shell escape in the assertion text, because judges graded the run step literally despite the note above. In a run without a shell, credit local tests written and reported as not run; a claim that the step ran, with no output to show for it, is still a FAIL.
