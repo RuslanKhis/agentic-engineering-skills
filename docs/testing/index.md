@@ -17,6 +17,28 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## Skill defects from the scenario triage · 28 October 2026
+
+Twelve of the thirteen suspected skill defects from the scenario triage were
+confirmed and fixed in the skill that owns each topic; the thirteenth (a
+do-nothing control for evaluation graders) was already in the evaluation
+skill. Screen placement and the local Prompt Guard 2 screen moved to
+protect-adk-sensitive-data, which operates the screens, with pointers from
+the security and guardrails skills and a new row in the ownership map. The
+guardrails, evaluation and sensitive-data descriptions now name the plain
+requests that had loaded no skill, and nine dev activation cases test them.
+
+**Results.** Sonnet 5.5 activation: dev 331 PASS, 12 PARTIAL, 1 FAIL (an
+existing designer-versus-engineer instability that also fails on `main`);
+held-out 156 of 156, unchanged. The 16 scenarios with skill-defect rows were
+re-run: those rows went from 0 to 8 of 27 passing, the scenarios from 22 to
+33 of 71 assertions, and the primary skill loaded in 14 runs instead of 9.
+33 scenarios ran for the first time (56 of 143 assertions); their triage
+names three new skill gaps, chiefly a workflow-design description that misses
+checkpoints and durable resume. Spend was $22.93; the eight governance packs
+and one presenter scenario stayed unrun within the $25 cap.
+[Skill defect fixes record](skill-defect-fixes-2026-10-27.md).
+
 ## Fixtures for every representable scenario · 27 October 2026
 
 126 of 152 scenarios had no project to run against. They now build their
