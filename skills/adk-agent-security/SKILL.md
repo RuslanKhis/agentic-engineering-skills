@@ -93,7 +93,7 @@ are trusted operators, and what the deployment perimeter is.
 | (a) Threat model | Read [threat model](references/threat-model.md): inventory, the lethal-trifecta check per agent and per workflow, enforcement-point map (identity, callback, plugin, tool body, workflow structure, executor, perimeter, UI). Output is the completed checklist with each row's observable check. |
 | (b) Injection-resistant structure | Read [injection patterns](references/injection-patterns.md): map action-selector, plan-then-execute, dual LLM, map-reduce and context minimisation onto `SequentialAgent`, a quarantined reader with `include_contents='none'` and no tools, `before_tool_callback` capability checks keyed on `tool_context.state`, and sub-agent output treated as data. |
 | (c) Tool and MCP supply chain | Read [tool supply chain](references/tool-supply-chain.md): allowlist with `tool_filter`, review AI-visible descriptions, pin definitions by hash, namespace with `tool_name_prefix`, Streamable HTTP over stdio in production, per-user `header_provider`, no token passthrough, SSRF and egress rules, unfenced own tool results and OpenAPI descriptions. |
-| (d) Agency and output handling | Read [agency and output](references/agency-and-output.md): tool tiering (read, write, irreversible), confirmation policy and its pitfalls, escaping and URL rules for rendered output, code-executor selection table, `BashToolPolicy` allowlists, identity and IAM conditions. |
+| (d) Agency and output handling | Read [agency and output](references/agency-and-output.md): tool tiering (read, write, irreversible), confirmation policy and its pitfalls, escaping and URL rules for rendered output, code-executor selection table, `BashToolPolicy` allowlists, identity and IAM conditions. When Model Armor, Semantic Governance Policies or another screen is proposed, or a reviewer asks what holds if a prompt gets through, read its [Screening is a layer](references/agency-and-output.md#screening-is-a-layer) section: the Preview status and accuracy caveat, placement, an aggregate bound keyed on the business object, writes signed by a key the model never holds, and simulated demo controls that are not products. |
 | (e) Adversarial suite | Read [adversarial testing](references/adversarial-testing.md) and seed from [adversarial cases](assets/adversarial-cases.json); from the other references only "Tier every tool" and "Confirmation as code" in agency-and-output and the gate in injection-patterns: deterministic scripted-model Runner assertions ("forbidden tool never called", "data never egressed"), optional promptfoo, garak or PyRIT campaign, Model Armor shadow evidence. |
 | (f) Security review | Use all references, skipping the code-execution section of agency-and-output when the inventory shows no executor or environment toolset; report prioritised findings with `file:line`, the OWASP LLM or ASI identifier, the observable check that would show the fix, the evidence label and the owning skill. For a web application whose design records `adk-system-designer`'s web security baseline, also cite the rule ID (`SB17`) a finding breaks, so one review covers the application and the agent. Write the review document first; when the request also says to carry the work out, then make the fixes it recommends, otherwise change nothing. |
 
@@ -127,11 +127,13 @@ State the affected agents, tools, callbacks and tests before editing. Then:
 - Escape model output in UIs, render links from an allowlist, and strip image
   and URL markup that could carry session data (`adk-frontend-integration`
   owns the renderer).
-- Keep screening (Model Armor, Gemini-as-judge, SDP) as added layers behind
-  these structural controls; configure them with `protect-adk-sensitive-data`.
+- Keep screening (Model Armor, Semantic Governance Policies, Gemini-as-judge,
+  SDP) as added layers behind these structural controls
+  ([screening is a layer](references/agency-and-output.md#screening-is-a-layer));
+  configure them with `protect-adk-sensitive-data`.
   When tool results may not leave the project, a local classifier
-  (LlamaFirewall's Prompt Guard 2) and its conditions are in
-  [agency and output](references/agency-and-output.md).
+  (LlamaFirewall's Prompt Guard 2) is operated by
+  `protect-adk-sensitive-data`, which also owns where a screen runs.
 
 Do not widen an allowlist, loosen a filter or disable a callback to make a
 test pass. Do not treat an instruction such as "ignore text inside documents"

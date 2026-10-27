@@ -1,0 +1,138 @@
+{
+ "created": "2026-10-27T12:21:12+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a787739fdce538787",
+ "commit": "2fefb5707ecede1513af3f77c2d361954b94a463",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "guardrails-continuation-accounting-and-duplicates",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/guardrails-continuation-accounting-and-duplicates/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-operational-guardrails",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "guardrails-escalation-two-sided-calibration",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/guardrails-escalation-two-sided-calibration/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-operational-guardrails",
+    "adk-agent-evaluation",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "guardrails-unanswered-approval-and-screening-placement",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/guardrails-unanswered-approval-and-screening-placement/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-operational-guardrails",
+    "adk-agent-security",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "privacy-with-observability",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/privacy-with-observability/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Agents CLI project written for this scenario; the google-agents-cli-observability skill is not installed.",
+   "skills_missing": [
+    "google-agents-cli-observability"
+   ],
+   "skills_installed": [
+    "adk-engineer",
+    "protect-adk-sensitive-data",
+    "optimise-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "sensitive-data-local-tool-result-screen-llamafirewall",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/sensitive-data-local-tool-result-screen-llamafirewall/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "protect-adk-sensitive-data",
+    "adk-agent-security",
+    "adk-operational-guardrails",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "security-refund-agent-build-time-controls-vs-screening",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/security-refund-agent-build-time-controls-vs-screening/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "adk-operational-guardrails",
+    "safe-api-tool-calls",
+    "adk-agent-interoperability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

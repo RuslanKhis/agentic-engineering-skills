@@ -1,0 +1,214 @@
+{
+ "created": "2026-10-27T12:22:05+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a787739fdce538787",
+ "commit": "c297ef126cd683f22e34f558566b28cea9056d42",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "engineer-resumes-from-progress-block",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-plan"
+   ],
+   "copy": [
+    {
+     "from": "evals/fixtures/engineer-parallel-tickets-with-overlapping-touches/web",
+     "to": "web"
+    },
+    {
+     "from": "evals/fixtures/engineer-writes-progress-block-when-stopping/AGENTS.md",
+     "to": "AGENTS.md"
+    }
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-resumes-from-progress-block/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The worktree named in the Progress block is wt-G02/ inside the workspace; git status and the re-verify command need a shell, so the agent can only say what it would check.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration",
+    "adk-system-designer"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "engineer-ticket-with-missing-companion",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-ticket-with-missing-companion/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Lint and theme checks need a shell and npm, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "engineer-agents-cli-deploy-ticket",
+   "status": "repo-fixture",
+   "base": [],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-agents-cli-deploy-ticket/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "google-agents-cli-deploy and google-agents-cli-workflow are not in this repository, so they are not installed.",
+   "skills_missing": [
+    "google-agents-cli-deploy",
+    "google-agents-cli-workflow"
+   ],
+   "skills_installed": [
+    "adk-engineer",
+    "deploy-adk-on-google-cloud",
+    "adk-tool-auth-and-secrets",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "engineer-google-skills-supporting-missing",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "remove": [
+    "pyproject.toml"
+   ],
+   "grader": [
+    {
+     "from": "evals/graders/engineer-google-skills-supporting-missing/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Running the suite and the local image build needs a shell, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "deploy-adk-on-google-cloud",
+    "adk-tool-auth-and-secrets",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "frontend-a2ui-route-and-validation-declared",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-web"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/frontend-a2ui-route-and-validation-declared/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration",
+    "adk-agent-interoperability",
+    "adk-model-and-output-contracts"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "frontend-assistant-ui-adk-python-gateway",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-web"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/frontend-assistant-ui-adk-python-gateway/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration",
+    "adk-operational-guardrails",
+    "adk-fastapi-backend"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "frontend-tool-widgets-staged-emission",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/frontend-tool-widgets-staged-emission/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration",
+    "adk-tool-interface-design",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "web-backend-stream-progress-routes-to-frontend",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-web"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/web-backend-stream-progress-routes-to-frontend/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-frontend-integration",
+    "adk-fastapi-backend"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,13 @@
+# Column types are not recorded in the old Python dict. Fill them from INFORMATION_SCHEMA.COLUMNS
+# (INT64, FLOAT64, BOOL, STRUCT names) at review; until then the drift check compares names only.
+name: invoices
+table_reference: {project: fernhill-analytics, dataset: sales, table: invoices}
+primary_key: [invoice_id]
+columns:
+  - {name: invoice_id}
+  - {name: customer_id}
+  - {name: invoice_date}
+  - {name: currency}
+  - {name: status}
+reviewed_by: null
+reviewed_on: null

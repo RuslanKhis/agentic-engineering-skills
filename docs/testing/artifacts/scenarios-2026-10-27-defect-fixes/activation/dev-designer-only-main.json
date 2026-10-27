@@ -1,0 +1,687 @@
+{
+ "schema": "activation-results/1",
+ "created": "2026-10-27T12:19:14+00:00",
+ "backend": "claude-cli",
+ "model": "claude-sonnet-5-5",
+ "seed": "20261027",
+ "batch_size": 14,
+ "repeats": 3,
+ "only": [
+  "adk-system-designer"
+ ],
+ "split": "dev",
+ "commit": null,
+ "catalogue_sha256": "74e4ed4293f09ed1b877b88fa873596ea4cd9c5c2f915aa5e1b1674948e955d0",
+ "corpus_sha256": "df13231d2053304f9616667fcfe423f37cc057de9c30f179b07aa8e8b986a589",
+ "skill_count": 26,
+ "case_count": 13,
+ "grading": "8 October 2026 rules; see scripts/run_activation.py",
+ "batches": [
+  {
+   "repeat": 1,
+   "batch": 1,
+   "cases": [
+    "designer-checkpoint-positive",
+    "designer-next-ticket-near-miss",
+    "system-designer-positive",
+    "system-designer-generic-near-miss",
+    "system-designer-capacity-positive",
+    "system-designer-feature-near-miss",
+    "system-designer-review-positive",
+    "system-designer-deploy-near-miss",
+    "designer-change-request-positive",
+    "system-designer-scope-gate-positive",
+    "designer-existing-app-feature-near-miss",
+    "designer-sow-commercial-near-miss",
+    "designer-sow-positive"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 10034,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1103,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 10034,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1103,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 10034,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 10034
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.05117,
+   "duration_s": 9.1,
+   "attempts": 1
+  },
+  {
+   "repeat": 2,
+   "batch": 1,
+   "cases": [
+    "designer-next-ticket-near-miss",
+    "designer-existing-app-feature-near-miss",
+    "designer-checkpoint-positive",
+    "designer-sow-commercial-near-miss",
+    "designer-sow-positive",
+    "system-designer-scope-gate-positive",
+    "system-designer-positive",
+    "designer-change-request-positive",
+    "system-designer-capacity-positive",
+    "system-designer-review-positive",
+    "system-designer-generic-near-miss",
+    "system-designer-deploy-near-miss",
+    "system-designer-feature-near-miss"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 10035,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1006,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 10035,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1006,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 10035,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 10035
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.050204,
+   "duration_s": 8.2,
+   "attempts": 1
+  },
+  {
+   "repeat": 3,
+   "batch": 1,
+   "cases": [
+    "designer-sow-commercial-near-miss",
+    "designer-next-ticket-near-miss",
+    "designer-change-request-positive",
+    "system-designer-capacity-positive",
+    "designer-sow-positive",
+    "system-designer-deploy-near-miss",
+    "designer-checkpoint-positive",
+    "system-designer-review-positive",
+    "system-designer-feature-near-miss",
+    "designer-existing-app-feature-near-miss",
+    "system-designer-scope-gate-positive",
+    "system-designer-generic-near-miss",
+    "system-designer-positive"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 10033,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1810,
+    "output_tokens_details": {
+     "thinking_tokens": 841
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 10033,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1810,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 10033,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 10033
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.058235999999999996,
+   "duration_s": 14.0,
+   "attempts": 1
+  }
+ ],
+ "cases": [
+  {
+   "id": "designer-checkpoint-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-engineer",
+   "supporting": [],
+   "reason": "A mid-build checkpoint of a plan after a ticket changed scope (forgetting a preference) and hours overrun is a cross-concern engineering request on an existing ADK app with tickets; adk-engineer is the starting point for planning across concerns.",
+   "grade": "FAIL"
+  },
+  {
+   "id": "designer-next-ticket-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-engineer",
+   "supporting": [],
+   "reason": "Executing the next ready ticket in an existing ADK project's ticket folder is general engineering work with no specialist chosen, so adk-engineer selects the relevant specialists.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "A new ADK application on GCP to be designed through requirements and trade-off discussion before implementation matches adk-system-designer exactly.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-generic-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "A conventional Django inventory app with no agents or ADK is outside every ADK skill's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-capacity-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Scoping an MVP to two weeks and three people and planning what ships first and what follows is explicitly covered by adk-system-designer.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-feature-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-engineer",
+   "supporting": [
+    "adk-memory-architecture"
+   ],
+   "reason": "Implementing a new feature in an existing accepted design is adk-engineer's remit, and a saved preference with a forget action involves memory, consent and erasure boundaries.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-review-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [
+    "adk-agent-security",
+    "adk-memory-architecture"
+   ],
+   "reason": "A cross-cutting architecture review of an ADK design with no implementation fits adk-system-designer, with tenant isolation in a shared index and retried booking writes needing security and memory/retrieval scoping input.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-deploy-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Deploying an existing ADK service to an approved Cloud Run target with rollout checks is deployment lifecycle work with design already settled.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-change-request-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Turning the design and plan into a change request against an SOW is explicitly within adk-system-designer.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-scope-gate-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Scoping a time-boxed ADK build to decide what ships first and what is left out is covered by adk-system-designer's PoC/MVP scoping.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-existing-app-feature-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-engineer",
+   "supporting": [
+    "adk-frontend-integration",
+    "adk-fastapi-backend"
+   ],
+   "reason": "A new feature in an application with an accepted design that spans UI, backend, sessions and hosting is the adk-engineer cross-concern planning case, routing to frontend and backend specialists.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-sow-commercial-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Negotiating a master services agreement and payment terms with procurement is not covered by any skill in the catalogue.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-sow-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Turning the discovery brief, design and plan into a client statement of work is explicitly covered by adk-system-designer.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-next-ticket-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "adk-engineer",
+   "supporting": [],
+   "reason": "Carrying out a ticket in an ADK project is an engineering change with no specialist named, so the starting-point skill picks the relevant specialists.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-existing-app-feature-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "adk-engineer",
+   "supporting": [],
+   "reason": "A new feature on an accepted, live design spans UI, backend, sessions and hosting, which is the adk-engineer cross-concern planning case.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-checkpoint-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "adk-engineer",
+   "supporting": [],
+   "reason": "Checkpointing a plan mid-build for a ticket that changed forget semantics and hours overrun concerns an existing accepted design's feature work, which adk-engineer handles.",
+   "grade": "FAIL"
+  },
+  {
+   "id": "designer-sow-commercial-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Negotiating an MSA and payment terms with procurement is a commercial/legal task that no ADK skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-sow-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Turning the design and plan into a client statement of work is explicitly covered by adk-system-designer.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-scope-gate-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Scoping a time-boxed proof of concept and deciding what ships first versus what is left out is an adk-system-designer use.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "A new ADK application design on GCP worked through on requirements and trade-offs before implementation fits adk-system-designer.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-change-request-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Writing a change request against a signed SOW, with goals and estimates, is covered by adk-system-designer's proposal/SOW/change request scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-capacity-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Scoping an MVP to the time and people available and planning what ships first and what follows is adk-system-designer territory.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-review-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [
+    "adk-agent-security",
+    "safe-api-tool-calls"
+   ],
+   "reason": "A cross-cutting architecture review with no implementation is adk-system-designer, with tenant isolation and retried booking writes needing security and safe-write expertise.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-generic-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "A conventional Django app with no agents or ADK components is outside every skill in the catalogue.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-deploy-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Deploying an existing ADK service to Cloud Run with rollout checks is a deployment lifecycle task with the architecture already settled.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-feature-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [
+    "adk-engineer"
+   ],
+   "reason": "An explicitly saved preference with a forget action is a memory, consent and erasure boundary feature in an existing accepted design, so memory architecture leads with adk-engineer supporting.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-sow-commercial-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Negotiating an MSA and payment terms with procurement is commercial work that no catalogue skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-next-ticket-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "adk-engineer",
+   "supporting": [],
+   "reason": "This is a ticket-driven ADK engineering task with no specialist chosen, so the engineer skill is the starting point.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-change-request-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Turning a design and plan into a change request against a signed SOW, with changed goals and estimates, is explicitly part of adk-system-designer.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-capacity-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Scoping an MVP to the time and people available, and planning what ships first and what follows, is an adk-system-designer task.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-sow-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Writing a client statement of work from the design and plan falls under adk-system-designer.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-deploy-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "This is a deployment to Cloud Run of an existing ADK service with settled architecture, including rollout checks.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-checkpoint-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [
+    "adk-memory-architecture"
+   ],
+   "reason": "Checkpointing the plan against a design change and an hours overrun is design and plan work, and the changed meaning of forgetting a preference touches memory erasure.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-review-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [
+    "adk-agent-security",
+    "safe-api-tool-calls"
+   ],
+   "reason": "This is an architecture review before implementation, with tenant isolation over a shared index and unsafe booking retries as the main concerns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-feature-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "A saved preference with a forget action is a focused memory, consent and erasure implementation within an accepted design.",
+   "grade": "PASS"
+  },
+  {
+   "id": "designer-existing-app-feature-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "adk-engineer",
+   "supporting": [
+    "adk-frontend-integration",
+    "adk-fastapi-backend"
+   ],
+   "reason": "The change spans UI, backend, sessions and hosting of an existing application, so the engineer skill routes it, with session-endpoint and API-layer specialists supporting.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-scope-gate-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Deciding what to build first and what to cut within a four-hour proof of concept is scoping that belongs to adk-system-designer.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-generic-near-miss",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "none",
+   "supporting": [],
+   "reason": "A conventional Django application with no agents or ADK is outside every ADK skill's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-positive",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 3,
+   "split": "dev",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "A requirements and architecture design session for a new ADK application on GCP, before code, is the core of adk-system-designer.",
+   "grade": "PASS"
+  }
+ ],
+ "summary": {
+  "overall": {
+   "PASS": 37,
+   "PARTIAL": 0,
+   "FAIL": 2,
+   "ERROR": 0
+  },
+  "by_repeat": {
+   "1": {
+    "PASS": 12,
+    "PARTIAL": 0,
+    "FAIL": 1,
+    "ERROR": 0
+   },
+   "2": {
+    "PASS": 12,
+    "PARTIAL": 0,
+    "FAIL": 1,
+    "ERROR": 0
+   },
+   "3": {
+    "PASS": 13,
+    "PARTIAL": 0,
+    "FAIL": 0,
+    "ERROR": 0
+   }
+  },
+  "by_split": {
+   "dev": {
+    "PASS": 37,
+    "PARTIAL": 0,
+    "FAIL": 2,
+    "ERROR": 0
+   }
+  },
+  "not_pass": {
+   "designer-checkpoint-positive": [
+    "FAIL",
+    "FAIL",
+    "PASS"
+   ]
+  }
+ }
+}

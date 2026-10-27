@@ -1,16 +1,16 @@
 ---
 name: adk-agent-evaluation
 description: >-
-  Build, adapt or audit a Python ADK agent's testing strategy: deterministic
-  tool and Runner tests, live evaluation sets, simulated conversations,
-  conformance replay and strict result checks. Use for agent behaviour,
-  regression coverage or evaluation reliability, for improving wrong decisions
-  through a labelled development set and error analysis that measures each
-  prompt, exemplar or model change, and for labelling with subject-matter
-  experts: session plan, failure taxonomy, inter-rater agreement and judge
-  calibration against their labels. Do not activate for non-agent unit tests,
-  standalone model benchmarks, deployment or cleanup alone, prompt wording or
-  exemplar design (adk-agent-instructions), model settings
+  Build, adapt or audit a Python ADK agent's test strategy: deterministic tool
+  and Runner tests, live eval sets, simulated conversations, conformance
+  replay, strict result checks and quote or citation support. Use for agent
+  behaviour, regression coverage, eval reliability, fixing a failed stage
+  without re-running paid earlier ones, holdout budgets, error analysis on a
+  labelled dev set to fix wrong decisions, measuring each prompt, exemplar or
+  model change, and subject-matter expert labelling: failure taxonomy,
+  inter-rater agreement and judge calibration. Do not activate for non-agent
+  unit tests, standalone model benchmarks, deployment or cleanup alone, prompt
+  wording or exemplar design (adk-agent-instructions), model settings
   (adk-model-and-output-contracts), wiring eval gates into CI
   (adk-release-engineering), production telemetry (adk-agent-observability),
   adversarial suites (adk-agent-security) or presenting results

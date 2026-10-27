@@ -44,7 +44,16 @@ section as one line, `<resource>: <absent | retained: reason | unknown>;
 cleanup: <command>; verified: <how, when>`. When the ticket asks for a price
 and the pricing page cannot be read in this session, leave the placeholder,
 say so in Evidence and keep that acceptance item open; never fill it from
-memory. A teardown goal or ticket completes only when the
+memory. Retention outlives the parent: Cloud SQL on-demand and final backups
+bill until deleted or expired after the instance is gone, automated backups
+roll off daily after deletion, and point-in-time recovery logs after deletion
+need checking on the [pricing page](https://cloud.google.com/sql/pricing)
+(AlloyDB backups likewise bill until deleted or expired), so a ticket that
+creates a database names them in its Evidence line and the teardown ticket
+checks them with `gcloud sql backups list --instance=-`, the form for deleted
+instances
+([backups](https://docs.cloud.google.com/sql/docs/postgres/backup-recovery/backups);
+adk-system-designer's resource cost ledger, checked on 21 October 2026). A teardown goal or ticket completes only when the
 resource list and, once it has caught up, the billing report show the
 resources gone; a delete command returning successfully is where
 verification starts.

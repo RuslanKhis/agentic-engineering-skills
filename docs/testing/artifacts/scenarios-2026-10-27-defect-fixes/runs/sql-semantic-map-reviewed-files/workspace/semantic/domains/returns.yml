@@ -1,0 +1,9 @@
+name: returns
+description: Credit notes against invoices.
+tables:
+  credit_notes: [credit_note_id, invoice_id, issued_on, amount_gbp, reason_code]
+  invoices: [invoice_id, customer_id, invoice_date]
+relationships: [credit_notes_to_invoices]
+derived: {}
+reviewed_by: null
+reviewed_on: null

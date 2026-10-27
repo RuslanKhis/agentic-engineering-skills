@@ -148,6 +148,23 @@ The 2026-07-28 specification makes `ttlMs` and `cacheScope` mandatory on
 records them (`list_result_ttl_ms`) so you can align the TTL with what the
 server states.
 
+## Schema keywords the conversion drops
+
+A server may use any JSON Schema 2020-12 keyword in `inputSchema` and
+`outputSchema`: 2020-12 became the default dialect in 2025-11-25 (SEP-1613)
+and 2026-07-28 loosened both schemas to any 2020-12 keyword with `$ref`
+resolution requirements (SEP-2106; modelcontextprotocol/modelcontextprotocol
+commit 80041ab, read 2026-10-22). ADK's declaration conversion keeps only the
+Gemini-supported subset, so a constraint the server expresses with `oneOf`,
+`if`/`then` or `patternProperties` is gone before the model sees the tool,
+and the server rejects arguments the model had no way to know were invalid.
+Check it in the recorded-definition test: compare each recorded
+`inputSchema` with the declaration the model receives (captured in a
+`before_model_callback`) and list every dropped keyword in the ticket, with
+the server's error for an argument that breaks it.
+`adk-tool-interface-design` owns the supported subset and the shaping of
+the tool's error for the model.
+
 ## Authorization facts a consumer pins
 
 When the server is an OAuth resource server, four rules from the
@@ -446,6 +463,8 @@ joins your trace (`adk-agent-observability`).
   tiered and gated); `tool_name_prefix` set when more than one toolset.
 - Manifest from `mcp_tool_inventory.py --out` committed; a test diffs the
   live list against it.
+- Recorded-definition test lists the schema keywords ADK's conversion drops
+  from each tool's `inputSchema`.
 - Credentials through `header_provider` or `auth_scheme`; nothing shared
   across users in `connection_params.headers`; no passthrough of the user's
   upstream token.

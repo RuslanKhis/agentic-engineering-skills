@@ -1,0 +1,21 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: analytics-agent
+  labels:
+    app: fernhill-analytics-agent
+spec:
+  template:
+    metadata:
+      annotations:
+        run.googleapis.com/ingress: internal-and-cloud-load-balancing
+    spec:
+      serviceAccountName: analytics-agent@fernhill-analytics.iam.gserviceaccount.com
+      containerConcurrency: 20
+      timeoutSeconds: 300
+      containers:
+        - image: europe-west2-docker.pkg.dev/fernhill-analytics/agents/analytics-agent:0.3.0
+          command: ["/bin/sh", "deploy/start.sh"]
+          env:
+            - name: BQ_JOB_PROJECT
+              value: fernhill-analytics

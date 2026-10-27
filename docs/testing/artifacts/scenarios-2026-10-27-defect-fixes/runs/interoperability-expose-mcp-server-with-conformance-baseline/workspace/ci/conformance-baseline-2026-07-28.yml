@@ -1,0 +1,12 @@
+# Expected conformance failures for the exposed research agent, requirements 2026-07-28.
+# UNSEEDED
+# The server is a business agent, not the reference "everything" server, so scenarios that call
+# fixture tools/resources/prompts fail by design. Seeded below only with the two per-check
+# entries the interoperability skill observed on google-adk 2.12.0 + mcp 2.3.0. The first real
+# CI run will list the rest in ci/out/2026-07-28 (checks.json per scenario): add each with a
+# comment naming the fixture it needs, prefer `<scenario>:<check-id>` entries, then delete the
+# UNSEEDED line above so the run starts gating (and flags stale entries).
+server:
+  # diagnostic tool test_missing_capability does not exist on this server
+  - server-stateless:sep-2575-server-rejects-undeclared-capability
+  - server-stateless:sep-2575-missing-capability-http-400

@@ -1,0 +1,35 @@
+name: monthly-golden-report
+# Report only: it never blocks a release. Needs the same repository variables as nightly-score.
+on:
+  schedule:
+    - cron: "0 6 1 * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  report:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SCORER_SA }}
+      - run: pip install "bigquery-agent-analytics==0.6.1"
+      - name: Fetch drift result for the last 30 days
+        run: |
+          python ops/golden_report.py fetch --project-id "${{ vars.GCP_PROJECT }}" \
+            --dataset-id support_analytics --golden-table golden_questions \
+            --start-time "$(date -u -d '30 days ago' +%Y-%m-%dT%H:%M:%SZ)" --out drift.json
+      - run: python ops/golden_report.py render --drift drift.json --out golden_report.md
+      - run: cat golden_report.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: golden-report
+          path: |
+            golden_report.md
+            drift.json

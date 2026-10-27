@@ -1,0 +1,9 @@
+# Assumption: @OWNER/platform-leads is a placeholder; replace with the real team.
+# Files that define what the production agent can do, or that judge the change.
+/app/agent.py        @OWNER/platform-leads
+/app/callbacks.py    @OWNER/platform-leads
+/app/reporting.py    @OWNER/platform-leads
+/app/tools/          @OWNER/platform-leads
+/mcp/                @OWNER/platform-leads
+/.github/            @OWNER/platform-leads
+/.agents/            @OWNER/platform-leads

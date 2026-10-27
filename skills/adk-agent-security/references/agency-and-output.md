@@ -277,47 +277,18 @@ check that raises instead of returning a verdict is an unknown verdict, kept
 separate from a rejection in the record. On ADK the first and last agent are
 the root agent's model callbacks, the per-tool check is `before_tool_callback`
 and `after_tool_callback`, and the static envelope is
-`adk-operational-guardrails`' halt message.
+`adk-operational-guardrails`' halt message. `protect-adk-sensitive-data` owns operating the
+screens and these placement rules ("Where a screen runs" in its boundaries
+reference); this section is the threat-model view of them.
 
-A local alternative for tool results is Meta's LlamaFirewall with its Prompt
-Guard 2 classifier, run in-process from `after_tool_callback` when tool
-output may not leave the project or region, or as a second signal beside
-Model Armor (meta-llama/PurpleLlama commit d934ea2, `LlamaFirewall/` (MIT
-scanner code), read 2026-10-24). These facts decide whether it actually
-screens. It scores only the first 512 tokens (`truncation=True,
-max_length=512`), and the model card says longer inputs must be split, so
-the shipped scanner is not a whole-result screen and an injection after
-token 512 passes. Chunk the projected result and classify each segment:
-count with the classifier's own tokenizer (the scanner's `pg.tokenizer`),
-keep each window under 512 tokens and overlap the windows, and test with an
-injection placed across a window boundary and one after token 512, since
-window and overlap sizes are the project's choice. It flags explicit
-attempts to override instructions, not every risk. Call one
-`PromptGuardScanner` directly, never through `LlamaFirewall`: `scan()` runs
-each scanner with `asyncio.run`, which raises inside ADK's running event
-loop; `scan_async()` returns a successful `ALLOW` for every result that is
-not a block or a human-review hold, a scanner `ERROR` included; both build a
-new scanner, and so reload the model, on every scan; and a role with no
-scanner configured returns `ALLOW`. The scanner's `scan()` is declared async
-but runs the model synchronously, so call it through `asyncio.to_thread` to
-keep ADK's loop free; it has no error handling, so an exception, a status
-other than success, or a result over your size limit is the unknown verdict
-and withholds. Its block reason embeds the full scanned text, so log the
-decision and score, never the reason. Construct the scanner once at startup,
-which loads the model, from weights already at
-`$HF_HOME/meta-llama--Llama-Prompt-Guard-2-86M`, and refuse to start if that
-directory is missing: when `HF_HOME` is unset the library sets it, for the
-whole process, to a literal `~/.cache/huggingface`, and a missing directory
-triggers a download and an interactive Hugging Face login. Tests use a fake
-with the same interface, `async scan(message, past_trace=None) ->
-ScanResult`, returning each decision, an `ERROR` status and an exception in
-turn, beside the scripted-model Runner test in [adversarial
-testing](adversarial-testing.md). The Prompt Guard 2 weights are gated under
-the Llama 4 Community License, separate from the MIT code: whether a project
-may use them is that project's licence decision, recorded before deployment;
-this skill links to them and ships none. Its AlignmentCheck scanner is a
-remote judge, not a local screen (see `protect-adk-sensitive-data`), and it
-does nothing for sensitive data, which stays with Sensitive Data Protection.
+A local alternative for tool results is Meta's LlamaFirewall with its
+Prompt Guard 2 classifier, for tool output that may not leave the project
+(meta-llama/PurpleLlama commit d934ea2, read 2026-10-24). For the threat
+model, record two facts: it scores only the first 512 tokens, so unchunked
+it is not a whole-result screen, and `LlamaFirewall.scan_async()` reports a
+scanner error as `ALLOW`. Its wiring, chunking, weights licence and tests
+are owned by `protect-adk-sensitive-data` ("A local screen for tool
+results" in its boundaries reference).
 
 A second screening layer now sits on Agent Gateway: Semantic Governance
 Policies, natural-language constraints that a managed LLM policy engine

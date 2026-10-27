@@ -1,0 +1,28 @@
+/* Tokens from docs/design/DESIGN.md */
+:root {
+  --color-bg: #f7f5f0;
+  --color-surface: #ffffff;
+  --color-text: #1f2a2e;
+  --color-muted: #5b6b70;
+  --color-primary: #1d5c63;
+  --color-error: #b3261e;
+  --radius: 10px;
+  --space: 8px;
+  --font: "Inter", system-ui, sans-serif;
+}
+
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font); }
+.app-shell { max-width: 760px; margin: 0 auto; padding: calc(var(--space) * 2); }
+.chat-panel { background: var(--color-surface); border-radius: var(--radius); padding: calc(var(--space) * 2); }
+.chat-log { list-style: none; padding: 0; margin: 0 0 calc(var(--space) * 2); }
+.message { margin: var(--space) 0; }
+.message--user { text-align: right; }
+.message--failed p { color: var(--color-muted); }
+.badge--error { color: var(--color-error); font-size: 0.85em; }
+.trace { list-style: none; padding: 0; margin: 0 0 var(--space); font-size: 0.9em; color: var(--color-muted); text-align: left; }
+.trace__step--failed { color: var(--color-error); }
+.status { color: var(--color-muted); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.chat-input { display: flex; gap: var(--space); }
+.chat-input input { flex: 1; padding: var(--space); border-radius: var(--radius); border: 1px solid var(--color-muted); }
+.chat-input button { background: var(--color-primary); color: #fff; border: 0; border-radius: var(--radius); padding: var(--space) calc(var(--space) * 2); }

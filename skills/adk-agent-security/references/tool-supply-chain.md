@@ -38,7 +38,11 @@ assume it.
 3. **Pin by hash.** Record a SHA-256 of each reviewed declaration (`name`,
    `description`, `inputSchema`) in the repository and compare at startup or
    in a test; a changed hash is a change request, not a hot update.
-   `tool_list_cache_ttl_seconds` controls re-listing but not re-review. A
+   `tool_list_cache_ttl_seconds` controls re-listing but not re-review:
+   ADK never subscribes to `notifications/tools/list_changed`, so with the
+   TTL at `None` it re-lists on every `get_tools()` (every model request) and
+   with a positive TTL a changed list stays unseen until the entry expires
+   (`adk-agent-interoperability`'s MCP consumption reference). A
    startup or CI check misses a remote server that changes a description
    after deploy, so enforce the pin at run time as well: `McpToolset`
    applies `tool_filter` on every `get_tools` call, cache hits included, and

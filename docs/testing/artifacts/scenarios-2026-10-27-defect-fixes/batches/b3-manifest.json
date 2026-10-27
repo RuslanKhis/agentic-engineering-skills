@@ -1,0 +1,168 @@
+{
+ "created": "2026-10-27T12:22:14+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a787739fdce538787",
+ "commit": "c297ef126cd683f22e34f558566b28cea9056d42",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "model-output-schema-with-tools-hardening",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/model-output-schema-with-tools-hardening/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The schema checker needs a shell; google-adk 2.8.0 is pinned but not installed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-model-and-output-contracts",
+    "adk-agent-evaluation",
+    "adk-sql-agent-engineering",
+    "optimise-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "sensitive-data-model-armor-file-attachments-and-template-update",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/sensitive-data-model-armor-file-attachments-and-template-update/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Neither google-adk nor google-cloud-modelarmor is installed; tests use an SDK-shaped double.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "protect-adk-sensitive-data",
+    "adk-memory-architecture",
+    "deploy-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "sensitive-data-offline-pii-oracle-in-ci",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/sensitive-data-offline-pii-oracle-in-ci/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Runner tests skip without google-adk; presidio is not installed and the agent has no shell.",
+   "skills_missing": [],
+   "skills_installed": [
+    "protect-adk-sensitive-data",
+    "adk-agent-evaluation",
+    "adk-release-engineering"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "sql-acceptance-metric-names-and-spider2-bigquery-probe",
+   "status": "repo-fixture",
+   "base": [
+    "sql-agent"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/sql-acceptance-metric-names-and-spider2-bigquery-probe/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-sql-agent-engineering",
+    "adk-agent-evaluation",
+    "adk-release-engineering"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "sql-managed-bigquery-mcp-read-only-by-platform",
+   "status": "repo-fixture",
+   "base": [
+    "sql-agent"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/sql-managed-bigquery-mcp-read-only-by-platform/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-sql-agent-engineering",
+    "adk-agent-interoperability",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "sql-semantic-map-reviewed-files",
+   "status": "repo-fixture",
+   "base": [
+    "sql-agent"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/sql-semantic-map-reviewed-files/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-sql-agent-engineering",
+    "adk-release-engineering",
+    "adk-memory-architecture"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "out-of-scope-marketing-edit",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/out-of-scope-marketing-edit/situation.md"
+    }
+   ],
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-workflow-design",
+    "adk-frontend-integration",
+    "deploy-adk-on-google-cloud",
+    "optimise-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1147 @@
+{
+ "cost_usd": {
+  "agent": 16.51,
+  "judge": 6.42
+ },
+ "scenarios": [
+  {
+   "id": "guardrails-continuation-accounting-and-duplicates",
+   "batch": "a1",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-operational-guardrails",
+   "passed": 3,
+   "total": 5,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "PPP",
+    "A4": "FFF",
+    "A5": "PPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-operational-guardrails"
+   ],
+   "agent_cost": 0.3454585,
+   "judge_cost": 0.1848
+  },
+  {
+   "id": "guardrails-escalation-two-sided-calibration",
+   "batch": "a1",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-operational-guardrails",
+   "passed": 1,
+   "total": 4,
+   "unstable": [
+    "A4"
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "PPF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-operational-guardrails"
+   ],
+   "agent_cost": 0.2210509,
+   "judge_cost": 0.0757
+  },
+  {
+   "id": "guardrails-unanswered-approval-and-screening-placement",
+   "batch": "a1",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-operational-guardrails",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "PPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-operational-guardrails"
+   ],
+   "agent_cost": 0.2604727,
+   "judge_cost": 0.1102
+  },
+  {
+   "id": "privacy-with-observability",
+   "batch": "a1",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "protect-adk-sensitive-data",
+   "passed": 4,
+   "total": 6,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPP",
+    "A4": "FFF",
+    "A5": "PPP",
+    "A6": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "protect-adk-sensitive-data"
+   ],
+   "agent_cost": 0.1957446,
+   "judge_cost": 0.096
+  },
+  {
+   "id": "sensitive-data-local-tool-result-screen-llamafirewall",
+   "batch": "a1",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-agent-security",
+   "passed": 4,
+   "total": 5,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPP",
+    "A4": "FFF",
+    "A5": "PPP"
+   },
+   "primary_loaded": false,
+   "skills_loaded": [
+    "protect-adk-sensitive-data"
+   ],
+   "agent_cost": 0.3606595,
+   "judge_cost": 0.1574
+  },
+  {
+   "id": "security-refund-agent-build-time-controls-vs-screening",
+   "batch": "a1",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-agent-security",
+   "passed": 2,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-agent-security"
+   ],
+   "agent_cost": 0.404675,
+   "judge_cost": 0.1607
+  },
+  {
+   "id": "evaluation-bound-spans-versus-model-paraphrase",
+   "batch": "a2",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 0,
+   "total": 5,
+   "unstable": [],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF",
+    "A5": "FFF"
+   },
+   "primary_loaded": false,
+   "skills_loaded": [],
+   "agent_cost": 0.18919760000000002,
+   "judge_cost": 0.0823
+  },
+  {
+   "id": "evaluation-progressive-downstream-repair",
+   "batch": "a2",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 1,
+   "total": 5,
+   "unstable": [
+    "A4"
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FPF",
+    "A5": "PPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-agent-evaluation"
+   ],
+   "agent_cost": 0.27887280000000003,
+   "judge_cost": 0.0817
+  },
+  {
+   "id": "evaluation-collateral-damage-no-op-control",
+   "batch": "a2",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 1,
+   "total": 4,
+   "unstable": [
+    "A1"
+   ],
+   "votes": {
+    "A1": "FFP",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-agent-evaluation"
+   ],
+   "agent_cost": 0.42277580000000003,
+   "judge_cost": 0.2513
+  },
+  {
+   "id": "release-coding-agent-capability-diff-gate",
+   "batch": "a2",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-release-engineering",
+   "passed": 2,
+   "total": 5,
+   "unstable": [
+    "A2"
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "PFF",
+    "A3": "PPP",
+    "A4": "PPP",
+    "A5": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-release-engineering"
+   ],
+   "agent_cost": 0.27839020000000003,
+   "judge_cost": 0.0889
+  },
+  {
+   "id": "interoperability-consume-enterprise-mcp-server-registration-and-sso",
+   "batch": "a2",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-agent-interoperability",
+   "passed": 3,
+   "total": 4,
+   "unstable": [
+    "A2"
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPF",
+    "A3": "PPP",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-agent-interoperability",
+    "adk-tool-auth-and-secrets"
+   ],
+   "agent_cost": 0.33609249999999996,
+   "judge_cost": 0.1091
+  },
+  {
+   "id": "mcp-rug-pull-runtime-pin-and-mcp-ids",
+   "batch": "a3",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-agent-security",
+   "passed": 2,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "FFF",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "PPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-agent-security"
+   ],
+   "agent_cost": 0.3580024,
+   "judge_cost": 0.1254
+  },
+  {
+   "id": "engineer-agents-cli-focused-memory-1-11",
+   "batch": "a3",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-memory-architecture",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "FFF",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-memory-architecture"
+   ],
+   "agent_cost": 0.2546667,
+   "judge_cost": 0.0844
+  },
+  {
+   "id": "engineer-ticket-creates-cloud-sql",
+   "batch": "a3",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-memory-architecture",
+   "passed": 2,
+   "total": 4,
+   "unstable": [
+    "A3"
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "PPP",
+    "A3": "PPF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-engineer",
+    "adk-memory-architecture"
+   ],
+   "agent_cost": 0.4943799000000001,
+   "judge_cost": 0.1711
+  },
+  {
+   "id": "memory-write-back-loop-from-horizon",
+   "batch": "a3",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "adk-memory-architecture",
+   "passed": 2,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "FFF",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "PPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-memory-architecture"
+   ],
+   "agent_cost": 0.8428271,
+   "judge_cost": 0.3203
+  },
+  {
+   "id": "web-backend-deploy-routes-to-deploy",
+   "batch": "a3",
+   "set": "a-rerun",
+   "status": "graded",
+   "expected_primary": "deploy-adk-on-google-cloud",
+   "passed": 4,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPP",
+    "A4": "PPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "agent_cost": 0.2654298,
+   "judge_cost": 0.0874
+  },
+  {
+   "id": "interoperability-expose-and-register-a2a",
+   "batch": "b1",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-agent-interoperability",
+   "passed": 0,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-agent-interoperability"
+   ],
+   "agent_cost": 0.34495689999999996,
+   "judge_cost": 0.1292
+  },
+  {
+   "id": "interoperability-expose-mcp-server-with-conformance-baseline",
+   "batch": "b1",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-agent-interoperability",
+   "passed": 0,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-agent-interoperability"
+   ],
+   "agent_cost": 0.36982580000000004,
+   "judge_cost": 0.1301
+  },
+  {
+   "id": "interoperability-exposed-agent-forgets-on-modern-clients",
+   "batch": "b1",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-agent-interoperability",
+   "passed": 3,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPP",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-agent-interoperability"
+   ],
+   "agent_cost": 0.2019705,
+   "judge_cost": 0.0857
+  },
+  {
+   "id": "interoperability-mcp-app-widget-to-custom-frontend",
+   "batch": "b1",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-agent-interoperability",
+   "passed": 2,
+   "total": 4,
+   "unstable": [
+    "A3",
+    "A4"
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "FPP",
+    "A4": "PFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-agent-interoperability"
+   ],
+   "agent_cost": 0.3412331,
+   "judge_cost": 0.1125
+  },
+  {
+   "id": "interoperability-verify-signed-agent-card",
+   "batch": "b1",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-agent-interoperability",
+   "passed": 1,
+   "total": 4,
+   "unstable": [
+    "A1"
+   ],
+   "votes": {
+    "A1": "FFP",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-agent-interoperability"
+   ],
+   "agent_cost": 0.32728920000000006,
+   "judge_cost": 0.1163
+  },
+  {
+   "id": "observability-handover-and-postmortem",
+   "batch": "b1",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-agent-observability",
+   "passed": 1,
+   "total": 4,
+   "unstable": [
+    "A1"
+   ],
+   "votes": {
+    "A1": "FPF",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-agent-observability"
+   ],
+   "agent_cost": 0.29907360000000005,
+   "judge_cost": 0.1592
+  },
+  {
+   "id": "release-bigquery-analytics-score-gate-and-drift",
+   "batch": "b1",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-release-engineering",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-release-engineering"
+   ],
+   "agent_cost": 0.4655104000000001,
+   "judge_cost": 0.1189
+  },
+  {
+   "id": "release-post-launch-quality-loop-aqua",
+   "batch": "b1",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-release-engineering",
+   "passed": 1,
+   "total": 4,
+   "unstable": [
+    "A4"
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FPP"
+   },
+   "primary_loaded": false,
+   "skills_loaded": [],
+   "agent_cost": 0.1651878,
+   "judge_cost": 0.0732
+  },
+  {
+   "id": "engineer-resumes-from-progress-block",
+   "batch": "b2",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-engineer",
+   "passed": 2,
+   "total": 3,
+   "unstable": [
+    "A3"
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "PFP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-engineer"
+   ],
+   "agent_cost": 0.20975900000000003,
+   "judge_cost": 0.0742
+  },
+  {
+   "id": "engineer-ticket-with-missing-companion",
+   "batch": "b2",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-engineer",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "FFF",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-engineer",
+    "adk-frontend-integration"
+   ],
+   "agent_cost": 0.39768440000000005,
+   "judge_cost": 0.0529
+  },
+  {
+   "id": "engineer-agents-cli-deploy-ticket",
+   "batch": "b2",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "deploy-adk-on-google-cloud",
+   "passed": 1,
+   "total": 5,
+   "unstable": [
+    "A1"
+   ],
+   "votes": {
+    "A1": "PFP",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF",
+    "A5": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "agent_cost": 0.22606049999999997,
+   "judge_cost": 0.097
+  },
+  {
+   "id": "engineer-google-skills-supporting-missing",
+   "batch": "b2",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "deploy-adk-on-google-cloud",
+   "passed": 2,
+   "total": 5,
+   "unstable": [
+    "A1",
+    "A3",
+    "A5"
+   ],
+   "votes": {
+    "A1": "PFF",
+    "A2": "FFF",
+    "A3": "PFF",
+    "A4": "PPP",
+    "A5": "FPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "agent_cost": 0.25367259999999997,
+   "judge_cost": 0.1083
+  },
+  {
+   "id": "frontend-a2ui-route-and-validation-declared",
+   "batch": "b2",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-frontend-integration",
+   "passed": 0,
+   "total": 4,
+   "unstable": [
+    "A3"
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "PFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-frontend-integration"
+   ],
+   "agent_cost": 0.26514820000000006,
+   "judge_cost": 0.121
+  },
+  {
+   "id": "frontend-assistant-ui-adk-python-gateway",
+   "batch": "b2",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-frontend-integration",
+   "passed": 3,
+   "total": 4,
+   "unstable": [
+    "A2"
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PFP",
+    "A3": "PPP",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-frontend-integration"
+   ],
+   "agent_cost": 0.6228383000000001,
+   "judge_cost": 0.2449
+  },
+  {
+   "id": "frontend-tool-widgets-staged-emission",
+   "batch": "b2",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-frontend-integration",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-frontend-integration",
+    "adk-workflow-design"
+   ],
+   "agent_cost": 0.251325,
+   "judge_cost": 0.1061
+  },
+  {
+   "id": "web-backend-stream-progress-routes-to-frontend",
+   "batch": "b2",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-frontend-integration",
+   "passed": 3,
+   "total": 3,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-frontend-integration"
+   ],
+   "agent_cost": 0.27360850000000003,
+   "judge_cost": 0.1345
+  },
+  {
+   "id": "model-output-schema-with-tools-hardening",
+   "batch": "b3",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-model-and-output-contracts",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-model-and-output-contracts"
+   ],
+   "agent_cost": 0.2494066,
+   "judge_cost": 0.121
+  },
+  {
+   "id": "sensitive-data-model-armor-file-attachments-and-template-update",
+   "batch": "b3",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "protect-adk-sensitive-data",
+   "passed": 3,
+   "total": 5,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPP",
+    "A4": "FFF",
+    "A5": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "protect-adk-sensitive-data"
+   ],
+   "agent_cost": 0.5371226000000001,
+   "judge_cost": 0.2285
+  },
+  {
+   "id": "sensitive-data-offline-pii-oracle-in-ci",
+   "batch": "b3",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "protect-adk-sensitive-data",
+   "passed": 1,
+   "total": 5,
+   "unstable": [
+    "A3",
+    "A4"
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "PFF",
+    "A4": "PFF",
+    "A5": "PPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "protect-adk-sensitive-data"
+   ],
+   "agent_cost": 0.30746549999999995,
+   "judge_cost": 0.13
+  },
+  {
+   "id": "sql-acceptance-metric-names-and-spider2-bigquery-probe",
+   "batch": "b3",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-sql-agent-engineering",
+   "passed": 3,
+   "total": 4,
+   "unstable": [
+    "A4"
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "PPP",
+    "A4": "PFP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-sql-agent-engineering"
+   ],
+   "agent_cost": 0.2292699,
+   "judge_cost": 0.1034
+  },
+  {
+   "id": "sql-managed-bigquery-mcp-read-only-by-platform",
+   "batch": "b3",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-sql-agent-engineering",
+   "passed": 2,
+   "total": 4,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-sql-agent-engineering",
+    "adk-agent-interoperability"
+   ],
+   "agent_cost": 0.37834520000000005,
+   "judge_cost": 0.0978
+  },
+  {
+   "id": "sql-semantic-map-reviewed-files",
+   "batch": "b3",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-sql-agent-engineering",
+   "passed": 1,
+   "total": 4,
+   "unstable": [
+    "A1",
+    "A3"
+   ],
+   "votes": {
+    "A1": "FFP",
+    "A2": "FFF",
+    "A3": "FFP",
+    "A4": "PPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-sql-agent-engineering"
+   ],
+   "agent_cost": 0.5576479999999999,
+   "judge_cost": 0.2213
+  },
+  {
+   "id": "out-of-scope-marketing-edit",
+   "batch": "b3",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": null,
+   "passed": 2,
+   "total": 3,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "FFF"
+   },
+   "primary_loaded": false,
+   "skills_loaded": [],
+   "agent_cost": 0.0270017,
+   "judge_cost": 0.0338
+  },
+  {
+   "id": "plain-adk-no-scaffold",
+   "batch": "b4",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-workflow-design",
+   "passed": 3,
+   "total": 5,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPP",
+    "A4": "FFF",
+    "A5": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-workflow-design"
+   ],
+   "agent_cost": 0.09136680000000001,
+   "judge_cost": 0.0497
+  },
+  {
+   "id": "workflow-checkpoint-dependency-invalidation",
+   "batch": "b4",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-workflow-design",
+   "passed": 1,
+   "total": 5,
+   "unstable": [
+    "A3"
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFP",
+    "A4": "PPP",
+    "A5": "FFF"
+   },
+   "primary_loaded": false,
+   "skills_loaded": [],
+   "agent_cost": 0.6129418999999999,
+   "judge_cost": 0.161
+  },
+  {
+   "id": "workflow-content-safeguards-in-code",
+   "batch": "b6",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-workflow-design",
+   "passed": 3,
+   "total": 5,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF",
+    "A5": "PPP"
+   },
+   "primary_loaded": false,
+   "skills_loaded": [],
+   "agent_cost": 0.44193029999999994,
+   "judge_cost": 0.1607
+  },
+  {
+   "id": "workflow-durable-refund-resume-or-engine",
+   "batch": "b6",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-workflow-design",
+   "passed": 0,
+   "total": 4,
+   "unstable": [
+    "A2"
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "PFF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": false,
+   "skills_loaded": [],
+   "agent_cost": 0.2162557,
+   "judge_cost": 0.1176
+  },
+  {
+   "id": "workflow-engine-restate-or-dapr-keeps-adk-contract",
+   "batch": "b6",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-workflow-design",
+   "passed": 0,
+   "total": 5,
+   "unstable": [],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF",
+    "A5": "FFF"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-workflow-design"
+   ],
+   "agent_cost": 0.7466128999999999,
+   "judge_cost": 0.2804
+  },
+  {
+   "id": "workflow-realistic-checkpoint-storage-preflight",
+   "batch": "b6",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-workflow-design",
+   "passed": 0,
+   "total": 5,
+   "unstable": [
+    "A3"
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFP",
+    "A4": "FFF",
+    "A5": "FFF"
+   },
+   "primary_loaded": false,
+   "skills_loaded": [],
+   "agent_cost": 0.2234071,
+   "judge_cost": 0.1197
+  },
+  {
+   "id": "workflow-warning-only-correction-preservation",
+   "batch": "b6",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-workflow-design",
+   "passed": 1,
+   "total": 4,
+   "unstable": [
+    "A3"
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "FFP",
+    "A4": "FFF"
+   },
+   "primary_loaded": false,
+   "skills_loaded": [],
+   "agent_cost": 0.22068949999999998,
+   "judge_cost": 0.0903
+  },
+  {
+   "id": "portability-ticket-carried-out",
+   "batch": "b7",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-portability-planning",
+   "passed": 6,
+   "total": 8,
+   "unstable": [
+    "A7",
+    "A8"
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "PPP",
+    "A4": "PPP",
+    "A5": "PPP",
+    "A6": "PPP",
+    "A7": "FPF",
+    "A8": "PFP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-portability-planning"
+   ],
+   "agent_cost": 0.5827779,
+   "judge_cost": 0.2106
+  },
+  {
+   "id": "presenter-poc-review-evidence-only",
+   "batch": "b7",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-presenter",
+   "passed": 5,
+   "total": 5,
+   "unstable": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPP",
+    "A4": "PPP",
+    "A5": "PPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-presenter"
+   ],
+   "agent_cost": 0.3974647,
+   "judge_cost": 0.178
+  },
+  {
+   "id": "presenter-monthly-value-report",
+   "batch": "b7",
+   "set": "new",
+   "status": "graded",
+   "expected_primary": "adk-presenter",
+   "passed": 2,
+   "total": 4,
+   "unstable": [
+    "A3"
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "PFF",
+    "A4": "PPP"
+   },
+   "primary_loaded": true,
+   "skills_loaded": [
+    "adk-presenter"
+   ],
+   "agent_cost": 0.16298610000000002,
+   "judge_cost": 0.0696
+  }
+ ]
+}

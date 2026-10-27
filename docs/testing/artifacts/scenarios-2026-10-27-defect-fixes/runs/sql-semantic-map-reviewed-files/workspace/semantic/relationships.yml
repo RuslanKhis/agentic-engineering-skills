@@ -1,0 +1,20 @@
+# join_type is the cardinality, read from the first model to the second: MANY_TO_ONE means many
+# `models[0]` rows per `models[1]` row, so models[1] must join on its primary key.
+relationships:
+  - name: invoice_lines_to_invoices
+    models: [invoice_lines, invoices]
+    join_type: MANY_TO_ONE
+    condition: invoice_lines.invoice_id = invoices.invoice_id
+  - name: invoices_to_customers
+    # The old dict had no cardinality here. MANY_TO_ONE is the assumption (one customer, many
+    # invoices; customers is keyed on customer_id). Finance must confirm, and confirm that
+    # customers.customer_id is unique in the data, before this file is marked reviewed.
+    models: [invoices, customers]
+    join_type: MANY_TO_ONE
+    condition: invoices.customer_id = customers.customer_id
+  - name: credit_notes_to_invoices
+    models: [credit_notes, invoices]
+    join_type: MANY_TO_ONE
+    condition: credit_notes.invoice_id = invoices.invoice_id
+reviewed_by: null
+reviewed_on: null

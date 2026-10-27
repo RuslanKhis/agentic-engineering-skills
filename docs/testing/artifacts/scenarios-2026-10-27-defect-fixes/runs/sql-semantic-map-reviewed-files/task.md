@@ -1,0 +1,6 @@
+Our ADK analytics agent keeps its semantic domains in a Python dict. Move them to reviewed YAML files like WrenAI's MDL, run `wren context validate` in CI, and let the agent save every successful query as an example for next time.
+
+---
+Situation (from the person asking): ADK SQL agent: router, Python metadata collector reading BigQuery INFORMATION_SCHEMA for selected tables, tool-free author, sqlglot execution check on the author's candidate. One domain has a derived table defined by a SQL string that the collector expands into the candidate. A relationship entry lacks a cardinality. wrenai not installed; no network.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

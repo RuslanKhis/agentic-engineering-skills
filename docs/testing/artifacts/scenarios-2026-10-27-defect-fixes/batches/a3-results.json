@@ -1,0 +1,1133 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T12:34:12+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/a3/aes-scenarios-xhitxn3t",
+ "commit": "2fefb5707ecede1513af3f77c2d361954b94a463",
+ "scenarios_sha256": "08bdfd0448ee19392db60de134e5699ca35943f4d306f794b168ae661b5138c7",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 30,
+ "timeout_s": 900.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "mcp-rug-pull-runtime-pin-and-mcp-ids",
+   "expected_primary": "adk-agent-security",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-security",
+    "adk-agent-interoperability",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1254,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Explains that the CI diff misses a post-deploy definition change and that ADK re-lists on every get_tools without subscribing to list_changed, and proposes a predicate tool_filter that recomputes each tool's manifest hash and withholds mismatches, with a Runner test where the server double changes a description mid-session.",
+     "verdict": "FAIL",
+     "quote": "Five new tests in `tests/test_inventory.py` use fake tools.",
+     "quote_found": true,
+     "reason": "The predicate filter and CI-gap explanation exist, but the tests use fake tools rather than a Runner test with a server double changing a description mid-session, and the answer says ADK doesn't need to subscribe to list_changed rather than explaining it as a gap.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Says a matching hash proves the declared interface, not the server's behaviour.",
+     "verdict": "PASS",
+     "quote": "Limit: a matching hash proves the definition, not the server's behaviour.",
+     "quote_found": true,
+     "reason": "Directly states that a matching hash proves the definition but not behaviour.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Reports findings as MCP03:2025 beside LLM03 and ASI04 (and MCP05 or MCP09 for the bundled stdio server), cites MCP ids by id with a link, notes beta status and MCP06's title drift, and copies no OWASP text.",
+     "verdict": "FAIL",
+     "quote": "Framework: OWASP MCP Top 10 (beta, ids MCP01:2025 to MCP10:2025; ids cited, text not copied), with LLM03/ASI04 beside MCP03.",
+     "quote_found": true,
+     "reason": "Beta status and ids are covered, but there is no link and no mention of MCP06's title drift; MCP06 is used for injected content without noting drift.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Treats the stdio server as holding the agent's identity and proposes a separate service with its own identity or a sandbox; reports tests as not run.",
+     "verdict": "PASS",
+     "quote": "Preferred fix: run it as its own Cloud Run service with its own minimal service account, private ingress and Streamable HTTP",
+     "quote_found": true,
+     "reason": "Treats the stdio server as holding the agent's identity, proposes a separate service with its own identity, and reports tests as not run.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3326,
+   "files": [
+    "Dockerfile",
+    "SECURITY-REVIEW.md",
+    "app/agent.py",
+    "app/inventory.py",
+    "tests/test_inventory.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 96.5,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 24,
+    "total_cost_usd": 0.3580024,
+    "duration_ms": 95465,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-agent-security"
+    ],
+    "skill_files_read": [
+     "adk-agent-security/references/tool-supply-chain.md",
+     "adk-agent-interoperability/scripts/mcp_tool_inventory.py",
+     "adk-agent-security/references/threat-model.md",
+     "adk-agent-interoperability/references/mcp-consumption.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-security": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-agent-interoperability": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 2
+     },
+     "adk-tool-auth-and-secrets": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 22,
+    "catalogue": [
+     "adk-agent-interoperability",
+     "adk-agent-security",
+     "adk-tool-auth-and-secrets",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-security": true,
+    "adk-agent-interoperability": false,
+    "adk-tool-auth-and-secrets": false
+   }
+  },
+  {
+   "id": "engineer-agents-cli-focused-memory-1-11",
+   "expected_primary": "adk-memory-architecture",
+   "fixture_status": "repo-fixture",
+   "note": "The google-agents-cli-* skills named in available_skills are external and not installed.",
+   "skills_missing": [
+    "google-agents-cli-adk-code",
+    "google-agents-cli-workflow",
+    "google-agents-cli-eval"
+   ],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0844,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Chooses memory guidance for the feature, consults google-agents-cli-adk-code for the installed APIs and the cross-session-memory recipe, and preserves the manifest, session backend and pins.",
+     "verdict": "FAIL",
+     "quote": "Skills loaded\n\nadk-memory-architecture",
+     "quote_found": true,
+     "reason": "The agent loaded memory guidance and preserved the scaffold, but never consulted or acknowledged google-agents-cli-adk-code (not installed) for installed APIs or the cross-session recipe.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Treats the exact language setting as an application-owned profile record scoped by trusted identity rather than reaching for semantic memory because the recipe demonstrates Memory Bank.",
+     "verdict": "PASS",
+     "quote": "I treated the language as an exact user setting, so it's a saved profile value and not semantic memory. It lives in ADK `user:` state (`user:response_language`).",
+     "quote_found": true,
+     "reason": "Treats the language as an exact profile value in user-scoped state keyed by the trusted staff ID, not Memory Bank.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Writes scripted-model Runner tests of effects (saved, restart persistence, cross-user denial, forgetting) and states that these are application checks, not the behavioural unit tests the workflow skill discourages.",
+     "verdict": "FAIL",
+     "quote": "`tests/unit/test_preferences_runner.py` runs a real Runner with a scripted model on SQLite. It checks that the preference persists after a restart, isn't shared with another user, and isn't stored for a rejected language.",
+     "quote_found": true,
+     "reason": "Runner tests exist but no forgetting test is included, and the answer never says these are application checks distinct from the behavioural unit tests the workflow skill discourages.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Does not start the workflow's spec phase, scaffold enhance, or a live evaluation because those skills are installed; names the live evaluation as separate work with its Agents CLI dataset format.",
+     "verdict": "FAIL",
+     "quote": "I added no eval cases. A language-following eval would need a live model, which isn't authorised.",
+     "quote_found": true,
+     "reason": "It avoided the spec phase, scaffold enhance and live eval, but did not name the live evaluation as separate work with the Agents CLI dataset format.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2830,
+   "files": [
+    ".agents-cli-spec.md",
+    "app/agent.py",
+    "app/preferences.py",
+    "app/tools.py",
+    "tests/unit/test_preferences.py",
+    "tests/unit/test_preferences_runner.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 75.4,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 25,
+    "total_cost_usd": 0.2546667,
+    "duration_ms": 74243,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-memory-architecture"
+    ],
+    "skill_files_read": [
+     "adk-memory-architecture/references/sessions-state.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-memory-architecture": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 23,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-engineer",
+     "adk-memory-architecture",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-memory-architecture": true,
+    "adk-agent-evaluation": false
+   }
+  },
+  {
+   "id": "engineer-ticket-creates-cloud-sql",
+   "expected_primary": "adk-memory-architecture",
+   "fixture_status": "repo-fixture",
+   "note": "No gcloud, credentials or shell: instance creation and the dry run cannot execute in the run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "deploy-adk-on-google-cloud",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1711,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Writes the deletion script beside the creation script in the same change, deleting only the instance this ticket owns, refusing to run without the approved scope, and tests it at least by a dry run.",
+     "verdict": "FAIL",
+     "quote": "the delete script's dry run is also not run",
+     "quote_found": true,
+     "reason": "The deletion script was written beside the creation script, scoped to the project and instance, and refuses without CONFIRM_DELETE, but it was never tested, even by a dry run, and the assertion requires at least a dry run.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Records the instance in the Evidence section with its cleanup command and current state (absent, retained, or unknown) rather than only the creation command's success.",
+     "verdict": "PASS",
+     "quote": "absent (never created); cleanup: `PROJECT_ID=harbour-support-dev CONFIRM_DELETE=support-sessions-dev EXECUTE=yes deploy/delete_sessions_db.sh`; verified: not run",
+     "quote_found": true,
+     "reason": "The Evidence records the instance with its state (absent), its cleanup command and the verification status, not just a creation success.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Notes that backups and point-in-time recovery retention outlive the instance and that the teardown ticket must check them.",
+     "verdict": "PASS",
+     "quote": "Backups: none configured (`--no-backup`, so no PITR logs either); after deletion G06 checks `gcloud sql backups list --instance=-`.",
+     "quote_found": true,
+     "reason": "It tells G06 to check backups after deletion. It frames them as not configured rather than saying retention outlives the instance, but the teardown check is flagged.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Does not delete the instance in this ticket and does not treat a successful create as proof of cost; names the billing readback as the teardown ticket's verification.",
+     "verdict": "FAIL",
+     "quote": "Idle cost USD 1.75/day is the ticket's figure (read 2026-10-20); I could not read the pricing page here, so it is not re-verified.",
+     "quote_found": true,
+     "reason": "The instance is not deleted and a create is not treated as cost proof, but the billing readback is never named as G06's verification; only the instance list and the backups list are.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    3
+   ],
+   "final_chars": 3385,
+   "files": [
+    "app/server.py",
+    "app/sessions.py",
+    "app/settings.py",
+    "deploy/README.md",
+    "deploy/create_sessions_db.sh",
+    "deploy/delete_sessions_db.sh",
+    "deploy/deploy.sh",
+    "docs/tickets/support/G03.md",
+    "tests/test_sessions.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 159.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 37,
+    "total_cost_usd": 0.4943799000000001,
+    "duration_ms": 157908,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-engineer",
+     "adk-memory-architecture"
+    ],
+    "skill_files_read": [
+     "adk-engineer/SKILL.md",
+     "adk-engineer/references/ticket-lifecycle.md",
+     "adk-memory-architecture/references/sessions-state.md",
+     "deploy-adk-on-google-cloud/references/lifecycle.md",
+     "adk-memory-architecture/references/operations-validation.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": true,
+      "how": "read",
+      "other_files_read": 1
+     },
+     "adk-memory-architecture": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     },
+     "adk-tool-auth-and-secrets": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 35,
+    "catalogue": [
+     "adk-engineer",
+     "adk-memory-architecture",
+     "adk-tool-auth-and-secrets",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": true,
+    "adk-memory-architecture": true,
+    "deploy-adk-on-google-cloud": false,
+    "adk-tool-auth-and-secrets": false
+   }
+  },
+  {
+   "id": "memory-write-back-loop-from-horizon",
+   "expected_primary": "adk-memory-architecture",
+   "fixture_status": "repo-fixture",
+   "note": "SDK-dependent tests skip: google-adk is not installed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-memory-architecture",
+    "adk-agent-evaluation",
+    "optimise-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.3203,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Chooses an after_agent_callback write-back scoped by the trusted user and site, throttled, and names the Horizon recipe's loop (throttled flush, background judge fork, pre-compaction flush, nightly consolidation) as a pattern to lift rather than copying its code.",
+     "verdict": "FAIL",
+     "quote": "The Horizon recipe was reviewed (see `docs/memory-wishlist.md` ask) and **not adopted**: its background judge and whole-session flush save things nobody asked to be saved",
+     "quote_found": true,
+     "reason": "It uses an after_agent_callback scoped by user, but it is not throttled and it rejects the Horizon loop instead of naming it as a pattern to lift.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Adds what the recipe lacks: consent per topic, correction and erasure by label or revision, and a test that a memory-service failure is observable rather than an empty result.",
+     "verdict": "PASS",
+     "quote": "async def test_recall_outage_raises_rather_than_returning_empty(self):\n        self.backend.fail_search = ConnectionError(\"down\")\n        with self.assertRaises(MemoryUnavailable):",
+     "quote_found": true,
+     "reason": "It has per-user consent with correct/forget by memory id, but consent is not per topic; the failure-observable test is present, and the per-topic gap is only partly offset by the other items.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Treats written memory as an untrusted-input boundary (content scan before write) and keeps exact user settings in a profile record, not semantic memory.",
+     "verdict": "FAIL",
+     "quote": "_SENSITIVE = re.compile(r\"\\b(pass(word|code)?|pin|code|token|secret|key|login)\\b|\\d{4,}|@|https?://\", re.I)",
+     "quote_found": true,
+     "reason": "A content scan before write exists, but exact settings are not placed in a separate profile record; they go to semantic memory (answer_style).",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Writes scripted-model Runner tests for cross-user denial and forgetting, reported as not run without the SDK, and does not change the google-adk pin.",
+     "verdict": "PASS",
+     "quote": "`tests/test_memory_runner.py` uses a scripted model and skips without the SDK. It was never executed, so expect fixes on first run.",
+     "quote_found": true,
+     "reason": "Scripted-model Runner tests cover cross-user denial and forgetting, are reported as not run, and the google-adk pin was not changed.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 2,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 4177,
+   "files": [
+    "README.md",
+    "deploy/deploy.sh",
+    "docs/memory-design.md",
+    "fieldline/agent.py",
+    "fieldline/memory_adk.py",
+    "fieldline/memory_admin.py",
+    "fieldline/memory_governor.py",
+    "fieldline/memory_ledger.py",
+    "fieldline/memory_tools.py",
+    "fieldline/services.py",
+    "tests/test_memory_governor.py",
+    "tests/test_memory_runner.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 334.2,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 42,
+    "total_cost_usd": 0.8428271,
+    "duration_ms": 332967,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-memory-architecture"
+    ],
+    "skill_files_read": [
+     "adk-memory-architecture/references/memory-bank.md",
+     "adk-memory-architecture/references/operating-rules.md"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-memory-architecture": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 2
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "optimise-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 40,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-engineer",
+     "adk-memory-architecture",
+     "optimise-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": false,
+    "adk-memory-architecture": true,
+    "adk-agent-evaluation": false,
+    "optimise-adk-on-google-cloud": false
+   }
+  },
+  {
+   "id": "web-backend-deploy-routes-to-deploy",
+   "expected_primary": "deploy-adk-on-google-cloud",
+   "fixture_status": "repo-fixture",
+   "skills_missing": [],
+   "skills_installed": [
+    "deploy-adk-on-google-cloud",
+    "adk-fastapi-backend",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.0874,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Leads with deploy-adk-on-google-cloud and reads its frontend-hosting reference for topology A rather than restarting backend design.",
+     "verdict": "PASS",
+     "quote": "Skills loaded: deploy-adk-on-google-cloud; Skill files read: deploy-adk-on-google-cloud/references/frontend-hosting.md",
+     "quote_found": false,
+     "reason": "The agent loaded the deploy skill, read its frontend-hosting reference, treated topology A as given, and left app/ untouched rather than redesigning the backend.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Keeps one process per container with an explicit request timeout and concurrency, and no Firebase Hosting rewrite on run or stream paths.",
+     "verdict": "PASS",
+     "quote": "--min-instances 0 --max-instances 1 --concurrency 8 --timeout 300",
+     "quote_found": true,
+     "reason": "The Dockerfile runs one uvicorn process per container, the deploy command sets explicit concurrency and timeout, and no Firebase Hosting is used.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Uses IAP's signed assertion with the Cloud Run audience form and treats the audience as a fact the first live run confirms.",
+     "verdict": "PASS",
+     "quote": "`/projects/PROJECT_NUMBER/locations/europe-west2/services/SERVICE_NAME` must be set as\n   `IAP_AUDIENCE`; confirm against a captured live token on the first run.",
+     "quote_found": true,
+     "reason": "The Cloud Run audience form is used and the first live run is named as the point of confirmation; the signed assertion is verified by the app.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Presents the exact project, region and commands for approval and reports the live deployment as not run.",
+     "verdict": "PASS",
+     "quote": "Nothing is deployed. I prepared the deployment files and a runbook, but made no cloud calls",
+     "quote_found": true,
+     "reason": "The runbook gives the exact project (harbour-support-dev), region (europe-west2) and gcloud commands pending approval, and reports the live deployment as not run.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 4,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 2564,
+   "files": [
+    ".dockerignore",
+    ".gcloudignore",
+    "Dockerfile",
+    "docs/deploy/cloud-run-iap.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 70.4,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 25,
+    "total_cost_usd": 0.2654298,
+    "duration_ms": 69252,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "deploy-adk-on-google-cloud"
+    ],
+    "skill_files_read": [
+     "deploy-adk-on-google-cloud/references/cloud-run.md",
+     "deploy-adk-on-google-cloud/references/frontend-hosting.md",
+     "deploy-adk-on-google-cloud/references/compatibility.md"
+    ],
+    "skill_md_loaded": {
+     "deploy-adk-on-google-cloud": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 3
+     },
+     "adk-fastapi-backend": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-frontend-integration": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 23,
+    "catalogue": [
+     "adk-fastapi-backend",
+     "adk-frontend-integration",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "deploy-adk-on-google-cloud": true,
+    "adk-fastapi-backend": false,
+    "adk-frontend-integration": false
+   }
+  }
+ ]
+}

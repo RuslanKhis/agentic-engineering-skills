@@ -1,0 +1,6 @@
+The model's answer passes validation, but then saving the checkpoint fails. Can you make it fit in storage without throwing away any evidence? Use our existing ADK and storage code, and no paid calls please.
+
+---
+Situation (from the person asking): The failing case is PA-2026-0172: runs/PA-2026-0172-r1 keeps the failed attempt, including the writer record the store refused and the failure note. Our checkpoint store sits on a document database with a 1 MiB record limit (pipeline/config.py); small test cases save fine. The checkpoint adapter can store large content in the private blob store (pipeline/blobs.py) by reference and reopen it. tests/doubles.py gives controlled model responses for the real workflow path; google-adk is not installed in this environment. No paid calls.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

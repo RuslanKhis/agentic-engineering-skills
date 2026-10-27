@@ -1928,6 +1928,78 @@
       "should_trigger": false,
       "rationale": "Whether the earlier agent wrote the key in time is an output_key handoff owned by adk-workflow-design; instructions owns template syntax only (ownership map).",
       "split": "dev"
+    },
+    {
+      "id": "guardrails-escalation-queue-positive",
+      "skill": "adk-operational-guardrails",
+      "prompt": "Our ADK claims agent sends almost half of its cases to the human review queue, and the reviewers have started approving them in bulk without reading. Management wants the escalation rate down. Work out what can safely be lowered and what must keep going to review.",
+      "should_trigger": true,
+      "rationale": "Escalation rates and review-queue load are the guardrails skill's human-review mode: code-forced escalations, the floor share and the two-sided rates to tune against.",
+      "split": "dev"
+    },
+    {
+      "id": "guardrails-paid-continuation-positive",
+      "skill": "adk-operational-guardrails",
+      "prompt": "When a provider response is lost and our worker restarts, the app sends another paid model request for the same step, so we get charged twice. Make the decision to continue count against the same attempt allowance and spending cap, even with several workers.",
+      "should_trigger": true,
+      "rationale": "Admitting a paid continuation against a shared attempt ledger and spending envelope is guardrails' cost and budget enforcement, not a single API retry policy.",
+      "split": "dev"
+    },
+    {
+      "id": "guardrails-review-dashboard-near-miss",
+      "skill": "adk-operational-guardrails",
+      "prompt": "Build a Cloud Monitoring dashboard for our ADK agent showing daily escalations and the depth of the human review queue, with an alert when the queue stays backed up for an hour.",
+      "should_trigger": false,
+      "rationale": "A dashboard and an alert over existing escalation signals are adk-agent-observability's; nothing here changes which actions wait for review or how many attempts are admitted.",
+      "split": "dev"
+    },
+    {
+      "id": "evaluation-quote-support-positive",
+      "skill": "adk-agent-evaluation",
+      "prompt": "Our ADK document reviewer rejects correct findings when the model's quote differs slightly from the source, for example a word hyphenated across a line break. Fix the citation support check without letting changed numbers or dropped exceptions through, and keep a test that shows the old false rejection.",
+      "should_trigger": true,
+      "rationale": "Quote and citation support checks, with paraphrase and mutation controls, are the evaluation skill's source-support calibration.",
+      "split": "dev"
+    },
+    {
+      "id": "evaluation-saved-stage-recovery-positive",
+      "skill": "adk-agent-evaluation",
+      "prompt": "The final review stage of our multi-stage ADK pipeline failed after the earlier stages, which we paid for, succeeded. Repair it from the saved stage outputs instead of re-running them, and tell me the smallest next run and what to check before release.",
+      "should_trigger": true,
+      "rationale": "Recovering from a failed stage on saved paid outputs and scheduling the next evidence is the evaluation skill's progressive validation.",
+      "split": "dev"
+    },
+    {
+      "id": "evaluation-workflow-resume-near-miss",
+      "skill": "adk-agent-evaluation",
+      "prompt": "Our ADK workflow should resume from the last completed node after the process crashes instead of starting again from the first node. Wire up the checkpointing.",
+      "should_trigger": false,
+      "rationale": "Runtime resume semantics belong to adk-workflow-design; no evaluation, saved-stage evidence or measured repair is asked for.",
+      "split": "dev"
+    },
+    {
+      "id": "sensitive-data-trace-exporter-positive",
+      "skill": "protect-adk-sensitive-data",
+      "prompt": "We turned off message content in our ADK agent's tracing, but full user prompts still turn up in the tracing backend and in an analytics table. Find every exporter that sends prompt text and stop it, keeping the timings and errors.",
+      "should_trigger": true,
+      "rationale": "Which prompt content may leave through trace, completion-upload or analytics exporters is the sensitive-data boundary; observability only owns the pipelines.",
+      "split": "dev"
+    },
+    {
+      "id": "sensitive-data-screen-placement-positive",
+      "skill": "protect-adk-sensitive-data",
+      "prompt": "Our Model Armor output screen runs in parallel with the ADK agent to save latency, and sometimes the refund tool has already fired before the screen rejects the reply. Move the screen so it can actually prevent the effect.",
+      "should_trigger": true,
+      "rationale": "Where a screen runs relative to the agent and tool dispatch is owned by the skill that operates the screening products.",
+      "split": "dev"
+    },
+    {
+      "id": "sensitive-data-trace-pipeline-near-miss",
+      "skill": "protect-adk-sensitive-data",
+      "prompt": "Set up OpenTelemetry trace export from our ADK agent on Cloud Run to Cloud Trace, and add an alert when p95 latency passes four seconds.",
+      "should_trigger": false,
+      "rationale": "A telemetry pipeline and a latency alert are adk-agent-observability's; no content policy or personal data is in question.",
+      "split": "dev"
     }
   ]
 }

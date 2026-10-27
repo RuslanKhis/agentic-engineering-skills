@@ -1,0 +1,98 @@
+name: capability-gate
+# Blocks a pull request that changes what the production agent can do until a
+# code owner applies the `capability-change-approved` label. Make this check
+# required in branch protection / a ruleset, and put .github/** and .agents/**
+# under CODEOWNERS (see .github/CODEOWNERS) so a PR cannot edit its own judge.
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: capability-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    runs-on: ubuntu-24.04
+    env:
+      BASE: ${{ github.event.pull_request.base.sha }}
+      HEAD: ${{ github.event.pull_request.head.sha }}
+      LABEL: capability-change-approved
+      GH_TOKEN: ${{ github.token }}
+      PR: ${{ github.event.pull_request.number }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      # A push after approval invalidates it: the owner approved a different head.
+      - name: Drop a stale approval label
+        if: github.event.action == 'synchronize'
+        run: gh pr edit "$PR" --remove-label "$LABEL" || true
+
+      - name: Inspect base and head
+        id: inspect
+        run: |
+          set -u
+          # The judge comes from the base commit, never from the pull request's copy.
+          if ! git show "$BASE":.agents/skills/adk-agent-security/scripts/inspect_security_surface.py > /tmp/inspect.py 2>/dev/null; then
+            echo "NOT RUN: the base commit has no vendored inspector (expected on the PR that adds this gate)"
+            echo "result=notrun" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          git worktree add -q /tmp/base "$BASE"
+          python /tmp/inspect.py --project /tmp/base > base.json || true
+          python -c 'import json; json.load(open("base.json"))' || { echo "result=notrun" >> "$GITHUB_OUTPUT"; exit 0; }
+          python /tmp/inspect.py --project . --compare base.json > head.json; status=$?
+          git diff --name-only "$BASE"..."$HEAD" > changed.txt
+          case $status in
+            1) echo "result=changed" >> "$GITHUB_OUTPUT"
+               python -c 'import json; [print("-", c["agent"], c["change"]) for c in json.load(open("head.json"))["capability_changes"]]' ;;
+            3) # A Workflow graph is never read, so only a changed file that is in unread_paths blocks.
+               if python -c 'import json,sys; u=set(json.load(open("head.json"))["unread_paths"]); c=set(open("changed.txt").read().split()); print(*sorted(u&c)); sys.exit(1 if u&c else 0)'; then
+                 echo "result=clean" >> "$GITHUB_OUTPUT"
+               else
+                 echo "result=changed" >> "$GITHUB_OUTPUT"
+                 echo "A file the inspector cannot read (Workflow graph) changed; review by hand."
+               fi ;;
+            0) echo "result=clean" >> "$GITHUB_OUTPUT" ;;
+            *) echo "result=notrun" >> "$GITHUB_OUTPUT" ;;
+          esac
+
+      - name: Decide
+        env:
+          RESULT: ${{ steps.inspect.outputs.result }}
+        run: |
+          case "$RESULT" in
+            clean) echo "No capability change listed."; exit 0 ;;
+            changed) ;;
+            *) echo "::error::NOT RUN: capability comparison did not complete; this blocks like a failure."; exit 2 ;;
+          esac
+          # Approval counts only when the label's latest applier is a maintainer or admin.
+          actor=$(gh api "repos/${{ github.repository }}/issues/$PR/events" --paginate \
+            --jq "[.[] | select(.event==\"labeled\" and .label.name==\"$LABEL\")] | last | .actor.login // empty")
+          if [ -z "$actor" ] || ! gh pr view "$PR" --json labels --jq '.labels[].name' | grep -qx "$LABEL"; then
+            echo "::error::Capability change: a code owner must review and apply '$LABEL'."; exit 1
+          fi
+          perm=$(gh api "repos/${{ github.repository }}/collaborators/$actor/permission" --jq .permission)
+          if [ "$perm" != admin ] && [ "$perm" != maintain ]; then
+            echo "::error::'$LABEL' was applied by $actor ($perm); a maintainer or admin must apply it."; exit 1
+          fi
+          echo "Approved by $actor."
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: capability-diff
+          path: |
+            base.json
+            head.json
+            changed.txt
+          if-no-files-found: ignore
