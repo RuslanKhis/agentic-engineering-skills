@@ -1,0 +1,207 @@
+{
+ "created": "2026-10-27T11:22:26+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-ae683dff62ffe485e",
+ "commit": "9b08d86fe48544e6971ac0e16e82dfe8b53a5c82",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "evaluation-incident-regression-fail-to-pass",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-incident-regression-fail-to-pass/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "No git history in the workspace: the base and fix commits are named in docs/incidents/INC-0412.md. Runner tests skip without google-adk.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-system-designer",
+    "adk-release-engineering"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-self-hosted-harnesses-mlflow-deepeval-opik",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-self-hosted-harnesses-mlflow-deepeval-opik/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Advisory and configuration; no model calls.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-agent-observability",
+    "adk-release-engineering",
+    "protect-adk-sensitive-data"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-judge-agreement-and-harness-bridge",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-judge-agreement-and-harness-bridge/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Computing alpha needs a shell; the agent can write the script and report it as not run.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-release-engineering",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-collateral-damage-no-op-control",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-collateral-damage-no-op-control/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Standalone expense agent; Runner case tests skip without google-adk.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-agent-interoperability",
+    "adk-release-engineering"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-tool-fault-matrix-and-resilience",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-tool-fault-matrix-and-resilience/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Standalone travel agent; the Environment Simulation test skips without google-adk.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-operational-guardrails",
+    "safe-api-tool-calls",
+    "adk-agent-instructions"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-repeated-trials-pass-hat-k-and-end-state",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-repeated-trials-pass-hat-k-and-end-state/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Standalone booking agent; evaluator tests skip without google-adk and model access.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-release-engineering",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-underwriter-labelling-session",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-underwriter-labelling-session/situation.md"
+    },
+    {
+     "from": "evals/graders/evaluation-underwriter-labelling-session/label-agreement-output.txt"
+    }
+   ],
+   "note": "Running scripts/label_agreement.py needs a shell; the helper's real output is with the judge.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-engineer",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md",
+    "label-agreement-output.txt"
+   ]
+  },
+  {
+   "id": "evaluation-selected-source-support",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-selected-source-support/situation.md"
+    },
+    {
+     "from": "evals/graders/evaluation-selected-source-support/hall-support-expectations.json"
+    }
+   ],
+   "note": "Its own community-hall pack (not the skill's worked example); expected labels are judge-only.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md",
+    "hall-support-expectations.json"
+   ]
+  },
+  {
+   "id": "designer-names-google-product-skills",
+   "status": "runnable",
+   "note": "No repository by design; finding-google-skills is not in this collection, so the router the context names is absent from the run.",
+   "skills_missing": [
+    "finding-google-skills"
+   ],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "deploy-adk-on-google-cloud",
+    "adk-agent-observability",
+    "adk-tool-auth-and-secrets"
+   ],
+   "grader_files": []
+  }
+ ]
+}

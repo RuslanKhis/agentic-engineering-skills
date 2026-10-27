@@ -1,0 +1,6 @@
+The review step in our multi-stage ADK app failed. The earlier stages already ran and we paid for them, so please don't redo them. Fix it locally, then tell me the smallest next run we'd need and what to check before we release. Don't call the model provider yet.
+
+---
+Situation (from the person asking): The failed run is runs/PA-2026-0158-r1: the source, writer and review stages completed and were paid for, and the export stage failed. Its manifests are complete. tests/doubles.py is a scripted provider transport that counts sends, and the checkpoint store is configured as in pipeline/config.py. The campaign (campaign/ledger.json, campaign/cohort-rules.md) permits one diagnostic review continuation followed by the fresh cases declared in cases/fresh/declared.json; its cohort rules and ceilings stay as they are. Network is off and google-adk is not installed here; everything in this session uses controlled responses.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

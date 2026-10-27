@@ -1,0 +1,6 @@
+Our expense agent's pytest graders check the expense row was filed, but in staging it also changed the approver's profile and every test stayed green. One case even passes when I stub the model to do nothing. Fix the grading, and tell us what to record for the nightly live run against our filesystem and GitHub MCP servers.
+
+---
+Situation (from the person asking): ADK 2.12 agent with a scripted-model Runner harness, a SQLite fixture of 14 tables reset per test, McpToolset launched as `npx -y @modelcontextprotocol/server-filesystem` (no version) and a GitHub server Docker image by tag, an eval set of 30 cases, no model access in the session.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

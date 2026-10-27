@@ -1,310 +1,296 @@
 # Implementation plan: warranty answers and return requests
 
-Status: **draft, unreviewed, schedule not machine-checked** (see Summary)
+Status: draft. No goal has run. The design's scope answers are assumptions (design, "Assumed answers"), so this plan is provisional until they are confirmed.
 Architecture: [docs/architecture/warranty-returns.md](../architecture/warranty-returns.md)
-Continuation source of truth: this plan (goals-only; no tickets written, none were requested)
+Continuation source of truth: this plan (no tickets written; ask for them per phase).
 
 ## Summary for the reader
 
-- **Profile and phase 1:** production service launched in phases. Phase 1 (G01 to G19) takes a warranty-answer-plus-confirmed-return service to production go-live for an **allowlisted cohort** of real customers, at MVP/pilot depth with the write path built to full depth. Phase 2 hardens it for all customers. All inputs are assumptions (design, Assumed answers).
-- **Effort and finish:** phase 1 is **122 to 200 human hours** (summed by hand from the schedule block) against 216 team hours, of which 162 are usable after a 25% reserve. **It fits at the low end only.** Each developer carries 61 to 100 hours against 81 usable. My hand sequencing gives a finish of about **22 working days at the low end and about 39 at the high end, against 30 available**. These figures were not produced by `check_schedule.py` because this session had no shell; treat them as unchecked and run the command below before anyone relies on them.
-- **Largest risks:** (1) the return path (G07, 14 to 22 h) and the unknowns behind it (O2 to O4), settled by the discovery goal G03 early in the build; (2) calendar waits outside the team, W1 and W2 at 5 to 10 working days each, gating almost everything that touches cloud or real systems; (3) launching before the penetration test (SB24), an accepted risk nobody has accepted yet (O1).
-- **Decisions needed from you:** O1 (cohort launch at pilot depth, or full production depth with a later date); O4 (how customers sign in); O7 (spend ceiling and volume); a start date. Full list in the design's Open decisions.
-- **Next prompt:** the three goals that can start on day 1 are G01, G04 (Dev A) and G14 (Dev B); the first is below under Resume here.
-
-If the high end happens, the order in which scope slides to phase 2 without touching the floor is: wiring the evaluation gate into CI (keep a manual run, about 3 h), G13 reduced to logs plus one alert (about 3 h), the ASVS review inside G15 (about 2 h). These recover about 8 of the up to 38 hours of overrun, so **they do not close the gap alone**; closing it means a later date (about 8 weeks), more hours per person, or a third person on G08 and G16. I did not run those as what-ifs (no helper), so none of them is a verified remedy.
+- **Profile and phase 1:** Production profile, cut to what two developers can carry in six weeks. Phase 1 delivers a signed-in customer journey on Cloud Run: grounded warranty answers, a confirmed and idempotent return request, the production floor, and a go-live review, ending in a canary launch to a small share of customers. Ramp to 100 percent, the ASVS Level 2 review, the support rollout pack and the first live bill come in phase 2.
+- **Effort and finish (hand arithmetic, the schedule helper was not run):** phase 1 totals 149 to 223 human hours against 216 usable (288 focused hours less a 25 percent reserve); only the low end fits. By my rough walk the calendar finishes between working day 30 and day 41 against 30 available, so the 2026-12-11 date holds only if every wait comes in at its low end. Details and untested remedies are under "Delivery profile and capacity".
+- **Largest risks:** (1) calendar waits on other teams (landing zone, data and return-system access, identity, privacy sign-off, pen test) set the finish more than the work does; W1 to W3, W5 and the pen-test booking must be requested on day 1. (2) The return system may lack an idempotency key or lookup (O2), which weakens C5; G03 settles it first. (3) Real customer data with a model in the loop: the residency answer (O5) can change the model and region after work has started.
+- **Decisions needed from you:** confirm or move the cut line; O4 spend ceiling and volume; O5 jurisdictions and retention; O10 hours and start date; O8 SPA or portal. The rest are in the design's open decisions.
+- **Next prompt:** the three access requests and the pen-test booking are human actions for today. Then `/adk-engineer Carry out G02 from docs/plans/warranty-returns.md.` G01 needs `adk-presenter`, which is not installed.
 
 ## Destination and constraints
 
-End result: a signed-in customer asks warranty questions about their own purchases, gets a status computed from the product database, and files a return request only after confirming the exact details. Non-goals, stack and decisions: see the design. **Authorization: none yet.** The user asked for design and plan only. No repository, project, cloud resource, install or network call exists or was made; every cloud step in a goal is an execution-scope prerequisite until a target and approval are named. Model ID, ADK pin and every price are unverified (design D8, O12).
+A signed-in customer gets warranty answers about their own products from the product database, and files a return request after confirming a stored proposal, once. Non-goals and the accepted stack are in the design. Authorization today: design and plan only. No repository, cloud project or credentials were touched. Nothing is installed.
 
-**Skill availability (checked in this workspace):** installed: `adk-engineer`, `adk-system-designer`, `deploy-adk-on-google-cloud`, `adk-agent-observability`, `adk-tool-auth-and-secrets`. **Not installed here and named by goals below (a setup prerequisite, not applied guidance):** `adk-workflow-design`, `adk-tool-interface-design`, `adk-agent-instructions`, `adk-model-and-output-contracts`, `adk-fastapi-backend`, `adk-frontend-integration`, `adk-memory-architecture`, `safe-api-tool-calls`, `adk-operational-guardrails`, `adk-agent-security`, `protect-adk-sensitive-data`, `adk-agent-evaluation`, `adk-release-engineering`, `adk-presenter`, `adk-governance-pack`; companions `shadcn` and Playwright. **Google product skills:** only the `finding-google-skills` router is installed and it was not invoked (no network). The `google/skills:<name>` entries come from the designer's catalogue table read 21 October 2026; confirm each name through the router before a goal uses it.
+Inherited from the design, not decided here: model ID chosen in G02 from the lifecycle table; ADK pin assumed `google-adk==2.8.0` and confirmed in G02/A3; prompt, model, judge and tool schema change together as a release (C10).
+
+Setup prerequisites, because these skills are not installed in this environment: `adk-presenter`, `adk-agent-evaluation`, `adk-governance-pack`, `adk-fastapi-backend`, `adk-frontend-integration`, `adk-agent-security`, `adk-agent-instructions`, `adk-tool-interface-design`, `adk-model-and-output-contracts`, `adk-memory-architecture`, `safe-api-tool-calls`, `adk-operational-guardrails`, `protect-adk-sensitive-data`, `adk-release-engineering`, `adk-workflow-design`, and the Google product skills named per goal. `adk-engineer`, `deploy-adk-on-google-cloud`, `adk-agent-observability` and `adk-tool-auth-and-secrets` are installed. A goal does not claim a skill's guidance until it is installed.
 
 ## Delivery profile and capacity
 
-| Phase | Delivers | Goals | Human hours (hand sum) | Capacity and reserve |
+Profile: production, linked to the design's delivery constraints. Capacity assumptions: two developers, 4.8 focused hours a day each, 30 working days from 2026-11-02, reserve 25 percent. Estimates are human hours with a coding agent, hands-on plus review; ADK goals include a ×1.5 multiplier for a team new to ADK (stated once, applied to every implementation goal; presentation, labelling and governance goals keep their own figures). The team knows GCP, so no first-project day is added; the project itself is W1.
+
+| Phase | Delivers | Goals | Human hours | Capacity and reserve |
 | --- | --- | --- | --- | --- |
-| 1, ship to cohort | Warranty answers and confirmed returns live for an allowlisted cohort | G01 to G19 | 122 to 200 | 2 people × 30 days × 3.6 h = 216 h; 25% reserve leaves 162 h |
-| 2, harden and open | Production depth, baseline and value, hand-over, then open to all customers | G20 to G27 | 55 to 95 (assumed, coarse) | After phase 1 evidence |
+| 1, ship | Controlled launch to a small share of customers | G01 to G19 | 149–223 | 2 × 4.8 × 30 = 288; usable 216 |
+| 2, harden and ramp | General availability and the first measured results | G20 to G25 | 33–53 (rough) | After phase 1 |
 
-Estimates are agent-assisted human hours (hands-on plus review), assumptions for the stated team. The ×1.5 new-to-ADK multiplier is already applied to the ADK implementation goals; presentation, labelling and governance goals are not ADK work and keep their own estimates. First GCP project setup is a wait (W1), not hours. Handoff hours (1 h each, in the hands-on figure) are recorded on goals that receive work from the other developer.
-
-| Person | Goals | Hours | Usable capacity |
-| --- | --- | --- | --- |
-| Dev A (agent, data, write path) | G01, G03, G04, G06, G07, G09, G10, G11 | 61 to 100 | 81 |
-| Dev B (platform, identity, UI, governance, launch) | G02, G05, G08, G12 to G19 | 61 to 100 | 81 |
-
-Order if time runs out early: Dev A G01, G04, G10, G03, G06, G07, G11, G09. Dev B G14, G05, G02, G12, G13, G08, G15, G17, G16, G18, G19. Each completed goal leaves a working, safe slice.
+Schedule block, the single source of each estimate and wait:
 
 ```yaml
+- goal: W0
+  phase: 1
+  total: 0
+  calendar_waits: go-ahead decision on the design from the sponsor
+  wait_days: 2-3
+  blocked_by: [G01]
+  type: discovery
+- goal: W1
+  phase: 1
+  total: 0
+  calendar_waits: access request to the landing-zone team for the project, billing link, IAM grants and policy exceptions
+  wait_days: 5-10
+  blocked_by: []
+  type: discovery
+- goal: W2
+  phase: 1
+  total: 0
+  calendar_waits: access request to the product database and return system owners for read access and sandbox credentials
+  wait_days: 5-10
+  blocked_by: []
+  type: discovery
+- goal: W3
+  phase: 1
+  total: 0
+  calendar_waits: access request to the identity owners for an OIDC client and test customers
+  wait_days: 3-5
+  blocked_by: []
+  type: discovery
+- goal: W5
+  phase: 1
+  total: 0
+  calendar_waits: warranty experts labelling session booked and held
+  wait_days: 5-8
+  blocked_by: []
+  type: discovery
+- goal: W4
+  phase: 1
+  total: 0
+  calendar_waits: privacy and legal sign-off of the DPIA input from the privacy owner
+  wait_days: 10-15
+  blocked_by: [G13]
+  type: governance
+- goal: W6
+  phase: 1
+  total: 0
+  calendar_waits: penetration test by an outside party on staging, booked on day 1
+  wait_days: 8-10
+  blocked_by: [G09, G11]
+  type: discovery
+- goal: W7
+  phase: 1
+  total: 0
+  calendar_waits: go-live approval from the sponsor after the review
+  wait_days: 2-3
+  blocked_by: [G18]
+  type: discovery
 - goal: G01
   phase: 1
   hands_on: 2-3
-  review: 1-2
-  total: 3-5
+  review: 1
+  total: 3-4
   owner: Dev A
   blocked_by: []
-  calendar_waits: none
-  wait_days: 0
-  handoff: 0
   contracts: []
   security: []
-  mentions_only: [W3]
   type: presentation
   status: planned
 - goal: G02
   phase: 1
   hands_on: 4-6
-  review: 1-3
-  total: 5-9
-  owner: Dev B
-  blocked_by: [W1]
-  calendar_waits: landing-zone project, billing link, policy exceptions (W1)
-  wait_days: 0
-  handoff: 0
-  contracts: []
-  security: []
-  mentions_only: []
+  review: 2-3
+  total: 6-9
+  owner: Dev A
+  blocked_by: []
+  contracts: [C7, C8, C10]
+  security: [SB15, SB16]
   type: implementation
   status: planned
 - goal: G03
   phase: 1
   hands_on: 4-6
-  review: 1-3
-  total: 5-9
+  review: 1-2
+  total: 5-8
   owner: Dev A
-  blocked_by: [W2]
-  calendar_waits: access grants (W2)
-  wait_days: 0
-  handoff: 0
-  contracts: []
+  blocked_by: [W2, W3]
+  contracts: [C1, C2, C5]
   security: []
-  mentions_only: [G14]
   type: discovery
   status: planned
 - goal: G04
-  phase: 1
-  hands_on: 6-10
-  review: 4-6
-  total: 10-16
-  owner: Dev A
-  blocked_by: []
-  calendar_waits: none
-  wait_days: 0
-  handoff: 0
-  contracts: [C3, C11]
-  security: []
-  mentions_only: [G03]
-  type: implementation
-  status: planned
-- goal: G05
-  phase: 1
-  hands_on: 5-8
-  review: 3-6
-  total: 8-14
-  owner: Dev B
-  blocked_by: [G04]
-  calendar_waits: none
-  wait_days: 0
-  handoff: 1
-  contracts: [C1, C2]
-  security: [SB01, SB02, SB03, SB04, SB09, SB13, SB20]
-  mentions_only: [G12]
-  type: implementation
-  status: planned
-- goal: G06
-  phase: 1
-  hands_on: 4-6
-  review: 2-4
-  total: 6-10
-  owner: Dev A
-  blocked_by: [G03, G05, W3]
-  calendar_waits: go-ahead decision (W3)
-  wait_days: 0
-  handoff: 1
-  contracts: [C2, C3, C10]
-  security: []
-  mentions_only: [G04]
-  type: implementation
-  status: planned
-- goal: G07
-  phase: 1
-  hands_on: 8-12
-  review: 6-10
-  total: 14-22
-  owner: Dev A
-  blocked_by: [G03, G06, W3]
-  calendar_waits: none
-  wait_days: 0
-  handoff: 0
-  contracts: [C4, C5, C6, C7, C10]
-  security: [SB18]
-  mentions_only: [G05]
-  type: implementation
-  status: planned
-- goal: G08
-  phase: 1
-  hands_on: 6-8
-  review: 4-6
-  total: 10-14
-  owner: Dev B
-  blocked_by: [G07, G12]
-  calendar_waits: none
-  wait_days: 0
-  handoff: 1
-  contracts: [C1, C4]
-  security: [SB10]
-  mentions_only: [G05]
-  type: implementation
-  status: planned
-- goal: G09
-  phase: 1
-  hands_on: 7-10
-  review: 4-7
-  total: 11-17
-  owner: Dev A
-  blocked_by: [G07, W4]
-  calendar_waits: SME labelling session (W4)
-  wait_days: 0
-  handoff: 0
-  contracts: [C3, C10, C11]
-  security: []
-  mentions_only: [G06]
-  type: implementation
-  status: planned
-- goal: G10
-  phase: 1
-  hands_on: 3-5
-  review: 2-4
-  total: 5-9
-  owner: Dev A
-  blocked_by: [G04]
-  calendar_waits: none
-  wait_days: 0
-  handoff: 0
-  contracts: [C9, C10]
-  security: [SB19]
-  mentions_only: []
-  type: implementation
-  status: planned
-- goal: G11
-  phase: 1
-  hands_on: 4-7
-  review: 3-5
-  total: 7-12
-  owner: Dev A
-  blocked_by: [G07]
-  calendar_waits: none
-  wait_days: 0
-  handoff: 0
-  contracts: [C7, C8]
-  security: [SB14, SB17]
-  mentions_only: [G14]
-  type: implementation
-  status: planned
-- goal: G12
   phase: 1
   hands_on: 6-9
   review: 3-5
   total: 9-14
   owner: Dev B
-  blocked_by: [G02, G05, W3]
-  calendar_waits: go-ahead decision (W3)
-  wait_days: 0
-  handoff: 0
-  contracts: [C1]
-  security: [SB05, SB06, SB07, SB16, SB25]
-  mentions_only: [G08]
+  handoff: 1
+  blocked_by: [G02, G03, W0]
+  contracts: [C1, C9]
+  security: [SB01, SB02, SB03, SB04, SB13, SB20]
+  type: implementation
+  status: planned
+- goal: G05
+  phase: 1
+  hands_on: 7-10
+  review: 4-6
+  total: 11-16
+  owner: Dev A
+  blocked_by: [G02, G03, W0]
+  contracts: [C1, C2, C6, C9]
+  security: [SB04, SB17]
+  type: implementation
+  status: planned
+- goal: G06
+  phase: 1
+  hands_on: 6-9
+  review: 2-3
+  total: 8-12
+  owner: Dev A
+  blocked_by: [G05, W5]
+  contracts: [C2, C6, C10]
+  security: []
+  type: implementation
+  status: planned
+- goal: G07
+  phase: 1
+  hands_on: 8-12
+  review: 4-6
+  total: 12-18
+  owner: Dev A
+  handoff: 1
+  blocked_by: [G04, G05]
+  contracts: [C1, C3, C4, C5, C6]
+  security: [SB18]
+  type: implementation
+  status: planned
+- goal: G08
+  phase: 1
+  hands_on: 6-9
+  review: 4-6
+  total: 10-15
+  owner: Dev A
+  blocked_by: [G07]
+  contracts: [C5, C7, C8, C9]
+  security: [SB16]
+  type: implementation
+  status: planned
+- goal: G09
+  phase: 1
+  hands_on: 9-13
+  review: 4-6
+  total: 13-19
+  owner: Dev B
+  handoff: 1
+  blocked_by: [G04, G05]
+  contracts: [C3, C8, C9]
+  security: [SB05, SB06, SB07, SB09, SB10, SB13, SB19]
+  type: implementation
+  status: planned
+- goal: G10
+  phase: 1
+  hands_on: 5-8
+  review: 3-4
+  total: 8-12
+  owner: Dev B
+  handoff: 1
+  blocked_by: [G04, G05]
+  contracts: [C7, C8]
+  security: [SB14, SB19]
+  type: implementation
+  status: planned
+- goal: G11
+  phase: 1
+  hands_on: 8-12
+  review: 4-6
+  total: 12-18
+  owner: Dev B
+  blocked_by: [G02, W1]
+  contracts: [C7, C8, C10]
+  security: [SB05, SB25]
+  type: implementation
+  status: planned
+- goal: G12
+  phase: 1
+  hands_on: 7-10
+  review: 3-4
+  total: 10-14
+  owner: Dev B
+  handoff: 1
+  blocked_by: [G11, G06]
+  contracts: [C2, C5, C7, C9, C10]
+  security: []
   type: implementation
   status: planned
 - goal: G13
   phase: 1
-  hands_on: 3-5
+  hands_on: 5-8
   review: 2-3
-  total: 5-8
-  owner: Dev B
-  blocked_by: [G12]
-  calendar_waits: none
-  wait_days: 0
-  handoff: 0
-  contracts: [C9]
+  total: 7-11
+  owner: Dev A
+  blocked_by: [G03]
+  contracts: [C7]
   security: []
-  mentions_only: []
-  type: implementation
+  type: governance
   status: planned
 - goal: G14
   phase: 1
-  hands_on: 3-5
-  review: 2-4
-  total: 5-9
-  owner: Dev B
-  blocked_by: []
-  calendar_waits: none
-  wait_days: 0
-  handoff: 0
-  contracts: [C8]
-  security: []
-  mentions_only: [G03, W5]
-  type: governance
+  hands_on: 6-9
+  review: 3-4
+  total: 9-13
+  owner: Dev A
+  handoff: 1
+  blocked_by: [G07, G09]
+  contracts: [C1, C3, C6]
+  security: [SB17, SB23]
+  type: implementation
   status: planned
 - goal: G15
   phase: 1
-  hands_on: 2-4
-  review: 2-3
-  total: 4-7
+  hands_on: 6-9
+  review: 3-4
+  total: 9-13
   owner: Dev B
-  blocked_by: [G11, G12]
-  calendar_waits: none
-  wait_days: 0
   handoff: 1
-  contracts: []
-  security: [SB15, SB21, SB22]
-  mentions_only: []
+  blocked_by: [G08, G10, G12, G14, W6]
+  contracts: [C8, C9]
+  security: [SB21, SB22, SB24]
   type: implementation
   status: planned
 - goal: G16
   phase: 1
-  hands_on: 2-3
+  hands_on: 4-6
   review: 2-3
-  total: 4-6
+  total: 6-9
   owner: Dev B
-  blocked_by: [G08, G09, G10, G11, G13]
-  calendar_waits: none
-  wait_days: 0
-  handoff: 1
-  contracts: [C1, C2, C4, C5]
+  blocked_by: [G15]
+  contracts: [C1, C2, C3, C4, C5, C9]
   security: []
-  mentions_only: []
   type: journey
   status: planned
 - goal: G17
   phase: 1
   hands_on: 3-5
-  review: 2-3
-  total: 5-8
+  review: 1-2
+  total: 4-7
   owner: Dev B
-  blocked_by: [G07, G12, G13]
-  calendar_waits: none
-  wait_days: 0
-  handoff: 1
-  contracts: [C5, C11]
+  blocked_by: [G15]
+  contracts: [C5, C10]
   security: []
-  mentions_only: []
   type: implementation
   status: planned
 - goal: G18
   phase: 1
-  hands_on: 2-4
+  hands_on: 3-4
   review: 1-2
-  total: 3-6
+  total: 4-6
   owner: Dev B
-  blocked_by: [G14, G15, G16, G17]
-  calendar_waits: none
-  wait_days: 0
-  handoff: 0
+  blocked_by: [G16, G17, W4]
   contracts: []
   security: []
-  mentions_only: [W6]
   type: presentation
   status: planned
 - goal: G19
@@ -313,287 +299,464 @@ Order if time runs out early: Dev A G01, G04, G10, G03, G06, G07, G11, G09. Dev 
   review: 1-2
   total: 3-5
   owner: Dev B
-  blocked_by: [G18, W5, W6]
-  calendar_waits: privacy sign-off (W5), launch decision (W6)
-  wait_days: 0
-  handoff: 0
-  contracts: []
+  blocked_by: [W7, G17]
+  contracts: [C8, C10]
   security: []
-  mentions_only: []
   type: implementation
   status: planned
-- goal: W1
-  phase: 1
-  total: 0
-  blocked_by: []
-  calendar_waits: administrator creates project, billing link, policy exceptions; requested day 1
-  wait_days: 5-10
-- goal: W2
-  phase: 1
-  total: 0
-  blocked_by: []
-  calendar_waits: product-database read role (masked copy), returns-system staging credentials, customer-identity details; requested day 1
-  wait_days: 5-10
-- goal: W3
-  phase: 1
-  total: 0
-  blocked_by: [G01]
-  calendar_waits: go-ahead decision date after G01
-  wait_days: 2-5
-- goal: W4
-  phase: 1
-  total: 0
-  blocked_by: []
-  calendar_waits: warranty and support experts' labelling session; requested day 1
-  wait_days: 3-5
-- goal: W5
-  phase: 1
-  total: 0
-  blocked_by: [G14]
-  calendar_waits: privacy impact and legal sign-off after drafts
-  wait_days: 8-10
-- goal: W6
-  phase: 1
-  total: 0
-  blocked_by: [G18]
-  calendar_waits: launch decision date after G18
-  wait_days: 2-5
 ```
 
-**Schedule check not run** (no shell in this session). Run from the project root once the repository exists, with Python 3.11 or later, and quote its figures instead of mine:
+**Schedule check: NOT RUN.** This session had no way to execute `scripts/check_schedule.py`, so the figures below are my hand arithmetic, not the helper's, and the design's grid, contract and security-rule coverage was checked by reading, not by the script. Run this before relying on any of it:
 
 ```bash
-python3 "$SKILL_DIR/scripts/check_schedule.py" --plan docs/plans/warranty-returns.md \
-  --design docs/architecture/warranty-returns.md --days 30 \
-  --reserve 0.25 --person "Dev A=3.6" --person "Dev B=3.6"
+python3 .claude/skills/adk-system-designer/scripts/check_schedule.py --plan docs/plans/warranty-returns.md \
+  --design docs/architecture/warranty-returns.md --days 30 --reserve 0.25 \
+  --person "Dev A=4.8" --person "Dev B=4.8"
 ```
 
-Hand sequencing behind the finish range (dependencies, one goal at a time per person, waits at their ends, no reserve): Dev A is the longer chain. Low: G04 and G10 done by about day 5, G03 after W2 (day 5), G06 about day 8, G07 about day 12, G11 about day 14, G09 about day 17; Dev B finishes G16 about day 18 and launch about day 22. High: W2 delays G03 to day 10; G07 ends about day 21, G09 about day 29, G16 about day 31, G18 plus W6 about day 38, G19 about day 39. The privacy sign-off (W5) starts after drafts on day 2 or 3 and is not on the critical path. The helper may find different numbers; trust it over this paragraph.
+Hand figures, phase 1: total 149 to 223 hours (sum of the entries above). Dev A 71 to 106 hours, Dev B 78 to 117, each against 144 focused hours less the 25 percent reserve, 108. The high end does not fit for Dev B and the total (223 against 216) is marginal. The calendar is the larger problem: waits W1 and W2 (up to 10 days each), then the chain G03, G05, G07, G09, the pen test W6 (up to 10 days), G15, G16 or G17, G18, W7 and G19. My rough walk puts the finish near working day 30 if every wait comes in at its low end and near day 41 if they come in at the high end, against 30 available. So phase 1 meets 2026-12-11 only in the best case. Remedies I have not tested with the helper: a later external canary (G19 after W6 and its fixes, with G15's drills and scans not waiting for the pen test), starting the pen test as soon as G09 and G11 exist, a third person for G11 and G12, or a date of about 8 weeks. Choose one and rerun the check.
 
 ## Implementation map
 
-Proposed module layout (greenfield, nothing inspected): `backend/app/{main,settings,principal,agent_routes,errors}.py`, `backend/app/returns/{proposals,executor,reconcile}.py`, `backend/agent/{agent,tools,warranty_rules}.py`, `backend/migrations/` (application schema only), `frontend/src/`, `docs/design/DESIGN.md`, `AGENTS.md`.
-
-| Contract / decision | Component and integration point | GCP responsibility | Primary skill | Verification still needed |
+| Contract / decision | Component and integration point (proposed layout) | GCP responsibility | Primary skill | Verification still needed |
 | --- | --- | --- | --- | --- |
-| C1, D2 | Principal dependency on `/api`; `user_id` overwritten server-side | Identity Platform | `adk-fastapi-backend` (principle: `adk-tool-auth-and-secrets`) | Captured-token audience (G12/A6) |
-| C2, D6 | Tools read `customer_id` from session state; owner filter on records | Read-only DB role | `adk-tool-interface-design`, `adk-tool-auth-and-secrets` | Live read on masked copy |
-| C3, D3 | `warranty_rules.py` pure function; tool returns cited fields | Product database | `adk-workflow-design` | Policy owner sign-off (O6) |
-| C4–C6, D4, D10 | `propose_return` tool; confirm route; executor and reconcile job over operation table | Cloud SQL; returns-system credential in Secret Manager | `safe-api-tool-calls` | Idempotency or lookup support (O3) |
-| C7, D5 | Tool tiers, `before_tool_callback` capability checks, scripted-model suite | None | `adk-agent-security` | Suite on real tool set |
-| C8 | Logging allowlist, telemetry content capture off, erase route | Logging, Trace | `protect-adk-sensitive-data`, `adk-agent-observability` | Retention (O13) |
-| C9, D9 | `max_llm_calls`, admission and kill switch in the app; max instances; Cloud Armor | Cloud Run, ALB, Cloud Armor, Billing export | `adk-operational-guardrails`, `deploy-adk-on-google-cloud` | Idle costs and prices (G12) |
-| C10 | Bounded timeouts, one retry owner, error results | None | `adk-operational-guardrails` | Provider timeouts |
-| C11, D8 | Release manifest, eval gate, Cloud Run revision rollback | Artifact Registry, Cloud Run | `adk-release-engineering`, `adk-model-and-output-contracts` | Model lifecycle date, ADK pin |
+| C1, D6 | `app/auth.py` verified-principal dependency; `user_id` overwritten on every Runner call; tools read `tool_context.state` | Customer identity provider; workload identity | `adk-fastapi-backend` | Token audience against a captured token (O3) |
+| C2, D2, D3 | `agent/tools.py` projections; `agent/schema.py` output model; `app/validate.py` evidence check | Read-only access to product database | `adk-tool-interface-design` | Access path (O1) |
+| C3, C4, D4 | `returns/proposals.py`, `returns/eligibility.py`, `/api/returns/{id}/confirm` | Cloud SQL | `safe-api-tool-calls` | Eligibility rules (O6) |
+| C5, D5 | `returns/operations.py`, `returns/rms_client.py`, reconcile endpoint | Cloud Scheduler, Secret Manager | `safe-api-tool-calls` | Idempotency and lookup (O2) |
+| C7, C8, D8 | `app/admission.py`, `app/retention.py`, logging filter | Cloud SQL, model project quota | `adk-operational-guardrails`, `protect-adk-sensitive-data` | Retention period (O5), ceiling (O4) |
+| C9, C10, D10 | `release/manifest.py`, Cloud Build config, alert policies | Cloud Run revisions, Cloud Build, Monitoring | `adk-release-engineering`, `adk-agent-observability` | Baselines from first week |
+
+The first goal writes a project `AGENTS.md` (pins, `make check`, the evidence directory, the design's invariants) with a one-line `CLAUDE.md` include.
 
 ## Web stack and companion skills
 
-Defaults from the designer's web application defaults apply (Vite/React/TypeScript SPA, generated client, shadcn components themed from `docs/design/DESIGN.md`, one FastAPI process, same origin). G08 writes the companion table with resolved pins into `AGENTS.md`; no deviation is recorded.
+The design uses the designer's web application defaults without deviation (baseline SPA, same origin). G09 writes the companion table with pins into `AGENTS.md` from that reference and links to it afterwards. Companion skills are named by that reference; none is installed here.
 
 ## Goals and dependencies
 
-Goals-only plan: each phase 1 goal below is its own home. Run prompt for any goal: `/adk-engineer Carry out <ID> from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md, use the goal's primary and supporting skills, verify its acceptance cases locally and record evidence under the goal.` Status and evidence for every goal start as planned and empty.
+| ID and goal | Phase | Type | Human hours | Depends on | Primary skill | State |
+| --- | --- | --- | --- | --- | --- | --- |
+| W0–W7 calendar waits | 1 | wait | 0 | see schedule | none | request W1, W2, W3, W5 and the W6 booking on day 1 |
+| G01 Go-ahead presentation | 1 | presentation | 3–4 | none | `adk-presenter` | ready once the skill is installed |
+| G02 Skeleton, pins, `make check` | 1 | implementation | 6–9 | none | `adk-workflow-design` | ready |
+| G03 Interface discovery | 1 | discovery | 5–8 | W2, W3 | `adk-tool-interface-design` | blocked on W2, W3 |
+| G04 Customer identity and scope | 1 | implementation | 9–14 | G02, G03, W0 | `adk-fastapi-backend` | blocked |
+| G05 Grounded warranty answers | 1 | implementation | 11–16 | G02, G03, W0 | `adk-tool-interface-design` | blocked |
+| G06 Evaluation set and runner | 1 | implementation | 8–12 | G05, W5 | `adk-agent-evaluation` | blocked |
+| G07 Return proposal and confirmation | 1 | implementation | 12–18 | G04, G05 | `safe-api-tool-calls` | blocked |
+| G08 Return-system adapter and reconcile | 1 | implementation | 10–15 | G07 | `safe-api-tool-calls` | blocked |
+| G09 Chat API and baseline SPA | 1 | implementation | 13–19 | G04, G05 | `adk-frontend-integration` | blocked |
+| G10 Data protection and spend stops | 1 | implementation | 8–12 | G04, G05 | `adk-operational-guardrails` | blocked |
+| G11 Cloud Run, edge and data tier | 1 | implementation | 12–18 | G02, W1 | `deploy-adk-on-google-cloud` | blocked on W1 |
+| G12 Observability and release gate | 1 | implementation | 10–14 | G11, G06 | `adk-agent-observability` | blocked |
+| G13 Governance papers | 1 | governance | 7–11 | G03 | `adk-governance-pack` | blocked |
+| G14 Threat model and adversarial suite | 1 | implementation | 9–13 | G07, G09 | `adk-agent-security` | blocked |
+| G15 Staging checks and drills | 1 | implementation | 9–13 | G08, G10, G12, G14, W6 | `adk-release-engineering` | blocked |
+| G16 Journey on staging | 1 | journey | 6–9 | G15 | `adk-agent-evaluation` | blocked |
+| G17 Operations handover | 1 | implementation | 4–7 | G15 | `adk-agent-observability` | blocked |
+| G18 Go-live review | 1 | presentation | 4–6 | G16, G17, W4 | `adk-presenter` | blocked |
+| G19 Canary launch | 1 | implementation | 3–5 | W7, G17 | `deploy-adk-on-google-cloud` | blocked |
 
-| ID and goal | Type | Hours (total) | Depends on | Primary skill |
+Every implementation goal runs the earlier goals' acceptance items it touches as regression checks. Product skills below are unconfirmed against the live catalogue; confirm each through the installed `finding-google-skills` router before first use, and treat their commands as proposals needing approval for the scope.
+
+### G01 — Go-ahead presentation
+
+- **Phase and estimate:** 1; hands-on 2–3, review 1, total 3–4; wait W0 for the decision; owner Dev A.
+- **Outcome, contracts, decisions:** The sponsor sees the design, the cut line, the assumptions to confirm (O1–O11) and the cost and risk position, and decides.
+- **Scope:** Business audience. Excludes any claim about results; nothing is built.
+- **Depth:** Cites design IDs only; every figure is a labelled assumption.
+- **Implementation route:** Deck outline, narrative, expected questions, one-page decision memo from this plan and the design.
+- **Resources created:** none.
+- **Prerequisites:** none beyond the design.
+- **Primary skill:** `adk-presenter`. **Supporting:** none. **Companion:** none. **Design system:** none. **Security rules:** none.
+- **Acceptance:**
+  - A1 THE outline SHALL pass the presenter's deck check with every claim citing a design or plan ID.
+  - A2 THE memo SHALL ask for the decisions O4, O5, O10 and the cut line, and record who decides and by when.
+- **Verification:** the deck check; manual read-through.
+- **Execution scope:** document only.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-presenter Build the go-ahead review for docs/plans/warranty-returns.md (G01), business audience.`
+
+### G02 — Skeleton, pins and `make check`
+
+- **Phase and estimate:** 1; hands-on 4–6, review 2–3, total 6–9; owner Dev A.
+- **Outcome, contracts, decisions:** A local repository where one `LlmAgent` with a stub tool runs through the Runner under scripted-model tests, and `make check` runs. Proves C7 (logging filter exists), C8 (`max_llm_calls`), C10 (pins), SB15, SB16. Implements D2 skeleton.
+- **Scope:** Layout, lockfile, `AGENTS.md`, CI skeleton, secret scan, dependency audit, scripted model, model ID selection. Excludes real tools, cloud.
+- **Depth:** Floor items: no secrets, spend stop, pinned model.
+- **Implementation route:** proposed layout in the implementation map; model ID from `adk-model-and-output-contracts/assets/model-lifecycle-*.json` once installed, otherwise the first acceptance is to obtain it; region from O5 (ask, or record the assumption).
+- **Resources created:** none.
+- **Prerequisites:** Python 3.11 or later; package installs are done by the developer, and an install is its own approval.
+- **Primary skill:** `adk-workflow-design`. **Supporting:** `adk-model-and-output-contracts` (model ID and lifecycle date). **Companion:** none.
+- **Security rules:** SB15, SB16.
+- **Acceptance:**
+  - A1 THE `make check` SHALL run lint, unit tests, the Python dependency audit and a secret scan, and fail on a seeded finding in each (SB15, SB16).
+  - A2 THE scripted-model run SHALL pass through the Runner with `max_llm_calls` set and the model ID pinned with its retirement date recorded (C8, C10).
+  - A3 THE chosen ADK pin SHALL be confirmed against installed signatures for `RunConfig`, `DatabaseSessionService` and tool context, and any move from `google-adk==2.8.0` recorded (C10).
+  - A4 THE logging filter SHALL drop message content fields in a unit test (C7).
+- **Verification:** offline; `make check` exit codes.
+- **Execution scope:** local only.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G02 from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md, use the goal's primary and supporting skills, verify its acceptance cases locally and record evidence here.`
+
+### G03 — Interface discovery (bounded)
+
+- **Phase and estimate:** 1; hands-on 4–6, review 1–2, total 5–8; waits W2, W3; owner Dev A.
+- **Outcome, contracts:** A memo at `docs/discovery/interfaces.md` that settles O1, O2, O3 and O7 or says which stay open. Contracts touched: C1, C2, C5.
+- **Question and stopping condition:** What are the product database, return system and token facts the design assumed? Stop at 8 hours or when A1 to A5 are answered, whichever is first; unresolved items become open decisions with an owner.
+- **Scope:** Read-only inspection of sandbox or sample data. No writes.
+- **Depth:** Records facts and assumptions separately; no secrets in the memo.
+- **Prerequisites:** W2 and W3 satisfied (access request granted); no production writes.
+- **Primary skill:** `adk-tool-interface-design`. **Supporting:** `adk-tool-auth-and-secrets` (token and credential facts). **Companion:** none.
+- **Acceptance:**
+  - A1 THE memo SHALL list the product database tables and columns the journey needs, the access path, freshness, and which columns are free text (C2, C6).
+  - A2 THE memo SHALL record the return system's create call, whether it accepts an idempotency key and for how long, its status lookup, sandbox availability and error codes (C5).
+  - A3 THE memo SHALL record the token issuer, audience, customer claim and its mapping to the product database's customer key (C1).
+  - A4 THE memo SHALL record the outcome measure and baseline, or name the owner who will supply it (O7).
+  - A5 IF the return system lacks an idempotency key or lookup, THEN the memo SHALL propose the revised C5 and D5 and mark G07 and G08 blocked on a checkpoint.
+- **Verification:** read of the memo against each item.
+- **Execution scope:** read-only against sandbox; production data only if the owner grants it in W2.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G03 from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md and record the memo.`
+
+### G04 — Customer identity and scope
+
+- **Phase and estimate:** 1; hands-on 6–9, review 3–5, total 9–14; handoff 1 from G03; owner Dev B.
+- **Outcome, contracts, decisions:** Every `/api` route verifies the customer token; the principal overwrites `user_id` on every ADK call; sessions are owner-filtered; revocation is checked before sensitive actions. Proves C1, C9; implements D6.
+- **Scope:** Verifier, dependency, session ownership, a two-customer test fixture. Excludes the SPA sign-in UI (G09).
+- **Depth:** Build, at the floor and tiers 1 to 6.
+- **Implementation route:** `app/auth.py`, middleware, owner-filtered session lookup; library from the identity provider (O3).
+- **Prerequisites:** G02, G03, W0. Token audience confirmed against a captured token.
+- **Primary skill:** `adk-fastapi-backend`. **Supporting:** `adk-tool-auth-and-secrets`, `adk-frontend-integration` (session routes). **Security rules:** SB01, SB02, SB03, SB04, SB13, SB20.
+- **Acceptance:**
+  - A1 WITH the verifier unset, EVERY `/api` route SHALL return 401 (C1, SB01).
+  - A2 AN expired token, a wrong-audience token and a forged-header request SHALL be rejected (C1, SB02).
+  - A3 A forged `user_id` in the body SHALL run in the caller's own scope, and another customer's session SHALL return the same 404 body as an unknown one with no model call (C1, SB03).
+  - A4 IN a two-customer test, a tool call whose arguments name another customer's product SHALL find nothing (C1, SB04).
+  - A5 A revoked token SHALL be refused on a sensitive-action route (SB20).
+  - A6 A verifier or key-fetch outage SHALL deny and return a generic error with a request ID (C9, SB13).
+- **Verification:** offline plus local two-customer fixtures; one captured real token for A2.
+- **Execution scope:** local; test customers from W3.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G04 from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md, use the goal's primary and supporting skills, verify its acceptance cases locally and record evidence here.`
+
+### G05 — Grounded warranty answers
+
+- **Phase and estimate:** 1; hands-on 7–10, review 4–6, total 11–16; owner Dev A.
+- **Outcome, contracts, decisions:** A customer's warranty question is answered from the record with evidence, or honestly declined. Proves C1, C2, C6, C9; implements D2, D3.
+- **Scope:** `list_my_products`, `get_warranty`, output schema with `cannot_answer`, instructions, validator, handoff wording. Excludes returns (G07) and evaluation labelling (G06).
+- **Depth:** Build. Typed projections; free-text columns excluded or bounded.
+- **Implementation route:** `agent/tools.py`, `agent/schema.py`, `app/validate.py`; customer key from trusted state (a stub principal until G04 lands, then real).
+- **Prerequisites:** G02, G03, W0; product-database access path (O1).
+- **Primary skill:** `adk-tool-interface-design`. **Supporting:** `adk-model-and-output-contracts` (schema, repair budget), `adk-agent-instructions`, `adk-agent-security` (injection check). **Security rules:** SB04, SB17.
+- **Acceptance:**
+  - A1 FOR an owned product with a record, THE answer SHALL carry code-computed status, evidence IDs and as-of date (C2).
+  - A2 WITH no record, THE answer SHALL say it cannot find the product and offer a handoff, and invent no terms (C2, C9).
+  - A3 A scripted answer claiming coverage absent from the turn's tool results SHALL be rejected by the validator, with a bounded repair budget and an explicit failure shape (C2).
+  - A4 A product-database text field and a customer message containing an injected instruction SHALL not cause any tool call outside the allowed set, and `propose_return` SHALL not be called without a return intent (C6, SB17).
+  - A5 A tool argument naming another customer's product SHALL return not found (C1, SB04).
+  - A6 WHEN the model is unavailable, slow or rate limited, THE run SHALL end inside the deadline with an honest message and one retry owner (C9).
+  - A7 WHEN the product database is unavailable, slow or its pool is exhausted, THE tool SHALL time out and the answer SHALL be an honest failure (C9).
+  - A8 WHEN the model returns blocked, empty, prose, fenced JSON or schema-valid wrong data, THE application SHALL respond as designed and count the wrong-but-valid case separately (C2).
+  - A9 THE declaration dump SHALL show at most four tools with bounded results, and the rendered-request test SHALL match the versioned instruction (C2).
+  - A10 WHEN the product database rejects a query (permission or schema drift), THE answer SHALL be an honest failure with no partial claim (C9).
+  - A11 WHEN the product database credential is expired or revoked, THE tool SHALL fail closed and no fallback credential SHALL be used (C9).
+- **Verification:** offline scripted model plus a bounded live check on the pinned model with declared request and cost limits.
+- **Execution scope:** local; live model calls need an authorised project (W1).
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G05 from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md, use the goal's primary and supporting skills, verify its acceptance cases locally and record evidence here.`
+
+### G06 — Evaluation set and runner
+
+- **Phase and estimate:** 1; hands-on 6–9, review 2–3, total 8–12; wait W5 for the experts' session; owner Dev A.
+- **Outcome, contracts:** A versioned criteria file, a labelled set of at least 40 cases with provenance and expert agreement, and a runner that fails by exit code. Proves C2, C6, C10.
+- **Scope:** Warranty questions, out-of-scope and adversarial cases. Excludes the CI wiring (G12).
+- **Depth:** Build with a gate.
+- **Prerequisites:** G05; the experts named by the warranty policy owner.
+- **Primary skill:** `adk-agent-evaluation` (expert-review reference). **Supporting:** none.
+- **Acceptance:**
+  - A1 A criteria file, a gold set of at least 40 cases with provenance, and an expert agreement report SHALL exist and be versioned (C2).
+  - A2 THE runner SHALL exit non-zero when the grounded-answer pass rate is below the threshold agreed with the experts (C2).
+  - A3 AT least 10 cases SHALL be out-of-scope or adversarial and expect a refusal or handoff (C2, C6).
+  - A4 THE baseline on the pinned model SHALL be recorded with the eval-set hash (C10).
+- **Verification:** local runner; live model calls within declared limits.
+- **Execution scope:** model calls on an authorised project.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G06 from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md.`
+
+### G07 — Return proposal and confirmation
+
+- **Phase and estimate:** 1; hands-on 8–12, review 4–6, total 12–18; handoff 1 from G04; owner Dev A.
+- **Outcome, contracts, decisions:** A customer's return intent becomes a stored, hashed proposal; only an authenticated confirm call files it; stale, over-broad and repeated actions are refused. Proves C1, C3, C4, C5, C6; implements D4, D5 (record and state machine).
+- **Scope:** `propose_return` draft tool, eligibility function, confirm endpoint, executor against a fake return system, operation record with unique key, durable dispatch. Excludes the real return system (G08).
+- **Depth:** Build. Eligibility rules pending O6.
+- **Prerequisites:** G04, G05; O6.
+- **Primary skill:** `safe-api-tool-calls`. **Supporting:** `adk-operational-guardrails` (approval binding, expiry), `adk-fastapi-backend` (confirm route), `adk-agent-security` (no model-callable write). **Security rules:** SB18.
+- **Acceptance:**
+  - A1 NO model-callable tool SHALL make a return-system call; `propose_return` SHALL only write a draft (C3, C6).
+  - A2 CONFIRM with a matching hash SHALL call the fake return system once; reject or no confirmation SHALL call it zero times (C3, SB18).
+  - A3 IF the warranty ends or the product is returned between proposal and confirm, THEN confirm SHALL be refused and a fresh proposal offered (C3, C4).
+  - A4 A proposal or confirm for another customer's product SHALL be refused (C1, C4).
+  - A5 TWO concurrent or repeated confirms SHALL yield one operation and one return-system call (C5).
+  - A6 AN expired proposal SHALL be refused (C3).
+  - A7 "Return everything I own" SHALL produce one proposal per product line with its own confirm, and no bulk filing (C3).
+  - A8 "Yes" typed into the chat SHALL not file anything; only the confirm endpoint does (C3, C6).
+  - A9 AN ineligible product SHALL be refused in code with a reason code the model cannot override (C4).
+  - A10 IF the commit acknowledgement is lost, THEN a retry SHALL return the same operation (C5).
+  - A11 AFTER a restart with an operation pending, THE dispatch SHALL resume from the durable record (C5).
+- **Verification:** offline with a fake return system and killed-process tests; local database.
+- **Execution scope:** local.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G07 from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md.`
+
+### G08 — Return-system adapter and reconcile
+
+- **Phase and estimate:** 1; hands-on 6–9, review 4–6, total 10–15; owner Dev A.
+- **Outcome, contracts:** The executor files a request in the sandbox exactly once, even after crashes and lost responses. Proves C5, C7, C8, C9.
+- **Scope:** Real adapter, idempotency key, status lookup, reconcile worker, `unknown` handling and support-queue entry, credential handling. Excludes production credentials.
+- **Prerequisites:** G07; sandbox credentials from W2; the revised D5 if G03/A5 fired.
+- **Primary skill:** `safe-api-tool-calls`. **Supporting:** `adk-tool-auth-and-secrets`. **Security rules:** SB16.
+- **Acceptance:**
+  - A1 A confirmed proposal SHALL create one record in the sandbox and the customer SHALL see its reference (C5).
+  - A2 AFTER a kill between the provider accepting and the receipt being stored, A restart SHALL find the existing record by key, create no second one, and preserve the verified effect (C5, C9).
+  - A3 ON timeout or 5xx, THE operation SHALL be `unknown`, the customer SHALL be told it is being checked, a support-queue entry SHALL exist and no resend SHALL occur before lookup (C5, C9).
+  - A4 ON a 4xx rejection, THE state SHALL be `rejected`, nothing SHALL be retried and a fresh proposal SHALL be possible (C9).
+  - A5 ON a 429, THE adapter SHALL back off with jitter and bounded attempts under one retry owner (C8).
+  - A6 WITH the credential expired or revoked, THE adapter SHALL fail closed, raise an alert and use no fallback credential (C9, SB16).
+  - A7 A different payload under the same operation ID SHALL be rejected (C5).
+  - A8 THE credential SHALL come from Secret Manager or workload identity and appear in no log or event (C7, SB16).
+  - A9 AN unexpected or malformed return-system payload SHALL be treated as failure or unknown, never as success (C5, C9).
+- **Verification:** local against the sandbox, with a fault-injecting proxy; no production calls.
+- **Execution scope:** sandbox only.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G08 from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md.`
+
+### G09 — Chat API and baseline SPA
+
+- **Phase and estimate:** 1; hands-on 9–13, review 4–6, total 13–19; handoff 1 from G05; owner Dev B.
+- **Outcome, contracts:** A signed-in customer chats in a browser, with streamed answers and a confirm card rendered from a stored draft. Proves C3, C8, C9; the web rules named below.
+- **Scope:** Run and stream route, owner-filtered session routes, run lock, request limits, SPA with sign-in, error handler, headers, generated client. The confirm card is built against the proposals API contract with a fake until G07 is merged; G16 runs it for real. Portal embedding is phase 2 (O8).
+- **Prerequisites:** G04, G05; companions pinned from web defaults.
+- **Primary skill:** `adk-frontend-integration`. **Supporting:** `adk-fastapi-backend`. **Companion skills:** per web application defaults. **Design system:** `DESIGN.md` from the organisation's house system, or the defaults' baseline if none (O8). **Security rules:** SB05, SB06, SB07, SB09, SB10, SB13, SB19.
+- **Acceptance:**
+  - A1 A SECOND concurrent run for the same customer SHALL be refused (C8, SB19).
+  - A2 AN oversize body SHALL get 413 and a malformed body 422 (SB09).
+  - A3 A scripted reply with an `<img onerror>` payload, a `javascript:` link and an image from an unlisted host SHALL render inert and load nothing (C3, SB10).
+  - A4 A forced exception SHALL return a generic 500 with a request ID and no stack or provider message (C9, SB13).
+  - A5 AT the served build, `/docs`, `/redoc`, `/openapi.json` and ADK's own routes SHALL return no schema, no ADK data and cause no model call, and the header test SHALL pass (SB05, SB07).
+  - A6 A preflight from an unlisted origin SHALL receive no allow header (SB06).
+  - A7 THE confirm card SHALL show product and remedy from the stored draft, not from model text (C3, SB10).
+  - A8 IF the browser disconnects mid-answer, THE run SHALL close and no partial answer SHALL be stored as a finished turn (C9).
+  - A9 AFTER a process restart, THE session SHALL continue for its owner only (C1).
+- **Verification:** local with Playwright; screenshot and accessibility check at production depth.
+- **Execution scope:** local.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G09 from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md.`
+
+### G10 — Data protection and spend stops
+
+- **Phase and estimate:** 1; hands-on 5–8, review 3–4, total 8–12; handoff 1 from G05; owner Dev B.
+- **Outcome, contracts:** Customer content stays out of logs; sessions expire and can be erased; a looping or abusive customer and a runaway bill are stopped by the application. Proves C7, C8.
+- **Scope:** Logging gate, retention and erasure job, card-number input detector, admission control, kill switch, model-project quota record. Ceiling and volume figures come from O4.
+- **Prerequisites:** G04, G05; retention period (O5) or the assumed 30 days recorded as assumption.
+- **Primary skill:** `adk-operational-guardrails`. **Supporting:** `protect-adk-sensitive-data`. **Security rules:** SB14, SB19.
+- **Acceptance:**
+  - A1 LOGS and traces SHALL contain no prompt, reply or personal content, and the denied-access line SHALL be present (C7, SB14).
+  - A2 THE retention job SHALL delete sessions and drafts older than the period, and an erasure by customer SHALL remove them (C7).
+  - A3 A message containing a payment card number SHALL be refused before storage and model (C7).
+  - A4 A looping scripted model SHALL stop at `max_llm_calls` (C8, SB19).
+  - A5 A customer at the daily allowance SHALL be refused with no model call (C8).
+  - A6 THE kill switch SHALL stop new runs within the stated seconds while status and reconcile still work, and the agent SHALL have no write path to it (C8).
+  - A7 WHEN the admission store is unavailable, NEW runs SHALL be refused (C8).
+  - A8 THE model-project quota SHALL be set and recorded as a backstop (C8).
+  - A9 THE per-request model-call inventory SHALL show the bound including SDK retries (C8).
+- **Verification:** offline and local; quota readback is a hosted step in G11.
+- **Execution scope:** local; quota setting needs W1 and approval.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G10 from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md.`
+
+### G11 — Cloud Run, edge and data tier
+
+- **Phase and estimate:** 1; hands-on 8–12, review 4–6, total 12–18; wait W1; owner Dev B.
+- **Outcome, contracts, decisions:** The skeleton, then each merged goal, deploys to staging and production from one pipeline behind the load balancer with only the load balancer able to reach it. Proves C7, C8, C10; implements D1, D7.
+- **Scope:** Infrastructure as code in the landing zone's convention, service accounts, Cloud SQL, Secret Manager, Artifact Registry, ALB with Cloud Armor, labels, billing export, backups. Staging with synthetic data only.
+- **Depth:** Production. Staging scales to zero and is single-zone.
+- **Resources created:** Each row's idle cost is a placeholder until G11/A1 reads the pricing page. Cloud Run with minimum instance 1 in production (idle rate; cleanup `gcloud run services delete`; verify `gcloud run services list`), Cloud SQL regional instance with backups and point-in-time recovery (per second running; `gcloud sql instances delete` then `gcloud sql backups delete`; verify both lists), external ALB forwarding rule, address, proxy and URL map (hourly; delete in dependency order; verify `forwarding-rules list` and `addresses list`), Artifact Registry repository (per GiB; `gcloud artifacts repositories delete`), Secret Manager versions (per active version). Lifetime owner: the cost contract C8 and the decommission item in Later; there is no teardown goal because production continues.
+- **Prerequisites:** G02, W1; effective org policies read (`gcp.resourceLocations`, `sql.restrictPublicIp`, key-creation and member-domain constraints); the APIs each step enables named in its approval (`run`, `sqladmin`, `secretmanager`, `artifactregistry`, `compute`, `cloudbuild`, `monitoring`).
+- **Primary skill:** `deploy-adk-on-google-cloud`. **Supporting:** `google/skills:cloud-run-basics` (service and ingress), `google/skills:cloud-sql-basics` (instance, backups), `google/skills:google-cloud-global-frontend-configuration` (ALB, Cloud Armor), `google/skills:iam-helper-for-policy-management` (bindings), `google/skills:gcloud` (commands), `google/skills:google-cloud-waf-reliability`, `-security` and `-cost-optimization` (pillar checks). All unconfirmed against the live catalogue. **Security rules:** SB05, SB25.
+- **Acceptance:**
+  - A1 BEFORE any resource is created, THE pricing pages SHALL be read and the idle cost, cleanup and verification rows above filled with dates (C8).
+  - A2 STAGING and production SHALL deploy the same image digest from the pipeline; the default `run.app` URL SHALL be refused and ADK paths return nothing (SB05).
+  - A3 THE serving identity SHALL have narrow grants, no key files, and the effective IAM readback SHALL match the design (C1).
+  - A4 A Cloud Armor rate rule SHALL trigger in a test (SB25).
+  - A5 EVERY resource SHALL carry `env`, `team` and `app` labels set in code, and the billing export SHALL be live (C8).
+  - A6 THE effective org policies and the region and residency choice SHALL be recorded and reconciled with O5.
+  - A7 A revision readback SHALL show the image digest and configuration equal to the release manifest, and a revision that cannot read its secrets SHALL fail readiness while the previous one keeps serving (C10).
+  - A8 Cloud SQL SHALL use private connectivity, backups and point-in-time recovery, with RPO and RTO recorded per store (C9).
+  - A9 STAGING SHALL contain no production data (C7).
+- **Verification:** hosted readbacks; infrastructure plan reviewed before apply.
+- **Execution scope:** NOT authorised. Needs a named project from W1, a named region and approval for each apply. Application Design Center plan assessment, if the organisation uses it, is cited as evidence.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G11 from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md. Propose each cloud command and wait for approval for the named project.`
+
+### G12 — Observability and release gate
+
+- **Phase and estimate:** 1; hands-on 7–10, review 3–4, total 10–14; handoff 1 from G06; owner Dev B.
+- **Outcome, contracts, decisions:** Traces, SLIs and alerts on the contracts; a Cloud Build gate that fails on a bad evaluation; a manifest; a rehearsed rollback and canary procedure. Proves C2, C5, C7, C9, C10; implements D10.
+- **Prerequisites:** G11, G06.
+- **Primary skill:** `adk-agent-observability`. **Supporting:** `adk-release-engineering`; `google/skills:cloud-run-alert-configuration`, `google/skills:google-cloud-slo-alert-configuration`, `google/skills:cloud-build-basics` (unconfirmed). **Resources created:** alert policies and the evaluation job's model spend; Cloud Build charges per build minute only; owner: C8.
+- **Acceptance:**
+  - A1 AN in-memory exporter test SHALL show one span per agent, tool and logical model call with the conversation ID set (C9).
+  - A2 CONTENT capture SHALL be off in the deployed environment, verified on a deployed trace (C7).
+  - A3 SLIs SHALL be defined as good over total with owners, and alerts SHALL route to the named owner (C2, C5, C9).
+  - A4 THE CI gate SHALL fail by exit code when the evaluation is below threshold, and the manifest SHALL contain no alias (C10).
+  - A5 A rollback to the previous revision SHALL be rehearsed in staging with prompt, model, tool schema and secrets moving together (C10).
+  - A6 AN alert SHALL fire for an `unknown` operation older than 15 minutes (C5).
+  - A7 THE canary traffic-split procedure SHALL be run in staging (C10).
+- **Execution scope:** NOT authorised for cloud; offline parts local.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G12 from docs/plans/warranty-returns.md. Read docs/architecture/warranty-returns.md.`
+
+### G13 — Governance papers
+
+- **Phase and estimate:** 1; hands-on 5–8, review 2–3, total 7–11; wait W4 for the sign-off; owner Dev A.
+- **Outcome, contracts:** Draft privacy and legal papers for the privacy owner and counsel: jurisdiction screen, privacy impact (DPIA) input, records of processing, impact assessment and system card, each statement citing contract, decision and evidence IDs. Proves C7 (retention and erasure policy).
+- **Prerequisites:** G03 (the data map). The signed-off retention period feeds G10 when it lands.
+- **Primary skill:** `adk-governance-pack`.
+- **Acceptance:**
+  - A1 THE drafts SHALL exist under `docs/governance/warranty-returns/` and the skill's checker SHALL pass (C7).
+  - A2 THE privacy input SHALL list every flow of personal data including the model region, logs and backups (C7).
+  - A3 THE sign-off request SHALL be sent with the drafts, starting W4.
+- **Execution scope:** documents only; sign-off is the privacy owner's.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G13 from docs/plans/warranty-returns.md.`
+
+### G14 — Threat model and adversarial suite
+
+- **Phase and estimate:** 1; hands-on 6–9, review 3–4, total 9–13; handoff 1 from G09; owner Dev A.
+- **Outcome, contracts:** A recorded threat model and a scripted-model suite asserting forbidden actions never run. Proves C1, C3, C6; SB17, SB23 at Minimal.
+- **Prerequisites:** G07, G09.
+- **Primary skill:** `adk-agent-security`. **Security rules:** SB17, SB23.
+- **Acceptance:**
+  - A1 THE threat model SHALL record the per-agent check (private data, untrusted content, write) and its resolution, and list the OWASP LLM and agentic rows used (SB17, SB23).
+  - A2 THE suite SHALL show that injected text in the product record, the customer message and a tool result never causes a filing, a cross-customer read or an off-list tool call (C1, C3, C6, SB23).
+  - A3 THE system prompt and rendered request SHALL contain no secret or internal identifier (SB16).
+- **Execution scope:** local.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G14 from docs/plans/warranty-returns.md.`
+
+### G15 — Staging checks and drills
+
+- **Phase and estimate:** 1; hands-on 6–9, review 3–4, total 9–13; handoff 1 from G14; owner Dev B.
+- **Outcome, contracts:** The staging scans, the pen-test triage, a backup restore and the failure drills are done before any customer sees the service. Proves C8, C9; SB21, SB22, SB24.
+- **Prerequisites:** G08, G10, G12, G14; W6 pen test report received.
+- **Primary skill:** `adk-release-engineering`. **Supporting:** `adk-agent-observability`; `google/skills:google-cloud-waf-reliability` (unconfirmed). **Security rules:** SB21, SB22, SB24.
+- **Acceptance:**
+  - A1 THE ZAP baseline scan SHALL run on staging and each finding be fixed or accepted by an owner (SB21).
+  - A2 THE ASVS Level 1 review SHALL be recorded with each gap as a goal or fix (SB22).
+  - A3 THE pen-test findings SHALL be fixed or accepted by an owner (SB24).
+  - A4 A Cloud SQL backup SHALL be restored into a non-production environment and RPO and RTO measured against the design (C9).
+  - A5 DRILLS SHALL show an honest failure with no invented answer when the model is unavailable or its permission is revoked, and when the return system is down (C9).
+  - A6 WHEN the app database is unavailable or its credential is revoked, NEW runs SHALL be refused and confirmed operations SHALL stay consistent (C9).
+  - A7 A bounded burst test with a stated measurement boundary SHALL show admission refusing cleanly with no pool or quota exhaustion (C8).
+- **Execution scope:** staging only, within declared request and cost limits.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G15 from docs/plans/warranty-returns.md.`
+
+### G16 — Journey on staging
+
+- **Phase and estimate:** 1; hands-on 4–6, review 2–3, total 6–9; owner Dev B.
+- **Outcome, contracts:** The whole path on staging with synthetic customers: ask, answer, propose, confirm, reference, plus every earlier regression test. Proves C1 to C5, C9.
+- **Primary skill:** `adk-agent-evaluation`; Playwright as companion.
+- **Acceptance:**
+  - A1 A synthetic customer SHALL ask about an owned product, receive a grounded answer, propose a return, confirm and see one reference in the sandbox (C1, C2, C3, C5).
+  - A2 EVERY earlier goal's acceptance item that its ticket lists as a regression check SHALL pass.
+  - A3 A second customer SHALL be unable to read, propose or confirm anything for the first (C1, C4).
+  - A4 WITH the return system faulted, THE same journey SHALL end in `unknown` and a support entry, and the customer SHALL see no false confirmation (C5, C9).
+- **Execution scope:** staging.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G16 from docs/plans/warranty-returns.md.`
+
+### G17 — Operations handover
+
+- **Phase and estimate:** 1; hands-on 3–5, review 1–2, total 4–7; owner Dev B.
+- **Outcome, contracts:** A runbook the on-call owner can use. Proves C5 (the unknown-state procedure), C10 (rollback and retirement date).
+- **Primary skill:** `adk-agent-observability` (operations handover reference). Blocked on O9 for names.
+- **Acceptance:**
+  - A1 THE runbook SHALL cover unknown returns and who closes them, the kill switch, rollback, model retirement date and the incident roles, each with a command or link (C5, C10).
+  - A2 AN on-call owner and an escalation path SHALL be named before launch (C10).
+  - A3 THE owner SHALL walk one drill from the runbook (C5).
+- **Execution scope:** documents and a drill in staging.
+- **Status and evidence:** planned.
+- **Run this goal:** `/adk-engineer Carry out G17 from docs/plans/warranty-returns.md.`
+
+### G18 — Go-live review
+
+- **Phase and estimate:** 1; hands-on 3–4, review 1–2, total 4–6; wait W4 first, W7 after; owner Dev B.
+- **Outcome:** The sponsor decides on the canary launch with evidence, residual risks, the cost ceiling and the phase 2 ramp plan.
+- **Primary skill:** `adk-presenter`. Business audience; the technical read for security and privacy reviewers is the design plus G13, G14, G15 evidence unless O11 says otherwise.
+- **Acceptance:**
+  - A1 THE outline SHALL pass the deck check and every claim SHALL cite an evidence record in this plan.
+  - A2 THE memo SHALL state residual risks with owners, the cost ceiling and the ramp gates.
+- **Run this goal:** `/adk-presenter Build the go-live review for docs/plans/warranty-returns.md (G18).`
+
+### G19 — Canary launch
+
+- **Phase and estimate:** 1; hands-on 2–3, review 1–2, total 3–5; owner Dev B.
+- **Outcome, contracts:** Production serves a small share of customers with rollback ready. Proves C8, C10.
+- **Primary skill:** `deploy-adk-on-google-cloud`. **Supporting:** `adk-release-engineering`.
+- **Acceptance:**
+  - A1 THE traffic split SHALL be set to the agreed small share with the previous revision ready (C10).
+  - A2 THE SLIs SHALL be read after 24 hours and compared with the provisional targets (C8).
+  - A3 THE rollback command SHALL be confirmed to work on the live service without sending traffic to it.
+- **Execution scope:** NOT authorised: production changes need the W7 approval and a named target.
+- **Run this goal:** `/adk-engineer Carry out G19 from docs/plans/warranty-returns.md.`
+
+### Phase 2 goals
+
+| ID | Goal | Primary skill | Estimate | One acceptance check |
 | --- | --- | --- | --- | --- |
-| G01 Go-ahead presentation | presentation | 3-5 | none | `adk-presenter` |
-| G02 Foundation and environments | implementation | 5-9 | W1 | `deploy-adk-on-google-cloud` |
-| G03 Data and integration discovery | discovery | 5-9 | W2 | `adk-engineer` |
-| G04 Warranty agent skeleton | implementation | 10-16 | none | `adk-workflow-design` |
-| G05 Identity and per-customer scope | implementation | 8-14 | G04 | `adk-fastapi-backend` |
-| G06 Product database tools | implementation | 6-10 | G03, G05, W3 | `adk-tool-interface-design` |
-| G07 Propose, confirm, file | implementation | 14-22 | G03, G06, W3 | `safe-api-tool-calls` |
-| G08 Customer chat UI | implementation | 10-14 | G07, G12 | `adk-frontend-integration` |
-| G09 Evaluation set and gate | implementation | 11-17 | G07, W4 | `adk-agent-evaluation` |
-| G10 Spend and abuse stops | implementation | 5-9 | G04 | `adk-operational-guardrails` |
-| G11 Injection, sensitive data, erasure | implementation | 7-12 | G07 | `adk-agent-security` |
-| G12 Staging deployment | implementation | 9-14 | G02, G05, W3 | `deploy-adk-on-google-cloud` |
-| G13 Minimal observability | implementation | 5-8 | G12 | `adk-agent-observability` |
-| G14 Governance drafts | governance | 5-9 | none | `adk-governance-pack` |
-| G15 Security review | implementation | 4-7 | G11, G12 | `adk-agent-security` |
-| G16 End-to-end journey | journey | 4-6 | G08, G09, G10, G11, G13 | `adk-agent-evaluation` |
-| G17 Production readiness | implementation | 5-8 | G07, G12, G13 | `adk-release-engineering` |
-| G18 Launch-decision presentation | presentation | 3-6 | G14, G15, G16, G17 | `adk-presenter` |
-| G19 Cohort go-live | implementation | 3-5 | G18, W5, W6 | `deploy-adk-on-google-cloud` |
-
-Waits requested on day 1, before any goal starts: W1, W2, W4. W3 starts when G01 is presented; W5 when G14 drafts are sent; W6 after G18.
-
-Presentations: G01 (business audience, approval to build) and G18 (business plus the platform and security reviewers, decision to go live); the results review is phase 2 (G26). The statement of work, portability and teardown goals do not apply (internal build; no lock-in concern; production resources carry forward and are owned by the cost contract and the decommission item in Later).
-
-### G01 Go-ahead presentation
-
-- **Outcome:** a deck outline and decision memo for the sponsor from this design and plan: scope, the assumed answers, the cohort-versus-production choice (O1), the cost placeholder (O7), the accepted risk (SB24). Evidence slides cite design IDs; there is no run evidence yet, and the deck must say so.
-- **Skills:** `adk-presenter`. **Acceptance:** A1 the outline passes the presenter's deck check and every claim cites a design or plan ID (deliverable). A2 the decision memo lists O1, O4 and O7 with a named decider each (deliverable). **Wait:** W3.
-
-### G02 Foundation and environments (Dev B)
-
-- **Outcome and depth:** the team can deploy to dev, staging and production projects in the landing zone with effective org policies read and recorded. Terraform or scripted, no console clicks that cannot be reproduced.
-- **Route and prerequisites:** read `gcloud org-policies describe ... --effective` for `gcp.resourceLocations`, `iam.disableServiceAccountKeyCreation`, `iam.allowedPolicyMemberDomains`, `gcp.restrictServiceUsage`, `sql.restrictPublicIp`, `compute.vmExternalIpAccess`; check `billingEnabled`; enable APIs per goal (`run`, `aiplatform`, `secretmanager`, `artifactregistry`, `logging`, `monitoring`, `cloudtrace`; `sqladmin`, `compute` and `identitytoolkit` are enabled by G12). A VPC Service Controls perimeter would make every cross-boundary call a W-style wait; record yes or no.
-- **Skills:** `deploy-adk-on-google-cloud`; `google/skills:google-cloud-recipe-onboarding`, `google-cloud-recipe-auth`, `gcloud` (read-only inspection and enablement, scoped flags, no global config changes). **Resources created:** Artifact Registry repository (storage beyond the free tier; idle cost not looked up, record with pricing date before creating); Secret Manager entries. Cleanup and absence checks: `gcloud artifacts repositories delete` and `list`; `gcloud secrets delete` and `list`.
-- **Acceptance:** A1 the effective-policy readout is recorded with the region decision (O5). A2 service accounts exist per design identity (serving, executor, product-DB reader, deployer) with no keys. A3 a recorded readback shows enabled APIs match the list above.
-- **Execution scope:** needs W1, a target project and approval for each enablement.
-
-### G03 Data and integration discovery (Dev A)
-
-- **Question and stopping condition:** settle O2, O3, O4, O6 in at most 6 hours. Stop when each has a documented answer or a named owner and a date. Deliver `docs/discovery/data-and-integrations.md`.
-- **Expected decisions:** product-database engine, access path and masked copy; returns-system API, idempotency or status lookup, what a return triggers; how customers sign in and map to purchases; who owns the warranty rule and whether policy text is unstructured. Updates C1 to C6 in place with one-line notes if any answer changes them, and resets G05 to G07 estimates.
-- **Unblocks:** G06, G07; narrows the estimate ranges. If O4 shows customers do not sign in, return to the design before G05.
-- **Acceptance:** A1 each of O2, O3, O4, O6 is closed or owned with a date (deliverable). A2 any contract change is listed with the goals it moves (deliverable).
-
-### G04 Warranty agent skeleton (Dev A)
-
-- **Outcome:** locally, a scripted-model and a real-model run answer warranty questions from a fake product database through the rule function. No cloud, no real data.
-- **Contracts:** C3, C11. **Route:** `LlmAgent` with `get_warranty_status` and `lookup_purchases`, `warranty_rules.py`, offline tests, a test principal via dependency override only in tests. Pins ADK and the model ID from the lifecycle table.
-- **Skills:** `adk-workflow-design`; supporting `adk-tool-interface-design`, `adk-agent-instructions`, `adk-model-and-output-contracts`.
-- **Acceptance:** A1 table-driven rule tests: covered, expired, boundary day, missing purchase date yields "cannot determine" (C3). A2 scripted model: the tool returns "no record" and the answer states it cannot determine and invents no date (C3). A3 the dumped tool declarations show the intended tools only, each with primitive parameters and a bounded result, and a rendered-request test shows a stable instruction prefix (C3). A4 the ADK version and model ID are pinned, each interface used is confirmed against the pin, and the model's retirement date is recorded (C11).
-
-### G05 Identity and per-customer scope (Dev B)
-
-- **Outcome:** only a verified customer can reach `/api`; every tool and record route is scoped to them.
-- **Contracts and rules:** C1, C2; SB01, SB02, SB03, SB04, SB09, SB13, SB20. **Route:** principal dependency failing closed, server overwrite of `user_id`, `DatabaseSessionService` on a local database, owner filter on records, one error handler. Live-token checks wait for G12.
-- **Skills:** `adk-fastapi-backend`; supporting `adk-tool-auth-and-secrets`, `adk-memory-architecture`.
-- **Acceptance:** A1 with no verifier configured every `/api` route returns 401 (C1, SB01). A2 expired, wrong-audience, forged-header and forged-signature tokens are rejected (C1, SB02). A3 a forged `user_id` runs in the caller's own scope, and another customer's session id returns the same 404 body as an unknown one with no model call (C1, SB03). A4 two-customer test: a tool call naming another customer's order finds nothing (C2, SB04). A5 a verifier outage denies, and a forced exception returns a generic 500 with a request id and no internals (SB13). A6 a revoked token is refused on a sensitive action (SB20). A7 oversize and malformed bodies get 413 or 422, and no string-built SQL exists (SB09).
-
-### G06 Product database tools (Dev A)
-
-- **Outcome:** the agent answers from the real (masked) product database on staging.
-- **Contracts:** C2, C3, C10. **Route:** read-only role through workload identity, parameterised queries scoped by trusted `customer_id`, bounded rows, error results with a status field.
-- **Skills:** `adk-tool-interface-design`; supporting `adk-tool-auth-and-secrets`; `google/skills:gcloud`, `iam-helper-for-policy-management` (read-only role binding, proposals needing approval). **Execution scope:** W2 grants and W3.
-- **Acceptance:** A1 on the masked copy, three test customers get the expected cited warranty fields (C3). A2 a database timeout or outage returns a bounded actionable error and the answer says it cannot check, with no fabricated status (C10). A3 an empty authorised result does not widen the query (C2). A4 an oversized result is bounded, and connection exhaustion triggers one bounded retry owner and then an honest failure. A5 permission denied or schema drift returns an actionable error and an alert signal (C10). A6 a revoked reader role surfaces as "cannot check" and is detected (C10).
-
-### G07 Propose, confirm, file (Dev A)
-
-- **Outcome:** a customer proposes a return, sees the exact details, confirms, and exactly one request is filed or its true state is shown.
-- **Contracts and rules:** C4, C5, C6, C7, C10; SB18. **Route:** `propose_return` (draft with canonical hash), confirm route (owner, hash, recheck), executor (atomic claim, operation record before dispatch, idempotency key per O3), reconcile job. Returns system is a fake until W2 gives a staging target; live acceptance runs there, never against production.
-- **Skills:** `safe-api-tool-calls`; supporting `adk-operational-guardrails`, `adk-agent-security`, `adk-tool-auth-and-secrets`.
-- **Acceptance:** A1 `propose_return` writes only a draft and makes no returns-system call (C4). A2 confirm by the same customer with the matching hash files exactly once; reject runs the filing zero times (C4, SB18). A3 a changed detail, changed warranty status or an existing open return makes confirm refuse with the reason (C6). A4 a double click and two concurrent confirms produce one filing (C5). A5 killing the process after the returns system accepts and before the receipt is recorded, then restarting, reconciles by lookup and files nothing twice (C5). A6 a returns-system rejection is shown, not retried in a loop, and the draft stays (C10). A7 a timeout and a 429 leave the operation pending with visible status and no duplicate (C5, C10). A8 confirming another customer's draft returns 404 with no effect (C1, C2). A9 the declared tools for the model contain no filing tool (C4, C7). A10 "return everything I bought" yields one separately confirmed proposal per line, none filed together. A11 a malformed returns-system response is treated as outcome unknown (C5). A12 an expired or revoked returns-system credential holds the operation, alerts, and creates no duplicate (C5). A13 if the operation record cannot be written, the returns system is not called and the customer is told (C10).
-- **Estimate risk:** the 14 to 22 hours depend on O3. With no idempotency key and no lookup, this goal grows and a design checkpoint is needed.
-
-### G08 Customer chat UI (Dev B)
-
-- **Outcome:** sign in, ask, read a streamed answer with status block, review a proposal card, confirm or reject.
-- **Contracts and rules:** C1, C4; SB10. **Companions:** `shadcn`, Playwright; design system `docs/design/DESIGN.md` from the house system. Writes the companion table into `AGENTS.md`.
-- **Skills:** `adk-frontend-integration`; supporting `adk-fastapi-backend`.
-- **Acceptance:** A1 the browser journey runs against the real API with a scripted model: sign-in, answer, proposal card, confirm, receipt (C1, C4). A2 a reply containing an `<img onerror>` payload, a `javascript:` link and an image from an unlisted host renders inert and loads nothing (SB10). A3 a stale confirm card after a status change shows the refusal and no filing (C4). A4 a dropped stream shows an incomplete turn and never a filed state, and the status is re-read from the operation record. A5 the hand-off route for unanswerable questions is shown (O8).
-
-### G09 Evaluation set and gate (Dev A)
-
-- **Outcome:** a measured answer-quality and return-flow baseline, and a gate that fails by exit code.
-- **Contracts:** C3, C10, C11. **Route:** at least 30 labelled cases (covered, expired, boundary, no purchase, foreign order, ambiguous product, injected text, return flows), criteria file and agreement report from the experts, runner, gate script; the CI wiring is the first item that slides (summary).
-- **Skills:** `adk-agent-evaluation` with its expert-review reference; supporting `adk-release-engineering`. Experts' hours and the session date are W4; the quality decision-maker is the sponsor's nominee (O6).
-- **Acceptance:** A1 a versioned criteria file, a gold set with provenance and an agreement report exist (C3). A2 introducing a regression in a rule or prompt makes the gate exit non-zero and the release manifest records the eval-set hash (C3, C11). A3 a scripted model returning prose, fenced JSON and schema-valid wrong data each gets the designed response: bounded repair then an explicit failure, wrong-but-valid counted separately (C10).
-
-### G10 Spend and abuse stops (Dev A)
-
-- **Outcome:** a looping, concurrent or abusive customer cannot run up spend; an operator can stop new sessions at once.
-- **Contracts and rules:** C9, C10; SB19. **Route:** `max_llm_calls` from a measured run, per-customer allowance, one active run per customer and conversation, global cap, kill switch outside agent authority, state in the database, fail closed.
-- **Skills:** `adk-operational-guardrails`. Needs O7 for numbers; otherwise labelled provisional values.
-- **Acceptance:** A1 a scripted looping agent is stopped by the cap (C9, SB19). A2 model unavailable and model 429 give bounded retries owned in one place and an honest message (C10). A3 a second concurrent run for the same customer is refused, and the per-customer allowance refuses the next conversation (C9, SB19). A4 the kill switch refuses new sessions regardless of budget resets (C9). A5 control store unavailable or the connection pool exhausted refuses new runs (fail closed) (C9).
-
-### G11 Injection, sensitive data, erasure (Dev A)
-
-- **Outcome:** hostile text and personal data cannot cause harm or leak.
-- **Contracts and rules:** C7, C8; SB14, SB17. **Route:** adversarial scripted-model suite on the real tool set, logging allowlist, telemetry content capture off, erase route plus delete job with a tombstone for late writers; screening seams at ingress, storage, tool and log only where a threat is shown (no Model Armor by default).
-- **Skills:** `adk-agent-security`; supporting `protect-adk-sensitive-data`. Retention periods depend on O13.
-- **Acceptance:** A1 an instruction planted in a product-database free-text field and in a customer message does not cause a filing, a foreign read or a disclosure; the forbidden call never runs (C7, SB17). A2 a denied-access log line exists and no message content or personal data appears in logs or traces (C8, SB14). A3 each exposure seam (ingress, session storage, tool results, telemetry) has a recorded policy and a test (C8). A4 erase removes sessions and drafts, and a queued late write is refused (C8).
-
-### G12 Staging deployment (Dev B)
-
-- **Outcome:** the application runs on staging behind the load balancer with real sign-in, masked data and the returns system's test target.
-- **Contracts and rules:** C1; SB05, SB06, SB07, SB16, SB25. **Route:** Cloud Run service, ALB with Cloud Armor rate rule, ingress internal-LB only, Cloud SQL (private connectivity), Secret Manager, labels in deployment code, `identitytoolkit` configuration, live token audience check, ADK paths unreachable.
-- **Skills:** `deploy-adk-on-google-cloud`; `google/skills:cloud-run-basics`, `google-cloud-solution-n-tier-serverless-web-app`, `google-cloud-global-frontend-configuration`, `cloud-sql-basics`, `iam-helper-for-policy-management`. **Execution scope:** W1, W3, an approved target; no command runs before the cost record below exists.
-- **Resources created (record idle cost and pricing date before creating; none was looked up):** Cloud SQL instance (staging and production); external ALB forwarding rule, static IP and Cloud Armor policy; Cloud Run with minimum instances (staging 0, production per the cost record); Artifact Registry images; Secret Manager versions. Cleanup: `gcloud run services delete`; forwarding rule, then proxy, URL map, backend, address; `gcloud sql instances delete` then check backups; `gcloud artifacts repositories delete`; `gcloud secrets delete`. Absence: the matching `list` commands empty and backups page checked. **Lifetime owner:** the cost contract C9 and the decommission item in Later (production resources are not torn down by a phase goal).
-- **Acceptance:** A1 at the deployed URL, `/apps/…`, `/run`, `/run_sse`, `/list-apps` and the dev UI return no ADK data and cause no model call (SB05). A2 the `run.app` URL cannot reach the service; only the load balancer can. A3 a preflight from an unlisted origin gets no allow header; `/docs`, `/redoc` and `/openapi.json` return neither UI nor schema; the CSP, `nosniff`, referrer and HSTS headers are present (SB06, SB07). A4 a rate-limit test triggers the Cloud Armor rule (SB25). A5 secrets come from Secret Manager, the secret scan is clean, and a missing or unreachable secret makes the service refuse to become ready (SB16). A6 a captured live token confirms the audience, and a token for another audience is refused (C1, SB02). A7 an identity-provider outage on staging denies access.
-
-### G13 Minimal observability (Dev B)
-
-- **Contracts:** C9 (evidence). **Route:** one telemetry owner per process, one span per agent, tool and logical model call with the conversation id, token usage counted once, content capture off, structured logs, two alerts (error ratio, stuck operations), a trace-to-session lookup.
-- **Skills:** `adk-agent-observability`; `google/skills:cloud-run-alert-configuration`, `cloud-monitoring-notification-channels-configuration`.
-- **Acceptance:** A1 an in-memory exporter test shows the spans with the conversation id. A2 usage is counted once per logical model call. A3 a synthetic failure fires the alert to a named channel and the alert leads to a stored session (C9).
-
-### G14 Governance drafts (Dev B)
-
-- **Outcome:** drafts for counsel, the privacy officer and security reviewers: jurisdiction screen (region from O5), regulatory memo, privacy impact inputs, impact assessment, system card, processing records, questionnaire answers. Real personal data is in scope from go-live, so this is not optional.
-- **Skills:** `adk-governance-pack`. **Contracts:** C8. **Acceptance:** A1 the pack's checker passes on the drafts, each statement citing contract, decision and evidence IDs or flagged for counsel (deliverable). A2 the sign-off request is sent when drafts go out, starting W5 (deliverable). Drafts are revised after G03 closes O2 to O4.
-
-### G15 Security review (Dev B)
-
-- **Rules:** SB15, SB21, SB22. **Acceptance:** A1 a ZAP baseline scan against staging is recorded with each finding fixed or accepted (SB21). A2 an ASVS Level 1 review is recorded with gaps as goals (SB22). A3 `make check` runs Python and JavaScript audits failing on high findings, lockfiles are committed and pre-1.0 tools pinned (SB15). **Skills:** `adk-agent-security`, `adk-release-engineering`.
-
-### G16 End-to-end journey (Dev B)
-
-- **Outcome:** the whole path on staging, with every earlier acceptance item rerun (`pass_to_pass`: G05/A1 to A7, G07/A1 to A13, G08/A1 to A4, G10/A1 to A5, G11/A1 to A4).
-- **Contracts:** C1, C2, C4, C5. **Skills:** `adk-agent-evaluation`; companion Playwright. **Acceptance:** A1 sign-in, warranty question, proposal, confirm, receipt on staging with masked data passes, and a second customer cannot see the first's draft (C1, C2, C4, C5). A2 all `pass_to_pass` items pass in one run.
-
-### G17 Production readiness (Dev B)
-
-- **Contracts:** C5, C11. **Route:** release manifest, rollback rehearsal on staging, Cloud SQL point-in-time restore into a non-production environment, restart test with an in-flight operation, runbook, on-call and incident roles (O10), reconcile alert owner.
-- **Skills:** `adk-release-engineering`; supporting `adk-agent-observability`; `google/skills:cloud-sql-basics`, `google-cloud-waf-reliability`, `google-cloud-waf-cost-optimization`.
-- **Acceptance:** A1 a restored copy meets the stated RPO and RTO and the time taken is recorded. A2 rollback to the previous revision serves, and the manifest's image, prompt, model, tool-schema, eval-set and secret versions move together (C11). A3 a named person is on call, a runbook and incident roles exist, and the Cloud Billing export and budget alert exist with a named reader. A4 a process restart with an operation in flight leaves its record intact, and the reconcile job completes it without a second filing (C5).
-
-### G18 Launch-decision presentation (Dev B)
-
-- **Outcome:** deck outline, narrative, expected questions and one-page decision memo for the sponsor, platform and security reviewers, built only from recorded evidence: the contract table with evidence tiers, G09's measured results, G15's findings, G14 status, the accepted risk (SB24) restated for a decision, the cohort definition. **Skills:** `adk-presenter`. **Acceptance:** A1 the outline passes the deck check and every claim cites recorded evidence (deliverable). Decision date is W6.
-
-### G19 Cohort go-live (Dev B)
-
-- **Outcome:** production deployed with the cohort allowlist enforced, and a first-day watch. Starts only after W5 and W6. **Skills:** `deploy-adk-on-google-cloud`, `adk-release-engineering`. **Resources created:** the production set under G12's cost record, with the idle cost already recorded. **Acceptance:** A1 a non-allowlisted customer is refused and an allowlisted one completes the journey (C1). A2 the production release manifest equals the staged one. A3 the kill switch and rollback were each exercised once on production before the cohort was told. **Execution scope:** a named production project, approval from W6, and the real-data access W2 grants for production.
-
-## Phase 2 (coarse, will change after phase 1 evidence)
-
-| ID | Goal | Primary skill | Hours | One acceptance check |
-| --- | --- | --- | --- | --- |
-| G20 | First live week: read the bill against C9, record measurement records (M1 cost per conversation, M2 answered-without-support share against a baseline measured first) | `adk-agent-observability` | 3-6 | M records exist with baseline, window, sample and method |
-| G21 | Production hardening: penetration test by an outside party (SB24) and ASVS Level 2 with adversarial suite (SB23); findings fixed or owned | `adk-agent-security` | 12-24 plus test wait | Findings closed or accepted by a named owner |
-| G22 | Canary and joint rollback automation, evaluation gate in CI, judge schedule | `adk-release-engineering` | 8-14 | A bad build is stopped by exit code and a canary rolls back |
-| G23 | Full SLOs, dashboards, burn-rate alerts, feedback capture, production-to-evaluation loop | `adk-agent-observability` | 8-14 | An alert leads to a stored session that becomes an evaluation case |
-| G24 | Operations hand-over to IT and the rollout pack for support staff | `adk-agent-observability`, `adk-presenter` | 8-14 | Receiving team runs a drill from the runbook |
-| G25 | Open to all customers: load experiment, quota and Cloud Armor tuning, capacity | `optimise-adk-on-google-cloud` | 6-10 | Burst test holds stated latency and spend |
-| G26 | Results review presentation after the first period | `adk-presenter` | 3-6 | Every figure cites an M or I record |
-| G27 | Value report and a stop, continue or scale call | `adk-presenter` | 3-5 | Report cites measured baseline and counter-metric |
-
-The decision to open to all customers waits on G21 and G26.
+| G20 | ASVS Level 2 review and gaps (SB23) | `adk-agent-security` | 8–12 | Review recorded; each gap fixed or accepted by an owner |
+| G21 | First live bill against C8, and the first cost review | `adk-operational-guardrails` | 3–5 | M1 records the bill against the estimate with the window and sample |
+| G22 | Ramp to 100 percent by SLI gates | `adk-release-engineering` | 4–6 | Each step has a gate read from the SLIs; rollback tested at the top step |
+| G23 | Support-team rollout pack | `adk-presenter` | 4–8 | Guide and training delivered; unknown-return handling rehearsed |
+| G24 | Results review | `adk-presenter` | 4–6 | Every figure cites an M or I record |
+| G25 | Portal embedding (O8), if chosen | `adk-frontend-integration` | 10–16 | Embedded journey passes G16's checks |
 
 ## Later
 
 | Item | Trigger | Risk accepted while it waits | Likely primary skill |
 | --- | --- | --- | --- |
-| Retrieval over unstructured policy text | O6 shows policy outside structured fields | Answers limited to structured fields | `adk-memory-architecture` |
-| Photo or file upload for returns (SB11 then applies) | Business asks for evidence | Customers describe issues in text | `adk-fastapi-backend` |
-| Refund or payment effects | O3 shows returns trigger money | Not built; raises C5 to money depth | `safe-api-tool-calls` |
-| Human-ticket creation on hand-off | O8 asks for it | Contact link only | `adk-tool-interface-design` |
-| Other languages | O9 | English only | `adk-agent-evaluation` |
-| Model and capacity cost review (smallest passing model, committed use) | First bill, or a volume step, then quarterly | Possible overspend within the C9 ceiling | `optimise-adk-on-google-cloud` |
-| Regional failover, game day | Availability target above single-region | Regional outage stops service | `deploy-adk-on-google-cloud` |
-| Model retirement re-baseline | A retirement date inside 90 days | None if the calendar is kept | `adk-release-engineering` |
-| Decommission of staging and production | Application retirement | Idle cost continues until done | `deploy-adk-on-google-cloud` |
+| Recurring cost and model-mix review | A date each month, the first bill, a volume step | Spend above the smallest model that would pass | `adk-model-and-output-contracts` |
+| Committed-use review | Three stable months | Paying list price | `optimise-adk-on-google-cloud` |
+| Latency and capacity tuning | Measured p95 above target | Slower answers | `optimise-adk-on-google-cloud` |
+| BigQuery agent analytics, production-to-evaluation sampling | First incident or a quality drift | Slower quality learning | `adk-agent-observability` |
+| Refunds or other remedies | A policy decision | None; out of scope | `safe-api-tool-calls` |
+| Cross-session memory | A requirement | None | `adk-memory-architecture` |
+| Decommission | Application retires | Idle spend if forgotten | `deploy-adk-on-google-cloud` (ledger cleanups, dependants and retention) |
+| Model retirement re-baseline | Retirement date in the manifest | Forced migration | `adk-release-engineering` |
 
 ## What the reviewer reads
 
 | Document | Establishes |
 | --- | --- |
-| The design | Contracts, decisions, accepted and open decisions |
-| This plan | Capacity, cut line, goals and acceptance |
-| Evaluation summary (created by G09) | Latest result per case |
+| docs/architecture/warranty-returns.md | Method, contracts and accepted decisions |
+| docs/discovery/interfaces.md (after G03) | What the databases and return system actually do |
+| This plan | Remaining limits, deferred controls, evidence by contract |
 
 ## Open decisions for further planning
 
-See the design's Open decisions O1 to O13. Blocking: O4 (G05), O3 (G07), O2 (G06), O1 (G18/G19 scope), O7 (G10 values). Independent work remains possible meanwhile: G01, G04, G14.
-
-## Independent review
-
-**Not done.** This session had no subagent or shell. Before the plan is handed to two developers, run the independent plan review prompt in `.claude/skills/adk-system-designer/assets/plan-review-prompt.md` in a fresh session, settle each finding in a change table here, and rerun the schedule command above.
+See the design's open decisions O1 to O11. Those that block build goals: O1, O2, O3 (G03 settles them), O6 (G07), O4 and O5 (G10, G11). O10 changes every figure in this plan.
 
 ## Resume here
 
-- **Next goals (parallel on day 1):** G01 (Dev A), G04 (Dev A), G14 (Dev B); request W1, W2 and W4 the same day.
-- **Read first:** the design, then this plan's Summary.
+- **Next goal:** G02, which is ready and independent. First, today: send the access requests W1, W2, W3, the SME session request W5 and the pen-test booking W6.
+- **Read first:** the design and this plan.
 - **Continuation prompt:**
 
 ```text
-/adk-engineer Carry out G04 Warranty agent skeleton from docs/plans/warranty-returns.md.
-Read docs/architecture/warranty-returns.md and preserve its decisions.
-Use adk-workflow-design with adk-tool-interface-design, adk-agent-instructions and adk-model-and-output-contracts
-(install any that are missing first). Work locally with a fake product database and no cloud;
-verify A1 to A4 and record the evidence and any remaining blockers under G04.
+/adk-engineer Carry out G02 from docs/plans/warranty-returns.md.
+Read docs/architecture/warranty-returns.md and preserve its accepted decisions.
+Use adk-workflow-design with adk-model-and-output-contracts.
+Work locally only, verify A1 to A4, and update the plan with actual evidence.
 ```

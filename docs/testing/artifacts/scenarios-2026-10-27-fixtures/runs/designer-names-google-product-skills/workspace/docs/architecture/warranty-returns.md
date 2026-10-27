@@ -1,261 +1,247 @@
 # System design: warranty answers and return requests (ADK on Cloud Run)
 
-Status: **draft, unreviewed.** Written in a non-interactive session: nobody could answer the scope-gate questions, so every answer below is an assumption (see Assumed answers) and every decision that depends on one is provisional. Nothing here has been accepted by the user. Capacity, finish range and cut line are in the plan's summary ([plan](../plans/warranty-returns.md)), not restated here.
+Status: **draft**. Nothing here is user-accepted yet. The request was a non-interactive design and plan, so every scope-gate question is answered by an assumption (table below) and every decision that rests on one is provisional. The plan is `docs/plans/warranty-returns.md`; capacity, finish range and risks live there.
 
-## Assumed answers
-
-Questions I would have asked, the answer I proceeded on, and what depends on it. Correct any row and the dependent decisions change.
-
-| # | Question | Assumed answer | Depends on it |
-| --- | --- | --- | --- |
-| Q1 | When must the first version exist; continued afterwards? | Six weeks from 2026-11-02 (ends 2026-12-11), then continued and operated | Phase 1 size, cut line |
-| Q2 | Who builds it, hours, familiarity? | Two developers (Dev A, Dev B), about 30 h/week each on this at a 0.6 focus factor = 3.6 focused h/day each; strong Python and GCP, new to ADK (×1.5 on ADK goals) | Every estimate; capacity |
-| Q3 | Money for models and cloud? | Unknown. Spend ceiling and expected volume are placeholders the sponsor sets (O7) | C9, hosting sizing |
-| Q4 | Who uses and judges it? | External customers on the web; the support team and the business sponsor judge it. Phase 1 reaches an **allowlisted cohort** of real customers (O1) | Identity, SB tiers, SB24 timing |
-| Q5 | Own web interface, who reaches it, who continues it? | Own single-page chat UI at a public URL behind a load balancer; the two builders run it in phase 1, IT hand-over in phase 2 | D1, D9, G08, hand-over goal |
-| Q6 | Data touched, what can change? | Personal customer data (identity, purchase history, serial numbers). Reads the product database; writes one return request per confirmed proposal, which a real person at the company will act on | Floor, C4–C8 |
-| Q7 | Which reviews need a presentation? | Go-ahead before build (business), launch decision before go-live (business plus the platform and security reviewers), results review in phase 2. Dates unknown | G01, G18, phase 2 |
-| Q8 | Client contract or statement of work? | No, internal build | No SoW goal |
-| Q9 | Lock-in concern? | No | No portability goal |
-| Q10 | Residency and jurisdiction? | Unknown. Region comes from the effective `gcp.resourceLocations` policy (read in G02); jurisdiction is screened in G14 | Region, G14 |
+No repository, discovery brief or practice profile exists. The use case was given, not chosen through discovery; its outcome measure and baseline are unknown (O7).
 
 ## Purpose and constraints
 
-**Journey.** A customer signs in and asks "is my blender still under warranty?" The agent finds their purchase, reports the warranty status computed from the product database, and, if the customer wants a return, drafts a return request. The customer reviews the exact details and presses Confirm; only then is the request filed with the returns system and a reference shown.
+**Journey.** A signed-in customer asks "is my X still under warranty, and what does it cover?". The agent finds the customer's own product in the product database and answers from the record. If the customer wants to return it, the agent proposes a return request (product, reason, remedy). The customer confirms on a card the server renders; the backend files the request once in the return system and shows its reference.
 
-**Friction and outcome.** Today (assumed) a customer reads policy pages or waits for support. The outcome to improve is the share of warranty questions answered correctly without a support contact and the time to file a valid return. **No baseline exists; measuring one is a phase 2 goal** (the discovery brief that would hold it was not supplied; if one exists, read it first and treat its confirmed answers as settled).
+**Friction and outcome.** Today the customer reads policy pages or contacts support (assumed; no baseline given, O7). The outcome to improve is warranty questions resolved without an agent contact and return requests filed correctly the first time. Neither has a baseline yet.
 
-**What the model decides and what code controls.** The model interprets the question, chooses tools and words the answer. Code decides: who the customer is, which purchases they may see, warranty status (a deterministic rule function over database fields), whether a proposal is valid, confirmation, and filing. The model can draft a proposal; it cannot confirm or file one.
+**Model decides:** which tool to call, how to phrase a grounded answer, whether the customer's words amount to a return intent. **Code controls:** identity, which records are in scope, warranty status and eligibility, the confirmation, the write, retries, limits.
 
-**Non-goals (phase 1).** Refund or payment actions, uploads (photos), human-ticket creation, other languages, memory across sessions, unstructured policy retrieval.
+**Non-goals (phase 1):** refunds or payments, inbound email or voice, other product lines than those in the product database, proactive messages, a multi-agent design.
 
-**Existing systems (assumed, not inspected: no repository, no cloud access).** Product database (read-only access, engine unknown, O2), a returns system with an API (O3), a landing zone with folders, policies and billing owned by an administrator (the project, billing link and policy exceptions are calendar waits, W1), no customer identity provider known (O4).
+### Assumed answers (nobody could answer; every dependent decision is provisional)
 
-## Delivery constraints, depth and deferred controls
+| Scope-gate question | Assumed answer | Decisions that depend on it |
+| --- | --- | --- |
+| Deadline and afterwards | Six weeks from Mon 2026-11-02 (30 working days, to 2026-12-11); launched and continued | Cut line in the plan; phase 2 |
+| Who builds, hours, familiarity | Two developers, about 4.8 focused hours a day each (8 h at focus 0.6); new to ADK, comfortable with GCP; ×1.5 on ADK goals | Every estimate; G02 |
+| Money | Unknown; a sponsor-set monthly ceiling is needed (O4) | C8, D8, G10, G11 sizing |
+| Users and judge | External customers, daily. Judged by a business sponsor plus security and privacy reviewers, who read a go-live memo and evidence | G01, G13, G18 |
+| Own web interface, reach, handover | A baseline single-page app from [web application defaults](../../.claude/skills/adk-system-designer/references/web-app-defaults.md), reachable on the internet behind customer sign-in; later embedded in the organisation's portal (O8); other developers will continue it | D1, D9, web security tiers 1–6 |
+| Data and effects | Real personal data (name, contact, purchase, product serial) in production; staging uses synthetic data only. Effect: files a return request, which the return system may act on (labels, notifications, assumed) | Floor, C3–C5, C7, governance goal |
+| Reviews | Go-ahead before the build (G01); go-live approval (G18) for the business audience, with security and privacy reviewers reading the evidence directly (O11); results review after launch is phase 2 | Presentation goals, W7 |
+| Contract or lock-in | No statement of work; no lock-in concern, so no portability goal | Nothing |
+| Hosting | Cloud Run (given) | D1 |
+| Organisation foundation | A landing zone exists; the project, billing link, IAM grants and policy exceptions are an administrator's calendar waits (W1), not team hours | G11, W1 |
+| Jurisdictions and residency | Unknown (O5) | Model and database regions, D7, G13 |
 
-**Profile (one line, correct it):** production service **launched in phases**. Phase 1 reaches production go-live for an allowlisted customer cohort at MVP/pilot depth (security tiers 1 to 5); phase 2 reaches production depth (tier 6, canary, full SLOs, hand-over) before the service opens to all customers. I chose this because production depth for every concern does not fit six weeks for two people (plan summary); it is the first decision for you to confirm (O1).
+### Profile and depth
 
-Depth per concern the journey touches:
+**Production.** Real customers and real data set the risk, and the floor and tiers follow. Six weeks and two people do not carry every production control, so the plan cuts the later part of production (ramp to 100 percent, full ASVS Level 2 review, rollout pack, tuning) into phase 2 with triggers, and keeps the floor. The user should confirm or move that cut line; phase 1 ends in a controlled launch to a small share of customers, not general availability.
 
 | Concern | Depth now | Trigger that raises it |
 | --- | --- | --- |
-| Core judgment (warranty answers) measured | Build: 30+ labelled cases, gate | Production depth: gated in CI with judge schedule (phase 2) |
-| Identity and per-customer scope | Build | — |
-| External write (return request) | Build: confirmation, idempotency, recheck, reconcile | Refund or payment effect appears (O3): full replay and reconciliation |
-| Secrets | Build: Secret Manager, workload identity | Rotation schedule at production |
-| Sensitive data | Build: minimal fields, no content in logs, erasure | Regulated jurisdiction or new data class |
-| Injection and agency | Build: structural split (D5), scripted-model suite | Uploads, URL fetch or a second write tool |
-| Budgets and abuse | Build: per-customer allowance, admission, kill switch, cost contract with a stop | Opening beyond the cohort |
-| Hosting | Build: Cloud Run behind external load balancer, staging and production | Regional failover at production |
-| Observability | Minimal: traces, token cost, two alerts | Full SLOs, dashboards, analytics (phase 2) |
-| Release engineering | Minimal: pinned release unit, manual-run eval gate plus CI audit, rollback rehearsal | Canary and joint rollback automation (phase 2) |
-| Web security baseline | Tiers 1 to 5; SB25 Minimal | SB23, SB24 before opening beyond the cohort |
-| Performance and cost tuning | Defer | Measured traffic from the first live week |
+| Identity and per-customer scope | Build | none; at the floor |
+| Grounded answers, evaluation | Build: labelled set, gate in CI | New product line or policy change |
+| Confirmed write, idempotency, reconcile | Build | New remedy type (refund or payment) |
+| Sensitive data, retention, erasure | Build | New data class or jurisdiction |
+| Prompt injection and agency | Build: structural split, adversarial suite | New tool or new untrusted source |
+| Budgets and abuse | Build: per-customer allowance, kill switch, cost contract | Volume above the assumed range |
+| Observability | Build: traces, SLIs, alerts on the contracts | First incident |
+| Release engineering | Build: gate, manifest, canary, rollback rehearsal | Model retirement date |
+| Web security | Tiers 1–6, with SB23's ASVS Level 2 review deferred | Ramp past 25 percent of customers |
+| Hosting | Cloud Run, load balancer, Cloud Armor, Cloud SQL | Measured latency or cost targets |
+| Memory beyond sessions | Defer: none needed for the journey | A requirement for cross-session recall |
+| Performance tuning, model-mix review | Defer until measured | First bill and first load data |
 
-**Floor kept:** no secrets in source, prompts or logs; spend stop (`max_llm_calls`, admission, kill switch); no irreversible or outside-visible effect without the customer's confirmation (the customer is the approver; support staff are not in the loop in phase 1); real personal data scoped and out of logs; nothing reachable without sign-in; pinned model ID.
+**Floor kept:** no secrets in source, prompts or logs; a spend stop that acts without a person (C8); a human confirms the one outside-visible effect (C3); real data scoped to the journey and out of logs (C7); nothing reachable without sign-in and ADK's own routes never exposed; pinned model ID.
 
-**Accepted risk, not yet accepted by anyone:** launching to a cohort before the penetration test (SB24) and ASVS Level 2 (SB23). Proposed owner: the sponsor (O1). Ends when the service opens beyond the cohort; phase 2 builds both first.
-
-**Environments:** staging uses a masked or synthetic copy of the product data, never real customers (floor: real personal data only where the journey needs it). Only production touches real data. Staging scales to zero; production holds the always-on cost.
+**Graduation conditions** (what phase 2 must add before general availability): ASVS Level 2 review, ramp gates on measured SLIs, support-team rollout pack, first live bill read against C8, results review.
 
 ## Requirements and contracts
 
-| ID | Requirement | Status |
-| --- | --- | --- |
-| R1 | Answer warranty questions about the customer's own products from the product database | User request |
-| R2 | File a return request only after the customer confirms | User request |
-| R3 | Real customer data is protected end to end | User request ("real customer data") |
-| R4 | Operable in production: failures are honest, spend is bounded, releases are reversible | Assumed from "production" |
-| R5 | Built by two developers in six weeks | User request |
+| ID | Requirement | Need it serves | Status |
+| --- | --- | --- | --- |
+| R1 | A customer gets correct warranty answers about their own products | Fewer contacts, trust | assumed |
+| R2 | Every warranty statement comes from the product database, never from the model | Correctness | assumed |
+| R3 | A return request is filed only on the customer's explicit confirmation, once, for the right product | No accidental or duplicate returns | assumed ("once the customer confirms" is stated) |
+| R4 | Customer data is protected and not exposed to other customers, logs or tools beyond need | Privacy, law | assumed |
+| R5 | Spend and abuse are bounded | Production cost | assumed |
+| R6 | The service is operable and recoverable by a small team | Production | assumed |
 
 | ID | From | Invariant | Scope | Authority | Enforcement (and recheck at the effect) | Failure outcome | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| C1 | R3 | Every `/api` call and tool call runs as the customer in the verified token; a session id or a model argument never selects another customer | Every request | Identity provider token | Principal dependency fails closed; server overwrites `user_id`; session ownership checked before any model call | 401, or the same 404 body for unknown and foreign sessions; no model call | planned: G05/A1–A3, G12/A6, local then live |
-| C2 | R1, R3 | A customer reads only their own purchases and returns; an empty authorised result never widens the query | Purchases, drafts, operations | Product database ownership; application tables filtered by owner | Tools take `customer_id` from trusted session state; queries filtered in code; owner filter on every record route | "No purchase found"; nothing disclosed | planned: G05/A4, G06/A3, local then live |
-| C3 | R1 | Warranty status shown (covered, expired, not determinable, end date) is computed by the rule function from the product record and cited fields; it is never produced from model memory; missing data yields "cannot determine" | Each answer | Product database fields; versioned rule function owned by the warranty policy owner (O6) | Rule function in code; answer composed from the tool result; output checked against the result | Honest "I can't determine this" plus the contact route | planned: G04/A1–A2, G06/A1, G09/A1–A2 |
-| C4 | R2 | A return request is filed only after the same signed-in customer confirms the exact stored proposal (line, reason, resolution); the model holds no filing tool; reject runs the filing zero times | Each proposal | Stored proposal hash | Confirm is an API route, not a model action; confirm checks owner and hash | Refusal naming what changed; draft stays | planned: G07/A1, A2, A9 |
-| C5 | R2 | One confirmed proposal yields at most one returns-system request, including under double click, retry, restart and a lost response; an unknown outcome is reconciled, not re-filed | Each business operation | Durable operation record; returns-system status lookup or idempotency key (O3) | Atomic claim of the operation; same key on replay; reconcile before any new dispatch | "Pending" status visible; recovery by reconcile job | planned: G07/A4, A5, A7, A11, A13; G17/A4 |
-| C6 | R2 | At confirm time, warranty status, line ownership and absence of an open return are rechecked against current data; a stale confirmation is refused | Each confirm | Product database, returns system | Recheck inside the confirm route immediately before dispatch | Customer sees "this changed", must re-propose | planned: G07/A3 |
-| C7 | R2, R3 | Text from the customer, the product database or tool results never causes a filing, an out-of-scope read or a disclosure; the structure (no write tool for the model, capability checks in code) prevents it, not an instruction | Every agent run | Code | Tool tiers; `before_tool_callback` capability checks keyed on trusted state | Forbidden call never runs | planned: G07/A9, G11/A1 |
-| C8 | R3 | Personal data stays out of logs, traces and evaluation sets unless redacted; a customer's erase request removes sessions and drafts and late retries cannot resurrect them | Logs, traces, sessions, drafts, eval data | Sensitive-data policy (G14, O13) | Logging allowlist; telemetry content capture off; erase route and delete job | Erase confirmed or refused with reason | planned: G11/A2–A4 |
-| C9 | R4 | Spend stays under the sponsor's ceiling at the stated volume (placeholder, O7); looping runs, concurrent runs and per-customer overuse are refused | Project and environment | Cloud Billing export; application usage counters | `max_llm_calls`, admission control with per-customer allowance, one active run per customer, maximum Cloud Run instances, operator kill switch (a budget alert only observes) | New sessions refused first; cohort and team told | planned: G10/A1–A5, G13/A3; bill read in the first live week (phase 2) |
-| C10 | R4 | When the model, product database, returns system or session store fails, the customer gets an honest message and a contact route; nothing is filed without a stored, confirmed operation | Every failure | Code | Bounded timeouts and retries with a single retry owner; error results from tools | "Can't check right now"; state retained | planned: G06/A2, G07/A6–A7, G10/A2 |
-| C11 | R4 | Image, prompt version, model ID, tool-schema hash, eval-set hash and secret versions move and roll back together; a regression fails the gate by exit code | Each release | Release manifest | CI gate; Cloud Run revision rollback | Previous revision serving | planned: G09/A2, G17/A2 |
-
-Deferred contract detail: availability and latency targets are provisional until measured (see Budgets).
+| C1 | R4 | Every read and write the agent causes concerns only the verified customer; the customer key comes from the verified token and never from a model argument or request body | Per customer, per request | Identity provider token; the product database's customer key | Auth dependency sets trusted session state; tools read the key from `tool_context`; every query filters by it; the confirm endpoint and executor re-derive it at the effect | Request denied or "not found" (same body as unknown); no model call; denial logged | planned: two-customer denial tests, offline and local, G04/A3, G04/A4, G05/A5, G07/A4 |
+| C2 | R1, R2 | Every statement about warranty status, expiry or coverage is rendered from a product record fetched in this turn, carries the record ID and as-of date, and the status is computed by code | Per answer | Product database record | Tool returns computed status and evidence ID; output schema requires them; the application validates the answer against the turn's tool results before release | "I can't find that product" or a handoff offer; never an invented term | planned: scripted-model cases offline G05/A1–A3, A8; labelled evaluation G06/A1–A3 |
+| C3 | R3 | A return request is filed only by an authenticated customer action on a stored proposal; the action carries the proposal ID and hash; it is refused when the hash, ownership, eligibility or expiry no longer holds; the model holds no tool that files | Per proposal | The stored proposal row and the product database at the effect | Proposal tool writes a draft only; a separate confirm endpoint runs the executor, rechecking at the effect | Refusal with the reason; the customer is offered a fresh proposal | planned: offline and local, G07/A1–A3, A6–A8 |
+| C4 | R3 | Eligibility (within warranty, product class, no open return, allowed remedy) is decided by deterministic code from current records, at proposal and again at filing | Per proposal | Product database; return system for open returns | Eligibility function in the application, not the prompt | Proposal not created, or confirm refused, with a reason code | planned: offline G07/A3, A9; rules pending O6 |
+| C5 | R3 | One confirmed proposal produces at most one return request in the return system; an uncertain outcome is reconciled by lookup before any resend; the customer sees a reference only after the return system returned one | Per operation ID | Return system record, found by idempotency key | Durable operation record with unique constraint; idempotency key from operation ID; reconcile worker; status endpoint renders receipts | Status `unknown` shown as "we are checking", a support-queue entry, no second request | planned: local with a sandbox, G07/A5, A10, A11; G08/A1–A3, A7; depends on O2 |
+| C6 | R3, R4 | No agent both reads untrusted content and holds an unconfirmed write or egress tool; customer text and database free-text fields are data | The one agent | Design | The only model-callable write is a draft with no external effect; filing is outside the model's reach; tool results are bounded typed projections | The injected instruction has no effect; the forbidden call does not run | planned: scripted-model adversarial tests offline, G05/A4, G07/A1, G07/A8, G14/A2 |
+| C7 | R4 | Prompts, replies, tokens and personal data are absent from logs, traces and metrics; sessions and drafts expire after the retention period (assumed 30 days, O5) and are erased on request; card numbers typed into the chat are refused before storage or model | Per customer, per store | Retention policy from governance (G13) | Logging filter and exporter gates set at the single telemetry owner; scheduled deletion job; input detector before storage and model | Message refused with an explanation; nothing stored | planned: local, G10/A1–A3, G12/A2, G11/A9 |
+| C8 | R5 | The application spends under a stated ceiling at a stated volume: `max_llm_calls` per run, a per-customer daily allowance, one active run per customer, maximum instances, an operator kill switch outside agent authority; the model project has a quota backstop. Ceiling and volume: provisional, O4 | Per run, customer, day, project | Cloud Billing export (evidence); admission store (enforcement) | Admission control in the application before the model is called; fail closed when its store is unavailable; budget alert is observation only | New runs refused with a message; read-only status still works; owner alerted | planned: local G10/A4–A8; hosted G11/A5; first live bill is phase 2 |
+| C9 | R1, R6 | When the model, product database, session store, identity provider or return system fails, the customer sees a bounded honest message; nothing is stated as filed unless the return system confirmed; the system fails closed on authority checks | Per request | Receipts from each system | Timeouts inside the request deadline, one retry owner, typed failure shapes | Customer sees a retry or handoff message; state remains consistent | planned: offline and drills, G05/A2, A6, A7, A10, A11; G08/A3, A4; G15/A5, A6 |
+| C10 | R6 | One release unit (image digest, prompt version, model and judge IDs, tool schema hash, eval-set hash, secret versions) is recorded, gated by the evaluation, and rolls forward and back together | Per release | Release manifest | CI gate fails by exit code; manifest has no alias; Cloud Run revisions with traffic split | Promotion blocked; previous revision still serving | planned: hosted rehearsal G12/A4, A5, A7; G11/A7 |
 
 ## Architecture and decisions
 
 ```text
-Browser SPA ──HTTPS──> External ALB + Cloud Armor ──(internal LB ingress only)──> Cloud Run: one FastAPI process
-                                                                         │  verified principal (Identity Platform token)
-                                                                         ├─ ADK Runner in process ──> Vertex AI model (pinned)
-                                                                         │     tools: lookup_purchases, get_warranty_status,
-                                                                         │            search_policy_text (later), propose_return
-                                                                         ├─ /api/returns/{id}/confirm  (not a model action)
-                                                                         │     └─ executor: recheck → operation record → returns system
-                                                                         ├─ Cloud SQL: ADK sessions + application tables (own schema)
-                                                                         └─ Product database (read-only, workload identity)
+Customer browser ──► External ALB + Cloud Armor ──► Cloud Run: warranty-agent (single process)
+   (CIAM sign-in)        (ingress: LB only)           FastAPI: SPA assets, /api/*, auth dependency
+                                                       Runner in-process ─► LlmAgent ─► Gemini (Vertex, region O5)
+                                                          tools: list_my_products, get_warranty, propose_return(draft)
+                                                       POST /api/returns/{id}/confirm ─► executor ─► Return system API
+                                                       reconcile worker (Cloud Scheduler → private endpoint)
+   Stores: Product DB (read only, existing) · App DB Cloud SQL (sessions, proposals, operations, usage)
+   Platform: Secret Manager · Cloud Logging/Trace · Cloud Build → Artifact Registry → revisions
 ```
 
-| ID | Enforces | Design choice | Reason | Tradeoff / alternative | Verification | Status |
-| --- | --- | --- | --- | --- | --- | --- |
-| D1 | C1, C2 | Cloud Run, one FastAPI process serving the SPA, `/api` and the in-process ADK Runner; ADK's own routes never exposed | User chose Cloud Run; one process is the smallest shape for two developers; avoids exposing ADK's unauthenticated server (SB05) | Agent Runtime would move session state to a managed service but adds a gateway hop and migration; GKE adds operations the team lacks | G12/A1 | proposed |
-| D2 | C1 | Identity Platform (or the organisation's existing customer login, O4) with bearer tokens sent by `fetch`; ownership via verified `sub` | External users need managed sign-in (SB02); same-origin, no cookies, no CSRF surface | Cookie sessions rejected for CSRF cost | G05/A1–A3 | proposed |
-| D3 | C3 | Warranty status is a pure rule function over product fields, unit-tested; the model explains the result and never derives dates | The answer is a business fact; code makes it testable and signable by the policy owner | A pure-prompt answer is cheaper and wrong at boundaries | G04/A1 | proposed |
-| D4 | C4, C5, C6 | **Propose, confirm, file** split: `propose_return` writes a draft with a canonical hash; confirm is a backend route the browser calls; the executor re-checks, writes an operation record, then calls the returns system with an idempotency key | A confirmation the model cannot reach is a control; ADK's native confirmation has documented limits for cross-request approval | More code than a single tool with native confirmation | G07/A1–A13 | proposed |
-| D5 | C7 | The agent reads untrusted text (customer messages, database free-text) and holds a write tool only to the **draft** table, which has no outside effect; the effectful path has no model access. This removes the trifecta leg | Splitting readers from writers by structure, not prompt | A second agent adds nothing here because the executor is not an agent | G07/A9, G11/A1 | proposed |
-| D6 | C2, C3 | Four function tools, each one declaration with primitive parameters, a bounded result dict with status and actionable errors; `customer_id` from trusted state, never an argument | Tool interface is the model's only view; bounded results protect context and cost | MCP/OpenAPI toolsets rejected: no remote tool server is needed | G04/A3, G06/A4 | proposed |
-| D7 | C8 | Cloud SQL (PostgreSQL, private connectivity) holds ADK sessions via `DatabaseSessionService` and the application tables (proposals, operations) in a separate schema, with migrations as a job | Sessions must survive restarts and replicas; operation records need transactions | In-memory sessions rejected (restart loses state); Firestore rejected (ADK database service targets SQL) | G17/A4 | proposed |
-| D8 | C9, C11 | Pinned model ID chosen from the dated lifecycle table (**not read: `adk-model-and-output-contracts` is not installed here**); pinned ADK version, prompt as versioned code | Behaviour must stay comparable across releases; a retirement is a planned re-baseline | Alias drift rejected | G04/A4, G09/A2 | provisional: model ID and ADK pin open (O12) |
-| D9 | C9, R4 | External Application Load Balancer with Cloud Armor rate limiting; Cloud Run ingress `INTERNAL_LOAD_BALANCER` so `run.app` cannot bypass it | Public customer endpoint needs an abuse control in front; floor requires one (SB25 Minimal) | An ALB bills hourly while provisioned (ledger row); direct `run.app` exposure rejected | G12/A2, A4 | proposed |
-| D10 | C5 | Durable operation record is the recovery owner; a reconcile job looks up status in the returns system for operations stuck in "dispatched" | A restart or lost response must not re-file | An in-process background task is not a queue; Cloud Tasks only if reconcile latency matters (phase 2) | G07/A5, G17/A4 | proposed |
+Trust boundaries: browser (untrusted), the agent's model output (untrusted until validated), product database free-text and customer text (data), the return system (authority for filed requests). Identities: end customer (token), serving service account (workload identity, no keys), deployer (pipeline), reconcile caller (scheduler identity).
 
-Versions: ADK and Google specialists were checked against different releases (deploy skill `google-adk==2.8.0`; observability 2.11.0; read from the installed skills' compatibility files). Greenfield, no pin exists: G04 picks one and confirms each interface against it (acceptance item). Nothing was run or fetched, so no provider price, quota, region or model lifecycle fact is verified; each is stated as an open check.
+| ID | Enforces | Design choice | Reason | Tradeoff and alternative | Verification | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| D1 | C1, C8, C10 | One Cloud Run service running FastAPI with the Runner in process; ADK's own routes are never mounted publicly; ingress limited to the load balancer; public edge is an external ALB with Cloud Armor | Cloud Run is given, and one process keeps identity, run lock and confirm endpoint in one trusted place; the default `run.app` URL must not bypass the armor | Agent Runtime would host the agent with managed sessions, but the confirm endpoint, auth and limits still need an application in front, so two services for a two-person team. GKE is operational weight for no stated need | G11/A2: default URL refused, ADK paths return nothing (G09/A5) | proposed |
+| D2 | C2, C6 | One `LlmAgent`, three tools: `list_my_products`, `get_warranty` (read tier) and `propose_return` (draft tier). Ordinary code for everything else | Fixed ordering of eligibility and filing is not a language problem; one agent has no extra boundary to defend | A reader/writer pair of agents: rejected, since the writer here is not an agent at all | G05/A9 declaration dump and rendered-request test | proposed |
+| D3 | C1, C2, C6 | Product database accessed with a read-only identity through typed projections (columns named, free-text columns excluded or length-bounded); the customer key is a trusted argument from state; warranty status computed in code from dates | Removes the model from dates and ownership; shrinks the injection surface | Less flexible answers than letting the model read raw records; more mapping work | G05/A1, A4, A5 | proposed; access path pending O1 |
+| D4 | C3, C4, C6 | Proposal and confirmation are separate: the model only creates a draft (stored, hashed over customer, product, reason, remedy, eligibility snapshot, 30-minute expiry, assumed); the UI renders the confirm card from the stored draft; the customer's click calls the confirm endpoint | A sentence typed in chat cannot file anything, so injected text cannot either. ADK's native tool confirmation is not used because its fit with a streamed, multi-replica, reloadable UI needs checking and the stored draft needs to exist anyway | Extra endpoint and UI state instead of one tool; the customer cannot confirm by typing "yes" | G07/A1, A2, A6, A8; G09/A7 | proposed |
+| D5 | C5, C9 | Operation record in the app database with a unique key per proposal and a state machine (`pending`, `sent`, `filed`, `rejected`, `unknown`); idempotency key to the return system; reconcile worker looks up by key before any resend | Provider-backed replay is the only safe recovery from a lost response | If the return system lacks an idempotency key or lookup, C5 weakens to "own table is the system of record and fulfilment reads it"; decided in G03 (O2) | G08/A2, A3, A7 | provisional on O2 |
+| D6 | C1, C9 | Customer sign-in through the organisation's customer identity provider (Identity Platform or the existing one, O3); a library verifies signature, audience, issuer, expiry; the server overwrites `user_id` on every ADK call; revocation checked before confirm | Managed sign-in; session ID only locates a conversation | A custom login: rejected | G04/A1–A6 | provisional on O3 |
+| D7 | C1, C2, C7 | Sessions in Cloud SQL (PostgreSQL) via `DatabaseSessionService`; the same instance holds application tables, kept apart from ADK's; model ID chosen in G02 from the dated lifecycle table that `adk-model-and-output-contracts` ships (not installed here, so no ID is named); the model region follows O5 | Database transactions give the unique operation constraint; sessions need persistence across replicas | A separate store for operations is more isolation than two people can run; Firestore is credible but gives up the unique constraint with the same transaction | G09/A9, G07/A5, G15/A4 | provisional |
+| D8 | C8 | Admission in the app database before any model call: per-customer daily counter, one active run lock, global kill switch read from a store the agent cannot write; `max_llm_calls` on the `RunConfig`; model-project quota as backstop | A budget alert only notifies; the stop must act without a person | A shared admission store adds a failure mode, so it fails closed | G10/A4–A8 | proposed |
+| D9 | C3, C7 | Baseline SPA served by the same service: text and sanitised markdown only, bearer token via `fetch`, confirm card from stored draft | Same origin removes CORS and cookie risk | Embedding in the portal is phase 2 (O8) | G09/A3, A6, A7 | proposed |
+| D10 | C7, C10 | One telemetry owner per process; prompt and response content capture off in deployed environments; trace, invocation and session IDs on every hop; SLIs below; eval gate in Cloud Build | Defaults capture prompts, which would put customer data in traces | Debugging needs the session store, not traces | G12/A1–A4 | proposed |
 
 ### Model-facing interfaces
 
-| Surface | Interface | Skill and verification |
+| Surface | Interface | Implementing skill and verification |
 | --- | --- | --- |
-| Instructions | One agent: answer warranty questions from tool results only, never state dates it did not receive, propose returns through `propose_return`, refuse out-of-scope requests; all facts the application knows (customer id, today's date) come from state, not prompt text | `adk-agent-instructions`; rendered-request test |
-| Tools | `lookup_purchases` (read), `get_warranty_status` (read), `propose_return` (write-draft); fourth slot reserved for policy text, deferred | `adk-tool-interface-design`; declaration dump, result-size test |
-| Output and model | Free text plus a structured status block the UI renders (covered / expired / unknown / proposal); invalid shape gets a bounded repair then an explicit failure | `adk-model-and-output-contracts`; scripted invalid-output test |
+| Instructions | Scope (warranty questions and return intent only), refusal to guess, handoff wording; customer identity and dates stay in code | `adk-agent-instructions`; rendered-request test (G05/A9) |
+| Tools | Three tools, primitive parameters, bounded result dicts with a status and actionable errors; `propose_return` returns a draft ID and display data, never filing status | `adk-tool-interface-design`; declaration dump (G05/A9) |
+| Output and model | Schema with `answer`, `evidence_ids`, `as_of`, and a first-class `cannot_answer` shape; bounded repair budget; pinned model ID with retirement date | `adk-model-and-output-contracts`; scripted invalid-output test (G05/A3, A8) |
+
+ADK pin: working assumption is the baseline the deploy specialist was checked against (`google-adk==2.8.0`, September 2026), not a fresh lookup; G02/A3 confirms against the chosen pin and records any move to 2.12 or later.
 
 ## Data and authority
 
-| Data | Owner and scope | Writers / readers | Source and freshness | Lifetime / erasure |
+| Data / operation | Owner and authorized scope | Writers / readers | Source and freshness | Lifetime / erasure |
 | --- | --- | --- | --- | --- |
-| Customer identity | Identity provider; the signed-in customer | Provider / backend verifier | Token validated per request; revocation checked before confirm (SB20) | Per provider policy |
-| Purchases, warranty fields | Product data owner; read by the owning customer only | Source systems / read tools | Read at question time and again at confirm (C6) | Not copied; only the answer's cited fields persist in the session |
-| Warranty rule | Warranty policy owner (O6) | Developers via review / rule function | Versioned in code; business sign-off per version | Versioned |
-| Sessions | The customer | ADK Runner / Runner | Cloud SQL | Retention assumed 30 days (O13); erase route |
-| Proposals and operations | The customer; support read access later | Backend only | Cloud SQL application schema; the returns system is authoritative after filing | Audit retention to be set (O13) |
-| Telemetry | Operators | Platform | Content capture off; identifiers only | Retention to be set (O13) |
-| Evaluation data | Developers and SMEs | Humans | Redacted or synthetic | Per G14 |
+| Product, purchase and warranty terms | Product database owner; customer sees own rows | Read only by the serving identity | Fetched each turn; as-of shown | Not copied; no cache in phase 1 |
+| Session events | App database; the owning customer | Runner (via `DatabaseSessionService`) | n/a | Assumed 30 days; deleted by job and on request |
+| Return proposal | App database; the owning customer | Proposal tool writes; confirm endpoint reads | Eligibility snapshot, rechecked at the effect | Expires in 30 minutes; purge after retention |
+| Return operation and receipt | App database mirrors the return system | Executor, reconcile worker | Return system is authoritative | Retention per governance (G13) |
+| Usage counters, kill switch | App database | Admission control; operator | n/a | Daily reset; operator flag independent of resets |
+| Logs and traces | Cloud Logging and Trace | One telemetry owner | No content | Default retention; custom retention only with an owner |
 
-Identities: session (a conversation, located by id, never authority), invocation (one run), operation (one confirmed return; the idempotency key). Workload identities: separate service accounts for the serving process, the executor's returns-system credential, the product-database reader and the deployer.
+Identities: session (conversation, locates only), invocation (one run, `max_llm_calls`), business operation (proposal ID, survives retries and restarts).
 
 ### Security posture
 
 | Agent | Private data | Untrusted content | Write or egress | Resolution |
 | --- | --- | --- | --- | --- |
-| Warranty agent | Customer purchases | Customer text; database free text | Draft write only; no egress tool; no filing tool | Leg removed by structure (D5); scripted-model injection test asserts no filing, no foreign read (G11/A1) |
+| warranty agent | Yes: the customer's products | Yes: customer messages, product-database free text | A draft write with no external effect; filing is not model-callable | A leg removed: the agent has no filing or egress tool (C6); injection tests assert it (G14/A2) |
 
-Tool tiers: read (`lookup_purchases`, `get_warranty_status`), write-draft (`propose_return`), irreversible (filing, executed by the backend executor after the customer's confirm; never a model tool).
+Tool tiers: read (`list_my_products`, `get_warranty`), draft (`propose_return`, no confirmation, no external effect), irreversible (filing: code only, customer click). No code executor. No outbound fetch tools.
 
 #### Web security baseline
 
-Component abbreviations: API = `/api` routes; AG = agent routes; RT = ADK runtime; UI = browser app.
+Components: SPA, `/api` routes, agent run route, confirm endpoint, ADK runtime, Cloud Run, load balancer. Tiers 1–6 apply (production). Each rule is recorded here only.
 
-| Rule | Component | Depth now | Proved by (G/A), n/a or deferred |
+| Rule | Component | Depth now | Proved by (G/A), n/a: reason, or deferred: trigger |
 | --- | --- | --- | --- |
-| SB01 | API | Build | G05/A1 |
-| SB02 | Identity | Build | G05/A2; live audience check G12/A6 |
-| SB03 | AG | Build | G05/A3 |
-| SB04 | Records and tools | Build | G05/A4 |
-| SB05 | RT | Build | G12/A1 |
-| SB06 | API | Build (same origin) | G12/A3 |
-| SB07 | API | Build | G12/A3 |
-| SB08 | UI | n/a: bearer tokens, no cookies | — |
-| SB09 | API | Build | G05/A7 |
-| SB10 | UI | Build | G08/A2 |
-| SB11 | Uploads | n/a: no uploads in phase 1 (deferred item has a trigger in Later) | — |
-| SB12 | Outbound fetch | n/a: no URL-fetching tool or route | — |
-| SB13 | Errors | Build | G05/A5 |
-| SB14 | Logging | Build | G11/A2 |
-| SB15 | Supply chain | Build | G15/A3 |
-| SB16 | Secrets | Build | G12/A5 |
-| SB17 | Agents with tools | Build | G11/A1 |
-| SB18 | Tools with effects | Build | G07/A2 |
-| SB19 | Cost and abuse | Build | G10/A1, A3 |
-| SB20 | Identity | Build | G05/A6 |
+| SB01 | `/api` routes | Build | G04/A1 |
+| SB02 | Identity | Build | G04/A2 |
+| SB03 | Agent routes | Build | G04/A3 |
+| SB04 | Records and tools | Build | G04/A4 |
+| SB05 | ADK runtime | Build | G09/A5, G11/A2 |
+| SB06 | API configuration | Build | G09/A6 |
+| SB07 | API configuration | Build | G09/A5 |
+| SB08 | Browser credentials | n/a | n/a: bearer tokens sent by fetch, no cookies, so no CSRF surface |
+| SB09 | API inputs | Build | G09/A2 |
+| SB10 | Browser app | Build | G09/A3 |
+| SB11 | Uploads | n/a | n/a: the journey has no uploads |
+| SB12 | Outbound fetch | n/a | n/a: no tool or route fetches a user or model supplied URL; return system host is fixed configuration |
+| SB13 | Errors | Build | G09/A4, G04/A6 |
+| SB14 | Logging | Build | G10/A1 |
+| SB15 | Supply chain | Build | G02/A1 |
+| SB16 | Secrets | Build | G02/A1, G08/A6 |
+| SB17 | Agents with tools | Build | G05/A4, G14/A1 |
+| SB18 | Tools with external effects | Build | G07/A2 |
+| SB19 | Cost and abuse | Build | G09/A1, G10/A4 |
+| SB20 | Identity | Build | G04/A5 |
 | SB21 | Deployment | Build | G15/A1 |
 | SB22 | Whole application | Build | G15/A2 |
-| SB23 | Whole application | deferred: before opening beyond the cohort (phase 2) | — |
-| SB24 | Whole application | deferred: before opening beyond the cohort (phase 2, outside party) | — |
-| SB25 | Public endpoints | Minimal: Cloud Armor rate rule | G12/A4 |
+| SB23 | Whole application | Minimal | G14/A1, G14/A2 for the threat model and adversarial suite; deferred: ASVS Level 2 review (G20) before ramp past 25 percent |
+| SB24 | Whole application | Build | G15/A3 |
+| SB25 | Public endpoints | Build | G11/A4 |
 
 ## Budgets and capacity
 
-**Workload (illustrative inputs, owner: sponsor, O7):** cohort of a few hundred customers, about 2,000 conversations a month, about 6 turns each, one model call per turn plus at most one repair and tool-call round trips. Concurrency is about arrival rate × time in flight; measure in G10 and G13 rather than guess.
+Workload (illustrative, no figure was supplied, O4): 20,000 conversations a month, about 6 model calls each (read tools plus one answer), `max_llm_calls` per run set at 12; peak concurrency from arrival rate × time in flight, measured in G15/A7.
 
-```text
-cost per conversation ≈ (input tokens × p_in + output tokens × p_out) × model calls per conversation
-                        + Cloud SQL and Cloud Run work attributable per conversation
-monthly ≈ cost per conversation × conversations per month
-fixed monthly ≈ Σ idle cost per day (ledger rows) × days
-```
+Provisional targets (assumed, to be measured): first streamed text p95 3 s; complete answer p95 12 s; confirm to reference p95 8 s; availability 99.5 percent monthly; session store RPO 24 h, RTO 4 h; operation records RPO 5 minutes (point-in-time recovery), RTO 4 h.
 
-`p_in`, `p_out`, region price and idle costs are symbolic: **no pricing page was fetched.** G12 records each provisioned resource's idle cost with the pricing date before creating it.
+Cost (C8): `cost per conversation ≈ (input tokens × p_in + output tokens × p_out) × model calls + database and egress work`, `monthly ≈ that × conversations + fixed`. Prices not looked up (no network); `p_in`, `p_out` and the idle rates below are placeholders to fill in G11/A1 and G02, with the pricing date. Fixed part: while-provisioned rows of the resource cost ledger (ledger rows dated 21 October 2026): Cloud Run minimum instance (idle rate), Cloud SQL instance with HA and backups, external ALB forwarding rule, Artifact Registry images, Secret Manager versions. All carry labels `env`, `team`, `app`, set in deployment code. Stop: D8. Evidence: first live bill read against C8 in phase 2 (G21).
 
-**Allowances (C9):** `max_llm_calls` per run (value set in G10 from a measured representative run); per-customer daily conversation and run allowance; one active run per customer and conversation; global concurrent-run cap; Cloud Run maximum instances. Enforcement is admission in the application, persisted in Cloud SQL so it survives a restart; control-store failure fails closed for new runs. The operator kill switch is a separate setting outside agent authority and independent of budget resets. A Cloud Billing budget and alert is evidence only. Resources carry `env`, `team` and `app` labels set in deployment code.
-
-**Latency targets (provisional, owner: sponsor; measure first):** time to first meaningful content and time to a complete correct answer are separate targets; a filing is asynchronous-tolerant (status pending is acceptable).
-
-**SLIs (good over total, targets from the first live week):** answered warranty turns without error; confirmed proposals that reach a recorded receipt; time to first content within target. Alerts: error ratio, stuck operations older than the reconcile window.
-
-**Recovery targets (assumed, owner: sponsor, O13):** Cloud SQL RPO under 15 minutes through point-in-time recovery, RTO under 4 hours; the restore into a non-production environment is G17/A1.
+Environments: staging scales to zero, single-zone database, synthetic data only. Production: regional database, minimum one instance.
 
 ## Failure and recovery
 
-Coverage grid (rows are external systems; cells cite acceptance items in the plan):
+Coverage grid, one row per external system:
 
 | Integration | Unavailable or slow | Rejects the request | Write outcome unknown | Partial multi-step change | Credential expired or revoked | Rate limited or out of quota | Duplicate or concurrent request | Untrusted or malformed content |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Model (Vertex AI) | G10/A2 | G10/A2 | n/a: model call has no write effect | n/a: no model-driven writes | n/a: platform-managed workload identity | G10/A2 | G10/A3 | G09/A3 |
-| Product database | G06/A2 | G06/A5 | n/a: read only | n/a: read only | G06/A6 | G06/A4 | n/a: read only | G11/A1 |
-| Returns system | G07/A7 | G07/A6 | G07/A5 | n/a: one request per operation | G07/A12 | G07/A7 | G07/A4 | G07/A11 |
-| Cloud SQL (sessions, operations) | G07/A13 | G07/A13 | G07/A5 | G07/A5 | n/a: platform-managed workload identity | G10/A5 | G07/A4 | G05/A7 |
-| Identity provider | G05/A5 | G05/A2 | n/a: read only | n/a: read only | G05/A2 | n/a: provider-managed quota | n/a: stateless verification | G05/A2 |
-| Secret Manager | G12/A5 | G12/A5 | n/a: read only | n/a: read only | G12/A5 | n/a: provider-managed quota | n/a: read only | n/a: platform-delivered values |
+| Model endpoint | G05/A6 | G05/A8 | n/a: model calls change no state | n/a: model calls change no state | G15/A5 | G05/A6 | G09/A1 | G05/A8 |
+| Product database | G05/A7 | G05/A10 | n/a: read only | n/a: read only | G05/A11 | G15/A7 | n/a: read only | G05/A4 |
+| App database (Cloud SQL) | G15/A6 | G07/A5 | G07/A10 | G07/A11 | G15/A6 | G15/A7 | G07/A5 | n/a: typed fields validated |
+| Return system | G08/A3 | G08/A4 | G08/A2 | G08/A2 | G08/A6 | G08/A5 | G08/A7 | G08/A9 |
+| Customer identity provider | G04/A6 | G04/A2 | n/a: verification only reads | n/a: verification only reads | G04/A5 | G04/A6 | n/a: stateless verification | G04/A2 |
+| Secret Manager | G11/A7 | G11/A7 | n/a: read at startup | n/a: read at startup | G08/A6 | n/a: startup reads only | n/a: read only | n/a: values never rendered |
 
-Action grid (rows are actions that change something):
+Action grid:
 
 | Action | Over-broad or wrong target | Partially applied | Confirmation stale or changed | Outcome unknown | Repeated or concurrent |
 | --- | --- | --- | --- | --- | --- |
-| File a return request | G07/A10 | G07/A5 | G07/A3 | G07/A5 | G07/A4 |
-| Save a draft proposal | G07/A10 | n/a: single local transaction | G07/A3 | n/a: local transaction outcome known | G07/A4 |
+| File a return request | G07/A7 | G08/A2 | G07/A3 | G08/A3 | G07/A5 |
+| Create a return proposal (draft) | G07/A4 | n/a: single row insert | n/a: a draft needs no confirmation | G07/A10 | n/a: duplicate drafts have no external effect |
 
 Cross-cutting scenarios:
 
-| Failure window | Customer sees | Retained state and possible effects | Safe next action and recovery owner |
+| Failure window | User-visible outcome | Retained state and possible effects | Safe next action and recovery owner |
 | --- | --- | --- | --- |
-| Returns system accepts, response lost | "Pending" | Operation record `dispatched`; a request may exist | Reconcile job looks up by key; no re-dispatch (G07/A5) |
-| Customer confirms after the product record changed | "This changed, please review" | Draft retained, no filing | Customer re-proposes (G07/A3) |
-| Stream or browser dies mid-run | Incomplete turn marked as such | Session persisted; no filing implied | Customer re-opens; status read from the operation record (G08/A4) |
-| Process restart or overlapping instances | Possible retry | Operation record and allowances in Cloud SQL | Claim is atomic (G07/A4, G17/A4) |
-| Model or judge retirement lands mid-release | None if planned | Pinned IDs and a dated calendar | Re-baseline release (G09/A2) |
-| Burst traffic or exhausted budget | New sessions refused with a reason | Existing runs finish | Cloud Armor and admission (G10/A3, G12/A4) |
-| Erase request races queued work | Confirmation after delete job | Late writers refused | G11/A4 |
-| Document or DB free text carries instructions | Normal answer | No filing, no foreign read | Structure (D5); G11/A1 |
-| Rollback | Previous revision serves | Release unit moves together | G17/A2 |
-
-The WAF checks (reliability, cost, operations, performance) were not run beyond the contracts above; product-level recommendations come from the Google WAF skills when installed (G12, G17).
+| Return system accepts, response lost | "We are checking your request" | Operation `unknown`; a request may exist | Reconcile worker looks it up by key; support queue after a threshold; support owns manual closure |
+| Process restarts between proposal and confirm | Card still valid until expiry | Draft persisted | Customer confirms; executor rechecks |
+| Browser disconnects mid-answer | Nothing marked complete | Partial text not stored as a finished turn | Customer resends; one active run lock released on close |
+| Customer's warranty changes or product is returned while the card is open | Confirm refused with reason | No request | Fresh proposal if still eligible |
+| Kill switch or budget exhausted | New runs refused | Existing operations still reconcile | Operator clears the switch; allowance resets daily |
+| Bad release | Canary shows burn or eval regression | Previous revision still ready | `adk-release-engineering` rollback: image, prompt, model, schema, secrets together |
+| Erasure request | Sessions and drafts removed | Operation receipts retained per policy | Privacy owner (G13) |
 
 ## Verification and implementation handoff
 
-Tiers: offline (scripted model, fake product DB and returns system), local integration (real process restart, real sockets), live on staging with masked data and the returns system's test target, release (rollback, restore). Every critical contract is cited by a goal in the plan's implementation map; none is yet evidenced. Outcome claims (fewer contacts, faster returns) are hypotheses until phase 2 measures a baseline.
+Checks run in four tiers: offline deterministic (scripted model, fake return system, real policy code), local integration (process restart, real database, Playwright journey, sandbox return system), bounded live (Vertex and the sandbox, with declared request and cost limits), and hosted (staging, drills, canary). No check has run; every Evidence cell is `planned`.
 
-Release bundle: image digest, prompt version, model ID, tool-schema hash, eval-set hash, secret versions in one manifest; promotion gate is the evaluation run's exit code plus audits in `make check`.
+Observability (D10), SLIs as good/total ratios tied to contracts, targets from the first measured week, none at 100 percent: answers completed without an error shape (C9); answers passing the sampled grounding check (C2); returns confirmed that reach `filed` or a documented `rejected` within 10 minutes (C5); `unknown` operations older than 15 minutes, which must be zero (C5, alert); p95 latency (budgets). Telemetry owner: the service process, one provider; content gates off (C7). Release bundle: image digest, prompt version, model and judge IDs, tool schema hash, eval-set hash, secret versions, recorded in a manifest by G12. Gate: the evaluation set in Cloud Build fails by exit code. Rollback unit: the revision with its bundle; the previous one stays ready until the canary has soaked.
 
-Implementation plan: [docs/plans/warranty-returns.md](../plans/warranty-returns.md).
+### Implementation routes and Google product skills
+
+| Choice | Primary skill | Google product skills (`google/skills:<name>`) |
+| --- | --- | --- |
+| D1, D6 hosting and identity | `deploy-adk-on-google-cloud`, `adk-fastapi-backend`, `adk-tool-auth-and-secrets` | `cloud-run-basics`, `google-cloud-global-frontend-configuration`, `iam-helper-for-policy-management`, `gcloud` |
+| D7 sessions and app database | `adk-memory-architecture` for sessions; `safe-api-tool-calls` for operations | `cloud-sql-basics` |
+| D4, D5 confirm and write | `safe-api-tool-calls`, `adk-operational-guardrails` | none |
+| D10 telemetry and alerts | `adk-agent-observability`, `adk-release-engineering` | `cloud-run-alert-configuration`, `google-cloud-slo-alert-configuration`, `cloud-build-basics`, `cloud-logging-configuration-basics` |
+| Production pillars | the team | `google-cloud-waf-reliability`, `-security`, `-cost-optimization`, `-operational-excellence` |
+
+These names come from the designer's handoff table, read from the published catalogue on 21 October 2026. Google's router `finding-google-skills` is installed, but I did not run it in this session (no network, and a design-only task), so each name is **unconfirmed against the live catalogue**. Confirm every name through the router before a goal first uses it. None of these product skills is installed; installing them and the specialists the plan names is a setup step. The design records the need and runs no recipe.
 
 ## Open decisions
 
-| ID | Question or assumption | Why it changes the design | Owner / evidence | Blocks |
+| ID | Question or assumption | Why it changes the design | Owner or evidence | Blocks |
 | --- | --- | --- | --- | --- |
-| O1 | Accept cohort launch at pilot depth in phase 1, with SB23/SB24 before opening wider; or require full production depth for launch | Sets phase 1 scope and the accepted-risk owner; full depth does not fit six weeks | Sponsor | G18, G19, phase 2 |
-| O2 | Product database engine, access path, freshness, masked staging copy | Tool design, IAM, cost | Data owner, G03 | G06 |
-| O3 | Returns system: API, idempotency key support, status lookup, what a return triggers (refund, label) | Idempotency vs reconcile-only (C5); a money effect raises depth | Returns owner, G03 | G07 |
-| O4 | How customers sign in and map to purchases (existing login, or order number plus email) | C1 and C2 could change fundamentally | Identity owner, G03 | G05 |
-| O5 | Residency, jurisdiction, region | Region, transfer assessment | Counsel, G14, `gcp.resourceLocations` in G02 | G02, G14 |
-| O6 | Who owns the warranty rule; are policy documents unstructured (would add retrieval) | C3 authority; scope | Policy owner, G03 | G04 sign-off |
-| O7 | Spend ceiling and volume | C9 numbers | Sponsor | G10 |
-| O8 | Human hand-off route when the agent cannot answer | C10 failure outcome (assumed: a contact link, no ticket creation) | Support lead | G08 |
-| O9 | Languages and channels (assumed English, web) | Evaluation, UI | Sponsor | G09 |
-| O10 | Who is on call after launch; start date and holidays | Operations, calendar | Sponsor | G17, G18 |
-| O11 | Pen test lead time and whether cohort customers count as "external users" for SB24 | Go-live date | Security owner | G19 |
-| O12 | Model ID and ADK pin | D8 | G04 | G04 |
-| O13 | Retention for sessions, proposals, operations, telemetry; RPO and RTO | Erasure, restore goals | Counsel and sponsor | G11, G17 |
+| O1 | Product database engine, access path (direct or an API), freshness, free-text columns | D3 and C2 mechanics; injection surface | Database owner; G03 | G05 |
+| O2 | Return system: API, idempotency key, status lookup, sandbox | C5 and D5 hold or weaken | Return-system owner; G03 | G07, G08 |
+| O3 | Customer identity provider and the mapping from token to the product database's customer key | C1 and D6 | Identity owner; G03, W3 | G04 |
+| O4 | Volume, monthly ceiling, who owns the budget | C8 numbers, sizing, the stop thresholds | Sponsor | G10 numbers, G11 sizing |
+| O5 | Jurisdictions, residency, retention period; effective org policies (`gcp.resourceLocations`, `sql.restrictPublicIp`) | Model and database regions, model choice, C7 | Privacy and platform owners; G13, G11/A6 | G02 model choice, G11 |
+| O6 | Eligibility and remedy rules (warranty periods, reason codes, repair, replace, refund) | C4 function | Warranty policy owner | G07/A9 |
+| O7 | The outcome measure and its baseline | Whether the benefit can be claimed | Sponsor; G03/A4 | G18 claims |
+| O8 | Standalone SPA or the organisation's portal | G09 size, SB07, phase 2 | Product owner | G09 scope |
+| O9 | Who is on call and who handles `unknown` returns | G17, alert routing | Operations lead | G17 |
+| O10 | Team hours and start date (4.8 h a day each, 2026-11-02) | Every figure in the plan | Engineering lead | Finish range |
+| O11 | Does the security or privacy review need its own technical deck | Extra presentation goal | Reviewers | G18 |
 
-No decision above is user-accepted. Design review is not complete: contracts have planned checks but no run evidence.
+Design completion and implementation authorization are separate facts: nothing is approved, and no cloud action has been authorised.

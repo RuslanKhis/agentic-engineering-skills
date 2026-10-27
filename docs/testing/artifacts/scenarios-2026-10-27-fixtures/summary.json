@@ -1,9 +1,9 @@
 {
  "spend_usd": {
-  "agent": 16.98,
-  "judge": 5.85
+  "agent": 26.92,
+  "judge": 8.99
  },
- "spend_total_usd": 22.83,
+ "spend_total_usd": 35.91,
  "batches": [
   "eng1",
   "eng2",
@@ -12,7 +12,11 @@
   "mem1",
   "mem2",
   "des1",
-  "des2"
+  "des2",
+  "int1",
+  "int2",
+  "eval1",
+  "eval2"
  ],
  "by_skill": {
   "adk-engineer": {
@@ -51,14 +55,716 @@
    "loaded": 10
   },
   "adk-system-designer": {
-   "scenarios": 10,
-   "passed": 37,
-   "total": 49,
-   "unstable": 7,
-   "loaded": 10
+   "scenarios": 11,
+   "passed": 40,
+   "total": 53,
+   "unstable": 8,
+   "loaded": 11
+  },
+  "adk-agent-observability": {
+   "scenarios": 3,
+   "passed": 6,
+   "total": 13,
+   "unstable": 2,
+   "loaded": 3
+  },
+  "adk-release-engineering": {
+   "scenarios": 3,
+   "passed": 4,
+   "total": 13,
+   "unstable": 1,
+   "loaded": 3
+  },
+  "adk-agent-interoperability": {
+   "scenarios": 2,
+   "passed": 3,
+   "total": 8,
+   "unstable": 0,
+   "loaded": 2
+  },
+  "adk-agent-evaluation": {
+   "scenarios": 16,
+   "passed": 33,
+   "total": 72,
+   "unstable": 9,
+   "loaded": 11
   }
  },
  "scenarios": [
+  {
+   "id": "evaluation-bound-spans-versus-model-paraphrase",
+   "batch": "eval1",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 0,
+   "total": 5,
+   "unstable": [],
+   "failed": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF",
+    "A5": "FFF"
+   },
+   "primary_loaded": false,
+   "primary_how": null,
+   "primary_files_read": 0,
+   "skills_loaded": [],
+   "agent_cost": 0.156328,
+   "judge_cost": 0.0827,
+   "turns": 18,
+   "seconds": 48.2
+  },
+  {
+   "id": "evaluation-collateral-damage-no-op-control",
+   "batch": "eval2",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 2,
+   "total": 4,
+   "unstable": [
+    3
+   ],
+   "failed": [
+    3,
+    4
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 2,
+   "skills_loaded": [
+    "adk-agent-evaluation"
+   ],
+   "agent_cost": 0.43401280000000003,
+   "judge_cost": 0.2539,
+   "turns": 29,
+   "seconds": 151.3
+  },
+  {
+   "id": "evaluation-generalization-and-deliverable-budget",
+   "batch": "eval1",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 3,
+   "total": 4,
+   "unstable": [
+    3
+   ],
+   "failed": [
+    4
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPF",
+    "A4": "FFF"
+   },
+   "primary_loaded": false,
+   "primary_how": null,
+   "primary_files_read": 0,
+   "skills_loaded": [],
+   "agent_cost": 0.1868333,
+   "judge_cost": 0.086,
+   "turns": 15,
+   "seconds": 67.4
+  },
+  {
+   "id": "evaluation-improve-decisions-error-analysis",
+   "batch": "eval1",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 1,
+   "total": 5,
+   "unstable": [
+    1,
+    5
+   ],
+   "failed": [
+    1,
+    3,
+    4,
+    5
+   ],
+   "votes": {
+    "A1": "FPF",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF",
+    "A5": "FFP"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 1,
+   "skills_loaded": [
+    "adk-agent-evaluation"
+   ],
+   "agent_cost": 0.4592253,
+   "judge_cost": 0.0998,
+   "turns": 29,
+   "seconds": 120.5
+  },
+  {
+   "id": "evaluation-incident-regression-fail-to-pass",
+   "batch": "eval2",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 3,
+   "total": 4,
+   "unstable": [
+    3
+   ],
+   "failed": [
+    4
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PFP",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 2,
+   "skills_loaded": [
+    "adk-agent-evaluation"
+   ],
+   "agent_cost": 0.2112037,
+   "judge_cost": 0.0988,
+   "turns": 20,
+   "seconds": 48.9
+  },
+  {
+   "id": "evaluation-judge-agreement-and-harness-bridge",
+   "batch": "eval2",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 0,
+   "total": 4,
+   "unstable": [
+    2
+   ],
+   "failed": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFP",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 3,
+   "skills_loaded": [
+    "adk-agent-evaluation",
+    "update-config"
+   ],
+   "agent_cost": 0.6475094,
+   "judge_cost": 0.0687,
+   "turns": 24,
+   "seconds": 73.2
+  },
+  {
+   "id": "evaluation-preinference-contract-qualification",
+   "batch": "eval1",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 0,
+   "total": 6,
+   "unstable": [],
+   "failed": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF",
+    "A5": "FFF",
+    "A6": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 1,
+   "skills_loaded": [
+    "adk-agent-evaluation",
+    "run"
+   ],
+   "agent_cost": 0.3945913,
+   "judge_cost": 0.1298,
+   "turns": 34,
+   "seconds": 128.1
+  },
+  {
+   "id": "evaluation-progressive-downstream-repair",
+   "batch": "eval1",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 0,
+   "total": 5,
+   "unstable": [],
+   "failed": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF",
+    "A5": "FFF"
+   },
+   "primary_loaded": false,
+   "primary_how": null,
+   "primary_files_read": 0,
+   "skills_loaded": [],
+   "agent_cost": 0.1204358,
+   "judge_cost": 0.0628,
+   "turns": 16,
+   "seconds": 34.3
+  },
+  {
+   "id": "evaluation-recovery-is-not-full-route-acceptance",
+   "batch": "eval1",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 5,
+   "total": 6,
+   "unstable": [],
+   "failed": [
+    6
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPP",
+    "A4": "PPP",
+    "A5": "PPP",
+    "A6": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 1,
+   "skills_loaded": [
+    "adk-agent-evaluation"
+   ],
+   "agent_cost": 0.23603980000000002,
+   "judge_cost": 0.0816,
+   "turns": 28,
+   "seconds": 65.9
+  },
+  {
+   "id": "evaluation-recurring-failures-reentry",
+   "batch": "eval1",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 4,
+   "total": 4,
+   "unstable": [],
+   "failed": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPP",
+    "A4": "PPP"
+   },
+   "primary_loaded": false,
+   "primary_how": null,
+   "primary_files_read": 2,
+   "skills_loaded": [],
+   "agent_cost": 0.5824005,
+   "judge_cost": 0.2081,
+   "turns": 45,
+   "seconds": 230.2
+  },
+  {
+   "id": "evaluation-repeated-trials-pass-hat-k-and-end-state",
+   "batch": "eval2",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 2,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    3,
+    4
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 3,
+   "skills_loaded": [
+    "adk-agent-evaluation"
+   ],
+   "agent_cost": 0.4705217,
+   "judge_cost": 0.1057,
+   "turns": 29,
+   "seconds": 156.4
+  },
+  {
+   "id": "evaluation-reviewer-coverage-versus-uncertainty",
+   "batch": "eval1",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 3,
+   "total": 4,
+   "unstable": [
+    3
+   ],
+   "failed": [
+    3
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "FFP",
+    "A4": "PPP"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 2,
+   "skills_loaded": [
+    "adk-agent-evaluation"
+   ],
+   "agent_cost": 0.299671,
+   "judge_cost": 0.0912,
+   "turns": 26,
+   "seconds": 89.0
+  },
+  {
+   "id": "evaluation-selected-source-support",
+   "batch": "eval2",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 3,
+   "total": 5,
+   "unstable": [],
+   "failed": [
+    3,
+    5
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "FFF",
+    "A4": "PPP",
+    "A5": "FFF"
+   },
+   "primary_loaded": false,
+   "primary_how": null,
+   "primary_files_read": 1,
+   "skills_loaded": [],
+   "agent_cost": 0.1193476,
+   "judge_cost": 0.1016,
+   "turns": 6,
+   "seconds": 38.6
+  },
+  {
+   "id": "evaluation-self-hosted-harnesses-mlflow-deepeval-opik",
+   "batch": "eval2",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 2,
+   "total": 4,
+   "unstable": [
+    1
+   ],
+   "failed": [
+    2,
+    4
+   ],
+   "votes": {
+    "A1": "PFP",
+    "A2": "FFF",
+    "A3": "PPP",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 1,
+   "skills_loaded": [
+    "adk-agent-evaluation"
+   ],
+   "agent_cost": 0.2014472,
+   "judge_cost": 0.1025,
+   "turns": 11,
+   "seconds": 57.2
+  },
+  {
+   "id": "evaluation-tool-fault-matrix-and-resilience",
+   "batch": "eval2",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 3,
+   "total": 4,
+   "unstable": [
+    4
+   ],
+   "failed": [
+    2
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "PPP",
+    "A4": "PPF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 4,
+   "skills_loaded": [
+    "adk-agent-evaluation"
+   ],
+   "agent_cost": 0.6161327,
+   "judge_cost": 0.223,
+   "turns": 30,
+   "seconds": 238.9
+  },
+  {
+   "id": "evaluation-underwriter-labelling-session",
+   "batch": "eval2",
+   "status": "graded",
+   "expected_primary": "adk-agent-evaluation",
+   "passed": 2,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    1,
+    2
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "PPP",
+    "A4": "PPP"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 3,
+   "skills_loaded": [
+    "adk-agent-evaluation"
+   ],
+   "agent_cost": 0.2738367,
+   "judge_cost": 0.1078,
+   "turns": 15,
+   "seconds": 74.7
+  },
+  {
+   "id": "interoperability-consume-enterprise-mcp-server-registration-and-sso",
+   "batch": "int2",
+   "status": "graded",
+   "expected_primary": "adk-agent-interoperability",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    1,
+    2,
+    4
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "PPP",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 2,
+   "skills_loaded": [
+    "adk-agent-interoperability"
+   ],
+   "agent_cost": 0.24638129999999997,
+   "judge_cost": 0.0954,
+   "turns": 15,
+   "seconds": 65.5
+  },
+  {
+   "id": "interoperability-expose-a2a-with-tck-acceptance",
+   "batch": "int2",
+   "status": "graded",
+   "expected_primary": "adk-agent-interoperability",
+   "passed": 2,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    1,
+    4
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "PPP",
+    "A3": "PPP",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 3,
+   "skills_loaded": [
+    "adk-agent-interoperability"
+   ],
+   "agent_cost": 0.3526054,
+   "judge_cost": 0.158,
+   "turns": 19,
+   "seconds": 112.1
+  },
+  {
+   "id": "interoperability-expose-and-register-a2a",
+   "status": "agent-error",
+   "batch": "int1",
+   "expected_primary": "adk-agent-interoperability"
+  },
+  {
+   "id": "interoperability-expose-mcp-server-with-conformance-baseline",
+   "status": "agent-error",
+   "batch": "int1",
+   "expected_primary": "adk-agent-interoperability"
+  },
+  {
+   "id": "interoperability-exposed-agent-forgets-on-modern-clients",
+   "status": "agent-error",
+   "batch": "int2",
+   "expected_primary": "adk-agent-interoperability"
+  },
+  {
+   "id": "interoperability-mcp-app-widget-to-custom-frontend",
+   "status": "agent-error",
+   "batch": "int2",
+   "expected_primary": "adk-agent-interoperability"
+  },
+  {
+   "id": "interoperability-verify-signed-agent-card",
+   "status": "agent-error",
+   "batch": "int2",
+   "expected_primary": "adk-agent-interoperability"
+  },
+  {
+   "id": "observability-agent-runtime-latency-and-alerts",
+   "batch": "int1",
+   "status": "graded",
+   "expected_primary": "adk-agent-observability",
+   "passed": 0,
+   "total": 4,
+   "unstable": [
+    1
+   ],
+   "failed": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "votes": {
+    "A1": "FFP",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 4,
+   "skills_loaded": [
+    "adk-agent-observability"
+   ],
+   "agent_cost": 0.3379441,
+   "judge_cost": 0.0941,
+   "turns": 21,
+   "seconds": 87.0
+  },
+  {
+   "id": "observability-cost-reconciliation-agenttool-litellm",
+   "batch": "int1",
+   "status": "graded",
+   "expected_primary": "adk-agent-observability",
+   "passed": 5,
+   "total": 5,
+   "unstable": [],
+   "failed": [],
+   "votes": {
+    "A1": "PPP",
+    "A2": "PPP",
+    "A3": "PPP",
+    "A4": "PPP",
+    "A5": "PPP"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 4,
+   "skills_loaded": [
+    "adk-agent-observability"
+   ],
+   "agent_cost": 0.21279489999999998,
+   "judge_cost": 0.0684,
+   "turns": 11,
+   "seconds": 37.6
+  },
+  {
+   "id": "observability-handover-and-postmortem",
+   "status": "agent-error",
+   "batch": "int2",
+   "expected_primary": "adk-agent-observability"
+  },
+  {
+   "id": "observability-semconv-drift-and-evaluation-events",
+   "batch": "int2",
+   "status": "graded",
+   "expected_primary": "adk-agent-observability",
+   "passed": 1,
+   "total": 4,
+   "unstable": [
+    1
+   ],
+   "failed": [
+    2,
+    3,
+    4
+   ],
+   "votes": {
+    "A1": "PPF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 3,
+   "skills_loaded": [
+    "adk-agent-observability"
+   ],
+   "agent_cost": 0.3288561,
+   "judge_cost": 0.1081,
+   "turns": 27,
+   "seconds": 96.5
+  },
   {
    "id": "mcp-rug-pull-runtime-pin-and-mcp-ids",
    "batch": "sec2",
@@ -1033,6 +1739,111 @@
    "seconds": 55.6
   },
   {
+   "id": "release-bigquery-analytics-score-gate-and-drift",
+   "status": "agent-error",
+   "batch": "int1",
+   "expected_primary": "adk-release-engineering"
+  },
+  {
+   "id": "release-coding-agent-capability-diff-gate",
+   "batch": "int1",
+   "status": "graded",
+   "expected_primary": "adk-release-engineering",
+   "passed": 2,
+   "total": 5,
+   "unstable": [
+    2
+   ],
+   "failed": [
+    1,
+    4,
+    5
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "PFP",
+    "A3": "PPP",
+    "A4": "FFF",
+    "A5": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 1,
+   "skills_loaded": [
+    "adk-release-engineering"
+   ],
+   "agent_cost": 0.2831456,
+   "judge_cost": 0.0936,
+   "turns": 20,
+   "seconds": 87.1
+  },
+  {
+   "id": "release-model-retirement-and-ci-gate",
+   "batch": "int1",
+   "status": "graded",
+   "expected_primary": "adk-release-engineering",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    1,
+    2,
+    3
+   ],
+   "votes": {
+    "A1": "FFF",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "PPP"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 4,
+   "skills_loaded": [
+    "adk-release-engineering"
+   ],
+   "agent_cost": 0.49681859999999994,
+   "judge_cost": 0.136,
+   "turns": 42,
+   "seconds": 159.8
+  },
+  {
+   "id": "release-post-launch-quality-loop-aqua",
+   "status": "agent-error",
+   "batch": "int1",
+   "expected_primary": "adk-release-engineering"
+  },
+  {
+   "id": "release-promptfoo-gate-exit-codes-and-trajectory-assertions",
+   "batch": "int2",
+   "status": "graded",
+   "expected_primary": "adk-release-engineering",
+   "passed": 1,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    2,
+    3,
+    4
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "FFF",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 1,
+   "skills_loaded": [
+    "adk-release-engineering"
+   ],
+   "agent_cost": 0.4605968000000001,
+   "judge_cost": 0.1514,
+   "turns": 33,
+   "seconds": 151.3
+  },
+  {
    "id": "designer-checkpoint-settles-the-agenda",
    "batch": "des2",
    "status": "graded",
@@ -1066,9 +1877,32 @@
   },
   {
    "id": "designer-names-google-product-skills",
-   "status": "agent-error",
-   "batch": "des1",
-   "expected_primary": "adk-system-designer"
+   "batch": "eval2",
+   "status": "graded",
+   "expected_primary": "adk-system-designer",
+   "passed": 2,
+   "total": 4,
+   "unstable": [],
+   "failed": [
+    2,
+    4
+   ],
+   "votes": {
+    "A1": "PPP",
+    "A2": "FFF",
+    "A3": "PPP",
+    "A4": "FFF"
+   },
+   "primary_loaded": true,
+   "primary_how": "skill-tool",
+   "primary_files_read": 11,
+   "skills_loaded": [
+    "adk-system-designer"
+   ],
+   "agent_cost": 1.5539977,
+   "judge_cost": 0.3483,
+   "turns": 28,
+   "seconds": 590.6
   },
   {
    "id": "designer-phase-gate-plan-versus-code",
@@ -1106,17 +1940,17 @@
    "batch": "des2",
    "status": "graded",
    "expected_primary": "adk-system-designer",
-   "passed": 4,
+   "passed": 5,
    "total": 5,
-   "unstable": [],
-   "failed": [
+   "unstable": [
     4
    ],
+   "failed": [],
    "votes": {
     "A1": "PPP",
     "A2": "PPP",
     "A3": "PPP",
-    "A4": "FFF",
+    "A4": "PPF",
     "A5": "PPP"
    },
    "primary_loaded": true,
@@ -1126,7 +1960,7 @@
     "adk-system-designer"
    ],
    "agent_cost": 1.6741309,
-   "judge_cost": 0.2671,
+   "judge_cost": 0.2562,
    "turns": 25,
    "seconds": 736.5
   },
