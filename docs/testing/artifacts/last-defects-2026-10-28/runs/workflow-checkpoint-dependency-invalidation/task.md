@@ -1,0 +1,6 @@
+I want our ADK route to carry on from saved stages instead of redoing everything, using the checkpoint store we already have. The catch is that some saved outputs were made before we changed an input or the draft. Do it offline and don't change our interfaces.
+
+---
+Situation (from the person asking): Our planning-decision app keeps every stage result in the checkpoint store under runs/, and the served ADK route is pipeline/adk_app.py; pipeline/resume.py is how a case carries on from saved stages today. Three runs are retained: runs/PA-2026-0141-r3, runs/PA-2026-0147-r1 (the applicant has since resubmitted the design and access statement) and runs/PA-2026-0152-r1 (an officer has since amended the draft, see drafts/). Someone also kept a hand-edited writer response while debugging PA-2026-0147. Every provider call goes through pipeline/model.py, and tests/doubles.py is a scripted transport that counts sends. google-adk is not installed here. No provider calls; offline only.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

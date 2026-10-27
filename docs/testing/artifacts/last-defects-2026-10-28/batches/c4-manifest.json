@@ -1,0 +1,31 @@
+{
+ "created": "2026-10-27T20:54:49+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-aaf094c4199329fd4",
+ "commit": "19e51e3ce18c8556593c77e7bd137703afd74d26",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "presenter-rollout-pack-go-live",
+   "status": "repo-fixture",
+   "base": [
+    "claims-docs"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/presenter-rollout-pack-go-live/situation.md"
+    }
+   ],
+   "note": "check_rollout.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-presenter",
+    "adk-engineer",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

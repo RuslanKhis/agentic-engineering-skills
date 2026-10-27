@@ -1,0 +1,6 @@
+Wattle & Co's Privacy Officer and Head of Security want the governance papers for the staff HR assistant before the pilot. Draft what they need from our docs.
+
+---
+Situation (from the person asking): An Australian agency's project record for an Australian retailer's internal HR assistant: 4,800 staff in NSW, Victoria and Queensland; Workday leave, roster and attendance reads; managers can summarise a team member's attendance before a performance conversation; Gemini pinned in australia-southeast1; prompts logged for 30 days; error bodies sent to a US-region error tracker; agency engineers in Sydney read logs; masking missed union and medical phrases; pilot profile.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

@@ -1,0 +1,1050 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T20:55:15+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/c3/aes-scenarios-xi_dlg8l",
+ "commit": "19e51e3ce18c8556593c77e7bd137703afd74d26",
+ "scenarios_sha256": "10502802ecc331164cfb83cdbeac0a1f63828dfb4d93f99efbaca6887cba813c",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "max_turns": 40,
+ "timeout_s": 900,
+ "max_budget_usd": null,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "governance-pack-annex-iii-pilot",
+   "expected_primary": "adk-governance-pack",
+   "fixture_status": "repo-fixture",
+   "note": "check_governance.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-governance-pack",
+    "adk-engineer",
+    "adk-presenter",
+    "protect-adk-sensitive-data"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.4552,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Writes the full pack under docs/governance/<topic>/ for a pilot profile and sets counsel_required: yes because ranking applicants is an Annex III employment use.",
+     "verdict": "PASS",
+     "quote": "Every draft is `status: draft`, `counsel_required: yes` and has `pending` sign-off rows.",
+     "quote_found": true,
+     "reason": "Seven papers (full pack) written under docs/governance/shortlisting/ with counsel_required: yes, tied to Annex III point 4 ranking applicants.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Records the Article 6(3) facts and that ranking candidates is likely profiling, leaving the classification to counsel instead of concluding the derogation holds.",
+     "verdict": "FAIL",
+     "quote": "high-risk under Annex III point 4 (recruitment: ranking applicants), profiling of natural persons, with no Article 6(3) derogation proposed",
+     "quote_found": true,
+     "reason": "It records facts but proposes high-risk and no derogation, effectively concluding classification rather than leaving it fully to counsel, though it flags counsel: confirm.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 3,
+     "assertion": "Proposes the client as provider and deployer and the agency as developer under contract, each flagged counsel:, and keeps GDPR roles separate.",
+     "verdict": "PASS",
+     "quote": "Kestrel as AI Act provider and deployer and as GDPR controller; Southgate Labs as developer and, in GDPR terms, processor; Google as processor (Roles below; counsel: confirm).",
+     "quote_found": true,
+     "reason": "Proposes provider/deployer and developer with counsel flags and keeps GDPR roles in a separate bullet.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "States applicability dates with a checked date, including Annex III obligations from 2 December 2027 under Regulation (EU) 2026/1744.",
+     "verdict": "PASS",
+     "quote": "Annex III obligations apply from 2 December 2027 (Art. 113(c), checked 2026-10-26)",
+     "quote_found": true,
+     "reason": "Gives the date with a checked date and cites Reg. 2026/1744 for the AI literacy row; the Annex III date is stated with check.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Reports the below-threshold adverse-impact measurement as a limit with its M ID instead of omitting it, and treats DPIA sign-off and works council consultation as calendar waits.",
+     "verdict": "PASS",
+     "quote": "the adverse-impact ratio for applicants aged 50 and over is 0.71, below the 0.8 four-fifths comparison the measurement uses",
+     "quote_found": true,
+     "reason": "Reports 0.71 as a limit with M3 and treats W1 and W2 as calendar waits in the plan and memo.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 6,
+     "assertion": "Runs check_governance.py with the brief, design and plan as sources and fixes its errors before finishing.",
+     "verdict": "FAIL",
+     "quote": "I could not run the checker because Bash is disabled in this session.",
+     "quote_found": true,
+     "reason": "The checker was not run and no errors were fixed, though the command with the three sources was named.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 4,
+   "total": 6,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.94,
+   "unstable": [
+    2
+   ],
+   "final_chars": 4497,
+   "files": [
+    "docs/governance/shortlisting/impact-assessment.md",
+    "docs/governance/shortlisting/privacy-impact-input-pack.md",
+    "docs/governance/shortlisting/processing-records.md",
+    "docs/governance/shortlisting/regulatory-memo.md",
+    "docs/governance/shortlisting/security-questionnaire.md",
+    "docs/governance/shortlisting/system-card.md",
+    "docs/governance/shortlisting/transfer-assessment.md",
+    "docs/plans/shortlisting.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 374.5,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 35,
+    "total_cost_usd": 1.2297361999999998,
+    "duration_ms": 373405,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-governance-pack"
+    ],
+    "skill_files_read": [
+     "adk-governance-pack/references/jurisdiction-screen.md",
+     "adk-governance-pack/assets/regulatory-memo-template.md",
+     "adk-governance-pack/references/eu-ai-act.md",
+     "adk-governance-pack/assets/privacy-impact-input-pack-template.md",
+     "adk-governance-pack/assets/processing-records-template.md",
+     "adk-governance-pack/assets/transfer-assessment-annex-template.md",
+     "adk-governance-pack/assets/impact-assessment-template.md",
+     "adk-governance-pack/assets/system-card-template.md",
+     "adk-governance-pack/assets/security-questionnaire-template.md",
+     "adk-governance-pack/references/privacy-and-records.md",
+     "adk-governance-pack/references/system-card-and-questionnaire.md",
+     "adk-governance-pack/references/impact-assessment.md",
+     "adk-governance-pack/references/australia.md",
+     "adk-governance-pack/scripts/check_governance.py"
+    ],
+    "skill_md_loaded": {
+     "adk-governance-pack": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 14
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-presenter": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "protect-adk-sensitive-data": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 33,
+    "catalogue": [
+     "adk-engineer",
+     "adk-governance-pack",
+     "adk-presenter",
+     "protect-adk-sensitive-data",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-governance-pack": true,
+    "adk-engineer": false,
+    "adk-presenter": false,
+    "protect-adk-sensitive-data": false
+   }
+  },
+  {
+   "id": "governance-pack-au-hr-internal",
+   "expected_primary": "adk-governance-pack",
+   "fixture_status": "repo-fixture",
+   "note": "check_governance.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-governance-pack",
+    "adk-engineer",
+    "protect-adk-sensitive-data"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.3237,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Screens jurisdictions before drafting and records jurisdictions: [au] in every draft, with a reason in the screen table for leaving out the United States, the EU and the UK; the US error tracker is treated as an APP 8 overseas disclosure fact, not a reason to bring US law in.",
+     "verdict": "PASS",
+     "quote": "data merely stored in the US does not bring US state privacy laws in; it is an APP 8 fact",
+     "quote_found": true,
+     "reason": "All drafts carry jurisdictions: [au], the screen table gives reasons for excluding the US, EU and UK, and the Sentry flow is treated as an APP 8 fact.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Writes no EU AI Act or GDPR sections and no records of processing; the privacy impact input pack uses the APPs (no lawful-basis test) and an inventory and notice section instead.",
+     "verdict": "PASS",
+     "quote": "Inputs for Wattle & Co's privacy impact assessment of this system under the\nAustralian Privacy Principles.",
+     "quote_found": true,
+     "reason": "The pack is built on the APPs with an inventory and notice section, and no EU AI Act, GDPR or records-of-processing sections were written.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "States that the client's employee records exemption does not cover the consultancy and flags the consultancy's APP entity status as counsel.",
+     "verdict": "PASS",
+     "quote": "the OAIC says it does not cover contractors handling an employer's employee information, so Southgate Labs is not covered by Wattle's exemption",
+     "quote_found": true,
+     "reason": "The memo states the exemption does not cover the consultancy and flags counsel to confirm whether Southgate Labs is an APP entity in its own right.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Treats the manager attendance summary as a possible APP 1.7 decision from 10 December 2026 with its checked date, does not treat human review as an exemption, and sets counsel_required: yes.",
+     "verdict": "PASS",
+     "quote": "counsel: APP 1.7 substantially and directly related decision, from 10 December 2026 (APP 1.7, checked 2026-10-26)",
+     "quote_found": true,
+     "reason": "The summary is treated as a possible APP 1.7 decision with a checked date, the memo says human review is not an exemption, and all drafts set counsel_required: yes.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Names the NSW workplace surveillance notice for prompt logging as a calendar wait and the union consultation as a wait.",
+     "verdict": "PASS",
+     "quote": "W3: NSW workplace surveillance notice to pilot staff, at least 14 days before prompt logging\n  starts for them",
+     "quote_found": true,
+     "reason": "The NSW surveillance notice is recorded as wait W3 and SDA consultation as wait W4 in the plan.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 6,
+     "assertion": "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing.",
+     "verdict": "FAIL",
+     "quote": "I could not run the skill's checker because this session had no shell.",
+     "quote_found": true,
+     "reason": "The checker was not run, so the drafts were never shown to pass it.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 5,
+   "total": 6,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 5013,
+   "files": [
+    "docs/governance/hr-assistant/impact-assessment.md",
+    "docs/governance/hr-assistant/privacy-impact-input-pack.md",
+    "docs/governance/hr-assistant/regulatory-memo.md",
+    "docs/governance/hr-assistant/security-questionnaire.md",
+    "docs/governance/hr-assistant/system-card.md",
+    "docs/plans/hr-assistant.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 235.9,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 24,
+    "total_cost_usd": 0.7999217,
+    "duration_ms": 234683,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-governance-pack"
+    ],
+    "skill_files_read": [
+     "adk-governance-pack/references/jurisdiction-screen.md",
+     "adk-governance-pack/references/australia.md",
+     "adk-governance-pack/assets/regulatory-memo-template.md",
+     "adk-governance-pack/assets/privacy-impact-input-pack-template.md",
+     "adk-governance-pack/assets/impact-assessment-template.md",
+     "adk-governance-pack/assets/system-card-template.md",
+     "adk-governance-pack/assets/security-questionnaire-template.md",
+     "adk-governance-pack/references/system-card-and-questionnaire.md"
+    ],
+    "skill_md_loaded": {
+     "adk-governance-pack": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 8
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "protect-adk-sensitive-data": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 22,
+    "catalogue": [
+     "adk-engineer",
+     "adk-governance-pack",
+     "protect-adk-sensitive-data",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-governance-pack": true,
+    "adk-engineer": false,
+    "protect-adk-sensitive-data": false
+   }
+  },
+  {
+   "id": "governance-pack-uk-bank-chatbot",
+   "expected_primary": "adk-governance-pack",
+   "fixture_status": "repo-fixture",
+   "note": "check_governance.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-governance-pack",
+    "adk-engineer",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.4778,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Records jurisdictions: [au, eu, uk] in that order, with Australia in scope for the consultancy's own handling and the United States left out with a reason.",
+     "verdict": "PASS",
+     "quote": "jurisdictions: [au, eu, uk]",
+     "quote_found": true,
+     "reason": "Jurisdictions are in the right order, Australia is in scope via the consultancy's own handling, and the US is excluded with a stated reason.\n",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Writes a transfer assessment annex with rows for EU and UK personal data accessed from Australia (SCCs and a transfer impact assessment; IDTA or Addendum and the data protection test), leaving the conclusions to counsel.",
+     "verdict": "PASS",
+     "quote": "IDTA or Addendum plus the data protection test; no UK adequacy regulations for Australia (checked 2026-10-26); gap: not executed (W4); counsel:",
+     "quote_found": true,
+     "reason": "The transfer annex has rows for UK and EU data accessed from Australia with SCCs plus a TIA and an IDTA/Addendum plus the data protection test, and leaves conclusions to counsel.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Uses UK GDPR Articles 22A to 22D and names the Information Commission in the UK sections, and GDPR Article 22 with SCHUFA in the EU sections, for the overdraft explanation.",
+     "verdict": "FAIL",
+     "quote": "UK Articles 22A to 22D, including the 22C safeguards",
+     "quote_found": true,
+     "reason": "The UK GDPR Articles 22A to 22D and the Information Commission are covered, but the EU sections cite GDPR Article 22 with no mention of SCHUFA, so the EU half is unmet.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Covers Article 50(1) disclosure including on whose behalf the agent acts, and the FCA Consumer Duty and CMA guidance as UK screens.",
+     "verdict": "PASS",
+     "quote": "the CMA's AI-agent guidance of 9 March 2026 (checked 2026-10-26) says tell people they deal with AI where it could change a decision",
+     "quote_found": true,
+     "reason": "The pack covers Article 50(1), Consumer Duty and CMA guidance, but it does not address on whose behalf the agent acts, so the disclosure element is only partly met.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "FAIL"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 5,
+     "assertion": "Sets counsel_required: yes because the agent explains credit decisions, and runs check_governance.py until every draft passes.",
+     "verdict": "FAIL",
+     "quote": "I've drafted the governance pack for Thamesbridge's two DPOs and the CISO, but I couldn't run the checker. No shell was available, so nothing has been validated.",
+     "quote_found": true,
+     "reason": "counsel_required: yes is set, but the checker was never run, so the 'runs until every draft passes' requirement is not met.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.87,
+   "unstable": [
+    3,
+    4
+   ],
+   "final_chars": 4937,
+   "files": [
+    "docs/governance/service-assistant/impact-assessment.md",
+    "docs/governance/service-assistant/privacy-impact-input-pack.md",
+    "docs/governance/service-assistant/processing-records.md",
+    "docs/governance/service-assistant/regulatory-memo.md",
+    "docs/governance/service-assistant/security-questionnaire.md",
+    "docs/governance/service-assistant/system-card.md",
+    "docs/governance/service-assistant/transfer-assessment.md",
+    "docs/plans/service-assistant.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 439.6,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 39,
+    "total_cost_usd": 1.5668784999999998,
+    "duration_ms": 438473,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-governance-pack"
+    ],
+    "skill_files_read": [
+     "adk-governance-pack/references/jurisdiction-screen.md",
+     "adk-governance-pack/assets/regulatory-memo-template.md",
+     "adk-governance-pack/references/united-kingdom.md",
+     "adk-governance-pack/references/eu-ai-act.md",
+     "adk-governance-pack/references/privacy-and-records.md",
+     "adk-governance-pack/assets/privacy-impact-input-pack-template.md",
+     "adk-governance-pack/assets/processing-records-template.md",
+     "adk-governance-pack/assets/transfer-assessment-annex-template.md",
+     "adk-governance-pack/references/system-card-and-questionnaire.md",
+     "adk-governance-pack/references/impact-assessment.md",
+     "adk-governance-pack/assets/impact-assessment-template.md",
+     "adk-governance-pack/assets/system-card-template.md",
+     "adk-governance-pack/assets/security-questionnaire-template.md",
+     "adk-governance-pack/references/australia.md",
+     "adk-governance-pack/scripts/check_governance.py"
+    ],
+    "skill_md_loaded": {
+     "adk-governance-pack": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 15
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-presenter": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 37,
+    "catalogue": [
+     "adk-engineer",
+     "adk-governance-pack",
+     "adk-presenter",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-governance-pack": true,
+    "adk-engineer": false,
+    "adk-presenter": false
+   }
+  },
+  {
+   "id": "governance-pack-us-hiring-screener",
+   "expected_primary": "adk-governance-pack",
+   "fixture_status": "repo-fixture",
+   "note": "check_governance.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-governance-pack",
+    "adk-engineer",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.3829,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Records jurisdictions: [au, us], with Australia for the consultancy's own handling and the EU and the UK left out with reasons.",
+     "verdict": "PASS",
+     "quote": "jurisdictions: [au, us]",
+     "quote_found": true,
+     "reason": "Frontmatter records [au, us]; Australia scoped to Southgate's own handling, and EU, UK (and others) marked out with reasons in the jurisdiction screen.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Screens the CPPA risk assessment and ADMT rules with the three-part human review facts, the FEHA automated-decision regulations, Title VII and ADA, and NYC Local Law 144 with its independent bias audit and 10-business-day notice named as the client's documents.",
+     "verdict": "PASS",
+     "quote": "NYC bias audit by an independent auditor with published summary and candidate notice, W4 (conditional on New York use)",
+     "quote_found": true,
+     "reason": "Memo covers CPPA risk assessment/ADMT with the three-part review facts (interpret, review with other info, authority), FEHA regs, Title VII/ADA, and NYC LL144 with independent audit and 10-business-day notice as client documents.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Reports the 0.74 impact ratio and the 6% recruiter review rate with their M IDs as limits and questions for counsel, not as compliance.",
+     "verdict": "PASS",
+     "quote": "M2, sample 6,000, window 2026-09-22 to 2026-10-03, build v0.5.2), below 0.8",
+     "quote_found": true,
+     "reason": "The 0.74 (M2) and 6% (M4) are reported with IDs as limits and put to counsel in questions 4 and 5, not as compliance.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Fills the input pack's assessment approval section with the go/no-go decision and the approver as gaps until the client names them.",
+     "verdict": "PASS",
+     "quote": "**Approver:** gap: approver not named; Kevin Ortiz is the pilot decider",
+     "quote_found": true,
+     "reason": "Assessment approval section marks the go/no-go as counsel-pending and the approver as a gap until named.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Sets counsel_required: yes on every draft and leaves the New York City answer to counsel with the facts it needs.",
+     "verdict": "PASS",
+     "quote": "counsel: Proposed answer: **not yet, and not on the current record.**",
+     "quote_found": true,
+     "reason": "All five drafts carry counsel_required: yes, and the NYC answer is framed as counsel's with the facts needed (audit, notice, M3 sex-only data).",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 6,
+     "assertion": "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing.",
+     "verdict": "FAIL",
+     "quote": "I could not run the checker because Bash is disabled in this session. The drafts follow the template structure, but I haven't confirmed they pass its checks.",
+     "quote_found": true,
+     "reason": "The checker was not run and no passing result exists, although the command with the right sources was named.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 5,
+   "total": 6,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 5027,
+   "files": [
+    "docs/governance/screener/impact-assessment.md",
+    "docs/governance/screener/privacy-impact-input-pack.md",
+    "docs/governance/screener/regulatory-memo.md",
+    "docs/governance/screener/security-questionnaire.md",
+    "docs/governance/screener/system-card.md",
+    "docs/plans/screener.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 347.7,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 30,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 28,
+    "total_cost_usd": 1.1548701,
+    "duration_ms": 346513,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "30",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill"
+     ],
+     "unconfined_tools": [],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": true
+    },
+    "skills_loaded": [
+     "adk-governance-pack"
+    ],
+    "skill_files_read": [
+     "adk-governance-pack/references/jurisdiction-screen.md",
+     "adk-governance-pack/references/united-states.md",
+     "adk-governance-pack/assets/regulatory-memo-template.md",
+     "adk-governance-pack/assets/privacy-impact-input-pack-template.md",
+     "adk-governance-pack/assets/impact-assessment-template.md",
+     "adk-governance-pack/assets/system-card-template.md",
+     "adk-governance-pack/assets/security-questionnaire-template.md",
+     "adk-governance-pack/references/australia.md",
+     "adk-governance-pack/references/system-card-and-questionnaire.md",
+     "adk-governance-pack/references/impact-assessment.md",
+     "adk-governance-pack/scripts/check_governance.py"
+    ],
+    "skill_md_loaded": {
+     "adk-governance-pack": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 11
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 26,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-engineer",
+     "adk-governance-pack",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-governance-pack": true,
+    "adk-engineer": false,
+    "adk-agent-evaluation": false
+   }
+  }
+ ]
+}

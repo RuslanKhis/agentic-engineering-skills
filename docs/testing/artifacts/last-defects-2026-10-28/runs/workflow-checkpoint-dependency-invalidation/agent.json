@@ -1,0 +1,122 @@
+{
+ "exit": 0,
+ "timed_out": false,
+ "seconds": 290.4,
+ "model": "claude-sonnet-5-5",
+ "max_turns": 30,
+ "tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "subtype": "success",
+ "is_error": false,
+ "num_turns": 46,
+ "total_cost_usd": 0.7158651,
+ "duration_ms": 289216,
+ "terminal_reason": "completed",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-sonnet-5-5",
+  "--output-format",
+  "stream-json",
+  "--verbose",
+  "--setting-sources",
+  "project,local",
+  "--strict-mcp-config",
+  "--no-session-persistence",
+  "--max-turns",
+  "30",
+  "--tools",
+  "Read,Write,Edit,Glob,Grep,Skill",
+  "--permission-mode",
+  "dontAsk",
+  "--permission-prompts",
+  "none",
+  "--allowedTools",
+  "Read(./**),Write(./**),Edit(./**),Skill",
+  "--max-budget-usd",
+  "3.0"
+ ],
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "skills_loaded": [
+  "adk-workflow-design"
+ ],
+ "skill_files_read": [
+  "adk-workflow-design/references/checkpoint-reuse.md"
+ ],
+ "skill_md_loaded": {
+  "adk-workflow-design": {
+   "loaded": true,
+   "how": "skill-tool",
+   "other_files_read": 1
+  }
+ },
+ "permission_denials": [
+  {
+   "tool": "Read",
+   "input": "{\"file_path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/c1/aes-scenarios-jws5r82a/workflow-checkpoint-dependency-invalidation/pipeline/stages.py\"}"
+  },
+  {
+   "tool": "Read",
+   "input": "{\"file_path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/c1/aes-scenarios-jws5r82a/workflow-checkpoint-dependency-invalidation/pipeline/constraints.py\"}"
+  },
+  {
+   "tool": "Read",
+   "input": "{\"file_path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/c1/aes-scenarios-jws5r82a/workflow-checkpoint-dependency-invalidation/tests/test_resume.py\"}"
+  },
+  {
+   "tool": "Read",
+   "input": "{\"file_path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/c1/aes-scenarios-jws5r82a/workflow-checkpoint-dependency-invalidation/tests/doubles.py\"}"
+  },
+  {
+   "tool": "Read",
+   "input": "{\"file_path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/c1/aes-scenarios-jws5r82a/workflow-checkpoint-dependency-invalidation/runs/PA-2026-0147-r1/manifest.json\"}"
+  },
+  {
+   "tool": "Read",
+   "input": "{\"file_path\": \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/c1/aes-scenarios-jws5r82a/workflow-checkpoint-dependency-invalidation/runs/PA-2026-0152-r1/manifest.json\"}"
+  }
+ ],
+ "tool_calls": 44,
+ "catalogue": [
+  "adk-workflow-design",
+  "deep-research",
+  "design",
+  "design-sync",
+  "dataviz",
+  "update-config",
+  "verify",
+  "debug",
+  "code-review",
+  "simplify",
+  "batch",
+  "fewer-permission-prompts",
+  "doctor",
+  "loop",
+  "schedule",
+  "claude-api",
+  "workflow-authoring",
+  "run",
+  "run-skill-generator",
+  "plugin-authoring"
+ ],
+ "catalogue_check": {
+  "missing": [],
+  "leaked": []
+ }
+}

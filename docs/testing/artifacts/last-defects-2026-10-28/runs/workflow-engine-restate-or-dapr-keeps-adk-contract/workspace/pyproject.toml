@@ -1,0 +1,19 @@
+[project]
+name = "support-assistant"
+version = "0.4.0"
+requires-python = ">=3.11"
+dependencies = [
+  "google-adk==2.12.0",
+  "google-genai==2.21.0",
+  "fastapi==0.118.0",
+  "uvicorn==0.37.0",
+  "httpx==0.28.1",
+]
+
+# Only the review worker process needs this (app/workflows/); the web service and the tests do not.
+# 1.1.0 is what resolved on 2026-10-25; re-pin deliberately after the checks in docs/refund-durability.md.
+[project.optional-dependencies]
+review-worker = ["restate-sdk==1.1.0"]
+
+[tool.setuptools.packages.find]
+include = ["app*"]

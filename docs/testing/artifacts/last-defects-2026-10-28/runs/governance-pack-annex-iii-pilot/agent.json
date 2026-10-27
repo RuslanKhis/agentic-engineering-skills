@@ -1,0 +1,128 @@
+{
+ "exit": 0,
+ "timed_out": false,
+ "seconds": 374.5,
+ "model": "claude-sonnet-5-5",
+ "max_turns": 30,
+ "tools": "Read,Write,Edit,Glob,Grep,Skill",
+ "subtype": "success",
+ "is_error": false,
+ "num_turns": 35,
+ "total_cost_usd": 1.2297361999999998,
+ "duration_ms": 373405,
+ "terminal_reason": "completed",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-sonnet-5-5",
+  "--output-format",
+  "stream-json",
+  "--verbose",
+  "--setting-sources",
+  "project,local",
+  "--strict-mcp-config",
+  "--no-session-persistence",
+  "--max-turns",
+  "30",
+  "--tools",
+  "Read,Write,Edit,Glob,Grep,Skill",
+  "--permission-mode",
+  "dontAsk",
+  "--permission-prompts",
+  "none",
+  "--allowedTools",
+  "Read(./**),Write(./**),Edit(./**),Skill",
+  "--max-budget-usd",
+  "3.0"
+ ],
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill"
+  ],
+  "unconfined_tools": [],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": true
+ },
+ "skills_loaded": [
+  "adk-governance-pack"
+ ],
+ "skill_files_read": [
+  "adk-governance-pack/references/jurisdiction-screen.md",
+  "adk-governance-pack/assets/regulatory-memo-template.md",
+  "adk-governance-pack/references/eu-ai-act.md",
+  "adk-governance-pack/assets/privacy-impact-input-pack-template.md",
+  "adk-governance-pack/assets/processing-records-template.md",
+  "adk-governance-pack/assets/transfer-assessment-annex-template.md",
+  "adk-governance-pack/assets/impact-assessment-template.md",
+  "adk-governance-pack/assets/system-card-template.md",
+  "adk-governance-pack/assets/security-questionnaire-template.md",
+  "adk-governance-pack/references/privacy-and-records.md",
+  "adk-governance-pack/references/system-card-and-questionnaire.md",
+  "adk-governance-pack/references/impact-assessment.md",
+  "adk-governance-pack/references/australia.md",
+  "adk-governance-pack/scripts/check_governance.py"
+ ],
+ "skill_md_loaded": {
+  "adk-governance-pack": {
+   "loaded": true,
+   "how": "skill-tool",
+   "other_files_read": 14
+  },
+  "adk-engineer": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  },
+  "adk-presenter": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  },
+  "protect-adk-sensitive-data": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  }
+ },
+ "permission_denials": [],
+ "tool_calls": 33,
+ "catalogue": [
+  "adk-engineer",
+  "adk-governance-pack",
+  "adk-presenter",
+  "protect-adk-sensitive-data",
+  "deep-research",
+  "design",
+  "design-sync",
+  "dataviz",
+  "update-config",
+  "verify",
+  "debug",
+  "code-review",
+  "simplify",
+  "batch",
+  "fewer-permission-prompts",
+  "doctor",
+  "loop",
+  "schedule",
+  "claude-api",
+  "workflow-authoring",
+  "run",
+  "run-skill-generator",
+  "plugin-authoring"
+ ],
+ "catalogue_check": {
+  "missing": [],
+  "leaked": []
+ }
+}

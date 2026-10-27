@@ -1,0 +1,178 @@
+{
+ "created": "2026-10-27T20:28:10+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-aaf094c4199329fd4",
+ "commit": "19e51e3ce18c8556593c77e7bd137703afd74d26",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "workflow-checkpoint-dependency-invalidation",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-checkpoint-dependency-invalidation/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Three retained runs and a resume path over the document pipeline; google-adk is not installed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "workflow-engine-restate-or-dapr-keeps-adk-contract",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-engine-restate-or-dapr-keeps-adk-contract/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design",
+    "adk-operational-guardrails",
+    "safe-api-tool-calls",
+    "adk-system-designer"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "workflow-realistic-checkpoint-storage-preflight",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-realistic-checkpoint-storage-preflight/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The refused writer record is kept in the run; tests and the round trip need a shell to execute.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "workflow-warning-only-correction-preservation",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-warning-only-correction-preservation/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Scripted writer and reviewer replies for the case are in the workspace for offline tests.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "plain-adk-no-scaffold",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "remove": [
+    "pyproject.toml",
+    "app/server.py"
+   ],
+   "grader": [
+    {
+     "from": "evals/graders/plain-adk-no-scaffold/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The optional Agents CLI skills are not in this repository, so they are not installed.",
+   "skills_missing": [
+    "google-agents-cli-workflow",
+    "google-agents-cli-scaffold"
+   ],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "workflow-content-safeguards-in-code",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-content-safeguards-in-code/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The skill's draft_consistency.py is reachable in the installed skill; running it needs a shell.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design",
+    "protect-adk-sensitive-data",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "workflow-durable-refund-resume-or-engine",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-durable-refund-resume-or-engine/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design",
+    "safe-api-tool-calls",
+    "adk-system-designer",
+    "adk-operational-guardrails"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}
