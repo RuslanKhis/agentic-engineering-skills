@@ -562,7 +562,9 @@ Use this when an agent repeats tools, consumes too much model usage, runs too
 long, or needs a person to approve an action. It helps put enforcement in the
 application code that actually runs the work, with tests showing that blocked
 actions never execute. It also helps design usage accounting across turns
-and application controls for reducing spend.
+and application controls for reducing spend, including escalation rates and
+review-queue load, and paid continuations after a lost response, admitted
+against a shared attempt ledger.
 
 **Invoke:** Claude Code `/adk-operational-guardrails` · Codex `$adk-operational-guardrails`
 
@@ -799,7 +801,9 @@ whose passing scores may hide missing checks. When the labels must come
 from subject-matter experts, it plans the labelling session, the failure
 taxonomy and the versioned criteria, and its helper reports Cohen's kappa
 between two experts, the disagreements to adjudicate, criteria drift, and a
-judge's true-positive and true-negative rates on a held-out split. The output is a test strategy,
+judge's true-positive and true-negative rates on a held-out split. It also
+covers quote and citation support checks, and repairing a failed stage from
+saved paid outputs without re-running them. The output is a test strategy,
 executable tests, evaluation assets or evidence-backed findings.
 
 **Invoke:** Claude Code `/adk-agent-evaluation` · Codex `$adk-agent-evaluation`
@@ -836,8 +840,10 @@ cases, failed actions and answers that falsely claim success.
 Use this when personal information or credentials could enter prompts, tools,
 conversation history, logs or public replies. It helps implement or review
 screening and data-handling rules, including Google Sensitive Data Protection
-and Model Armor integrations. Ask for a traced data flow, a focused code
-change and tests showing what happens when screening rejects data or fails.
+and Model Armor integrations, where a screen runs relative to the agent and
+its tools, and prompt text leaking through trace, completion-upload or
+analytics exporters. Ask for a traced data flow, a focused code change and
+tests showing what happens when screening rejects data or fails.
 
 **Invoke:** Claude Code `/protect-adk-sensitive-data` · Codex `$protect-adk-sensitive-data`
 
