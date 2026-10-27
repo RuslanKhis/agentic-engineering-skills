@@ -1,0 +1,2587 @@
+{
+ "schema": "activation-results/1",
+ "created": "2026-10-27T12:19:54+00:00",
+ "backend": "claude-cli",
+ "model": "claude-sonnet-5-5",
+ "seed": "20261027",
+ "batch_size": 14,
+ "repeats": 2,
+ "only": null,
+ "split": "heldout",
+ "commit": "2fefb5707ecede1513af3f77c2d361954b94a463",
+ "catalogue_sha256": "c00a4e0ff95b99ada42ee54f0e9fb4c7d83fd540cd99e9e8dcc4426c1871debe",
+ "corpus_sha256": "ac2f0e7cb0d08f3e33a5a2a021b33ce4fbdc52dcdf2d705a1d472f45b1f38fb1",
+ "skill_count": 26,
+ "case_count": 78,
+ "grading": "8 October 2026 rules; see scripts/run_activation.py",
+ "batches": [
+  {
+   "repeat": 1,
+   "batch": 1,
+   "cases": [
+    "engineer-heldout-4",
+    "release-heldout-2",
+    "tool-interface-heldout-2",
+    "tool-interface-heldout-3",
+    "optimise-heldout-1",
+    "discovery-heldout-1",
+    "engineer-heldout-3",
+    "workflow-heldout-4",
+    "workflow-heldout-2",
+    "security-heldout-3",
+    "portability-heldout-1",
+    "portability-heldout-2",
+    "release-heldout-3"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11363,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1170,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11363,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1170,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11363,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11363
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.057156,
+   "duration_s": 9.1,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 2,
+   "cases": [
+    "sql-heldout-2",
+    "sensitive-data-heldout-3",
+    "model-output-heldout-4",
+    "observability-heldout-1",
+    "sensitive-data-heldout-2",
+    "deploy-heldout-2",
+    "sensitive-data-heldout-1",
+    "auth-heldout-3",
+    "engineer-heldout-2",
+    "frontend-heldout-4",
+    "presenter-heldout-3",
+    "memory-heldout-3",
+    "practice-profile-heldout-2"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11053,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1215,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11053,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1215,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11053,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11053
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.056366,
+   "duration_s": 9.5,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 3,
+   "cases": [
+    "workflow-heldout-3",
+    "instructions-heldout-2",
+    "practice-profile-heldout-3",
+    "fastapi-backend-heldout-3",
+    "practice-profile-heldout-1",
+    "interoperability-heldout-3",
+    "guardrails-heldout-1",
+    "instructions-heldout-1",
+    "governance-pack-heldout-1",
+    "system-designer-heldout-2",
+    "tool-interface-heldout-1",
+    "sql-heldout-1",
+    "optimise-heldout-3"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11404,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1254,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11404,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1254,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11404,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11404
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.058159999999999996,
+   "duration_s": 9.5,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 4,
+   "cases": [
+    "system-designer-heldout-1",
+    "presenter-heldout-2",
+    "api-heldout-4",
+    "interoperability-heldout-1",
+    "evaluation-heldout-3",
+    "discovery-heldout-3",
+    "auth-heldout-1",
+    "frontend-heldout-1",
+    "presenter-heldout-1",
+    "fastapi-backend-heldout-1",
+    "instructions-heldout-3",
+    "model-output-heldout-1",
+    "evaluation-heldout-1"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11384,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1037,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11384,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1037,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11384,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11384
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.05591,
+   "duration_s": 8.6,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 5,
+   "cases": [
+    "guardrails-heldout-4",
+    "portability-heldout-3",
+    "api-heldout-1",
+    "guardrails-heldout-2",
+    "memory-heldout-1",
+    "evaluation-heldout-2",
+    "fastapi-backend-heldout-2",
+    "observability-heldout-2",
+    "auth-heldout-2",
+    "discovery-heldout-2",
+    "release-heldout-1",
+    "model-output-heldout-2",
+    "governance-pack-heldout-3"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11611,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1231,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11611,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1231,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11611,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11611
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.058758000000000005,
+   "duration_s": 9.5,
+   "attempts": 1
+  },
+  {
+   "repeat": 1,
+   "batch": 6,
+   "cases": [
+    "deploy-heldout-3",
+    "memory-heldout-2",
+    "security-heldout-1",
+    "governance-pack-heldout-2",
+    "sql-heldout-3",
+    "system-designer-heldout-3",
+    "deploy-heldout-1",
+    "security-heldout-2",
+    "api-heldout-2",
+    "optimise-heldout-2",
+    "frontend-heldout-2",
+    "interoperability-heldout-2",
+    "observability-heldout-3"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11683,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1272,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11683,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1272,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11683,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11683
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.059456,
+   "duration_s": 10.2,
+   "attempts": 1
+  },
+  {
+   "repeat": 2,
+   "batch": 1,
+   "cases": [
+    "presenter-heldout-3",
+    "memory-heldout-2",
+    "workflow-heldout-3",
+    "discovery-heldout-2",
+    "interoperability-heldout-3",
+    "governance-pack-heldout-2",
+    "sql-heldout-3",
+    "release-heldout-3",
+    "model-output-heldout-2",
+    "portability-heldout-1",
+    "evaluation-heldout-2",
+    "model-output-heldout-1",
+    "optimise-heldout-3"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11336,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1293,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11336,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1293,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11336,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11336
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.058278,
+   "duration_s": 9.9,
+   "attempts": 1
+  },
+  {
+   "repeat": 2,
+   "batch": 2,
+   "cases": [
+    "workflow-heldout-4",
+    "presenter-heldout-1",
+    "sensitive-data-heldout-2",
+    "api-heldout-1",
+    "security-heldout-3",
+    "memory-heldout-3",
+    "instructions-heldout-1",
+    "memory-heldout-1",
+    "governance-pack-heldout-3",
+    "frontend-heldout-1",
+    "system-designer-heldout-3",
+    "instructions-heldout-3",
+    "portability-heldout-2"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11102,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1146,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11102,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1146,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11102,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11102
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.055872000000000005,
+   "duration_s": 9.5,
+   "attempts": 1
+  },
+  {
+   "repeat": 2,
+   "batch": 3,
+   "cases": [
+    "evaluation-heldout-3",
+    "sql-heldout-2",
+    "fastapi-backend-heldout-2",
+    "interoperability-heldout-2",
+    "practice-profile-heldout-1",
+    "model-output-heldout-4",
+    "presenter-heldout-2",
+    "tool-interface-heldout-3",
+    "evaluation-heldout-1",
+    "observability-heldout-2",
+    "system-designer-heldout-1",
+    "discovery-heldout-3",
+    "practice-profile-heldout-3"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11393,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1172,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11393,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1172,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11393,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11393
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.057296,
+   "duration_s": 9.3,
+   "attempts": 1
+  },
+  {
+   "repeat": 2,
+   "batch": 4,
+   "cases": [
+    "api-heldout-4",
+    "release-heldout-2",
+    "engineer-heldout-2",
+    "workflow-heldout-2",
+    "sensitive-data-heldout-1",
+    "engineer-heldout-4",
+    "fastapi-backend-heldout-3",
+    "frontend-heldout-4",
+    "tool-interface-heldout-1",
+    "api-heldout-2",
+    "frontend-heldout-2",
+    "optimise-heldout-1",
+    "sql-heldout-1"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11678,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1229,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11678,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1229,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11678,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11678
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.059005999999999996,
+   "duration_s": 9.8,
+   "attempts": 1
+  },
+  {
+   "repeat": 2,
+   "batch": 5,
+   "cases": [
+    "observability-heldout-3",
+    "instructions-heldout-2",
+    "discovery-heldout-1",
+    "guardrails-heldout-1",
+    "optimise-heldout-2",
+    "guardrails-heldout-4",
+    "interoperability-heldout-1",
+    "engineer-heldout-3",
+    "guardrails-heldout-2",
+    "auth-heldout-2",
+    "fastapi-backend-heldout-1",
+    "system-designer-heldout-2",
+    "governance-pack-heldout-1"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11663,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1238,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11663,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1238,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11663,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11663
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.059036,
+   "duration_s": 9.9,
+   "attempts": 1
+  },
+  {
+   "repeat": 2,
+   "batch": 6,
+   "cases": [
+    "observability-heldout-1",
+    "portability-heldout-3",
+    "security-heldout-1",
+    "deploy-heldout-1",
+    "auth-heldout-3",
+    "deploy-heldout-3",
+    "auth-heldout-1",
+    "deploy-heldout-2",
+    "practice-profile-heldout-2",
+    "security-heldout-2",
+    "tool-interface-heldout-2",
+    "release-heldout-1",
+    "sensitive-data-heldout-3"
+   ],
+   "model": "claude-sonnet-5-5",
+   "usage": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 11328,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 1124,
+    "output_tokens_details": {
+     "thinking_tokens": 0
+    },
+    "server_tool_use": {
+     "web_search_requests": 0,
+     "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+     "ephemeral_1h_input_tokens": 11328,
+     "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+     {
+      "input_tokens": 2,
+      "output_tokens": 1124,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 11328,
+      "cache_creation": {
+       "ephemeral_5m_input_tokens": 0,
+       "ephemeral_1h_input_tokens": 11328
+      },
+      "type": "message"
+     }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+   },
+   "cost_usd": 0.056555999999999995,
+   "duration_s": 9.0,
+   "attempts": 1
+  }
+ ],
+ "cases": [
+  {
+   "id": "engineer-heldout-4",
+   "skill": "adk-engineer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-engineer",
+   "supporting": [],
+   "reason": "The request spans multiple ADK concerns (prompts, tools, frontend, backend, deployment) with no specialist chosen, so the cross-cutting starting-point skill should scope the plan.",
+   "grade": "PASS"
+  },
+  {
+   "id": "release-heldout-2",
+   "skill": "adk-release-engineering",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-release-engineering",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "Versioned release artifact, CI eval gates, staged rollout with joint rollback and refreshing eval sets from production are exactly the release lifecycle; evaluation supports the dataset design.",
+   "grade": "PASS"
+  },
+  {
+   "id": "tool-interface-heldout-2",
+   "skill": "adk-tool-interface-design",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [],
+   "reason": "AgentTool versus sub_agents choice, naming/description for tool selection, and actionable error returns are all covered by tool interface design.",
+   "grade": "PASS"
+  },
+  {
+   "id": "tool-interface-heldout-3",
+   "skill": "adk-tool-interface-design",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "A 403 on a BigQuery tool only after deploying to Agent Engine is an identity/keyless GCP credential issue, with deployment identity context as support.",
+   "grade": "PASS"
+  },
+  {
+   "id": "optimise-heldout-1",
+   "skill": "optimise-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Diagnosing time-to-first-token and cold start on Cloud Run with min-instances tradeoffs is measured ADK performance optimisation.",
+   "grade": "PASS"
+  },
+  {
+   "id": "discovery-heldout-1",
+   "skill": "adk-discovery",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-discovery",
+   "supporting": [],
+   "reason": "No use case is chosen yet; the user needs to find where AI pays off, pick a pilot, set baselines and judge technology fit (rules vs agent).",
+   "grade": "PASS"
+  },
+  {
+   "id": "engineer-heldout-3",
+   "skill": "adk-engineer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [],
+   "reason": "The model passing wrong arguments to a tool despite the docstring is a tool parameter schema and docstring design problem.",
+   "grade": "PASS"
+  },
+  {
+   "id": "workflow-heldout-4",
+   "skill": "adk-workflow-design",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-workflow-design",
+   "supporting": [],
+   "reason": "A KeyError or empty value for an output_key placeholder in a later agent's instruction is an output_key handoff contract issue in workflow design.",
+   "grade": "PASS"
+  },
+  {
+   "id": "workflow-heldout-2",
+   "skill": "adk-workflow-design",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-workflow-design",
+   "supporting": [],
+   "reason": "Choosing between Sequential, Parallel, Loop, custom BaseAgent or plain code (including whether regex needs an LLM) is orchestration selection.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-heldout-3",
+   "skill": "adk-agent-security",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "Secret Manager 403 and determining the runtime identity on Agent Engine is keyless GCP access and Secret Manager plumbing, with deployment identity as support.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-heldout-1",
+   "skill": "adk-portability-planning",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-portability-planning",
+   "supporting": [],
+   "reason": "Procurement's exit question calls for a stakeholder-ready portability plan with AWS/Azure alternatives, framework comparison, boundaries and phased effort without code changes.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-heldout-2",
+   "skill": "adk-portability-planning",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-portability-planning",
+   "supporting": [],
+   "reason": "A no-code vendor lock-in markdown report with portability, framework swap, risks and staged migration effort is the portability plan skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "release-heldout-3",
+   "skill": "adk-release-engineering",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "The suspected cause is a confusing tool docstring causing duplicate calls, which is tool interface design; repeated-tool protection from guardrails is a useful supporting skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sql-heldout-2",
+   "skill": "adk-sql-agent-engineering",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-sql-agent-engineering",
+   "supporting": [
+    "adk-agent-security"
+   ],
+   "reason": "Read-only controlled SQL execution, reviewed query templates, and the agent's dedicated BigQuery identity with setup and cleanup are exactly the SQL agent skill's scope; injection-resistant tool tiering is a secondary security concern.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sensitive-data-heldout-3",
+   "skill": "protect-adk-sensitive-data",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "Moving the Gemini API key and Postgres password to Secret Manager with runtime loading and rotation is secret handling, with GKE hosting details as support.",
+   "grade": "PASS"
+  },
+  {
+   "id": "model-output-heldout-4",
+   "skill": "adk-model-and-output-contracts",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-workflow-design",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "Session-state handoff of a parsed result that is lost between turns only on Agent Engine is a state/output_key runtime contract issue, with deployment target behavior as support.",
+   "grade": "PASS"
+  },
+  {
+   "id": "observability-heldout-1",
+   "skill": "adk-agent-observability",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-observability",
+   "supporting": [],
+   "reason": "Duplicated spans, missing tool-call spans and manual OpenTelemetry conflicting with ADK's own emission are telemetry instrumentation problems.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sensitive-data-heldout-2",
+   "skill": "protect-adk-sensitive-data",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "protect-adk-sensitive-data",
+   "supporting": [
+    "adk-frontend-integration"
+   ],
+   "reason": "Masking PII, Model Armor screening and guarded release of streamed responses are the sensitive-data skill's core, with SSE streaming to the frontend as support.",
+   "grade": "PASS"
+  },
+  {
+   "id": "deploy-heldout-2",
+   "skill": "deploy-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Hosting selection, minimal-permission identity, packaging, browser smoke test, recovery and cleanup are the deployment lifecycle.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sensitive-data-heldout-1",
+   "skill": "protect-adk-sensitive-data",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "protect-adk-sensitive-data",
+   "supporting": [],
+   "reason": "Redacting card numbers and passwords before the model, session storage, logs and tool args using SDP and Model Armor, including prerequisites, is exactly this skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "auth-heldout-3",
+   "skill": "adk-tool-auth-and-secrets",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "A 403 on Vertex AI from the Cloud Run runtime service account is a hosting identity and IAM issue in ADK deployment.",
+   "grade": "PASS"
+  },
+  {
+   "id": "engineer-heldout-2",
+   "skill": "adk-engineer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-engineer",
+   "supporting": [],
+   "reason": "An unscoped production-readiness request on an inherited ADK project spanning several concerns needs the starting-point skill to pick specialists and order.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-heldout-4",
+   "skill": "adk-frontend-integration",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [
+    "adk-agent-instructions"
+   ],
+   "reason": "The model calling search_catalog with wrong params points to tool schema and docstring design, and the invented product names to prompt grounding guidance.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-heldout-3",
+   "skill": "adk-presenter",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "Cutting token usage from repeated tool calls and resent in-session history in a specific sub-agent is a measured ADK optimisation, with repeated-tool protection as support.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-heldout-3",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Trimming or summarising growing in-session history within one chat is explicitly this skill's scope, not cross-session memory.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-heldout-2",
+   "skill": "practice-profile",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "practice-profile",
+   "supporting": [],
+   "reason": "Importing documents into per-org profiles kept outside projects, with review, correction and export, matches the practice profile's import, review and export actions.",
+   "grade": "PASS"
+  },
+  {
+   "id": "workflow-heldout-3",
+   "skill": "adk-workflow-design",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [
+    "adk-tool-auth-and-secrets"
+   ],
+   "reason": "A RefreshError on Cloud Run with the default compute service account is a deployment identity/IAM problem, with keyless GCP access to Firestore from the callback as a supporting concern.",
+   "grade": "PASS"
+  },
+  {
+   "id": "instructions-heldout-2",
+   "skill": "adk-agent-instructions",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-instructions",
+   "supporting": [
+    "adk-release-engineering"
+   ],
+   "reason": "Rewriting the instruction for a new model generation, fixing over-calling tools, the templating KeyError and few-shot exemplars with prompt-as-code regression tests all fall under adk-agent-instructions, with model migration versioning as support.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-heldout-3",
+   "skill": "practice-profile",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Cross-session memory of shopper preferences and past orders is exactly memory architecture with consent and retention boundaries.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-heldout-3",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [
+    "adk-agent-instructions"
+   ],
+   "reason": "The model passes wrong or fabricated arguments to a tool, which points at the tool's docstring and parameter schema rather than the instruction string, with instruction guidance as a secondary check.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-heldout-1",
+   "skill": "practice-profile",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "practice-profile",
+   "supporting": [],
+   "reason": "The user wants an interview-based personal profile kept outside the repo capturing client context and lessons across engagements, which is the practice-profile init action.",
+   "grade": "PASS"
+  },
+  {
+   "id": "interoperability-heldout-3",
+   "skill": "adk-agent-interoperability",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "A 403 from an internal service called by a tool when deployed is a tool credential issue (service-to-service identity token rather than local gcloud creds), with Cloud Run identity as support.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-heldout-1",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-operational-guardrails",
+   "supporting": [
+    "adk-model-and-output-contracts"
+   ],
+   "reason": "Runaway tool loops, invocation limits, per-user caps and staged cost shutdown are core guardrail work, with model downgrade to flash-lite touching model settings and failover.",
+   "grade": "PASS"
+  },
+  {
+   "id": "instructions-heldout-1",
+   "skill": "adk-agent-instructions",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-instructions",
+   "supporting": [],
+   "reason": "Mis-routing between sub-agents despite descriptions is a sub-agent description and routing instruction problem.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-heldout-1",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "The DPO's requests for regulatory screening, DPIA inputs, records of processing, transfer facts and a system description with flagged guesses are exactly the governance pack.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-heldout-2",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Turning an accepted design and plan into a client statement of work with scope, phases and effort is explicitly covered by adk-system-designer.",
+   "grade": "PASS"
+  },
+  {
+   "id": "tool-interface-heldout-1",
+   "skill": "adk-tool-interface-design",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [],
+   "reason": "Wrong tool selection and arguments, a 34-tool budget, dynamic toolsets, consolidation and bloated result size are all tool interface design concerns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sql-heldout-1",
+   "skill": "adk-sql-agent-engineering",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-sql-agent-engineering",
+   "supporting": [],
+   "reason": "Generated SQL referencing nonexistent columns and the need for selective schema feeding is the core of SQL agent engineering.",
+   "grade": "PASS"
+  },
+  {
+   "id": "optimise-heldout-3",
+   "skill": "optimise-adk-on-google-cloud",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [
+    "adk-tool-auth-and-secrets"
+   ],
+   "reason": "A RefreshError and missing aiplatform.user role on the Cloud Run service account is a deployment identity problem, with keyless GCP access as support.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-heldout-1",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "The use case is already approved and the user wants v1 scoping to a 6-week demo plus architecture trade-offs (single vs multi-agent, state, human handoff) before implementation.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-heldout-2",
+   "skill": "adk-presenter",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-presenter",
+   "supporting": [],
+   "reason": "A monthly value report to the sponsor (outcome against baseline, cost per outcome, continue/scale call) is explicitly covered by adk-presenter.",
+   "grade": "PASS"
+  },
+  {
+   "id": "api-heldout-4",
+   "skill": "safe-api-tool-calls",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-model-and-output-contracts",
+   "supporting": [],
+   "reason": "Retrying and handling the model's own 429/quota errors and failover across regions or models is owned by the model-contracts skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "interoperability-heldout-1",
+   "skill": "adk-agent-interoperability",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-interoperability",
+   "supporting": [],
+   "reason": "Consuming an MCP server with McpToolset covers transport choice, tool_filter and connection timeouts.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-heldout-3",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-agent-observability"
+   ],
+   "reason": "A measured latency regression on Cloud Run requires diagnosing model and tool time, with Cloud Trace reading as supporting trace-debugging help.",
+   "grade": "PASS"
+  },
+  {
+   "id": "discovery-heldout-3",
+   "skill": "adk-discovery",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-instructions",
+   "supporting": [],
+   "reason": "Wrong sub-agent routing driven by instructions and sub-agent descriptions is a prompt and routing-description problem.",
+   "grade": "PASS"
+  },
+  {
+   "id": "auth-heldout-1",
+   "skill": "adk-tool-auth-and-secrets",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [],
+   "reason": "Replacing a committed service account key with per-user delegated OAuth and keeping refresh tokens out of session events is the core of this skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-heldout-1",
+   "skill": "adk-frontend-integration",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-frontend-integration",
+   "supporting": [],
+   "reason": "Mapping stream events to tool-call UI states and handling partial text in the browser is an agent-to-browser streaming contract task.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-heldout-1",
+   "skill": "adk-presenter",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-presenter",
+   "supporting": [],
+   "reason": "The user needs a production-decision deck outline with evidence citations, talking points, expected questions and a one-page decision memo.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-heldout-1",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Alembic migrations beside ADK session tables and an owner-filtered GET /projects route are both FastAPI backend and application data concerns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "instructions-heldout-3",
+   "skill": "adk-agent-instructions",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "A tool call that works locally but times out when deployed points to deployment, networking and identity issues in the hosting environment.",
+   "grade": "PASS"
+  },
+  {
+   "id": "model-output-heldout-1",
+   "skill": "adk-model-and-output-contracts",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-model-and-output-contracts",
+   "supporting": [],
+   "reason": "The request covers output_schema with tools, structured-output repair and temperature or thinking settings.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-heldout-1",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-evaluation",
+   "supporting": [],
+   "reason": "The user wants a repeatable eval set including multi-turn conversations and a score comparison between versions, which is the evaluation skill's job.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-heldout-4",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-memory-architecture"
+   ],
+   "reason": "Latency and token burn from a large static document re-sent every turn is a measured optimisation/context-growth problem, with RAG as a possible retrieval architecture choice.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-heldout-3",
+   "skill": "adk-portability-planning",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "none",
+   "supporting": [],
+   "reason": "The request is to build a migration to Azure (Cosmos DB sessions, Azure OpenAI), which is explicitly outside adk-portability-planning (writes a plan only, no code) and no skill covers building on another platform.",
+   "grade": "PASS"
+  },
+  {
+   "id": "api-heldout-1",
+   "skill": "safe-api-tool-calls",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "safe-api-tool-calls",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "Duplicate bookings from retries on an ambiguous POST need idempotency keys and run-once approved writes, with the cross-turn confirmation/resume flow touching the approval mechanics.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-heldout-2",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-operational-guardrails",
+   "supporting": [],
+   "reason": "Human approval with durable review records, pause/resume flow and invocation step limits are exactly the guardrails skill's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-heldout-1",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Cross-session memory with consent, retention, and erasure boundaries on Vertex is the memory architecture skill's core remit.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-heldout-2",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-evaluation",
+   "supporting": [],
+   "reason": "Expert labelling, rubric design, judge calibration/agreement and simulated conversations are all covered by the evaluation skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-heldout-2",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-fastapi-backend",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "CORS, security headers, OpenAPI contract cleanup, generated client and Cloud Run process shape (uvicorn without --reload) are FastAPI backend work, with Dockerfile packaging touching deployment.",
+   "grade": "PASS"
+  },
+  {
+   "id": "observability-heldout-2",
+   "skill": "adk-agent-observability",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-observability",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "Cost accounting, alerts, trace-to-session debugging, operations handover and a postmortem are observability scope, while the 40-call tool loop relates to repeated-tool protection.",
+   "grade": "PASS"
+  },
+  {
+   "id": "auth-heldout-2",
+   "skill": "adk-tool-auth-and-secrets",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [],
+   "reason": "Per-user delegated OAuth tokens, Secret Manager, revocation/refresh and cross-user isolation at the tool hop are this skill's exact scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "discovery-heldout-2",
+   "skill": "adk-discovery",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-discovery",
+   "supporting": [],
+   "reason": "No use case is chosen yet, and the user wants a discovery framework, ranking and baseline metrics, which is what adk-discovery provides.",
+   "grade": "PASS"
+  },
+  {
+   "id": "release-heldout-1",
+   "skill": "adk-release-engineering",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-release-engineering",
+   "supporting": [],
+   "reason": "Model deprecation, bundled versioning, CI eval gate, canary and joint rollback are the release lifecycle skill's core.",
+   "grade": "PASS"
+  },
+  {
+   "id": "model-output-heldout-2",
+   "skill": "adk-model-and-output-contracts",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-model-and-output-contracts",
+   "supporting": [
+    "adk-release-engineering"
+   ],
+   "reason": "Choosing a replacement Gemini model, thinking settings, FallbackModel for 429/503 and centralising model config fit the model contracts skill, with the migration deadline touching release engineering.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-heldout-3",
+   "skill": "adk-governance-pack",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "protect-adk-sensitive-data",
+   "supporting": [],
+   "reason": "Redacting PII from prompts and logs before logging fires is a sensitive-data boundary implementation.",
+   "grade": "PASS"
+  },
+  {
+   "id": "deploy-heldout-3",
+   "skill": "deploy-adk-on-google-cloud",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-observability",
+   "supporting": [
+    "optimise-adk-on-google-cloud"
+   ],
+   "reason": "A production ADK agent suddenly slow with unclear cause needs trace-based debugging of latency, with optimisation guidance for the BigQuery tool hang as follow-up.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-heldout-2",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-memory-architecture",
+   "supporting": [
+    "adk-agent-security"
+   ],
+   "reason": "Per-page ingestion triage of scans, tables and drawings plus governed RAG with identity-scoped retrieval is memory-architecture work, and tenant isolation is a security concern.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-heldout-1",
+   "skill": "adk-agent-security",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-security",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "Prompt-injection review of an agent that reads untrusted email and can act (refunds) plus an adversarial test suite is the security skill's core remit, with evaluation for the pytest harness.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-heldout-2",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "Impact assessment, ATRS record, security questionnaire and cross-border transfer facts from repo evidence with gaps flagged for counsel match the governance pack exactly.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sql-heldout-3",
+   "skill": "adk-sql-agent-engineering",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Tuning a slow BigQuery MERGE job is ordinary SQL optimisation, which the SQL agent skill explicitly excludes and no other skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-heldout-3",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "safe-api-tool-calls",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "A tool call hitting DeadlineExceeded on an external API call is a deadline problem for safe API tools, with possible Agent Runtime hosting timeout settings as supporting context.",
+   "grade": "PASS"
+  },
+  {
+   "id": "deploy-heldout-1",
+   "skill": "deploy-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Choosing a hosting target and covering identity, containerizing, UI validation, rollback and cleanup is the deployment lifecycle skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-heldout-2",
+   "skill": "adk-agent-security",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-security",
+   "supporting": [
+    "adk-agent-interoperability"
+   ],
+   "reason": "A threat model covering injection, MCP supply-chain risk, code execution and least privilege with CI injection tests is whole-agent security, with MCP wiring as secondary.",
+   "grade": "PASS"
+  },
+  {
+   "id": "api-heldout-2",
+   "skill": "safe-api-tool-calls",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "safe-api-tool-calls",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "Exactly-once approved writes, ambiguous 504 outcomes and never running rejected ones is the write side of confirmation, with durable approval records from guardrails.",
+   "grade": "PASS"
+  },
+  {
+   "id": "optimise-heldout-2",
+   "skill": "optimise-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-agent-observability"
+   ],
+   "reason": "In-session history growth, HPA scaling and measured before/after numbers are optimisation work on GKE, with instrumentation help from observability.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-heldout-2",
+   "skill": "adk-frontend-integration",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-frontend-integration",
+   "supporting": [
+    "adk-fastapi-backend"
+   ],
+   "reason": "Choosing between a custom JSON API and CopilotKit, with session resume, approval UI and mid-stream error handling, is frontend integration, with the FastAPI wrapper as backend support.",
+   "grade": "PASS"
+  },
+  {
+   "id": "interoperability-heldout-2",
+   "skill": "adk-agent-interoperability",
+   "should_trigger": true,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "adk-agent-interoperability",
+   "supporting": [
+    "adk-tool-auth-and-secrets"
+   ],
+   "reason": "Exposing an agent via A2A with agent card and cross-framework callers is interoperability, with cross-project auth as a supporting concern.",
+   "grade": "PASS"
+  },
+  {
+   "id": "observability-heldout-3",
+   "skill": "adk-agent-observability",
+   "should_trigger": false,
+   "repeat": 1,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-workflow-design"
+   ],
+   "reason": "Latency already traced to stacked model calls needs measured optimisation, with workflow design relevant to parallelising or restructuring the sequential sub-agents.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-heldout-3",
+   "skill": "adk-presenter",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-tool-interface-design"
+   ],
+   "reason": "Cutting token usage from re-sent in-session history and repeated search tool calls is a measured optimisation of context growth, with tool-call behaviour possibly tied to the tool interface design.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-heldout-2",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-memory-architecture",
+   "supporting": [
+    "adk-agent-security"
+   ],
+   "reason": "Per-page ingestion triage of scans, tables and drawings plus governed RAG with tenant isolation enforced at retrieval is memory/retrieval architecture, with cross-tenant leakage a security boundary concern.",
+   "grade": "PASS"
+  },
+  {
+   "id": "workflow-heldout-3",
+   "skill": "adk-workflow-design",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "A RefreshError when a callback calls Firestore with the default compute service account is a keyless GCP credential/identity problem on a Cloud Run deployment.",
+   "grade": "PASS"
+  },
+  {
+   "id": "discovery-heldout-2",
+   "skill": "adk-discovery",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-discovery",
+   "supporting": [],
+   "reason": "No use case is chosen yet, and the user wants a discovery framework, a ranking of candidates, baseline metrics and a view on claims triage as a first pick.",
+   "grade": "PASS"
+  },
+  {
+   "id": "interoperability-heldout-3",
+   "skill": "adk-agent-interoperability",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "A 403 from a tool calling an internal API with the Cloud Run service identity is a tool credential/keyless identity issue, with deployment identity as context.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-heldout-2",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "Impact assessment, ATRS record, security questionnaire and cross-border transfer facts for UK and Canadian reviewers, citing evidence and flagging gaps for counsel, is exactly the governance pack.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sql-heldout-3",
+   "skill": "adk-sql-agent-engineering",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Tuning a slow scheduled BigQuery MERGE job is ordinary SQL optimisation, which the SQL agent skill explicitly excludes and no other skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "release-heldout-3",
+   "skill": "adk-release-engineering",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [
+    "adk-agent-instructions"
+   ],
+   "reason": "The model repeatedly calling lookup_order with the same args suspected to stem from a confusing docstring is a tool interface problem, with the prompt's tool-use guidance as a possible factor.",
+   "grade": "PASS"
+  },
+  {
+   "id": "model-output-heldout-2",
+   "skill": "adk-model-and-output-contracts",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-model-and-output-contracts",
+   "supporting": [
+    "adk-release-engineering"
+   ],
+   "reason": "Choosing a replacement Gemini model, thinking settings and FallbackModel for 429/503 is model selection and failover, while the retirement migration plan across agents is release engineering.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-heldout-1",
+   "skill": "adk-portability-planning",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-portability-planning",
+   "supporting": [],
+   "reason": "A non-code, stakeholder-readable doc on lock-in, AWS/Azure and other-framework migration with phased effort sizing is exactly the portability plan.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-heldout-2",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-agent-evaluation",
+   "supporting": [],
+   "reason": "Labelling sessions with adjusters, rubric, judge calibration against human agreement and simulated conversations are all core agent evaluation topics.",
+   "grade": "PASS"
+  },
+  {
+   "id": "model-output-heldout-1",
+   "skill": "adk-model-and-output-contracts",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-model-and-output-contracts",
+   "supporting": [],
+   "reason": "Structured output arriving as fenced or prose-wrapped JSON, output_schema with tools, and temperature with thinking models are output contract and model settings questions.",
+   "grade": "PASS"
+  },
+  {
+   "id": "optimise-heldout-3",
+   "skill": "optimise-adk-on-google-cloud",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [
+    "adk-tool-auth-and-secrets"
+   ],
+   "reason": "A Cloud Run deployment failing with RefreshError and a service account missing aiplatform.user is a deployment identity problem, with keyless GCP access as the supporting concern.",
+   "grade": "PASS"
+  },
+  {
+   "id": "workflow-heldout-4",
+   "skill": "adk-workflow-design",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-workflow-design",
+   "supporting": [],
+   "reason": "A later agent's {findings} placeholder raising KeyError or empty because output_key handoff isn't reliably written is an explicit workflow-design state handoff issue.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-heldout-1",
+   "skill": "adk-presenter",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-presenter",
+   "supporting": [],
+   "reason": "A decision deck outline with evidence citations, talking points, expected questions and a one-page memo for a production decision is exactly adk-presenter's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sensitive-data-heldout-2",
+   "skill": "protect-adk-sensitive-data",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "protect-adk-sensitive-data",
+   "supporting": [],
+   "reason": "Masking PII before model and logs and screening prompts/responses with Model Armor, including streamed release, is the core of the sensitive-data skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "api-heldout-1",
+   "skill": "safe-api-tool-calls",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "safe-api-tool-calls",
+   "supporting": [],
+   "reason": "Duplicate bookings from retries on a hanging API, idempotency key choice and once-only approved write replay are the safe-api-tool-calls domain.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-heldout-3",
+   "skill": "adk-agent-security",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "A 403 from Secret Manager on Agent Engine is a keyless GCP identity and Secret Manager access problem, with the runtime identity depending on the deployment target.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-heldout-3",
+   "skill": "adk-memory-architecture",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Trimming or summarising growing in-session history and tool outputs for context size is explicitly owned by the optimisation skill, not memory architecture.",
+   "grade": "PASS"
+  },
+  {
+   "id": "instructions-heldout-1",
+   "skill": "adk-agent-instructions",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-agent-instructions",
+   "supporting": [],
+   "reason": "Wrong sub-agent routing despite descriptions and delegation instruction is a prompt and sub-agent description routing issue.",
+   "grade": "PASS"
+  },
+  {
+   "id": "memory-heldout-1",
+   "skill": "adk-memory-architecture",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-memory-architecture",
+   "supporting": [
+    "protect-adk-sensitive-data"
+   ],
+   "reason": "Cross-session memory with consent, erasure and 18-month retention is memory architecture, with sensitive guest data such as allergies adding data-protection considerations.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-heldout-3",
+   "skill": "adk-governance-pack",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "protect-adk-sensitive-data",
+   "supporting": [],
+   "reason": "Redacting emails and phone numbers before they reach Cloud Logging is a PII exposure control in logs.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-heldout-1",
+   "skill": "adk-frontend-integration",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-frontend-integration",
+   "supporting": [],
+   "reason": "Mapping /run_sse stream events to a tool-timeline UI state and handling partial text during tool calls is agent-to-browser streaming contract work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-heldout-3",
+   "skill": "adk-system-designer",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "safe-api-tool-calls",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "Tool calls dying at a ~30s deadline are a cooperative deadline and external-call issue, with the Agent Engine hosting timeout possibly involved.",
+   "grade": "PASS"
+  },
+  {
+   "id": "instructions-heldout-3",
+   "skill": "adk-agent-instructions",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [
+    "safe-api-tool-calls"
+   ],
+   "reason": "A tool timing out at 60s only in the deployed environment calling an internal API points to hosting/networking, with the call's deadline handling as secondary.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-heldout-2",
+   "skill": "adk-portability-planning",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-portability-planning",
+   "supporting": [],
+   "reason": "A no-code markdown vendor lock-in report with AWS/Azure alternatives, framework swap, risks and phased effort is exactly the portability plan.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-heldout-3",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-agent-observability"
+   ],
+   "reason": "A measured latency regression on Cloud Run requiring diagnosis of slow model/tool calls via traces is optimisation work, with observability help for reading Cloud Trace.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sql-heldout-2",
+   "skill": "adk-sql-agent-engineering",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-sql-agent-engineering",
+   "supporting": [
+    "adk-tool-auth-and-secrets"
+   ],
+   "reason": "Read-only controlled execution, reviewed query templates and the agent's BigQuery identity, setup and cleanup are core to the SQL agent skill, with dedicated keyless service account credentials support.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-heldout-2",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-fastapi-backend",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "CORS, security headers, OpenAPI contract/client generation and Cloud Run process shape (uvicorn without reload) are FastAPI backend concerns, with deployment packaging help for the Dockerfile.",
+   "grade": "PASS"
+  },
+  {
+   "id": "interoperability-heldout-2",
+   "skill": "adk-agent-interoperability",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-agent-interoperability",
+   "supporting": [
+    "adk-tool-auth-and-secrets"
+   ],
+   "reason": "Exposing an ADK agent via A2A with agent card and cross-project consumers is interoperability work, with auth concerns as supporting.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-heldout-1",
+   "skill": "practice-profile",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "practice-profile",
+   "supporting": [],
+   "reason": "The user wants an interview-based personal practice profile kept outside the repo, capturing client context and lessons for later engagements.",
+   "grade": "PASS"
+  },
+  {
+   "id": "model-output-heldout-4",
+   "skill": "adk-model-and-output-contracts",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-workflow-design",
+   "supporting": [],
+   "reason": "Session-state handoff of a parsed result being lost between turns is a session-state/output_key runtime contract issue.",
+   "grade": "PASS"
+  },
+  {
+   "id": "presenter-heldout-2",
+   "skill": "adk-presenter",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-presenter",
+   "supporting": [],
+   "reason": "A monthly value report to the sponsor with outcome against baseline and cost per outcome is explicitly covered by the presenter skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "tool-interface-heldout-3",
+   "skill": "adk-tool-interface-design",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "A 403 from a BigQuery tool only after deployment points to the runtime identity/keyless GCP access for the tool, with deployment identity as supporting.",
+   "grade": "PASS"
+  },
+  {
+   "id": "evaluation-heldout-1",
+   "skill": "adk-agent-evaluation",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-agent-evaluation",
+   "supporting": [
+    "adk-tool-interface-design"
+   ],
+   "reason": "A repeatable eval set with multi-turn conversations and score diffs between versions is evaluation work, while wrong tool selection may need tool interface review.",
+   "grade": "PASS"
+  },
+  {
+   "id": "observability-heldout-2",
+   "skill": "adk-agent-observability",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-agent-observability",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "Handover monitoring, cost accounting, alerts, runbook and a blameless postmortem are observability territory, and the 40-iteration tool loop calls for loop protection guardrails.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-heldout-1",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Scoping a 6-week demo into v1 versus later phases and sketching the architecture before implementation is system design.",
+   "grade": "PASS"
+  },
+  {
+   "id": "discovery-heldout-3",
+   "skill": "adk-discovery",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-agent-instructions",
+   "supporting": [],
+   "reason": "Flaky sub-agent routing due to instructions and sub-agent descriptions is an instruction/routing issue, and the use case is already chosen so discovery does not apply.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-heldout-3",
+   "skill": "practice-profile",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-memory-architecture",
+   "supporting": [],
+   "reason": "Cross-session memory of shopper preferences and past orders is memory architecture work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "api-heldout-4",
+   "skill": "safe-api-tool-calls",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-model-and-output-contracts",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "Retrying the model's own 429/quota ResourceExhausted errors and failover or regional spreading falls under model settings and FallbackModel decisions in adk-model-and-output-contracts.",
+   "grade": "PASS"
+  },
+  {
+   "id": "release-heldout-2",
+   "skill": "adk-release-engineering",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-release-engineering",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "The request is about versioned release artifacts, CI eval gates, staged rollout with joint rollback and refreshing stale eval sets from production, which is the release lifecycle.",
+   "grade": "PASS"
+  },
+  {
+   "id": "engineer-heldout-2",
+   "skill": "adk-engineer",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-engineer",
+   "supporting": [],
+   "reason": "The user has not chosen a specialist and the vague 'production ready' ask spans several ADK concerns, so the engineer entry point should triage which specialists apply.",
+   "grade": "PASS"
+  },
+  {
+   "id": "workflow-heldout-2",
+   "skill": "adk-workflow-design",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-workflow-design",
+   "supporting": [],
+   "reason": "Choosing between Sequential/Parallel/Loop, a custom BaseAgent, or plain code for the regex step is a workflow control-flow selection question.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sensitive-data-heldout-1",
+   "skill": "protect-adk-sensitive-data",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "protect-adk-sensitive-data",
+   "supporting": [],
+   "reason": "Redacting PII and credentials in prompts, tool args, session history and logs with SDP and Model Armor, including prerequisites, is exactly this skill's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "engineer-heldout-4",
+   "skill": "adk-engineer",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-engineer",
+   "supporting": [],
+   "reason": "Multi-language support is a feature spanning frontend, backend, tools, prompts and deployment, needing a plan across several ADK specialists.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-heldout-3",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [
+    "adk-agent-instructions"
+   ],
+   "reason": "The model passes wrong or invented arguments to lookup_invoice, pointing to the tool's docstring and parameter schema, with instruction tweaks as a secondary factor.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-heldout-4",
+   "skill": "adk-frontend-integration",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [
+    "adk-agent-instructions"
+   ],
+   "reason": "Wrong params to search_catalog is a tool schema and docstring problem, and the made-up product names may also need prompt guidance on grounding in tool results.",
+   "grade": "PASS"
+  },
+  {
+   "id": "tool-interface-heldout-1",
+   "skill": "adk-tool-interface-design",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [],
+   "reason": "Wrong tool selection, argument mix-ups, bloated results, renaming/merging and dynamic toolsets for 34 tools are all tool interface design concerns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "api-heldout-2",
+   "skill": "safe-api-tool-calls",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "safe-api-tool-calls",
+   "supporting": [
+    "adk-operational-guardrails"
+   ],
+   "reason": "Exactly-once approved writes, no side effect on rejected confirmation, and reconciling ambiguous gateway timeouts are the write side of confirmation and idempotency covered by safe-api-tool-calls, with approval records in guardrails.",
+   "grade": "PASS"
+  },
+  {
+   "id": "frontend-heldout-2",
+   "skill": "adk-frontend-integration",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-frontend-integration",
+   "supporting": [
+    "adk-fastapi-backend"
+   ],
+   "reason": "Choosing between a custom JSON API and AG-UI/CopilotKit with session resume, approval UI and mid-stream error states is the frontend integration skill's core.",
+   "grade": "PASS"
+  },
+  {
+   "id": "optimise-heldout-1",
+   "skill": "optimise-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Diagnosing time to first token, cold start, startup and concurrency trade-offs on Cloud Run with measured changes is an optimisation task.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sql-heldout-1",
+   "skill": "adk-sql-agent-engineering",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-sql-agent-engineering",
+   "supporting": [],
+   "reason": "Hallucinated columns in generated SQL and how to supply selective schema to a natural-language analytics agent is the SQL agent skill's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "observability-heldout-3",
+   "skill": "adk-agent-observability",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-workflow-design"
+   ],
+   "reason": "Measured latency from stacked sequential model calls is an optimisation task, and the SequentialAgent structure may be restructured (parallelism, collapsing agents).",
+   "grade": "PASS"
+  },
+  {
+   "id": "instructions-heldout-2",
+   "skill": "adk-agent-instructions",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-agent-instructions",
+   "supporting": [
+    "adk-workflow-design",
+    "adk-release-engineering"
+   ],
+   "reason": "Rewriting the instruction for a new model generation with few-shot exemplars and fixing templating KeyErrors is instruction work, with prompt-as-code regression and versioning handled by release engineering and the state-key handoff by workflow design.",
+   "grade": "PASS"
+  },
+  {
+   "id": "discovery-heldout-1",
+   "skill": "adk-discovery",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-discovery",
+   "supporting": [],
+   "reason": "Choosing where AI pays off, selecting a pilot, baselines and agent-vs-rules technology fit is exactly discovery.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-heldout-1",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-operational-guardrails",
+   "supporting": [
+    "adk-model-and-output-contracts"
+   ],
+   "reason": "Tool-call and turn limits, per-user caps, repeated-tool protection and staged cost shutdown are guardrails; model downgrade to flash-lite touches model configuration.",
+   "grade": "PASS"
+  },
+  {
+   "id": "optimise-heldout-2",
+   "skill": "optimise-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-agent-observability"
+   ],
+   "reason": "History growth, HPA scaling and measured before/after numbers on GKE are optimisation work, with instrumentation help from observability.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-heldout-4",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-memory-architecture"
+   ],
+   "reason": "Latency and token cost from resending a large document is an optimisation question (context caching), with RAG as an alternative architecture.",
+   "grade": "PASS"
+  },
+  {
+   "id": "interoperability-heldout-1",
+   "skill": "adk-agent-interoperability",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-agent-interoperability",
+   "supporting": [],
+   "reason": "Consuming an MCP server with McpToolset, transport choice, tool_filter and timeouts is MCP wiring.",
+   "grade": "PASS"
+  },
+  {
+   "id": "engineer-heldout-3",
+   "skill": "adk-engineer",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [],
+   "reason": "The model passing wrong arguments despite the docstring is a tool schema and parameter design problem.",
+   "grade": "PASS"
+  },
+  {
+   "id": "guardrails-heldout-2",
+   "skill": "adk-operational-guardrails",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-operational-guardrails",
+   "supporting": [
+    "safe-api-tool-calls"
+   ],
+   "reason": "Human approval with durable review records, resume flow and step limits are guardrails; the write executing once on approval relates to safe write handling.",
+   "grade": "PASS"
+  },
+  {
+   "id": "auth-heldout-2",
+   "skill": "adk-tool-auth-and-secrets",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [],
+   "reason": "Per-user delegated OAuth tokens, Secret Manager, revocation and cross-user isolation at the tool hop are the core of this skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "fastapi-backend-heldout-1",
+   "skill": "adk-fastapi-backend",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-fastapi-backend",
+   "supporting": [],
+   "reason": "Alembic migrations beside ADK session tables and an owner-filtered route for the verified Firebase user are backend concerns.",
+   "grade": "PASS"
+  },
+  {
+   "id": "system-designer-heldout-2",
+   "skill": "adk-system-designer",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-system-designer",
+   "supporting": [],
+   "reason": "Turning a design and plan into a client statement of work is explicitly covered by the system designer.",
+   "grade": "PASS"
+  },
+  {
+   "id": "governance-pack-heldout-1",
+   "skill": "adk-governance-pack",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-governance-pack",
+   "supporting": [],
+   "reason": "Screening applicable laws and drafting DPIA input, records of processing and system description from project evidence, flagged for counsel, is the governance pack.",
+   "grade": "PASS"
+  },
+  {
+   "id": "observability-heldout-1",
+   "skill": "adk-agent-observability",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-agent-observability",
+   "supporting": [],
+   "reason": "Duplicated and missing ADK spans in Cloud Trace is a telemetry instrumentation and environment-gate problem.",
+   "grade": "PASS"
+  },
+  {
+   "id": "portability-heldout-3",
+   "skill": "adk-portability-planning",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "none",
+   "supporting": [],
+   "reason": "Rewriting the session service for Cosmos DB and swapping to Azure OpenAI is building on another platform, which the portability skill explicitly excludes and no other skill covers.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-heldout-1",
+   "skill": "adk-agent-security",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-agent-security",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "An attacker-style review of an agent that reads untrusted email and can act, plus an adversarial test suite, is the security skill's core; evaluation helps with the pytest harness.",
+   "grade": "PASS"
+  },
+  {
+   "id": "deploy-heldout-1",
+   "skill": "deploy-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "Hosting choice, service account, containerizing, post-deploy validation, rollback and cleanup are all deployment lifecycle work.",
+   "grade": "PASS"
+  },
+  {
+   "id": "auth-heldout-3",
+   "skill": "adk-tool-auth-and-secrets",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "The runtime identity's missing IAM role for Vertex AI on Cloud Run is a deployment identity issue.",
+   "grade": "PASS"
+  },
+  {
+   "id": "deploy-heldout-3",
+   "skill": "deploy-adk-on-google-cloud",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "optimise-adk-on-google-cloud",
+   "supporting": [
+    "adk-agent-observability"
+   ],
+   "reason": "Diagnosing slow time-to-first-token and tool latency on a running Cloud Run agent is performance diagnosis, with traces helping locate the hang.",
+   "grade": "PASS"
+  },
+  {
+   "id": "auth-heldout-1",
+   "skill": "adk-tool-auth-and-secrets",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [],
+   "reason": "Moving from a committed service account key to per-user delegated OAuth and keeping refresh tokens out of session events is this skill's scope.",
+   "grade": "PASS"
+  },
+  {
+   "id": "deploy-heldout-2",
+   "skill": "deploy-adk-on-google-cloud",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "deploy-adk-on-google-cloud",
+   "supporting": [],
+   "reason": "First deployment needing hosting choice, minimal identity, packaging, smoke test, rollback and cleanup matches the deployment skill.",
+   "grade": "PASS"
+  },
+  {
+   "id": "practice-profile-heldout-2",
+   "skill": "practice-profile",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "practice-profile",
+   "supporting": [],
+   "reason": "Importing past client documents into per-org profiles outside repos, with review, correction and export, is exactly the practice profile's import, review and export actions.",
+   "grade": "PASS"
+  },
+  {
+   "id": "security-heldout-2",
+   "skill": "adk-agent-security",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-agent-security",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "A threat model covering injection, MCP supply chain, code execution and least privilege with CI injection tests is the security skill; evaluation supports the test suite.",
+   "grade": "PASS"
+  },
+  {
+   "id": "tool-interface-heldout-2",
+   "skill": "adk-tool-interface-design",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-interface-design",
+   "supporting": [],
+   "reason": "The AgentTool versus sub_agents choice, tool naming and description, and actionable error returns are covered by tool interface design.",
+   "grade": "PASS"
+  },
+  {
+   "id": "release-heldout-1",
+   "skill": "adk-release-engineering",
+   "should_trigger": true,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-release-engineering",
+   "supporting": [
+    "adk-agent-evaluation"
+   ],
+   "reason": "Model deprecation migration, versioned bundles, CI eval gates, canary and joint rollback are release lifecycle work, with evaluation for the golden set.",
+   "grade": "PASS"
+  },
+  {
+   "id": "sensitive-data-heldout-3",
+   "skill": "protect-adk-sensitive-data",
+   "should_trigger": false,
+   "repeat": 2,
+   "split": "heldout",
+   "primary": "adk-tool-auth-and-secrets",
+   "supporting": [
+    "deploy-adk-on-google-cloud"
+   ],
+   "reason": "Moving the API key and database password to Secret Manager with rotation is secrets handling, with GKE runtime wiring from the deployment skill.",
+   "grade": "PASS"
+  }
+ ],
+ "summary": {
+  "overall": {
+   "PASS": 156,
+   "PARTIAL": 0,
+   "FAIL": 0,
+   "ERROR": 0
+  },
+  "by_repeat": {
+   "1": {
+    "PASS": 78,
+    "PARTIAL": 0,
+    "FAIL": 0,
+    "ERROR": 0
+   },
+   "2": {
+    "PASS": 78,
+    "PARTIAL": 0,
+    "FAIL": 0,
+    "ERROR": 0
+   }
+  },
+  "by_split": {
+   "heldout": {
+    "PASS": 156,
+    "PARTIAL": 0,
+    "FAIL": 0,
+    "ERROR": 0
+   }
+  },
+  "not_pass": {}
+ }
+}
