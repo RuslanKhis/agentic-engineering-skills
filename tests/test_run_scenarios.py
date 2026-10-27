@@ -259,6 +259,14 @@ class AgentAndJudgeTests(unittest.TestCase):
         self.assertEqual(summary["skill_md_reads"], ["beta-skill"])
         self.assertEqual(summary["permission_denials"][0]["tool"], "Read")
 
+    def test_leading_slash_command_counts_as_loading_a_catalogued_skill(self):
+        transcript = [json.dumps({"type": "system", "subtype": "init", "skills": ["alpha-skill", "beta-skill"]})]
+        summary = scen.parse_transcript(transcript, "/beta-skill Carry out docs/tickets/G01.md.")
+        self.assertEqual(summary["skills_loaded"], ["beta-skill"])
+        self.assertEqual(scen.skill_md_loaded(summary, ["beta-skill"])["beta-skill"]["how"], "slash-command")
+        self.assertEqual(scen.parse_transcript(transcript, "/gamma-skill go")["skills_loaded"], [])
+        self.assertEqual(scen.parse_transcript(transcript, "Use /beta-skill later")["skills_loaded"], [])
+
     def test_skill_md_loaded_per_installed_skill(self):
         summary = scen.parse_transcript(TRANSCRIPT)
         report = scen.skill_md_loaded(summary, ["alpha-skill", "beta-skill", "gamma-skill"])

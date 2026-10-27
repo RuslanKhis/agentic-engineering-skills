@@ -330,11 +330,19 @@ def confinement(tools: str, skill_install: str) -> dict:
             "confined_to_workspace": not unconfined}
 
 
-def parse_transcript(lines: list[str]) -> dict:
-    """Summarise a stream-json transcript: final text, tool calls, skills loaded, refusals, usage."""
+SLASH_COMMAND = re.compile(r"^\s*/([a-z0-9][a-z0-9-]*)\b")
+
+
+def parse_transcript(lines: list[str], prompt: str = "") -> dict:
+    """Summarise a stream-json transcript: final text, tool calls, skills loaded, refusals, usage.
+
+    A prompt that starts with ``/<skill>`` is expanded by Claude Code into that skill's
+    instructions before the first turn; the stream does not echo it, so it is counted
+    from the prompt when the skill is in the session's catalogue.
+    """
     summary = {"final": "", "texts": [], "tool_calls": [], "skills_loaded": [], "skill_tool_calls": [],
-               "skill_md_reads": [], "skill_files_read": [], "result": None, "catalogue": None,
-               "permission_denials": []}
+               "skill_md_reads": [], "skill_files_read": [], "slash_commands": [], "result": None,
+               "catalogue": None, "permission_denials": []}
     for line in lines:
         try:
             event = json.loads(line)
@@ -371,7 +379,11 @@ def parse_transcript(lines: list[str]) -> dict:
                 for d in event.get("permission_denials") or []]
     if not summary["final"] and summary["texts"]:
         summary["final"] = summary["texts"][-1]
-    for key in ("skills_loaded", "skill_tool_calls", "skill_md_reads", "skill_files_read"):
+    command = SLASH_COMMAND.match(prompt or "")
+    if command and summary["catalogue"] is not None and command.group(1) in summary["catalogue"]:
+        summary["slash_commands"].append(command.group(1))
+        summary["skills_loaded"].insert(0, command.group(1))
+    for key in ("skills_loaded", "skill_tool_calls", "skill_md_reads", "skill_files_read", "slash_commands"):
         summary[key] = list(dict.fromkeys(summary[key]))
     return summary
 
@@ -380,11 +392,13 @@ def skill_md_loaded(summary: dict, installed: list[str]) -> dict[str, dict]:
     """Per installed skill: was its SKILL.md loaded (through the Skill tool or a Read), and how."""
     report = {}
     for name in installed:
+        via_slash = name in summary.get("slash_commands", [])
         via_tool = name in summary["skill_tool_calls"]
         via_read = name in summary["skill_md_reads"]
         files = [path for path in summary["skill_files_read"] if path.split("/", 1)[0] == name]
-        report[name] = {"loaded": via_tool or via_read,
-                        "how": "skill-tool" if via_tool else "read" if via_read else None,
+        report[name] = {"loaded": via_slash or via_tool or via_read,
+                        "how": ("slash-command" if via_slash else "skill-tool" if via_tool
+                                else "read" if via_read else None),
                         "other_files_read": len([f for f in files if f != f"{name}/SKILL.md"])}
     return report
 
@@ -407,15 +421,16 @@ def run_agent(run_dir: Path, entry: dict, model: str, max_turns: int, timeout: f
     env = os.environ.copy()
     env.update(AGENTIC_ENGINEERING_HOME=str(case_dir / "home"), AES_FIELD_NOTES="off", **AGENT_ENV)
     started, timed_out = time.monotonic(), False
+    task = (case_dir / "task.md").read_text()
     try:
-        proc = runner(command, input=(case_dir / "task.md").read_text(),
+        proc = runner(command, input=task,
                       cwd=workspace, env=env, capture_output=True, text=True, timeout=timeout)
         stdout, code = proc.stdout, proc.returncode
     except subprocess.TimeoutExpired as exc:
         stdout = exc.stdout.decode() if isinstance(exc.stdout, bytes) else (exc.stdout or "")
         code, timed_out = None, True
     (case_dir / "transcript.jsonl").write_text(stdout, encoding="utf-8")
-    summary = parse_transcript(stdout.splitlines())
+    summary = parse_transcript(stdout.splitlines(), task)
     (case_dir / "final.md").write_text(summary["final"], encoding="utf-8")
     installed = entry.get("skills_installed") or []
     record = {"exit": code, "timed_out": timed_out, "seconds": round(time.monotonic() - started, 1),
@@ -457,7 +472,9 @@ def evidence_text(case_dir: Path) -> tuple[str, dict]:
     agent = json.loads((case_dir / "agent.json").read_text()) if (case_dir / "agent.json").exists() else {}
     transcript = case_dir / "transcript.jsonl"
     if transcript.exists():
-        parsed = parse_transcript(transcript.read_text(encoding="utf-8").splitlines())
+        task = case_dir / "task.md"
+        parsed = parse_transcript(transcript.read_text(encoding="utf-8").splitlines(),
+                                  task.read_text(encoding="utf-8") if task.exists() else "")
         agent = {**agent, "skills_loaded": parsed["skills_loaded"],
                  "skill_files_read": parsed["skill_files_read"]}
     files = changed_files(case_dir)
