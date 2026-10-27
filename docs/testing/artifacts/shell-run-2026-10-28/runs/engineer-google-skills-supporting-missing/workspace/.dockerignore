@@ -1,0 +1,16 @@
+.env
+.env.*
+*.key
+*.pem
+*.json.key
+credentials*.json
+*.db
+.git
+.claude
+.venv
+__pycache__
+docs
+tests
+deploy
+README.md
+AGENTS.md

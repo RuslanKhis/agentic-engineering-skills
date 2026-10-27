@@ -1,0 +1,6 @@
+Please do docs/tickets/support-agent/G04.md. It's deploying the support agent to Cloud Run, privately, behind the load balancer we already have. The ticket also lists google/skills:cloud-run-basics for setting up the service and ingress. Check what you can locally and fill in the Evidence section.
+
+---
+Situation (from the person asking): A plain ADK repository with a Dockerfile, a pinned requirements file and an existing offline test suite. The ticket names deploy-adk-on-google-cloud as primary skill and google/skills:cloud-run-basics as a supporting skill. No Google product skill is installed, finding-google-skills is absent, and no cloud mutation has been authorised beyond a local image build.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

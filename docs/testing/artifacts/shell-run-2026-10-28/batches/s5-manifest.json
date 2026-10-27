@@ -1,0 +1,116 @@
+{
+ "created": "2026-10-27T22:19:28+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a0d6d075c33c6cea9",
+ "commit": "1795c5c1ba8d272c727a852f4c42a822cf4115ee",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "presenter-monthly-value-report",
+   "status": "repo-fixture",
+   "base": [
+    "claims-docs"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/presenter-monthly-value-report/situation.md"
+    }
+   ],
+   "note": "check_value_report.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-presenter",
+    "adk-agent-observability",
+    "adk-engineer"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "engineer-resumes-from-progress-block",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant",
+    "support-plan"
+   ],
+   "copy": [
+    {
+     "from": "evals/fixtures/engineer-parallel-tickets-with-overlapping-touches/web",
+     "to": "web"
+    },
+    {
+     "from": "evals/fixtures/engineer-writes-progress-block-when-stopping/AGENTS.md",
+     "to": "AGENTS.md"
+    }
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-resumes-from-progress-block/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The worktree named in the Progress block is wt-G02/ inside the workspace; git status and the re-verify command need a shell, so the agent can only say what it would check.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration",
+    "adk-system-designer"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "engineer-google-skills-supporting-missing",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "remove": [
+    "pyproject.toml"
+   ],
+   "grader": [
+    {
+     "from": "evals/graders/engineer-google-skills-supporting-missing/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Running the suite and the local image build needs a shell, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "deploy-adk-on-google-cloud",
+    "adk-tool-auth-and-secrets",
+    "adk-agent-observability"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "portability-ticket-carried-out",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/portability-ticket-carried-out/situation.md"
+    }
+   ],
+   "note": "check_portability.py needs a shell, and official sources cannot be re-read without network.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-portability-planning",
+    "adk-system-designer",
+    "deploy-adk-on-google-cloud",
+    "adk-model-and-output-contracts"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

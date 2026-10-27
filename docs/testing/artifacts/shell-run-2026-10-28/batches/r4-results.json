@@ -1,0 +1,478 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T22:28:39+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/r4/aes-scenarios-2lrfl2dq",
+ "commit": "6b03823bbc096b042e83c8e2b7a73fd3873733aa",
+ "scenarios_sha256": "065da3d19025c75c2bda476535a8dfc07179dbc466b6634cbbe687527fe1f456",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+ "max_turns": 40,
+ "timeout_s": 1200.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill",
+   "Bash"
+  ],
+  "unconfined_tools": [
+   "Bash"
+  ],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": false,
+  "unconfined": true,
+  "shell_environment": {
+   "home_mode": "real-home-redirected-config",
+   "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+   "variables_scrubbed": [
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN",
+    "SSH_AUTH_SOCK"
+   ],
+   "scrub_prefixes": [
+    "GOOGLE_",
+    "GCLOUD_",
+    "CLOUDSDK_",
+    "AWS_",
+    "AZURE_",
+    "ARM_"
+   ],
+   "scrub_names": [
+    "SSH_AUTH_SOCK",
+    "GH_TOKEN",
+    "GITHUB_TOKEN",
+    "GH_ENTERPRISE_TOKEN",
+    "GITLAB_TOKEN",
+    "NPM_TOKEN",
+    "HF_TOKEN",
+    "OPENAI_API_KEY",
+    "GEMINI_API_KEY",
+    "VAULT_TOKEN",
+    "KUBECONFIG",
+    "DOCKER_CONFIG",
+    "DOCKER_HOST",
+    "GIT_CONFIG_GLOBAL",
+    "GIT_ASKPASS",
+    "SSH_ASKPASS",
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN"
+   ],
+   "redirected": {
+    "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+    "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+    "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+    "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+    "DOCKER_CONFIG": "<case>/shell-env/docker",
+    "KUBECONFIG": "<case>/shell-env/kube/config",
+    "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+    "GH_CONFIG_DIR": "<case>/shell-env/gh",
+    "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+   },
+   "set": {
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "BROWSER": "true",
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"
+   }
+  }
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "governance-pack-quebec-ontario-hr-assistant",
+   "expected_primary": "adk-governance-pack",
+   "fixture_status": "repo-fixture",
+   "note": "check_governance.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-governance-pack",
+    "adk-engineer",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.5318,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Records jurisdictions: [au, ca] with the screen naming Canada (never CA) and every other regime with a reason.",
+     "verdict": "PASS",
+     "quote": "jurisdictions: [au, ca]",
+     "quote_found": true,
+     "reason": "Front matter is [au, ca], and the screen names Canada (never CA) and gives a reason for each of the other regimes.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Screens which law governs each flow: Quebec's private sector Act for Montréal staff and, for Ontario staff of a provincially regulated employer, no general private sector statute, with counsel: on torts and collective agreements.",
+     "verdict": "PASS",
+     "quote": "n/a: no general private sector statute for Ontario staff of a provincially regulated employer (checked 2026-10-26); counsel: does the Quebec Act reach it",
+     "quote_found": true,
+     "reason": "The memo's flow table assigns Quebec's Act to Montréal staff and no general statute to Ontario staff, and a separate counsel question covers Ontario torts and collective agreements.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Treats auto-approved leave as a possible decision based exclusively on automated processing under Quebec s 12.1, with notice, explanation and review facts, and sets counsel_required: yes.",
+     "verdict": "PASS",
+     "quote": "Proposed: yes in operation, the rule decides and writes approver \"HR assistant\" with no human review",
+     "quote_found": true,
+     "reason": "The memo treats auto-approval as s 12.1 exclusive automation with notice, explanation and review facts, and sets counsel_required: yes.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Writes the s 3.3 PIA facts and an s 17 assessment row for every flow leaving Quebec, including the Toronto region, the US model processing and Sydney access.",
+     "verdict": "PASS",
+     "quote": "| Hosting and logs | Toronto, Ontario |",
+     "quote_found": true,
+     "reason": "The transfer assessment's s 17 table has rows for Toronto hosting, US model processing and Sydney log access, and the input pack gives s 3.3 project facts.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Names the Ontario electronic monitoring policy for logged prompts as a wait, and answers the Law 25 question in the memo Summary marked counsel:.",
+     "verdict": "PASS",
+     "quote": "**Direct question, does Law 25 apply to the leave decisions?** Proposed answer: yes for Montréal staff.",
+     "quote_found": true,
+     "reason": "The Summary answers the Law 25 question and carries counsel: markers, and the Ontario monitoring policy update is wait W6 in the plan and memo.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 6,
+     "assertion": "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing. In a run without a shell, it names that command, reports it as not run and checks the drafts against the same rules by reading them; it does not claim they pass.",
+     "verdict": "PASS",
+     "quote": "python3 -I .claude/skills/adk-governance-pack/scripts/check_governance.py docs/governance/hr-assistant/ --source docs/discovery/hr-assistant.md --source docs/architecture/hr-assistant.md --source docs/plans/hr-assistant.md",
+     "quote_found": true,
+     "reason": "The agent ran the checker with brief, design and plan as sources, and all six drafts returned ok.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 6,
+   "total": 6,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 4620,
+   "files": [
+    "docs/governance/hr-assistant/impact-assessment.md",
+    "docs/governance/hr-assistant/privacy-impact-input-pack.md",
+    "docs/governance/hr-assistant/regulatory-memo.md",
+    "docs/governance/hr-assistant/security-questionnaire.md",
+    "docs/governance/hr-assistant/system-card.md",
+    "docs/governance/hr-assistant/transfer-assessment.md",
+    "docs/plans/hr-assistant.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 269.8,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 40,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 25,
+    "total_cost_usd": 0.9625741,
+    "duration_ms": 268739,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "40",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill,Bash",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill,Bash",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill",
+      "Bash"
+     ],
+     "unconfined_tools": [
+      "Bash"
+     ],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": false,
+     "unconfined": true,
+     "shell_environment": {
+      "home_mode": "real-home-redirected-config",
+      "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+      "variables_scrubbed": [
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN",
+       "SSH_AUTH_SOCK"
+      ],
+      "scrub_prefixes": [
+       "GOOGLE_",
+       "GCLOUD_",
+       "CLOUDSDK_",
+       "AWS_",
+       "AZURE_",
+       "ARM_"
+      ],
+      "scrub_names": [
+       "SSH_AUTH_SOCK",
+       "GH_TOKEN",
+       "GITHUB_TOKEN",
+       "GH_ENTERPRISE_TOKEN",
+       "GITLAB_TOKEN",
+       "NPM_TOKEN",
+       "HF_TOKEN",
+       "OPENAI_API_KEY",
+       "GEMINI_API_KEY",
+       "VAULT_TOKEN",
+       "KUBECONFIG",
+       "DOCKER_CONFIG",
+       "DOCKER_HOST",
+       "GIT_CONFIG_GLOBAL",
+       "GIT_ASKPASS",
+       "SSH_ASKPASS",
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN"
+      ],
+      "redirected": {
+       "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+       "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+       "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+       "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+       "DOCKER_CONFIG": "<case>/shell-env/docker",
+       "KUBECONFIG": "<case>/shell-env/kube/config",
+       "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+       "GH_CONFIG_DIR": "<case>/shell-env/gh",
+       "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+      },
+      "set": {
+       "GIT_CONFIG_NOSYSTEM": "1",
+       "BROWSER": "true",
+       "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"
+      }
+     }
+    },
+    "variables_scrubbed": [
+     "CLAUDE_CODE_MESSAGING_SOCKET",
+     "CLAUDE_CODE_MESSAGING_TOKEN",
+     "SSH_AUTH_SOCK"
+    ],
+    "shell_commands": [
+     {
+      "command": "pwd; ls -la; find . -type f | head -100",
+      "output": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/r4/aes-scenarios-2lrfl2dq/governance-pack-quebec-ontario-hr-assistant/workspace\ntotal 8\ndrwxr-xr-x@ 5 ruslankhissamiyev  wheel  160 28 Oct 09:24 .\ndrwxr-xr-x@ 8 ruslankhissamiyev  wheel  256 28 Oct 09:24 ..\ndrwxr-xr-x@ 3 ruslankhissamiyev  wheel   96 28 Oct 09:24 .claude\ndrwxr-xr-x@ 5 ruslankhissamiyev  wheel  160 28 Oct 08:08 docs\n-rw-r--r--@ 1 ruslankhissamiyev  wheel  504 28 Oct 08:08 README.md\n./.claude/skills/adk-agent-evaluation/LICENSE\n./.claude/skills/adk-agent-evaluation/references/result-auditing.md\n./.claude/skills/adk-agent-evaluation/references/conformance.md\n./.claude/skills/adk-agent-evaluation/references/environment-and-troubleshooting.md\n./.claude/skills/adk-agent-evaluation/references/quality-iteration.md\n./.claude/skills/adk-agent-evaluation/references/deterministic-tests.md\n./.claude/skills/adk-agent-evaluation/references/validation.md\n./.claude/skills/adk-agent-evaluation/references/contract-qualification.md\n./.claude/skills/adk-agent-evaluation/references/provider-compatibility.md\n./.claude/skills/adk-agent-evaluation/references/source-support-calibration.md\n./.claude/skills/adk-agent-evaluation/references/execution-evidence.md\n./.\n[... 3130 characters omitted ...]\nneer/LICENSE\n./.claude/skills/adk-engineer/references/composition.md\n./.claude/skills/adk-engineer/references/ticket-lifecycle.md\n./.claude/skills/adk-engineer/references/ownership.md\n./.claude/skills/adk-engineer/references/practice-profile.md\n./.claude/skills/adk-engineer/references/updates.md\n./.claude/skills/adk-engineer/references/operating-rules.md\n./.claude/skills/adk-engineer/references/field-feedback.md\n./.claude/skills/adk-engineer/agents/openai.yaml\n./.claude/skills/adk-engineer/scripts/field_notes.py\n./.claude/skills/adk-engineer/SKILL.md\n./docs/plans/hr-assistant.md\n./docs/discovery/hr-assistant.md\n./docs/architecture/hr-assistant.md\n./README.md",
+      "is_error": false
+     },
+     {
+      "command": "cd docs; cat ../README.md discovery/*.md architecture/*.md plans/*.md",
+      "output": "# HR assistant for Érable Logistics\n\nSouthgate Labs (Sydney) built an HR assistant for Érable Logistics Inc., a\nlogistics employer with staff in Montréal and Toronto. Staff ask it HR policy\nquestions and submit leave requests through it; routine requests are\napproved by the assistant.\n\nProject record:\n\n- Discovery brief: `docs/discovery/hr-assistant.md`\n- Design: `docs/architecture/hr-assistant.md`\n- Plan and evidence: `docs/plans/hr-assistant.md`\n\nReviewer: Érable's counsel, Me Geneviève Roy.\n# Discovery brief: HR assistant at Érable Logistics\n\nStatus: accepted 2026-08-27 by Luc Tremblay (Vice-President, People)\nPrepared by: Southgate Labs, Sydney\n\n## 1. Context\n\nÉrable Logistics Inc. (incorporated under the Canada Business Corporations Act, head office\nMontréal) runs distribution centres in Montréal (1,150 staff) and Toronto (640 staff). It is a\nprovincially regulated employer in both provinces. HR answers about 2,300 questions and\nprocesses about 900 leave requests a month.\n\n## 2. First workflow and outcome\n\n- **Workflow:** HR policy questions and leave requests from distribution-centre staff.\n- **Outcome measure:** median hours from leave request to decision (HRIS).\n- **Baseline:** 31 hours (May to July 2026).\n- **Counter-metric:** leave decisions reversed after a complaint; baseline 1.2 %.\n- **Decider:** Lu\n[... 4680 characters omitted ...]\n9.\n\n## Measurement records\n\n- M1: metric policy answers citing the right section; value 92%; window 2026-10-05 to 2026-10-16; sample 300 questions (150 French, 150 English); method offline evaluation; owner Southgate Labs; build v0.5.0\n- M2: metric share of pilot-shape leave requests the rule approves without review; value 64%; window 2026-10-05 to 2026-10-16; sample 500 requests replayed from July 2026; method replay; owner Southgate Labs; build v0.5.0\n- M3: metric dates and leave type extracted correctly; value 98.4%; window 2026-10-05 to 2026-10-16; sample 500; method replay; owner Southgate Labs; build v0.5.0\n\n## Resume here\n\nNext: G05 Governance papers.",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills/adk-governance-pack/references; cat jurisdiction-screen.md canada.md",
+      "output": "<persisted-output>\nOutput too large (41.9KB). Full output saved to: /Users/ruslankhissamiyev/.claude/projects/-private-tmp-claude-501--Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills-acdcf7e1-62e2-4a63-8616-dcbde98d7357-scratchpad-runs-r4-aes-scenarios-2lrfl2dq-governance-p-uly7wi/1fcef153-ab4d-4274-882f-dd8a907d763a/tool-results/bimyyc3fn.txt\n\nPreview (first 2KB):\n# Jurisdiction screen\n\n<!-- verified: 2026-10-26; re-check every 180 days -->\n\nRead before drafting anything. The screen decides which regimes' sections\neach draft carries. It is the first step of every pack, including a\nproof-of-concept note and a single requested document.\n\nSources: the research notes this skill was built from, each read on 26\nOctober 2026 (`docs/research/au-ai-privacy-law-2026-10-26.md`,\n`us-ai-privacy-law-2026-10-26.md`, `eu-ai-privacy-law-2026-10-26.md`,\n`uk-ai-privacy-law-2026-10-26.md`, `nz-ai-privacy-law-2026-10-26.md`,\n`sg-ai-privacy-law-2026-10-26.md`, `ca-ai-privacy-law-2026-10-26.md` and\n`au-government-forms-nsw-2026-10-26.md` in the skills repository), and the\nregime references they produced: [Australia](australia.md),\n[United States](united-states.md), [EU AI Act](eu-ai-act.md),\n[privacy and records](privacy-and-records.md),\n[United Kingdom](united-kingdom.md), [New Zealand](new-zealan\n[... 420 characters omitted ...]\ne\nin scope only. Name Canada as \"Canada\" or \"Quebec\", never \"CA\", which US\nsections use for California.\n\nThe screen covers seven regimes. A screen written before New Zealand,\nSingapore and Canada were added, with four rows, fails the checker until it\ngains their three rows, each with the reason it is or is not in scope: a\nregime left out without a reason is the failure the screen exists to stop.\n\n## Where the consultancy is\n\nThe consultancy's home is where its staff and systems that can see project\ndata are. The references and templates are written for a consultancy in\nAustralia. That is the default, used when nothing says otherwise.\n\n...\n</persisted-output>",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills/adk-governance-pack/references; sed -n 30,400p jurisdiction-screen.md",
+      "output": "The screen covers seven regimes. A screen written before New Zealand,\nSingapore and Canada were added, with four rows, fails the checker until it\ngains their three rows, each with the reason it is or is not in scope: a\nregime left out without a reason is the failure the screen exists to stop.\n\n## Where the consultancy is\n\nThe consultancy's home is where its staff and systems that can see project\ndata are. The references and templates are written for a consultancy in\nAustralia. That is the default, used when nothing says otherwise.\n\n1. If the repository is bound to a practice profile whose `kind` is\n   `employer`, take the home from the countries of staff in its \"Sector and\n   jurisdictions\" section. Cite it as `source: practice profile <org>,\n   reviewed <date>`.\n2. A `kind: client` profile describes the client, not the consultancy. Do\n   not take the home from it.\n3. If the user names the home, take it from the user with\n   `source: <role>, <date>`.\n4. Otherwise the home is Australia. Record it in the memo's facts as\n   `assumption: consultancy home Australia (default)`.\n\nWhen the home is not Australia:\n\n- **The `au` row's consultancy trigger does not apply.** Australia is in\n  scope only through the client or the data subjects.\n- **Read the Australian wording as the actual home.** Wherever a reference or\n  tem\n[... 18004 characters omitted ...]\nppeal) | United States: CPPA ADMT and Colorado SB 26-189 | System card section \"Automated-decision disclosure\" |\n| ATRS record | United Kingdom: central government department or in-scope arm's-length body, tool in Beta, Pilot or Production with public effect or public interaction | System card, privacy impact input pack, impact assessment |\n| Online Safety Act risk assessments | United Kingdom: users can share outputs, the agent searches several sites or databases, or it can generate pornography | Memo `gap:` with its owner |\n| Fundamental rights impact assessment | EU: Article 27 deployer of an Annex III system | Impact assessment section \"FRIA crosswalk\" |",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills/adk-governance-pack/references; cat canada.md",
+      "output": "# Canada\n\n<!-- verified: 2026-10-26; re-check every 180 days -->\n\nRead when the [jurisdiction screen](jurisdiction-screen.md) puts `ca` in\nscope. Canada has no AI Act and no AI bill, so the Canadian sections of the\nregulatory memo assign no risk tier. They screen which privacy laws govern\neach flow (federal PIPEDA, Quebec, Alberta and British Columbia), the\nemployment, sector and government rules the agent falls under, and leave\nevery legal conclusion to counsel. This reference is at screen depth: the\ntriggers, the key duties, the pack section each lands in and the questions\nfor counsel.\n\nName the regime \"Canada\" or \"Quebec\" in drafts, never \"CA\": US sections use\n\"CA\" for California, and the checker does not read \"CA\" as Canada.\n\n## Sources and their status\n\nRead at the primary source on 26 October 2026 unless a line says\n\"reported; not confirmed at the source on 2026-10-26\". Copy `checked\n2026-10-26` into a draft only while this file is the newest check. Several\nprimary sites refused automated reads that day (parl.ca, LégisQuébec,\nCanLII, the Treasury Board policy site, the CRTC FAQ and, late in the\nsession, Justice Laws); claims resting on them are marked.\n\n- PIPEDA, S.C. 2000, c. 5, Justice Laws consolidation current to 2026-09-30\n  (<https://laws-lois.justice.gc.ca/eng/acts/P-8.6/>): ss 4, 5(3), 6.1, 10.1\n  \n[... 19403 characters omitted ...]\ne French Language require French notices,\n  interfaces or documents for this system? This reference does not cover\n  that law; name it as a question, never describe it.\n- Does a new logging practice need the Ontario electronic monitoring policy\n  updated now, rather than at the next yearly cycle?\n\n## Words to use\n\nPersonal information, organisation, individual, meaningful consent,\nprivacy impact assessment (EFVP in Quebec), breach of security safeguards\n(PIPEDA), confidentiality incident (Quebec), person in charge of the\nprotection of personal information, real risk of significant harm. Never\n\"lawful basis\", \"controller\" or \"processor\" in a Canadian section.",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills/adk-governance-pack; wc -c assets/* references/*; cat assets/regulatory-memo-template.md",
+      "output": "    5113 assets/government-form-answers-template.md\n   10325 assets/impact-assessment-template.md\n    2840 assets/poc-note-template.md\n   18368 assets/privacy-impact-input-pack-template.md\n    3012 assets/processing-records-template.md\n   24208 assets/regulatory-memo-template.md\n    6210 assets/security-questionnaire-template.md\n    5601 assets/system-card-template.md\n    6260 assets/transfer-assessment-annex-template.md\n   29952 references/au-government-crosswalks.md\n   48957 references/australia.md\n   21414 references/canada.md\n   22803 references/eu-ai-act.md\n   10882 references/impact-assessment.md\n   21463 references/jurisdiction-screen.md\n   23447 references/new-zealand.md\n    4587 references/practice-profile.md\n   25754 references/privacy-and-records.md\n   20073 references/singapore.md\n    8359 references/system-card-and-questionnaire.md\n   17052 references/united-kingdom.md\n   21098 references/united-states.md\n  357778 total\n---\ndocument: regulatory-memo\nsystem: <system name>\nversion: <design revision or build screened>\nstatus: draft\njurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca>]\ncounsel_required: <yes / no / pending>\nprepared: <YYYY-MM-DD> by <agency or team>\nfor: <client counsel or AI governance lead>\nsources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/pl\n[... 23150 characters omitted ...]\n(a DTA assessment, AIAF registration, Quebec EFVP, NYC bias audit, ATRS record), with its owner and wait> (<W IDs or gap:>).\n\n## Questions for counsel\n\n- counsel: <question>; regime <regime>; facts at <IDs>; needed before <goal or wait ID>.\n\n## Review and sign-off\n\n<!-- Only the reviewer fills Decision and Date. Leave both `pending` while\nstatus is draft; the reviewer sets status: reviewed when they sign. One row\nper reviewer: the role from `for:` first, then any other reviewer. -->\n\n| Reviewer (role) | Scope reviewed | Decision | Date |\n| --- | --- | --- | --- |\n| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills/adk-governance-pack; cat assets/privacy-impact-input-pack-template.md assets/transfer-assessment-annex-template.md",
+      "output": "---\ndocument: privacy-impact-input-pack\nsystem: <system name>\nversion: <build or design revision described>\nstatus: draft\njurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca>]\ncounsel_required: <yes / no / pending>\nprepared: <YYYY-MM-DD> by <agency or team>\nowner: <client legal entity; for a group, each entity and its role>\nfor: <DPO, privacy officer or role>\nsources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<topic>.md>\n---\n\n# Privacy impact input pack: <system name>\n\n> **Drafting aid output, not legal advice.** Prepared to support the\n> reviewer named in `for:`, never to replace the client's lawyer. It is not\n> reviewed until that reviewer records a decision in Review and sign-off at\n> the end; counsel decides every legal conclusion in it.\n\nInputs for <client>'s privacy assessments of this system: the privacy impact\nassessment under the Australian Privacy Principles (or, for a NSW agency,\nunder the PPIP and HRIP Acts and the IPC guides), the data protection impact\nassessment under GDPR or UK GDPR Article 35, the data protection or risk\nassessment US state laws ask for, the New Zealand privacy impact assessment\nthe Privacy Commissioner expects, a Singapore data protection impact\nassessment and the PDPA's required assessments, and the Canadian privacy\nimpact assess\n[... 22625 characters omitted ...]\nhe access a restricted transfer, who is the exporter, which module or tool applies, is the test met; for New Zealand, agent or foreign recipient; for Singapore, which mechanism; for Quebec, adequate protection>, needed by <goal or wait ID>.\n\n## Review and sign-off\n\n<!-- Only the reviewer fills Decision and Date. Leave both `pending` while\nstatus is draft; the reviewer sets status: reviewed when they sign. One row\nper reviewer: the role from `for:` first, then any other reviewer. -->\n\n| Reviewer (role) | Scope reviewed | Decision | Date |\n| --- | --- | --- | --- |\n| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills/adk-governance-pack; cat assets/impact-assessment-template.md assets/system-card-template.md assets/security-questionnaire-template.md",
+      "output": "---\ndocument: impact-assessment\nsystem: <system name>\nversion: <build or design revision assessed>\nstatus: draft\njurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca>]\ncounsel_required: <yes / no / pending>\nprepared: <YYYY-MM-DD> by <agency or team>\nfor: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>\ntrigger: <why this assessment now: design, production decision, significant change>\nsources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<topic>.md, regulatory-memo.md>\n---\n\n# AI system impact assessment: <system name>\n\n> **Drafting aid output, not legal advice.** Prepared to support the\n> reviewer named in `for:`, never to replace the client's lawyer. It is not\n> reviewed until that reviewer records a decision in Review and sign-off at\n> the end; counsel decides every legal conclusion in it.\n\nStructured along the topics of ISO/IEC 42005:2025 and mapped to NIST AI RMF\n1.0 and NIST AI 600-1. Draft for <client>'s risk owner; scores are\nprovisional until they set them. Not legal advice.\n\n<!-- The sections after \"Monitoring and review\" are optional: keep each one\nwhose condition holds and delete the rest, with this comment. -->\n\n## Scope and intended use\n\n- **System and functions:** <what it does; what the model decides; what code decides> \n[... 20130 characters omitted ...]\nervice: NZISM certification and accreditation; or n/a: private client> | <status> | <SB/C IDs; agency:> |\n| Certifications | Which certifications apply? | <the cloud provider's, cited; the application's own, if any> | <status> | <source:> |\n\n## Review and sign-off\n\n<!-- Only the reviewer fills Decision and Date. Leave both `pending` while\nstatus is draft; the reviewer sets status: reviewed when they sign. One row\nper reviewer: the role from `for:` first, then any other reviewer. -->\n\n| Reviewer (role) | Scope reviewed | Decision | Date |\n| --- | --- | --- | --- |\n| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills/adk-governance-pack/references; sed -n 1,140p australia.md",
+      "output": "# Australia\n\n<!-- verified: 2026-10-26; re-check every 180 days -->\n\nRead when the [jurisdiction screen](jurisdiction-screen.md) puts `au` in\nscope. Australia has no AI Act, so the Australian sections of the regulatory\nmemo assign no risk tier. They screen which existing laws and government\npolicies the agent falls under, from facts the design records, and leave\nevery legal conclusion to counsel.\n\n**Which sections to read.** Every Australian pack: Roles, the APPs,\nautomated-decision transparency, privacy impact assessment, overseas\nprocessing, notifiable data breaches, the screen and the checklist. When\nAustralia is in scope only through the consultancy's own handling, those\nare enough. Add \"Commonwealth and state government clients\" for any\ngovernment client, \"NSW government clients\" for a NSW agency or State\ncontract, and the Consumer Law and sector rows when their trigger fires.\nWhether the Privacy Act reaches a foreign client's data merely hosted or\nread in Australia is not covered here: write it as `counsel:`.\n\n## Sources and their status\n\nRead at the primary source on 26 October 2026 unless a line says\n\"reported; not confirmed at the source on 2026-10-26\". Copy `checked\n2026-10-26` into a draft only while this file is the newest check.\n\n- Privacy Act 1988, Compilation No. 104, 4 June 2026\n  (<https://www.l\n[... 7473 characters omitted ...]\nnauthorised access (11.1); destroy or de-identify when no longer needed (11.2); since 11 December 2024, \"such steps include technical and organisational measures\" (11.3, checked 2026-10-26) | SB and C IDs; retention contracts |\n| APP 12, 13 | Access and correction; APP 13.5 is an infringement-notice provision | Memory stores, session history and evaluation sets are held information an access request reaches |\n\nUse Australian terms in Australian sections: personal information,\nsensitive information, APP entity, contracted service provider, eligible\ndata breach, PIA, overseas recipient. GDPR terms tell an Australian reviewer\nthe draft was not written for them.",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills/adk-governance-pack/references; cat system-card-and-questionnaire.md; grep -n -i -E \"quebec|canada|s 17|logging|log \" privacy-and-records.md impact-assessment.md | head -50",
+      "output": "# System card and security questionnaire\n\n<!-- verified: 2026-10-26; re-check every 180 days -->\n\nRead when writing the system card or the questionnaire answer bank. Both\ndescribe one build to outsiders, so both use the plan's evidence vocabulary\nand nothing warmer.\n\nSources: the status vocabulary is this toolkit's own. The legal duties\nnamed below were read on 26 October 2026 at the sources listed in\n[Australia](australia.md), [United States](united-states.md),\n[EU AI Act](eu-ai-act.md), [privacy and records](privacy-and-records.md) and\n[United Kingdom](united-kingdom.md); cite those references' dates, not this\nfile.\n\n## Status words\n\nEvery capability or control is one of:\n\n| Word | Means | Cite |\n| --- | --- | --- |\n| in place | Evidence recorded at local, live or release tier | The contract or rule ID and the goal's acceptance (`C2 evidenced, local, G01/A3`) |\n| planned | A goal will build or prove it | The goal ID |\n| deferred | Waits for a trigger in the design | `deferred: <trigger>` |\n| n/a | The component does not exist | `n/a: <reason>` |\n| gap | Nothing enforces it | `gap: <what is missing>` and the proposed goal |\n\nWrite the tier: a control evidenced only offline or locally is \"in place,\ntested locally\", not \"in production\". A questionnaire answers for the build\nnamed in its front matter; a later buil\n[... 8074 characters omitted ...]\nves Quebec, including to another province; Alberta requires the\nprivacy-and-records.md:337:the annex's Canada section.\nprivacy-and-records.md:367:under a written contract; in Canada the statutes speak of transfers for\nprivacy-and-records.md:368:processing (PIPEDA) and service contracts (Quebec s 18.3, reported). Each\nprivacy-and-records.md:397:entries. **New Zealand, Singapore and Canada** have no Article 30 register;\nimpact-assessment.md:13:  published 27 May 2025 (metadata from the Standards Council of Canada\nimpact-assessment.md:130:- **Canada: AIA inputs** (`ca`, federal institution): whether the output\nimpact-assessment.md:134:  See [Canada](canada.md).",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills/adk-governance-pack/references; sed -n 140,300p australia.md; sed -n 215,255p privacy-and-records.md; sed -n 296,340p privacy-and-records.md",
+      "output": "the draft was not written for them.\n\n## Automated-decision transparency (APP 1.7 to 1.9)\n\n**Status.** Inserted by the Privacy and Other Legislation Amendment Act 2024;\ncommences on 10 December 2026, checked 2026-10-26, and applies to decisions\nmade after that day whenever the program was arranged or the data\ncollected. APP 1.7 is a civil penalty provision (s 13K, up to 200 penalty\nunits) with infringement notices available.\n\n**The test (APP 1.7).** The APP privacy policy must contain the APP 1.8\ninformation if the entity has arranged for a computer program to make, or\ndo a thing that is substantially and directly related to making, a\ndecision; the decision could reasonably be expected to significantly affect\nthe rights or interests of an individual; and personal information about\nthe individual is used in the operation of the program.\n\n**APP 1.8 contents.** The kinds of personal information used; the kinds of\ndecisions made solely by the program; the kinds of decisions for which the\nprogram does a thing substantially and directly related to making them.\nAPP 1.9: deciding includes refusing or failing to decide; effects can be\nadverse or beneficial; examples include decisions under an Act, decisions\naffecting rights under a contract, and access to \"a significant service or\nsupport\".\n\n**What the OAIC fact sheet (Se\n[... 12674 characters omitted ...]\nrtification. No\nadequacy list. One annex row per transfer.\n\n**Canada (PIPEDA, Quebec s 17, Alberta).** PIPEDA treats a transfer for\nprocessing as a use, protected by contract, with notice of possible foreign\naccess; it has no standard clauses, so PIPEDA facts sit in the input pack.\nQuebec requires a PIA and a written agreement before personal information\nleaves Quebec, including to another province; Alberta requires the\ncountries where service providers handle data to be listed. Those two go in\nthe annex's Canada section.\n\n**United States.** State privacy laws follow residents, not servers; US\ntransfer questions arise only for the other regimes' data, above.",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills/adk-governance-pack/scripts; wc -l check_governance.py; sed -n 1,200p check_governance.py",
+      "output": "     736 check_governance.py\n#!/usr/bin/env python3\n\"\"\"Check governance drafts for citations, jurisdictions, counsel flags and dated legal claims. Standard library only.\n\nA draft is a Markdown file written from one of this skill's templates. It\nopens with front matter naming its ``document`` type, ``counsel_required``\n(``yes``, ``no`` or ``pending``) and ``jurisdictions``: the regimes the\njurisdiction screen found in scope, as codes in the fixed order ``au``,\n``us``, ``eu``, ``uk``, ``nz``, ``sg``, ``ca``. The checker never judges the\nlaw. It reports what a reviewer would otherwise find by hand:\n\n- ``jurisdictions`` missing, empty, out of order or holding an unknown code;\n  a regime section (``## Australia: ...``, ``## United States: ...``,\n  ``## EU: ...``, ``## United Kingdom: ...``, ``## New Zealand: ...``,\n  ``## Singapore: ...``, ``## Canada: ...``) whose code is not listed; records\n  of processing without ``eu`` or ``uk``; a transfer assessment without a\n  regime that has a transfer rule (``eu``, ``uk``, ``nz``, ``sg``, ``ca``);\n  government form answers without ``au``;\n- a required section (``##`` heading) that is missing or empty; the required\n  set follows ``jurisdictions``;\n- a regulatory memo whose jurisdiction screen (or a proof-of-concept note\n  whose Classification section) does not name all seven \n[... 9898 characters omitted ...]\ne\", \"not reviewed until\")\nDECISIONS = {\"pending\", \"approved\", \"approved with changes\", \"changes requested\", \"rejected\"}\n# Government form answers name the official form they answer and when its page\n# was last read; forms change faster than laws.\nFORM_FIELDS = (\"form\", \"form_version\", \"form_url\")\nFORM_MAX_AGE = 90\nNOT_THE_FORM = \"not the official form\"\n\n# Phrases that put a system near a high-stakes area in at least one regime: the\n# EU AI Act's Annex III areas, Australian APP 1.7 significant decisions, US\n# consequential decisions, UK Article 22A significant decisions and the public\n# bodies that carry extra duties. A match forces counsel review; it decides",
+      "is_error": false
+     },
+     {
+      "command": "cd docs/plans && python3 - <<'EOF'\np='hr-assistant.md'\ns=open(p).read()\ns=s.replace(\"\"\"| G05 Governance papers | 1 | governance | 5-7 | G04 | adk-governance-pack | ready |\n\"\"\",\"\"\"| G05 Governance papers | 1 | governance | 5-7 | G04 | adk-governance-pack | ready (drafted, not sent) |\n| G06 Pilot approval (decision 2026-11-24) | 1 | governance | to estimate | G05, W2, W3, W4, W5, W6 | none yet | blocked |\n\"\"\")\ns=s.replace(\"\"\"- W1: UKG integration user, granted 2026-09-29.\n\"\"\",\"\"\"- W1: UKG integration user, granted 2026-09-29.\n- W2: review of the governance pack by Érable's counsel (Me Geneviève Roy), requested the day the drafts are sent; needed before 2026-11-24.\n- W3: Quebec privacy impact assessment (EFVP, s 3.3) by Érable, with the person in charge (Marie-Claude Gagnon); needed before the pilot starts.\n- W4: Quebec s 17 assessments and written agreements for each flow leaving Quebec (Toronto hosting, US model processing, Sydney log access); needed before pilot data flows.\n- W5: Montréal union (Teamsters local) notice or consultation, only if counsel finds the collective agreement or law requires it; needed before the pilot starts.\n- W6: update of Érable's Ontario electronic monitoring policy for prompt logging tied to employee IDs, only if counsel finds it required; needed before the pilot starts.\n\"\"\")\ns=s.replace(\"\"\"## Resume here\"\"\",\"\"\"## G05 evidence\n\nDrafted, not sent: `docs/governance/hr-assistant/` (regulatory memo, privacy impact input pack, transfer assessment annex, impact assessment, system card, security questionnaire). Regimes in scope: Australia (consultancy's own handling), Canada (Quebec, Ontario). Checker result and open gaps: see the closing summary of the drafting session; the drafts go to Me Geneviève Roy when the owner sends them.\n\n## Resume here\"\"\")\nopen(p,'w').write(s)\nEOF\nmkdir -p ../governance/hr-assistant",
+      "output": "(Bash completed with no output)",
+      "is_error": false
+     },
+     {
+      "command": "cd docs/governance/hr-assistant && sed -i 's/northamerica-northee2/northamerica-northeast2/' regulatory-memo.md && grep -c northeast2 regulatory-memo.md",
+      "output": "sed: -I or -i may not be used with stdin",
+      "is_error": false
+     },
+     {
+      "command": "cd docs/governance/hr-assistant && sed -i '' 's/northamerica-northee2/northamerica-northeast2/' regulatory-memo.md && sed -i '' 's/Southgate Labs Pty (consultancy; legal entity name not recorded, gap)/Southgate Labs (consultancy, Sydney; legal entity name not recorded, gap)/' privacy-impact-input-pack.md && grep -c \"northeast2\" regulatory-memo.md; grep -c Pty privacy-impact-input-pack.md",
+      "output": "1\n0",
+      "is_error": false
+     },
+     {
+      "command": "python3 -I .claude/skills/adk-governance-pack/scripts/check_governance.py docs/governance/hr-assistant/ --source docs/discovery/hr-assistant.md --source docs/architecture/hr-assistant.md --source docs/plans/hr-assistant.md",
+      "output": "ok  docs/governance/hr-assistant/impact-assessment.md (impact-assessment; jurisdictions: au, ca; counsel_required: yes; counsel triggers: employment)\nok  docs/governance/hr-assistant/privacy-impact-input-pack.md (privacy-impact-input-pack; jurisdictions: au, ca; counsel_required: yes; counsel triggers: employment)\nok  docs/governance/hr-assistant/regulatory-memo.md (regulatory-memo; jurisdictions: au, ca; counsel_required: yes; counsel triggers: automated decisions, employment)\nok  docs/governance/hr-assistant/security-questionnaire.md (security-questionnaire; jurisdictions: au, ca; counsel_required: yes; counsel triggers: employment)\nok  docs/governance/hr-assistant/system-card.md (system-card; jurisdictions: au, ca; counsel_required: yes; counsel triggers: employment)\nok  docs/governance/hr-assistant/transfer-assessment.md (transfer-assessment; jurisdictions: au, ca; counsel_required: yes; counsel triggers: employment)",
+      "is_error": false
+     }
+    ],
+    "skills_loaded": [
+     "adk-governance-pack"
+    ],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-governance-pack": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 0
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-evaluation": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 23,
+    "catalogue": [
+     "adk-agent-evaluation",
+     "adk-engineer",
+     "adk-governance-pack",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-governance-pack": true,
+    "adk-engineer": false,
+    "adk-agent-evaluation": false
+   }
+  }
+ ]
+}

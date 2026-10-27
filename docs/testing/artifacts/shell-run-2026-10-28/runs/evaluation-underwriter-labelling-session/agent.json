@@ -1,0 +1,199 @@
+{
+ "exit": 0,
+ "timed_out": false,
+ "seconds": 43.2,
+ "model": "claude-sonnet-5-5",
+ "max_turns": 40,
+ "tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+ "subtype": "success",
+ "is_error": false,
+ "num_turns": 10,
+ "total_cost_usd": 0.1805122,
+ "duration_ms": 42225,
+ "terminal_reason": "completed",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-sonnet-5-5",
+  "--output-format",
+  "stream-json",
+  "--verbose",
+  "--setting-sources",
+  "project,local",
+  "--strict-mcp-config",
+  "--no-session-persistence",
+  "--max-turns",
+  "40",
+  "--tools",
+  "Read,Write,Edit,Glob,Grep,Skill,Bash",
+  "--permission-mode",
+  "dontAsk",
+  "--permission-prompts",
+  "none",
+  "--allowedTools",
+  "Read(./**),Write(./**),Edit(./**),Skill,Bash",
+  "--max-budget-usd",
+  "3.0"
+ ],
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill",
+   "Bash"
+  ],
+  "unconfined_tools": [
+   "Bash"
+  ],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": false,
+  "unconfined": true,
+  "shell_environment": {
+   "home_mode": "real-home-redirected-config",
+   "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+   "variables_scrubbed": [
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN",
+    "SSH_AUTH_SOCK"
+   ],
+   "scrub_prefixes": [
+    "GOOGLE_",
+    "GCLOUD_",
+    "CLOUDSDK_",
+    "AWS_",
+    "AZURE_",
+    "ARM_"
+   ],
+   "scrub_names": [
+    "SSH_AUTH_SOCK",
+    "GH_TOKEN",
+    "GITHUB_TOKEN",
+    "GH_ENTERPRISE_TOKEN",
+    "GITLAB_TOKEN",
+    "NPM_TOKEN",
+    "HF_TOKEN",
+    "OPENAI_API_KEY",
+    "GEMINI_API_KEY",
+    "VAULT_TOKEN",
+    "KUBECONFIG",
+    "DOCKER_CONFIG",
+    "DOCKER_HOST",
+    "GIT_CONFIG_GLOBAL",
+    "GIT_ASKPASS",
+    "SSH_ASKPASS",
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN"
+   ],
+   "redirected": {
+    "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+    "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+    "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+    "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+    "DOCKER_CONFIG": "<case>/shell-env/docker",
+    "KUBECONFIG": "<case>/shell-env/kube/config",
+    "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+    "GH_CONFIG_DIR": "<case>/shell-env/gh",
+    "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+   },
+   "set": {
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "BROWSER": "true",
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"
+   }
+  }
+ },
+ "variables_scrubbed": [
+  "CLAUDE_CODE_MESSAGING_SOCKET",
+  "CLAUDE_CODE_MESSAGING_TOKEN",
+  "SSH_AUTH_SOCK"
+ ],
+ "shell_commands": [
+  {
+   "command": "find . -type f | head -100; head -5 labels/experts.csv; head -c 800 labels/judge.jsonl; wc -l labels/*",
+   "output": "./labels/judge.jsonl\n./labels/judge-config.md\n./labels/criteria.md\n./labels/experts.csv\n./cases/CLM-4107.json\n./cases/CLM-4111.json\n./cases/CLM-4110.json\n./cases/CLM-4106.json\n./cases/CLM-4121.json\n./cases/CLM-4101.json\n./cases/CLM-4117.json\n./cases/CLM-4116.json\n./cases/CLM-4120.json\n./cases/CLM-4123.json\n./cases/CLM-4119.json\n./cases/CLM-4115.json\n./cases/CLM-4103.json\n./cases/CLM-4102.json\n./cases/CLM-4114.json\n./cases/CLM-4118.json\n./cases/CLM-4122.json\n./cases/CLM-4113.json\n./cases/CLM-4105.json\n./cases/CLM-4109.json\n./cases/CLM-4108.json\n./cases/CLM-4124.json\n./cases/CLM-4104.json\n./cases/CLM-4112.json\n./.claude/skills/adk-presenter/LICENSE\n./.claude/skills/adk-presenter/references/storyline.md\n./.claude/skills/adk-presenter/references/slide-craft.md\n./.claude/skills/adk-presenter/references/rollout-and-adoption.md\n./.claude/skills/adk-presenter/references/value-report.md\n./.claude/skills/adk-presenter/references/speech.md\n./.claude/skills/adk-presenter/references/stage-outlines.md\n./.claude/skills/adk-presenter/references/case-study.md\n./.claude/skills/adk-presenter/references/practice-profile.md\n./.claude/skills/adk-presenter/references/audiences-and-questions.md\n./.claude/skills/adk-presenter/agents/openai.yaml\n./.claude/skills/adk-presenter/scripts/check_rollout.py\n./.claude/skills/adk-presenter/script\n[... 3800 characters omitted ...]\neria_version\": \"v01\", \"labelled_at\": \"2026-10-18\"}\n{\"case_id\": \"CLM-4101\", \"criterion\": \"note_grounded\", \"rater\": \"judge-gemini\", \"label\": \"pass\", \"criteria_version\": \"v01\", \"labelled_at\": \"2026-10-18\"}\n{\"case_id\": \"CLM-4102\", \"criterion\": \"fraud_flags_correct\", \"rater\": \"judge-gemini\", \"label\": \"pass\", \"criteria_version\": \"v01\", \"labelled_at\": \"2026-10-18\"}\n{\"case_id\": \"CLM-4102\", \"criterion\": \"fast_track_correct\", \"rater\": \"judge-gemini\", \"label\": \"pass\", \"criteria_version\": \"v01\", \"labelled_at\": \"2026-10-18\"}\n{\"case_id\": \"CLM-4      14 labels/criteria.md\n     145 labels/experts.csv\n       5 labels/judge-config.md\n      72 labels/judge.jsonl\n     236 total",
+   "is_error": false
+  },
+  {
+   "command": "cat labels/criteria.md labels/judge-config.md README.md; cat cases/CLM-4101.json; sed -n 1,60p .claude/skills/adk-agent-evaluation/scripts/label_agreement.py",
+   "output": "# Labelling criteria\n\nEach case gets pass or fail on three criteria. A critique sentence is required for every fail.\n\n## fraud_flags_correct\n- v01 (2026-10-13): pass when every fraud indicator present in the claim is flagged.\n- v02 (2026-10-16): pass when every indicator is flagged **and** no indicator is flagged that the\n  claim does not support (false flags now fail).\n\n## fast_track_correct\n- v01 (2026-10-13): pass when the fast-track decision matches the underwriting guide.\n\n## note_grounded\n- v01 (2026-10-13): pass when every statement in the triage note is supported by a claim field.\n# Judge\n\n- Model: gemini-3.5-flash (Vertex AI), temperature 0\n- Prompt: the criteria in criteria.md as of 2026-10-13, one call per case and criterion.\n- Run: 2026-10-18 on all 24 cases.\n# Claims triage agent\n\nAn ADK agent that triages incoming motor claims for Kestrel Mutual's underwriters: it reads the\nfirst notice of loss, flags fraud indicators, decides whether the claim can be fast-tracked and\nwrites a short triage note.\n\n- `triage/agent.py` builds the agent; `triage/prompts.py` holds the instruction.\n- `labels/` holds the first labelling batch: two underwriters' verdicts (`experts.csv`) and an\n  LLM judge's verdicts on the same cases (`judge.jsonl`); `labels/criteria.md` defines the\n  criteria.\n- `cases/` holds the 24 clai\n[... 2468 characters omitted ...]\n the reference's latest, are reported too.\nVersions are compared as text, so name them so that they sort (v01, v02 or\ndates).\n\nCritiques can hold customer text; they are printed only with\n``--show-critiques``. Exit status: 0 nothing needs attention, 1 at least one\nfinding (low or undefined kappa, a judge rate below threshold, judge metrics\nrefused for too few cases, criteria drift), 2 unreadable or invalid input.\n\"\"\"\n\nfrom __future__ import annotations\n\nimport argparse\nimport csv\nfrom datetime import date\nimport io\nimport itertools\nimport json\nfrom pathlib import Path\nimport sys\n\nREQUIRED = (\"case_id\", \"criterion\", \"rater\", \"label\")\nLABELS = (\"pass\", \"fail\")",
+   "is_error": false
+  },
+  {
+   "command": "S=.claude/skills/adk-agent-evaluation; python3 -I $S/scripts/label_agreement.py --labels labels/experts.csv --show-critiques; echo EXIT $?; python3 -I $S/scripts/label_agreement.py --labels labels/experts.csv labels/judge.jsonl --judge judge-gemini --reference consensus; echo EXIT $?; python3 -I $S/scripts/label_agreement.py --labels labels/experts.csv --criteria-version v02 | head -30; cat $S/assets/expert-session-plan.md | head -80",
+   "output": "fast_track_correct: uw-castillo vs uw-mensah on 24 cases: agreement 75.0%, kappa 0.44, fail share 0.33, 6 to adjudicate\n  adjudicate CLM-4106: uw-castillo=pass uw-mensah=fail\n    uw-mensah: see claim fields\n  adjudicate CLM-4109: uw-castillo=fail uw-mensah=pass\n    uw-castillo: see claim fields\n  adjudicate CLM-4113: uw-castillo=pass uw-mensah=fail\n    uw-mensah: see claim fields\n  adjudicate CLM-4116: uw-castillo=pass uw-mensah=fail\n    uw-mensah: see claim fields\n  adjudicate CLM-4119: uw-castillo=fail uw-mensah=pass\n    uw-castillo: see claim fields\n  adjudicate CLM-4121: uw-castillo=pass uw-mensah=fail\n    uw-mensah: see claim fields\nfraud_flags_correct: uw-castillo vs uw-mensah on 24 cases: agreement 54.2%, kappa 0.10, fail share 0.52, 11 to adjudicate\n  adjudicate CLM-4103: uw-castillo=pass uw-mensah=fail\n    uw-mensah: see claim fields\n  adjudicate CLM-4104: uw-castillo=fail uw-mensah=pass\n    uw-castillo: see claim fields\n  adjudicate CLM-4107: uw-castillo=pass uw-mensah=fail\n    uw-mensah: see claim fields\n  adjudicate CLM-4108: uw-castillo=fail uw-mensah=pass\n    uw-castillo: see claim fields\n  adjudicate CLM-4115: uw-castillo=fail uw-mensah=pass\n    uw-castillo: see claim fields\n  adjudicate CLM-4117: uw-castillo=fail uw-mensah=pass\n    uw-castillo: see claim fields\n  adjudicate CLM-4118: uw-castillo=\n[... 9415 characters omitted ...]\n the new rulings could flip | rest, or offline | `adjudicated` rows with reasons |\n| Open coding of new traces to check the taxonomy still covers them | if time remains | New failure modes or none |\n\n## After the session\n\n- [ ] Taxonomy recorded with counts and the trace number of the last new\n      failure mode.\n- [ ] Criteria file versioned and dated; every change since `v01` noted.\n- [ ] Labels given under older criteria versions re-reviewed.\n- [ ] Overlap labelled by both experts independently; `label_agreement.py`\n      run; disagreements adjudicated by the decision-maker with reasons.\n- [ ] Gold set written with provenance and splits; living evaluation",
+   "is_error": false
+  },
+  {
+   "command": "python3 -I - <<'E'\nimport csv,json,collections as C\nr=list(csv.DictReader(open('labels/experts.csv')))\nprint(C.Counter((x['criterion'],x['rater'],x['criteria_version'],x['labelled_at']) for x in r))\nd={(x['case_id'],x['criterion'],x['rater']):x for x in r}\n# fraud agreement by mensah version\nfor v in('v01','v02'):\n  a=n=0\n  for c in sorted({x['case_id'] for x in r}):\n    m=d[(c,'fraud_flags_correct','uw-mensah')];k=d[(c,'fraud_flags_correct','uw-castillo')]\n    if m['criteria_version']==v: n+=1;a+=m['label']==k['label']\n  print(v,n,a)\nprint(sorted(c for c in {x['case_id'] for x in r} if d[(c,'fraud_flags_correct','uw-mensah')]['criteria_version']=='v02'))\nj=[json.loads(l) for l in open('labels/judge.jsonl')]\nprint(C.Counter((x['criterion']) for x in j), len({x['case_id'] for x in j}))\nE\ncat cases/CLM-4103.json; grep -c . triage/prompts.py",
+   "output": "Counter({('fraud_flags_correct', 'uw-mensah', 'v01', '2026-10-14'): 12, ('fraud_flags_correct', 'uw-castillo', 'v01', '2026-10-14'): 12, ('fast_track_correct', 'uw-mensah', 'v01', '2026-10-14'): 12, ('fast_track_correct', 'uw-castillo', 'v01', '2026-10-14'): 12, ('note_grounded', 'uw-mensah', 'v01', '2026-10-14'): 12, ('note_grounded', 'uw-castillo', 'v01', '2026-10-14'): 12, ('fraud_flags_correct', 'uw-mensah', 'v02', '2026-10-17'): 12, ('fraud_flags_correct', 'uw-castillo', 'v01', '2026-10-17'): 12, ('fast_track_correct', 'uw-mensah', 'v01', '2026-10-17'): 12, ('fast_track_correct', 'uw-castillo', 'v01', '2026-10-17'): 12, ('note_grounded', 'uw-mensah', 'v01', '2026-10-17'): 12, ('note_grounded', 'uw-castillo', 'v01', '2026-10-17'): 12})\nv01 12 8\nv02 12 5\n['CLM-4113', 'CLM-4114', 'CLM-4115', 'CLM-4116', 'CLM-4117', 'CLM-4118', 'CLM-4119', 'CLM-4120', 'CLM-4121', 'CLM-4122', 'CLM-4123', 'CLM-4124']\nCounter({'fraud_flags_correct': 24, 'fast_track_correct': 24, 'note_grounded': 24}) 24\n{\"claim_id\": \"CLM-4103\", \"policy_age_days\": 900, \"vehicle\": \"hatchback\", \"incident\": \"car park scrape\", \"third_party\": true, \"estimate_eur\": 6100}\n3",
+   "is_error": false
+  },
+  {
+   "command": "python3 -I - <<'E'\nimport csv,json,collections as C\nr=list(csv.DictReader(open('labels/experts.csv')))\nj={(x['case_id'],x['criterion']):x['label'] for x in map(json.loads,open('labels/judge.jsonl'))}\nfor crit in ['fast_track_correct','fraud_flags_correct','note_grounded']:\n  for rt in['uw-mensah','uw-castillo']:\n    rows=[x for x in r if x['criterion']==crit and x['rater']==rt]\n    ag=sum(j[(x['case_id'],crit)]==x['label'] for x in rows)\n    print(crit,rt,ag,len(rows),'judge fail',sum(j[(x['case_id'],crit)]=='fail' for x in rows))\n# pairwise per half for fraud kappa-ish\nE",
+   "output": "fast_track_correct uw-mensah 21 24 judge fail 6\nfast_track_correct uw-castillo 21 24 judge fail 6\nfraud_flags_correct uw-mensah 13 24 judge fail 9\nfraud_flags_correct uw-castillo 16 24 judge fail 9\nnote_grounded uw-mensah 13 24 judge fail 4\nnote_grounded uw-castillo 17 24 judge fail 4",
+   "is_error": false
+  }
+ ],
+ "skills_loaded": [
+  "adk-agent-evaluation"
+ ],
+ "skill_files_read": [
+  "adk-agent-evaluation/references/expert-review.md",
+  "adk-agent-evaluation/scripts/label_agreement.py"
+ ],
+ "skill_md_loaded": {
+  "adk-agent-evaluation": {
+   "loaded": true,
+   "how": "skill-tool",
+   "other_files_read": 2
+  },
+  "adk-engineer": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  },
+  "adk-presenter": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  }
+ },
+ "permission_denials": [],
+ "tool_calls": 8,
+ "catalogue": [
+  "adk-agent-evaluation",
+  "adk-engineer",
+  "adk-presenter",
+  "deep-research",
+  "design",
+  "design-sync",
+  "dataviz",
+  "update-config",
+  "verify",
+  "debug",
+  "code-review",
+  "simplify",
+  "batch",
+  "fewer-permission-prompts",
+  "doctor",
+  "loop",
+  "schedule",
+  "claude-api",
+  "workflow-authoring",
+  "run",
+  "run-skill-generator",
+  "plugin-authoring"
+ ],
+ "catalogue_check": {
+  "missing": [],
+  "leaked": []
+ }
+}

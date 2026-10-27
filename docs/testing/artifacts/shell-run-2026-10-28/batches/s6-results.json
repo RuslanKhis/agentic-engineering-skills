@@ -1,0 +1,1399 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T22:28:06+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/s6/aes-scenarios-2aqf2ccs",
+ "commit": "1795c5c1ba8d272c727a852f4c42a822cf4115ee",
+ "scenarios_sha256": "065da3d19025c75c2bda476535a8dfc07179dbc466b6634cbbe687527fe1f456",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+ "max_turns": 40,
+ "timeout_s": 1200.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill",
+   "Bash"
+  ],
+  "unconfined_tools": [
+   "Bash"
+  ],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": false,
+  "unconfined": true,
+  "shell_environment": {
+   "home_mode": "real-home-redirected-config",
+   "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+   "variables_scrubbed": [
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN",
+    "SSH_AUTH_SOCK"
+   ],
+   "scrub_prefixes": [
+    "GOOGLE_",
+    "GCLOUD_",
+    "CLOUDSDK_",
+    "AWS_",
+    "AZURE_",
+    "ARM_"
+   ],
+   "scrub_names": [
+    "SSH_AUTH_SOCK",
+    "GH_TOKEN",
+    "GITHUB_TOKEN",
+    "GH_ENTERPRISE_TOKEN",
+    "GITLAB_TOKEN",
+    "NPM_TOKEN",
+    "HF_TOKEN",
+    "OPENAI_API_KEY",
+    "GEMINI_API_KEY",
+    "VAULT_TOKEN",
+    "KUBECONFIG",
+    "DOCKER_CONFIG",
+    "DOCKER_HOST",
+    "GIT_CONFIG_GLOBAL",
+    "GIT_ASKPASS",
+    "SSH_ASKPASS",
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN"
+   ],
+   "redirected": {
+    "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+    "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+    "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+    "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+    "DOCKER_CONFIG": "<case>/shell-env/docker",
+    "KUBECONFIG": "<case>/shell-env/kube/config",
+    "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+    "GH_CONFIG_DIR": "<case>/shell-env/gh",
+    "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+   },
+   "set": {
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "BROWSER": "true"
+   }
+  }
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "interoperability-verify-signed-agent-card",
+   "expected_primary": "adk-agent-interoperability",
+   "fixture_status": "repo-fixture",
+   "note": "agent_card_check.py needs a shell; the sample signed card is in docs/partner/.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-agent-security",
+    "adk-tool-auth-and-secrets",
+    "deploy-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.2237,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "States that RemoteA2aAgent does not verify signatures on a card it fetches by URL, resolves the card with get_agent_card(signature_verifier=create_signature_verifier(...)) and passes the AgentCard object, and re-applies the https and same-origin check ADK skips for a passed-in card.",
+     "verdict": "PASS",
+     "quote": "ADK skips that check for a card passed as an object.",
+     "quote_found": true,
+     "reason": "Code resolves via get_agent_card(signature_verifier=...), passes the card object to RemoteA2aAgent, and re-applies the https/same-origin check; the final answer states ADK skips the origin check, though it never says outright that RemoteA2aAgent does not verify signatures on a URL-fetched card.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 2,
+     "assertion": "Builds the key provider on the out-of-band key set, not on the card's jku; allows asymmetric algorithms only; raises a PyJWTError subclass for an unknown kid so rotation keeps working; and fails closed when verification fails.",
+     "verdict": "PASS",
+     "quote": "Unknown key ids raise a `PyJWTError` subclass, which lets the verifier move on to the next signature.",
+     "quote_found": true,
+     "reason": "The provider is built on a pinned JWKS and ignores jku, allows only ES256, raises a PyJWTError subclass for an unknown kid, and refuses the card on any failure.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Runs agent_card_check.py with --require-signature and --key-host and reads its findings (alg, kid, typ, jku origin, unprotected header, fields the signature does not cover), or, in a run without a shell, names that command, reports it as not run and reads the same findings from the card; either way it says the helper does not verify the signature itself.",
+     "verdict": "PASS",
+     "quote": "I ran `agent_card_check.py` on `docs/partner/sample-signed-card.json` with `--require-signature` and `--key-host keys.partner.example`.",
+     "quote_found": true,
+     "reason": "The command actually ran with both flags, the findings were read (jku off-origin, unprotected header, and the decoded protected header), and the answer says it \"does not verify signatures\".",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Treats a verified card's text as untrusted data for prompts and leaves bearer-token plumbing to adk-tool-auth-and-secrets.",
+     "verdict": "FAIL",
+     "quote": "Our provider ignores it either way.",
+     "quote_found": true,
+     "reason": "The answer does not say that a verified card's text is untrusted data for prompts, and it does not defer bearer-token plumbing to adk-tool-auth-and-secrets.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 3,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    1
+   ],
+   "final_chars": 4766,
+   "files": [
+    "app/agent.py",
+    "app/card_trust.py",
+    "app/server.py",
+    "app/settings.py",
+    "config/README.md",
+    "tests/test_card_trust.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 76.8,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 40,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 18,
+    "total_cost_usd": 0.2590365,
+    "duration_ms": 75759,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "40",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill,Bash",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill,Bash",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill",
+      "Bash"
+     ],
+     "unconfined_tools": [
+      "Bash"
+     ],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": false,
+     "unconfined": true,
+     "shell_environment": {
+      "home_mode": "real-home-redirected-config",
+      "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+      "variables_scrubbed": [
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN",
+       "SSH_AUTH_SOCK"
+      ],
+      "scrub_prefixes": [
+       "GOOGLE_",
+       "GCLOUD_",
+       "CLOUDSDK_",
+       "AWS_",
+       "AZURE_",
+       "ARM_"
+      ],
+      "scrub_names": [
+       "SSH_AUTH_SOCK",
+       "GH_TOKEN",
+       "GITHUB_TOKEN",
+       "GH_ENTERPRISE_TOKEN",
+       "GITLAB_TOKEN",
+       "NPM_TOKEN",
+       "HF_TOKEN",
+       "OPENAI_API_KEY",
+       "GEMINI_API_KEY",
+       "VAULT_TOKEN",
+       "KUBECONFIG",
+       "DOCKER_CONFIG",
+       "DOCKER_HOST",
+       "GIT_CONFIG_GLOBAL",
+       "GIT_ASKPASS",
+       "SSH_ASKPASS",
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN"
+      ],
+      "redirected": {
+       "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+       "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+       "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+       "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+       "DOCKER_CONFIG": "<case>/shell-env/docker",
+       "KUBECONFIG": "<case>/shell-env/kube/config",
+       "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+       "GH_CONFIG_DIR": "<case>/shell-env/gh",
+       "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+      },
+      "set": {
+       "GIT_CONFIG_NOSYSTEM": "1",
+       "BROWSER": "true"
+      }
+     }
+    },
+    "variables_scrubbed": [
+     "CLAUDE_CODE_MESSAGING_SOCKET",
+     "CLAUDE_CODE_MESSAGING_TOKEN",
+     "SSH_AUTH_SOCK"
+    ],
+    "shell_commands": [
+     {
+      "command": "cd .claude/skills/adk-agent-interoperability; grep -n -i \"signed agent cards\" references/*.md SKILL.md | head; awk '/^## Signed agent cards/{f=1} f&&/^## /&&!/Signed agent cards/{exit} f' references/a2a-contracts.md",
+      "output": "references/a2a-contracts.md:256:  card, follow [signed agent cards](#signed-agent-cards): passing a verified\nreferences/a2a-contracts.md:306:  ([signed agent cards](#signed-agent-cards)) but not the signature itself,\nreferences/a2a-contracts.md:317:  card is signed once at startup ([signed agent cards](#signed-agent-cards)).\nreferences/a2a-contracts.md:336:## Signed agent cards\nSKILL.md:84:   ([signed agent cards](references/a2a-contracts.md#signed-agent-cards)).\nSKILL.md:115:  ([signed agent cards](references/a2a-contracts.md#signed-agent-cards)). Choose the transport from\n## Signed agent cards\n\nA2A 1.0 lets a producer sign its card with JWS (specification §8.4,\na2aproject/A2A main 98279d6 and tag v1.0.1, read 2026-10-24). Each\n`signatures[]` entry has a base64url `protected` header and a `signature`,\nboth required, and an optional unprotected `header`. The protected header\nmust carry `alg` and `kid`, `typ` should be `JOSE`, and `jku` may point at a\nJWKS. The signed payload is the card without `signatures`, defaults removed,\ncanonicalised with RFC 8785.\n\nConsumer, in this order:\n\n1. ADK 2.12.0 does not verify a signature on a card it fetches by URL:\n   `RemoteA2aAgent._resolve_agent_card_from_url` calls\n   `A2ACardResolver.get_agent_card` without a verifier. To require one,\n   resolve the card yourself with\n   \n[... 4149 characters omitted ...]\nnly where the card's\n  advertised origin is the origin you fetch from, since a local `to_a2a`\n  advertising its public https URL fails `rpc_url_origin_mismatch` by\n  design.\n\nSources: a2aproject/a2a-samples at 6603ba3 (2026-08-04; Apache-2.0; quiet\nsince August), `samples/python/agents/sign_and_verify_agent_card` (pins\na2a-sdk 1.1.0), read 2026-10-24; a2a-sdk 1.2.3 `a2a/utils/signing.py` and\n`a2a/client/card_resolver.py`; google-adk 2.12.0\n`a2a/agent/_remote_a2a_agent.py` and `a2a/utils/agent_to_a2a.py`. The probe\nwas two scratch scripts against the installed a2a-sdk; no sample code ran.\nThe repository's CIBA sample is covered in `adk-tool-auth-and-secrets`.",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills/adk-agent-interoperability; grep -n -i \"signature\\|jku\\|key-host\" scripts/agent_card_check.py | head -60; grep -n -i \"RemoteA2aAgent\\|agent_card\\|card_resolver\\|a2a_client_factory\" references/compatibility.md | head -20",
+      "output": "(eval):cd:1: no such file or directory: .claude/skills/adk-agent-interoperability\n13:JWS structure the specification requires (``protected`` and ``signature``; an\n14:asymmetric ``alg``, ``kid`` and ``typ`` in the protected header; a ``jku`` on\n15:https at the card's origin or a ``--key-host``), flags unprotected header\n17:checking, which the signature therefore does not cover. It does not verify the\n18:signature cryptographically. Accepts the a2a-sdk 0.3 card shape (``url``, ``preferredTransport``) and the 1.0 shape\n53:# not covered by the signature (a2a-sdk 1.2.3 a2a.types descriptors and\n58:         \"defaultOutputModes\", \"skills\", \"signatures\", \"iconUrl\"},\n286:def signature_checks(card: dict, *, shape: str, fetched_from: str | None, key_hosts: list[str],\n288:    \"\"\"Structural JWS checks on card signatures; returns the algorithms seen.\"\"\"\n289:    signatures = card.get(\"signatures\")\n290:    if signatures is None:\n292:            checks.append({\"code\": \"signature_missing\", \"level\": \"error\", \"heuristic\": False,\n293:                           \"message\": \"card carries no signatures and --require-signature was given\"})\n295:    if not isinstance(signatures, list) or not signatures:\n296:        checks.append({\"code\": \"signatures_malformed\", \"level\": \"error\", \"heuristic\": False,\n297:                       \"message\": \"si\n[... 4285 characters omitted ...]\nr, `REJECTED` state, three bindings). 2.11.0 fixes a2a-sdk 0.3.4 to 0.3.10 breakage (5b079ee) | `agent_card_check.py --installed-a2a-sdk` compares the card's `protocolVersion` with the SDK generation. Numbers in 1.x data parts round-trip as floats (`_compat.data_part_dict` docstring) |\n29:| `RemoteA2aAgent` card validation | RPC URLs https or loopback, same origin as the fetched card (2.7.0) | 2.9.0 requires https for a non-loopback card URL itself; stops caching a card that failed validation |\n35:| `RemoteA2aAgent` options | `use_legacy`, `config`, `auth_scheme`, `a2a_request_meta_provider` | 2.10.0 `context_builder` and `forward_session_id_as_context_id` |",
+      "is_error": false
+     },
+     {
+      "command": "pip list 2>/dev/null | grep -i -E \"a2a|adk|jwcrypto|pyjwt|cryptography|jwt|jose\"; python3 --version; cat tests/fakes.py | head -30; cat README.md | head -30",
+      "output": "cryptography                             45.0.5\nPyJWT                                    2.10.1\nPython 3.9.13\ncat: tests/fakes.py: No such file or directory\ncat: README.md: No such file or directory",
+      "is_error": false
+     },
+     {
+      "command": "cd /private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/s6/aes-scenarios-2aqf2ccs/interoperability-verify-signed-agent-card/workspace && python3 .claude/skills/adk-agent-interoperability/scripts/agent_card_check.py --file docs/partner/sample-signed-card.json --require-signature --key-host keys.partner.example --installed-a2a-sdk 1.2.3 2>&1 | head -80; echo ---; cat tests/fakes.py | head -20; sed -n 1,30p app/server.py; cat app/settings.py; python3 -c \"import base64;print(base64.urlsafe_b64decode('eyJhbGciOiJFUzI1NiIsImtpZCI6ImNhcmQtMjAyNi0xMCIsInR5cCI6IkpPU0UiLCJqa3UiOiJodHRwczovL2Nkbi5wYXJ0bmVyLWFzc2V0cy5leGFtcGxlL2p3a3MuanNvbiJ9'+'=='))\"",
+      "output": "{\n  \"card_url\": null,\n  \"checks\": [\n    {\n      \"code\": \"no_security_schemes\",\n      \"heuristic\": false,\n      \"level\": \"error\",\n      \"message\": \"non-loopback endpoint declares no securitySchemes; the A2A enterprise baseline carries auth in HTTP headers declared by the card\"\n    },\n    {\n      \"code\": \"signature_unprotected_header\",\n      \"heuristic\": false,\n      \"level\": \"review\",\n      \"message\": \"signatures[0].header values are not integrity-protected; trust only what is in the protected header\"\n    },\n    {\n      \"code\": \"signature_jku_off_origin\",\n      \"heuristic\": false,\n      \"level\": \"error\",\n      \"message\": \"signatures[0] jku host cdn.partner-assets.example is neither the card's origin nor a --key-host\"\n    },\n    {\n      \"code\": \"signature_jku_present\",\n      \"heuristic\": false,\n      \"level\": \"info\",\n      \"message\": \"signatures[0] names a jku; a verifier must take keys from a key set agreed out of band, never from the card it is verifying\"\n    },\n    {\n      \"code\": \"signature_shape_unchecked\",\n      \"heuristic\": false,\n      \"level\": \"review\",\n      \"message\": \"signed card in the 0.3 shape; which fields the signature covers depends on the pinned a2a-sdk's verifier\"\n    }\n  ],\n  \"counts\": {\n    \"by_code\": {\n      \"no_security_schemes\": 1,\n      \"signature_jku_off_origin\": 1,\n      \"signature_jku_\n[... 3491 characters omitted ...]\nund_cents: int = 20_000\n\n    @classmethod\n    def from_env(cls) -> \"Settings\":\n        return cls(\n            model_id=os.environ.get(\"MODEL_ID\", cls.model_id),\n            db_path=os.environ.get(\"SUPPORT_DB_PATH\", cls.db_path),\n            payments_base_url=os.environ.get(\"PAYMENTS_BASE_URL\", cls.payments_base_url),\n            mail_base_url=os.environ.get(\"MAIL_BASE_URL\", cls.mail_base_url),\n            iap_audience=os.environ.get(\"IAP_AUDIENCE\", \"\"),\n            max_refund_cents=int(os.environ.get(\"MAX_REFUND_CENTS\", cls.max_refund_cents)),\n        )\nb'{\"alg\":\"ES256\",\"kid\":\"card-2026-10\",\"typ\":\"JOSE\",\"jku\":\"https://cdn.partner-assets.example/jwks.json\"}'",
+      "is_error": false
+     },
+     {
+      "command": "sed -n 30,200p app/server.py; grep -rn \"root_agent\\|build_agent\" --include=*.py . | grep -v \"^./.claude\"; sed -n 20,60p tests/fakes.py; ls tests; sed -n 1,20p tests/test_auth.py",
+      "output": "    except Unauthenticated:\n        raise HTTPException(status_code=401, detail=\"unauthenticated\")\n\n\nclass ChatIn(BaseModel):\n    session_id: str | None = None\n    message: str\n\n\n@app.post(\"/api/chat\")\nasync def chat(body: ChatIn, principal: Principal = Depends(current_principal)):\n    session = None\n    if body.session_id:\n        session = await session_service.get_session(app_name=\"support\", user_id=principal.user_id,\n                                                    session_id=body.session_id)\n    if session is None:\n        session = await session_service.create_session(app_name=\"support\", user_id=principal.user_id)\n    reply = []\n    async for event in runner.run_async(user_id=principal.user_id, session_id=session.id,\n                                        new_message=types.Content(role=\"user\",\n                                                                  parts=[types.Part(text=body.message)])):\n        if event.is_final_response() and event.content and event.content.parts:\n            reply.extend(p.text for p in event.content.parts if p.text)\n    return {\"session_id\": session.id, \"reply\": \"\".join(reply)}\n(eval):1: no matches found: --include=*.py\n\n    def request(self, method, url, *, json=None, headers=None, timeout=10.0):\n        self.requests.append({\"method\": method, \"url\": url, \"json\": json, \n[... 1252 characters omitted ...]\nrn store, pay, mail\n__init__.py\nfakes.py\ntest_auth.py\ntest_tools.py\nimport unittest\n\nfrom app.auth import Unauthenticated, principal_from_headers\n\n\ndef verifier(claims=None, error=None):\n    def verify(assertion, audience):\n        if error:\n            raise error\n        return claims\n    return verify\n\n\nclass AuthTests(unittest.TestCase):\n    def test_valid_assertion_gives_principal(self):\n        p = principal_from_headers({\"x-goog-iap-jwt-assertion\": \"jwt\"},\n                                   verifier({\"sub\": \"cust-ana\", \"email\": \"ana@example.com\"}), \"aud\")\n        self.assertEqual(p.user_id, \"cust-ana\")\n\n    def test_missing_assertion_is_refused(self):",
+      "is_error": false
+     },
+     {
+      "command": "python3 - <<'E'\nimport re\np='app/settings.py'\ns=open(p).read()\ns=s.replace('    max_refund_cents: int = 20_000\\n','    max_refund_cents: int = 20_000\\n    partner_card_url: str = \"https://partner.example/.well-known/agent-card.json\"\\n    partner_jwks_path: str = \"config/partner-jwks.json\"\\n    partner_card_kids: tuple[str, ...] = (\"card-2026-10\", \"card-2027-01\")\\n',1)\ns=s.replace('            max_refund_cents=int(os.environ.get(\"MAX_REFUND_CENTS\", cls.max_refund_cents)),\\n','            max_refund_cents=int(os.environ.get(\"MAX_REFUND_CENTS\", cls.max_refund_cents)),\\n            partner_jwks_path=os.environ.get(\"PARTNER_JWKS_PATH\", cls.partner_jwks_path),\\n',1)\nopen(p,'w').write(s)\np='app/agent.py'\ns=open(p).read()\ns=s.replace('def build_agent(settings: Settings | None = None) -> LlmAgent:','def build_agent(settings: Settings | None = None, warranty_card=None) -> LlmAgent:\\n    \"\"\"`warranty_card` is a signature-verified AgentCard; without one there is no warranty agent.\"\"\"',1)\na=s.index('    warranty = RemoteA2aAgent(')\nb=s.index('\\n\\n\\nroot_agent')\ns=s[:a]+'''    instruction = ROOT_INSTRUCTION\n    sub_agents = []\n    if warranty_card is not None:\n        sub_agents.append(RemoteA2aAgent(\n            name=\"warranty_partner\",\n            description=\"The bike maker's warranty agent: coverage and repair options for a serial number.\",\n            agent_card=warranty_card,\n        ))\n        instruction += \"\\\\nTransfer warranty questions to warranty_partner.\"\n    else:\n        instruction += \"\\\\nWarranty lookups are unavailable; tell the customer a human will follow up.\"\n    return LlmAgent(\n        name=\"support_assistant\",\n        model=settings.model_id,\n        instruction=instruction,\n        tools=[lookup_order, list_my_orders, search_help],\n        sub_agents=sub_agents,\n    )\n\n\nasync def build_verified_agent(settings: Settings | None = None) -> LlmAgent:\n    \"\"\"Fetch the partner card, verify its signature, and build the agent.\n\n    A refused card yields an agent without the warranty sub-agent (fail closed).\n    \"\"\"\n    import logging\n    import httpx\n    from app.card_trust import CardRefused, PinnedKeyProvider, fetch_verified_card\n\n    settings = settings or Settings.from_env()\n    try:\n        provider = PinnedKeyProvider.from_file(settings.partner_jwks_path, settings.partner_card_kids)\n        async with httpx.AsyncClient(timeout=10.0, follow_redirects=False) as client:\n            card = await fetch_verified_card(settings.partner_card_url, provider, client)\n    except CardRefused as exc:\n        logging.getLogger(__name__).error(\"warranty partner disabled: %s\", exc)\n        card = None\n    return build_agent(settings, warranty_card=card)'''+s[b:]\ns=s.replace('\\n\\n\\nroot_agent = build_agent()\\n','\\n',1)\nopen(p,'w').write(s)\nE\ntail -50 app/agent.py | head -15",
+      "output": "def build_agent(settings: Settings | None = None, warranty_card=None) -> LlmAgent:\n    \"\"\"`warranty_card` is a signature-verified AgentCard; without one there is no warranty agent.\"\"\"\n    settings = settings or Settings.from_env()\n    transport = HttpxTransport()\n    services.configure(services.Services(\n        store=Store(settings.db_path),\n        payments=PaymentsClient(settings.payments_base_url, transport, os.environ.get(\"PAYMENTS_API_KEY\", \"\")),\n        mail=MailClient(settings.mail_base_url, transport),\n        help_index=HelpIndex(),\n        max_refund_cents=settings.max_refund_cents,\n    ))\n    instruction = ROOT_INSTRUCTION\n    sub_agents = []\n    if warranty_card is not None:",
+      "is_error": false
+     },
+     {
+      "command": "python3 - <<'E'\np='app/server.py'\ns=open(p).read()\ns=s.replace('from fastapi import','from contextlib import asynccontextmanager\\n\\nfrom fastapi import',1)\ns=s.replace('from app.agent import root_agent','from app.agent import build_verified_agent')\ns=s.replace('''app = FastAPI(title=\"Support assistant\")\nsession_service = InMemorySessionService()\nrunner = Runner(app_name=\"support\", agent=root_agent, session_service=session_service)\n''','''session_service = InMemorySessionService()\nrunner: Runner | None = None\n\n\n@asynccontextmanager\nasync def lifespan(_: FastAPI):\n    # The partner card is fetched and signature-verified here, not at import.\n    global runner\n    agent = await build_verified_agent(settings)\n    runner = Runner(app_name=\"support\", agent=agent, session_service=session_service)\n    yield\n\n\napp = FastAPI(title=\"Support assistant\", lifespan=lifespan)\n''')\nopen(p,'w').write(s)\nE\nmkdir -p config\ncat > tests/test_card_trust.py <<'E'\nimport json\nimport unittest\n\nfrom app.card_trust import CardRefused, PinnedKeyProvider, check_interface_origins\n\ntry:\n    import jwt\n    from cryptography.hazmat.primitives.asymmetric import ec\nexcept ImportError:  # SDK extras not installed\n    jwt = None\n\nCARD = \"https://partner.example/.well-known/agent-card.json\"\n\n\ndef make_key(kid):\n    key = ec.generate_private_key(ec.SECP256R1())\n    jwk = json.loads(jwt.algorithms.ECAlgorithm.to_jwk(key.public_key()))\n    jwk.update(kid=kid, use=\"sig\", alg=\"ES256\")\n    return key, jwk\n\n\nclass OriginTests(unittest.TestCase):\n    def test_same_origin_https_passes(self):\n        check_interface_origins([\"https://partner.example/a2a/warranty\"], CARD)\n\n    def test_other_host_refused(self):\n        with self.assertRaises(CardRefused):\n            check_interface_origins([\"https://evil.example/a2a\"], CARD)\n\n    def test_http_refused(self):\n        with self.assertRaises(CardRefused):\n            check_interface_origins([\"http://partner.example/a2a\"], CARD)\n\n    def test_no_interface_refused(self):\n        with self.assertRaises(CardRefused):\n            check_interface_origins([], CARD)\n\n\n@unittest.skipIf(jwt is None, \"PyJWT/cryptography not installed\")\nclass ProviderTests(unittest.TestCase):\n    def setUp(self):\n        self.k1, self.j1 = make_key(\"card-2026-10\")\n        self.k2, self.j2 = make_key(\"card-2027-01\")\n        self.rogue, self.jr = make_key(\"card-2026-10\")\n        self.allowed = {\"card-2026-10\", \"card-2027-01\"}\n\n    def sign(self, key, kid):\n        return jwt.encode({\"x\": 1}, key, algorithm=\"ES256\", headers={\"kid\": kid})\n\n    def verify(self, provider, token):\n        header = jwt.get_unverified_header(token)\n        return jwt.decode(token, provider(header[\"kid\"], header.get(\"jku\")), algorithms=[\"ES256\"])\n\n    def test_both_rotation_keys_verify(self):\n        p = PinnedKeyProvider({\"keys\": [self.j1, self.j2]}, self.allowed)\n        self.assertEqual(self.verify(p, self.sign(self.k1, \"card-2026-10\")), {\"x\": 1})\n        self.assertEqual(self.verify(p, self.sign(self.k2, \"card-2027-01\")), {\"x\": 1})\n\n    def test_attacker_key_with_pinned_kid_fails(self):\n        p = PinnedKeyProvider({\"keys\": [self.j1]}, self.allowed)\n        with self.assertRaises(jwt.InvalidSignatureError):\n            self.verify(p, self.sign(self.rogue, \"card-2026-10\"))\n\n    def test_unknown_kid_raises_pyjwt_error_subclass(self):\n        p = PinnedKeyProvider({\"keys\": [self.j1]}, self.allowed)\n        with self.assertRaises(jwt.PyJWTError):\n            p(\"card-2099-01\", None)\n\n    def test_jku_is_ignored(self):\n        p = PinnedKeyProvider({\"keys\": [self.j1]}, self.allowed)\n        with self.assertRaises(jwt.InvalidSignatureError):\n            self.verify(p, jwt.encode({\"x\": 1}, self.rogue, algorithm=\"ES256\",\n                                      headers={\"kid\": \"card-2026-10\", \"jku\": \"https://cdn.evil.example/jwks.json\"}))\n\n    def test_kid_not_in_allowlist_is_not_loaded(self):\n        with self.assertRaises(CardRefused):\n            PinnedKeyProvider({\"keys\": [self.j2]}, {\"card-2026-10\"})\n\n    def test_missing_file_refuses(self):\n        with self.assertRaises(CardRefused):\n            PinnedKeyProvider.from_file(\"/nonexistent/jwks.json\", self.allowed)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\nE\npython3 -m unittest discover -s tests -t . 2>&1 | tail -15",
+      "output": ".....................\n----------------------------------------------------------------------\nRan 21 tests in 0.029s\n\nOK",
+      "is_error": false
+     },
+     {
+      "command": "cat > config/README.md <<'E'\nPlace `partner-jwks.json` here: the partner's key set, copied by a person from\nhttps://keys.partner.example/a2a/jwks.json and checked against the key ids the\npartner announced (`card-2026-10`, `card-2027-01`) over a second channel. The\nservice refuses the warranty card if this file is missing or has no allowed kid.\nE\npython3 -m py_compile app/server.py app/agent.py app/card_trust.py && echo ok",
+      "output": "ok",
+      "is_error": false
+     }
+    ],
+    "skills_loaded": [
+     "adk-agent-interoperability"
+    ],
+    "skill_files_read": [
+     "adk-agent-interoperability/references/a2a-contracts.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-interoperability": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-tool-auth-and-secrets": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "deploy-adk-on-google-cloud": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 16,
+    "catalogue": [
+     "adk-agent-interoperability",
+     "adk-agent-security",
+     "adk-tool-auth-and-secrets",
+     "deploy-adk-on-google-cloud",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-interoperability": true,
+    "adk-agent-security": false,
+    "adk-tool-auth-and-secrets": false,
+    "deploy-adk-on-google-cloud": false
+   }
+  },
+  {
+   "id": "interoperability-expose-mcp-server-with-conformance-baseline",
+   "expected_primary": "adk-agent-interoperability",
+   "fixture_status": "repo-fixture",
+   "note": "The agent has no shell; helper scripts it names can only be proposed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-release-engineering",
+    "adk-agent-security"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.1865,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Serves the agent with to_mcp_server over streamable HTTP, commits the tool manifest from the inventory helper (or, in a run without a shell, names the inventory helper command that produces it and reports the manifest as not generated), and keeps the tool's description a capability statement without the instruction.",
+     "verdict": "FAIL",
+     "quote": "return to_mcp_server(root_agent, name=TOOL_NAME)",
+     "quote_found": true,
+     "reason": "It serves via to_mcp_server over streamable HTTP, but no tool manifest was committed and the inventory helper command is never named nor the manifest reported as not generated.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Adds the pinned conformance command with --requirements for the revision the server speaks and an expected-failures baseline whose entries name the fixture-dependent scenarios or checks with reasons, run with a scripted model so no credentials are needed.",
+     "verdict": "FAIL",
+     "quote": "The baselines are not generated on this repo. The 2026-07-28 file holds only the two failures the skill documents, and the 2025-11-25 file is empty.",
+     "quote_found": true,
+     "reason": "Conformance command with --requirements exists, but the baseline does not name fixture-dependent scenarios with reasons (empty for 2025-11-25, and the 2026 entries are not fixture-dependent with proper reasons).",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Explains that a baseline entry that starts passing makes the run exit 1, so the baseline shrinks on purpose, and places the check in the pull-request tier.",
+     "verdict": "PASS",
+     "quote": "A new failure fails the\n  job, and so does a baselined failure that starts passing (stale entry), so a suite change shows up either way.",
+     "quote_found": true,
+     "reason": "It explains that a baselined entry that starts passing fails the run, and the check runs on pull_request in the test job.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Does not widen the server to fixture tools, resources or prompts to make the suite green, and records the approval gate for MCP callers as not satisfiable by an MCP host.",
+     "verdict": "FAIL",
+     "quote": "It has no authentication, so someone needs to put an authenticated edge in front of it before it is exposed.",
+     "quote_found": true,
+     "reason": "It does not widen to fixture tools, but it never records that the approval gate for MCP callers is not satisfiable by an MCP host.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.92,
+   "unstable": [
+    3
+   ],
+   "final_chars": 3068,
+   "files": [
+    ".github/workflows/ci.yml",
+    "README.md",
+    "conformance/PINS.json",
+    "conformance/baseline-2025-11-25.yml",
+    "conformance/baseline-2026-07-28.yml",
+    "research/mcp_server.py",
+    "scripts/conformance.sh",
+    "tests/test_mcp_server.py",
+    "tests/test_pins.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 66.2,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 40,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 11,
+    "total_cost_usd": 0.24346840000000003,
+    "duration_ms": 65187,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "40",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill,Bash",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill,Bash",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill",
+      "Bash"
+     ],
+     "unconfined_tools": [
+      "Bash"
+     ],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": false,
+     "unconfined": true,
+     "shell_environment": {
+      "home_mode": "real-home-redirected-config",
+      "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+      "variables_scrubbed": [
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN",
+       "SSH_AUTH_SOCK"
+      ],
+      "scrub_prefixes": [
+       "GOOGLE_",
+       "GCLOUD_",
+       "CLOUDSDK_",
+       "AWS_",
+       "AZURE_",
+       "ARM_"
+      ],
+      "scrub_names": [
+       "SSH_AUTH_SOCK",
+       "GH_TOKEN",
+       "GITHUB_TOKEN",
+       "GH_ENTERPRISE_TOKEN",
+       "GITLAB_TOKEN",
+       "NPM_TOKEN",
+       "HF_TOKEN",
+       "OPENAI_API_KEY",
+       "GEMINI_API_KEY",
+       "VAULT_TOKEN",
+       "KUBECONFIG",
+       "DOCKER_CONFIG",
+       "DOCKER_HOST",
+       "GIT_CONFIG_GLOBAL",
+       "GIT_ASKPASS",
+       "SSH_ASKPASS",
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN"
+      ],
+      "redirected": {
+       "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+       "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+       "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+       "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+       "DOCKER_CONFIG": "<case>/shell-env/docker",
+       "KUBECONFIG": "<case>/shell-env/kube/config",
+       "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+       "GH_CONFIG_DIR": "<case>/shell-env/gh",
+       "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+      },
+      "set": {
+       "GIT_CONFIG_NOSYSTEM": "1",
+       "BROWSER": "true"
+      }
+     }
+    },
+    "variables_scrubbed": [
+     "CLAUDE_CODE_MESSAGING_SOCKET",
+     "CLAUDE_CODE_MESSAGING_TOKEN",
+     "SSH_AUTH_SOCK"
+    ],
+    "shell_commands": [
+     {
+      "command": "find . -type f -not -path './node_modules/*' | head -100",
+      "output": "./research/tools.py\n./research/__init__.py\n./research/agent.py\n./pyproject.toml\n./tests/scripted_model.py\n./tests/__init__.py\n./tests/test_agent_scripted.py\n./tests/test_tools.py\n./.claude/skills/adk-agent-interoperability/LICENSE\n./.claude/skills/adk-agent-interoperability/references/topology.md\n./.claude/skills/adk-agent-interoperability/references/platform-registration.md\n./.claude/skills/adk-agent-interoperability/references/sources.md\n./.claude/skills/adk-agent-interoperability/references/remote-failures.md\n./.claude/skills/adk-agent-interoperability/references/validation.md\n./.claude/skills/adk-agent-interoperability/references/mcp-exposure.md\n./.claude/skills/adk-agent-interoperability/references/selection.md\n./.claude/skills/adk-agent-interoperability/references/mcp-consumption.md\n./.claude/skills/adk-agent-interoperability/references/compatibility.md\n./.claude/skills/adk-agent-interoperability/references/evaluation-across-boundaries.md\n./.claude/skills/adk-agent-interoperability/references/operating-rules.md\n./.claude/skills/adk-agent-interoperability/references/a2a-contracts.md\n./.claude/skills/adk-agent-interoperability/agents/openai.yaml\n./.claude/skills/adk-agent-interoperability/scripts/mcp_tool_inventory.py\n./.claude/skills/adk-agent-interoperability/scripts/agent_card_check.py\n./.claude/skills/ad\n[... 1652 characters omitted ...]\ns/adk-agent-security/references/tool-supply-chain.md\n./.claude/skills/adk-agent-security/references/compatibility.md\n./.claude/skills/adk-agent-security/references/adversarial-testing.md\n./.claude/skills/adk-agent-security/references/agency-and-output.md\n./.claude/skills/adk-agent-security/references/operating-rules.md\n./.claude/skills/adk-agent-security/agents/openai.yaml\n./.claude/skills/adk-agent-security/scripts/inspect_security_surface.py\n./.claude/skills/adk-agent-security/SKILL.md\n./.claude/skills/adk-agent-security/assets/adversarial-cases.json\n./.claude/skills/adk-agent-security/assets/threat-model-checklist.md\n./README.md\n./.github/workflows/ci.yml",
+      "is_error": false
+     },
+     {
+      "command": "cd /private/tmp/claude-501/*/scratchpad/runs/s6/aes-scenarios-2aqf2ccs/interoperability-expose-mcp-server-with-conformance-baseline/workspace && cat pyproject.toml README.md .github/workflows/ci.yml research/*.py tests/*.py; cat .claude/skills/adk-agent-interoperability/references/mcp-exposure.md .claude/skills/adk-agent-interoperability/references/validation.md",
+      "output": "Exit code 1\n(eval):1: no matches found: /private/tmp/claude-501/*/scratchpad/runs/s6/aes-scenarios-2aqf2ccs/interoperability-expose-mcp-server-with-conformance-baseline/workspace",
+      "is_error": true
+     },
+     {
+      "command": "cat pyproject.toml README.md .github/workflows/ci.yml research/*.py tests/*.py",
+      "output": "[project]\nname = \"paper-research-agent\"\nversion = \"0.6.0\"\nrequires-python = \">=3.11\"\ndependencies = [\n  \"google-adk==2.12.0\",\n  \"mcp>=2.0,<3\",\n  \"uvicorn==0.37.0\",\n]\n# Research agent\n\nOne ADK agent that answers questions about published papers using two tools.\nThe platform team wants to call it from their MCP hosts.\n\nTests: `python -m unittest discover -s tests -t .` runs the tool tests offline.\n`tests/test_agent_scripted.py` drives the agent with a scripted model and needs\ngoogle-adk installed; it is skipped here, where neither google-adk nor mcp is\ninstalled. No cloud credentials.\nname: ci\non:\n  pull_request:\n  push:\n    branches: [main]\njobs:\n  test:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/checkout@v5\n      - uses: actions/setup-python@v6\n        with:\n          python-version: \"3.12\"\n      - uses: actions/setup-node@v5\n        with:\n          node-version: \"22\"\n      - run: pip install -e .\n      - run: python -m unittest discover -s tests -t .\n\"\"\"The research agent.\"\"\"\nfrom google.adk.agents import LlmAgent\n\nfrom research.tools import get_abstract, search_papers\n\nroot_agent = LlmAgent(\n    name=\"paper_research\",\n    model=\"gemini-3.5-flash\",\n    description=\"Answers questions about published papers in the team's index.\",\n    instruction=(\n        \"You answer questions about papers in the \n[... 2897 characters omitted ...]\n = list(runner.run(user_id=\"u\", session_id=session.id,\n                                 new_message=types.Content(role=\"user\", parts=[types.Part(text=\"agents?\")])))\n        self.assertIn(\"p-102\", events[-1].content.parts[0].text)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\nimport unittest\n\nfrom research.tools import get_abstract, search_papers\n\n\nclass ToolTests(unittest.TestCase):\n    def test_search(self):\n        self.assertEqual(search_papers(\"agents reliability\")[\"papers\"][0][\"paper_id\"], \"p-102\")\n\n    def test_unknown_paper(self):\n        self.assertEqual(get_abstract(\"p-999\")[\"status\"], \"not_found\")\n\n\nif __name__ == \"__main__\":\n    unittest.main()",
+      "is_error": false
+     },
+     {
+      "command": "grep -n \"^## \\|^### \" .claude/skills/adk-agent-interoperability/references/validation.md; python3 -c \"import google.adk\" 2>&1 | tail -1; python3 -c \"import mcp\" 2>&1|tail -1; node -v; ls ~/.npm/_cacache 2>/dev/null | head -2",
+      "output": "6:## 1. Inventory and card reports before and after\n32:## 2. Source and pin check\n47:## 3. Fake-server tests\n55:## 4. Contract table\n61:## 5. Live exchange (approved)\n69:## 6. Protocol conformance (local, pinned)\n192:## Completion report\nModuleNotFoundError: No module named 'google.adk'\nModuleNotFoundError: No module named 'mcp'\nv22.23.2\ncontent-v2\nindex-v5",
+      "is_error": false
+     },
+     {
+      "command": "mkdir -p scripts conformance\ncat > research/mcp_server.py <<'EOF'\n\"\"\"Serve the research agent as an MCP server: one tool, `paper_research`, taking `request: str`.\n\n    python -m research.mcp_server                 # streamable HTTP on 127.0.0.1:$PORT (default 8000)\n    python -m research.mcp_server --stdio\n\nBinds loopback unless MCP_HOST says otherwise. There is no authentication here: put the edge\n(IAP, gateway, mTLS) in front before binding anything but loopback.\nEvery call is one self-contained turn. On spec 2026-07-28 there is no connection, so\n`to_mcp_server` cannot keep a conversation across calls; hosts must put the full context in `request`.\n\"\"\"\nfrom __future__ import annotations\n\nimport os\nimport sys\n\nfrom google.adk.tools.mcp_tool import to_mcp_server\n\nfrom research.agent import root_agent\n\nTOOL_NAME = \"paper_research\"\n\n\ndef build_server():\n    return to_mcp_server(root_agent, name=TOOL_NAME)\n\n\ndef main(argv: list[str]) -> None:\n    server = build_server()\n    if \"--stdio\" in argv:\n        server.run(transport=\"stdio\")\n    else:\n        server.run(transport=\"streamable-http\", host=os.environ.get(\"MCP_HOST\", \"127.0.0.1\"),\n                   port=int(os.environ.get(\"PORT\", \"8000\")))\n\n\nif __name__ == \"__main__\":\n    main(sys.argv[1:])\nEOF\ncat > tests/test_mcp_server.py <<'EOF'\n\"\"\"In-process MCP protocol tests: the same exchange under the handshake and 2026-07-28 revisions.\n\nNeeds google-adk and mcp 2.x; skipped otherwise. Scripted model, no network.\n\"\"\"\nimport importlib.util\nimport unittest\n\ntry:\n    HAVE = all(importlib.util.find_spec(m) for m in (\"google.adk\", \"mcp\"))\nexcept ModuleNotFoundError:\n    HAVE = False\n\n\n@unittest.skipUnless(HAVE, \"google-adk and mcp not installed\")\nclass McpServerTests(unittest.IsolatedAsyncioTestCase):\n    def setUp(self):\n        from google.adk.models.llm_response import LlmResponse\n        from google.genai import types\n\n        from research.agent import root_agent\n        from tests.scripted_model import ScriptedModel\n\n        self._orig_model = root_agent.model\n        root_agent.model = ScriptedModel(responses=[\n            LlmResponse(content=types.Content(role=\"model\", parts=[types.Part(function_call=types.FunctionCall(\n                name=\"search_papers\", args={\"query\": \"agents\"}))])),\n            LlmResponse(content=types.Content(role=\"model\", parts=[types.Part(text=\"See p-102.\")])),\n        ])\n\n    def tearDown(self):\n        from research.agent import root_agent\n        root_agent.model = self._orig_model\n\n    async def _each_mode(self):\n        import mcp\n        from research.mcp_server import build_server\n        for kwargs in ({}, {\"mode\": \"legacy\"}):   # default negotiates 2026-07-28\n            yield kwargs, mcp.Client(build_server(), **kwargs)\n\n    async def test_tools_list_contract(self):\n        from research.agent import root_agent\n        async for kwargs, client in self._each_mode():\n            async with client:\n                tools = (await client.list_tools()).tools\n            with self.subTest(kwargs=kwargs):\n                self.assertEqual([t.name for t in tools], [\"paper_research\"])\n                self.assertEqual(tools[0].description, root_agent.description)\n                self.assertEqual(tools[0].inputSchema.get(\"required\"), [\"request\"])\n                self.assertNotIn(\"search_papers\", tools[0].description)  # instruction/tools stay private\n\n    async def test_call_returns_final_answer(self):\n        from research.agent import root_agent\n        from google.adk.models.llm_response import LlmResponse\n        from google.genai import types\n        async for kwargs, client in self._each_mode():\n            root_agent.model.responses[:] = [\n                LlmResponse(content=types.Content(role=\"model\", parts=[types.Part(text=\"See p-102.\")]))]\n            async with client:\n                result = await client.call_tool(\"paper_research\", {\"request\": \"agents?\"})\n            with self.subTest(kwargs=kwargs):\n                self.assertFalse(result.is_error)\n                self.assertIn(\"p-102\", \"\".join(getattr(c, \"text\", \"\") for c in result.content))\n\n    async def test_unknown_tool_is_error_result(self):\n        async for kwargs, client in self._each_mode():\n            async with client:\n                try:\n                    result = await client.call_tool(\"nope\", {})\n                except Exception:  # a JSON-RPC error is also an acceptable rejection\n                    continue\n            with self.subTest(kwargs=kwargs):\n                self.assertTrue(result.is_error)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\nEOF\ncat > tests/test_pins.py <<'EOF'\n\"\"\"Fails with a readable message when the installed SDK or ADK moves off the versions the\nconformance baselines were recorded on. Update conformance/PINS.json together with the baselines.\"\"\"\nimport importlib.metadata as md\nimport json\nimport pathlib\nimport unittest\n\nPINS = json.loads((pathlib.Path(__file__).parent.parent / \"conformance\" / \"PINS.json\").read_text())\n\n\nclass PinTests(unittest.TestCase):\n    def test_recorded_versions(self):\n        for dist, want in PINS[\"python\"].items():\n            try:\n                have = md.version(dist)\n            except md.PackageNotFoundError:\n                self.skipTest(f\"{dist} not installed\")\n            self.assertEqual(have, want, f\"{dist} is {have}, baselines were recorded on {want}: \"\n                             \"rerun scripts/conformance.sh, review the diff, update baselines and PINS.json\")\n\n\nif __name__ == \"__main__\":\n    unittest.main()\nEOF\ncat > conformance/PINS.json <<'EOF'\n{\n  \"conformance_package\": \"@modelcontextprotocol/conformance@0.2.0-alpha.12\",\n  \"python\": {\"google-adk\": \"2.12.0\", \"mcp\": \"2.3.0\"}\n}\nEOF\ncat > conformance/baseline-2026-07-28.yml <<'EOF'\n# Expected failures for `conformance server --requirements 2026-07-28` on the research MCP server.\n# Seeded from the adk-agent-interoperability skill's observed run (google-adk 2.12.0, mcp 2.3.0);\n# NOT yet regenerated on this repo. First CI run will list anything missing; add it with a reason.\n# A baselined entry that starts passing fails the run as stale: that is intentional.\nserver:\n  # Diagnostic tool from the reference \"everything\" server; this server has one business tool.\n  - server-stateless:sep-2575-server-rejects-undeclared-capability\n  - server-stateless:sep-2575-missing-capability-http-400\nEOF\ncat > conformance/baseline-2025-11-25.yml <<'EOF'\n# Expected failures for `conformance server --requirements 2025-11-25` (handshake revision).\n# Empty until the first CI run on this repo; fixture-dependent scenarios (tools-call-image,\n# resources-read-*, prompts-get-*, elicitation-*, ...) will appear and each needs a reason.\nserver: []\nEOF\ncat > scripts/conformance.sh <<'EOF'\n#!/usr/bin/env bash\n# Start the research MCP server on loopback and run the pinned conformance suite per revision.\n# Usage: scripts/conformance.sh [CONFORMANCE_PKG]   (default: the version in conformance/PINS.json)\n# Env: REVISIONS=\"2026-07-28 2025-11-25\"  BASELINES=1 (use baselines; set 0 to just report)\nset -euo pipefail\ncd \"$(dirname \"$0\")/..\"\nPKG=\"${1:-$(python -c 'import json;print(json.load(open(\"conformance/PINS.json\"))[\"conformance_package\"])')}\"\nPORT=\"${PORT:-8765}\"\nOUT=\"${OUT:-conformance-out}\"\nmkdir -p \"$OUT\"\nPORT=$PORT python -m research.mcp_server > \"$OUT/server.log\" 2>&1 &\nSERVER=$!\ntrap 'kill $SERVER 2>/dev/null || true' EXIT\nfor _ in $(seq 1 60); do\n  (exec 3<>/dev/tcp/127.0.0.1/$PORT) 2>/dev/null && break\n  kill -0 $SERVER 2>/dev/null || { cat \"$OUT/server.log\"; echo \"server died\" >&2; exit 1; }\n  sleep 0.5\ndone\nstatus=0\nfor rev in ${REVISIONS:-2026-07-28 2025-11-25}; do\n  args=(server --url \"http://127.0.0.1:$PORT/mcp\" --requirements \"$rev\" -o \"$OUT/$rev\")\n  [ \"${BASELINES:-1}\" = 1 ] && args+=(--expected-failures \"conformance/baseline-$rev.yml\")\n  echo \"== conformance $PKG $rev\"\n  npx -y \"$PKG\" \"${args[@]}\" || status=1\ndone\nexit $status\nEOF\nchmod +x scripts/conformance.sh\ncat > .github/workflows/ci.yml <<'EOF'\nname: ci\non:\n  pull_request:\n  push:\n    branches: [main]\n  schedule:\n    - cron: \"0 6 * * 1\"   # weekly drift check\njobs:\n  test:\n    if: github.event_name != 'schedule'\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/checkout@v5\n      - uses: actions/setup-python@v6\n        with:\n          python-version: \"3.12\"\n      - uses: actions/setup-node@v5\n        with:\n          node-version: \"22\"\n      - run: pip install -e .\n      - run: pip list | grep -Ei '^(google-adk|mcp) '\n      # Tool, scripted-agent, in-process MCP (both revisions) and version-pin tests.\n      - run: python -m unittest discover -s tests -t . -v\n      # Pinned conformance suite against the live server, one baseline per revision.\n      - run: scripts/conformance.sh\n      - if: always()\n        uses: actions/upload-artifact@v4\n        with:\n          name: conformance-out\n          path: conformance-out\n  drift:\n    # Reports (fails) when latest SDK or latest conformance suite behaves differently from the\n    # pinned baselines. Advisory: it does not gate PRs.\n    if: github.event_name == 'schedule'\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/checkout@v5\n      - uses: actions/setup-python@v6\n        with:\n          python-version: \"3.12\"\n      - uses: actions/setup-node@v5\n        with:\n          node-version: \"22\"\n      - run: pip install -e . && pip install -U \"mcp<3\"\n      - run: pip list | grep -Ei '^(google-adk|mcp) '\n      - run: python -m unittest tests.test_mcp_server -v\n      - run: scripts/conformance.sh \"@modelcontextprotocol/conformance@latest\"\nEOF\npython3 - <<'EOF'\nimport re\np='README.md';s=open(p).read()\ns+='''\n## MCP server\n\n`python -m research.mcp_server` serves the agent as one MCP tool, `paper_research(request: str)`,\nover streamable HTTP on `127.0.0.1:$PORT` (`--stdio` for stdio; `MCP_HOST` overrides the bind, and\nthere is no authentication, so front it before exposing it). Calls are single-turn: on spec\n2026-07-28 there is no connection to hold a conversation, so hosts send full context per call.\n\nCI (`.github/workflows/ci.yml`):\n- `tests/test_mcp_server.py` lists and calls the tool in process under both protocol revisions.\n- `scripts/conformance.sh` runs `@modelcontextprotocol/conformance` (pinned in `conformance/PINS.json`)\n  for 2026-07-28 and 2025-11-25 against `conformance/baseline-<rev>.yml`. A new failure fails the\n  job, and so does a baselined failure that starts passing (stale entry), so a suite change shows up either way.\n- `tests/test_pins.py` fails when google-adk or mcp differ from `conformance/PINS.json`.\n- A weekly `drift` job runs the latest mcp and latest conformance suite (advisory).\n\nTo move a pin: run `BASELINES=0 scripts/conformance.sh`, review the output, edit the baselines\n(a reason comment per entry) and `PINS.json` in the same change.\n'''\nopen(p,'w').write(s)\nEOF\nbash -n scripts/conformance.sh && python3 -m unittest discover -s tests -t . 2>&1 | tail -4; python3 -c \"import ast;ast.parse(open('research/mcp_server.py').read())\"",
+      "output": "----------------------------------------------------------------------\nRan 7 tests in 0.009s\n\nOK (skipped=5)",
+      "is_error": false
+     }
+    ],
+    "skills_loaded": [
+     "adk-agent-interoperability"
+    ],
+    "skill_files_read": [
+     "adk-agent-interoperability/references/mcp-exposure.md",
+     "adk-agent-interoperability/references/validation.md",
+     "adk-agent-interoperability/references/compatibility.md"
+    ],
+    "skill_md_loaded": {
+     "adk-agent-interoperability": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 3
+     },
+     "adk-release-engineering": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-agent-security": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 9,
+    "catalogue": [
+     "adk-agent-interoperability",
+     "adk-agent-security",
+     "adk-release-engineering",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-agent-interoperability": true,
+    "adk-release-engineering": false,
+    "adk-agent-security": false
+   }
+  },
+  {
+   "id": "engineer-ticket-with-missing-companion",
+   "expected_primary": "adk-engineer",
+   "fixture_status": "repo-fixture",
+   "note": "Lint and theme checks need a shell and npm, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.2952,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Loads adk-frontend-integration as the ticket's primary skill and reads the composition row for companions.",
+     "verdict": "FAIL",
+     "quote": "adk-engineer/references/ticket-lifecycle.md, adk-frontend-integration/references",
+     "quote_found": true,
+     "reason": "Only adk-engineer is listed as loaded; adk-frontend-integration SKILL.md was read via cat in the shell, but no skill load is recorded, and composition.md was only skimmed (head) from the engineer's references, not clearly the composition row for companions.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Reports each missing companion as setup with its install line from AGENTS.md and does not claim its guidance was applied.",
+     "verdict": "PASS",
+     "quote": "Companions (setup owed, guidance NOT applied; nothing installed, no network in this session):\n  - shadcn: `npx skills add shadcn/ui`, pin `shadcn-ui/ui@4233ed1`",
+     "quote_found": true,
+     "reason": "Each companion is reported as setup owed with its AGENTS.md install line and an explicit statement that no guidance was applied.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Themes from DESIGN.md starting from the house theme and runs the lint and theme checks, or, in a run without a shell, names those checks and reports them as not run.",
+     "verdict": "FAIL",
+     "quote": "Not done:\n- shadcn init and theming from `DESIGN.md`.",
+     "quote_found": false,
+     "reason": "The theming itself (house theme plus petrol overrides) was not done; the checks were run or reported, but the theming is required.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Writes one Evidence line per contract and one for SB10 with its tier and acceptance cases; a check that could not be run is recorded with its tier and the outcome not run, never left without a tier.",
+     "verdict": "FAIL",
+     "quote": "SB10: built in code (raw HTML kept as literal text, `https:`/`mailto:` links only, images only from `ALLOWED_IMAGE_HOSTS`, currently empty, no `dangerouslySetInnerHTML`); tier reached: none yet, G03/A3 not run.",
+     "quote_found": true,
+     "reason": "The SB10 line reports tier as 'none yet' rather than a tier, and the C3 line says 'planned, not evidenced' without a tier and an outcome of 'not run' in the required form.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 1,
+   "total": 4,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 3347,
+   "files": [
+    "docs/tickets/doc-assistant/G03.md",
+    "web/src/components/ChatColumn.tsx",
+    "web/src/components/SafeText.tsx",
+    "web/src/lib/chat.test.ts",
+    "web/src/lib/message.ts",
+    "web/src/lib/safe-content.ts",
+    "web/src/lib/sse.ts",
+    "web/tsconfig.json"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 99.2,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 40,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 14,
+    "total_cost_usd": 0.35370880000000005,
+    "duration_ms": 98167,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "40",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill,Bash",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill,Bash",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill",
+      "Bash"
+     ],
+     "unconfined_tools": [
+      "Bash"
+     ],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": false,
+     "unconfined": true,
+     "shell_environment": {
+      "home_mode": "real-home-redirected-config",
+      "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+      "variables_scrubbed": [
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN",
+       "SSH_AUTH_SOCK"
+      ],
+      "scrub_prefixes": [
+       "GOOGLE_",
+       "GCLOUD_",
+       "CLOUDSDK_",
+       "AWS_",
+       "AZURE_",
+       "ARM_"
+      ],
+      "scrub_names": [
+       "SSH_AUTH_SOCK",
+       "GH_TOKEN",
+       "GITHUB_TOKEN",
+       "GH_ENTERPRISE_TOKEN",
+       "GITLAB_TOKEN",
+       "NPM_TOKEN",
+       "HF_TOKEN",
+       "OPENAI_API_KEY",
+       "GEMINI_API_KEY",
+       "VAULT_TOKEN",
+       "KUBECONFIG",
+       "DOCKER_CONFIG",
+       "DOCKER_HOST",
+       "GIT_CONFIG_GLOBAL",
+       "GIT_ASKPASS",
+       "SSH_ASKPASS",
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN"
+      ],
+      "redirected": {
+       "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+       "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+       "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+       "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+       "DOCKER_CONFIG": "<case>/shell-env/docker",
+       "KUBECONFIG": "<case>/shell-env/kube/config",
+       "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+       "GH_CONFIG_DIR": "<case>/shell-env/gh",
+       "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+      },
+      "set": {
+       "GIT_CONFIG_NOSYSTEM": "1",
+       "BROWSER": "true"
+      }
+     }
+    },
+    "variables_scrubbed": [
+     "CLAUDE_CODE_MESSAGING_SOCKET",
+     "CLAUDE_CODE_MESSAGING_TOKEN",
+     "SSH_AUTH_SOCK"
+    ],
+    "shell_commands": [
+     {
+      "command": "cat docs/tickets/doc-assistant/G03.md; ls; ls docs docs/design docs/tickets/doc-assistant .claude/skills; cat .claude/skills/adk-engineer/references/ticket-lifecycle.md",
+      "output": "---\ngoal: G03\ntitle: UI shell\ndesign: docs/architecture/doc-assistant.md\nplan: docs/plans/doc-assistant.md\nprimary_skill: adk-frontend-integration\nsupporting_skills: []\ndocs: [adk-frontend-integration/references/agent-ui-states.md, adk-frontend-integration/references/frontend-quality.md]\nblocked_by: [G02]\ntouches: [web/src/, web/components.json, web/index.html]\nparallel_safe: no\ncontracts: [C3]\ncompanion_skills: [shadcn, react-router]\nsecurity: [SB10]\ndesign_system: docs/design/DESIGN.md\ncontract_deltas: [none]\npass_to_pass: [G02/A1]\nphase: 1\ntype: implementation\nprofile: proof of concept\nestimate:\n  hands_on: 2-3\n  review_and_verify: 1\n  total: 3-4\n  handoff: none\n  calendar_waits: none\nowner: Lea\nstatus: ready\n---\n\n# G03 UI shell\n\n## Outcome\n\nStaff get a themed chat page: a conversation route, the chat column with streamed\nanswers and their sources, and honest states for failed replies.\n\n## Scope\n\n- In: shadcn initialised and themed from `docs/design/DESIGN.md`, a router with `/` and\n  `/c/:conversationId`, the chat column reading `/api/chat` with fetch, message states\n  (streaming, completed, failed).\n- Out: conversation history sidebar (later), browser journey (G04).\n- Depth: proof of concept; SB10 is built now (tier 1).\n\n## Constraints\n\nIdentity, transport and stack as in AGENTS.md and the design; no user I\n[... 8884 characters omitted ...]\n its own session in its own worktree. Each writes only\n   its own ticket file and the paths in its `touches`; a session that finds it\n   must write another ticket's path stops, sets `parallel_safe: no` in its\n   ticket and says so.\n3. Merge finished branches one at a time in dependency order, then by goal ID.\n   After each merge, rerun every `pass_to_pass` test of the merged tickets\n   before merging the next; a failure is fixed on that branch, not on the\n   merged result.\n4. Run `plan_status.py` after the last merge and follow its next prompt.\n\nThe person decides when to merge and commits; the sessions leave their changes\nuncommitted unless asked otherwise.",
+      "is_error": false
+     },
+     {
+      "command": "cat docs/tickets/doc-assistant/G02.md | sed -n 1,200p; cat docs/architecture/doc-assistant.md docs/design/DESIGN.md; sed -n 1,80p docs/plans/doc-assistant.md; find web app tests -not -path '*/node_modules*' -type f | head -80; ls .claude/skills/adk-frontend-integration .claude/skills/adk-frontend-integration/references",
+      "output": "---\ngoal: G02\ntitle: Streamed answers\ndesign: docs/architecture/doc-assistant.md\nplan: docs/plans/doc-assistant.md\nprimary_skill: adk-frontend-integration\nsupporting_skills: []\ndocs: []\nblocked_by: [G01]\ntouches: [app/server.py, tests/test_stream.py]\nparallel_safe: no\ncontracts: [C2]\ncompanion_skills: [fastapi]\nsecurity: []\ndesign_system: none\ncontract_deltas: [none]\npass_to_pass: [G01/A1, G01/A2]\nphase: 1\ntype: implementation\nprofile: proof of concept\nestimate:\n  total: 2-3\nowner: Lea\nstatus: verified_local\n---\n\n# G02 Streamed answers\n\n## Acceptance\n\n- [x] A1 WHEN the run ends THE stream SHALL end with completed, or failed after an error (C2)\n\n## Evidence\n\n- A1: python -m unittest tests.test_stream; exit 0 (scripted event source)\n- C2: evidenced, local, A1\n- fastapi companion loaded at the locked FastAPI version\n- actual: 2 h\n# Design: doc assistant\n\nStatus: accepted 2026-10-16\nPlan: [docs/plans/doc-assistant.md](../plans/doc-assistant.md)\n\nInternal assistant for Nordlicht Insurance staff that answers from the policy library,\nweb chat on the designer's web defaults (FastAPI with the Runner in process, Vite React\nSPA with shadcn and react-router, IAP). Profile: proof of concept.\n\n## Contracts\n\n| ID | From | Invariant | Scope | Authority | Enforcement (and recheck at the effect) | Failure outcome | Evidence |\n| -\n[... 3155 characters omitted ...]\n.md) | journey | 1-2 | G03 | adk-agent-evaluation | see ticket |\nweb/package.json\nweb/src/App.tsx\nweb/src/main.tsx\nweb/src/index.css\napp/auth.py\napp/server.py\napp/library.py\napp/policies.json\napp/__init__.py\napp/agent.py\ntests/test_library.py\ntests/__init__.py\ntests/test_stream.py\n.claude/skills/adk-frontend-integration:\nagents\nassets\nLICENSE\nreferences\nscripts\nSKILL.md\n\n.claude/skills/adk-frontend-integration/references:\nag-ui.md\nagent-ui-states.md\ncompatibility.md\ncopilotkit-recipe.md\ndemo-readiness.md\ndeployment-runbook.md\nfrontend-quality.md\njson-api.md\nlive-streaming.md\nmanaged-runtime.md\noperating-rules.md\nproduction.md\ntroubleshooting.md\nvalidation.md",
+      "is_error": false
+     },
+     {
+      "command": "cd web; cat package.json src/*; cd ..; cat app/server.py; cat .claude/skills/adk-frontend-integration/SKILL.md; ls .claude/skills/adk-frontend-integration/scripts; ls node_modules web/node_modules 2>&1 | head -3; ls ~/.claude/skills 2>/dev/null; ls .claude",
+      "output": "{\n  \"name\": \"doc-assistant-web\",\n  \"private\": true,\n  \"version\": \"0.2.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"build\": \"tsc -b && vite build\",\n    \"lint\": \"eslint .\",\n    \"test\": \"vitest run\"\n  },\n  \"dependencies\": {\n    \"react\": \"19.1.1\",\n    \"react-dom\": \"19.1.1\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/vite\": \"4.1.14\",\n    \"@vitejs/plugin-react\": \"5.0.4\",\n    \"eslint\": \"9.37.0\",\n    \"tailwindcss\": \"4.1.14\",\n    \"typescript\": \"5.9.3\",\n    \"vite\": \"7.1.9\",\n    \"vitest\": \"3.2.4\"\n  }\n}\nexport function App() {\n  return (\n    <main>\n      <h1>Doc assistant</h1>\n      <p>Ask a question about our policies.</p>\n    </main>\n  );\n}\n@import \"tailwindcss\";\nimport { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport \"./index.css\";\nimport { App } from \"./App\";\n\ncreateRoot(document.getElementById(\"root\")!).render(\n  <StrictMode>\n    <App />\n  </StrictMode>,\n);\n\"\"\"FastAPI app: /api/chat streams the agent's reply as SSE; the SPA is served from web/dist.\"\"\"\nfrom __future__ import annotations\n\nimport json\n\nfrom fastapi import Depends, FastAPI, HTTPException, Request\nfrom fastapi.responses import StreamingResponse\nfrom google.adk.runners import Runner\nfrom google.adk.sessions import InMemorySessionService\nfrom google.genai import types\nfrom pydantic import BaseModel\n\nfrom a\n[... 14110 characters omitted ...]\nesign\nask-matt\nclaude-handoff\ncode-review\ncodebase-design\ndeploy-adk-on-google-cloud\ndiagnosing-bugs\ndomain-modeling\nfind-skills\ngit-guardrails-claude-code\ngrill-me\ngrill-with-docs\ngrilling\nhandoff\nimplement\nimplement-spec\nimprove-codebase-architecture\nloop-me\nmigrate-to-shoehorn\noptimise-adk-on-google-cloud\npractice-profile\nprotect-adk-sensitive-data\nprototype\nresearch\nresolving-merge-conflicts\nretro\nsafe-api-tool-calls\nscaffold-exercises\nsetup-matt-pocock-skills\nsetup-pre-commit\nsetup-ts-deep-modules\nsynced\ntdd\nteach\nto-questionnaire\nto-spec\nto-tickets\ntriage\nwait-what\nwayfinder\nwizard\nwriting-beats\nwriting-for-agents\nwriting-fragments\nwriting-shape\nskills",
+      "is_error": false
+     },
+     {
+      "command": "cd .claude/skills; cat adk-frontend-integration/references/frontend-quality.md; sed -n 1,200p adk-frontend-integration/references/agent-ui-states.md; grep -rn \"SB10\" --include=*.md . | head; ls adk-frontend-integration/assets/design; sed -n 1,60p adk-frontend-integration/scripts/check_theme.py",
+      "output": "# Frontend quality gates and streaming-UI rules\n\nRead when building or reviewing the browser app of an ADK interface, or when\na ticket names a design system. Gates run in the project's `make check` at the\nprofile's depth.\n\n## Start from the house theme\n\nCopy [the house DESIGN.md](../assets/design/DESIGN.md) to\n`docs/design/DESIGN.md` unless the client brings its own design system. A\nclient brand overrides only the surface that file names. Map its tokens to the\nshadcn theme variables with the `shadcn` companion's DESIGN.md workflow; never\nship shadcn's default theme, because the generic look comes from its default\ntokens. The DESIGN.md file itself states its lint gate (the CLI pinned\nexactly; fail on any error or warning, read from the JSON output, because at\n0.4.0 contrast failures arrive as warnings while the exit code stays 0).\n\n## Gates by depth\n\n| Gate | POC | Internal tool and above |\n| --- | --- | --- |\n| `eslint-plugin-react-hooks` `recommended` preset (7.x includes the compiler-derived rules) and `tsc --noEmit` in strict mode | 0 errors | 0 errors |\n| Generated-client drift: regenerate from the offline OpenAPI dump, `git diff --exit-code` (`adk-fastapi-backend`) | When handed over | Always |\n| DESIGN.md lint and `scripts/check_theme.py --project frontend` (no shadcn default tokens or fonts left) | When h\n[... 11265 characters omitted ...]\nlch(0.488 0.243 264.376)\", \"oklch(0.696 0.17 162.48)\", \"oklch(0.769 0.188 70.08)\",\n                     \"oklch(0.627 0.265 303.9)\", \"oklch(0.645 0.246 16.439)\")\n\n# Variable -> default values in that scope (several where init and the docs differ).\nDEFAULTS: dict[str, dict[str, tuple[str, ...]]] = {\n    \":root\": {\n        \"--radius\": (\"0.625rem\",),\n        \"--background\": (\"oklch(1 0 0)\",),\n        \"--foreground\": (\"oklch(0.145 0 0)\",),\n        \"--card\": (\"oklch(1 0 0)\",),\n        \"--card-foreground\": (\"oklch(0.145 0 0)\",),\n        \"--popover\": (\"oklch(1 0 0)\",),\n        \"--popover-foreground\": (\"oklch(0.145 0 0)\",),\n        \"--primary\": (\"oklch(0.205 0 0)\",),",
+      "is_error": false
+     },
+     {
+      "command": "cd ..; cd ..; pwd; which node npm python3; ls web; cat web/tsconfig.json web/eslint.config.* 2>&1 | head; cat web/index.html 2>&1 | head -3; sed -n 1,60p .claude/skills/adk-engineer/references/composition.md | head -80",
+      "output": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/s6/aes-scenarios-2aqf2ccs/engineer-ticket-with-missing-companion/workspace\n/Users/ruslankhissamiyev/.nvm/versions/node/v22.23.2/bin/node\n/Users/ruslankhissamiyev/.nvm/versions/node/v22.23.2/bin/npm\n/opt/anaconda3/bin/python3\npackage.json\nsrc\n(eval):1: no matches found: web/eslint.config.*\ncat: web/index.html: No such file or directory\n# Working with other skill collections\n\nRead this when another collection supplies the project's lifecycle, a goal\nnames a `google/skills:<name>` supporting skill, or the user asks to combine\nskills. Keep one development workflow for the task and use the selected ADK\nspecialist for the application decisions. Additional collections are\noptional; their presence does not expand the user's request.\n\n## Establish the project and scope\n\nRead the relevant project instructions and existing design before choosing a\nworkflow. An `agents-cli-manifest.yaml` identifies an Agents CLI project; inspect\nits declared agent directory, framework, version and deployment target alongside\nthe actual code. Read `.agents-cli-spec.md` when present and relevant. A manifest\nis evidence of project conventions, not permission to execute platform comman\n[... 3881 characters omitted ...]\nts) and the recipe\n  catalogue in `google/adk-recipes` (memory, approval, RAG, safety plugins,\n  ambient triggers, a scheduled production-trace evaluator). That\n  repository's README says recipes are \"for demonstration and as starting\n  points, not production use\" (google/adk-recipes be63596, `README.md`, read\n  2026-10-22): `core/` holds the curated patterns, `contrib/` deployable\n  vertical agents, `plugins/` installable skills with an `EVAL.yaml`. A change\n  that lifts a recipe pattern repeats that disclaimer in its Evidence section\n  and names the controls the recipe lacks. Two recipes carry their own Apache\n  LICENSE (`core/python/cross-session-memory`,",
+      "is_error": false
+     },
+     {
+      "command": "python3 --version; python3 -m unittest discover -s tests -t . 2>&1 | tail -8",
+      "output": "Python 3.9.13\n...ss\n----------------------------------------------------------------------\nRan 5 tests in 0.006s\n\nOK (skipped=2)",
+      "is_error": false
+     },
+     {
+      "command": "python3 -m unittest discover -s tests -t . -v 2>&1 | grep -E \"skip|ok|ERROR\"",
+      "output": "test_missing_assertion_is_refused (tests.test_library.AuthTests) ... ok\ntest_verified_subject_is_the_user (tests.test_library.AuthTests) ... ok\ntest_search_returns_cited_sections (tests.test_library.LibraryTests) ... ok\ntest_completed_after_text (tests.test_stream.StreamEndsTests) ... skipped 'fastapi and google-adk are not installed'\ntest_failed_after_partial_text (tests.test_stream.StreamEndsTests) ... skipped 'fastapi and google-adk are not installed'\nOK (skipped=2)",
+      "is_error": false
+     },
+     {
+      "command": "mkdir -p web/src/lib web/src/components && cd web\ncat > tsconfig.json <<'EOF'\n{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"lib\": [\"ES2022\", \"DOM\", \"DOM.Iterable\"],\n    \"module\": \"ESNext\",\n    \"moduleResolution\": \"bundler\",\n    \"jsx\": \"react-jsx\",\n    \"strict\": true,\n    \"noEmit\": true,\n    \"skipLibCheck\": true,\n    \"isolatedModules\": true,\n    \"types\": [\"vite/client\"]\n  },\n  \"include\": [\"src\"]\n}\nEOF\ncat > src/lib/sse.ts <<'EOF'\n// Parses the C2 stream: `event: text|completed|failed` frames separated by a blank line.\n// Each frame is validated at run time; anything else is dropped (model and server output is untrusted).\n\nexport type StreamEvent =\n  | { type: \"text\"; text: string }\n  | { type: \"completed\" }\n  | { type: \"failed\"; message: string };\n\nexport function parseFrame(frame: string): StreamEvent | null {\n  let name = \"\";\n  const data: string[] = [];\n  for (const line of frame.split(\"\\n\")) {\n    if (line.startsWith(\"event:\")) name = line.slice(6).trim();\n    else if (line.startsWith(\"data:\")) data.push(line.slice(5).trim());\n  }\n  let body: unknown;\n  try {\n    body = JSON.parse(data.join(\"\\n\") || \"{}\");\n  } catch {\n    return null;\n  }\n  const record = typeof body === \"object\" && body !== null ? (body as Record<string, unknown>) : {};\n  if (name === \"text\" && typeof record.text === \"string\") return { type: \"text\", text: record.text };\n  if (name === \"completed\") return { type: \"completed\" };\n  if (name === \"failed\") {\n    return { type: \"failed\", message: typeof record.message === \"string\" ? record.message : \"\" };\n  }\n  return null;\n}\n\nexport async function* readEvents(body: ReadableStream<Uint8Array>): AsyncGenerator<StreamEvent> {\n  const reader = body.getReader();\n  const decoder = new TextDecoder();\n  let buffer = \"\";\n  try {\n    for (;;) {\n      const { done, value } = await reader.read();\n      buffer += decoder.decode(value, { stream: !done }).replace(/\\r\\n/g, \"\\n\");\n      let end: number;\n      while ((end = buffer.indexOf(\"\\n\\n\")) !== -1) {\n        const event = parseFrame(buffer.slice(0, end));\n        buffer = buffer.slice(end + 2);\n        if (event) yield event;\n      }\n      if (done) break;\n    }\n  } finally {\n    reader.releaseLock();\n  }\n}\nEOF\ncat > src/lib/message.ts <<'EOF'\n// Message state for one assistant turn (C3): partial text is never shown as final.\nimport type { StreamEvent } from \"./sse\";\n\nexport type MessageStatus = \"streaming\" | \"completed\" | \"failed\";\n\nexport interface AssistantMessage {\n  text: string;\n  status: MessageStatus;\n  error?: string;\n}\n\nexport const FAILED_COPY = \"The assistant could not finish this reply. Try asking again.\";\n\nexport const startMessage = (): AssistantMessage => ({ text: \"\", status: \"streaming\" });\n\nexport function applyEvent(message: AssistantMessage, event: StreamEvent): AssistantMessage {\n  if (message.status !== \"streaming\") return message; // terminal states are final\n  if (event.type === \"text\") return { ...message, text: message.text + event.text };\n  if (event.type === \"completed\") return { ...message, status: \"completed\" };\n  // Server text is not shown raw: the design says errors are one plain sentence.\n  return { ...message, status: \"failed\", error: FAILED_COPY };\n}\n\n// The stream ended, or the fetch threw, without a terminal event: that is a failure, never a completion.\nexport function endStream(message: AssistantMessage): AssistantMessage {\n  return message.status === \"streaming\" ? { ...message, status: \"failed\", error: FAILED_COPY } : message;\n}\nEOF\ncat > src/lib/safe-content.ts <<'EOF'\n// SB10: model output is untrusted. It is tokenised into text, links and images; raw HTML is never\n// interpreted (it stays literal text), links need an allowed protocol, images need a listed host.\n\nexport const ALLOWED_LINK_PROTOCOLS = [\"https:\", \"mailto:\"];\n// Policy images come from the library host once it is named; empty means no image ever loads.\nexport const ALLOWED_IMAGE_HOSTS: readonly string[] = [];\n\nexport type Token =\n  | { kind: \"text\"; text: string }\n  | { kind: \"link\"; label: string; href: string }\n  | { kind: \"image\"; alt: string; src: string };\n\nexport function safeHref(raw: string): string | null {\n  try {\n    const url = new URL(raw.trim());\n    return ALLOWED_LINK_PROTOCOLS.includes(url.protocol) ? url.href : null;\n  } catch {\n    return null;\n  }\n}\n\nexport function safeImageSrc(raw: string, hosts: readonly string[] = ALLOWED_IMAGE_HOSTS): string | null {\n  try {\n    const url = new URL(raw.trim());\n    return url.protocol === \"https:\" && hosts.includes(url.hostname) ? url.href : null;\n  } catch {\n    return null;\n  }\n}\n\nconst MARKDOWN = /(!?)\\[([^\\]]*)\\]\\(([^)\\s]*)\\)/g;\n\nexport function tokenise(source: string, hosts: readonly string[] = ALLOWED_IMAGE_HOSTS): Token[] {\n  const tokens: Token[] = [];\n  const text = (value: string) => value && tokens.push({ kind: \"text\", text: value });\n  let last = 0;\n  for (const match of source.matchAll(MARKDOWN)) {\n    text(source.slice(last, match.index));\n    last = match.index + match[0].length;\n    const [whole, bang, label, target] = match;\n    if (bang) {\n      const src = safeImageSrc(target, hosts);\n      if (src) tokens.push({ kind: \"image\", alt: label, src });\n      else text(label ? `[image: ${label}]` : \"[image removed]\"); // nothing is fetched\n    } else {\n      const href = safeHref(target);\n      if (href) tokens.push({ kind: \"link\", label: label || href, href });\n      else text(label || whole); // unsafe target: keep the words, drop the link\n    }\n  }\n  text(source.slice(last));\n  return tokens;\n}\nEOF\ncat > src/components/SafeText.tsx <<'EOF'\nimport { tokenise } from \"../lib/safe-content\";\n\n// Renders untrusted model text. No dangerouslySetInnerHTML: React escapes every text node.\nexport function SafeText({ source }: { source: string }) {\n  return (\n    <>\n      {tokenise(source).map((token, i) => {\n        if (token.kind === \"text\") return <span key={i}>{token.text}</span>;\n        if (token.kind === \"link\") {\n          return (\n            <a key={i} href={token.href} target=\"_blank\" rel=\"noopener noreferrer nofollow\">\n              {token.label}\n            </a>\n          );\n        }\n        return <img key={i} src={token.src} alt={token.alt} referrerPolicy=\"no-referrer\" />;\n      })}\n    </>\n  );\n}\nEOF\ncat > src/components/ChatColumn.tsx <<'EOF'\nimport { useCallback, useEffect, useRef, useState } from \"react\";\nimport { applyEvent, endStream, startMessage, type AssistantMessage } from \"../lib/message\";\nimport { readEvents } from \"../lib/sse\";\nimport { SafeText } from \"./SafeText\";\n\ninterface Turn {\n  question: string;\n  answer: AssistantMessage;\n}\n\n// The browser sends the conversation ID and the question only; identity comes from IAP on the server.\nexport function ChatColumn({ conversationId }: { conversationId: string }) {\n  const [turns, setTurns] = useState<Turn[]>([]);\n  const [draft, setDraft] = useState(\"\");\n  const abort = useRef<AbortController | null>(null);\n  useEffect(() => () => abort.current?.abort(), []);\n\n  const update = (fn: (m: AssistantMessage) => AssistantMessage) =>\n    setTurns((all) => all.map((t, i) => (i === all.length - 1 ? { ...t, answer: fn(t.answer) } : t)));\n\n  const send = useCallback(async () => {\n    const question = draft.trim();\n    if (!question) return;\n    setDraft(\"\");\n    setTurns((all) => [...all, { question, answer: startMessage() }]);\n    const controller = (abort.current = new AbortController());\n    try {\n      const response = await fetch(\"/api/chat\", {\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ session_id: conversationId, message: question }),\n        signal: controller.signal,\n      });\n      if (!response.ok || !response.body) throw new Error(\"request failed\");\n      for await (const event of readEvents(response.body)) update((m) => applyEvent(m, event));\n    } catch {\n      /* fall through: an unfinished message becomes failed below */\n    }\n    if (!controller.signal.aborted) update(endStream);\n  }, [draft, conversationId]);\n\n  return (\n    <section aria-label=\"Conversation\" style={{ maxWidth: 720, margin: \"0 auto\" }}>\n      {turns.map((turn, i) => (\n        <article key={i}>\n          <p>{turn.question}</p>\n          <div>\n            <SafeText source={turn.answer.text} />\n          </div>\n          {turn.answer.status === \"streaming\" && <p role=\"status\">Working…</p>}\n          {turn.answer.status === \"failed\" && (\n            <p role=\"status\">\n              <strong>Failed</strong> {turn.answer.error}\n            </p>\n          )}\n        </article>\n      ))}\n      <form\n        onSubmit={(e) => {\n          e.preventDefault();\n          void send();\n        }}\n      >\n        <label>\n          Ask about a policy\n          <textarea value={draft} onChange={(e) => setDraft(e.target.value)} />\n        </label>\n        <button type=\"submit\">Send</button>\n      </form>\n    </section>\n  );\n}\nEOF\n",
+      "output": "(Bash completed with no output)",
+      "is_error": false
+     },
+     {
+      "command": "cd web\ncat > src/lib/chat.test.ts <<'EOF'\nimport { createElement } from \"react\";\nimport { renderToStaticMarkup } from \"react-dom/server\";\nimport { describe, expect, it } from \"vitest\";\nimport { SafeText } from \"../components/SafeText\";\nimport { applyEvent, endStream, startMessage } from \"./message\";\nimport { readEvents } from \"./sse\";\n\nfunction stream(chunks: string[]): ReadableStream<Uint8Array> {\n  const enc = new TextEncoder();\n  return new ReadableStream({\n    start(c) {\n      chunks.forEach((x) => c.enqueue(enc.encode(x)));\n      c.close();\n    },\n  });\n}\nasync function run(chunks: string[]) {\n  let m = startMessage();\n  const seen: string[] = [];\n  for await (const e of readEvents(stream(chunks))) {\n    m = applyEvent(m, e);\n    seen.push(`${m.status}:${m.text}`);\n  }\n  return { m, seen };\n}\n\ndescribe(\"A1 streaming then completed\", () => {\n  it(\"shows text as it arrives and completes only after `completed`\", async () => {\n    const { m, seen } = await run([\n      'event: text\\ndata: {\"text\":\"HR-04 \"}\\n\\nevent: te', // frame split across chunks\n      'xt\\ndata: {\"text\":\"§2.3\"}\\n\\n',\n      \"event: completed\\ndata: {}\\n\\n\",\n    ]);\n    expect(seen).toEqual([\"streaming:HR-04 \", \"streaming:HR-04 §2.3\", \"completed:HR-04 §2.3\"]);\n    expect(m.status).toBe(\"completed\");\n  });\n  it(\"a stream that just ends is failed, not completed\", async () => {\n    const { m } = await run(['event: text\\ndata: {\"text\":\"part\"}\\n\\n']);\n    expect(endStream(m).status).toBe(\"failed\");\n  });\n});\n\ndescribe(\"A2 failed keeps its text\", () => {\n  it(\"keeps partial text and marks failed, without the server's raw message\", async () => {\n    const { m } = await run([\n      'event: text\\ndata: {\"text\":\"partial\"}\\n\\n',\n      'event: failed\\ndata: {\"message\":\"boom: stack trace\"}\\n\\n',\n    ]);\n    expect(m).toMatchObject({ status: \"failed\", text: \"partial\" });\n    expect(m.error).not.toContain(\"boom\");\n  });\n});\n\ndescribe(\"A3 hostile model output is inert\", () => {\n  const hostile =\n    'Hi <img src=x onerror=alert(1)> [click](javascript:alert(1)) ![t](https://evil.example/p.png) [ok](https://example.com/a)';\n  const html = renderToStaticMarkup(createElement(SafeText, { source: hostile }));\n  it(\"renders no img, no javascript: link and no live onerror\", () => {\n    expect(html).not.toContain(\"<img\");\n    expect(html).not.toMatch(/href=\"javascript/i);\n    expect(html).not.toMatch(/<[^>]*onerror/i); // appears only as escaped text\n    expect(html).toContain(\"&lt;img src=x onerror=alert(1)&gt;\");\n  });\n  it(\"still renders a safe https link\", () => {\n    expect(html).toContain('href=\"https://example.com/a\"');\n  });\n});\nEOF\n# scratch check of pure modules (no vitest/react here): copy outside the workspace\nS=$(mktemp -d); cp src/lib/sse.ts src/lib/message.ts src/lib/safe-content.ts $S/\nsed -i '' 's#\"./sse\"#\"./sse.ts\"#' $S/message.ts\ncat > $S/check.ts <<'EOF'\nimport assert from \"node:assert\";\nimport { applyEvent, endStream, startMessage } from \"./message.ts\";\nimport { readEvents } from \"./sse.ts\";\nimport { tokenise } from \"./safe-content.ts\";\nconst enc = new TextEncoder();\nconst rs = (cs: string[]) => new ReadableStream({ start(c) { cs.forEach(x => c.enqueue(enc.encode(x))); c.close(); } });\nlet m = startMessage(); const seen: string[] = [];\nfor await (const e of readEvents(rs(['event: text\\ndata: {\"text\":\"HR-04 \"}\\n\\nevent: te','xt\\ndata: {\"text\":\"§2.3\"}\\n\\n',\"event: completed\\ndata: {}\\n\\n\"]))) { m = applyEvent(m, e); seen.push(m.status + \":\" + m.text); }\nassert.deepEqual(seen, [\"streaming:HR-04 \",\"streaming:HR-04 §2.3\",\"completed:HR-04 §2.3\"]);\nlet f = startMessage();\nfor await (const e of readEvents(rs(['event: text\\ndata: {\"text\":\"p\"}\\n\\nevent: failed\\ndata: {\"message\":\"boom\"}\\n\\n']))) f = applyEvent(f, e);\nassert.equal(f.status, \"failed\"); assert.equal(f.text, \"p\"); assert(!f.error!.includes(\"boom\"));\nassert.equal(endStream({text:\"x\",status:\"streaming\"}).status, \"failed\");\nconst t = tokenise('Hi <img src=x onerror=alert(1)> [c](javascript:alert(1)) ![t](https://evil.example/p.png) [ok](https://example.com/a)');\nassert(!t.some(x => x.kind === \"image\")); assert.deepEqual(t.filter(x=>x.kind===\"link\").map((x:any)=>x.href), [\"https://example.com/a\"]);\nassert(!JSON.stringify(t).includes(\"javascript:alert\") || t.every(x => x.kind !== \"link\" || (x as any).href.startsWith(\"https\")));\nconsole.log(\"scratch checks ok\");\nEOF\nnode --experimental-strip-types --no-warnings $S/check.ts; rm -rf $S",
+      "output": "(eval):cd:1: no such file or directory: web\nscratch checks ok",
+      "is_error": false
+     },
+     {
+      "command": "cd ..; find web -type f | sort; python3 -m unittest discover -s tests -t . 2>&1 | tail -2; python3 .claude/skills/adk-frontend-integration/scripts/check_theme.py --css web/src/index.css; echo exit $?",
+      "output": "web/package.json\nweb/src/App.tsx\nweb/src/components/ChatColumn.tsx\nweb/src/components/SafeText.tsx\nweb/src/index.css\nweb/src/lib/chat.test.ts\nweb/src/lib/message.ts\nweb/src/lib/safe-content.ts\nweb/src/lib/sse.ts\nweb/src/main.tsx\nweb/tsconfig.json\n\nOK (skipped=2)\nerror: check_theme.py requires Python 3.11 or newer.\nexit 2",
+      "is_error": false
+     },
+     {
+      "command": "for p in python3.12 python3.11 python3.13; do which $p; done",
+      "output": "/opt/homebrew/bin/python3.12\n/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11\n/opt/homebrew/bin/python3.13",
+      "is_error": false
+     },
+     {
+      "command": "python3.12 .claude/skills/adk-frontend-integration/scripts/check_theme.py --css web/src/index.css; echo exit $?",
+      "output": "error: no_root_or_dark_custom_properties\nexit 2",
+      "is_error": false
+     },
+     {
+      "command": "python3 - <<'EOF'\np=\"docs/tickets/doc-assistant/G03.md\"\ns=open(p).read()\ns=s.replace(\"status: ready\",\"status: in_progress\")\nev='''## Evidence\n\nProgress:\n  - done: SSE parser, message state machine (streaming/completed/failed), SB10 renderer, ChatColumn (fetch `/api/chat`, abort on unmount), tests for A1-A3 written\n  - in hand: A1-A3 are written but vitest has not run (dependencies not installed, no network)\n  - next: (1) install the companions at the AGENTS.md pins; (2) `shadcn init` and map `docs/design/DESIGN.md` to `web/src/index.css` and `web/components.json` (Nordlicht petrol overrides, Source Serif 4), then `check_theme.py`; (3) add `react-router` with routes `/` and `/c/:conversationId`, passing `conversationId` to `ChatColumn`, replacing the placeholder `App.tsx`; (4) add `web/index.html`, an ESLint config and the lint dependencies; (5) `cd web && npm ci && npm run lint && npm test && npm run build`\n  - uncommitted: web/tsconfig.json, web/src/lib/{sse,message,safe-content,chat.test}.ts, web/src/components/{SafeText,ChatColumn}.tsx (no git repository here)\n  - re-verify: `cd web && npm run lint && npm test`; `python3.12 <skill>/scripts/check_theme.py --project web`; `python -m unittest discover -s tests -t .`\n\nCompanions (setup owed, guidance NOT applied; nothing installed, no network in this session):\n  - shadcn: `npx skills add shadcn/ui`, pin `shadcn-ui/ui@4233ed1`, record the shadcn CLI version\n  - react-router: `npx skills add https://github.com/remix-run/react-router --skill react-router`, pin `remix-run/react-router@8f364c8`\n  - Consequence: shadcn init, theming and the router are not done. No react-router or shadcn code was written from memory.\n\nResults:\n  - pass_to_pass G02/A1: `python -m unittest discover -s tests -t .` exit 0 but tests.test_stream skipped (fastapi, google-adk absent; Python 3.9.13): offline, not run for A1.\n  - A1, A2, A3: tests in `web/src/lib/chat.test.ts`: not run (vitest not installed). Same assertions exercised for the pure modules (SSE parse across split chunks, state machine, tokeniser; not the React render) by a throwaway Node 22 script outside the repo: offline, pass. Not the ticket's verification.\n  - `npm run lint`, `npm test`: not run (no node_modules, no network); `npm run lint` would also fail today: no ESLint config in `web/`.\n  - Theme check: `python3.12 check_theme.py --css web/src/index.css` exit 2 (no :root/.dark tokens): fail, theme not applied.\n  - Manual check against DESIGN.md in a browser: owed (Lea); no UI was rendered.\nC3 (browser state): planned, not evidenced (no UI test has run); design cell left unchanged.\nSB10: built in code (raw HTML kept as literal text, `https:`/`mailto:` links only, images only from `ALLOWED_IMAGE_HOSTS`, currently empty, no `dangerouslySetInnerHTML`); tier reached: none yet, G03/A3 not run.\n\nQuestions written down and assumptions taken (nobody to answer):\n  - Q: Which hosts may serve images? A: none until the policy library host is named; every image renders as text.\n  - Q: C2 has no sources event, but DESIGN.md wants sources under each answer. A: sources are shown only as the citations inside the answer text (e.g. \"HR-04 §2.3\"); a sources list needs a C2 contract change (designer checkpoint).\n  - Q: `/api/chat` returns 404 for an unknown `session_id` and nothing creates sessions. A: the route ID is passed as `session_id`; session creation is a gap outside this ticket's `touches` (`app/server.py`), so a first message on a new conversation will fail honestly until a route exists.\n  - Q: Failed copy. A: the UI shows its own one-sentence copy, not the server's message, per DESIGN.md \"never raw error text\".\nRulings: none beyond the assumptions above.\nControls left out (proof of concept): axe/screenshots/lighthouse gates (G04 and handover), stream-delta batching per frame, stop button and Stopped state, scroll-follow, first-paint theme script.\nHuman effort still owed: about 2-3 h for Lea: install companions, shadcn init and theme, router and `index.html`, lint config, run the verification; then about 1 h to review against DESIGN.md in a browser.\nactual: not reported\n'''\ns=s.replace(\"## Evidence\\n\",ev,1)\nopen(p,\"w\").write(s)\nEOF\nsed -n 50,60p docs/tickets/doc-assistant/G03.md",
+      "output": "## Resources created\n\nnone\n\n## Acceptance\n\n- [ ] A1 WHEN a reply streams THE chat SHALL show text as it arrives and the completed state only after `completed` (C3)\n- [ ] A2 IF the stream ends with `failed` THEN THE message SHALL keep its text and show the failed badge (C3)\n- [ ] A3 WHEN a scripted reply contains an `<img onerror>` payload, a `javascript:` link and an image from an unlisted host THE chat SHALL render it inert and load nothing (C3, SB10)\n\nVerification, automated: `cd web && npm run lint && npm test` exits 0; theme check exits 0.",
+      "is_error": false
+     }
+    ],
+    "skills_loaded": [
+     "adk-engineer"
+    ],
+    "skill_files_read": [
+     "adk-engineer/references/ticket-lifecycle.md",
+     "adk-frontend-integration/references"
+    ],
+    "skill_md_loaded": {
+     "adk-engineer": {
+      "loaded": true,
+      "how": "slash-command",
+      "other_files_read": 1
+     },
+     "adk-frontend-integration": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 1
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 13,
+    "catalogue": [
+     "adk-engineer",
+     "adk-frontend-integration",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-engineer": true,
+    "adk-frontend-integration": false
+   }
+  },
+  {
+   "id": "workflow-checkpoint-dependency-invalidation",
+   "expected_primary": "adk-workflow-design",
+   "fixture_status": "repo-fixture",
+   "note": "Three retained runs and a resume path over the document pipeline; google-adk is not installed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.3681,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Qualifies an unchanged checkpoint through trusted owner and complete dependency identity rather than merely finding a saved value.",
+     "verdict": "FAIL",
+     "quote": "The old manifests' `code_version` isn't compared, because there's no current value to compare it to.",
+     "quote_found": true,
+     "reason": "Qualification checks source, parser, model settings, instructions and schema, but it does not check producer code version or owner, so the dependency identity is incomplete.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Rejects each changed-input/config/schema/code/projection checkpoint and invalidates its affected descendants before dispatch while preserving the unaffected branch control.",
+     "verdict": "FAIL",
+     "quote": "def test_changed_model_setting_rejects_saved_stages(self):",
+     "quote_found": true,
+     "reason": "Tests cover only a changed source, a changed model name and a changed draft; there are no per-dependency mutations for schema, code or projection, and code is not compared at all.",
+     "votes": [
+      "FAIL",
+      "FAIL",
+      "FAIL"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Rejects stale reviews after draft/frame/invocation/image changes and prevents a concurrent changed draft from committing an old review.",
+     "verdict": "PASS",
+     "quote": "A review is committed only if the draft hasn't been amended while it ran.",
+     "quote_found": true,
+     "reason": "Stale review for PA-2026-0152 is rejected through draft_sha256 and a test checks a concurrent amendment is not committed.",
+     "votes": [
+      "FAIL",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    },
+    {
+     "n": 4,
+     "assertion": "Retains immutable originals and separately linked continuations; diagnostic edited responses cannot become authoritative producer or publication evidence.",
+     "verdict": "PASS",
+     "quote": "self.assertTrue(all(after[k] == v for k, v in before.items()))   # parent untouched",
+     "quote_found": true,
+     "reason": "Originals are verified unchanged, continuations are new runs linked by parent_run, and the edited diagnostic response is never read by the resume code.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Exercises positive reuse controls and actual boundary effects (in a run without a shell, writes those tests and reports them as not run rather than passed), without claiming exactly-once execution from hashes or framework checkpoints.",
+     "verdict": "PASS",
+     "quote": "Ran 12 tests in 0.066s\n\nOK",
+     "quote_found": true,
+     "reason": "The tests were actually run; they include a zero-send positive control for PA-2026-0141-r3 and counted sends for the other runs, with no exactly-once claim made from hashes.",
+     "votes": [
+      "PASS",
+      "FAIL",
+      "PASS"
+     ],
+     "agreement": 0.67,
+     "unstable": true
+    }
+   ],
+   "passed": 3,
+   "total": 5,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 0.87,
+   "unstable": [
+    3,
+    5
+   ],
+   "final_chars": 3400,
+   "files": [
+    "pipeline/adk_app.py",
+    "pipeline/resume.py",
+    "pipeline/sources.py",
+    "tests/test_resume.py"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 246.2,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 40,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 17,
+    "total_cost_usd": 0.6090645,
+    "duration_ms": 245195,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "40",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill,Bash",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill,Bash",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill",
+      "Bash"
+     ],
+     "unconfined_tools": [
+      "Bash"
+     ],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": false,
+     "unconfined": true,
+     "shell_environment": {
+      "home_mode": "real-home-redirected-config",
+      "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+      "variables_scrubbed": [
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN",
+       "SSH_AUTH_SOCK"
+      ],
+      "scrub_prefixes": [
+       "GOOGLE_",
+       "GCLOUD_",
+       "CLOUDSDK_",
+       "AWS_",
+       "AZURE_",
+       "ARM_"
+      ],
+      "scrub_names": [
+       "SSH_AUTH_SOCK",
+       "GH_TOKEN",
+       "GITHUB_TOKEN",
+       "GH_ENTERPRISE_TOKEN",
+       "GITLAB_TOKEN",
+       "NPM_TOKEN",
+       "HF_TOKEN",
+       "OPENAI_API_KEY",
+       "GEMINI_API_KEY",
+       "VAULT_TOKEN",
+       "KUBECONFIG",
+       "DOCKER_CONFIG",
+       "DOCKER_HOST",
+       "GIT_CONFIG_GLOBAL",
+       "GIT_ASKPASS",
+       "SSH_ASKPASS",
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN"
+      ],
+      "redirected": {
+       "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+       "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+       "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+       "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+       "DOCKER_CONFIG": "<case>/shell-env/docker",
+       "KUBECONFIG": "<case>/shell-env/kube/config",
+       "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+       "GH_CONFIG_DIR": "<case>/shell-env/gh",
+       "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+      },
+      "set": {
+       "GIT_CONFIG_NOSYSTEM": "1",
+       "BROWSER": "true"
+      }
+     }
+    },
+    "variables_scrubbed": [
+     "CLAUDE_CODE_MESSAGING_SOCKET",
+     "CLAUDE_CODE_MESSAGING_TOKEN",
+     "SSH_AUTH_SOCK"
+    ],
+    "shell_commands": [
+     {
+      "command": "find . -type f -not -name '*.pyc' | head -100; cat pipeline/resume.py pipeline/adk_app.py",
+      "output": "./pipeline/config.py\n./pipeline/resume.py\n./pipeline/ledger.py\n./pipeline/__init__.py\n./pipeline/checkpoints.py\n./pipeline/prompts.py\n./pipeline/adk_app.py\n./pipeline/model.py\n./pipeline/stages.py\n./pipeline/sources.py\n./pipeline/schemas.py\n./pipeline/constraints.py\n./pipeline/workflow.py\n./drafts/PA-2026-0152/r2.json\n./pyproject.toml\n./tests/doubles.py\n./tests/__init__.py\n./tests/test_resume.py\n./tests/test_pipeline.py\n./cases/local-plan.json\n./cases/dev/PA-2026-0141/application.json\n./cases/dev/PA-2026-0147/application.json\n./cases/dev/PA-2026-0152/application.json\n./cases/constraint-layers.json\n./.claude/skills/adk-workflow-design/LICENSE\n./.claude/skills/adk-workflow-design/references/callbacks.md\n./.claude/skills/adk-workflow-design/references/content-safeguards.md\n./.claude/skills/adk-workflow-design/references/orchestration.md\n./.claude/skills/adk-workflow-design/references/local-runbook.md\n./.claude/skills/adk-workflow-design/references/validation.md\n./.claude/skills/adk-workflow-design/references/model-call-controls.md\n./.claude/skills/adk-workflow-design/references/checkpoint-reuse.md\n./.claude/skills/adk-workflow-design/references/review-contracts.md\n./.claude/skills/adk-workflow-design/references/external-validation.md\n./.claude/skills/adk-workflow-design/references/compatibility.md\n./.claude/skills/\n[... 5289 characters omitted ...]\ne[\"writer\"], state[\"review\"]), {}\n        store.save(state[\"run_id\"], self.stage, result, {\"usage\": usage})\n        yield Event(author=self.name, invocation_id=ctx.invocation_id,\n                    content=types.Content(role=\"model\", parts=[types.Part(text=json.dumps(result))]),\n                    actions=EventActions(state_delta={self.stage: result}))\n\n\nroot_agent = SequentialAgent(\n    name=\"planning_decision\",\n    sub_agents=[StageAgent(name=\"writer\", stage=\"writer\", model_name=settings.writer_model),\n                StageAgent(name=\"review\", stage=\"review\", model_name=settings.review_model),\n                StageAgent(name=\"export\", stage=\"export\")],\n)",
+      "is_error": false
+     },
+     {
+      "command": "cat .claude/skills/adk-workflow-design/references/checkpoint-reuse.md; cat pipeline/checkpoints.py pipeline/stages.py pipeline/sources.py pipeline/config.py runs/README.md README.md",
+      "output": "# Qualify checkpoints before continuation\n\nRead before resuming an application stage from saved producer output. Define\nthe contract in the target application's existing stores and interfaces; this\nreference is a design and acceptance procedure for those stores. Reuse and\nexactly-once effects come from the manifest and guards below, on top of\nframework checkpoints and state keys.\n\n## Retain a complete dependency identity\n\nFor each reusable stage, retain an immutable manifest that resolves:\n\n| Dependency | Qualification |\n| --- | --- |\n| Source snapshot and full inputs | Exact source/content identities, all effective inputs and upstream artifact versions; references resolve to complete unchanged private content |\n| Parsing and representation | Parser/extractor version, normalization rules, source-coordinate/label conventions and grouping/selection configuration used to construct stage inputs |\n| Instructions and schema | Effective instructions, tool contract and serialized response schema, including dynamically compiled definitions |\n| Model configuration | Backend/route, requested and available returned model identity, generation/reasoning/output settings and relevant adapter configuration |\n| Response and projection | Authoritative raw response with attempt identity, native validated projection and their verifi\n[... 14023 characters omitted ...]\npatible gateway), and are charged\nagainst the campaign ledger in `campaign/ledger.json`\n(`pipeline/ledger.py`).\n\n`pipeline/workflow.py` runs a case in plain Python. `pipeline/adk_app.py`\nwires the same stages as a Google ADK app for the served route; it is the\nonly module that imports `google.adk`.\n\n## Running\n\n```bash\npython -m pipeline.workflow --case cases/dev/PA-2026-0141   # paid: needs PROVIDER_API_KEY\npython -m unittest discover -s tests -t .                  # offline\n```\n\nThe unit tests use `tests/doubles.py` (a scripted transport that counts\nsends) and never reach the provider. google-adk and the provider SDKs are\nnot installed in this environment.",
+      "is_error": false
+     },
+     {
+      "command": "for d in runs/*/; do echo \"== $d\"; cat $d/manifest.json; echo; done; cat drafts/PA-2026-0152/r2.json; head -c 600 runs/PA-2026-0147-r1/source.json; echo; cat tests/test_resume.py; cat tests/doubles.py",
+      "output": "== runs/PA-2026-0141-r3/\n{\n \"run_id\": \"PA-2026-0141-r3\",\n \"case_id\": \"PA-2026-0141\",\n \"code_version\": \"pipeline 0.9.4 (c41d0e7)\",\n \"source\": {\n  \"spans\": 32,\n  \"sha256\": \"63c35d2884dabbf3537a545ebf04313b4a2d348a7bcb3e8d9c08bcdb0091cd39\",\n  \"documents\": [\n   \"APP-FORM@1\",\n   \"DAS@1\",\n   \"NBR-1@1\",\n   \"LP-H4@2024\",\n   \"LP-T2@2024\",\n   \"LP-T2-1@2024\",\n   \"LP-ENV3@2024\"\n  ],\n  \"parser\": \"json-lines-v2\"\n },\n \"constraints\": {\n  \"layers_version\": \"gis-2026-09\"\n },\n \"writer\": {\n  \"attempt\": \"a1\",\n  \"model\": \"gemini-3.5-flash\",\n  \"temperature\": 1.0,\n  \"max_output_tokens\": 8192,\n  \"prompt\": \"writer-v7\",\n  \"instructions_sha256\": \"cbd2595aa19785cb4f7c2660a3b9a768dc2e61fd773f34b6f78952e23edc2595\",\n  \"schema_sha256\": \"7b6db3f6d63a41dfbd33401f7dd5d368b285f6495704803492e753ac5b055cb2\",\n  \"input\": \"source\",\n  \"draft_revision\": \"r1\"\n },\n \"review\": {\n  \"attempt\": \"a1-review\",\n  \"model\": \"gemini-3.5-flash\",\n  \"temperature\": 1.0,\n  \"prompt\": \"review-v4\",\n  \"instructions_sha256\": \"c403cd446cebd8d507079374d836a85f35018bbb38f5103611c2c4af96bac356\",\n  \"schema_sha256\": \"db54309423609e0445d29a8a4a9f0406975cc838b10c68a8395fa5a22960131f\",\n  \"input\": \"writer\",\n  \"draft_revision\": \"r1\"\n }\n}\n\n== runs/PA-2026-0147-r1/\n{\n \"run_id\": \"PA-2026-0147-r1\",\n \"case_id\": \"PA-2026-0147\",\n \"code_version\": \"pipeline 0.9.4 (c41d0e7)\",\n \"source\": {\n  \"spans\":\n[... 5039 characters omitted ...]\nst(replies)\n        self.sent: list[dict] = []\n\n    def __call__(self, url, payload, headers, timeout):\n        self.sent.append({\"url\": url, \"payload\": payload})\n        if not self.replies:\n            raise AssertionError(\"unexpected provider send\")\n        reply = self.replies.pop(0)\n        if isinstance(reply, Exception):\n            raise reply\n        if isinstance(reply, tuple):\n            return reply\n        return 200, {\"choices\": [{\"message\": {\"content\": json.dumps(reply)}}],\n                     \"usage\": {\"prompt_tokens\": 1000, \"completion_tokens\": 200, \"cost_usd\": 0.01}}\n\n    @property\n    def sends(self) -> int:\n        return len(self.sent)",
+      "is_error": false
+     },
+     {
+      "command": "cat pipeline/prompts.py pipeline/schemas.py pipeline/constraints.py pipeline/workflow.py; cat cases/constraint-layers.json | head -30; cat campaign/ledger.json | head -30; cat pyproject.toml; ls runs/*/diagnostics; head -c 700 runs/PA-2026-0147-r1/diagnostics/*.json; head -c 500 runs/PA-2026-0141-r3/constraints.json",
+      "output": "\"\"\"Instructions for the writer and reviewer. Versioned: bump the version with any change.\"\"\"\n\nWRITER_VERSION = \"writer-v7\"\nREVIEW_VERSION = \"review-v4\"\n\nWRITER_INSTRUCTION = \"\"\"\\\nYou are drafting a recommended decision on a householder planning application for a planning\nofficer. Use only the numbered source spans below. Every reason must cite the span ids it relies\non, and every quotation in citations must be copied from its span.\n\nDecide approve, approve_with_conditions or refuse. Give reasons, any conditions (each tied to the\nreason that justifies it), the citations, conflicts between sources, and gaps where the sources\ndo not settle a material question.\n\nReturn JSON matching the schema.\n\nApplication: {address} - {proposal}\n\nSources:\n{sources}\n\"\"\"\n\nREVIEW_INSTRUCTION = \"\"\"\\\nYou are reviewing a draft planning decision. For each reason, check the cited spans and say\nwhether they support it (supported, unsupported or contradicted). Reject the draft if any\nmaterial reason is not supported or a material question is left unresolved. List findings.\n\nReturn JSON matching the schema.\n\nDraft:\n{draft}\n\nSources:\n{sources}\n\"\"\"\n\"\"\"The writer's and reviewer's output contracts, checked in code (stdlib only).\"\"\"\nfrom __future__ import annotations\n\nDECISIONS = (\"approve\", \"approve_with_conditions\", \"refuse\")\nSUPPORT = (\"suppor\n[... 8114 characters omitted ...]\nider.\",\n \"based_on\": \"runs/PA-2026-0147-r1/writer.json#a1\",\n \"draft\": {\n  \"decision\": \"approve_with_conditions\",\n  \"reasons\": [\n   {\n    \"id\": \"R1\",\n    \"text\": \"The 4.6 m projection suits a semi-detached house and keeps neighbours' light.\",\n    \"citations\": [\n     \"DAS@2:p1:1\",\n     \"LP-H4@2024:p31:4\"\n    ]\n   },\n   {\n    \"id\": \"R2\",\n    \"text\": \"The protected oak's root protection area (7.7 m) is clear of the works at 9 m.\",\n    \"citations\": [\n     \"DAS@2:p1:3\",\n  {\n \"stage\": \"constraints\",\n \"saved_at\": \"2026-10-16T09:12:40+00:00\",\n \"meta\": {},\n \"payload\": {\n  \"address\": \"12 Linnet Row, Eastmere\",\n  \"layers_version\": \"gis-2026-09\",\n  \"constraints\": []\n }\n}",
+      "is_error": false
+     },
+     {
+      "command": "python - <<'E'\nimport json,hashlib\nfrom pathlib import Path\nfrom pipeline import prompts, schemas\nfrom pipeline.sources import *\nfor n in dir(prompts):\n    if n.isupper(): print(n, hashlib.sha256(getattr(prompts,n).encode()).hexdigest())\nfor n in dir(schemas):\n    if n.isupper() and isinstance(getattr(schemas,n),dict): print(n, hashlib.sha256(json.dumps(getattr(schemas,n),sort_keys=True).encode()).hexdigest(), hashlib.sha256(json.dumps(getattr(schemas,n)).encode()).hexdigest())\nfor c in [\"0141\",\"0147\",\"0152\"]:\n    case=load_case(Path(\"cases/dev/PA-2026-\"+c)); print(c, manifest(case_spans(case,load_policies())))\nE",
+      "output": "REVIEW_INSTRUCTION c403cd446cebd8d507079374d836a85f35018bbb38f5103611c2c4af96bac356\nREVIEW_VERSION eeb9a5a11415c6c09106696e612812dec52821d97197c912a9ae180ffec1bb28\nWRITER_INSTRUCTION cbd2595aa19785cb4f7c2660a3b9a768dc2e61fd773f34b6f78952e23edc2595\nWRITER_VERSION fcf661822a9f4ea609d0b5a92a056e640e5aa4dfe95a798728f72ce13d12ecf3\nDRAFT_SCHEMA 7b6db3f6d63a41dfbd33401f7dd5d368b285f6495704803492e753ac5b055cb2 2693238e22bdfb8f76f822a5796994a1d264389797f964cb420339102432175b\nREVIEW_SCHEMA db54309423609e0445d29a8a4a9f0406975cc838b10c68a8395fa5a22960131f f87869861f861fcb4212b01ca5bcfb50311d9eabf7546906f655f116f35bb3d8\n0141 {'spans': 32, 'sha256': '63c35d2884dabbf3537a545ebf04313b4a2d348a7bcb3e8d9c08bcdb0091cd39'}\n0147 {'spans': 33, 'sha256': 'e86a4fd541b86bb3fa639af7b0ebb0140e0f0d56ffab67b5f0522f20ef40be3d'}\n0152 {'spans': 30, 'sha256': '83a150ad914d31bca87c658e45d433721e4b9502e92b2a056281e6d2cb325c25'}",
+      "is_error": false
+     },
+     {
+      "command": "cat pipeline/model.py; grep -rn \"publish\\|latest_draft\\|resume\" --include=*.py . | grep -v \"^./.claude\"; grep -n \"def test\\|import\" tests/test_pipeline.py | head -30; python - <<'E'\nimport json\nfor c in (\"0147\",\"0152\"):\n    d=json.load(open(f\"cases/dev/PA-2026-{c}/application.json\")); print(c,d[\"address\"],[(x[\"doc_id\"],x[\"version\"]) for x in d[\"documents\"]])\nE\npython -m unittest discover -s tests -t . 2>&1 | tail -3",
+      "output": "\"\"\"OpenAI-compatible chat-completions adapter. The transport is injectable and every send is counted.\"\"\"\nfrom __future__ import annotations\n\nfrom dataclasses import dataclass, field\nimport json\nfrom typing import Any, Callable\n\n# transport(url, payload, headers, timeout) -> (status_code, body_dict)\nTransport = Callable[[str, dict, dict, float], tuple[int, dict]]\n\n\nclass ProviderError(Exception):\n    def __init__(self, message: str, status: int | None = None, retryable: bool = False):\n        super().__init__(message)\n        self.status = status\n        self.retryable = retryable\n\n\ndef httpx_transport(url: str, payload: dict, headers: dict, timeout: float) -> tuple[int, dict]:\n    import httpx  # imported here so tests never need it\n\n    resp = httpx.post(url, json=payload, headers=headers, timeout=timeout)\n    return resp.status_code, resp.json()\n\n\n@dataclass\nclass ChatModel:\n    base_url: str\n    model: str\n    api_key: str = \"\"\n    transport: Transport = httpx_transport\n    temperature: float = 1.0\n    max_output_tokens: int = 8192\n    timeout_s: float = 120.0\n    sends: int = 0\n    usage: list[dict] = field(default_factory=list)\n\n    def complete_json(self, instruction: str, schema: dict, schema_name: str) -> tuple[dict, dict]:\n        \"\"\"One paid call. Returns (parsed JSON, usage). The gateway is asked for \n[... 1425 characters omitted ...]\nport validate_draft\n12:from pipeline.sources import case_spans, load_case, load_policies\n13:from pipeline.workflow import run_case\n14:from tests.doubles import ScriptedTransport\n41:    def test_spans_are_numbered_by_document_version_page_and_line(self):\n47:    def test_draft_citing_unknown_span_is_invalid(self):\n52:    def test_case_runs_end_to_end_with_scripted_provider(self):\n64:    def test_checkpoint_over_limit_is_refused(self):\n69:    def test_ledger_refuses_reservation_beyond_allowance(self):\n0147 31 Wren Lane, Eastmere [('APP-FORM', '1'), ('DAS', '2'), ('ARB', '1')]\n0152 8 Heron Way, Eastmere [('APP-FORM', '1'), ('DAS', '1')]\nRan 6 tests in 0.014s\n\nOK",
+      "is_error": false
+     },
+     {
+      "command": "cat >> pipeline/sources.py <<'E'\n\n\nPARSER = \"json-lines-v2\"\nE\ncat > pipeline/resume.py <<'E'\n\"\"\"Carry a case on from the stages already saved in the checkpoint store.\n\nUsed by the served route so a case interrupted after a paid stage does not pay\nfor that stage again. A saved stage is loaded only when everything it was made\nfrom still matches: the source spans, the instructions, the schema, the model\nsettings and, for a review, the exact draft it checked. Anything else is\ninvalidated, with its descendants, and runs again.\n\nRetained runs are evidence and are never written to. A continuation writes a new\nrun directory (`<case>-r<n>`) whose manifest links to the parent and records which\nstages were reused and which were invalidated, and why.\n\"\"\"\nfrom __future__ import annotations\n\nimport hashlib\nimport json\nimport re\nfrom pathlib import Path\n\nfrom pipeline import prompts, schemas, stages\nfrom pipeline.checkpoints import CheckpointStore\nfrom pipeline.config import Settings\nfrom pipeline.constraints import load_layers, site_constraints\nfrom pipeline.model import ChatModel\nfrom pipeline.sources import PARSER, case_spans, load_case, load_policies, manifest as source_manifest\n\nSTAGES = (\"source\", \"constraints\", \"writer\", \"review\", \"export\")\n\n# Identity fields a saved manifest must carry to qualify a model stage; a missing one means \"cannot prove it\".\nREQUIRED = {\n    \"writer\": (\"model\", \"temperature\", \"max_output_tokens\", \"prompt\", \"instructions_sha256\", \"schema_sha256\"),\n    \"review\": (\"model\", \"temperature\", \"prompt\", \"instructions_sha256\", \"schema_sha256\"),\n}\n# Compared only when the saved manifest recorded them (older manifests did not).\nOPTIONAL = (\"max_output_tokens\", \"max_source_chars\", \"draft_sha256\")\n\n\ndef digest(obj: object) -> str:\n    return hashlib.sha256(json.dumps(obj, sort_keys=True).encode()).hexdigest()\n\n\ndef resume_case(case_dir: Path, run_id: str, settings: Settings, writer: ChatModel, reviewer: ChatModel,\n                store: CheckpointStore, drafts_dir: Path = Path(\"drafts\")) -> dict:\n    case = load_case(case_dir)\n    spans = case_spans(case, load_policies())\n    cont = Continuation(store, run_id, case, spans, settings, writer, reviewer, drafts_dir)\n    cont.obtain(\"source\", lambda: ({\"span_ids\": [s.span_id for s in spans]}, {}))\n    cont.obtain(\"constraints\", lambda: (site_constraints(case[\"address\"]), {}))\n    draft = cont.obtain_draft(lambda: stages.run_writer(writer, case, spans, settings.max_source_chars))\n    review = cont.obtain(\"review\", lambda: stages.run_review(reviewer, draft, spans, settings.max_source_chars))\n    return cont.publish(draft, review)\n\n\nclass Continuation:\n    \"\"\"Qualifies saved stages against the current inputs and writes the continuation run.\"\"\"\n\n    def __init__(self, store: CheckpointStore, parent_run: str, case: dict, spans: list, settings: Settings,\n                 writer: ChatModel, reviewer: ChatModel, drafts_dir: Path = Path(\"drafts\"),\n                 run_id: str | None = None) -> None:\n        self.store, self.parent_run, self.case, self.spans = store, parent_run, case, spans\n        self.settings, self.writer, self.reviewer, self.drafts_dir = settings, writer, reviewer, drafts_dir\n        self.run_id = run_id            # the continuation run; allocated on the first write\n        self.draft: dict | None = None\n        self.hits: dict[str, str] = {}  # stage -> run the saved record came from\n        self.rejected: dict[str, list[str]] = {}\n        self.span_ids = [s.span_id for s in spans]\n        self.src = source_manifest(spans)\n\n    # ---- reading saved runs -------------------------------------------------------------------\n    def _manifest(self, run: str) -> dict | None:\n        path = self.store.root / run / \"manifest.json\"\n        return json.loads(path.read_text(encoding=\"utf-8\")) if path.exists() else None\n\n    def _candidates(self) -> list[str]:\n        \"\"\"Continuations of the parent, newest first, then the parent.\"\"\"\n        children = []\n        for path in self.store.root.glob(f\"{self.case['case_id']}-r*\"):\n            man = self._manifest(path.name)\n            if man and man.get(\"continuation\", {}).get(\"parent_run\") == self.parent_run:\n                children.append((_rev_no(path.name), path.name))\n        return [name for _, name in sorted(children, reverse=True)] + [self.parent_run]\n\n    def amendment(self) -> tuple[str, dict, dict] | None:\n        \"\"\"The newest officer-amended draft: (revision, draft, file record).\"\"\"\n        folder = self.drafts_dir / self.case[\"case_id\"]\n        revisions = sorted(folder.glob(\"r*.json\"), key=lambda p: _rev_no(p.stem)) if folder.is_dir() else []\n        if not revisions:\n            return None\n        rec = json.loads(revisions[-1].read_text(encoding=\"utf-8\"))\n        return rec.get(\"revision\", revisions[-1].stem), rec[\"draft\"], rec\n\n    def _section(self, stage: str, draft: dict | None = None) -> dict:\n        \"\"\"The identity the stage would have if it ran now.\"\"\"\n        if stage == \"source\":\n            return {**self.src, \"parser\": PARSER, \"documents\": sorted({s.span_id.split(\":\")[0] for s in self.spans})}\n        if stage == \"constraints\":\n            return {\"layers_version\": load_layers()[\"version\"]}\n        model, name, instruction, schema = ((self.writer, \"writer\", prompts.WRITER_INSTRUCTION, schemas.DRAFT_SCHEMA)\n                                            if stage == \"writer\" else\n                                            (self.reviewer, \"review\", prompts.REVIEW_INSTRUCTION, schemas.REVIEW_SCHEMA))\n        section = {\"model\": model.model, \"temperature\": model.temperature,\n                   \"max_output_tokens\": model.max_output_tokens,\n                   \"max_source_chars\": self.settings.max_source_chars,\n                   \"prompt\": prompts.WRITER_VERSION if stage == \"writer\" else prompts.REVIEW_VERSION,\n                   \"instructions_sha256\": hashlib.sha256(instruction.encode()).hexdigest(),\n                   \"schema_sha256\": digest(schema), \"input\": \"source\" if stage == \"writer\" else \"writer\"}\n        if stage == \"review\" and draft is not None:\n            section[\"draft_sha256\"] = digest(draft)\n        return section\n\n    def _check(self, run: str, stage: str) -> list[str]:\n        \"\"\"Reasons the saved record is not reusable; empty means it qualifies.\"\"\"\n        rec = self.store.load(run, stage)\n        man = self._manifest(run)\n        if rec is None:\n            return [\"no checkpoint\"]\n        if man is None:\n            return [\"no manifest, so its inputs cannot be verified\"]\n        payload = rec[\"payload\"]\n        if stage == \"source\":\n            saved = man.get(\"source\", {})\n            if saved.get(\"sha256\") != self.src[\"sha256\"] or saved.get(\"parser\") != PARSER:\n                return [\"source spans or parser changed\"]\n            return [] if payload.get(\"span_ids\") == self.span_ids else [\"saved span ids differ\"]\n        if stage == \"constraints\":\n            return [] if payload == site_constraints(self.case[\"address\"]) else [\"address or constraint layers changed\"]\n        if man.get(\"source\", {}).get(\"sha256\") != self.src[\"sha256\"] or man.get(\"source\", {}).get(\"parser\") != PARSER:\n            return [\"produced from different source spans\"]\n        saved = man.get(stage, {})\n        if stage == \"writer\":\n            if saved.get(\"origin\") == \"officer_amendment\":\n                return self._check_amended(saved)\n            current = self._section(\"writer\")\n        else:\n            current = self._section(\"review\", self.draft)\n            saved = dict(saved)\n            if \"draft_sha256\" not in saved:\n                # Older manifests: a review checked the writer output saved in the same run.\n                writer_rec, writer_saved = self.store.load(run, \"writer\"), man.get(\"writer\", {})\n                if writer_rec is None or writer_saved.get(\"origin\") == \"officer_amendment\":\n                    return [\"review input draft cannot be identified\"]\n                saved[\"draft_sha256\"] = digest(writer_rec[\"payload\"])\n        errors = [f\"{k} is not recorded\" for k in REQUIRED[stage] if k not in saved]\n        errors += [f\"{k} changed\" for k in (*REQUIRED[stage], *OPTIONAL)\n                   if k in saved and k in current and saved[k] != current[k]]\n        if errors:\n            return errors\n        if stage == \"writer\":\n            errors = schemas.validate_draft(payload, set(self.span_ids))\n        else:\n            errors = schemas.validate_review(payload, self.draft)\n        return [f\"saved output invalid: {e}\" for e in errors]\n\n    def _check_amended(self, saved: dict) -> list[str]:\n        amended = self.amendment()\n        if amended is None:\n            return [\"saved draft is an officer amendment but none exists now\"]\n        return [] if saved.get(\"draft_sha256\") == digest(amended[1]) else [\"officer draft differs\"]\n\n    def lookup(self, stage: str) -> tuple[str, dict] | None:\n        for run in self._candidates():\n            if stage == \"writer\" and self.amendment() is not None:\n                amended = self.amendment()\n                rec = self.store.load(run, \"writer\")\n                man = (self._manifest(run) or {}).get(\"writer\", {})\n                if rec and man.get(\"origin\") == \"officer_amendment\" and not self._check_amended(man) \\\n                        and not schemas.validate_draft(rec[\"payload\"], set(self.span_ids)):\n                    self.hits[stage] = run\n                    return run, rec\n                self.rejected.setdefault(stage, []).append(f\"{run}: model draft superseded by officer draft {amended[0]}\")\n                continue\n            reasons = self._check(run, stage)\n            if not reasons:\n                self.hits[stage] = run\n                return run, self.store.load(run, stage)\n            self.rejected.setdefault(stage, []).append(f\"{run}: \" + \"; \".join(reasons))\n        return None\n\n    # ---- obtaining stages ---------------------------------------------------------------------\n    def obtain(self, stage: str, produce) -> dict:\n        \"\"\"Saved payload if it qualifies, otherwise produce() -> (payload, usage), saved to the continuation run.\"\"\"\n        hit = self.lookup(stage)\n        if hit:\n            run, rec = hit\n            if self.run_id is not None and run != self.run_id:\n                self._write(stage, rec[\"payload\"], {\"reused_from\": run, \"original_saved_at\": rec[\"saved_at\"],\n                                                    \"original_meta\": rec[\"meta\"]}, reused=run)\n            return rec[\"payload\"]\n        payload, usage = produce()\n        if stage == \"review\":\n            self._fence_draft()\n        self._write(stage, payload, {\"usage\": usage}, fresh=True)\n        return payload\n\n    def obtain_draft(self, produce) -> dict:\n        hit = self.lookup(\"writer\")\n        amended = self.amendment()\n        if hit:\n            run, rec = hit\n            if self.run_id is not None and run != self.run_id:\n                self._write(\"writer\", rec[\"payload\"], {\"reused_from\": run, \"original_saved_at\": rec[\"saved_at\"],\n                                                       \"original_meta\": rec[\"meta\"]}, reused=run)\n            self.draft = rec[\"payload\"]\n        elif amended:\n            revision, draft, rec = amended\n            errors = schemas.validate_draft(draft, set(self.span_ids))\n            if errors:\n                raise stages.StageFailed(\"writer\", [f\"officer draft {revision}: {e}\" for e in errors])\n            self.draft = draft\n            self._write(\"writer\", draft, {\"officer_amendment\": revision, \"amended_by\": rec.get(\"amended_by\"),\n                                          \"amended_at\": rec.get(\"amended_at\"), \"parent_revision\": rec.get(\"parent_revision\")},\n                        fresh=True, section={\"origin\": \"officer_amendment\", \"draft_revision\": revision,\n                                             \"draft_sha256\": digest(draft)})\n        else:\n            self.draft, usage = produce()\n            self._write(\"writer\", self.draft, {\"usage\": usage}, fresh=True)\n        return self.draft\n\n    def publish(self, draft: dict, review: dict) -> dict:\n        \"\"\"Export (deterministic, no model). Skips the write when one saved run already holds the same result.\"\"\"\n        result = build_export(self.case, draft, review, self.store.load(self._run_of(\"constraints\"), \"constraints\")[\"payload\"])\n        runs = {self.hits.get(s) for s in (\"source\", \"constraints\", \"writer\", \"review\")}\n        if self.run_id is None and len(runs) == 1:\n            rec = self.store.load(runs.pop(), \"export\")\n            if rec and rec[\"payload\"] == result:\n                return result\n        self._write(\"export\", result, {}, fresh=True)\n        return result\n\n    # ---- writing the continuation run -----------------------------------------------------------\n    def _run_of(self, stage: str) -> str:\n        return self.run_id if self.run_id and self.store.load(self.run_id, stage) else self.hits[stage]\n\n    def _fence_draft(self) -> None:\n        \"\"\"A review may only be committed against the draft revision it checked.\"\"\"\n        amended = self.amendment()\n        if amended and digest(amended[1]) != digest(self.draft):\n            raise stages.StageFailed(\"review\", [\"draft was amended while the review ran; review discarded\"])\n\n    def _ensure_run(self, stage: str) -> None:\n        if self.run_id is None:\n            case_id = self.case[\"case_id\"]\n            taken = [_rev_no(p.name) for p in self.store.root.glob(f\"{case_id}-r*\")]\n            self.run_id = f\"{case_id}-r{max(taken, default=0) + 1}\"\n            self.store.write_manifest(self.run_id, {\n                \"run_id\": self.run_id, \"case_id\": case_id, \"source\": self._section(\"source\"),\n                \"continuation\": {\"parent_run\": self.parent_run, \"stages\": {}, \"invalidated\": {}}})\n            for earlier in STAGES[:STAGES.index(stage)]:     # copy qualified upstream stages into the new run\n                run = self.hits.get(earlier)\n                if run:\n                    rec = self.store.load(run, earlier)\n                    self._write(earlier, rec[\"payload\"], {\"reused_from\": run, \"original_saved_at\": rec[\"saved_at\"],\n                                                          \"original_meta\": rec[\"meta\"]}, reused=run)\n\n    def _write(self, stage: str, payload: dict, meta: dict, reused: str | None = None, fresh: bool = False,\n               section: dict | None = None) -> None:\n        self._ensure_run(stage)\n        self.store.save(self.run_id, stage, payload, meta)\n        man = self._manifest(self.run_id)\n        if stage in (\"writer\", \"review\"):\n            if reused:\n                section = dict((self._manifest(reused) or {}).get(stage, {}))\n                if stage == \"review\":\n                    section[\"draft_sha256\"] = digest(self.draft)\n            elif section is None:\n                section = self._section(stage, self.draft)\n                section[\"attempt\"] = f\"{self.run_id}-{stage}\"\n            if stage == \"writer\":\n                section.setdefault(\"draft_revision\", \"r1\")\n            else:\n                section[\"draft_revision\"] = self._revision()\n            man[stage] = section\n        elif stage == \"constraints\":\n            man[stage] = self._section(\"constraints\")\n        cont = man[\"continuation\"]\n        cont[\"stages\"][stage] = {\"reused_from\": reused} if reused else {\"executed\": True}\n        cont[\"invalidated\"] = {s: r for s, r in self.rejected.items() if s not in man[\"continuation\"][\"stages\"]\n                               or \"executed\" in cont[\"stages\"][s]}\n        self.store.write_manifest(self.run_id, man)\n\n    def _revision(self) -> str:\n        amended = self.amendment()\n        return amended[0] if amended else \"r1\"\n\n\ndef build_export(case: dict, draft: dict, review: dict, constraints: dict) -> dict:\n    result = stages.export(case, draft, review)\n    result[\"constraints\"] = constraints[\"constraints\"]\n    return result\n\n\ndef publish(case: dict, run_id: str, store: CheckpointStore) -> dict:\n    \"\"\"Export a run's own draft with its own review, and save it in that run.\"\"\"\n    draft = store.load(run_id, \"writer\")[\"payload\"]\n    review = store.load(run_id, \"review\")[\"payload\"]\n    result = build_export(case, draft, review, store.load(run_id, \"constraints\")[\"payload\"])\n    store.save(run_id, \"export\", result, {})\n    return result\n\n\ndef latest_draft(case_id: str, drafts_dir: Path = Path(\"drafts\")) -> dict | None:\n    \"\"\"Officers can amend a draft in the case-management screen; amendments land in drafts/.\"\"\"\n    folder = drafts_dir / case_id\n    revisions = sorted(folder.glob(\"r*.json\"), key=lambda p: _rev_no(p.stem)) if folder.is_dir() else []\n    if not revisions:\n        return None\n    return json.loads(revisions[-1].read_text(encoding=\"utf-8\"))[\"draft\"]\n\n\ndef _rev_no(name: str) -> int:\n    match = re.search(r\"r(\\d+)$\", name)\n    return int(match.group(1)) if match else 0\nE",
+      "output": "(Bash completed with no output)",
+      "is_error": false
+     },
+     {
+      "command": "python - <<'E'\nimport re\np=\"pipeline/resume.py\"; s=open(p).read()\na=s.index('        cont[\"invalidated\"] = {'); b=s.index('        self.store.write_manifest(self.run_id, man)\\n\\n    def _revision')\ns=s[:a]+'        cont[\"invalidated\"] = self.rejected\\n'+s[b:]\nopen(p,\"w\").write(s)\nE\npython - <<'E'\nimport json\nd=json.load(open(\"runs/PA-2026-0147-r1/writer.json\"))[\"payload\"]; print(json.dumps(d)[:400])\nE",
+      "output": "{\"decision\": \"approve_with_conditions\", \"reasons\": [{\"id\": \"R1\", \"text\": \"The 3.8 m projection suits a semi-detached house and keeps neighbours' light.\", \"citations\": [\"DAS@1:p1:1\", \"LP-H4@2024:p31:4\"]}, {\"id\": \"R2\", \"text\": \"The protected oak's root protection area (7.7 m) is clear of the works at 11 m.\", \"citations\": [\"DAS@1:p1:3\", \"ARB@1:p1:2\"]}], \"conditions\": [{\"id\": \"C1\", \"text\": \"Tree prote",
+      "is_error": false
+     },
+     {
+      "command": "cat > tests/test_resume.py <<'E'\nimport hashlib\nimport json\nfrom pathlib import Path\nimport shutil\nimport tempfile\nimport unittest\n\nfrom pipeline.checkpoints import CheckpointStore\nfrom pipeline.config import Settings\nfrom pipeline.model import ChatModel\nfrom pipeline.resume import resume_case\nfrom pipeline.sources import case_spans, load_case, load_policies\nfrom tests.doubles import ScriptedTransport\n\nROOT = Path(__file__).resolve().parents[1]\nCASES = ROOT / \"cases\" / \"dev\"\n\n\ndef tree_hashes(root: Path) -> dict:\n    return {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest()\n            for p in sorted(root.rglob(\"*\")) if p.is_file()}\n\n\ndef model(replies):\n    transport = ScriptedTransport(replies)\n    return ChatModel(\"https://gw.test/v1\", \"gemini-3.5-flash\", transport=transport), transport\n\n\ndef copy_run(tmp: str, run: str) -> CheckpointStore:\n    shutil.copytree(ROOT / \"runs\" / run, Path(tmp) / run)\n    return CheckpointStore(tmp)\n\n\ndef draft_for(case_id: str, doc_version: str) -> dict:\n    return {\"decision\": \"approve\", \"reasons\": [{\"id\": \"R1\", \"text\": \"ok\", \"citations\": [f\"DAS@{doc_version}:p1:1\"]}],\n            \"conditions\": [], \"citations\": [], \"conflicts\": [], \"gaps\": []}\n\n\nclass ResumeTests(unittest.TestCase):\n    def run_case(self, case_id, run, store, writer=None, reviewer=None, drafts=ROOT / \"drafts\"):\n        w, wt = writer or model([])\n        r, rt = reviewer or (w, wt)\n        out = resume_case(CASES / case_id, run, Settings(), w, r, store, drafts_dir=drafts)\n        return out, wt, rt\n\n    def test_fully_saved_run_costs_nothing_and_writes_nothing(self):\n        with tempfile.TemporaryDirectory() as tmp:\n            store = copy_run(tmp, \"PA-2026-0141-r3\")\n            before = tree_hashes(Path(tmp))\n            result, transport, _ = self.run_case(\"PA-2026-0141\", \"PA-2026-0141-r3\", store)\n            self.assertEqual(transport.sends, 0)\n            self.assertEqual(result[\"decision\"], \"approve\")\n            self.assertEqual(tree_hashes(Path(tmp)), before)\n\n    def test_missing_export_is_rebuilt_in_a_new_run_with_zero_sends(self):\n        with tempfile.TemporaryDirectory() as tmp:\n            store = copy_run(tmp, \"PA-2026-0141-r3\")\n            (Path(tmp) / \"PA-2026-0141-r3\" / \"export.json\").unlink()\n            before = tree_hashes(Path(tmp))\n            result, transport, _ = self.run_case(\"PA-2026-0141\", \"PA-2026-0141-r3\", store)\n            self.assertEqual(transport.sends, 0)\n            self.assertEqual(result[\"decision\"], \"approve\")\n            after = tree_hashes(Path(tmp))\n            self.assertTrue(all(after[k] == v for k, v in before.items()))   # parent untouched\n            self.assertIn(\"PA-2026-0141-r4/export.json\", after)\n            # a second request reconnects to the continuation: still no sends, no further run\n            self.run_case(\"PA-2026-0141\", \"PA-2026-0141-r3\", store)\n            self.assertEqual(tree_hashes(Path(tmp)), after)\n\n    def test_resubmitted_statement_invalidates_source_writer_review_but_not_constraints(self):\n        case = load_case(CASES / \"PA-2026-0147\")\n        ids = {s.span_id for s in case_spans(case, load_policies())}\n        draft = draft_for(\"PA-2026-0147\", \"2\")\n        review = {\"verdict\": \"accept\", \"claims\": [{\"reason_id\": \"R1\", \"support\": \"supported\", \"span_ids\": [\"DAS@2:p1:1\"]}],\n                  \"findings\": []}\n        self.assertIn(\"DAS@2:p1:1\", ids)\n        with tempfile.TemporaryDirectory() as tmp:\n            store = copy_run(tmp, \"PA-2026-0147-r1\")\n            before = tree_hashes(Path(tmp))\n            result, transport, _ = self.run_case(\"PA-2026-0147\", \"PA-2026-0147-r1\", store,\n                                                 writer=model([draft, review]), drafts=Path(tmp) / \"none\")\n            self.assertEqual(transport.sends, 2)\n            after = tree_hashes(Path(tmp))\n            self.assertTrue(all(after[k] == v for k, v in before.items()))\n            man = json.loads((Path(tmp) / \"PA-2026-0147-r2\" / \"manifest.json\").read_text())\n            stages = man[\"continuation\"][\"stages\"]\n            self.assertEqual(stages[\"constraints\"], {\"reused_from\": \"PA-2026-0147-r1\"})\n            self.assertTrue(stages[\"writer\"][\"executed\"] and stages[\"review\"][\"executed\"])\n            self.assertIn(\"source spans or parser changed\", man[\"continuation\"][\"invalidated\"][\"source\"][0])\n            sent = json.dumps(transport.sent)\n            self.assertIn(\"DAS@2:p1:1\", sent)\n            self.assertNotIn(\"DAS@1:\", sent)       # the edited diagnostic and old spans never reach the model\n            self.assertEqual(store.load(\"PA-2026-0147-r2\", \"writer\")[\"payload\"], draft)\n\n    def test_amended_draft_keeps_writer_inputs_but_rereviews(self):\n        review = {\"verdict\": \"accept\", \"claims\": [{\"reason_id\": \"R1\", \"support\": \"supported\", \"span_ids\": []},\n                                                  {\"reason_id\": \"R2\", \"support\": \"supported\", \"span_ids\": []}],\n                  \"findings\": []}\n        with tempfile.TemporaryDirectory() as tmp:\n            store = copy_run(tmp, \"PA-2026-0152-r1\")\n            result, transport, _ = self.run_case(\"PA-2026-0152\", \"PA-2026-0152-r1\", store,\n                                                 reviewer=model([review]))\n            self.assertEqual(transport.sends, 1)            # only the review; no writer call\n            self.assertIn(\"obscure-glazed\", result[\"conditions\"][0])\n            man = json.loads((Path(tmp) / \"PA-2026-0152-r2\" / \"manifest.json\").read_text())\n            self.assertEqual(man[\"review\"][\"draft_revision\"], \"r2\")\n            self.assertIn(\"draft_sha256\", man[\"review\"])\n            # asking again finds the new review qualified\n            _, transport2, _ = self.run_case(\"PA-2026-0152\", \"PA-2026-0152-r1\", store)\n            self.assertEqual(transport2.sends, 0)\n\n    def test_review_is_not_committed_if_draft_changes_during_review(self):\n        from pipeline.stages import StageFailed\n        review = {\"verdict\": \"accept\", \"claims\": [{\"reason_id\": \"R1\", \"support\": \"supported\", \"span_ids\": []},\n                                                  {\"reason_id\": \"R2\", \"support\": \"supported\", \"span_ids\": []}],\n                  \"findings\": []}\n        with tempfile.TemporaryDirectory() as tmp:\n            drafts = Path(tmp) / \"drafts\"\n            shutil.copytree(ROOT / \"drafts\", drafts)\n            store = copy_run(tmp, \"PA-2026-0152-r1\")\n            rev = model([review])\n            real = rev[1].__call__\n\n            def amend_midway(*args):\n                out = real(*args)\n                path = drafts / \"PA-2026-0152\" / \"r3.json\"\n                rec = json.loads((drafts / \"PA-2026-0152\" / \"r2.json\").read_text())\n                rec[\"revision\"] = \"r3\"\n                rec[\"draft\"][\"gaps\"] = [\"new gap\"]\n                path.write_text(json.dumps(rec))\n                return out\n            rev[0].transport = amend_midway\n            with self.assertRaises(StageFailed):\n                self.run_case(\"PA-2026-0152\", \"PA-2026-0152-r1\", store, reviewer=rev, drafts=drafts)\n            self.assertIsNone(store.load(\"PA-2026-0152-r2\", \"review\"))\n\n    def test_changed_model_setting_rejects_saved_stages(self):\n        with tempfile.TemporaryDirectory() as tmp:\n            store = copy_run(tmp, \"PA-2026-0141-r3\")\n            w, t = model([])\n            w.model = \"another-model\"\n            with self.assertRaises(AssertionError):     # the double refuses an unscripted send\n                resume_case(CASES / \"PA-2026-0141\", \"PA-2026-0141-r3\", Settings(), w, w, store)\n            self.assertEqual(t.sends, 1)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\nE\npython -m unittest discover -s tests -t . 2>&1 | tail -30",
+      "output": ".....F.....\n======================================================================\nFAIL: test_amended_draft_keeps_writer_inputs_but_rereviews (tests.test_resume.ResumeTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/s6/aes-scenarios-2aqf2ccs/workflow-checkpoint-dependency-invalidation/workspace/tests/test_resume.py\", line 103, in test_amended_draft_keeps_writer_inputs_but_rereviews\n    self.assertEqual(transport.sends, 1)            # only the review; no writer call\nAssertionError: 0 != 1\n\n----------------------------------------------------------------------\nRan 11 tests in 0.072s\n\nFAILED (failures=1)",
+      "is_error": false
+     },
+     {
+      "command": "python - <<'E'\np=\"tests/test_resume.py\"; s=open(p).read()\ns=s.replace(\"\"\"            result, transport, _ = self.run_case(\"PA-2026-0152\", \"PA-2026-0152-r1\", store,\n                                                 reviewer=model([review]))\n            self.assertEqual(transport.sends, 1)            # only the review; no writer call\"\"\",\"\"\"            result, writer_transport, transport = self.run_case(\"PA-2026-0152\", \"PA-2026-0152-r1\", store,\n                                                                reviewer=model([review]))\n            self.assertEqual(writer_transport.sends, 0)     # no writer call\n            self.assertEqual(transport.sends, 1)            # only the review\"\"\")\nopen(p,\"w\").write(s)\nE\npython -m unittest discover -s tests -t . 2>&1 | tail -8; ls runs; find runs -newer AGENTS.md -type f | head",
+      "output": "...........\n----------------------------------------------------------------------\nRan 11 tests in 0.050s\n\nOK\nPA-2026-0141-r3\nPA-2026-0147-r1\nPA-2026-0152-r1\nREADME.md",
+      "is_error": false
+     },
+     {
+      "command": "python - <<'E'\np=\"pipeline/adk_app.py\"; s=open(p).read()\na=s.index(\"        model = ChatModel(\"); b=s.index(\"        yield Event(\")\nnew='''        writer = ChatModel(settings.provider_base_url, settings.writer_model, state.get(\"temp:provider_key\", \"\"))\n        reviewer = ChatModel(settings.provider_base_url, settings.review_model, state.get(\"temp:provider_key\", \"\"))\n        store = CheckpointStore(settings.checkpoint_dir, settings.checkpoint_limit_bytes)\n        # Saved stages are reused only while their inputs still match; results go to a new continuation\n        # run, never into the retained run named by run_id.\n        cont = Continuation(store, state[\"run_id\"], case, spans, settings, writer, reviewer,\n                            run_id=state.get(\"continuation_run_id\"))\n        if self.stage == \"writer\":\n            result = cont.obtain_draft(lambda: stages.run_writer(writer, case, spans, settings.max_source_chars))\n        elif self.stage == \"review\":\n            cont.draft = state[\"writer\"]\n            result = cont.obtain(\"review\", lambda: stages.run_review(reviewer, state[\"writer\"], spans,\n                                                                     settings.max_source_chars))\n        else:\n            cont.draft = state[\"writer\"]\n            for upstream in (\"source\", \"constraints\", \"writer\", \"review\"):\n                cont.lookup(upstream)\n            result = cont.publish(state[\"writer\"], state[\"review\"])\n        delta = {self.stage: result}\n        if cont.run_id:\n            delta[\"continuation_run_id\"] = cont.run_id\n'''\ns=s[:a]+new+s[b:]\ns=s.replace(\"EventActions(state_delta={self.stage: result})\",\"EventActions(state_delta=delta)\")\ns=s.replace(\"from pipeline.model import ChatModel\\n\",\"from pipeline.model import ChatModel\\nfrom pipeline.resume import Continuation\\n\")\nopen(p,\"w\").write(s)\nE\npython -m py_compile pipeline/adk_app.py && sed -n 18,50p pipeline/adk_app.py",
+      "output": "class StageAgent(BaseAgent):\n    \"\"\"Runs one pipeline stage and records its result in session state.\"\"\"\n\n    stage: str\n    model_name: str = \"\"\n\n    async def _run_async_impl(self, ctx):\n        state = ctx.session.state\n        case = load_case(state[\"case_dir\"])\n        spans = case_spans(case, load_policies())\n        writer = ChatModel(settings.provider_base_url, settings.writer_model, state.get(\"temp:provider_key\", \"\"))\n        reviewer = ChatModel(settings.provider_base_url, settings.review_model, state.get(\"temp:provider_key\", \"\"))\n        store = CheckpointStore(settings.checkpoint_dir, settings.checkpoint_limit_bytes)\n        # Saved stages are reused only while their inputs still match; results go to a new continuation\n        # run, never into the retained run named by run_id.\n        cont = Continuation(store, state[\"run_id\"], case, spans, settings, writer, reviewer,\n                            run_id=state.get(\"continuation_run_id\"))\n        if self.stage == \"writer\":\n            result = cont.obtain_draft(lambda: stages.run_writer(writer, case, spans, settings.max_source_chars))\n        elif self.stage == \"review\":\n            cont.draft = state[\"writer\"]\n            result = cont.obtain(\"review\", lambda: stages.run_review(reviewer, state[\"writer\"], spans,\n                                                                     settings.max_source_chars))\n        else:\n            cont.draft = state[\"writer\"]\n            for upstream in (\"source\", \"constraints\", \"writer\", \"review\"):\n                cont.lookup(upstream)\n            result = cont.publish(state[\"writer\"], state[\"review\"])\n        delta = {self.stage: result}\n        if cont.run_id:\n            delta[\"continuation_run_id\"] = cont.run_id",
+      "is_error": false
+     },
+     {
+      "command": "python - <<'E'\np=\"pipeline/resume.py\"; s=open(p).read()\ns=s.replace('''            taken = [_rev_no(p.name) for p in self.store.root.glob(f\"{case_id}-r*\")]\n            self.run_id = f\"{case_id}-r{max(taken, default=0) + 1}\"\n''','''            taken = [_rev_no(p.name) for p in self.store.root.glob(f\"{case_id}-r*\")]\n            fresh_run = not (self.store.root / self.parent_run).exists()    # nothing saved: a first run, not a continuation\n            self.run_id = self.parent_run if fresh_run else f\"{case_id}-r{max(taken, default=0) + 1}\"\n''')\ns=s.replace('\"continuation\": {\"parent_run\": self.parent_run, \"stages\"','\"continuation\": {\"parent_run\": None if fresh_run else self.parent_run, \"stages\"')\ns=s.replace('''                run = self.hits.get(earlier)\n                if run:''','''                hit = (self.hits.get(earlier), None) if earlier in self.hits else (self.lookup(earlier) or (None,))\n                run = hit[0]\n                if run:''')\nopen(p,\"w\").write(s)\np=\"pipeline/adk_app.py\"; s=open(p).read()\ns=s.replace('''            for upstream in (\"source\", \"constraints\", \"writer\", \"review\"):\n                cont.lookup(upstream)\n''','''            cont.obtain(\"source\", lambda: ({\"span_ids\": [sp.span_id for sp in spans]}, {}))\n            cont.obtain(\"constraints\", lambda: (site_constraints(case[\"address\"]), {}))\n            cont.lookup(\"writer\")\n            cont.lookup(\"review\")\n''')\ns=s.replace(\"from pipeline.model import\",\"from pipeline.constraints import site_constraints\\nfrom pipeline.model import\")\nopen(p,\"w\").write(s)\nE\npython -m py_compile pipeline/adk_app.py && python -m unittest discover -s tests -t . 2>&1 | tail -4",
+      "output": "----------------------------------------------------------------------\nRan 11 tests in 0.054s\n\nOK",
+      "is_error": false
+     },
+     {
+      "command": "python - <<'E'\np=\"tests/test_resume.py\"; s=open(p).read()\nt='''\n    def test_stage_by_stage_like_the_served_route(self):\n        \"\"\"Each ADK agent builds its own Continuation; only continuation_run_id travels in state.\"\"\"\n        from pipeline import stages\n        from pipeline.constraints import site_constraints\n        from pipeline.resume import Continuation\n        review = {\"verdict\": \"accept\", \"claims\": [{\"reason_id\": \"R1\", \"support\": \"supported\", \"span_ids\": []},\n                                                  {\"reason_id\": \"R2\", \"support\": \"supported\", \"span_ids\": []}],\n                  \"findings\": []}\n        case = load_case(CASES / \"PA-2026-0152\")\n        spans = case_spans(case, load_policies())\n        with tempfile.TemporaryDirectory() as tmp:\n            store = copy_run(tmp, \"PA-2026-0152-r1\")\n            w, wt = model([])\n            r, rt = model([review])\n            make = lambda rid: Continuation(store, \"PA-2026-0152-r1\", case, spans, Settings(), w, r,\n                                            ROOT / \"drafts\", run_id=rid)\n            c1 = make(None)\n            draft = c1.obtain_draft(lambda: stages.run_writer(w, case, spans, 60000))\n            c2 = make(c1.run_id)\n            c2.draft = draft\n            rev = c2.obtain(\"review\", lambda: stages.run_review(r, draft, spans, 60000))\n            c3 = make(c2.run_id)\n            c3.draft = draft\n            c3.obtain(\"source\", lambda: ({\"span_ids\": [sp.span_id for sp in spans]}, {}))\n            c3.obtain(\"constraints\", lambda: (site_constraints(case[\"address\"]), {}))\n            c3.lookup(\"writer\"); c3.lookup(\"review\")\n            out = c3.publish(draft, rev)\n            self.assertEqual((wt.sends, rt.sends), (0, 1))\n            self.assertEqual(c3.run_id, \"PA-2026-0152-r2\")\n            for stage in (\"source\", \"constraints\", \"writer\", \"review\", \"export\"):\n                self.assertIsNotNone(store.load(\"PA-2026-0152-r2\", stage), stage)\n            self.assertEqual(out[\"conditions\"], [\"The east-facing bathroom window shall be obscure-glazed.\"])\n'''\ns=s.replace(\"\\n\\nif __name__\",t+\"\\n\\nif __name__\")\nopen(p,\"w\").write(s)\nE\npython -m unittest discover -s tests -t . 2>&1 | tail -12",
+      "output": "............\n----------------------------------------------------------------------\nRan 12 tests in 0.066s\n\nOK",
+      "is_error": false
+     }
+    ],
+    "skills_loaded": [
+     "adk-workflow-design"
+    ],
+    "skill_files_read": [
+     "adk-workflow-design/references/checkpoint-reuse.md"
+    ],
+    "skill_md_loaded": {
+     "adk-workflow-design": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 1
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 15,
+    "catalogue": [
+     "adk-workflow-design",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-workflow-design": true
+   }
+  }
+ ]
+}

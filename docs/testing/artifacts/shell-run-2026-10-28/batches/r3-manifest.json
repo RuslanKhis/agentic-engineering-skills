@@ -1,0 +1,28 @@
+{
+ "created": "2026-10-27T22:24:02+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a0d6d075c33c6cea9",
+ "commit": "6b03823bbc096b042e83c8e2b7a73fd3873733aa",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "governance-pack-auckland-singapore-retailer",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/governance-pack-auckland-singapore-retailer/situation.md"
+    }
+   ],
+   "note": "check_governance.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-governance-pack",
+    "adk-engineer",
+    "protect-adk-sensitive-data"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

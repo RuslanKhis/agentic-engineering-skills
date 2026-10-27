@@ -1,0 +1,47 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"   # weekly drift check
+jobs:
+  test:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - run: pip install -e .
+      - run: pip list | grep -Ei '^(google-adk|mcp) '
+      # Tool, scripted-agent, in-process MCP (both revisions) and version-pin tests.
+      - run: python -m unittest discover -s tests -t . -v
+      # Pinned conformance suite against the live server, one baseline per revision.
+      - run: scripts/conformance.sh
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: conformance-out
+          path: conformance-out
+  drift:
+    # Reports (fails) when latest SDK or latest conformance suite behaves differently from the
+    # pinned baselines. Advisory: it does not gate PRs.
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+      - run: pip install -e . && pip install -U "mcp<3"
+      - run: pip list | grep -Ei '^(google-adk|mcp) '
+      - run: python -m unittest tests.test_mcp_server -v
+      - run: scripts/conformance.sh "@modelcontextprotocol/conformance@latest"

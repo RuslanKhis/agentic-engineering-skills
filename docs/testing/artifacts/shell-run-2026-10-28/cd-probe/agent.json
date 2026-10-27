@@ -1,0 +1,179 @@
+{
+ "exit": 0,
+ "timed_out": false,
+ "seconds": 8.7,
+ "model": "claude-sonnet-5-5",
+ "max_turns": 6,
+ "tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+ "subtype": "success",
+ "is_error": false,
+ "num_turns": 4,
+ "total_cost_usd": 0.028408400000000004,
+ "duration_ms": 7457,
+ "terminal_reason": "completed",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-sonnet-5-5",
+  "--output-format",
+  "stream-json",
+  "--verbose",
+  "--setting-sources",
+  "project,local",
+  "--strict-mcp-config",
+  "--no-session-persistence",
+  "--max-turns",
+  "6",
+  "--tools",
+  "Read,Write,Edit,Glob,Grep,Skill,Bash",
+  "--permission-mode",
+  "dontAsk",
+  "--permission-prompts",
+  "none",
+  "--allowedTools",
+  "Read(./**),Write(./**),Edit(./**),Skill,Bash",
+  "--max-budget-usd",
+  "0.5"
+ ],
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill",
+   "Bash"
+  ],
+  "unconfined_tools": [
+   "Bash"
+  ],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": false,
+  "unconfined": true,
+  "shell_environment": {
+   "home_mode": "real-home-redirected-config",
+   "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+   "variables_scrubbed": [
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN",
+    "SSH_AUTH_SOCK"
+   ],
+   "scrub_prefixes": [
+    "GOOGLE_",
+    "GCLOUD_",
+    "CLOUDSDK_",
+    "AWS_",
+    "AZURE_",
+    "ARM_"
+   ],
+   "scrub_names": [
+    "SSH_AUTH_SOCK",
+    "GH_TOKEN",
+    "GITHUB_TOKEN",
+    "GH_ENTERPRISE_TOKEN",
+    "GITLAB_TOKEN",
+    "NPM_TOKEN",
+    "HF_TOKEN",
+    "OPENAI_API_KEY",
+    "GEMINI_API_KEY",
+    "VAULT_TOKEN",
+    "KUBECONFIG",
+    "DOCKER_CONFIG",
+    "DOCKER_HOST",
+    "GIT_CONFIG_GLOBAL",
+    "GIT_ASKPASS",
+    "SSH_ASKPASS",
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN"
+   ],
+   "redirected": {
+    "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+    "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+    "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+    "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+    "DOCKER_CONFIG": "<case>/shell-env/docker",
+    "KUBECONFIG": "<case>/shell-env/kube/config",
+    "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+    "GH_CONFIG_DIR": "<case>/shell-env/gh",
+    "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+   },
+   "set": {
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "BROWSER": "true",
+    "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"
+   }
+  }
+ },
+ "variables_scrubbed": [
+  "CLAUDE_CODE_MESSAGING_SOCKET",
+  "CLAUDE_CODE_MESSAGING_TOKEN",
+  "SSH_AUTH_SOCK"
+ ],
+ "shell_commands": [
+  {
+   "command": "cd .claude/skills/adk-governance-pack && pwd",
+   "output": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/cdtest/aes-scenarios-0gbovah6/governance-pack-nsw-agency-chatbot/workspace/.claude/skills/adk-governance-pack",
+   "is_error": false
+  },
+  {
+   "command": "pwd",
+   "output": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/cdtest/aes-scenarios-0gbovah6/governance-pack-nsw-agency-chatbot/workspace",
+   "is_error": false
+  }
+ ],
+ "skills_loaded": [],
+ "skill_files_read": [],
+ "skill_md_loaded": {
+  "adk-governance-pack": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  },
+  "adk-engineer": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  },
+  "adk-presenter": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  }
+ },
+ "permission_denials": [],
+ "tool_calls": 3,
+ "catalogue": [
+  "adk-engineer",
+  "adk-governance-pack",
+  "adk-presenter",
+  "deep-research",
+  "design",
+  "design-sync",
+  "dataviz",
+  "update-config",
+  "verify",
+  "debug",
+  "code-review",
+  "simplify",
+  "batch",
+  "fewer-permission-prompts",
+  "doctor",
+  "loop",
+  "schedule",
+  "claude-api",
+  "workflow-authoring",
+  "run",
+  "run-skill-generator",
+  "plugin-authoring"
+ ],
+ "catalogue_check": {
+  "missing": [],
+  "leaked": []
+ }
+}

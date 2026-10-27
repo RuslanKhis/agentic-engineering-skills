@@ -1,0 +1,199 @@
+{
+ "exit": 0,
+ "timed_out": false,
+ "seconds": 66.2,
+ "model": "claude-sonnet-5-5",
+ "max_turns": 40,
+ "tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+ "subtype": "success",
+ "is_error": false,
+ "num_turns": 11,
+ "total_cost_usd": 0.24346840000000003,
+ "duration_ms": 65187,
+ "terminal_reason": "completed",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-sonnet-5-5",
+  "--output-format",
+  "stream-json",
+  "--verbose",
+  "--setting-sources",
+  "project,local",
+  "--strict-mcp-config",
+  "--no-session-persistence",
+  "--max-turns",
+  "40",
+  "--tools",
+  "Read,Write,Edit,Glob,Grep,Skill,Bash",
+  "--permission-mode",
+  "dontAsk",
+  "--permission-prompts",
+  "none",
+  "--allowedTools",
+  "Read(./**),Write(./**),Edit(./**),Skill,Bash",
+  "--max-budget-usd",
+  "3.0"
+ ],
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill",
+   "Bash"
+  ],
+  "unconfined_tools": [
+   "Bash"
+  ],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": false,
+  "unconfined": true,
+  "shell_environment": {
+   "home_mode": "real-home-redirected-config",
+   "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+   "variables_scrubbed": [
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN",
+    "SSH_AUTH_SOCK"
+   ],
+   "scrub_prefixes": [
+    "GOOGLE_",
+    "GCLOUD_",
+    "CLOUDSDK_",
+    "AWS_",
+    "AZURE_",
+    "ARM_"
+   ],
+   "scrub_names": [
+    "SSH_AUTH_SOCK",
+    "GH_TOKEN",
+    "GITHUB_TOKEN",
+    "GH_ENTERPRISE_TOKEN",
+    "GITLAB_TOKEN",
+    "NPM_TOKEN",
+    "HF_TOKEN",
+    "OPENAI_API_KEY",
+    "GEMINI_API_KEY",
+    "VAULT_TOKEN",
+    "KUBECONFIG",
+    "DOCKER_CONFIG",
+    "DOCKER_HOST",
+    "GIT_CONFIG_GLOBAL",
+    "GIT_ASKPASS",
+    "SSH_ASKPASS",
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN"
+   ],
+   "redirected": {
+    "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+    "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+    "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+    "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+    "DOCKER_CONFIG": "<case>/shell-env/docker",
+    "KUBECONFIG": "<case>/shell-env/kube/config",
+    "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+    "GH_CONFIG_DIR": "<case>/shell-env/gh",
+    "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+   },
+   "set": {
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "BROWSER": "true"
+   }
+  }
+ },
+ "variables_scrubbed": [
+  "CLAUDE_CODE_MESSAGING_SOCKET",
+  "CLAUDE_CODE_MESSAGING_TOKEN",
+  "SSH_AUTH_SOCK"
+ ],
+ "shell_commands": [
+  {
+   "command": "find . -type f -not -path './node_modules/*' | head -100",
+   "output": "./research/tools.py\n./research/__init__.py\n./research/agent.py\n./pyproject.toml\n./tests/scripted_model.py\n./tests/__init__.py\n./tests/test_agent_scripted.py\n./tests/test_tools.py\n./.claude/skills/adk-agent-interoperability/LICENSE\n./.claude/skills/adk-agent-interoperability/references/topology.md\n./.claude/skills/adk-agent-interoperability/references/platform-registration.md\n./.claude/skills/adk-agent-interoperability/references/sources.md\n./.claude/skills/adk-agent-interoperability/references/remote-failures.md\n./.claude/skills/adk-agent-interoperability/references/validation.md\n./.claude/skills/adk-agent-interoperability/references/mcp-exposure.md\n./.claude/skills/adk-agent-interoperability/references/selection.md\n./.claude/skills/adk-agent-interoperability/references/mcp-consumption.md\n./.claude/skills/adk-agent-interoperability/references/compatibility.md\n./.claude/skills/adk-agent-interoperability/references/evaluation-across-boundaries.md\n./.claude/skills/adk-agent-interoperability/references/operating-rules.md\n./.claude/skills/adk-agent-interoperability/references/a2a-contracts.md\n./.claude/skills/adk-agent-interoperability/agents/openai.yaml\n./.claude/skills/adk-agent-interoperability/scripts/mcp_tool_inventory.py\n./.claude/skills/adk-agent-interoperability/scripts/agent_card_check.py\n./.claude/skills/ad\n[... 1652 characters omitted ...]\ns/adk-agent-security/references/tool-supply-chain.md\n./.claude/skills/adk-agent-security/references/compatibility.md\n./.claude/skills/adk-agent-security/references/adversarial-testing.md\n./.claude/skills/adk-agent-security/references/agency-and-output.md\n./.claude/skills/adk-agent-security/references/operating-rules.md\n./.claude/skills/adk-agent-security/agents/openai.yaml\n./.claude/skills/adk-agent-security/scripts/inspect_security_surface.py\n./.claude/skills/adk-agent-security/SKILL.md\n./.claude/skills/adk-agent-security/assets/adversarial-cases.json\n./.claude/skills/adk-agent-security/assets/threat-model-checklist.md\n./README.md\n./.github/workflows/ci.yml",
+   "is_error": false
+  },
+  {
+   "command": "cd /private/tmp/claude-501/*/scratchpad/runs/s6/aes-scenarios-2aqf2ccs/interoperability-expose-mcp-server-with-conformance-baseline/workspace && cat pyproject.toml README.md .github/workflows/ci.yml research/*.py tests/*.py; cat .claude/skills/adk-agent-interoperability/references/mcp-exposure.md .claude/skills/adk-agent-interoperability/references/validation.md",
+   "output": "Exit code 1\n(eval):1: no matches found: /private/tmp/claude-501/*/scratchpad/runs/s6/aes-scenarios-2aqf2ccs/interoperability-expose-mcp-server-with-conformance-baseline/workspace",
+   "is_error": true
+  },
+  {
+   "command": "cat pyproject.toml README.md .github/workflows/ci.yml research/*.py tests/*.py",
+   "output": "[project]\nname = \"paper-research-agent\"\nversion = \"0.6.0\"\nrequires-python = \">=3.11\"\ndependencies = [\n  \"google-adk==2.12.0\",\n  \"mcp>=2.0,<3\",\n  \"uvicorn==0.37.0\",\n]\n# Research agent\n\nOne ADK agent that answers questions about published papers using two tools.\nThe platform team wants to call it from their MCP hosts.\n\nTests: `python -m unittest discover -s tests -t .` runs the tool tests offline.\n`tests/test_agent_scripted.py` drives the agent with a scripted model and needs\ngoogle-adk installed; it is skipped here, where neither google-adk nor mcp is\ninstalled. No cloud credentials.\nname: ci\non:\n  pull_request:\n  push:\n    branches: [main]\njobs:\n  test:\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/checkout@v5\n      - uses: actions/setup-python@v6\n        with:\n          python-version: \"3.12\"\n      - uses: actions/setup-node@v5\n        with:\n          node-version: \"22\"\n      - run: pip install -e .\n      - run: python -m unittest discover -s tests -t .\n\"\"\"The research agent.\"\"\"\nfrom google.adk.agents import LlmAgent\n\nfrom research.tools import get_abstract, search_papers\n\nroot_agent = LlmAgent(\n    name=\"paper_research\",\n    model=\"gemini-3.5-flash\",\n    description=\"Answers questions about published papers in the team's index.\",\n    instruction=(\n        \"You answer questions about papers in the \n[... 2897 characters omitted ...]\n = list(runner.run(user_id=\"u\", session_id=session.id,\n                                 new_message=types.Content(role=\"user\", parts=[types.Part(text=\"agents?\")])))\n        self.assertIn(\"p-102\", events[-1].content.parts[0].text)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\nimport unittest\n\nfrom research.tools import get_abstract, search_papers\n\n\nclass ToolTests(unittest.TestCase):\n    def test_search(self):\n        self.assertEqual(search_papers(\"agents reliability\")[\"papers\"][0][\"paper_id\"], \"p-102\")\n\n    def test_unknown_paper(self):\n        self.assertEqual(get_abstract(\"p-999\")[\"status\"], \"not_found\")\n\n\nif __name__ == \"__main__\":\n    unittest.main()",
+   "is_error": false
+  },
+  {
+   "command": "grep -n \"^## \\|^### \" .claude/skills/adk-agent-interoperability/references/validation.md; python3 -c \"import google.adk\" 2>&1 | tail -1; python3 -c \"import mcp\" 2>&1|tail -1; node -v; ls ~/.npm/_cacache 2>/dev/null | head -2",
+   "output": "6:## 1. Inventory and card reports before and after\n32:## 2. Source and pin check\n47:## 3. Fake-server tests\n55:## 4. Contract table\n61:## 5. Live exchange (approved)\n69:## 6. Protocol conformance (local, pinned)\n192:## Completion report\nModuleNotFoundError: No module named 'google.adk'\nModuleNotFoundError: No module named 'mcp'\nv22.23.2\ncontent-v2\nindex-v5",
+   "is_error": false
+  },
+  {
+   "command": "mkdir -p scripts conformance\ncat > research/mcp_server.py <<'EOF'\n\"\"\"Serve the research agent as an MCP server: one tool, `paper_research`, taking `request: str`.\n\n    python -m research.mcp_server                 # streamable HTTP on 127.0.0.1:$PORT (default 8000)\n    python -m research.mcp_server --stdio\n\nBinds loopback unless MCP_HOST says otherwise. There is no authentication here: put the edge\n(IAP, gateway, mTLS) in front before binding anything but loopback.\nEvery call is one self-contained turn. On spec 2026-07-28 there is no connection, so\n`to_mcp_server` cannot keep a conversation across calls; hosts must put the full context in `request`.\n\"\"\"\nfrom __future__ import annotations\n\nimport os\nimport sys\n\nfrom google.adk.tools.mcp_tool import to_mcp_server\n\nfrom research.agent import root_agent\n\nTOOL_NAME = \"paper_research\"\n\n\ndef build_server():\n    return to_mcp_server(root_agent, name=TOOL_NAME)\n\n\ndef main(argv: list[str]) -> None:\n    server = build_server()\n    if \"--stdio\" in argv:\n        server.run(transport=\"stdio\")\n    else:\n        server.run(transport=\"streamable-http\", host=os.environ.get(\"MCP_HOST\", \"127.0.0.1\"),\n                   port=int(os.environ.get(\"PORT\", \"8000\")))\n\n\nif __name__ == \"__main__\":\n    main(sys.argv[1:])\nEOF\ncat > tests/test_mcp_server.py <<'EOF'\n\"\"\"In-process MCP protocol tests: the same exchange under the handshake and 2026-07-28 revisions.\n\nNeeds google-adk and mcp 2.x; skipped otherwise. Scripted model, no network.\n\"\"\"\nimport importlib.util\nimport unittest\n\ntry:\n    HAVE = all(importlib.util.find_spec(m) for m in (\"google.adk\", \"mcp\"))\nexcept ModuleNotFoundError:\n    HAVE = False\n\n\n@unittest.skipUnless(HAVE, \"google-adk and mcp not installed\")\nclass McpServerTests(unittest.IsolatedAsyncioTestCase):\n    def setUp(self):\n        from google.adk.models.llm_response import LlmResponse\n        from google.genai import types\n\n        from research.agent import root_agent\n        from tests.scripted_model import ScriptedModel\n\n        self._orig_model = root_agent.model\n        root_agent.model = ScriptedModel(responses=[\n            LlmResponse(content=types.Content(role=\"model\", parts=[types.Part(function_call=types.FunctionCall(\n                name=\"search_papers\", args={\"query\": \"agents\"}))])),\n            LlmResponse(content=types.Content(role=\"model\", parts=[types.Part(text=\"See p-102.\")])),\n        ])\n\n    def tearDown(self):\n        from research.agent import root_agent\n        root_agent.model = self._orig_model\n\n    async def _each_mode(self):\n        import mcp\n        from research.mcp_server import build_server\n        for kwargs in ({}, {\"mode\": \"legacy\"}):   # default negotiates 2026-07-28\n            yield kwargs, mcp.Client(build_server(), **kwargs)\n\n    async def test_tools_list_contract(self):\n        from research.agent import root_agent\n        async for kwargs, client in self._each_mode():\n            async with client:\n                tools = (await client.list_tools()).tools\n            with self.subTest(kwargs=kwargs):\n                self.assertEqual([t.name for t in tools], [\"paper_research\"])\n                self.assertEqual(tools[0].description, root_agent.description)\n                self.assertEqual(tools[0].inputSchema.get(\"required\"), [\"request\"])\n                self.assertNotIn(\"search_papers\", tools[0].description)  # instruction/tools stay private\n\n    async def test_call_returns_final_answer(self):\n        from research.agent import root_agent\n        from google.adk.models.llm_response import LlmResponse\n        from google.genai import types\n        async for kwargs, client in self._each_mode():\n            root_agent.model.responses[:] = [\n                LlmResponse(content=types.Content(role=\"model\", parts=[types.Part(text=\"See p-102.\")]))]\n            async with client:\n                result = await client.call_tool(\"paper_research\", {\"request\": \"agents?\"})\n            with self.subTest(kwargs=kwargs):\n                self.assertFalse(result.is_error)\n                self.assertIn(\"p-102\", \"\".join(getattr(c, \"text\", \"\") for c in result.content))\n\n    async def test_unknown_tool_is_error_result(self):\n        async for kwargs, client in self._each_mode():\n            async with client:\n                try:\n                    result = await client.call_tool(\"nope\", {})\n                except Exception:  # a JSON-RPC error is also an acceptable rejection\n                    continue\n            with self.subTest(kwargs=kwargs):\n                self.assertTrue(result.is_error)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\nEOF\ncat > tests/test_pins.py <<'EOF'\n\"\"\"Fails with a readable message when the installed SDK or ADK moves off the versions the\nconformance baselines were recorded on. Update conformance/PINS.json together with the baselines.\"\"\"\nimport importlib.metadata as md\nimport json\nimport pathlib\nimport unittest\n\nPINS = json.loads((pathlib.Path(__file__).parent.parent / \"conformance\" / \"PINS.json\").read_text())\n\n\nclass PinTests(unittest.TestCase):\n    def test_recorded_versions(self):\n        for dist, want in PINS[\"python\"].items():\n            try:\n                have = md.version(dist)\n            except md.PackageNotFoundError:\n                self.skipTest(f\"{dist} not installed\")\n            self.assertEqual(have, want, f\"{dist} is {have}, baselines were recorded on {want}: \"\n                             \"rerun scripts/conformance.sh, review the diff, update baselines and PINS.json\")\n\n\nif __name__ == \"__main__\":\n    unittest.main()\nEOF\ncat > conformance/PINS.json <<'EOF'\n{\n  \"conformance_package\": \"@modelcontextprotocol/conformance@0.2.0-alpha.12\",\n  \"python\": {\"google-adk\": \"2.12.0\", \"mcp\": \"2.3.0\"}\n}\nEOF\ncat > conformance/baseline-2026-07-28.yml <<'EOF'\n# Expected failures for `conformance server --requirements 2026-07-28` on the research MCP server.\n# Seeded from the adk-agent-interoperability skill's observed run (google-adk 2.12.0, mcp 2.3.0);\n# NOT yet regenerated on this repo. First CI run will list anything missing; add it with a reason.\n# A baselined entry that starts passing fails the run as stale: that is intentional.\nserver:\n  # Diagnostic tool from the reference \"everything\" server; this server has one business tool.\n  - server-stateless:sep-2575-server-rejects-undeclared-capability\n  - server-stateless:sep-2575-missing-capability-http-400\nEOF\ncat > conformance/baseline-2025-11-25.yml <<'EOF'\n# Expected failures for `conformance server --requirements 2025-11-25` (handshake revision).\n# Empty until the first CI run on this repo; fixture-dependent scenarios (tools-call-image,\n# resources-read-*, prompts-get-*, elicitation-*, ...) will appear and each needs a reason.\nserver: []\nEOF\ncat > scripts/conformance.sh <<'EOF'\n#!/usr/bin/env bash\n# Start the research MCP server on loopback and run the pinned conformance suite per revision.\n# Usage: scripts/conformance.sh [CONFORMANCE_PKG]   (default: the version in conformance/PINS.json)\n# Env: REVISIONS=\"2026-07-28 2025-11-25\"  BASELINES=1 (use baselines; set 0 to just report)\nset -euo pipefail\ncd \"$(dirname \"$0\")/..\"\nPKG=\"${1:-$(python -c 'import json;print(json.load(open(\"conformance/PINS.json\"))[\"conformance_package\"])')}\"\nPORT=\"${PORT:-8765}\"\nOUT=\"${OUT:-conformance-out}\"\nmkdir -p \"$OUT\"\nPORT=$PORT python -m research.mcp_server > \"$OUT/server.log\" 2>&1 &\nSERVER=$!\ntrap 'kill $SERVER 2>/dev/null || true' EXIT\nfor _ in $(seq 1 60); do\n  (exec 3<>/dev/tcp/127.0.0.1/$PORT) 2>/dev/null && break\n  kill -0 $SERVER 2>/dev/null || { cat \"$OUT/server.log\"; echo \"server died\" >&2; exit 1; }\n  sleep 0.5\ndone\nstatus=0\nfor rev in ${REVISIONS:-2026-07-28 2025-11-25}; do\n  args=(server --url \"http://127.0.0.1:$PORT/mcp\" --requirements \"$rev\" -o \"$OUT/$rev\")\n  [ \"${BASELINES:-1}\" = 1 ] && args+=(--expected-failures \"conformance/baseline-$rev.yml\")\n  echo \"== conformance $PKG $rev\"\n  npx -y \"$PKG\" \"${args[@]}\" || status=1\ndone\nexit $status\nEOF\nchmod +x scripts/conformance.sh\ncat > .github/workflows/ci.yml <<'EOF'\nname: ci\non:\n  pull_request:\n  push:\n    branches: [main]\n  schedule:\n    - cron: \"0 6 * * 1\"   # weekly drift check\njobs:\n  test:\n    if: github.event_name != 'schedule'\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/checkout@v5\n      - uses: actions/setup-python@v6\n        with:\n          python-version: \"3.12\"\n      - uses: actions/setup-node@v5\n        with:\n          node-version: \"22\"\n      - run: pip install -e .\n      - run: pip list | grep -Ei '^(google-adk|mcp) '\n      # Tool, scripted-agent, in-process MCP (both revisions) and version-pin tests.\n      - run: python -m unittest discover -s tests -t . -v\n      # Pinned conformance suite against the live server, one baseline per revision.\n      - run: scripts/conformance.sh\n      - if: always()\n        uses: actions/upload-artifact@v4\n        with:\n          name: conformance-out\n          path: conformance-out\n  drift:\n    # Reports (fails) when latest SDK or latest conformance suite behaves differently from the\n    # pinned baselines. Advisory: it does not gate PRs.\n    if: github.event_name == 'schedule'\n    runs-on: ubuntu-24.04\n    steps:\n      - uses: actions/checkout@v5\n      - uses: actions/setup-python@v6\n        with:\n          python-version: \"3.12\"\n      - uses: actions/setup-node@v5\n        with:\n          node-version: \"22\"\n      - run: pip install -e . && pip install -U \"mcp<3\"\n      - run: pip list | grep -Ei '^(google-adk|mcp) '\n      - run: python -m unittest tests.test_mcp_server -v\n      - run: scripts/conformance.sh \"@modelcontextprotocol/conformance@latest\"\nEOF\npython3 - <<'EOF'\nimport re\np='README.md';s=open(p).read()\ns+='''\n## MCP server\n\n`python -m research.mcp_server` serves the agent as one MCP tool, `paper_research(request: str)`,\nover streamable HTTP on `127.0.0.1:$PORT` (`--stdio` for stdio; `MCP_HOST` overrides the bind, and\nthere is no authentication, so front it before exposing it). Calls are single-turn: on spec\n2026-07-28 there is no connection to hold a conversation, so hosts send full context per call.\n\nCI (`.github/workflows/ci.yml`):\n- `tests/test_mcp_server.py` lists and calls the tool in process under both protocol revisions.\n- `scripts/conformance.sh` runs `@modelcontextprotocol/conformance` (pinned in `conformance/PINS.json`)\n  for 2026-07-28 and 2025-11-25 against `conformance/baseline-<rev>.yml`. A new failure fails the\n  job, and so does a baselined failure that starts passing (stale entry), so a suite change shows up either way.\n- `tests/test_pins.py` fails when google-adk or mcp differ from `conformance/PINS.json`.\n- A weekly `drift` job runs the latest mcp and latest conformance suite (advisory).\n\nTo move a pin: run `BASELINES=0 scripts/conformance.sh`, review the output, edit the baselines\n(a reason comment per entry) and `PINS.json` in the same change.\n'''\nopen(p,'w').write(s)\nEOF\nbash -n scripts/conformance.sh && python3 -m unittest discover -s tests -t . 2>&1 | tail -4; python3 -c \"import ast;ast.parse(open('research/mcp_server.py').read())\"",
+   "output": "----------------------------------------------------------------------\nRan 7 tests in 0.009s\n\nOK (skipped=5)",
+   "is_error": false
+  }
+ ],
+ "skills_loaded": [
+  "adk-agent-interoperability"
+ ],
+ "skill_files_read": [
+  "adk-agent-interoperability/references/mcp-exposure.md",
+  "adk-agent-interoperability/references/validation.md",
+  "adk-agent-interoperability/references/compatibility.md"
+ ],
+ "skill_md_loaded": {
+  "adk-agent-interoperability": {
+   "loaded": true,
+   "how": "skill-tool",
+   "other_files_read": 3
+  },
+  "adk-release-engineering": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  },
+  "adk-agent-security": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  }
+ },
+ "permission_denials": [],
+ "tool_calls": 9,
+ "catalogue": [
+  "adk-agent-interoperability",
+  "adk-agent-security",
+  "adk-release-engineering",
+  "deep-research",
+  "design",
+  "design-sync",
+  "dataviz",
+  "update-config",
+  "verify",
+  "debug",
+  "code-review",
+  "simplify",
+  "batch",
+  "fewer-permission-prompts",
+  "doctor",
+  "loop",
+  "schedule",
+  "claude-api",
+  "workflow-authoring",
+  "run",
+  "run-skill-generator",
+  "plugin-authoring"
+ ],
+ "catalogue_check": {
+  "missing": [],
+  "leaked": []
+ }
+}

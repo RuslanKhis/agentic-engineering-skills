@@ -1,0 +1,96 @@
+{
+ "created": "2026-10-27T22:19:28+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a0d6d075c33c6cea9",
+ "commit": "1795c5c1ba8d272c727a852f4c42a822cf4115ee",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "interoperability-verify-signed-agent-card",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/interoperability-verify-signed-agent-card/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "agent_card_check.py needs a shell; the sample signed card is in docs/partner/.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-agent-security",
+    "adk-tool-auth-and-secrets",
+    "deploy-adk-on-google-cloud"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "interoperability-expose-mcp-server-with-conformance-baseline",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/interoperability-expose-mcp-server-with-conformance-baseline/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The agent has no shell; helper scripts it names can only be proposed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-interoperability",
+    "adk-release-engineering",
+    "adk-agent-security"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "engineer-ticket-with-missing-companion",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-ticket-with-missing-companion/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Lint and theme checks need a shell and npm, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "workflow-checkpoint-dependency-invalidation",
+   "status": "repo-fixture",
+   "base": [
+    "doc-pipeline"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/workflow-checkpoint-dependency-invalidation/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Three retained runs and a resume path over the document pipeline; google-adk is not installed.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-workflow-design"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

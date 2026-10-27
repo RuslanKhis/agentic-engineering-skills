@@ -1,0 +1,6 @@
+The agency's Accountable Official, its privacy officer and the CISO want the governance papers for the public enquiries chatbot before the pilot. Draft what they need from our docs.
+
+---
+Situation (from the person asking): A Sydney consultancy's project record for a NSW agency's public-facing service chatbot: answers enquiries from published guidance and can look up a caller's application status; Gemini pinned with a retirement date about four months away; hosting in australia-southeast1; abuse monitoring and some support access outside NSW; transcripts kept 90 days; an ICTA contract with the default six-month model-change notice; pilot profile.
+
+Run conditions: this is a non-interactive session and nobody will answer questions. Where you would ask the user something, write the question down, state the assumption you proceed on, and carry on. Work only inside the current directory; do not install packages, make network requests or touch cloud resources. End with a short summary of what you did and what you left undone.

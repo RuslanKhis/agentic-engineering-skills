@@ -1,0 +1,472 @@
+{
+ "schema": "scenario-results/2",
+ "created": "2026-10-27T22:24:06+00:00",
+ "run_dir": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/s1/aes-scenarios-gc94fn3l",
+ "commit": "1795c5c1ba8d272c727a852f4c42a822cf4115ee",
+ "scenarios_sha256": "065da3d19025c75c2bda476535a8dfc07179dbc466b6634cbbe687527fe1f456",
+ "skills_sha256": "4d7b34b898626502e7577d70feadc5a16d4d5ab0ba429129783f70b7988cf6ed",
+ "agent_backend": "claude-cli",
+ "agent_model": "claude-sonnet-5-5",
+ "agent_tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+ "max_turns": 40,
+ "timeout_s": 1200.0,
+ "max_budget_usd": 3.0,
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill",
+   "Bash"
+  ],
+  "unconfined_tools": [
+   "Bash"
+  ],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": false,
+  "unconfined": true,
+  "shell_environment": {
+   "home_mode": "real-home-redirected-config",
+   "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+   "variables_scrubbed": [
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN",
+    "SSH_AUTH_SOCK"
+   ],
+   "scrub_prefixes": [
+    "GOOGLE_",
+    "GCLOUD_",
+    "CLOUDSDK_",
+    "AWS_",
+    "AZURE_",
+    "ARM_"
+   ],
+   "scrub_names": [
+    "SSH_AUTH_SOCK",
+    "GH_TOKEN",
+    "GITHUB_TOKEN",
+    "GH_ENTERPRISE_TOKEN",
+    "GITLAB_TOKEN",
+    "NPM_TOKEN",
+    "HF_TOKEN",
+    "OPENAI_API_KEY",
+    "GEMINI_API_KEY",
+    "VAULT_TOKEN",
+    "KUBECONFIG",
+    "DOCKER_CONFIG",
+    "DOCKER_HOST",
+    "GIT_CONFIG_GLOBAL",
+    "GIT_ASKPASS",
+    "SSH_ASKPASS",
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN"
+   ],
+   "redirected": {
+    "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+    "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+    "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+    "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+    "DOCKER_CONFIG": "<case>/shell-env/docker",
+    "KUBECONFIG": "<case>/shell-env/kube/config",
+    "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+    "GH_CONFIG_DIR": "<case>/shell-env/gh",
+    "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+   },
+   "set": {
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "BROWSER": "true"
+   }
+  }
+ },
+ "judge_backend": "claude-cli",
+ "judge_model": "claude-sonnet-5-5",
+ "judge_repeats": 3,
+ "cases": [
+  {
+   "id": "governance-pack-nsw-agency-chatbot",
+   "expected_primary": "adk-governance-pack",
+   "fixture_status": "repo-fixture",
+   "note": "check_governance.py needs a shell; the default agent tools leave it out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-governance-pack",
+    "adk-engineer",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md"
+   ],
+   "judge_backend": "claude-cli",
+   "judge_model": "claude-sonnet-5-5",
+   "judge_cost_usd": 0.5328,
+   "status": "graded",
+   "assertions": [
+    {
+     "n": 1,
+     "assertion": "Records jurisdictions: [au] with a seven-row screen, each other regime left out with a reason, and treats the client as a NSW agency inside the Australian sections.",
+     "verdict": "PASS",
+     "quote": "jurisdictions: [au]",
+     "quote_found": true,
+     "reason": "Memo has a seven-row jurisdiction screen (Australia plus US, EU, UK, NZ, Singapore, Canada each with a reason) and treats the client as a NSW agency within the Australia sections.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 2,
+     "assertion": "Writes government form answers for the AIAF Platform registration and the 2024 AIAF from the crosswalk, with form, form_version, form_url and form_checked, says the draft is not the official form, and leaves officer names, ratings and approvals as agency:.",
+     "verdict": "PASS",
+     "quote": "This is not the official form. It drafts answers, in the official form's own order, for the NSW Trades Licensing Office's officers",
+     "quote_found": true,
+     "reason": "Both AIAF form-answer files carry form, form_version, form_url and form_checked, state they are not the official form, and leave officers and approvals as agency:.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 3,
+     "assertion": "Screens PPIP Act s 19(2) for every flow outside NSW, the Part 6A scheme, GIPA, prompts and outputs as State records, the NSW Cyber Security Policy at Maturity Level One with 24-hour reporting, and s 7B(5) for the consultancy, each conclusion as counsel:.",
+     "verdict": "PASS",
+     "quote": "counsel: is each flow outside NSW (Brisbane access, abuse monitoring, model processing if outside NSW) a use or a disclosure, and which s 19(2) or HPP 14 ground applies",
+     "quote_found": true,
+     "reason": "The pack screens s 19(2) per flow, Part 6A, GIPA, State records, Cyber Security Policy Maturity Level One with 24-hour reporting, and s 7B(5), each as counsel:.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 4,
+     "assertion": "Flags the Gemini retirement inside the ICTA six-month model-change notice window as a gap for adk-model-and-output-contracts and a counsel question.",
+     "verdict": "PASS",
+     "quote": "gap for adk-model-and-output-contracts and adk-release-engineering; counsel: the notice period and the Order Form terms (W7).",
+     "quote_found": true,
+     "reason": "The retirement date 2027-02-26 is flagged as falling inside the six-month notice window, a gap for the named skill and a counsel question.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 5,
+     "assertion": "Names the AI Review Committee referral within 5 business days as a wait if the band is high or critical, leaving the band to the agency.",
+     "verdict": "PASS",
+     "quote": "W6: NSW AI Review Committee referral, within 5 business days of completing the AIAF; applies only if the agency sets the band at high or critical.",
+     "quote_found": true,
+     "reason": "Referral is named as a conditional wait with the 5-business-day limit, and the band is left to the agency.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    },
+    {
+     "n": 6,
+     "assertion": "Sets counsel_required: yes on every draft, leaves every sign-off decision pending, and runs check_governance.py until every draft passes. In a run without a shell, it names that command, reports it as not run and checks the drafts against the same rules by reading them; it does not claim they pass.",
+     "verdict": "PASS",
+     "quote": "| AIAF Accountable Owner (agency: to be named) | this document | pending | pending |",
+     "quote_found": true,
+     "reason": "All drafts have counsel_required: yes and pending sign-offs, and check_governance.py was run with every document reporting ok.",
+     "votes": [
+      "PASS",
+      "PASS",
+      "PASS"
+     ],
+     "agreement": 1.0,
+     "unstable": false
+    }
+   ],
+   "passed": 6,
+   "total": 6,
+   "judge_repeats": 3,
+   "judge_errors": [],
+   "agreement": 1.0,
+   "unstable": [],
+   "final_chars": 4726,
+   "files": [
+    "docs/governance/enquiries/government-form-answers-nsw-aiaf-assessment.md",
+    "docs/governance/enquiries/government-form-answers-nsw-aiaf-registration.md",
+    "docs/governance/enquiries/impact-assessment.md",
+    "docs/governance/enquiries/privacy-impact-input-pack.md",
+    "docs/governance/enquiries/regulatory-memo.md",
+    "docs/governance/enquiries/security-questionnaire.md",
+    "docs/governance/enquiries/system-card.md",
+    "docs/plans/enquiries.md"
+   ],
+   "agent": {
+    "exit": 0,
+    "timed_out": false,
+    "seconds": 274.0,
+    "model": "claude-sonnet-5-5",
+    "max_turns": 40,
+    "tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+    "subtype": "success",
+    "is_error": false,
+    "num_turns": 25,
+    "total_cost_usd": 0.9353240999999999,
+    "duration_ms": 272207,
+    "terminal_reason": "completed",
+    "command": [
+     "claude",
+     "-p",
+     "--model",
+     "claude-sonnet-5-5",
+     "--output-format",
+     "stream-json",
+     "--verbose",
+     "--setting-sources",
+     "project,local",
+     "--strict-mcp-config",
+     "--no-session-persistence",
+     "--max-turns",
+     "40",
+     "--tools",
+     "Read,Write,Edit,Glob,Grep,Skill,Bash",
+     "--permission-mode",
+     "dontAsk",
+     "--permission-prompts",
+     "none",
+     "--allowedTools",
+     "Read(./**),Write(./**),Edit(./**),Skill,Bash",
+     "--max-budget-usd",
+     "3.0"
+    ],
+    "confinement": {
+     "setting_sources": "project,local",
+     "permission_mode": "dontAsk",
+     "permission_prompts": "none",
+     "allowed": [
+      "Read(./**)",
+      "Write(./**)",
+      "Edit(./**)",
+      "Skill",
+      "Bash"
+     ],
+     "unconfined_tools": [
+      "Bash"
+     ],
+     "skill_install": "project",
+     "environment": {
+      "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+     },
+     "confined_to_workspace": false,
+     "unconfined": true,
+     "shell_environment": {
+      "home_mode": "real-home-redirected-config",
+      "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+      "variables_scrubbed": [
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN",
+       "SSH_AUTH_SOCK"
+      ],
+      "scrub_prefixes": [
+       "GOOGLE_",
+       "GCLOUD_",
+       "CLOUDSDK_",
+       "AWS_",
+       "AZURE_",
+       "ARM_"
+      ],
+      "scrub_names": [
+       "SSH_AUTH_SOCK",
+       "GH_TOKEN",
+       "GITHUB_TOKEN",
+       "GH_ENTERPRISE_TOKEN",
+       "GITLAB_TOKEN",
+       "NPM_TOKEN",
+       "HF_TOKEN",
+       "OPENAI_API_KEY",
+       "GEMINI_API_KEY",
+       "VAULT_TOKEN",
+       "KUBECONFIG",
+       "DOCKER_CONFIG",
+       "DOCKER_HOST",
+       "GIT_CONFIG_GLOBAL",
+       "GIT_ASKPASS",
+       "SSH_ASKPASS",
+       "CLAUDE_CODE_MESSAGING_SOCKET",
+       "CLAUDE_CODE_MESSAGING_TOKEN"
+      ],
+      "redirected": {
+       "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+       "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+       "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+       "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+       "DOCKER_CONFIG": "<case>/shell-env/docker",
+       "KUBECONFIG": "<case>/shell-env/kube/config",
+       "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+       "GH_CONFIG_DIR": "<case>/shell-env/gh",
+       "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+      },
+      "set": {
+       "GIT_CONFIG_NOSYSTEM": "1",
+       "BROWSER": "true"
+      }
+     }
+    },
+    "variables_scrubbed": [
+     "CLAUDE_CODE_MESSAGING_SOCKET",
+     "CLAUDE_CODE_MESSAGING_TOKEN",
+     "SSH_AUTH_SOCK"
+    ],
+    "shell_commands": [
+     {
+      "command": "find . -type f | head -100",
+      "output": "./.claude/skills/adk-presenter/LICENSE\n./.claude/skills/adk-presenter/references/storyline.md\n./.claude/skills/adk-presenter/references/slide-craft.md\n./.claude/skills/adk-presenter/references/rollout-and-adoption.md\n./.claude/skills/adk-presenter/references/value-report.md\n./.claude/skills/adk-presenter/references/speech.md\n./.claude/skills/adk-presenter/references/stage-outlines.md\n./.claude/skills/adk-presenter/references/case-study.md\n./.claude/skills/adk-presenter/references/practice-profile.md\n./.claude/skills/adk-presenter/references/audiences-and-questions.md\n./.claude/skills/adk-presenter/agents/openai.yaml\n./.claude/skills/adk-presenter/scripts/check_rollout.py\n./.claude/skills/adk-presenter/scripts/check_value_report.py\n./.claude/skills/adk-presenter/scripts/check_deck.py\n./.claude/skills/adk-presenter/SKILL.md\n./.claude/skills/adk-presenter/assets/value-report-template.md\n./.claude/skills/adk-presenter/assets/case-study-template.md\n./.claude/skills/adk-presenter/assets/decision-memo-template.md\n./.claude/skills/adk-presenter/assets/deck-format.md\n./.claude/skills/adk-presenter/assets/rollout-pack-template.md\n./.claude/skills/adk-governance-pack/LICENSE\n./.claude/skills/adk-governance-pack/references/singapore.md\n./.claude/skills/adk-governance-pack/references/united-kingdom.md\n./.claude/skills/adk-go\n[... 1619 characters omitted ...]\n/adk-engineer/references/composition.md\n./.claude/skills/adk-engineer/references/ticket-lifecycle.md\n./.claude/skills/adk-engineer/references/ownership.md\n./.claude/skills/adk-engineer/references/practice-profile.md\n./.claude/skills/adk-engineer/references/updates.md\n./.claude/skills/adk-engineer/references/operating-rules.md\n./.claude/skills/adk-engineer/references/field-feedback.md\n./.claude/skills/adk-engineer/agents/openai.yaml\n./.claude/skills/adk-engineer/scripts/field_notes.py\n./.claude/skills/adk-engineer/SKILL.md\n./docs/contract/order-form-summary.md\n./docs/plans/enquiries.md\n./docs/discovery/enquiries.md\n./docs/architecture/enquiries.md\n./README.md",
+      "is_error": false
+     },
+     {
+      "command": "cd /private/tmp/claude-501/*/scratchpad/runs/s1/*/governance-pack-nsw-agency-chatbot/workspace && cat README.md docs/contract/*.md docs/plans/*.md docs/discovery/*.md docs/architecture/*.md; ls ~/.agentic-engineering 2>&1 | head -3",
+      "output": "Exit code 1\n(eval):1: no matches found: /private/tmp/claude-501/*/scratchpad/runs/s1/*/governance-pack-nsw-agency-chatbot/workspace",
+      "is_error": true
+     },
+     {
+      "command": "cat README.md docs/contract/*.md docs/plans/*.md docs/discovery/*.md docs/architecture/*.md; ls ~/.agentic-engineering 2>&1 | head -3",
+      "output": "# Public enquiries assistant for the NSW Trades Licensing Office\n\nSouthgate Labs (Sydney) is building a public enquiries chat assistant for the\nNSW Trades Licensing Office, a NSW public sector agency that licenses\nelectricians, plumbers and builders. The assistant answers questions from the\nOffice's published guidance and lets a caller check the status of their own\nlicence application.\n\nProject record:\n\n- Discovery brief: `docs/discovery/enquiries.md`\n- Design: `docs/architecture/enquiries.md`\n- Plan and evidence: `docs/plans/enquiries.md`\n- Contract summary: `docs/contract/order-form-summary.md`\n\nReviewers before the pilot: the Office's Accountable Official for AI (Deputy\nCommissioner Ruth Abbott), its privacy officer (Sam Taylor) and its CISO\n(Nikhil Rao).\n# Order Form summary (ICTA)\n\nPrepared by Southgate Labs from the signed Order Form, 2026-09-08.\n\n| Item | Value |\n| --- | --- |\n| Contract | NSW ICTA Customer Contract with Order Form TLO-2026-031 |\n| Customer | NSW Trades Licensing Office |\n| Supplier | Southgate Labs Pty Ltd (Sydney) |\n| Value | $420,000 including GST |\n| Term | 2026-09-15 to 2027-09-14 |\n| AI module | selected; clause 6.11 model-change notice left at the default period |\n| Data location | Australia (Order Form item 14) |\n| Subcontractors | Google Cloud (hosting and model) |\n# Implementati\n[... 5468 characters omitted ...]\npage read 2026-10-20: retirement date 2027-02-26.\n- D2 Hosting, Firestore and logs in australia-southeast1.\n- D3 Chat transcripts kept 90 days in Firestore for quality review, then deleted.\n- D4 Google's abuse monitoring for Vertex AI applies with the project's default settings;\n  where that processing happens is not recorded.\n- D5 Southgate Labs supports the pilot from Sydney and from Brisbane (one support engineer),\n  with access to transcripts and logs.\n- D6 The service is procured under the NSW ICTA (Core& not used); Order Form summary in\n  `docs/contract/order-form-summary.md`.\nls: /Users/ruslankhissamiyev/.agentic-engineering: No such file or directory",
+      "is_error": false
+     },
+     {
+      "command": "cd /private/tmp/claude-501/*/scratchpad/runs/s1/*/governance-pack-nsw-agency-chatbot/workspace/.claude/skills/adk-governance-pack && wc -c references/* assets/* && cat references/jurisdiction-screen.md references/australia.md",
+      "output": "Exit code 1\n(eval):1: no matches found: /private/tmp/claude-501/*/scratchpad/runs/s1/*/governance-pack-nsw-agency-chatbot/workspace/.claude/skills/adk-governance-pack",
+      "is_error": true
+     },
+     {
+      "command": "cd /private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/s1/aes-scenarios-gc94fn3l/governance-pack-nsw-agency-chatbot/workspace/.claude/skills/adk-governance-pack && wc -c references/* assets/* && cat references/jurisdiction-screen.md references/australia.md",
+      "output": "<persisted-output>\nOutput too large (69.7KB). Full output saved to: /Users/ruslankhissamiyev/.claude/projects/-private-tmp-claude-501--Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills-acdcf7e1-62e2-4a63-8616-dcbde98d7357-scratchpad-runs-s1-aes-scenarios-gc94fn3l-governance-p-4yug63/6252a92a-9827-466c-9074-e7bc2d8a8553/tool-results/bfgl893q3.txt\n\nPreview (first 2KB):\n   29952 references/au-government-crosswalks.md\n   48957 references/australia.md\n   21414 references/canada.md\n   22803 references/eu-ai-act.md\n   10882 references/impact-assessment.md\n   21463 references/jurisdiction-screen.md\n   23447 references/new-zealand.md\n    4587 references/practice-profile.md\n   25754 references/privacy-and-records.md\n   20073 references/singapore.md\n    8359 references/system-card-and-questionnaire.md\n   17052 references/united-kingdom.md\n   21098 references/united-states.md\n    5113 assets/government-form-answers-template.md\n   10325 assets/impact-assessment-template.md\n    2840 assets/poc-note-template.md\n   18368 assets/privacy-impact-input-pack-template.md\n    3012 assets/processing-records-template.md\n   24208 assets/regulatory-memo-template.md\n    6210 assets/security-questionnaire-template.md\n    5601 assets/system-card-template.md\n    6260 assets/transfer-assessment-annex-template.\n[... 420 characters omitted ...]\n-26.md`,\n`us-ai-privacy-law-2026-10-26.md`, `eu-ai-privacy-law-2026-10-26.md`,\n`uk-ai-privacy-law-2026-10-26.md`, `nz-ai-privacy-law-2026-10-26.md`,\n`sg-ai-privacy-law-2026-10-26.md`, `ca-ai-privacy-law-2026-10-26.md` and\n`au-government-forms-nsw-2026-10-26.md` in the skills repository), and the\nregime references they produced: [Australia](australia.md),\n[United States](united-states.md), [EU AI Act](eu-ai-act.md),\n[privacy and records](privacy-and-records.md),\n[United Kingdom](united-kingdom.md), [New Zealand](new-zealand.md),\n[Singapore](singapore.md), [Canada](canada.md) and\n[AU government crosswalks](au-government-crosswalks.md).\n\n...\n</persisted-output>",
+      "is_error": false
+     },
+     {
+      "command": "cd references && sed -n 25,400p jurisdiction-screen.md | head -230",
+      "output": "Canada, whatever the client's location and wherever the consultancy is\nbased. Every list, table and front-matter value keeps this\norder: `jurisdictions: [au, us, eu, uk, nz, sg, ca]`, with the codes that are\nin scope only. Name Canada as \"Canada\" or \"Quebec\", never \"CA\", which US\nsections use for California.\n\nThe screen covers seven regimes. A screen written before New Zealand,\nSingapore and Canada were added, with four rows, fails the checker until it\ngains their three rows, each with the reason it is or is not in scope: a\nregime left out without a reason is the failure the screen exists to stop.\n\n## Where the consultancy is\n\nThe consultancy's home is where its staff and systems that can see project\ndata are. The references and templates are written for a consultancy in\nAustralia. That is the default, used when nothing says otherwise.\n\n1. If the repository is bound to a practice profile whose `kind` is\n   `employer`, take the home from the countries of staff in its \"Sector and\n   jurisdictions\" section. Cite it as `source: practice profile <org>,\n   reviewed <date>`.\n2. A `kind: client` profile describes the client, not the consultancy. Do\n   not take the home from it.\n3. If the user names the home, take it from the user with\n   `source: <role>, <date>`.\n4. Otherwise the home is Australia. Record it in the memo\n[... 18315 characters omitted ...]\nppeal) | United States: CPPA ADMT and Colorado SB 26-189 | System card section \"Automated-decision disclosure\" |\n| ATRS record | United Kingdom: central government department or in-scope arm's-length body, tool in Beta, Pilot or Production with public effect or public interaction | System card, privacy impact input pack, impact assessment |\n| Online Safety Act risk assessments | United Kingdom: users can share outputs, the agent searches several sites or databases, or it can generate pornography | Memo `gap:` with its owner |\n| Fundamental rights impact assessment | EU: Article 27 deployer of an Annex III system | Impact assessment section \"FRIA crosswalk\" |",
+      "is_error": false
+     },
+     {
+      "command": "cd references && grep -n '^#' australia.md au-government-crosswalks.md",
+      "output": "(eval):cd:1: no such file or directory: references",
+      "is_error": false
+     },
+     {
+      "command": "grep -n '^#' australia.md au-government-crosswalks.md",
+      "output": "australia.md:1:# Australia\naustralia.md:21:## Sources and their status\naustralia.md:79:## No AI Act\naustralia.md:89:## Roles under the Privacy Act\naustralia.md:123:## The APPs an agent engages\naustralia.md:142:## Automated-decision transparency (APP 1.7 to 1.9)\naustralia.md:205:## Privacy impact assessment\naustralia.md:229:## Overseas processing (APP 8 and s 16C)\naustralia.md:256:## Notifiable data breaches and penalties\naustralia.md:278:## OAIC AI guidance and determinations\naustralia.md:303:## Commonwealth and state government clients\naustralia.md:360:## NSW government clients\naustralia.md:371:### Policy: DCS-2026-02, the Operational Policy and the AIAF\naustralia.md:418:### Roles: the s 7B(5) State contract rule\naustralia.md:435:### PPIP Act 1998: the IPPs and s 19(2)\naustralia.md:476:### HRIP Act 2002: health information\naustralia.md:489:### Mandatory Notification of Data Breach scheme (PPIP Act Part 6A)\naustralia.md:506:### GIPA Act 2009\naustralia.md:527:### State Records Act 1998\naustralia.md:545:### NSW Cyber Security Policy 2026–2027\naustralia.md:559:### NSW contract AI clauses: ICTA clause 6.11 and Core&\naustralia.md:589:### NSW Workplace Surveillance Act and anti-discrimination\naustralia.md:603:### What a NSW agency produces, and what the pack supplies\naustralia.md:618:## Australian Consumer Law\naustral\n[... 566 characters omitted ...]\n-government-crosswalks.md:208:## Form: internal AI use case register row\nau-government-crosswalks.md:227:## Form: Agentic AI addendum conformance\nau-government-crosswalks.md:253:## NSW: the policy behind the forms\nau-government-crosswalks.md:285:## Form: NSW AIAF Platform registration\nau-government-crosswalks.md:302:## Form: NSW AIAF self-assessment (2024 framework, Excel and offline process)\nau-government-crosswalks.md:346:## Form: IPC Guide to undertaking PIAs on AI systems and projects\nau-government-crosswalks.md:373:## Documents the agency produces\nau-government-crosswalks.md:383:## Re-check list (every 90 days, and before each new form answers document)",
+      "is_error": false
+     },
+     {
+      "command": "sed -n 1,20p australia.md; sed -n 360,617p australia.md; sed -n 691,730p australia.md",
+      "output": "# Australia\n\n<!-- verified: 2026-10-26; re-check every 180 days -->\n\nRead when the [jurisdiction screen](jurisdiction-screen.md) puts `au` in\nscope. Australia has no AI Act, so the Australian sections of the regulatory\nmemo assign no risk tier. They screen which existing laws and government\npolicies the agent falls under, from facts the design records, and leave\nevery legal conclusion to counsel.\n\n**Which sections to read.** Every Australian pack: Roles, the APPs,\nautomated-decision transparency, privacy impact assessment, overseas\nprocessing, notifiable data breaches, the screen and the checklist. When\nAustralia is in scope only through the consultancy's own handling, those\nare enough. Add \"Commonwealth and state government clients\" for any\ngovernment client, \"NSW government clients\" for a NSW agency or State\ncontract, and the Consumer Law and sector rows when their trigger fires.\nWhether the Privacy Act reaches a foreign client's data merely hosted or\nread in Australia is not covered here: write it as `counsel:`.\n\n## NSW government clients\n\nRead when the client is a NSW public sector agency or state owned\ncorporation, or the consultancy works under a NSW State contract. A NSW\nagency client always sets `counsel_required: yes`. Write NSW sections in\nNSW terms: personal information, health information, IPP, HPP, \n[... 16585 characters omitted ...]\nDoes the contract meet the IPC's reasonable-steps\n  minimum?\n- Is everything the consultancy does \"for the purposes of meeting\" the State\n  contract (s 7B(5))?\n- Does the agency hold, under s 59C, data in the consultancy's environments,\n  and who notifies a Part 6A breach?\n- Does the agent provide services to the public on behalf of the agency\n  (GIPA s 121)?\n- Does any output feed an administrative decision under an Act, needing\n  express legislative authority?\n- Which AIAF band applies, and is review committee referral needed?\n- Does the ICTA model-change notice period fit the pinned model's\n  retirement date, and which AI systems does the Order Form list?",
+      "is_error": false
+     },
+     {
+      "command": "sed -n 15,77p au-government-crosswalks.md; sed -n 253,400p au-government-crosswalks.md",
+      "output": "## What it produces\n\nOne pack document per official form, written from the\n[government form answers template](../assets/government-form-answers-template.md)\nand named `government-form-answers-<form>.md` (for example\n`government-form-answers-dta-impact-assessment.md`,\n`government-form-answers-nsw-aiaf-registration.md`). Each holds draft\nanswers in the official form's own order, for the agency's officers to check\nand paste into the official tool, where they complete, rate and approve it.\nEvery answer cites a record ID or pack document, or says who answers it:\n\n- `agency:` for what only the agency can answer (officer names, its approved\n  products, its legislation, its risk appetite, its records systems);\n- `counsel:` for a legal question;\n- `assumption:` for a proposed rating, with its basis.\n\n## Rules for every form\n\n- **Never reproduce the form.** Give the question number and a short\n  paraphrase, never the full text, and say in the preamble that the draft is\n  not the official form (the checker requires it).\n- **Re-read the form's official page first.** Record the version it shows\n  and the date in `form_version` and `form_checked`. If the version differs\n  from the one below, write a `gap:` in \"Form and version\" and do not draft\n  answers to the changed questions until this file is updated. If the page\n  canno\n[... 13300 characters omitted ...]\ne GIPA contract register\nentry; the Part 6A data breach policy entry; the Digital Assurance\nFramework gateway review.\n\n## Re-check list (every 90 days, and before each new form answers document)\n\n- The DTA tool's version and document control table; Appendix D and the\n  tool's usage-pattern list.\n- The DTA policy version; the transparency and accountability standards.\n- The agentic addendum's update date.\n- DCS-2026-02 and the Operational Policy's version table.\n- The AIAF Platform's registration questions (ask an agency with access).\n- AIAF 2024 questions 14 and 30, and whether the framework PDF is back on\n  digital.nsw.gov.au.\n- The IPC AI PIA guide's date.",
+      "is_error": false
+     },
+     {
+      "command": "cd ../assets && cat regulatory-memo-template.md",
+      "output": "---\ndocument: regulatory-memo\nsystem: <system name>\nversion: <design revision or build screened>\nstatus: draft\njurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca>]\ncounsel_required: <yes / no / pending>\nprepared: <YYYY-MM-DD> by <agency or team>\nfor: <client counsel or AI governance lead>\nsources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<topic>.md>\n---\n\n# Regulatory memo: <system name>\n\n> **Drafting aid output, not legal advice.** Prepared to support the\n> reviewer named in `for:`, never to replace the client's lawyer. It is not\n> reviewed until that reviewer records a decision in Review and sign-off at\n> the end; counsel decides every legal conclusion in it.\n\nDraft for <client>'s counsel. It records which regimes the jurisdiction\nscreen found in scope, the facts the design records, and the provisions that\nappear relevant in each regime: the EU AI Act classification where the EU is\nin scope, and a screen of the existing laws that apply in Australia, the\nUnited States, the United Kingdom, New Zealand, Singapore and Canada, none of\nwhich has an AI Act or assigns a risk tier. Conclusions are proposals for\ncounsel; not legal advice.\n\n<!-- Keep only the regime sections, and the regime bullets inside shared\nsections (Summary, Roles, Applicable dates), whose code is in\n[... 22203 characters omitted ...]\n(a DTA assessment, AIAF registration, Quebec EFVP, NYC bias audit, ATRS record), with its owner and wait> (<W IDs or gap:>).\n\n## Questions for counsel\n\n- counsel: <question>; regime <regime>; facts at <IDs>; needed before <goal or wait ID>.\n\n## Review and sign-off\n\n<!-- Only the reviewer fills Decision and Date. Leave both `pending` while\nstatus is draft; the reviewer sets status: reviewed when they sign. One row\nper reviewer: the role from `for:` first, then any other reviewer. -->\n\n| Reviewer (role) | Scope reviewed | Decision | Date |\n| --- | --- | --- | --- |\n| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |",
+      "is_error": false
+     },
+     {
+      "command": "cat privacy-impact-input-pack-template.md impact-assessment-template.md",
+      "output": "---\ndocument: privacy-impact-input-pack\nsystem: <system name>\nversion: <build or design revision described>\nstatus: draft\njurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca>]\ncounsel_required: <yes / no / pending>\nprepared: <YYYY-MM-DD> by <agency or team>\nowner: <client legal entity; for a group, each entity and its role>\nfor: <DPO, privacy officer or role>\nsources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<topic>.md>\n---\n\n# Privacy impact input pack: <system name>\n\n> **Drafting aid output, not legal advice.** Prepared to support the\n> reviewer named in `for:`, never to replace the client's lawyer. It is not\n> reviewed until that reviewer records a decision in Review and sign-off at\n> the end; counsel decides every legal conclusion in it.\n\nInputs for <client>'s privacy assessments of this system: the privacy impact\nassessment under the Australian Privacy Principles (or, for a NSW agency,\nunder the PPIP and HRIP Acts and the IPC guides), the data protection impact\nassessment under GDPR or UK GDPR Article 35, the data protection or risk\nassessment US state laws ask for, the New Zealand privacy impact assessment\nthe Privacy Commissioner expects, a Singapore data protection impact\nassessment and the PDPA's required assessments, and the Canadian privacy\nimpact assess\n[... 26685 characters omitted ...]\nd measures | <IDs> |\n| (e) human oversight measures | system-card.md Human oversight | <IDs> |\n| (f) measures if risks materialise, governance, complaints | Measures; Residual risk and decision | <IDs; counsel: required under Article 27?> |\n\n## Review and sign-off\n\n<!-- Only the reviewer fills Decision and Date. Leave both `pending` while\nstatus is draft; the reviewer sets status: reviewed when they sign. One row\nper reviewer: the role from `for:` first, then any other reviewer. -->\n\n| Reviewer (role) | Scope reviewed | Decision | Date |\n| --- | --- | --- | --- |\n| <the reviewer named in for:> | <this document, or the sections reviewed> | pending | pending |",
+      "is_error": false
+     },
+     {
+      "command": "cat system-card-template.md security-questionnaire-template.md government-form-answers-template.md; cat ../references/system-card-and-questionnaire.md | sed -n 1,140p",
+      "output": "---\ndocument: system-card\nsystem: <system name>\nversion: <build or release the card describes>\nstatus: draft\njurisdictions: [<codes in scope, in the order au, us, eu, uk, nz, sg, ca>]\ncounsel_required: <yes / no / pending>\nprepared: <YYYY-MM-DD> by <agency or team>\nfor: <the reviewer who relies on it: counsel, DPO or privacy officer, CISO, risk owner>\nsources: <docs/discovery/<topic>.md, docs/architecture/<topic>.md, docs/plans/<topic>.md, evaluation reports>\n---\n\n# System card: <system name>\n\n> **Drafting aid output, not legal advice.** Prepared to support the\n> reviewer named in `for:`, never to replace the client's lawyer. It is not\n> reviewed until that reviewer records a decision in Review and sign-off at\n> the end; counsel decides every legal conclusion in it.\n\nDraft for <client> reviewers. It describes the build named above and nothing\nlater. Not legal advice. Every statement cites a design, plan or evidence ID,\na dated source, or is marked `assumption:` or `counsel:`.\n\n## Intended use\n\n- **Purpose:** <what the system does, for whom, in which workflow> (<R/C IDs>).\n- **Users:** <roles and number; internal / external> (<path §n or source: who, date>).\n- **Deployer and provider:** <who puts it into service under whose name> (<regulatory memo or D ID>).\n- **Decisions it informs:** <what a person decides with\n[... 23278 characters omitted ...]\nnwealth agencies, NZISM\ncertification and accreditation for the New Zealand public service.\n\nCite a certification from the provider's compliance page or the report the\nclient holds, with the date; when neither can be read, the answer is a\n`gap:` for the client's vendor-risk team, not a remembered list.\nA cloud provider's certification covers its infrastructure, not the\nclient's application: write \"hosted on Google Cloud, which holds <report>\n(source: <page>, <date>)\", never \"the system is ISO 27001 certified\".\nA rule marked Defer or a deferred SB row is answered \"deferred\" with its\ntrigger, which reviewers usually accept for a pilot and query for\nproduction.",
+      "is_error": false
+     },
+     {
+      "command": "cd /private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/s1/aes-scenarios-gc94fn3l/governance-pack-nsw-agency-chatbot/workspace && python3 - <<'E'\np='docs/plans/enquiries.md'\ns=open(p).read()\ns=s.replace(\"- W2: CISO security assessment before the pilot.\\n\",\"\"\"- W2: CISO security assessment before the pilot.\n- W3: Agency counsel review of the governance pack, including the ICTA clause 6.11 model-change position, needed before the 2026-12-10 pilot decision; requested the day the drafts go out.\n- W4: Privacy officer's PIA under the IPC AI PIA guide, privacy management plan and s 10 notice update, and records disposal authority advice from the records manager, needed before the 2026-12-10 pilot decision.\n- W5: AIAF Platform registration and assessment by the agency's Accountable Owner, needed before the 2026-12-10 pilot decision.\n- W6: NSW AI Review Committee referral, within 5 business days of completing the AIAF; applies only if the agency sets the band at high or critical.\n- W7: Customer's written approval or Order Form variation for the replacement of the pinned model and for any processing or support access outside NSW, needed before the pilot starts.\n\"\"\")\ns=s.replace(\"## Resume here\",\"\"\"## Evidence\n\n- G05: drafted, not sent. Documents in `docs/governance/enquiries/`; waits W3 to W7 added by the pack. No production or pilot-approval goal exists in this plan: W3 to W7 should block one (proposed G06 Pilot approval, decider Ruth Abbott, 2026-12-10).\n\n## Resume here\"\"\")\nopen(p,'w').write(s)\nE\nmkdir -p docs/governance/enquiries",
+      "output": "(Bash completed with no output)",
+      "is_error": false
+     },
+     {
+      "command": "python3 .claude/skills/adk-governance-pack/scripts/check_governance.py docs/governance/enquiries/ --source docs/discovery/enquiries.md --source docs/architecture/enquiries.md --source docs/plans/enquiries.md --source docs/contract/order-form-summary.md 2>&1 | head -80",
+      "output": "ok  docs/governance/enquiries/government-form-answers-nsw-aiaf-assessment.md (government-form-answers; jurisdictions: au; counsel_required: yes; counsel triggers: employment, public-body clients; agency questions: 11)\nok  docs/governance/enquiries/government-form-answers-nsw-aiaf-registration.md (government-form-answers; jurisdictions: au; counsel_required: yes; counsel triggers: employment, public-body clients; agency questions: 12)\nok  docs/governance/enquiries/impact-assessment.md (impact-assessment; jurisdictions: au; counsel_required: yes; counsel triggers: employment, public-body clients; agency questions: 3)\nok  docs/governance/enquiries/privacy-impact-input-pack.md (privacy-impact-input-pack; jurisdictions: au; counsel_required: yes; counsel triggers: employment, health care, public-body clients; agency questions: 5)\nok  docs/governance/enquiries/regulatory-memo.md (regulatory-memo; jurisdictions: au; counsel_required: yes; counsel triggers: employment, health care, public-body clients; agency questions: 10)\nok  docs/governance/enquiries/security-questionnaire.md (security-questionnaire; jurisdictions: au; counsel_required: yes; counsel triggers: employment, public-body clients; agency questions: 2)\nok  docs/governance/enquiries/system-card.md (system-card; jurisdictions: au; counsel_required: yes; counsel triggers: employment, public-body clients; agency questions: 3)",
+      "is_error": false
+     }
+    ],
+    "skills_loaded": [
+     "adk-governance-pack"
+    ],
+    "skill_files_read": [],
+    "skill_md_loaded": {
+     "adk-governance-pack": {
+      "loaded": true,
+      "how": "skill-tool",
+      "other_files_read": 0
+     },
+     "adk-engineer": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     },
+     "adk-presenter": {
+      "loaded": false,
+      "how": null,
+      "other_files_read": 0
+     }
+    },
+    "permission_denials": [],
+    "tool_calls": 23,
+    "catalogue": [
+     "adk-engineer",
+     "adk-governance-pack",
+     "adk-presenter",
+     "deep-research",
+     "design",
+     "design-sync",
+     "dataviz",
+     "update-config",
+     "verify",
+     "debug",
+     "code-review",
+     "simplify",
+     "batch",
+     "fewer-permission-prompts",
+     "doctor",
+     "loop",
+     "schedule",
+     "claude-api",
+     "workflow-authoring",
+     "run",
+     "run-skill-generator",
+     "plugin-authoring"
+    ],
+    "catalogue_check": {
+     "missing": [],
+     "leaked": []
+    }
+   },
+   "primary_loaded": true,
+   "primary_consulted": true,
+   "skill_md_loaded": {
+    "adk-governance-pack": true,
+    "adk-engineer": false,
+    "adk-presenter": false
+   }
+  }
+ ]
+}
