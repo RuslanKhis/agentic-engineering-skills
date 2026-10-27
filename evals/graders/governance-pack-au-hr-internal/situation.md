@@ -19,3 +19,5 @@ Not in the record (the agent should raise): the NSW Workplace Surveillance Act n
 logging (a wait), and union consultation as a wait (only the stakeholder fact is recorded).
 Expected jurisdictions [au]; US out (data merely routed to a US tracker is an APP 8 fact), EU
 and UK out. A6 needs a shell; credit naming `check_governance.py` and saying it was not run.
+
+Changed on 28 October 2026 (Phase 12): the check_governance.py assertion now carries the "reported as not run" escape in its own text, because Phase 11 judges failed it on the literal "runs" even where this note allowed naming the command.

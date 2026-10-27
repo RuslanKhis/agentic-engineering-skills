@@ -17,3 +17,5 @@ Ireland DAC; consultancy Southgate Labs in Sydney. Topic `service-assistant`.
 Expected jurisdictions [au, eu, uk]; US out with a reason. Transfer annex rows for EU and UK
 data accessed from Australia. counsel_required: yes (credit decision explanations). A5 needs a
 shell for `check_governance.py`; credit naming it and saying it was not run.
+
+Changed on 28 October 2026 (Phase 12): the check_governance.py assertion now carries the "reported as not run" escape in its own text, because Phase 11 judges failed it on the literal "runs" even where this note allowed naming the command.

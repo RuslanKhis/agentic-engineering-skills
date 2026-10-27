@@ -2165,7 +2165,7 @@
         "Proposes the client as provider and deployer and the agency as developer under contract, each flagged counsel:, and keeps GDPR roles separate.",
         "States applicability dates with a checked date, including Annex III obligations from 2 December 2027 under Regulation (EU) 2026/1744.",
         "Reports the below-threshold adverse-impact measurement as a limit with its M ID instead of omitting it, and treats DPIA sign-off and works council consultation as calendar waits.",
-        "Runs check_governance.py with the brief, design and plan as sources and fixes its errors before finishing."
+        "Runs check_governance.py with the brief, design and plan as sources and fixes its errors before finishing. In a run without a shell, it names that command, reports it as not run and checks the drafts against the same rules by reading them; it does not claim they pass."
       ]
     },
     {
@@ -2200,7 +2200,7 @@
         "States that the client's employee records exemption does not cover the consultancy and flags the consultancy's APP entity status as counsel.",
         "Treats the manager attendance summary as a possible APP 1.7 decision from 10 December 2026 with its checked date, does not treat human review as an exemption, and sets counsel_required: yes.",
         "Names the NSW workplace surveillance notice for prompt logging as a calendar wait and the union consultation as a wait.",
-        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing."
+        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing. In a run without a shell, it names that command, reports it as not run and checks the drafts against the same rules by reading them; it does not claim they pass."
       ]
     },
     {
@@ -2218,7 +2218,7 @@
         "Writes a transfer assessment annex with rows for EU and UK personal data accessed from Australia (SCCs and a transfer impact assessment; IDTA or Addendum and the data protection test), leaving the conclusions to counsel.",
         "Uses UK GDPR Articles 22A to 22D and names the Information Commission in the UK sections, and GDPR Article 22 with SCHUFA in the EU sections, for the overdraft explanation.",
         "Covers Article 50(1) disclosure including on whose behalf the agent acts, and the FCA Consumer Duty and CMA guidance as UK screens.",
-        "Sets counsel_required: yes because the agent explains credit decisions, and runs check_governance.py until every draft passes."
+        "Sets counsel_required: yes because the agent explains credit decisions, and runs check_governance.py until every draft passes. In a run without a shell, it names that command, reports it as not run and checks the drafts against the same rules by reading them; it does not claim they pass."
       ]
     },
     {
@@ -2237,7 +2237,7 @@
         "Reports the 0.74 impact ratio and the 6% recruiter review rate with their M IDs as limits and questions for counsel, not as compliance.",
         "Fills the input pack's assessment approval section with the go/no-go decision and the approver as gaps until the client names them.",
         "Sets counsel_required: yes on every draft and leaves the New York City answer to counsel with the facts it needs.",
-        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing."
+        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing. In a run without a shell, it names that command, reports it as not run and checks the drafts against the same rules by reading them; it does not claim they pass."
       ]
     },
     {
@@ -2256,7 +2256,7 @@
         "Screens PPIP Act s 19(2) for every flow outside NSW, the Part 6A scheme, GIPA, prompts and outputs as State records, the NSW Cyber Security Policy at Maturity Level One with 24-hour reporting, and s 7B(5) for the consultancy, each conclusion as counsel:.",
         "Flags the Gemini retirement inside the ICTA six-month model-change notice window as a gap for adk-model-and-output-contracts and a counsel question.",
         "Names the AI Review Committee referral within 5 business days as a wait if the band is high or critical, leaving the band to the agency.",
-        "Sets counsel_required: yes on every draft, leaves every sign-off decision pending, and runs check_governance.py until every draft passes."
+        "Sets counsel_required: yes on every draft, leaves every sign-off decision pending, and runs check_governance.py until every draft passes. In a run without a shell, it names that command, reports it as not run and checks the drafts against the same rules by reading them; it does not claim they pass."
       ]
     },
     {
@@ -2273,7 +2273,7 @@
         "Writes transparency statement and register-row inputs, and notes the usage-pattern list difference between the tool and Appendix D v2.1 as an agency: question.",
         "Treats question 1.8's legislative authority and 10.2's human rights alignment as counsel:, and the Agencies Privacy Code PIA as required for a high privacy risk project, with counsel: on the threshold.",
         "Names a possible Commonwealth AI Review Committee referral as a wait and states the 15 December 2026 date with a checked date.",
-        "Sets counsel_required: yes and runs check_governance.py until every draft passes."
+        "Sets counsel_required: yes and runs check_governance.py until every draft passes. In a run without a shell, it names that command, reports it as not run and checks the drafts against the same rules by reading them; it does not claim they pass."
       ]
     },
     {
@@ -2292,7 +2292,7 @@
         "Writes a transfer assessment annex with New Zealand rows (s 11 facts, IPP 12 only for own-purpose use) and Singapore Transfer Limitation Obligation rows for Sydney access and the Australian model endpoint.",
         "Covers IPP 3A for CRM reads from 1 May 2026, IPP 8 accuracy before use, the Singapore consent or exception per purpose including the reuse of transcripts, and the 3-calendar-day PDPC clock, with checked dates.",
         "Uses agency, IPP and personal information in New Zealand sections and organisation, data intermediary and personal data in Singapore sections, never APP or GDPR terms.",
-        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing."
+        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing. In a run without a shell, it names that command, reports it as not run and checks the drafts against the same rules by reading them; it does not claim they pass."
       ]
     },
     {
@@ -2311,7 +2311,7 @@
         "Treats auto-approved leave as a possible decision based exclusively on automated processing under Quebec s 12.1, with notice, explanation and review facts, and sets counsel_required: yes.",
         "Writes the s 3.3 PIA facts and an s 17 assessment row for every flow leaving Quebec, including the Toronto region, the US model processing and Sydney access.",
         "Names the Ontario electronic monitoring policy for logged prompts as a wait, and answers the Law 25 question in the memo Summary marked counsel:.",
-        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing."
+        "Runs check_governance.py with the brief, design and plan as sources and finishes with every draft passing. In a run without a shell, it names that command, reports it as not run and checks the drafts against the same rules by reading them; it does not claim they pass."
       ]
     },
     {

@@ -19,3 +19,5 @@ Expected jurisdictions [au, ca] (Canada named "Canada", never "CA"); s 12.1 fact
 auto-approval; s 3.3 PIA and s 17 rows for Toronto, US model processing and Sydney access;
 Ontario electronic monitoring policy for logged prompts as a wait; counsel_required: yes. A6
 needs a shell; credit naming `check_governance.py` and saying it was not run.
+
+Changed on 28 October 2026 (Phase 12): the check_governance.py assertion now carries the "reported as not run" escape in its own text, because Phase 11 judges failed it on the literal "runs" even where this note allowed naming the command.

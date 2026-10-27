@@ -167,6 +167,23 @@ unrun packs) need the same "reported as not run" escape in their text;
 `workflow-engine-restate-or-dapr-keeps-adk-contract` A4 could also accept a
 rejection of Dapr on its licence (Phase 10's note).
 
+## Follow-up fixes (not measured)
+
+Made after this record on branch `phase-12-small-fixes`, with no new model runs:
+
+- adk-workflow-design SKILL.md mode table: the checkpoint row now also covers a
+  checkpoint or saved artifact too large for its store, and sends it to
+  `checkpoint-reuse.md` for the storage-limit check (the four skill-defect rows).
+- adk-operational-guardrails SKILL.md: the human-review row now names
+  unanswered approvals and unreadable arguments and points to that section of
+  `human-review.md`.
+- The `check_governance.py` assertion in all eight governance packs now carries
+  the "reported as not run" escape in its text, with a dated note in each
+  grader `situation.md`.
+
+Not changed: engine-restate A4 (accepting a Dapr licence rejection) and the
+designer-versus-engineer activation instability.
+
 ## Cost
 
 Recorded: agent $8.77, judge $2.94, **$11.70** for 13 graded scenarios. Not

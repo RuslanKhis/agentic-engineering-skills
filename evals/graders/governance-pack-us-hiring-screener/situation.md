@@ -17,3 +17,5 @@ Not in the record: who approves go/no-go for the assessment (A4 expects a gap), 
 (NYC Local Law 144 needs an independent one), any applicant notice. Expected jurisdictions
 [au, us]; EU and UK out with reasons. counsel_required: yes on every draft. A6 needs a shell;
 credit naming `check_governance.py` and saying it was not run.
+
+Changed on 28 October 2026 (Phase 12): the check_governance.py assertion now carries the "reported as not run" escape in its own text, because Phase 11 judges failed it on the literal "runs" even where this note allowed naming the command.
