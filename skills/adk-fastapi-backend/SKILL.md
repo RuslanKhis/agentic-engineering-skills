@@ -6,6 +6,7 @@ metadata:
   author: Ruslan Khissamiyev
   source-book: Agentic Engineering
   last-tested: "2026-10-23"
+  verified-against: "google-adk 2.12.0 scratch-app and runtime-contract tests, 2026-10-23"
   version: "2026.10.26.3"
 ---
 

@@ -15,6 +15,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "6"
   last-tested: "2026-09-16"
+  verified-against: "google-adk 2.8.0 offline SDK checks 2026-09-16; 2.12.0 installed source read 2026-10-23"
   version: "2026.10.26.3"
 ---
 

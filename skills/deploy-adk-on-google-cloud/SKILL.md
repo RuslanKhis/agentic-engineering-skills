@@ -7,6 +7,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "3"
   last-tested: "2026-09-16"
+  verified-against: "google-adk 2.8.0 live deployments 2026-09-14; 2.12.0 scaffold and api_server source read 2026-10-22"
   version: "2026.10.26.3"
 ---
 

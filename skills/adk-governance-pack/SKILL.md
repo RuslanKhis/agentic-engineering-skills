@@ -22,6 +22,7 @@ metadata:
   source-book: Agentic Engineering
   source-chapter: "cross-cutting"
   sources-reviewed: "2026-10-26"
+  verified-against: "not applicable: drafts governance papers; runs no ADK code"
   version: "2026.10.26.3"
 ---
 

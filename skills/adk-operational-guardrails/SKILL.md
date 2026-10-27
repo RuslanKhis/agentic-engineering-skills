@@ -9,6 +9,7 @@ metadata:
   compatibility: Python helpers tested on 3.11.4; see references/compatibility.md for exact ADK evidence and adaptation gates.
   last-tested: "2026-10-22"
   last-reviewed: "2026-09-16"
+  verified-against: "google-adk 2.8.0 companion run 2026-09-13; 2.12.0 CHANGELOG and source read 2026-10-22"
   version: "2026.10.26.3"
 ---
 
