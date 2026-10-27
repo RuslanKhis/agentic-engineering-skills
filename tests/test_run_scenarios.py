@@ -557,6 +557,8 @@ class ShellRunTests(unittest.TestCase):
             self.assertEqual(env["HOME"], REAL_ENV["HOME"])
             self.assertEqual(env["PATH"], REAL_ENV["PATH"])
             self.assertEqual(env["GIT_CONFIG_NOSYSTEM"], "1")
+            # A cd would otherwise move the relative allow rules away from the workspace.
+            self.assertEqual(env["CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR"], "1")
             self.assertEqual(env["AGENTIC_ENGINEERING_HOME"], str(case_dir / "home"))
             self.assertEqual(env["CLAUDE_CODE_DISABLE_AUTO_MEMORY"], "1")
             self.assertEqual(env["CLAUDE_CODE_ENTRYPOINT"], "cli")

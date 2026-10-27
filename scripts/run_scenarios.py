@@ -107,8 +107,10 @@ SHELL_REDIRECTS = {"CLOUDSDK_CONFIG": ("dir", "gcloud"), "AWS_CONFIG_FILE": ("fi
                    "AZURE_CONFIG_DIR": ("dir", "azure"), "DOCKER_CONFIG": ("dir", "docker"),
                    "KUBECONFIG": ("file", "kube/config"), "GIT_CONFIG_GLOBAL": ("file", "gitconfig"),
                    "GH_CONFIG_DIR": ("dir", "gh"), "NPM_CONFIG_USERCONFIG": ("file", "npmrc")}
-# Fixed settings: no system git config; a login flow that opens a browser opens nothing.
-SHELL_SET = {"GIT_CONFIG_NOSYSTEM": "1", "BROWSER": "true"}
+# Fixed settings: no system git config; a login flow that opens a browser opens nothing; and each
+# Bash call returns to the workspace, because a `cd` otherwise moves Claude Code's working directory
+# and the relative allow rules (Write(./**)) with it, so writes to the workspace are refused.
+SHELL_SET = {"GIT_CONFIG_NOSYSTEM": "1", "BROWSER": "true", "CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR": "1"}
 SHELL_DIR = "shell-env"
 HOME_MODE = "real-home-redirected-config"
 HOME_NOTE = ("HOME is the real home directory: with HOME pointed at an empty directory the claude CLI "
