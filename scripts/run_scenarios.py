@@ -3,7 +3,9 @@
 
 Each selected scenario gets a fresh workspace under a temporary run directory
 (never inside this repository): the fixture listed for it in
-evals/scenario-fixtures.json (if any) and only the scenario's
+evals/scenario-fixtures.json (if any: shared base projects from
+evals/fixtures/base/, explicit copies, then the scenario's own overlay from
+evals/fixtures/<id>/, minus any listed removals) and only the scenario's
 ``available_skills`` that exist in skills/, copied (never symlinked, tests/
 left out) as Claude Code project skills in ``<workspace>/.claude/skills/``.
 With ``--skill-install add-dir`` they are copied to a sibling directory that
@@ -23,8 +25,9 @@ assertion PASS or FAIL from the agent's final answer, the files it wrote and
 the skills it loaded, quoting its evidence; it judges ``--judge-repeats``
 times (default 3) and each assertion takes the majority verdict, with
 disagreements flagged ``unstable``. Scenarios whose context describes
-fixtures that do not exist are reported as ``fixture-missing`` and never run
-against nothing.
+fixtures that do not exist are reported as ``fixture-missing``, and those
+marked ``not-representable`` (with a reason) cannot be built offline; neither
+is ever run against nothing.
 
 Subcommands::
 
@@ -66,8 +69,10 @@ from model_backends import (DEFAULT_MODEL, BackendError, call_model, canonical_j
 
 ROOT = Path(__file__).resolve().parents[1]
 GRADER_ROOT = "evals/graders/"
+FIXTURE_ROOT = "evals/fixtures"
 SCHEMA = "scenario-results/2"
-STATUSES = ("runnable", "repo-fixture", "fixture-missing")
+STATUSES = ("runnable", "repo-fixture", "fixture-missing", "not-representable")
+NOT_RUN = ("fixture-missing", "not-representable")
 SKILL_INSTALLS = ("project", "add-dir")
 AGENT_TOOLS = "Read,Write,Edit,Glob,Grep,Skill"
 # Path-scoped allow rules. Glob and Grep are governed by the Read rules, so they
@@ -123,20 +128,36 @@ def load_fixtures(root: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))["scenarios"] if path.exists() else {}
 
 
+def fixture_copies(case_id: str, entry: dict) -> list[dict]:
+    """The copies that build a workspace, in order: each shared base, explicit copies, the overlay.
+
+    ``base`` names directories under evals/fixtures/base/; ``overlay: true`` copies
+    evals/fixtures/<case id>/ last, so it adds or replaces files of the bases.
+    """
+    copies = [{"from": f"{FIXTURE_ROOT}/base/{name}", "to": "."} for name in entry.get("base", [])]
+    copies += list(entry.get("copy", []))
+    if entry.get("overlay"):
+        copies.append({"from": f"{FIXTURE_ROOT}/{case_id}", "to": "."})
+    return copies
+
+
 def classify(case: dict, fixtures: dict, root: Path) -> dict:
     entry = dict(fixtures.get(case["id"]) or {"status": "fixture-missing"})
     if entry.get("status") not in STATUSES:
         raise InputError(f"{case['id']}: unknown fixture status {entry.get('status')!r}")
+    if entry["status"] == "not-representable" and not entry.get("reason"):
+        raise InputError(f"{case['id']}: a not-representable scenario needs a reason")
     for item in entry.get("grader", []):
         if not item["from"].startswith(GRADER_ROOT):
             raise InputError(f"{case['id']}: grader material must live under {GRADER_ROOT}: {item['from']}")
     if entry["status"] == "repo-fixture":
-        absent = [c["from"] for c in entry.get("copy", []) if not (root / c["from"]).exists()]
-        if absent or not entry.get("copy"):
+        copies = fixture_copies(case["id"], entry)
+        absent = [c["from"] for c in copies if not (root / c["from"]).exists()]
+        if absent or not copies:
             entry = {"status": "fixture-missing", "partial": "listed fixture paths are absent: "
                      + ", ".join(absent or ["(none listed)"])}
     absent = [g["from"] for g in entry.get("grader", []) if not (root / g["from"]).is_file()]
-    if absent and entry["status"] != "fixture-missing":
+    if absent and entry["status"] not in NOT_RUN:
         entry = {"status": "fixture-missing", "partial": "listed grader material is absent: "
                  + ", ".join(absent)}
     if entry["status"] == "fixture-missing" and "partial" not in entry:
@@ -167,7 +188,7 @@ def format_list(cases: list[dict], fixtures: dict, root: Path) -> str:
     groups: dict[str, list[str]] = {status: [] for status in STATUSES}
     for case in cases:
         entry = classify(case, fixtures, root)
-        detail = entry.get("note") or entry.get("partial") or entry.get("needs") or ""
+        detail = entry.get("note") or entry.get("reason") or entry.get("partial") or entry.get("needs") or ""
         if entry["skills_missing"]:
             detail += f" [external skills absent: {', '.join(entry['skills_missing'])}]"
         groups[entry["status"]].append(
@@ -205,6 +226,27 @@ def install_skills(root: Path, names: list[str], parent: Path) -> list[str]:
     return installed
 
 
+def build_workspace(root: Path, case_id: str, fixture: dict, workspace: Path) -> None:
+    """Copy a scenario's bases, explicit copies and overlay into the workspace, then apply removals."""
+    for item in fixture_copies(case_id, fixture):
+        source, target = root / item["from"], (workspace / item["to"]).resolve()
+        if workspace.resolve() not in (target, *target.parents):
+            raise InputError(f"{case_id}: fixture target escapes the workspace")
+        if source.is_dir():
+            shutil.copytree(source, target, dirs_exist_ok=True,
+                            ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+        else:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+    for rel in fixture.get("remove", []):
+        target = (workspace / rel).resolve()
+        if workspace.resolve() not in target.parents:
+            raise InputError(f"{case_id}: fixture removal escapes the workspace")
+        if not target.exists():
+            raise InputError(f"{case_id}: fixture removes {rel}, which no base or overlay supplies")
+        shutil.rmtree(target) if target.is_dir() else target.unlink()
+
+
 def prepare(root: Path, cases: list[dict], fixtures: dict, tmp_root: Path | None,
             run_dir: Path | None = None, skill_install: str = "project") -> tuple[Path, dict]:
     if skill_install not in SKILL_INSTALLS:
@@ -221,21 +263,12 @@ def prepare(root: Path, cases: list[dict], fixtures: dict, tmp_root: Path | None
     entries = []
     for case in cases:
         entry = {"id": case["id"], **classify(case, fixtures, root)}
-        if entry["status"] != "fixture-missing":
+        if entry["status"] not in NOT_RUN:
             case_dir = run_dir / case["id"]
             workspace = case_dir / "workspace"
             workspace.mkdir(parents=True)
             (case_dir / "home").mkdir()
-            for item in fixtures.get(case["id"], {}).get("copy", []):
-                source, target = root / item["from"], (workspace / item["to"]).resolve()
-                if workspace.resolve() not in (target, *target.parents):
-                    raise InputError(f"{case['id']}: fixture target escapes the workspace")
-                if source.is_dir():
-                    shutil.copytree(source, target, dirs_exist_ok=True,
-                                    ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
-                else:
-                    target.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copy2(source, target)
+            build_workspace(root, case["id"], fixtures.get(case["id"], {}), workspace)
             fixture_files = tree_digest(workspace)
             grader = []
             for item in fixtures.get(case["id"], {}).get("grader", []):
@@ -514,15 +547,19 @@ def judge_case(run_dir: Path, case: dict, backend: str, model: str, timeout: flo
         except BackendError as exc:
             parsed, errors = [], [f"reply 1: {exc}"]
     else:
+        costs: list = []
+
         def one(k):
             """One repeat; a reply that cannot be read is asked for once more."""
             problems = []
             for attempt in (1, 2):
                 try:
-                    text = caller(backend, prompt, JUDGE_SYSTEM, model, timeout).text
+                    reply = caller(backend, prompt, JUDGE_SYSTEM, model, timeout)
                 except BackendError as exc:
                     problems.append(f"repeat {k} attempt {attempt}: {exc}")
                     continue
+                text = reply.text
+                costs.append(getattr(reply, "cost_usd", None))
                 suffix = "" if attempt == 1 else "-retry"
                 (case_dir / f"judge-reply-{k}{suffix}.txt").write_text(text, encoding="utf-8")
                 try:
@@ -534,6 +571,8 @@ def judge_case(run_dir: Path, case: dict, backend: str, model: str, timeout: flo
             outcomes = list(pool.map(one, range(1, repeats + 1)))
         parsed = [rows for rows, _ in outcomes if rows is not None]
         errors = [problem for _, problems in outcomes for problem in problems]
+        known = [c for c in costs if isinstance(c, (int, float))]
+        record["judge_cost_usd"] = round(sum(known), 4) if known else None
     if not parsed:
         return {**record, "status": "judge-error", "error": "; ".join(errors), **facts}
     rows = majority(parsed)
@@ -553,10 +592,10 @@ def build_results(root: Path, run_dir: Path, manifest: dict, cases_by_id: dict, 
         case = cases_by_id[entry["id"]]
         row = {"id": entry["id"], "expected_primary": case["expected_primary"],
                "fixture_status": entry["status"], **{k: entry[k] for k in
-               ("note", "partial", "needs", "skills_missing", "skills_installed", "grader_files")
+               ("note", "reason", "partial", "needs", "skills_missing", "skills_installed", "grader_files")
                if k in entry}}
-        if entry["status"] == "fixture-missing":
-            row["status"] = "fixture-missing"
+        if entry["status"] in NOT_RUN:
+            row["status"] = entry["status"]
         else:
             row.update(graded.get(entry["id"]) or {"status": "not-run"})
             agent = row.get("agent") or {}
@@ -586,6 +625,10 @@ def format_results(results: dict) -> str:
         consulted = words.get(row.get("primary_consulted"), "-")
         lines.append(f"| {row['id']} | {row['status']} | {passed} | {unstable} | {agreement} "
                      f"| {loaded} | {consulted} |")
+    agent_cost = sum((row.get("agent") or {}).get("total_cost_usd") or 0 for row in results["cases"])
+    judge_cost = sum(row.get("judge_cost_usd") or 0 for row in results["cases"])
+    if agent_cost or judge_cost:
+        lines.append(f"\nCost: agent ${agent_cost:.2f}, judge ${judge_cost:.2f}")
     return "\n".join(lines)
 
 
@@ -646,10 +689,10 @@ def main(argv: list[str] | None = None) -> int:
             run_dir = args.run_dir.resolve()
             manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
         skill_install = manifest.get("skill_install", "project")
-        prepared = [e for e in manifest["scenarios"] if e["status"] != "fixture-missing"]
+        prepared = [e for e in manifest["scenarios"] if e["status"] not in NOT_RUN]
         for entry in manifest["scenarios"]:
-            if entry["status"] == "fixture-missing":
-                print(f"{entry['id']}: fixture-missing, not run", file=sys.stderr)
+            if entry["status"] in NOT_RUN:
+                print(f"{entry['id']}: {entry['status']}, not run", file=sys.stderr)
         if args.command == "prepare" or (args.command == "run" and args.backend == "files"):
             print(f"Run directory: {run_dir}\nFor each prepared scenario, work in <id>/workspace from "
                   "<id>/task.md and save the final answer as <id>/final.md; then run the judge step.")

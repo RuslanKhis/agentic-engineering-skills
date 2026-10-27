@@ -143,6 +143,72 @@ class PrepareTests(unittest.TestCase):
             with self.assertRaises(scen.InputError):
                 scen.classify(cases[1], fixtures, root)
 
+    def test_base_and_overlay_compose_a_workspace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            base = root / "evals/fixtures/base/app"
+            (base / "app").mkdir(parents=True)
+            (base / "app/agent.py").write_text("BASE = 1\n")
+            (base / "app/tools.py").write_text("TOOLS = 1\n")
+            (base / "README.md").write_text("base readme\n")
+            overlay = root / "evals/fixtures/with-seed"
+            (overlay / "app").mkdir(parents=True)
+            (overlay / "app/agent.py").write_text("OVERLAY = 1\n")
+            (overlay / "tickets").mkdir()
+            (overlay / "tickets/T-1.md").write_text("ticket\n")
+            cases, _ = scen.load_scenarios(root)
+            fixtures = {"with-seed": {"status": "repo-fixture", "base": ["app"], "overlay": True,
+                                      "copy": [{"from": "fixtures/seed", "to": "seed"}],
+                                      "remove": ["README.md"]}}
+            self.assertEqual([c["from"] for c in scen.fixture_copies("with-seed", fixtures["with-seed"])],
+                             ["evals/fixtures/base/app", "fixtures/seed", "evals/fixtures/with-seed"])
+            self.assertEqual(scen.classify(cases[1], fixtures, root)["status"], "repo-fixture")
+            run_dir, _ = scen.prepare(root, [cases[1]], fixtures, Path(tmp) / "runs")
+            ws = run_dir / "with-seed/workspace"
+            self.assertEqual((ws / "app/agent.py").read_text(), "OVERLAY = 1\n")
+            self.assertEqual((ws / "app/tools.py").read_text(), "TOOLS = 1\n")
+            self.assertTrue((ws / "tickets/T-1.md").exists())
+            self.assertTrue((ws / "seed/service.py").exists())
+            self.assertFalse((ws / "README.md").exists())
+            digest = json.loads((run_dir / "with-seed/fixture-digest.json").read_text())
+            self.assertIn("app/agent.py", digest)
+            self.assertNotIn("README.md", digest)
+
+    def test_missing_base_or_overlay_leaves_the_scenario_fixture_missing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            fixtures = {"with-seed": {"status": "repo-fixture", "base": ["absent-app"], "overlay": True}}
+            entry = scen.classify(cases[1], fixtures, root)
+        self.assertEqual(entry["status"], "fixture-missing")
+        self.assertIn("evals/fixtures/base/absent-app", entry["partial"])
+        self.assertIn("evals/fixtures/with-seed", entry["partial"])
+
+    def test_removal_must_name_a_supplied_path_inside_the_workspace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            for remove in (["absent.py"], ["../outside"]):
+                fixtures = {"with-seed": {"status": "repo-fixture", "copy": [{"from": "fixtures/seed", "to": "."}],
+                                          "remove": remove}}
+                with self.subTest(remove=remove), self.assertRaises(scen.InputError):
+                    scen.prepare(root, [cases[1]], fixtures, Path(tmp) / f"runs-{len(remove[0])}")
+
+    def test_not_representable_needs_a_reason_and_is_never_prepared(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            with self.assertRaises(scen.InputError):
+                scen.classify(cases[2], {"imaginary-project": {"status": "not-representable"}}, root)
+            fixtures = {"imaginary-project": {"status": "not-representable", "reason": "needs a live cloud"}}
+            self.assertEqual(scen.classify(cases[2], fixtures, root)["status"], "not-representable")
+            listing = scen.format_list(cases, fixtures, root)
+            self.assertIn("## not-representable (1)", listing)
+            self.assertIn("needs a live cloud", listing)
+            run_dir, manifest = scen.prepare(root, [cases[2]], fixtures, Path(tmp) / "runs")
+        self.assertFalse((run_dir / "imaginary-project").exists())
+        self.assertEqual(manifest["scenarios"][0]["status"], "not-representable")
+
     def test_fixture_cannot_escape_workspace(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = make_root(Path(tmp) / "repo")
@@ -292,6 +358,20 @@ class AgentAndJudgeTests(unittest.TestCase):
         self.assertEqual(graded["assertions"][1]["agreement"], 0.67)
         self.assertEqual(graded["unstable"], [2])
         self.assertEqual(graded["passed"], 1)
+
+    def test_judge_cost_is_summed_over_repeats(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = make_root(Path(tmp) / "repo")
+            cases, _ = scen.load_scenarios(root)
+            run_dir, _ = scen.prepare(root, cases[:1], scen.load_fixtures(root), Path(tmp) / "runs")
+            (run_dir / "empty-design" / "final.md").write_text("# Design")
+
+            def caller(backend, prompt, system, model, timeout):
+                return scen.call_model.__globals__["ModelReply"](text=verdicts("PASS", "PASS"), model=model,
+                                                                 cost_usd=0.125)
+
+            graded = scen.judge_case(run_dir, cases[0], "claude-cli", "m", 60, repeats=2, caller=caller)
+        self.assertEqual(graded["judge_cost_usd"], 0.25)
 
     def test_majority_needs_more_than_half_to_pass(self):
         rows = lambda v: [{"n": 1, "verdict": v, "quote": "", "quote_found": False, "reason": ""}]
