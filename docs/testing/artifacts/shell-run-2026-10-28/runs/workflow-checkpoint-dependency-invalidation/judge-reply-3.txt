@@ -1,0 +1,7 @@
+{"verdicts": [
+{"assertion":"A1","verdict":"FAIL","quote":"The old manifests' `code_version` isn't compared, because there's no current value to compare it to.","reason":"Qualification compares source, parser, model, instructions, schema and draft hash, but it never checks producer code or owner, so the dependency identity is incomplete."},
+{"assertion":"A2","verdict":"FAIL","quote":"w.model = \"another-model\"","reason":"Tests cover only a source change, one model change and a draft amendment, with no separate mutation for schema, instructions, code or projection, and code is not compared at all."},
+{"assertion":"A3","verdict":"PASS","quote":"raise stages.StageFailed(\"review\", [\"draft was amended while the review ran; review discarded\"])","reason":"A review is checked against the exact draft hash, the amended r2 draft forces a re-review, and a test shows a mid-review amendment is not committed; frame, invocation and image changes are not separately covered."},
+{"assertion":"A4","verdict":"PASS","quote":"self.assertTrue(all(after[k] == v for k, v in before.items()))   # parent untouched","reason":"Originals are verified unchanged by hash, continuations are new directories linked by parent_run, and the edited diagnostic response is never read."},
+{"assertion":"A5","verdict":"PASS","quote":"Ran 12 tests in 0.066s\n\nOK","reason":"The tests were actually run, with output shown; they include a zero-send positive control for 0141-r3 and counted sends for the other cases, and the agent makes no exactly-once claim."}
+]}

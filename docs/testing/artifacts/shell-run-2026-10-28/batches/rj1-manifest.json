@@ -1,0 +1,29 @@
+{
+ "created": "2026-10-27T22:19:28+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a0d6d075c33c6cea9",
+ "commit": "1795c5c1ba8d272c727a852f4c42a822cf4115ee",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "engineer-ticket-with-missing-companion",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/engineer-ticket-with-missing-companion/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "Lint and theme checks need a shell and npm, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-engineer",
+    "adk-frontend-integration"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ],
+ "note": "cut from runs/s6/aes-scenarios-2aqf2ccs to re-judge engineer-ticket-with-missing-companion on unchanged evidence"
+}

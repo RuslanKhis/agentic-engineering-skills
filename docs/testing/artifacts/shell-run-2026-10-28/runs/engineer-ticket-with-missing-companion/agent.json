@@ -1,0 +1,232 @@
+{
+ "exit": 0,
+ "timed_out": false,
+ "seconds": 99.2,
+ "model": "claude-sonnet-5-5",
+ "max_turns": 40,
+ "tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+ "subtype": "success",
+ "is_error": false,
+ "num_turns": 14,
+ "total_cost_usd": 0.35370880000000005,
+ "duration_ms": 98167,
+ "terminal_reason": "completed",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-sonnet-5-5",
+  "--output-format",
+  "stream-json",
+  "--verbose",
+  "--setting-sources",
+  "project,local",
+  "--strict-mcp-config",
+  "--no-session-persistence",
+  "--max-turns",
+  "40",
+  "--tools",
+  "Read,Write,Edit,Glob,Grep,Skill,Bash",
+  "--permission-mode",
+  "dontAsk",
+  "--permission-prompts",
+  "none",
+  "--allowedTools",
+  "Read(./**),Write(./**),Edit(./**),Skill,Bash",
+  "--max-budget-usd",
+  "3.0"
+ ],
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill",
+   "Bash"
+  ],
+  "unconfined_tools": [
+   "Bash"
+  ],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": false,
+  "unconfined": true,
+  "shell_environment": {
+   "home_mode": "real-home-redirected-config",
+   "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+   "variables_scrubbed": [
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN",
+    "SSH_AUTH_SOCK"
+   ],
+   "scrub_prefixes": [
+    "GOOGLE_",
+    "GCLOUD_",
+    "CLOUDSDK_",
+    "AWS_",
+    "AZURE_",
+    "ARM_"
+   ],
+   "scrub_names": [
+    "SSH_AUTH_SOCK",
+    "GH_TOKEN",
+    "GITHUB_TOKEN",
+    "GH_ENTERPRISE_TOKEN",
+    "GITLAB_TOKEN",
+    "NPM_TOKEN",
+    "HF_TOKEN",
+    "OPENAI_API_KEY",
+    "GEMINI_API_KEY",
+    "VAULT_TOKEN",
+    "KUBECONFIG",
+    "DOCKER_CONFIG",
+    "DOCKER_HOST",
+    "GIT_CONFIG_GLOBAL",
+    "GIT_ASKPASS",
+    "SSH_ASKPASS",
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN"
+   ],
+   "redirected": {
+    "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+    "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+    "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+    "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+    "DOCKER_CONFIG": "<case>/shell-env/docker",
+    "KUBECONFIG": "<case>/shell-env/kube/config",
+    "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+    "GH_CONFIG_DIR": "<case>/shell-env/gh",
+    "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+   },
+   "set": {
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "BROWSER": "true"
+   }
+  }
+ },
+ "variables_scrubbed": [
+  "CLAUDE_CODE_MESSAGING_SOCKET",
+  "CLAUDE_CODE_MESSAGING_TOKEN",
+  "SSH_AUTH_SOCK"
+ ],
+ "shell_commands": [
+  {
+   "command": "cat docs/tickets/doc-assistant/G03.md; ls; ls docs docs/design docs/tickets/doc-assistant .claude/skills; cat .claude/skills/adk-engineer/references/ticket-lifecycle.md",
+   "output": "---\ngoal: G03\ntitle: UI shell\ndesign: docs/architecture/doc-assistant.md\nplan: docs/plans/doc-assistant.md\nprimary_skill: adk-frontend-integration\nsupporting_skills: []\ndocs: [adk-frontend-integration/references/agent-ui-states.md, adk-frontend-integration/references/frontend-quality.md]\nblocked_by: [G02]\ntouches: [web/src/, web/components.json, web/index.html]\nparallel_safe: no\ncontracts: [C3]\ncompanion_skills: [shadcn, react-router]\nsecurity: [SB10]\ndesign_system: docs/design/DESIGN.md\ncontract_deltas: [none]\npass_to_pass: [G02/A1]\nphase: 1\ntype: implementation\nprofile: proof of concept\nestimate:\n  hands_on: 2-3\n  review_and_verify: 1\n  total: 3-4\n  handoff: none\n  calendar_waits: none\nowner: Lea\nstatus: ready\n---\n\n# G03 UI shell\n\n## Outcome\n\nStaff get a themed chat page: a conversation route, the chat column with streamed\nanswers and their sources, and honest states for failed replies.\n\n## Scope\n\n- In: shadcn initialised and themed from `docs/design/DESIGN.md`, a router with `/` and\n  `/c/:conversationId`, the chat column reading `/api/chat` with fetch, message states\n  (streaming, completed, failed).\n- Out: conversation history sidebar (later), browser journey (G04).\n- Depth: proof of concept; SB10 is built now (tier 1).\n\n## Constraints\n\nIdentity, transport and stack as in AGENTS.md and the design; no user I\n[... 8884 characters omitted ...]\n its own session in its own worktree. Each writes only\n   its own ticket file and the paths in its `touches`; a session that finds it\n   must write another ticket's path stops, sets `parallel_safe: no` in its\n   ticket and says so.\n3. Merge finished branches one at a time in dependency order, then by goal ID.\n   After each merge, rerun every `pass_to_pass` test of the merged tickets\n   before merging the next; a failure is fixed on that branch, not on the\n   merged result.\n4. Run `plan_status.py` after the last merge and follow its next prompt.\n\nThe person decides when to merge and commits; the sessions leave their changes\nuncommitted unless asked otherwise.",
+   "is_error": false
+  },
+  {
+   "command": "cat docs/tickets/doc-assistant/G02.md | sed -n 1,200p; cat docs/architecture/doc-assistant.md docs/design/DESIGN.md; sed -n 1,80p docs/plans/doc-assistant.md; find web app tests -not -path '*/node_modules*' -type f | head -80; ls .claude/skills/adk-frontend-integration .claude/skills/adk-frontend-integration/references",
+   "output": "---\ngoal: G02\ntitle: Streamed answers\ndesign: docs/architecture/doc-assistant.md\nplan: docs/plans/doc-assistant.md\nprimary_skill: adk-frontend-integration\nsupporting_skills: []\ndocs: []\nblocked_by: [G01]\ntouches: [app/server.py, tests/test_stream.py]\nparallel_safe: no\ncontracts: [C2]\ncompanion_skills: [fastapi]\nsecurity: []\ndesign_system: none\ncontract_deltas: [none]\npass_to_pass: [G01/A1, G01/A2]\nphase: 1\ntype: implementation\nprofile: proof of concept\nestimate:\n  total: 2-3\nowner: Lea\nstatus: verified_local\n---\n\n# G02 Streamed answers\n\n## Acceptance\n\n- [x] A1 WHEN the run ends THE stream SHALL end with completed, or failed after an error (C2)\n\n## Evidence\n\n- A1: python -m unittest tests.test_stream; exit 0 (scripted event source)\n- C2: evidenced, local, A1\n- fastapi companion loaded at the locked FastAPI version\n- actual: 2 h\n# Design: doc assistant\n\nStatus: accepted 2026-10-16\nPlan: [docs/plans/doc-assistant.md](../plans/doc-assistant.md)\n\nInternal assistant for Nordlicht Insurance staff that answers from the policy library,\nweb chat on the designer's web defaults (FastAPI with the Runner in process, Vite React\nSPA with shadcn and react-router, IAP). Profile: proof of concept.\n\n## Contracts\n\n| ID | From | Invariant | Scope | Authority | Enforcement (and recheck at the effect) | Failure outcome | Evidence |\n| -\n[... 3155 characters omitted ...]\n.md) | journey | 1-2 | G03 | adk-agent-evaluation | see ticket |\nweb/package.json\nweb/src/App.tsx\nweb/src/main.tsx\nweb/src/index.css\napp/auth.py\napp/server.py\napp/library.py\napp/policies.json\napp/__init__.py\napp/agent.py\ntests/test_library.py\ntests/__init__.py\ntests/test_stream.py\n.claude/skills/adk-frontend-integration:\nagents\nassets\nLICENSE\nreferences\nscripts\nSKILL.md\n\n.claude/skills/adk-frontend-integration/references:\nag-ui.md\nagent-ui-states.md\ncompatibility.md\ncopilotkit-recipe.md\ndemo-readiness.md\ndeployment-runbook.md\nfrontend-quality.md\njson-api.md\nlive-streaming.md\nmanaged-runtime.md\noperating-rules.md\nproduction.md\ntroubleshooting.md\nvalidation.md",
+   "is_error": false
+  },
+  {
+   "command": "cd web; cat package.json src/*; cd ..; cat app/server.py; cat .claude/skills/adk-frontend-integration/SKILL.md; ls .claude/skills/adk-frontend-integration/scripts; ls node_modules web/node_modules 2>&1 | head -3; ls ~/.claude/skills 2>/dev/null; ls .claude",
+   "output": "{\n  \"name\": \"doc-assistant-web\",\n  \"private\": true,\n  \"version\": \"0.2.0\",\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"build\": \"tsc -b && vite build\",\n    \"lint\": \"eslint .\",\n    \"test\": \"vitest run\"\n  },\n  \"dependencies\": {\n    \"react\": \"19.1.1\",\n    \"react-dom\": \"19.1.1\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/vite\": \"4.1.14\",\n    \"@vitejs/plugin-react\": \"5.0.4\",\n    \"eslint\": \"9.37.0\",\n    \"tailwindcss\": \"4.1.14\",\n    \"typescript\": \"5.9.3\",\n    \"vite\": \"7.1.9\",\n    \"vitest\": \"3.2.4\"\n  }\n}\nexport function App() {\n  return (\n    <main>\n      <h1>Doc assistant</h1>\n      <p>Ask a question about our policies.</p>\n    </main>\n  );\n}\n@import \"tailwindcss\";\nimport { StrictMode } from \"react\";\nimport { createRoot } from \"react-dom/client\";\nimport \"./index.css\";\nimport { App } from \"./App\";\n\ncreateRoot(document.getElementById(\"root\")!).render(\n  <StrictMode>\n    <App />\n  </StrictMode>,\n);\n\"\"\"FastAPI app: /api/chat streams the agent's reply as SSE; the SPA is served from web/dist.\"\"\"\nfrom __future__ import annotations\n\nimport json\n\nfrom fastapi import Depends, FastAPI, HTTPException, Request\nfrom fastapi.responses import StreamingResponse\nfrom google.adk.runners import Runner\nfrom google.adk.sessions import InMemorySessionService\nfrom google.genai import types\nfrom pydantic import BaseModel\n\nfrom a\n[... 14110 characters omitted ...]\nesign\nask-matt\nclaude-handoff\ncode-review\ncodebase-design\ndeploy-adk-on-google-cloud\ndiagnosing-bugs\ndomain-modeling\nfind-skills\ngit-guardrails-claude-code\ngrill-me\ngrill-with-docs\ngrilling\nhandoff\nimplement\nimplement-spec\nimprove-codebase-architecture\nloop-me\nmigrate-to-shoehorn\noptimise-adk-on-google-cloud\npractice-profile\nprotect-adk-sensitive-data\nprototype\nresearch\nresolving-merge-conflicts\nretro\nsafe-api-tool-calls\nscaffold-exercises\nsetup-matt-pocock-skills\nsetup-pre-commit\nsetup-ts-deep-modules\nsynced\ntdd\nteach\nto-questionnaire\nto-spec\nto-tickets\ntriage\nwait-what\nwayfinder\nwizard\nwriting-beats\nwriting-for-agents\nwriting-fragments\nwriting-shape\nskills",
+   "is_error": false
+  },
+  {
+   "command": "cd .claude/skills; cat adk-frontend-integration/references/frontend-quality.md; sed -n 1,200p adk-frontend-integration/references/agent-ui-states.md; grep -rn \"SB10\" --include=*.md . | head; ls adk-frontend-integration/assets/design; sed -n 1,60p adk-frontend-integration/scripts/check_theme.py",
+   "output": "# Frontend quality gates and streaming-UI rules\n\nRead when building or reviewing the browser app of an ADK interface, or when\na ticket names a design system. Gates run in the project's `make check` at the\nprofile's depth.\n\n## Start from the house theme\n\nCopy [the house DESIGN.md](../assets/design/DESIGN.md) to\n`docs/design/DESIGN.md` unless the client brings its own design system. A\nclient brand overrides only the surface that file names. Map its tokens to the\nshadcn theme variables with the `shadcn` companion's DESIGN.md workflow; never\nship shadcn's default theme, because the generic look comes from its default\ntokens. The DESIGN.md file itself states its lint gate (the CLI pinned\nexactly; fail on any error or warning, read from the JSON output, because at\n0.4.0 contrast failures arrive as warnings while the exit code stays 0).\n\n## Gates by depth\n\n| Gate | POC | Internal tool and above |\n| --- | --- | --- |\n| `eslint-plugin-react-hooks` `recommended` preset (7.x includes the compiler-derived rules) and `tsc --noEmit` in strict mode | 0 errors | 0 errors |\n| Generated-client drift: regenerate from the offline OpenAPI dump, `git diff --exit-code` (`adk-fastapi-backend`) | When handed over | Always |\n| DESIGN.md lint and `scripts/check_theme.py --project frontend` (no shadcn default tokens or fonts left) | When h\n[... 11265 characters omitted ...]\nlch(0.488 0.243 264.376)\", \"oklch(0.696 0.17 162.48)\", \"oklch(0.769 0.188 70.08)\",\n                     \"oklch(0.627 0.265 303.9)\", \"oklch(0.645 0.246 16.439)\")\n\n# Variable -> default values in that scope (several where init and the docs differ).\nDEFAULTS: dict[str, dict[str, tuple[str, ...]]] = {\n    \":root\": {\n        \"--radius\": (\"0.625rem\",),\n        \"--background\": (\"oklch(1 0 0)\",),\n        \"--foreground\": (\"oklch(0.145 0 0)\",),\n        \"--card\": (\"oklch(1 0 0)\",),\n        \"--card-foreground\": (\"oklch(0.145 0 0)\",),\n        \"--popover\": (\"oklch(1 0 0)\",),\n        \"--popover-foreground\": (\"oklch(0.145 0 0)\",),\n        \"--primary\": (\"oklch(0.205 0 0)\",),",
+   "is_error": false
+  },
+  {
+   "command": "cd ..; cd ..; pwd; which node npm python3; ls web; cat web/tsconfig.json web/eslint.config.* 2>&1 | head; cat web/index.html 2>&1 | head -3; sed -n 1,60p .claude/skills/adk-engineer/references/composition.md | head -80",
+   "output": "/private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/s6/aes-scenarios-2aqf2ccs/engineer-ticket-with-missing-companion/workspace\n/Users/ruslankhissamiyev/.nvm/versions/node/v22.23.2/bin/node\n/Users/ruslankhissamiyev/.nvm/versions/node/v22.23.2/bin/npm\n/opt/anaconda3/bin/python3\npackage.json\nsrc\n(eval):1: no matches found: web/eslint.config.*\ncat: web/index.html: No such file or directory\n# Working with other skill collections\n\nRead this when another collection supplies the project's lifecycle, a goal\nnames a `google/skills:<name>` supporting skill, or the user asks to combine\nskills. Keep one development workflow for the task and use the selected ADK\nspecialist for the application decisions. Additional collections are\noptional; their presence does not expand the user's request.\n\n## Establish the project and scope\n\nRead the relevant project instructions and existing design before choosing a\nworkflow. An `agents-cli-manifest.yaml` identifies an Agents CLI project; inspect\nits declared agent directory, framework, version and deployment target alongside\nthe actual code. Read `.agents-cli-spec.md` when present and relevant. A manifest\nis evidence of project conventions, not permission to execute platform comman\n[... 3881 characters omitted ...]\nts) and the recipe\n  catalogue in `google/adk-recipes` (memory, approval, RAG, safety plugins,\n  ambient triggers, a scheduled production-trace evaluator). That\n  repository's README says recipes are \"for demonstration and as starting\n  points, not production use\" (google/adk-recipes be63596, `README.md`, read\n  2026-10-22): `core/` holds the curated patterns, `contrib/` deployable\n  vertical agents, `plugins/` installable skills with an `EVAL.yaml`. A change\n  that lifts a recipe pattern repeats that disclaimer in its Evidence section\n  and names the controls the recipe lacks. Two recipes carry their own Apache\n  LICENSE (`core/python/cross-session-memory`,",
+   "is_error": false
+  },
+  {
+   "command": "python3 --version; python3 -m unittest discover -s tests -t . 2>&1 | tail -8",
+   "output": "Python 3.9.13\n...ss\n----------------------------------------------------------------------\nRan 5 tests in 0.006s\n\nOK (skipped=2)",
+   "is_error": false
+  },
+  {
+   "command": "python3 -m unittest discover -s tests -t . -v 2>&1 | grep -E \"skip|ok|ERROR\"",
+   "output": "test_missing_assertion_is_refused (tests.test_library.AuthTests) ... ok\ntest_verified_subject_is_the_user (tests.test_library.AuthTests) ... ok\ntest_search_returns_cited_sections (tests.test_library.LibraryTests) ... ok\ntest_completed_after_text (tests.test_stream.StreamEndsTests) ... skipped 'fastapi and google-adk are not installed'\ntest_failed_after_partial_text (tests.test_stream.StreamEndsTests) ... skipped 'fastapi and google-adk are not installed'\nOK (skipped=2)",
+   "is_error": false
+  },
+  {
+   "command": "mkdir -p web/src/lib web/src/components && cd web\ncat > tsconfig.json <<'EOF'\n{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"lib\": [\"ES2022\", \"DOM\", \"DOM.Iterable\"],\n    \"module\": \"ESNext\",\n    \"moduleResolution\": \"bundler\",\n    \"jsx\": \"react-jsx\",\n    \"strict\": true,\n    \"noEmit\": true,\n    \"skipLibCheck\": true,\n    \"isolatedModules\": true,\n    \"types\": [\"vite/client\"]\n  },\n  \"include\": [\"src\"]\n}\nEOF\ncat > src/lib/sse.ts <<'EOF'\n// Parses the C2 stream: `event: text|completed|failed` frames separated by a blank line.\n// Each frame is validated at run time; anything else is dropped (model and server output is untrusted).\n\nexport type StreamEvent =\n  | { type: \"text\"; text: string }\n  | { type: \"completed\" }\n  | { type: \"failed\"; message: string };\n\nexport function parseFrame(frame: string): StreamEvent | null {\n  let name = \"\";\n  const data: string[] = [];\n  for (const line of frame.split(\"\\n\")) {\n    if (line.startsWith(\"event:\")) name = line.slice(6).trim();\n    else if (line.startsWith(\"data:\")) data.push(line.slice(5).trim());\n  }\n  let body: unknown;\n  try {\n    body = JSON.parse(data.join(\"\\n\") || \"{}\");\n  } catch {\n    return null;\n  }\n  const record = typeof body === \"object\" && body !== null ? (body as Record<string, unknown>) : {};\n  if (name === \"text\" && typeof record.text === \"string\") return { type: \"text\", text: record.text };\n  if (name === \"completed\") return { type: \"completed\" };\n  if (name === \"failed\") {\n    return { type: \"failed\", message: typeof record.message === \"string\" ? record.message : \"\" };\n  }\n  return null;\n}\n\nexport async function* readEvents(body: ReadableStream<Uint8Array>): AsyncGenerator<StreamEvent> {\n  const reader = body.getReader();\n  const decoder = new TextDecoder();\n  let buffer = \"\";\n  try {\n    for (;;) {\n      const { done, value } = await reader.read();\n      buffer += decoder.decode(value, { stream: !done }).replace(/\\r\\n/g, \"\\n\");\n      let end: number;\n      while ((end = buffer.indexOf(\"\\n\\n\")) !== -1) {\n        const event = parseFrame(buffer.slice(0, end));\n        buffer = buffer.slice(end + 2);\n        if (event) yield event;\n      }\n      if (done) break;\n    }\n  } finally {\n    reader.releaseLock();\n  }\n}\nEOF\ncat > src/lib/message.ts <<'EOF'\n// Message state for one assistant turn (C3): partial text is never shown as final.\nimport type { StreamEvent } from \"./sse\";\n\nexport type MessageStatus = \"streaming\" | \"completed\" | \"failed\";\n\nexport interface AssistantMessage {\n  text: string;\n  status: MessageStatus;\n  error?: string;\n}\n\nexport const FAILED_COPY = \"The assistant could not finish this reply. Try asking again.\";\n\nexport const startMessage = (): AssistantMessage => ({ text: \"\", status: \"streaming\" });\n\nexport function applyEvent(message: AssistantMessage, event: StreamEvent): AssistantMessage {\n  if (message.status !== \"streaming\") return message; // terminal states are final\n  if (event.type === \"text\") return { ...message, text: message.text + event.text };\n  if (event.type === \"completed\") return { ...message, status: \"completed\" };\n  // Server text is not shown raw: the design says errors are one plain sentence.\n  return { ...message, status: \"failed\", error: FAILED_COPY };\n}\n\n// The stream ended, or the fetch threw, without a terminal event: that is a failure, never a completion.\nexport function endStream(message: AssistantMessage): AssistantMessage {\n  return message.status === \"streaming\" ? { ...message, status: \"failed\", error: FAILED_COPY } : message;\n}\nEOF\ncat > src/lib/safe-content.ts <<'EOF'\n// SB10: model output is untrusted. It is tokenised into text, links and images; raw HTML is never\n// interpreted (it stays literal text), links need an allowed protocol, images need a listed host.\n\nexport const ALLOWED_LINK_PROTOCOLS = [\"https:\", \"mailto:\"];\n// Policy images come from the library host once it is named; empty means no image ever loads.\nexport const ALLOWED_IMAGE_HOSTS: readonly string[] = [];\n\nexport type Token =\n  | { kind: \"text\"; text: string }\n  | { kind: \"link\"; label: string; href: string }\n  | { kind: \"image\"; alt: string; src: string };\n\nexport function safeHref(raw: string): string | null {\n  try {\n    const url = new URL(raw.trim());\n    return ALLOWED_LINK_PROTOCOLS.includes(url.protocol) ? url.href : null;\n  } catch {\n    return null;\n  }\n}\n\nexport function safeImageSrc(raw: string, hosts: readonly string[] = ALLOWED_IMAGE_HOSTS): string | null {\n  try {\n    const url = new URL(raw.trim());\n    return url.protocol === \"https:\" && hosts.includes(url.hostname) ? url.href : null;\n  } catch {\n    return null;\n  }\n}\n\nconst MARKDOWN = /(!?)\\[([^\\]]*)\\]\\(([^)\\s]*)\\)/g;\n\nexport function tokenise(source: string, hosts: readonly string[] = ALLOWED_IMAGE_HOSTS): Token[] {\n  const tokens: Token[] = [];\n  const text = (value: string) => value && tokens.push({ kind: \"text\", text: value });\n  let last = 0;\n  for (const match of source.matchAll(MARKDOWN)) {\n    text(source.slice(last, match.index));\n    last = match.index + match[0].length;\n    const [whole, bang, label, target] = match;\n    if (bang) {\n      const src = safeImageSrc(target, hosts);\n      if (src) tokens.push({ kind: \"image\", alt: label, src });\n      else text(label ? `[image: ${label}]` : \"[image removed]\"); // nothing is fetched\n    } else {\n      const href = safeHref(target);\n      if (href) tokens.push({ kind: \"link\", label: label || href, href });\n      else text(label || whole); // unsafe target: keep the words, drop the link\n    }\n  }\n  text(source.slice(last));\n  return tokens;\n}\nEOF\ncat > src/components/SafeText.tsx <<'EOF'\nimport { tokenise } from \"../lib/safe-content\";\n\n// Renders untrusted model text. No dangerouslySetInnerHTML: React escapes every text node.\nexport function SafeText({ source }: { source: string }) {\n  return (\n    <>\n      {tokenise(source).map((token, i) => {\n        if (token.kind === \"text\") return <span key={i}>{token.text}</span>;\n        if (token.kind === \"link\") {\n          return (\n            <a key={i} href={token.href} target=\"_blank\" rel=\"noopener noreferrer nofollow\">\n              {token.label}\n            </a>\n          );\n        }\n        return <img key={i} src={token.src} alt={token.alt} referrerPolicy=\"no-referrer\" />;\n      })}\n    </>\n  );\n}\nEOF\ncat > src/components/ChatColumn.tsx <<'EOF'\nimport { useCallback, useEffect, useRef, useState } from \"react\";\nimport { applyEvent, endStream, startMessage, type AssistantMessage } from \"../lib/message\";\nimport { readEvents } from \"../lib/sse\";\nimport { SafeText } from \"./SafeText\";\n\ninterface Turn {\n  question: string;\n  answer: AssistantMessage;\n}\n\n// The browser sends the conversation ID and the question only; identity comes from IAP on the server.\nexport function ChatColumn({ conversationId }: { conversationId: string }) {\n  const [turns, setTurns] = useState<Turn[]>([]);\n  const [draft, setDraft] = useState(\"\");\n  const abort = useRef<AbortController | null>(null);\n  useEffect(() => () => abort.current?.abort(), []);\n\n  const update = (fn: (m: AssistantMessage) => AssistantMessage) =>\n    setTurns((all) => all.map((t, i) => (i === all.length - 1 ? { ...t, answer: fn(t.answer) } : t)));\n\n  const send = useCallback(async () => {\n    const question = draft.trim();\n    if (!question) return;\n    setDraft(\"\");\n    setTurns((all) => [...all, { question, answer: startMessage() }]);\n    const controller = (abort.current = new AbortController());\n    try {\n      const response = await fetch(\"/api/chat\", {\n        method: \"POST\",\n        headers: { \"Content-Type\": \"application/json\" },\n        body: JSON.stringify({ session_id: conversationId, message: question }),\n        signal: controller.signal,\n      });\n      if (!response.ok || !response.body) throw new Error(\"request failed\");\n      for await (const event of readEvents(response.body)) update((m) => applyEvent(m, event));\n    } catch {\n      /* fall through: an unfinished message becomes failed below */\n    }\n    if (!controller.signal.aborted) update(endStream);\n  }, [draft, conversationId]);\n\n  return (\n    <section aria-label=\"Conversation\" style={{ maxWidth: 720, margin: \"0 auto\" }}>\n      {turns.map((turn, i) => (\n        <article key={i}>\n          <p>{turn.question}</p>\n          <div>\n            <SafeText source={turn.answer.text} />\n          </div>\n          {turn.answer.status === \"streaming\" && <p role=\"status\">Working\u2026</p>}\n          {turn.answer.status === \"failed\" && (\n            <p role=\"status\">\n              <strong>Failed</strong> {turn.answer.error}\n            </p>\n          )}\n        </article>\n      ))}\n      <form\n        onSubmit={(e) => {\n          e.preventDefault();\n          void send();\n        }}\n      >\n        <label>\n          Ask about a policy\n          <textarea value={draft} onChange={(e) => setDraft(e.target.value)} />\n        </label>\n        <button type=\"submit\">Send</button>\n      </form>\n    </section>\n  );\n}\nEOF\n",
+   "output": "(Bash completed with no output)",
+   "is_error": false
+  },
+  {
+   "command": "cd web\ncat > src/lib/chat.test.ts <<'EOF'\nimport { createElement } from \"react\";\nimport { renderToStaticMarkup } from \"react-dom/server\";\nimport { describe, expect, it } from \"vitest\";\nimport { SafeText } from \"../components/SafeText\";\nimport { applyEvent, endStream, startMessage } from \"./message\";\nimport { readEvents } from \"./sse\";\n\nfunction stream(chunks: string[]): ReadableStream<Uint8Array> {\n  const enc = new TextEncoder();\n  return new ReadableStream({\n    start(c) {\n      chunks.forEach((x) => c.enqueue(enc.encode(x)));\n      c.close();\n    },\n  });\n}\nasync function run(chunks: string[]) {\n  let m = startMessage();\n  const seen: string[] = [];\n  for await (const e of readEvents(stream(chunks))) {\n    m = applyEvent(m, e);\n    seen.push(`${m.status}:${m.text}`);\n  }\n  return { m, seen };\n}\n\ndescribe(\"A1 streaming then completed\", () => {\n  it(\"shows text as it arrives and completes only after `completed`\", async () => {\n    const { m, seen } = await run([\n      'event: text\\ndata: {\"text\":\"HR-04 \"}\\n\\nevent: te', // frame split across chunks\n      'xt\\ndata: {\"text\":\"\u00a72.3\"}\\n\\n',\n      \"event: completed\\ndata: {}\\n\\n\",\n    ]);\n    expect(seen).toEqual([\"streaming:HR-04 \", \"streaming:HR-04 \u00a72.3\", \"completed:HR-04 \u00a72.3\"]);\n    expect(m.status).toBe(\"completed\");\n  });\n  it(\"a stream that just ends is failed, not completed\", async () => {\n    const { m } = await run(['event: text\\ndata: {\"text\":\"part\"}\\n\\n']);\n    expect(endStream(m).status).toBe(\"failed\");\n  });\n});\n\ndescribe(\"A2 failed keeps its text\", () => {\n  it(\"keeps partial text and marks failed, without the server's raw message\", async () => {\n    const { m } = await run([\n      'event: text\\ndata: {\"text\":\"partial\"}\\n\\n',\n      'event: failed\\ndata: {\"message\":\"boom: stack trace\"}\\n\\n',\n    ]);\n    expect(m).toMatchObject({ status: \"failed\", text: \"partial\" });\n    expect(m.error).not.toContain(\"boom\");\n  });\n});\n\ndescribe(\"A3 hostile model output is inert\", () => {\n  const hostile =\n    'Hi <img src=x onerror=alert(1)> [click](javascript:alert(1)) ![t](https://evil.example/p.png) [ok](https://example.com/a)';\n  const html = renderToStaticMarkup(createElement(SafeText, { source: hostile }));\n  it(\"renders no img, no javascript: link and no live onerror\", () => {\n    expect(html).not.toContain(\"<img\");\n    expect(html).not.toMatch(/href=\"javascript/i);\n    expect(html).not.toMatch(/<[^>]*onerror/i); // appears only as escaped text\n    expect(html).toContain(\"&lt;img src=x onerror=alert(1)&gt;\");\n  });\n  it(\"still renders a safe https link\", () => {\n    expect(html).toContain('href=\"https://example.com/a\"');\n  });\n});\nEOF\n# scratch check of pure modules (no vitest/react here): copy outside the workspace\nS=$(mktemp -d); cp src/lib/sse.ts src/lib/message.ts src/lib/safe-content.ts $S/\nsed -i '' 's#\"./sse\"#\"./sse.ts\"#' $S/message.ts\ncat > $S/check.ts <<'EOF'\nimport assert from \"node:assert\";\nimport { applyEvent, endStream, startMessage } from \"./message.ts\";\nimport { readEvents } from \"./sse.ts\";\nimport { tokenise } from \"./safe-content.ts\";\nconst enc = new TextEncoder();\nconst rs = (cs: string[]) => new ReadableStream({ start(c) { cs.forEach(x => c.enqueue(enc.encode(x))); c.close(); } });\nlet m = startMessage(); const seen: string[] = [];\nfor await (const e of readEvents(rs(['event: text\\ndata: {\"text\":\"HR-04 \"}\\n\\nevent: te','xt\\ndata: {\"text\":\"\u00a72.3\"}\\n\\n',\"event: completed\\ndata: {}\\n\\n\"]))) { m = applyEvent(m, e); seen.push(m.status + \":\" + m.text); }\nassert.deepEqual(seen, [\"streaming:HR-04 \",\"streaming:HR-04 \u00a72.3\",\"completed:HR-04 \u00a72.3\"]);\nlet f = startMessage();\nfor await (const e of readEvents(rs(['event: text\\ndata: {\"text\":\"p\"}\\n\\nevent: failed\\ndata: {\"message\":\"boom\"}\\n\\n']))) f = applyEvent(f, e);\nassert.equal(f.status, \"failed\"); assert.equal(f.text, \"p\"); assert(!f.error!.includes(\"boom\"));\nassert.equal(endStream({text:\"x\",status:\"streaming\"}).status, \"failed\");\nconst t = tokenise('Hi <img src=x onerror=alert(1)> [c](javascript:alert(1)) ![t](https://evil.example/p.png) [ok](https://example.com/a)');\nassert(!t.some(x => x.kind === \"image\")); assert.deepEqual(t.filter(x=>x.kind===\"link\").map((x:any)=>x.href), [\"https://example.com/a\"]);\nassert(!JSON.stringify(t).includes(\"javascript:alert\") || t.every(x => x.kind !== \"link\" || (x as any).href.startsWith(\"https\")));\nconsole.log(\"scratch checks ok\");\nEOF\nnode --experimental-strip-types --no-warnings $S/check.ts; rm -rf $S",
+   "output": "(eval):cd:1: no such file or directory: web\nscratch checks ok",
+   "is_error": false
+  },
+  {
+   "command": "cd ..; find web -type f | sort; python3 -m unittest discover -s tests -t . 2>&1 | tail -2; python3 .claude/skills/adk-frontend-integration/scripts/check_theme.py --css web/src/index.css; echo exit $?",
+   "output": "web/package.json\nweb/src/App.tsx\nweb/src/components/ChatColumn.tsx\nweb/src/components/SafeText.tsx\nweb/src/index.css\nweb/src/lib/chat.test.ts\nweb/src/lib/message.ts\nweb/src/lib/safe-content.ts\nweb/src/lib/sse.ts\nweb/src/main.tsx\nweb/tsconfig.json\n\nOK (skipped=2)\nerror: check_theme.py requires Python 3.11 or newer.\nexit 2",
+   "is_error": false
+  },
+  {
+   "command": "for p in python3.12 python3.11 python3.13; do which $p; done",
+   "output": "/opt/homebrew/bin/python3.12\n/Library/Frameworks/Python.framework/Versions/3.11/bin/python3.11\n/opt/homebrew/bin/python3.13",
+   "is_error": false
+  },
+  {
+   "command": "python3.12 .claude/skills/adk-frontend-integration/scripts/check_theme.py --css web/src/index.css; echo exit $?",
+   "output": "error: no_root_or_dark_custom_properties\nexit 2",
+   "is_error": false
+  },
+  {
+   "command": "python3 - <<'EOF'\np=\"docs/tickets/doc-assistant/G03.md\"\ns=open(p).read()\ns=s.replace(\"status: ready\",\"status: in_progress\")\nev='''## Evidence\n\nProgress:\n  - done: SSE parser, message state machine (streaming/completed/failed), SB10 renderer, ChatColumn (fetch `/api/chat`, abort on unmount), tests for A1-A3 written\n  - in hand: A1-A3 are written but vitest has not run (dependencies not installed, no network)\n  - next: (1) install the companions at the AGENTS.md pins; (2) `shadcn init` and map `docs/design/DESIGN.md` to `web/src/index.css` and `web/components.json` (Nordlicht petrol overrides, Source Serif 4), then `check_theme.py`; (3) add `react-router` with routes `/` and `/c/:conversationId`, passing `conversationId` to `ChatColumn`, replacing the placeholder `App.tsx`; (4) add `web/index.html`, an ESLint config and the lint dependencies; (5) `cd web && npm ci && npm run lint && npm test && npm run build`\n  - uncommitted: web/tsconfig.json, web/src/lib/{sse,message,safe-content,chat.test}.ts, web/src/components/{SafeText,ChatColumn}.tsx (no git repository here)\n  - re-verify: `cd web && npm run lint && npm test`; `python3.12 <skill>/scripts/check_theme.py --project web`; `python -m unittest discover -s tests -t .`\n\nCompanions (setup owed, guidance NOT applied; nothing installed, no network in this session):\n  - shadcn: `npx skills add shadcn/ui`, pin `shadcn-ui/ui@4233ed1`, record the shadcn CLI version\n  - react-router: `npx skills add https://github.com/remix-run/react-router --skill react-router`, pin `remix-run/react-router@8f364c8`\n  - Consequence: shadcn init, theming and the router are not done. No react-router or shadcn code was written from memory.\n\nResults:\n  - pass_to_pass G02/A1: `python -m unittest discover -s tests -t .` exit 0 but tests.test_stream skipped (fastapi, google-adk absent; Python 3.9.13): offline, not run for A1.\n  - A1, A2, A3: tests in `web/src/lib/chat.test.ts`: not run (vitest not installed). Same assertions exercised for the pure modules (SSE parse across split chunks, state machine, tokeniser; not the React render) by a throwaway Node 22 script outside the repo: offline, pass. Not the ticket's verification.\n  - `npm run lint`, `npm test`: not run (no node_modules, no network); `npm run lint` would also fail today: no ESLint config in `web/`.\n  - Theme check: `python3.12 check_theme.py --css web/src/index.css` exit 2 (no :root/.dark tokens): fail, theme not applied.\n  - Manual check against DESIGN.md in a browser: owed (Lea); no UI was rendered.\nC3 (browser state): planned, not evidenced (no UI test has run); design cell left unchanged.\nSB10: built in code (raw HTML kept as literal text, `https:`/`mailto:` links only, images only from `ALLOWED_IMAGE_HOSTS`, currently empty, no `dangerouslySetInnerHTML`); tier reached: none yet, G03/A3 not run.\n\nQuestions written down and assumptions taken (nobody to answer):\n  - Q: Which hosts may serve images? A: none until the policy library host is named; every image renders as text.\n  - Q: C2 has no sources event, but DESIGN.md wants sources under each answer. A: sources are shown only as the citations inside the answer text (e.g. \"HR-04 \u00a72.3\"); a sources list needs a C2 contract change (designer checkpoint).\n  - Q: `/api/chat` returns 404 for an unknown `session_id` and nothing creates sessions. A: the route ID is passed as `session_id`; session creation is a gap outside this ticket's `touches` (`app/server.py`), so a first message on a new conversation will fail honestly until a route exists.\n  - Q: Failed copy. A: the UI shows its own one-sentence copy, not the server's message, per DESIGN.md \"never raw error text\".\nRulings: none beyond the assumptions above.\nControls left out (proof of concept): axe/screenshots/lighthouse gates (G04 and handover), stream-delta batching per frame, stop button and Stopped state, scroll-follow, first-paint theme script.\nHuman effort still owed: about 2-3 h for Lea: install companions, shadcn init and theme, router and `index.html`, lint config, run the verification; then about 1 h to review against DESIGN.md in a browser.\nactual: not reported\n'''\ns=s.replace(\"## Evidence\\n\",ev,1)\nopen(p,\"w\").write(s)\nEOF\nsed -n 50,60p docs/tickets/doc-assistant/G03.md",
+   "output": "## Resources created\n\nnone\n\n## Acceptance\n\n- [ ] A1 WHEN a reply streams THE chat SHALL show text as it arrives and the completed state only after `completed` (C3)\n- [ ] A2 IF the stream ends with `failed` THEN THE message SHALL keep its text and show the failed badge (C3)\n- [ ] A3 WHEN a scripted reply contains an `<img onerror>` payload, a `javascript:` link and an image from an unlisted host THE chat SHALL render it inert and load nothing (C3, SB10)\n\nVerification, automated: `cd web && npm run lint && npm test` exits 0; theme check exits 0.",
+   "is_error": false
+  }
+ ],
+ "skills_loaded": [
+  "adk-engineer"
+ ],
+ "skill_files_read": [
+  "adk-engineer/references/ticket-lifecycle.md",
+  "adk-frontend-integration/references"
+ ],
+ "skill_md_loaded": {
+  "adk-engineer": {
+   "loaded": true,
+   "how": "slash-command",
+   "other_files_read": 1
+  },
+  "adk-frontend-integration": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 1
+  }
+ },
+ "permission_denials": [],
+ "tool_calls": 13,
+ "catalogue": [
+  "adk-engineer",
+  "adk-frontend-integration",
+  "deep-research",
+  "design",
+  "design-sync",
+  "dataviz",
+  "update-config",
+  "verify",
+  "debug",
+  "code-review",
+  "simplify",
+  "batch",
+  "fewer-permission-prompts",
+  "doctor",
+  "loop",
+  "schedule",
+  "claude-api",
+  "workflow-authoring",
+  "run",
+  "run-skill-generator",
+  "plugin-authoring"
+ ],
+ "catalogue_check": {
+  "missing": [],
+  "leaked": []
+ }
+}

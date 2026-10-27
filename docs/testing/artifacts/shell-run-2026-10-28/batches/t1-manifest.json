@@ -1,0 +1,81 @@
+{
+ "created": "2026-10-27T22:25:58+00:00",
+ "root": "/Users/ruslankhissamiyev/Documents/Coding Projects/skills/agentic-engineering-skills/.claude/worktrees/agent-a0d6d075c33c6cea9",
+ "commit": "6b03823bbc096b042e83c8e2b7a73fd3873733aa",
+ "skill_install": "project",
+ "scenarios": [
+  {
+   "id": "designer-tickets-get-journey-goal-and-lint",
+   "status": "repo-fixture",
+   "base": [
+    "claims-docs"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/designer-tickets-get-journey-goal-and-lint/situation.md"
+    }
+   ],
+   "note": "No shell: check_schedule.py and check_tickets.py cannot be run in the workspace.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-system-designer",
+    "adk-engineer",
+    "adk-agent-evaluation",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  },
+  {
+   "id": "evaluation-underwriter-labelling-session",
+   "status": "repo-fixture",
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/evaluation-underwriter-labelling-session/situation.md"
+    },
+    {
+     "from": "evals/graders/evaluation-underwriter-labelling-session/label-agreement-output.txt"
+    }
+   ],
+   "note": "Running scripts/label_agreement.py needs a shell; the helper's real output is with the judge.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-agent-evaluation",
+    "adk-engineer",
+    "adk-presenter"
+   ],
+   "grader_files": [
+    "situation.md",
+    "label-agreement-output.txt"
+   ]
+  },
+  {
+   "id": "tool-interface-wrong-tool-diagnosis",
+   "status": "repo-fixture",
+   "base": [
+    "support-assistant"
+   ],
+   "overlay": true,
+   "grader": [
+    {
+     "from": "evals/graders/tool-interface-wrong-tool-diagnosis/situation.md"
+    }
+   ],
+   "tests": "pass",
+   "note": "The tool-schema linter and declaration dump need a shell, which the default agent tools leave out.",
+   "skills_missing": [],
+   "skills_installed": [
+    "adk-tool-interface-design",
+    "adk-agent-instructions",
+    "safe-api-tool-calls",
+    "adk-agent-evaluation"
+   ],
+   "grader_files": [
+    "situation.md"
+   ]
+  }
+ ]
+}

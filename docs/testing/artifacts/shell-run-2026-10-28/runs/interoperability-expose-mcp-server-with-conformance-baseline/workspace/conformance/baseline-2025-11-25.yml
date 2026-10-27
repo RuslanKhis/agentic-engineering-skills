@@ -1,0 +1,4 @@
+# Expected failures for `conformance server --requirements 2025-11-25` (handshake revision).
+# Empty until the first CI run on this repo; fixture-dependent scenarios (tools-call-image,
+# resources-read-*, prompts-get-*, elicitation-*, ...) will appear and each needs a reason.
+server: []

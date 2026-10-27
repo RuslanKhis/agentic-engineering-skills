@@ -1,0 +1,217 @@
+{
+ "exit": 0,
+ "timed_out": false,
+ "seconds": 59.5,
+ "model": "claude-sonnet-5-5",
+ "max_turns": 40,
+ "tools": "Read,Write,Edit,Glob,Grep,Skill,Bash",
+ "subtype": "success",
+ "is_error": false,
+ "num_turns": 12,
+ "total_cost_usd": 0.20125600000000002,
+ "duration_ms": 58390,
+ "terminal_reason": "completed",
+ "command": [
+  "claude",
+  "-p",
+  "--model",
+  "claude-sonnet-5-5",
+  "--output-format",
+  "stream-json",
+  "--verbose",
+  "--setting-sources",
+  "project,local",
+  "--strict-mcp-config",
+  "--no-session-persistence",
+  "--max-turns",
+  "40",
+  "--tools",
+  "Read,Write,Edit,Glob,Grep,Skill,Bash",
+  "--permission-mode",
+  "dontAsk",
+  "--permission-prompts",
+  "none",
+  "--allowedTools",
+  "Read(./**),Write(./**),Edit(./**),Skill,Bash",
+  "--max-budget-usd",
+  "3.0"
+ ],
+ "confinement": {
+  "setting_sources": "project,local",
+  "permission_mode": "dontAsk",
+  "permission_prompts": "none",
+  "allowed": [
+   "Read(./**)",
+   "Write(./**)",
+   "Edit(./**)",
+   "Skill",
+   "Bash"
+  ],
+  "unconfined_tools": [
+   "Bash"
+  ],
+  "skill_install": "project",
+  "environment": {
+   "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1"
+  },
+  "confined_to_workspace": false,
+  "unconfined": true,
+  "shell_environment": {
+   "home_mode": "real-home-redirected-config",
+   "home_note": "HOME is the real home directory: with HOME pointed at an empty directory the claude CLI (2.1.306, macOS keychain login) reports 'Not logged in'. Tool configuration paths are redirected instead, so gcloud, aws, az, docker, kubectl, git and gh see no account; files under the real HOME (~/.config/gcloud, ~/.aws, ~/.ssh) stay readable to the shell.",
+   "variables_scrubbed": [
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN",
+    "SSH_AUTH_SOCK"
+   ],
+   "scrub_prefixes": [
+    "GOOGLE_",
+    "GCLOUD_",
+    "CLOUDSDK_",
+    "AWS_",
+    "AZURE_",
+    "ARM_"
+   ],
+   "scrub_names": [
+    "SSH_AUTH_SOCK",
+    "GH_TOKEN",
+    "GITHUB_TOKEN",
+    "GH_ENTERPRISE_TOKEN",
+    "GITLAB_TOKEN",
+    "NPM_TOKEN",
+    "HF_TOKEN",
+    "OPENAI_API_KEY",
+    "GEMINI_API_KEY",
+    "VAULT_TOKEN",
+    "KUBECONFIG",
+    "DOCKER_CONFIG",
+    "DOCKER_HOST",
+    "GIT_CONFIG_GLOBAL",
+    "GIT_ASKPASS",
+    "SSH_ASKPASS",
+    "CLAUDE_CODE_MESSAGING_SOCKET",
+    "CLAUDE_CODE_MESSAGING_TOKEN"
+   ],
+   "redirected": {
+    "CLOUDSDK_CONFIG": "<case>/shell-env/gcloud",
+    "AWS_CONFIG_FILE": "<case>/shell-env/aws/config",
+    "AWS_SHARED_CREDENTIALS_FILE": "<case>/shell-env/aws/credentials",
+    "AZURE_CONFIG_DIR": "<case>/shell-env/azure",
+    "DOCKER_CONFIG": "<case>/shell-env/docker",
+    "KUBECONFIG": "<case>/shell-env/kube/config",
+    "GIT_CONFIG_GLOBAL": "<case>/shell-env/gitconfig",
+    "GH_CONFIG_DIR": "<case>/shell-env/gh",
+    "NPM_CONFIG_USERCONFIG": "<case>/shell-env/npmrc"
+   },
+   "set": {
+    "GIT_CONFIG_NOSYSTEM": "1",
+    "BROWSER": "true"
+   }
+  }
+ },
+ "variables_scrubbed": [
+  "CLAUDE_CODE_MESSAGING_SOCKET",
+  "CLAUDE_CODE_MESSAGING_TOKEN",
+  "SSH_AUTH_SOCK"
+ ],
+ "shell_commands": [
+  {
+   "command": "cat docs/plans/claims.md; echo ------; cat docs/discovery/claims.md; ls -R .",
+   "output": "# Implementation plan: claims triage assistant pilot\n\nStatus: phase 1 complete; pilot live since 2026-08-25\nArchitecture: [docs/architecture/claims.md](../architecture/claims.md)\nContinuation source of truth: this plan\n\n## Summary for the reader\n\n- **Profile and phase 1:** pilot; 14 triage handlers on new home claims since 2026-08-25.\n- **Decision:** pilot approved by Helen Okafor on 2026-08-20; monthly value reports to the\n  decider from September.\n\n## Goals and dependencies\n\n| ID and goal | Phase | Type | Human hours | Depends on | Primary skill | State |\n| --- | --- | --- | --- | --- | --- | --- |\n| G01 Triage draft from a de-identified notification | 1 | implementation | 4-5.5 | none | protect-adk-sensitive-data | done |\n| G02 Cover position with the clause it relies on | 1 | implementation | 4-6.5 | G01, W1 | adk-tool-interface-design | done |\n| G03 Handler queue scoped to the team | 1 | implementation | 4-5.5 | none | adk-fastapi-backend | done |\n| G04 Claim history and the daily spend stop | 1 | implementation | 3-5 | G03 | adk-operational-guardrails | done |\n| G05 Journey check | 1 | journey | 3-4 | G02, G04 | adk-agent-evaluation | done |\n| G06 Pilot approval presentation | 1 | presentation | 3-6.5 | G05, W2 | adk-presenter | done |\n| G07 Usage and cost reporting | 2 | implementation | 2-3 | G06 | adk-a\n[... 4188 characters omitted ...]\n in the claims operations\n  cost line.\n\n## 5. Technology fit\n\nAn agent with tools (policy lookup) drafting a recommendation for a person to accept; the\ndecision stays with the handler.\n\n## 6. Unit economics and people\n\n- Volume: about 1,200 new home claims a month in the pilot queue.\n- Accepted cost ceiling: \u00a3900 a month for the pilot (model, hosting and database).\n- 14 triage handlers in Leeds; two team leads.\n- **Decider:** Helen Okafor, Head of Claims Operations. **Senior owner:** Priya Shah, Chief\n  Operating Officer.\ndocs\nREADME.md\n\n./docs:\narchitecture\ndiscovery\nplans\n\n./docs/architecture:\nclaims.md\n\n./docs/discovery:\nclaims.md\n\n./docs/plans:\nclaims.md",
+   "is_error": false
+  },
+  {
+   "command": "cd .claude/skills/adk-presenter; cat references/value-report.md assets/value-report-template.md; ls scripts; cat ../../../docs/architecture/claims.md | head -80; cat ../../../README.md | head -20",
+   "output": "# Value report: one page a month after launch\n\nRead this for the `value-report` stage: a live pilot or production system\nwhose sponsor needs, every month, the outcome against the baseline, what it\ncost per outcome, what went wrong, and a stop, continue or scale call. It\nis one page in the [value-report template](../assets/value-report-template.md),\nnot a deck, saved as `docs/presentations/<topic>/value-report-<YYYY-MM>.md`.\nIts records are what the final-results deck later draws as a time series,\nso a month without a report is a gap in that chart.\n\n## Read the inputs by name\n\n- **Discovery brief** (`docs/discovery/<topic>.md`, \u00a74 and \u00a76): *Outcome\n  measure* (metric, how, window, by whom), *Baseline* (value, source, date,\n  and which part of the rollout scope it covers), *Counter-metric*,\n  *Threshold sentences* (\"If <metric> for <workflow> drops below\n  <threshold>, we will <action>\"), *How the measure reaches a KPI line*,\n  *Unit economics known so far* (volume, accepted cost ceiling), and the\n  *Decider* and *Senior owner*.\n- **Design** (`docs/architecture/<topic>.md`): the cost contract (ceiling\n  at volume, variable and fixed parts, the stop) and the resource cost\n  ledger's while-provisioned rows, which are fixed monthly cost whatever\n  the volume.\n- **Plan** (`docs/plans/<topic>.md`, and tickets' Evidence\n[... 14101 characters omitted ...]\nnother team cannot open it.\n# Claims triage assistant\n\nLarkspur Digital's engagement with Fenwick Mutual (a UK home and motor insurer)\nto help claims handlers triage first notifications of loss (FNOL). The\nassistant reads a new claim's notification, checks the policy's cover through\nthe policy system's read-only API, and drafts a triage recommendation (claim\ntype, urgency, cover position with the clause it relies on) that a handler\naccepts or changes.\n\nThe pilot went live for 14 triage handlers on 2026-08-25.\n\n- Discovery brief: `docs/discovery/claims.md`\n- Design: `docs/architecture/claims.md`\n- Plan, measurement and incident records: `docs/plans/claims.md`",
+   "is_error": false
+  },
+  {
+   "command": "cd /private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/s5/aes-scenarios-nqt86182/presenter-monthly-value-report/workspace && mkdir -p docs/presentations/claims && cat > docs/presentations/claims/value-report-2026-09.md <<'EOF'\n---\nstage: value-report\nperiod: 2026-09\ntitle: Claims triage assistant value report, September 2026\nsources: docs/discovery/claims.md, docs/plans/claims.md\ndecider: Helen Okafor\ndate: 2026-11-04\ncall: continue\n---\n\n# Claims triage assistant: September 2026\n\nOne page for Helen Okafor. Report written late (28 October 2026); the call date above is an assumption, see the plan's change table.\n\n**Bottom line:** Median triage time fell to 13 minutes against a 21-minute baseline (M2, M1), but the re-routing counter-metric has no September measurement (M3 covers only 25-31 August), so we recommend continue, not scale.\n\n## Outcome against baseline\n\n- Median triage time per claim: 13 minutes on pilot claims against a baseline of 21 minutes (M2, M1; pilot window 2026-09-01 to 2026-09-30, 1,184 claims; baseline window 2026-08-01 to 2026-08-22, 400 new home claims; both from the claims MI report, same definition and scope).\n- An 8-minute (38%) fall is far beyond the margin on these samples (about 1 over the square root of 1,184, roughly 3%). Target: 12 minutes or less (brief \u00a74), so the target is not yet met by one minute.\n\n## Counter-metric\n\n- Re-routing rate after triage: not measured for September. The only record is 8.6% against a 9% baseline (M3; window 2026-08-25 to 2026-08-31, 236 claims, build v1.0.1), which is last period, a different build, and a 0.4-point gap within the margin of that sample. G09 (added to the plan) measures September.\n\n## Adoption\n\n- Active means a handler who opened a draft on 5 or more claims in a week, in every week of September.\n- 12 of 14 pilot handlers were active (M5), 86%; 69% of 1,184 drafts were accepted without change (M4).\n\n## Cost per outcome\n\n- Actual: \u00a30.43 per claim triaged: \u00a3512 (M6: Cloud Billing export, rows labelled app=claims-triage; Vertex AI, Cloud Run, Cloud SQL, BigQuery; leaves out Larkspur build and support time) over 1,184 claims triaged with a draft (M7); we estimate \u00a3512 / 1,184 = \u00a30.43. This is within the \u00a3900 a month pilot ceiling (brief \u00a76).\n- Estimate: \u00a30.31 per claim at 4,800 claims a month (M8). We could not reproduce it: \u00a3512 spread over 4,800 claims with fixed costs unchanged is about \u00a30.11, and \u00a30.31 a claim at 4,800 would be about \u00a31,490 a month. The plan's figure needs its derivation before it is used; the 4,800 volume is not in the brief (about 1,200 a month in the pilot queue).\n- Per accepted-unchanged draft (stricter unit): \u00a3512 / 817 is not stated as a record; not reported (817 is 69% of 1,184, arithmetic on M4 and M7).\n\n## Incidents\n\n- I1: 2026-09-16, severity 2, 37 drafts cited a clause from a superseded wording version; drafts withheld for two hours and handlers triaged by hand; wording index rebuilt with a version filter and a C2 test added; closed 2026-09-19.\n\n## Thresholds\n\n| Threshold sentence (brief \u00a74) | This period | Fired |\n| --- | --- | --- |\n| If the median triage time on pilot claims is above 15 minutes after four pilot weeks, we will stop the pilot and review the drafts with the team leads | 13 minutes (M2) | no |\n| If the re-routing rate rises above 9% in any month, we will pause the assistant's urgency field until the cause is found | not measured for September (M3 is August, 8.6%) | unknown |\n\n## Call: continue\n\nHelen Okafor decides by 2026-11-04 (assumed date). We recommend continue: the stop threshold did not fire and cost is inside the ceiling, but scale needs the September re-routing rate. Options: stop (frees about \u00a3512 a month plus the retained Cloud SQL instance), continue (October must show the re-routing rate at or under 9%, triage time at 12 minutes or less, and the M8 derivation), scale (to home volume beyond the pilot queue; cost per claim at that scope cannot be stated until M8 is fixed).\nEOF\npython3 - <<'EOF'\np='docs/plans/claims.md'\ns=open(p).read()\ns=s.replace(\"| G08 Monthly value report, September | 2 | presentation | 1-2 | G07 | adk-presenter | ready |\",\n\"| G08 Monthly value report, September | 2 | presentation | 1-2 | G07 | adk-presenter | drafted, awaiting decision |\\n| G09 September re-routing rate and M8 derivation | 2 | measurement | 1-2 | G07 | adk-agent-observability | ready |\")\ns=s.replace(\"| 2026-10-02 | Usage and cost records added (G07) | Sara Lin |\",\n\"| 2026-10-02 | Usage and cost records added (G07) | Sara Lin |\\n| 2026-10-28 | September value report drafted late (due early October); call date 2026-11-04 assumed; G09 added for the missing September re-routing rate and the M8 derivation | Claude (for Larkspur Digital) |\")\ns=s.replace(\"Next: G08, September value report.\",\"Next: Helen Okafor's call on the September report (G08); G09 in parallel.\")\nopen(p,'w').write(s)\nEOF\npython3 .claude/skills/adk-presenter/scripts/check_value_report.py --report docs/presentations/claims/value-report-2026-09.md --plan docs/plans/claims.md --brief docs/discovery/claims.md",
+   "output": "Exit code 1\nvalue report for 2026-09-01 to 2026-09-30; call continue by Helen Okafor; 9 plan records, 9 cited\nERROR line 20: figure without an M or I citation: 38%, 3%, 12 minutes\nERROR outcome: M2 has no baseline; the figure cannot be read against the brief's baseline\nERROR line 35: cost per outcome must cite its numerator (a cost record) and its denominator (an outcome-count record); found M4, M7\nERROR line 50: figure rests on an assumption (M8) but reads as measured; say 'we estimate' or cite a measurement\nERROR line 50: cost per outcome must cite its numerator (a cost record) and its denominator (an outcome-count record); found M8\nERROR M3: window ends 2026-08-31, before the report period starts 2026-09-01; measure this period, or put 'last period' on the line that cites it",
+   "is_error": true
+  },
+  {
+   "command": "cd /private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/s5/aes-scenarios-nqt86182/presenter-monthly-value-report/workspace && python3 - <<'EOF'\np='docs/plans/claims.md'\ns=open(p).read()\ns=s.replace(\"value 13 minutes; window 2026-09-01\",\"value 13 minutes; baseline 21 minutes (M1, brief \u00a74); window 2026-09-01\")\nopen(p,'w').write(s)\np='docs/presentations/claims/value-report-2026-09.md'\ns=open(p).read()\ns=s.replace(\"- An 8-minute (38%) fall is far beyond the margin on these samples (about 1 over the square root of 1,184, roughly 3%). Target: 12 minutes or less (brief \u00a74), so the target is not yet met by one minute.\",\n\"- The fall from 21 to 13 minutes (M1, M2) is far beyond the margin on these samples (about 1 over the square root of 1,184, roughly 3% of the median). Target: 12 minutes or less (brief \u00a74), so the target is not yet met.\")\ns=s.replace(\"- Re-routing rate after triage: not measured for September. The only record is 8.6% against a 9% baseline (M3; window 2026-08-25 to 2026-08-31, 236 claims, build v1.0.1), which is last period, a different build, and a 0.4-point gap within the margin of that sample.\",\n\"- Re-routing rate after triage: not measured for September. Last period (2026-08-25 to 2026-08-31, 236 claims, build v1.0.1) it was 8.6% against a 9% baseline (M3), a 0.4-point gap within the margin of that sample and on an earlier build.\")\ns=s.replace(\"- Per accepted-unchanged draft (stricter unit): \u00a3512 / 817 is not stated as a record; not reported (817 is 69% of 1,184, arithmetic on M4 and M7).\\n\",\"\")\ns=s.replace(\"- Estimate: \u00a30.31 per claim at 4,800 claims a month (M8). We could not reproduce it:\",\"- Estimate: \u00a30.31 per claim at 4,800 claims a month (M8, an assumption, not measured; plan cost contract). We could not reproduce it:\")\ns=s.replace(\"(M8 is not\",\"(\")\ns=s.replace(\"scale (to home volume beyond the pilot queue; cost per claim at that scope cannot be stated until M8 is fixed).\",\"scale (to full home volume; we cannot state the cost per claim at that scope until the plan's estimate is derived, and it needs the September re-routing rate).\")\ns=s.replace(\"and the M8 derivation)\",\"and the derivation of the cost estimate)\")\nopen(p,'w').write(s)\nEOF\npython3 .claude/skills/adk-presenter/scripts/check_value_report.py --report docs/presentations/claims/value-report-2026-09.md --plan docs/plans/claims.md --brief docs/discovery/claims.md",
+   "output": "Exit code 1\nvalue report for 2026-09-01 to 2026-09-30; call continue by Helen Okafor; 9 plan records, 9 cited\nERROR line 49: figure without an M or I citation: \u00a3512, 9%, 12 minutes\nERROR line 49: cost per outcome must cite its numerator (a cost record) and its denominator (an outcome-count record); found none\nERROR M3: window ends 2026-08-31, before the report period starts 2026-09-01; measure this period, or put 'last period' on the line that cites it",
+   "is_error": true
+  },
+  {
+   "command": "cd /private/tmp/claude-501/-Users-ruslankhissamiyev-Documents-Coding-Projects-skills-agentic-engineering-skills/acdcf7e1-62e2-4a63-8616-dcbde98d7357/scratchpad/runs/s5/aes-scenarios-nqt86182/presenter-monthly-value-report/workspace && python3 - <<'EOF'\np='docs/presentations/claims/value-report-2026-09.md'\ns=open(p).read()\ns=s.replace(\"not measured for September (M3 is August, 8.6%)\",\"not measured for September (last period 8.6%, M3)\")\ns=s.replace(\"frees about \u00a3512 a month plus\",\"frees about \u00a3512 a month (M6) plus\")\ns=s.replace(\"at or under 9%, triage time at 12 minutes or less,\",\"at or under 9% (M3 baseline), triage time at 12 minutes or less (M2),\")\nopen(p,'w').write(s)\nEOF\npython3 .claude/skills/adk-presenter/scripts/check_value_report.py --report docs/presentations/claims/value-report-2026-09.md --plan docs/plans/claims.md --brief docs/discovery/claims.md; sed -n 49p docs/presentations/claims/value-report-2026-09.md",
+   "output": "value report for 2026-09-01 to 2026-09-30; call continue by Helen Okafor; 9 plan records, 9 cited\nERROR M3: window ends 2026-08-31, before the report period starts 2026-09-01; measure this period, or put 'last period' on the line that cites it\nHelen Okafor decides by 2026-11-04 (assumed date). We recommend continue: the stop threshold did not fire and cost is inside the ceiling, but scale needs the September re-routing rate. Options: stop (frees about \u00a3512 a month (M6) plus the retained Cloud SQL instance), continue (October must show the re-routing rate at or under 9% (M3 baseline), triage time at 12 minutes or less (M2), and the derivation of the cost estimate), scale (to full home volume; we cannot state the cost per claim at that scope until the plan's estimate is derived, and it needs the September re-routing rate).",
+   "is_error": false
+  },
+  {
+   "command": "python3 - <<'EOF'\np='docs/presentations/claims/value-report-2026-09.md'\ns=open(p).read()\ns=s.replace(\"at or under 9% (M3 baseline), triage\",\"at or under the 9% baseline (brief \u00a74), triage\")\nopen(p,'w').write(s)\nEOF\npython3 .claude/skills/adk-presenter/scripts/check_value_report.py --report docs/presentations/claims/value-report-2026-09.md --plan docs/plans/claims.md --brief docs/discovery/claims.md; echo exit $?",
+   "output": "value report for 2026-09-01 to 2026-09-30; call continue by Helen Okafor; 9 plan records, 9 cited\nERROR M3: window ends 2026-08-31, before the report period starts 2026-09-01; measure this period, or put 'last period' on the line that cites it\nexit 1",
+   "is_error": false
+  },
+  {
+   "command": "grep -n \"M3\" docs/presentations/claims/value-report-2026-09.md; grep -n \"last period\\|M3\" .claude/skills/adk-presenter/scripts/check_value_report.py | head -20",
+   "output": "15:**Bottom line:** Median triage time fell to 13 minutes against a 21-minute baseline (M2, M1), but the re-routing counter-metric has no September measurement (M3 covers only 25-31 August), so we recommend continue, not scale.\n24:- Re-routing rate after triage: not measured for September. Last period (2026-08-25 to 2026-08-31, 236 claims, build v1.0.1) it was 8.6% against a 9% baseline (M3), a 0.4-point gap within the margin of that sample and on an earlier build. G09 (added to the plan) measures September.\n45:| If the re-routing rate rises above 9% in any month, we will pause the assistant's urgency field until the cause is found | not measured for September (last period 8.6%, M3) | unknown |\n10:    - M3: metric resolved claims per week; value 412; baseline 388 (brief \u00a74, Q2 2026);\n34:  line that says \"last period\" or \"previous month\" may cite one as context;\n317:                          f\"{period[0].isoformat()}; measure this period, or put 'last period' on the line that cites it\")",
+   "is_error": false
+  },
+  {
+   "command": "sed -i 's/(M3 covers only 25-31 August)/(last period, M3, covers only 25-31 August)/' docs/presentations/claims/value-report-2026-09.md && python3 .claude/skills/adk-presenter/scripts/check_value_report.py --report docs/presentations/claims/value-report-2026-09.md --plan docs/plans/claims.md --brief docs/discovery/claims.md; echo exit $?",
+   "output": "sed: 1: \"docs/presentations/clai ...\": extra characters at the end of d command\nexit 1",
+   "is_error": false
+  },
+  {
+   "command": "python3 - <<'EOF'\np='docs/presentations/claims/value-report-2026-09.md'\ns=open(p).read()\ns=s.replace(\"(M3 covers only 25-31 August)\",\"(last period, M3, covers only 25-31 August)\")\nopen(p,'w').write(s)\nEOF\npython3 .claude/skills/adk-presenter/scripts/check_value_report.py --report docs/presentations/claims/value-report-2026-09.md --plan docs/plans/claims.md --brief docs/discovery/claims.md; echo exit $?",
+   "output": "value report for 2026-09-01 to 2026-09-30; call continue by Helen Okafor; 9 plan records, 9 cited\nEvery figure cites a current record, the baseline is present and the call has a decider.\nexit 0",
+   "is_error": false
+  }
+ ],
+ "skills_loaded": [
+  "adk-presenter"
+ ],
+ "skill_files_read": [
+  "adk-presenter/scripts/check_value_report.py"
+ ],
+ "skill_md_loaded": {
+  "adk-presenter": {
+   "loaded": true,
+   "how": "skill-tool",
+   "other_files_read": 1
+  },
+  "adk-agent-observability": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  },
+  "adk-engineer": {
+   "loaded": false,
+   "how": null,
+   "other_files_read": 0
+  }
+ },
+ "permission_denials": [],
+ "tool_calls": 10,
+ "catalogue": [
+  "adk-agent-observability",
+  "adk-engineer",
+  "adk-presenter",
+  "deep-research",
+  "design",
+  "design-sync",
+  "dataviz",
+  "update-config",
+  "verify",
+  "debug",
+  "code-review",
+  "simplify",
+  "batch",
+  "fewer-permission-prompts",
+  "doctor",
+  "loop",
+  "schedule",
+  "claude-api",
+  "workflow-authoring",
+  "run",
+  "run-skill-generator",
+  "plugin-authoring"
+ ],
+ "catalogue_check": {
+  "missing": [],
+  "leaked": []
+ }
+}
