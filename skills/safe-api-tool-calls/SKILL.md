@@ -21,7 +21,7 @@ metadata:
   source-chapter: "01"
   last-tested: "2026-09-16"
   verified-against: "google-adk 2.8.0 companion audit 2026-09-13; 2.12.0 CHANGELOG read 2026-10-22"
-  version: "2026.10.26.3"
+  version: "2026.10.27"
 ---
 
 # Safe API tool calls

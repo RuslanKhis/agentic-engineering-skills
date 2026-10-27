@@ -16,7 +16,7 @@ metadata:
   source-chapter: "10"
   last-tested: "2026-09-16"
   verified-against: "google-adk 2.8.0 companion run 2026-09-13; 2.12.0 offline scripted-model trial 2026-10-25"
-  version: "2026.10.26.3"
+  version: "2026.10.27"
 ---
 
 # ADK SQL agent engineering

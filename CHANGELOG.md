@@ -3,6 +3,78 @@
 One section per tagged release, newest first. Pin a release with
 `npx skills@latest add RuslanKhis/agentic-engineering-skills#v<version> --skill '*'`.
 
+## 2026.10.27 · 27 October 2026
+
+Changes since v2026.10.26.3:
+
+- **Helper flags and exit codes (check your scripts).** All 48 helper
+  scripts now follow one convention, set out in `docs/helper-conventions.md`.
+  - `--project DIR` names the target directory. A GCP project ID goes in
+    `--gcp-project`.
+  - Exit codes: 0 clean, 1 findings or a failed gate, 2 bad arguments or
+    unusable input, 3 incomplete.
+  - Old flags and positional arguments still work. Each prints a one-line
+    deprecation note.
+  - One break, in `deploy-adk-on-google-cloud`'s `inspect_project.py`:
+    `--project` now means the directory, and a value that is not a
+    directory fails with a pointer to `--gcp-project`.
+  - Several exit codes changed meaning. For example, an incomplete scan now
+    exits 3 everywhere (it was 1, 2 or 4), and a failed `--fail-on`-style
+    gate now exits 1 (it was 3).
+  - `docs/testing/helper-conventions-2026-10-27.md` lists every helper
+    whose behaviour changed. Any CI job that reads a helper's exit status
+    should be updated together with the vendored helper.
+- **Clearer routing between skills.** A new
+  `adk-engineer/references/ownership.md` gives each of 29 contested topics
+  one owner, for example:
+  - human approval, replay of an approved write and session ownership at
+    each hop;
+  - in-session history and cross-session memory;
+  - prompt wording and exemplars versus measuring them;
+  - CI eval gates versus writing eval cases.
+
+  The descriptions of 21 skills now exclude each other in both directions,
+  and `scripts/check_boundaries.py` keeps it so. `adk-memory-architecture`
+  now names document ingestion, and `adk-agent-evaluation` no longer claims
+  exemplar design. 40 activation cases were added.
+- **Routing is measured.** `scripts/run_activation.py` measures skill
+  selection from descriptions alone, and `scripts/run_scenarios.py` runs a
+  scenario and has a judge grade its assertions. A manual GitHub workflow
+  runs activation through the Anthropic API.
+  - With Sonnet 5.5 over two repeats, the 154 cases scored 298 PASS,
+    9 PARTIAL and 1 FAIL.
+  - The 114 cases that existed before gained no new failure.
+
+  51 scenario prompts were rewritten in plain user language.
+- **One source for shared guidance.** The evidence vocabulary, the rules for
+  consequential operations, interpreter selection, tool confirmation and the
+  verified principal are each kept once in `shared/`. `scripts/sync_shared.py`
+  checks that every skill's copy matches. The skills used nine different
+  evidence vocabularies; they now use one. Copies that had drifted were
+  corrected against the ADK 2.8.0 and 2.12.0 packages:
+  - 2.12.0's user-id fix covers A2A requests only.
+  - A confirmation callable gets `tool_context` only when the tool function
+    declares it.
+- **Version facts.**
+  - Every skill now carries `verified-against`, and `docs/compatibility.md`
+    gathers them into one table with the ADK security floors.
+  - `adk-model-and-output-contracts` records ADK 2.13.0's
+    `litellm<1.106.3` cap: 1.107.0 was a compromised release.
+  - `safe-api-tool-calls` warns that below ADK 2.12.0 a re-sent approval
+    could run a tool again.
+- **Less always-loaded context.**
+  - `adk-engineer` dropped from about 3,060 to about 2,500 words; ticket
+    closing, teardown and estimates moved to `ticket-lifecycle.md`.
+  - The designer now points to its plan template rather than repeating it.
+  - The governance pack turns its Australian scoping rules into a table.
+  - 14 maintainer records moved out of the skill packages to
+    `docs/skill-evidence/`.
+  - `validate_skills.py` warns when a SKILL.md body passes 2,500 words.
+- **A shorter README.** It went from 3,849 lines to 446. The per-skill
+  detail, the journeys, troubleshooting and the testing log moved verbatim
+  to `docs/skills.md`, `docs/journeys.md`, `docs/troubleshooting.md` and
+  `docs/testing/index.md`.
+
 ## 2026.10.26.3 · 26 October 2026
 
 Changes since v2026.10.26.2:
