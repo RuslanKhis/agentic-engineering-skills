@@ -416,9 +416,32 @@ def confinement(tools: str, skill_install: str, environ=None) -> dict:
 
 
 SLASH_COMMAND = re.compile(r"^\s*/([a-z0-9][a-z0-9-]*)\b")
-# A shell command that reads files (cat, head, sed ...) counts its skill paths as skill files read.
-SHELL_READ = re.compile(r"^\s*(cd [^;&|]+&&\s*)?(cat|head|tail|sed|less|more|nl|awk|grep|rg)\b")
-SHELL_SKILL_PATH = re.compile(r"\.claude/skills/([^/\s'\"]+)/([^\s'\"|;&>)]+)")
+# A shell command segment that reads files (cat, head, sed ...) counts its skill paths as skill files
+# read, including paths relative to a `cd` into an installed skill earlier in the same command.
+SHELL_READ = re.compile(r"\s*(cat|head|tail|sed|less|more|nl|awk|grep|rg)\b")
+SHELL_SEGMENTS = re.compile(r"\s*(?:&&|\|\||;|\n|\|)\s*")
+SHELL_SKILL_PATH = re.compile(r"\.claude/skills/([^/\s'\"]+)/([^\s'\"|;&>)*]+)")
+SHELL_SKILL_DIR = re.compile(r"\.claude/skills/([^/\s'\"]+)/?([^\s'\"]*)$")
+RELATIVE_FILE = re.compile(r"[\w.-]+(/[\w.-]+)*\.(md|py|json|ya?ml|txt|toml)$")
+
+
+def shell_skill_reads(command: str) -> list[tuple[str, str]]:
+    """(skill, path inside it) for each skill file a shell command reads."""
+    reads, inside = [], None
+    for segment in SHELL_SEGMENTS.split(command):
+        cd = re.match(r"cd\s+(\S+)\s*$", segment.strip())
+        if cd:
+            target = SHELL_SKILL_DIR.search(cd.group(1).strip("'\""))
+            inside = (target.group(1), target.group(2).strip("/")) if target else None
+            continue
+        if not SHELL_READ.match(segment):
+            continue
+        reads += [(m.group(1), m.group(2)) for m in SHELL_SKILL_PATH.finditer(segment)]
+        if inside:
+            for token in segment.split()[1:]:
+                if RELATIVE_FILE.match(token) and not token.startswith(("/", ".")):
+                    reads.append((inside[0], "/".join(p for p in (inside[1], token) if p)))
+    return reads
 
 
 def parse_transcript(lines: list[str], prompt: str = "") -> dict:
@@ -455,12 +478,11 @@ def parse_transcript(lines: list[str], prompt: str = "") -> dict:
                         command = str(tool_input.get("command") or "")
                         shell_by_id[block.get("id")] = len(summary["shell_commands"])
                         summary["shell_commands"].append({"command": command, "output": None, "is_error": None})
-                        if SHELL_READ.match(command):
-                            for match in SHELL_SKILL_PATH.finditer(command):
-                                if match.group(2) == "SKILL.md":
-                                    summary["skills_loaded"].append(match.group(1))
-                                    summary["skill_md_reads"].append(match.group(1))
-                                summary["skill_files_read"].append(f"{match.group(1)}/{match.group(2)}")
+                        for skill, rel in shell_skill_reads(command):
+                            if rel == "SKILL.md":
+                                summary["skills_loaded"].append(skill)
+                                summary["skill_md_reads"].append(skill)
+                            summary["skill_files_read"].append(f"{skill}/{rel}")
                     path = str(tool_input.get("file_path") or tool_input.get("path") or "")
                     match = SKILL_PATH.search(path)
                     if match and block.get("name") in ("Read", "Grep", "Glob"):

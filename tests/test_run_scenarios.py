@@ -622,6 +622,19 @@ class ShellRunTests(unittest.TestCase):
             self.assertIn("$ python3 scripts/check.py --strict\n[error]\nFAIL: 2 checks", evidence)
             self.assertEqual(facts["files"], ["report.md"])  # generated caches are not the agent's work
 
+    def test_shell_reads_of_skill_files_are_found_in_every_segment(self):
+        reads = scen.shell_skill_reads
+        self.assertEqual(reads("cd web; cat package.json; cd ..; cat .claude/skills/alpha-skill/SKILL.md"),
+                         [("alpha-skill", "SKILL.md")])
+        self.assertEqual(reads("cd .claude/skills/alpha-skill; cat references/x.md assets/t.md; ls scripts"),
+                         [("alpha-skill", "references/x.md"), ("alpha-skill", "assets/t.md")])
+        self.assertEqual(reads("cd /w/.claude/skills/alpha-skill/references && sed -n 1,40p y.md"),
+                         [("alpha-skill", "references/y.md")])
+        # Leaving the skill, listing it, or echoing a path is not a read.
+        self.assertEqual(reads("cd .claude/skills/alpha-skill; cd ../../..; cat README.md"), [])
+        self.assertEqual(reads("ls .claude/skills/alpha-skill/SKILL.md"), [])
+        self.assertEqual(reads("echo .claude/skills/alpha-skill/SKILL.md | wc -c"), [])
+
     def test_runs_without_shell_commands_have_no_shell_evidence(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = make_root(Path(tmp) / "repo")
