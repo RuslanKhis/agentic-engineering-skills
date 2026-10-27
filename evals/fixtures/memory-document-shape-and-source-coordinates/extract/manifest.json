@@ -1,0 +1,11 @@
+{
+ "job": "extract-policies",
+ "run": "2026-10-02T21:14:09Z",
+ "parser": "pdfplumber 0.11.4 with table rules v2 and clause-label splitter v3",
+ "documents": [
+  {"document": "DMP", "title": "Development Management Policies", "version": "v3", "pages": "14-18", "source_sha256": "9f2c41e0b7d35a8c06e4f1a2b9c7d8e5f3a1b0c9d2e4f6a8b1c3d5e7f9a0b2c4"}
+ ],
+ "records": 52,
+ "page_images": {"18": "DMP-v3-p18.png (not in this repository)"},
+ "notes": "Footnotes are separate records linked by footnote_refs; table cells carry row and col; a record split across pages carries continues / continued_by."
+}

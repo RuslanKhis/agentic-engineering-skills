@@ -1,0 +1,12 @@
+[project]
+name = "homeline-assistant"
+version = "1.3.2"
+requires-python = ">=3.11"
+dependencies = [
+  "google-adk==2.12.0",
+  "google-genai==2.21.0",
+  "mem0ai==2.2.1",
+]
+
+[tool.setuptools.packages.find]
+include = ["homeline*"]

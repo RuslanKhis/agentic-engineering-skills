@@ -20,7 +20,7 @@
       "id": "memory-document-shape-and-source-coordinates",
       "prompt": "Our policy retriever finds text, but the reviewer step keeps saying it can't account for some clauses. Can you work out whether we're cutting up or losing parts of the documents? Use the saved data only, no more model retries, and don't relax our rules on sources and evidence.",
       "available_skills": ["adk-memory-architecture", "adk-agent-evaluation", "adk-workflow-design"],
-      "context": "Supply synthetic extracted records with nested clause numbering, a cross-page exception, linked footnotes, repeated table cells, a dense table and an unreviewed image-only page. Selected-pack order separates physical neighbours and places non-neighbours consecutively. One required continuation is absent. The storage adapter can persist and reopen realistic complete envelopes; original PDFs/image bytes and domain-human review are unavailable.",
+      "context": "Our policy-review app extracts the council's policy PDFs into records, selects a pack of records per question, groups them into units for the writer and the reviewer, and saves every stage as an envelope through our storage adapter, which can store and reopen full-size envelopes. runs/run-0412 is a retained run the reviewer rejected. The original PDFs and page images are not available, nobody from the planning team can review anything this week, and no model calls are authorised.",
       "expected_primary": "adk-memory-architecture",
       "assertions": [
         "Keeps document/version/page/hierarchy and cell occurrence identities unambiguous despite equal text or local numbering.",
@@ -261,7 +261,7 @@
       "id": "memory-local-document-completeness",
       "prompt": "Our local policy retriever returns results but misses some answers. Diagnose the retained extraction and query observations, and add checks that expose missing evidence. Keep the existing retrieval and output limits; use offline fixtures only.",
       "available_skills": ["adk-memory-architecture"],
-      "context": "Use the memory skill's document-coverage fixture to supply main-policy-only, contents-only, incomplete table and empty image-page observations, along with an honest complete-text control. Keep expected sections with the grader, not the retriever. No real PDF parsing or visual review is available in this fixture.",
+      "context": "document-coverage.json holds the extracted page segments of our synthetic park-route policy and its related documents, and the test questions we run against the retriever with the sections a reviewer marked as needed to answer each; the retriever is never given those markings. No real PDF parsing or visual review is available in this session.",
       "expected_primary": "adk-memory-architecture",
       "assertions": [
         "Scores document and operative-section coverage separately and fails the supplement-dependent question for a main-only retriever.",
@@ -405,7 +405,7 @@
       "id": "router-resumes-accepted-goal",
       "prompt": "Use adk-engineer to pick up G01 from the support assistant plan we saved. Don't reopen decisions we've already made: build the language preference part locally with its checks, then write the real results back into the plan. Nothing in the cloud.",
       "available_skills": ["adk-engineer", "adk-system-designer", "adk-memory-architecture", "adk-tool-auth-and-secrets"],
-      "context": "The fixture contains linked architecture and implementation-plan documents. G01 is a ready, authorized local goal for exact user-controlled preferences, with an existing profile API, trusted caller context, supported database adapter, pinned dependencies and deterministic tests. Its acceptance cases cover save/use/forget across sessions, restart and cross-user denial. A future group-sharing goal is explicitly out of scope. The design names memory as the primary specialist and reuses the current app and test runner.",
+      "context": "The repository holds linked architecture and implementation-plan documents. G01 is a ready, authorized local goal for exact user-controlled preferences, with an existing profile API, trusted caller context, supported database adapter, pinned dependencies and deterministic tests. Its acceptance cases cover save/use/forget across sessions, restart and cross-user denial. A future group-sharing goal is explicitly out of scope. The design names memory as the primary specialist and reuses the current app and test runner.",
       "expected_primary": "adk-memory-architecture",
       "assertions": [
         "Reads the canonical design and goal, checks actual code and prerequisites, and loads the memory specialist without restarting the architecture interview.",
@@ -565,7 +565,7 @@
       "id": "memory-ingestion-scan-detection",
       "prompt": "Qualify this document pack before we call the model. Some pages are scans and some are drawings. Produce the ingestion report and the per-page route.",
       "available_skills": ["adk-memory-architecture", "adk-agent-evaluation"],
-      "context": "Use the memory skill's ingestion fixture, copied to pack/ (the generator's own inventory is held back for grading): a text page, a header-only scanned page with an embedded image, a table page and a drawing page with a scale bar and a written dimension. No OCR engine or vision model is available in this trial.",
+      "context": "A planning application's supporting documents have been saved as four PDFs in pack/. Nobody has checked yet what kind of pages they are; what each page actually contains is held back by the person asking. No OCR engine or vision model is available in this session.",
       "expected_primary": "adk-memory-architecture",
       "assertions": [
         "Classifies the header-only scanned page as low density and routes it to OCR or vision instead of passing it as a text page.",

@@ -1,34 +1,44 @@
 {
   "kind": "generator_knowledge_not_extraction_result",
-  "note": "Text, image and vector counts are what make_ingestion_fixture.py wrote. Produce a separate inventory from your own extractor and compare.",
+  "note": "What make_pack.py placed on each page and the route a correct qualification takes. The scanned page's text layer is its running header only.",
   "pages": [
     {
-      "document": "text-page.pdf",
+      "document": "pack/01-design-code-dc7.pdf",
       "page": 1,
-      "text": "Policy H3 Residential extensions\nExtensions to dwellings are supported where the proposal respects the\nscale, form and materials of the host building and the character of the\nstreet. Rear extensions should not exceed a depth of 4.0 m for terraced\ndwellings or 6.0 m for detached dwellings unless the applicant shows that\nno material loss of daylight or outlook results to a neighbouring room.\nSide extensions are set back from the front elevation and keep a minimum\n1.0 m gap to the side boundary where a terracing effect would otherwise\noccur. Off-street parking is assessed against Table 2 of the Design SPD,\nwhich sets the minimum spaces by bedroom count and accessibility.\nProposals that remove a parking space must show that the replacement\nprovision meets that table or that the site lies within Zone A.",
+      "text": "DC7 Shopfronts and advertisements\nNew and replacement shopfronts in the Market Street conservation area keep the\ntraditional elements of pilasters, fascia, stall riser and cornice, and use timber\nor painted metal frames. Internally illuminated box fascias are not acceptable;\nlettering is applied or hand-painted and may be lit by discreet trough lights.\nRoller shutters are fitted internally and are of an open lattice design; solid\nexternal shutters are refused unless the premises is a pharmacy open after 22:00.\nFascia depth does not exceed 0.6 m or one fifth of the shopfront height, whichever\nis less. Projecting signs are limited to one per frontage and sit at fascia level.\nCycle parking for staff and customers is provided in line with Table C1 of the\nBorough Transport SPD, or by a contribution where the pavement is under 2.5 m wide.\nExample Borough Design Code 2024 - section 4",
       "image_count": 0,
-      "vector_drawing_ops": 0
+      "vector_drawing_ops": 0,
+      "route": "text",
+      "kind": "text"
     },
     {
-      "document": "scanned-page.pdf",
+      "document": "pack/02-local-plan-p12.pdf",
       "page": 1,
-      "text": "Synthetic Local Plan 2021 - page 7",
+      "text": "Example Borough Local Plan 2019 - page 12",
       "image_count": 1,
-      "vector_drawing_ops": 0
+      "vector_drawing_ops": 0,
+      "route": "ocr_or_vision",
+      "kind": "scanned body, header-only text layer"
     },
     {
-      "document": "table-page.pdf",
+      "document": "pack/03-cycle-parking-table.pdf",
       "page": 1,
-      "text": "Dwelling size | Minimum spaces | Cycle spaces | Note\n1 bedroom | 1 | 1 | Zone A: 0\n2-3 bedrooms | 2 | 2 | see note 2\n4+ bedrooms | 3 | 2 | Tandem spaces count once\nNote 2: within 400 m of a frequent bus stop the standard reduces by 1 space.",
+      "text": "Table C1 Cycle parking for commercial units (Borough Transport SPD)\nUse class | Floor area | Staff spaces | Visitor spaces | Notes\nRetail (E(a)) | up to 500 m2 | 1 per 175 m2 | 2 minimum | Sheffield stands\nRetail (E(a)) | over 500 m2 | 1 per 175 m2 | 1 per 250 m2 | see note b\nCafe (E(b)) | any | 1 per 100 m2 | 1 per 40 m2 | see note b\nHot food (sui generis) | any | 1 per 100 m2 | 2 minimum | covered spaces\nNote b: where the footway is under 2.5 m wide a commuted sum replaces visitor spaces.",
       "image_count": 0,
-      "vector_drawing_ops": 10
+      "vector_drawing_ops": 12,
+      "route": "text_and_image",
+      "kind": "table"
     },
     {
-      "document": "drawing-page.pdf",
+      "document": "pack/04-rear-elevation.pdf",
       "page": 1,
-      "text": "Proposed site plan - 14 Synthetic Road\n6.0 m\n0\n5\n10 m\nScale 1:200 @ A3\nN\nProposed extension\nExisting dwelling",
+      "text": "Proposed rear elevation - 3 Example Mews\n3.2 m to eaves\n0\n2\n4 m\nScale 1:100 @ A3\nNew garden room\nExisting house",
       "image_count": 0,
-      "vector_drawing_ops": 14
+      "vector_drawing_ops": 16,
+      "route": "text_and_image",
+      "kind": "drawing",
+      "written_dimension": "3.2 m to eaves",
+      "scale_statement": "Scale 1:100 @ A3"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+ "run_id": "run-0412",
+ "question_id": "Q-0412",
+ "status": "rejected at review",
+ "envelopes": {
+  "select_pack": "run-0412/select_pack.e7560c16ee2b.json",
+  "group": "run-0412/group.639bd81fc956.json",
+  "write": "run-0412/write.ccd9e23a2c1d.json",
+  "review": "run-0412/review.ea99fc1e8628.json"
+ },
+ "extract": {
+  "records": "extract/records.jsonl",
+  "manifest": "extract/manifest.json"
+ },
+ "model_calls": {
+  "write": 1,
+  "review": 1
+ },
+ "cost_usd": 0.41,
+ "note": "Original PDFs and page images are not in this repository."
+}

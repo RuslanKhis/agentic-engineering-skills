@@ -73,16 +73,21 @@ class GraderMaterialTests(unittest.TestCase):
                 with self.subTest(scenario=cid, source=item["from"]):
                     self.assertFalse(item["from"].startswith(("evals/graders", "evals/trials")))
 
-    def test_committed_ingestion_inventory_matches_its_generator(self):
-        script = ROOT / "skills/adk-memory-architecture/scripts/make_ingestion_fixture.py"
-        spec = importlib.util.spec_from_file_location("make_ingestion_fixture", script)
+    def test_committed_ingestion_pack_and_inventory_match_their_generator(self):
+        # The scenario has its own pack (not the memory skill's worked example); its
+        # generator is grader material, and both its outputs are committed.
+        script = GRADERS / "memory-ingestion-scan-detection" / "make_pack.py"
+        spec = importlib.util.spec_from_file_location("make_pack", script)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
+        committed_pack = ROOT / "evals" / "fixtures" / "memory-ingestion-scan-detection" / "pack"
         with tempfile.TemporaryDirectory() as tmp:
-            module.write_fixture(Path(tmp))
+            module.write_pack(Path(tmp) / "pack", Path(tmp) / "inventory.json")
             generated = (Path(tmp) / "inventory.json").read_bytes()
+            pdfs = {p.name: p.read_bytes() for p in (Path(tmp) / "pack").iterdir()}
         committed = (GRADERS / "memory-ingestion-scan-detection" / "inventory.json").read_bytes()
         self.assertEqual(generated, committed)
+        self.assertEqual(pdfs, {p.name: p.read_bytes() for p in committed_pack.iterdir()})
 
 
 if __name__ == "__main__":
