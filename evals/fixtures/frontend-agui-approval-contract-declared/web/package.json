@@ -1,0 +1,33 @@
+{
+  "name": "support-web",
+  "private": true,
+  "version": "0.5.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "runtime": "tsx runtime/server.ts",
+    "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@ag-ui/client": "1.0.2",
+    "@copilotkit/react-core": "1.79.0",
+    "@copilotkit/react-ui": "1.79.0",
+    "@copilotkit/runtime": "1.79.0",
+    "react": "19.1.1",
+    "react-dom": "19.1.1"
+  },
+  "devDependencies": {
+    "@testing-library/react": "16.3.0",
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
+    "@vitejs/plugin-react": "5.0.2",
+    "eslint": "9.35.0",
+    "jsdom": "26.1.0",
+    "tsx": "4.20.5",
+    "typescript": "5.9.2",
+    "vite": "7.1.5",
+    "vitest": "3.2.4"
+  }
+}

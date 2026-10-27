@@ -1,0 +1,48 @@
+[
+  {
+    "id": "q01-top-customers-q3",
+    "question": "Who were our top 3 customers by revenue in Q3 2026?",
+    "route": "template",
+    "columns": ["account_name", "net_revenue_gbp"],
+    "ordered": true,
+    "expected_rows": [
+      {"account_name": "Pennine Hardware", "net_revenue_gbp": 184220.5},
+      {"account_name": "Tamar Building Supplies", "net_revenue_gbp": 151030.0},
+      {"account_name": "Clyde Fixings", "net_revenue_gbp": 97410.25}
+    ]
+  },
+  {
+    "id": "q02-midlands-monthly",
+    "question": "Monthly revenue for Midlands from July to September 2026",
+    "route": "template",
+    "columns": ["month", "net_revenue_gbp"],
+    "ordered": true,
+    "expected_rows": [
+      {"month": "2026-07-01", "net_revenue_gbp": 64200.0},
+      {"month": "2026-08-01", "net_revenue_gbp": 58975.5},
+      {"month": "2026-09-01", "net_revenue_gbp": 71110.0}
+    ]
+  },
+  {
+    "id": "q03-discontinued-lines",
+    "question": "Which product lines still have discontinued SKUs on sale?",
+    "route": "generated",
+    "columns": ["product_line"],
+    "ordered": false,
+    "expected_rows": [{"product_line": "Fixings"}, {"product_line": "Hand tools"}]
+  },
+  {
+    "id": "q04-invoices-per-region-september",
+    "question": "How many posted invoices did each region raise in September 2026?",
+    "route": "generated",
+    "columns": ["region", "invoices"],
+    "ordered": false,
+    "expected_rows": [
+      {"region": "Midlands", "invoices": 412},
+      {"region": "North", "invoices": 388},
+      {"region": "Scotland", "invoices": 203},
+      {"region": "South", "invoices": 455},
+      {"region": "Wales", "invoices": 200}
+    ]
+  }
+]

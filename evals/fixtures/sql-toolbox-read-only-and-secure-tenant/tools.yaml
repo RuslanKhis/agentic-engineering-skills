@@ -1,0 +1,44 @@
+# MCP Toolbox for Databases configuration for the customer portal agent.
+sources:
+  fernhill-bq:
+    kind: bigquery
+    project: fernhill-analytics
+    location: EU
+
+tools:
+  execute-sql:
+    kind: bigquery-execute-sql
+    source: fernhill-bq
+    description: Run any BigQuery SQL statement and return the rows.
+
+  customer-revenue:
+    kind: bigquery-sql
+    source: fernhill-bq
+    description: >-
+      Monthly net revenue for one customer from a sales table. Use table "invoices_summary" for
+      invoiced revenue or "credit_summary" for credits.
+    statement: |
+      SELECT month, net_revenue_gbp
+      FROM `fernhill-analytics.sales.{{.table}}`
+      WHERE customer_id = @tenant_id
+        AND month BETWEEN @start_month AND @end_month
+      ORDER BY month
+    templateParameters:
+      - name: table
+        type: string
+        description: Table to read.
+    parameters:
+      - name: tenant_id
+        type: string
+        description: The customer's account ID, e.g. "C-10482".
+      - name: start_month
+        type: string
+        description: First month, YYYY-MM-01.
+      - name: end_month
+        type: string
+        description: Last month, YYYY-MM-01.
+
+toolsets:
+  customer-portal:
+    - customer-revenue
+    - execute-sql

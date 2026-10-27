@@ -1,0 +1,7 @@
+{
+  "remote_agent_runtime_id": "projects/claims-helper-dev/locations/europe-west1/reasoningEngines/5823190446271381504",
+  "deployment_target": "agent_runtime",
+  "display_name": "claims-helper",
+  "is_a2a": false,
+  "deployment_timestamp": "2026-10-09T14:12:37.551204"
+}
