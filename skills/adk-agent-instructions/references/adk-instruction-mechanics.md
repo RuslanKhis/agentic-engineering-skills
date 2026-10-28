@@ -15,7 +15,11 @@ any callable `(ReadonlyContext) -> str`, sync or async
 read-only mapping), `agent_name`, `invocation_id` and `user_content`.
 
 - A **string** instruction is passed through `inject_session_state` on every
-  model request.
+  model request. Whatever a placeholder's key holds becomes instruction text,
+  so template only keys that trusted code writes; a key filled from tool
+  output, another agent's `output_key` or user input is an injection path
+  (`adk-agent-security`, injection-patterns.md, "State placeholders are
+  prompt text too").
 - A **callable** instruction bypasses templating entirely: whatever string it
   returns is sent as written (`canonical_instruction` returns
   `bypass_state_injection=True`). Call `inject_session_state(template, ctx)`

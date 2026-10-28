@@ -224,6 +224,24 @@ Rules for the gate:
   reader from routing the conversation onward once it has read untrusted
   content.
 
+## State placeholders are prompt text too
+
+A string `instruction` or `global_instruction` is filled from session state
+on every request (`inject_session_state`; see `adk-agent-instructions`
+references/adk-instruction-mechanics.md), so a `{key}` placeholder copies
+that value into the agent's instruction, where it carries the developer's
+authority. That is safe only when application code wrote the key. A key
+written by `output_key` from an agent that read untrusted content, by a tool
+from fetched or retrieved text, or from user-entered fields promotes
+attacker-reachable text into the instruction.
+
+- Template only keys that trusted code writes (`app:` configuration, a
+  validated enum, an ID the application issued).
+- Pass untrusted values as user content or tool results, or through the
+  quarantined reader's typed fields, validated in code first.
+- In review, trace every placeholder to the writer of its key; list each
+  untrusted writer as a finding.
+
 ## Instructions help; they do not enforce
 
 Write the instruction so the model knows documents are data (and

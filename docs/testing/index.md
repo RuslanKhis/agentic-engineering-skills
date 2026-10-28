@@ -17,6 +17,21 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## Engineering-articles reading plan, and two small fixes · 28 October 2026
+
+Part one of the [engineering-articles programme](engineering-articles-integration-prompt.md):
+ten read-only scouts produced a ranked
+[reading plan](../research/engineering-articles-reading-plan-2026-10-28.md)
+of practical Google, Anthropic and OpenAI articles. No skill changed because
+of an article. Two problems found while planning were fixed directly:
+- a garbled sentence in optimise-adk-on-google-cloud `context-window.md`;
+- a new adk-agent-security rule, "State placeholders are prompt text too",
+  checked against google-adk 2.8.0 `flows/llm_flows/instructions.py`, with a
+  pointer from adk-agent-instructions.
+
+`scripts/check_repo.py` passed: 28 offline suites, 1,212 tests. No model or
+cloud runs.
+
 ## The first shell-enabled scenario run · 28 October 2026
 
 The scenario runner can now give the agent Bash. A shell cannot be confined

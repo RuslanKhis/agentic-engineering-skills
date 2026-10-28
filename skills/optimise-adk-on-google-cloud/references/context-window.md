@@ -256,9 +256,9 @@ and `CallbackContext`):
   `features/_feature_registry.py`, read 2026-10-25). The explicit cache's
   fingerprint covers the system instruction, so with `ContextCacheConfig`
   every new artifact recreates the cache, and artifact names become cached
-  prompt text: keep customer identifiers out of them. It which is the just-in-time identifier
-  pattern Anthropic describes (V) and the file-system-as-context pattern Manus
-  reports (V).
+  prompt text: keep customer identifiers out of them. This is the just-in-time
+  identifier pattern Anthropic describes (V) and the file-system-as-context
+  pattern Manus reports (V).
 
 Recipe: keep the identifier and a preview in the tool result (Manus: keep the
 URL when truncating, V), save the body once, and let a later turn load it by
