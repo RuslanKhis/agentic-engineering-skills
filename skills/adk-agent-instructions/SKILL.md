@@ -51,7 +51,7 @@ The linter parses source with `ast`, never imports or executes the project, and 
 | Tool-use calibration (over-triggering, under-triggering, hallucinated calls) | Read [tool-use guidance](references/tool-use-guidance.md). Check the tool mix and declarations before rewriting prose; never mandate a call. |
 | Routing and sub-agent descriptions | Read [routing and descriptions](references/routing-and-descriptions.md). The description is a routing contract; the coordinator names sub-agents and trigger conditions and leaves the transfer mechanism to the framework. |
 | Migrate to a new model generation | Read [model notes](references/model-notes.md) for dated prompt-side consequences, then re-measure through adk-agent-evaluation. Temperature and thinking settings belong to adk-model-and-output-contracts. |
-| Prompt-as-code layout and change tests | Read [prompt as code](references/prompt-as-code.md) for the file layout, loader, contract test and hostile-document fixture; [exemplars](references/exemplars.md) for examples kept as data. |
+| Prompt-as-code layout and change tests | Read [prompt as code](references/prompt-as-code.md) for the file layout, loader, contract test and hostile-document fixture, and its Optimisers section before any `adk optimize` run; [exemplars](references/exemplars.md) for examples kept as data. |
 
 Read [compatibility](references/compatibility.md) before citing version-dependent behaviour and [validation](references/validation.md) before reporting. A request often needs two modes (a routing fix usually needs a description rewrite and a tool-use check); keep them in one change set with one measurement.
 

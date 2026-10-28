@@ -143,7 +143,9 @@ When a drafting stage produces officer-facing decisions, read
 consistency in code on every fresh draft (a condition cannot require what a
 reason waives; a refusal carries no conditions), rank warnings by whether
 they could change the decision, treat source documents as data, and ask the
-reviewer for the strongest objection.
+reviewer for the strongest objection. When a model check's verdict stops the
+run or sends a case to a person, re-check its costly verdict in code (its
+"Re-check the verdict whose error costs most" section).
 
 For strict paid-request limits, SDK retries or campaign restart, read
 [model-call-controls.md](references/model-call-controls.md) before choosing the

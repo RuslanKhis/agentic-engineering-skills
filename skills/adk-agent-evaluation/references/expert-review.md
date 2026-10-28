@@ -179,10 +179,40 @@ python3 "$SKILL_DIR/scripts/label_agreement.py" \
 The checker scores the `test` split by default, notes when the gold set has
 no split (the rates are then not held out), and reports NOT REPORTED when
 either class has fewer than `--min-per-class` cases (default 30, after
-the FAQ's 30 to 50 per class). Set `--min-tpr` and `--min-tnr` in the plan;
+the FAQ's 30 to 50 per class). In that case, give the raw counts instead,
+labelled indicative: for example, "caught 12 of 12 failures, passed 26 of
+48 good outputs". Set `--min-tpr` and `--min-tnr` in the plan;
 favour TPR when a missed failure is costly and TNR when false alarms would
 flood a human review queue. A judge below threshold is fixed by rewriting
 the criterion or examples and rerun on dev, never tuned on test.
+
+**Re-check where the costly error lands.** When a judge's verdict acts on
+the run (it stops a pipeline, or sends a case to people), the asymmetry can
+be built as well as chosen by threshold. Code re-runs the judge on the
+verdict whose false value costs most, and acts on that verdict only when
+every run agrees; the other verdict is trusted after one call. Which verdict
+that is depends on what sits downstream. Omran and Dixit re-check suspected
+violations, because their deterministic checks already stop the costly
+wrong payments and a false violation costs reviewer time. With no
+deterministic check or correction step between the judge and the effect,
+the direction flips: re-check the "compliant" verdict (Pouya Ghiasnezhad
+Omran and Tanya Dixit, "Evaluation Precedes Evolution", Google, LinkedIn,
+15 June 2026, read 2026-10-28). Their sample does this in Python, not in the
+prompt: `PerGroupValidator._run_with_triple_check` returns a run with no
+violations after one call, and confirms a violation only when two further
+runs overlap it (google/adk-samples, now google/adk-recipes, at a9dc177,
+`python/agents/invoice-processing/invoice_processing/shared_libraries/investigation/investigate_agent_reconst.py`).
+Two choices there are not this skill's. The sample calls at temperature 0,
+so its re-runs are not independent samples. And a failed call returns "no
+violations", which counts a failure as a pass. adk-workflow-design's
+content-safeguards reference gives the runtime rule. Measure here:
+
+- TPR and TNR of the whole rule on the test split, not of one call;
+- the share of first verdicts the re-runs overturned; near zero means the
+  re-runs buy nothing;
+- the extra judge calls per case;
+- a re-run that errors or returns no verdict, which makes the case
+  incomplete and never confirms the other verdict.
 
 When the judge then grades unlabelled production traces, its observed fail
 rate is biased by its errors. With the measured rates, the corrected
@@ -197,7 +227,8 @@ number of the last new category; the criteria file is versioned; labels
 given under older versions have been re-reviewed; the agreement report and
 its adjudications are retained; each judge has TPR and TNR on a test split
 with both class counts, or a NOT REPORTED line naming the labels still
-needed.
+needed; a judge re-checked at run time has the whole rule's rates and its
+overturn rate.
 
 Sources read 25 October 2026: Hamel Husain and Shreya Shankar,
 [AI Evals: Everything You Need to Know](https://hamel.dev/blog/posts/evals-faq/)

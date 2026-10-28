@@ -147,3 +147,22 @@ These are instruction changes with new routing and scenario cases in the
 repository's evaluation inputs; they add no helper and no test. No fresh-agent
 trial of the new branch has been executed; the maintainer tests named in the
 retrospective remain to be run and recorded.
+
+## "Evaluation Precedes Evolution" — 28 October 2026
+
+[Evaluation design](evaluation-design.md#shape-the-rubric-before-writing-it)
+gained "Shape the rubric before writing it". It covers:
+
+- the three axes;
+- stage verdicts kept beside the end-to-end verdict;
+- the outcome measure as the headline figure, with its two gaming patterns;
+- code checks as `EvalConfig` custom metrics.
+
+[Expert review](expert-review.md#calibrate-one-judge-per-failure-mode)
+gained the asymmetric re-check and raw counts below the per-class minimum.
+The source is Omran and Dixit's LinkedIn article (15 June 2026), checked
+against google/adk-samples (now google/adk-recipes) at a9dc177 and
+google-adk 2.8.0 and 2.12.0 source. One fresh-agent trial ran on a synthetic
+invoice pipeline, offline, and its frictions were fixed the same day. No
+model ran. Record: `docs/testing/omran-dixit-evaluation-precedes-evolution-alignment-2026-10-28.md`
+in the repository.

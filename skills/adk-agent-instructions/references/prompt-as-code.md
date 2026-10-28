@@ -217,6 +217,38 @@ goes through the same review checklist; run manual fixes first and one
 optimiser pass last so its output is attributable (agents-cli eval skill,
 vendor guidance).
 
+An optimiser climbs whatever the evaluation scores, so the rubric comes
+first ("evaluation precedes evolution": Pouya Ghiasnezhad Omran and Tanya
+Dixit, "Evaluation Precedes Evolution: Rubrics for Agents That Rewrite
+Themselves", Google, LinkedIn, 15 June 2026, read 2026-10-28). In
+`adk optimize` the `LocalEvalSampler` scores each example 1.0 when its eval
+case's `final_eval_status` is `PASSED` and 0.0 otherwise. GEPA reflects on
+the per-invocation metric scores it captured. The metrics and thresholds in
+the sampler's `eval_config` are therefore the fitness function (google-adk
+2.8.0 and 2.12.0, `optimization/local_eval_sampler.py` and
+`gepa_root_agent_prompt_optimizer.py`, read 2026-10-28). Before the first
+run:
+
+- The eval config gates on the code checks and per-stage criteria that
+  adk-agent-evaluation's evaluation-design reference shapes ("Shape the
+  rubric before writing it"), not on one holistic judge score.
+- The cases include its escalation and claimed-check controls.
+- `validation_eval_set` names a separate set; left unset, the sampler
+  validates on the training cases. The holdout stays outside both.
+- The agent the optimiser loads has a static string `instruction`. GEPA
+  seeds from the root agent's `instruction` and raises a `ValueError` for
+  an instruction provider (`_gepa_utils.require_static_instruction`). A
+  workflow root such as a `SequentialAgent` has no instruction to rewrite.
+  To optimise one stage, expose that stage's `LlmAgent` as the root of its
+  own agent module and evaluate it with that stage's criteria. Then
+  re-measure the whole pipeline's outcome measure on the holdout.
+
+Keep the candidate only when the project's outcome measure improves on the
+holdout and no stage verdict regresses. A higher eval score with a flat
+outcome measure is the optimiser finding the proxy. The same precondition
+holds for any loop that rewrites the agent from scores, including one
+written in the project.
+
 Completion: the prompt is in one owned location with a dated changelog, the
 loader returns a versioned provider, the contract and hostile-document tests
 pass offline, and the next evaluation run records the version.

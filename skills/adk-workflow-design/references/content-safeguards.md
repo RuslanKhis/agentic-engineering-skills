@@ -121,6 +121,55 @@ prompt = adversarial_review_prompt("Approve a 1.5 m sliding gate with one condit
 Keep this framing through corrections: a repair request must still
 [permit another rejection](review-contracts.md#preserve-the-scope-of-a-narrow-correction).
 
+## Re-check the verdict whose error costs most
+
+First move every rule that code can decide out of the model check and into
+the consistency checks above. A re-check is for what stays a model judgement.
+When a model check's verdict acts on the run (it stops the pipeline, or
+sends the case to a person), spend repeated calls on one side only. Name the
+verdict whose false value costs most once the code checks above have run.
+Re-run the check for that verdict, and act on it only when every run agrees.
+Trust the other verdict after one call. After deterministic checks that catch
+wrong payments, a false "violation" mostly costs reviewer time, so that is
+the verdict to re-check. When nothing deterministic sits between the check
+and the effect, re-check "compliant" instead (Pouya Ghiasnezhad Omran and
+Tanya Dixit, "Evaluation Precedes Evolution", Google, LinkedIn, 15 June 2026,
+read 2026-10-28).
+
+```python
+def checked_verdict(run_check, case, guarded: str, reruns: int = 2) -> dict:
+    """Act on `guarded` only when every run agrees; trust the other verdict once."""
+    first = run_check(case)                       # the model check, one call
+    if first is None:
+        return {"verdict": "incomplete", "runs": [first]}
+    if first["verdict"] != guarded:
+        return {"verdict": first["verdict"], "runs": [first]}
+    runs = [first]
+    for _ in range(reruns):
+        again = run_check(case)
+        runs.append(again)
+        if again is None:                         # error or no verdict
+            return {"verdict": "incomplete", "runs": runs}
+        if again["verdict"] != guarded:
+            return {"verdict": again["verdict"], "overturned": True, "runs": runs}
+    return {"verdict": guarded, "runs": runs}
+```
+
+- The loop lives in the code that calls the check (a workflow function
+  node, or the tool or callback that wraps the checker). An instruction to
+  "double-check" is not a re-check, and a rewritten prompt cannot skip
+  code.
+- An `incomplete` result takes the path a failed check takes (review, or a
+  stop). It never takes the path of the verdict the re-check guards
+  against.
+- Keep the model's default sampling for the check. Repeated calls at
+  temperature 0 tend to repeat themselves, so the agreement is not
+  evidence.
+- Record every run and every overturned verdict. adk-agent-evaluation's
+  expert-review reference measures the whole rule on labelled cases: its
+  TPR and TNR, the overturn rate and the extra calls. A re-check that never
+  overturns anything is cost without benefit.
+
 ## Run the bundled checks
 
 From this skill directory with Python 3.11 or later:
@@ -148,6 +197,7 @@ check must fail in code before any review runs. Give it a document containing
 Every fresh draft passes the encoded consistency rules or returns to the
 writer with the blocker attached; abstention conditions are written down and
 tested; warnings reach the reader deduplicated and ranked; the hostile fixture
-is in the suite; the reviewer prompt asks for the strongest objection. Report
-the checks that ran against the application's real draft shape separately from
-this synthetic fixture.
+is in the suite; the reviewer prompt asks for the strongest objection; a
+model check that stops the run or sends cases to people re-checks its costly
+verdict in code and records each run. Report the checks that ran against the
+application's real draft shape separately from this synthetic fixture.

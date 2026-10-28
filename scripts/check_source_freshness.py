@@ -2,11 +2,15 @@
 """Report whether the external repositories this toolkit cites are still maintained.
 
 Reads docs/research/source-register.json, asks the GitHub REST API (read only)
-about each repository, and reports its band (active, quiet or stale by days
+about each repository row, and reports its band (active, quiet or stale by days
 since the last commit on the default branch), latest release, commits since the
 commit the toolkit read, and anything that needs a maintainer: an archived,
 renamed or missing repository, a changed licence, a stale band or a pinned
 commit GitHub no longer has. It changes nothing.
+
+An article row ("kind": "article", with "url" in place of "repo" and "pinned"
+null) is validated but never fetched: it is reported as "article", checked by
+its read date only, and never needs attention or makes the run incomplete.
 
 Exit codes: 0 nothing needs attention; 1 at least one source needs attention;
 2 the register or the arguments are invalid; 3 at least one source could not be
@@ -36,6 +40,8 @@ REPO_RE = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
 ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 SHA_RE = re.compile(r"^[0-9a-f]{7,40}$")
 FIELDS = {"id", "repo", "pinned", "read", "licence", "note", "used_by"}
+ARTICLE_FIELDS = {"id", "kind", "url", "pinned", "read", "licence", "note", "used_by"}
+URL_RE = re.compile(r"^https://[^\s/]+\.[^\s/]+(/\S*)?$")
 
 Fetch = Callable[[str], tuple[int, object]]
 
@@ -69,26 +75,37 @@ def load_register(path: Path, root: Path) -> tuple[list[dict], list[str]]:
     seen_repos: set[str] = set()
     for index, src in enumerate(data["sources"]):
         label = src.get("id", f"#{index}") if isinstance(src, dict) else f"#{index}"
-        if not isinstance(src, dict) or set(src) != FIELDS:
-            errors.append(f"{label}: expected exactly the fields {sorted(FIELDS)}")
+        article = isinstance(src, dict) and "kind" in src
+        expected = ARTICLE_FIELDS if article else FIELDS
+        if not isinstance(src, dict) or set(src) != expected:
+            errors.append(f"{label}: expected exactly the fields {sorted(expected)}")
             continue
         if not isinstance(src["id"], str) or not ID_RE.match(src["id"]) or src["id"] in seen_ids:
             errors.append(f"{label}: id must be unique lowercase-kebab text")
         seen_ids.add(src["id"])
-        repo = src["repo"]
-        if not isinstance(repo, str) or not REPO_RE.match(repo):
-            errors.append(f"{label}: repo must be owner/name")
-        elif repo.lower() in seen_repos:
-            errors.append(f"{label}: repo {repo} is listed twice")
+        if article:
+            if src["kind"] != "article":
+                errors.append(f"{label}: kind must be article (repository rows have no kind)")
+            if not isinstance(src["url"], str) or not URL_RE.match(src["url"]):
+                errors.append(f"{label}: url must be an https URL")
+            if src["pinned"] is not None:
+                errors.append(f"{label}: pinned must be null for an article")
         else:
-            seen_repos.add(repo.lower())
-        if src["pinned"] is not None and (not isinstance(src["pinned"], str)
-                                          or not SHA_RE.match(src["pinned"])):
-            errors.append(f"{label}: pinned must be null or a 7-40 character commit")
+            repo = src["repo"]
+            if not isinstance(repo, str) or not REPO_RE.match(repo):
+                errors.append(f"{label}: repo must be owner/name")
+            elif repo.lower() in seen_repos:
+                errors.append(f"{label}: repo {repo} is listed twice")
+            else:
+                seen_repos.add(repo.lower())
+            if src["pinned"] is not None and (not isinstance(src["pinned"], str)
+                                              or not SHA_RE.match(src["pinned"])):
+                errors.append(f"{label}: pinned must be null or a 7-40 character commit")
         if not _iso_date(src["read"]):
             errors.append(f"{label}: read must be an ISO date")
         if not isinstance(src["licence"], str) or not src["licence"].strip():
-            errors.append(f"{label}: licence must be the SPDX id GitHub reported, or none")
+            errors.append(f"{label}: licence must be the SPDX id GitHub reported, or none"
+                          " (for an article, a short statement such as n/a)")
         note = src["note"]
         if (not isinstance(note, str) or not note.startswith("docs/")
                 or not (root / note).is_file()):
@@ -141,9 +158,17 @@ def _day(stamp: object) -> date | None:
 
 
 def _blank(src: dict, error: str | None = None) -> dict:
-    return {"id": src["id"], "repo": src["repo"], "band": "unchecked", "attention": [],
-            "last_commit": None, "days": None, "release": None, "since_pin": None,
-            "licence": None, "error": error}
+    return {"id": src["id"], "repo": src.get("repo"), "url": src.get("url"),
+            "band": "unchecked", "attention": [], "last_commit": None, "days": None,
+            "release": None, "since_pin": None, "licence": None, "error": error}
+
+
+def article_result(src: dict) -> dict:
+    """An article cannot be queried for maintenance; report it by its read date."""
+    result = _blank(src)
+    result["band"] = "article"
+    result["read"] = src["read"]
+    return result
 
 
 def check_source(src: dict, fetch: Fetch, today: date,
@@ -197,6 +222,8 @@ def check_source(src: dict, fetch: Fetch, today: date,
 
 def render(result: dict) -> str:
     parts = [f"{result['id']:<28}", f"{result['band']:<9}"]
+    if result["band"] == "article":
+        parts.append(f"not checkable; checked by date only (read {result['read']})")
     if result["last_commit"]:
         parts.append(f"last commit {result['last_commit']} ({result['days']}d)")
     if result["release"]:
@@ -249,7 +276,9 @@ def main(argv: list[str] | None = None, fetch: Fetch | None = None) -> int:
     for src in sources:
         if args.only and src["id"] not in args.only:
             continue
-        if limited:
+        if "kind" in src:
+            result = article_result(src)
+        elif limited:
             result = _blank(src, limited)
         else:
             try:

@@ -17,6 +17,39 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## Seed article "Evaluation Precedes Evolution" integrated · 28 October 2026
+
+The first article in part two of the engineering-articles programme:
+Pouya Ghiasnezhad Omran and Tanya Dixit (Google), "Evaluation Precedes
+Evolution", LinkedIn, 15 June 2026. The article was checked against
+google/adk-samples (now google/adk-recipes) at a9dc177 and against the
+google-adk 2.8.0 and 2.12.0 optimiser source.
+
+**What changed in the skills.**
+
+- **adk-agent-evaluation.**
+  - Shape a rubric by verifiability, horizon and stakes.
+  - Score every stage and keep the stage verdicts.
+  - Judge the work on the outcome measure, closing two gaming patterns.
+  - Code checks as `EvalConfig` custom metrics.
+  - Measure a judge that is re-checked on its costly side.
+- **adk-workflow-design.** Re-check a model check's costly verdict in code,
+  failing closed.
+- **adk-agent-instructions.** The rubric comes before any `adk optimize`
+  run: what the sampler scores, a separate validation set, and a root agent
+  with a static instruction.
+
+**Register and checks.** The source register gained its first article row,
+and `check_source_freshness.py` now validates article rows without fetching
+them (three tests). Two scenario cases were added.
+
+**Trial.** One fresh-agent trial ran on a synthetic invoice pipeline,
+offline: 44 project tests passed, and it rated the work 4 of 5. Five
+frictions were fixed the same day.
+
+`scripts/check_repo.py` passed: 28 offline suites, 1,215 tests. No model or
+cloud runs. Record: [alignment](omran-dixit-evaluation-precedes-evolution-alignment-2026-10-28.md).
+
 ## Engineering-articles reading plan, and two small fixes · 28 October 2026
 
 Part one of the [engineering-articles programme](engineering-articles-integration-prompt.md):

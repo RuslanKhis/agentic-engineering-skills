@@ -2080,6 +2080,43 @@
       ]
     },
     {
+      "id": "evaluation-rubric-before-optimiser",
+      "prompt": "We want to let adk optimize rewrite our invoice triage agent's prompt. Before it runs, set up an evaluation we can trust. At the moment one LLM judge rates every case 1 to 10 for helpfulness.",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-agent-instructions",
+        "adk-workflow-design",
+        "adk-release-engineering"
+      ],
+      "context": "A Python ADK 2.12 project: a SequentialAgent of three LlmAgents (extract, policy_check, decide) writing output_key values extracted, policy_findings and decision; decide returns pay, reject or escalate. eval/triage.evalset.json has 12 cases with expected decisions; eval/test_config.json has one rubric-based judge metric with a helpfulness rubric. The discovery brief says the sponsor measures the share of invoices paid or rejected correctly with no manual review. Totals, supplier IDs and dates can be checked in Python. No model or cloud access in this session.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Records the agent's verifiability, horizon and stakes before writing the rubric, and puts every property code can check (totals, supplier list, dates) in programmatic assertions that run before any judge.",
+        "Replaces the single helpfulness score with one sub-rubric per stage (extract, policy_check, decide) and keeps per-stage verdicts in the result record beside the end-to-end verdict.",
+        "Makes the outcome measure (share decided correctly with no manual review) the headline figure, counts an escalated case as manual work and reports over-escalation beside any score.",
+        "Adds a calibration or eval case where the agent's text claims a check that the trace shows never ran, and grades whether a check ran from the trace, not the wording.",
+        "Before the optimiser runs, names a separate validation_eval_set, keeps a holdout outside both, pins optimizer_model, and keeps a candidate only when the outcome measure improves on the holdout; reports every model-dependent run as not run."
+      ]
+    },
+    {
+      "id": "workflow-recheck-costly-verdict",
+      "prompt": "Our invoice pipeline's LLM policy check sends too many false violations to the review team. Can you cut the false alarms without letting real violations through?",
+      "available_skills": [
+        "adk-workflow-design",
+        "adk-agent-evaluation",
+        "adk-operational-guardrails"
+      ],
+      "context": "A Python ADK 2.12 graph Workflow: deterministic checks (totals, supplier list, dates) run first, then an LlmAgent policy_check returns compliant or violation, and a function node sends violations to a review queue; compliant cases go on to an automatic correction step. pipeline/nodes.py calls the check once at temperature 0, and an exception from the model call is caught and treated as compliant. labels/policy.csv holds 80 reviewer-labelled cases. No model access in this session.",
+      "expected_primary": "adk-workflow-design",
+      "assertions": [
+        "Re-runs the policy check in code (not in the prompt) on violation verdicts only, and sends a case to review only when every run agrees, trusting a compliant verdict after one call.",
+        "Explains that the direction would flip, re-checking compliant verdicts, if nothing deterministic sat between the check and the effect.",
+        "Changes the exception path so a failed or empty check result is incomplete and goes to review or stops, never to compliant.",
+        "Keeps the model's default sampling for the repeated calls instead of temperature 0, and records every run and overturned verdict.",
+        "Measures the whole rule's TPR and TNR on the labelled cases, its overturn rate and its extra calls, and reports model-dependent figures as not run."
+      ]
+    },
+    {
       "id": "presenter-monthly-value-report",
       "prompt": "Can you write September's value report for our sponsor on the claims triage agent? Use docs/plans/claims.md and the discovery brief.",
       "available_skills": [

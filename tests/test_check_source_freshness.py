@@ -26,6 +26,15 @@ def source(**overrides):
     return value
 
 
+def article(**overrides):
+    value = {"id": "an-article", "kind": "article", "url": "https://example.org/post",
+             "pinned": None, "read": "2026-10-28",
+             "licence": "n/a (article; cited, not copied)", "note": "docs/note.md",
+             "used_by": ["example-skill"]}
+    value.update(overrides)
+    return value
+
+
 def github(repo="owner/example", last="2026-10-20T10:00:00Z", archived=False,
            licence="MIT", release=True, compare_status=200, ahead=3):
     """A fake GitHub keyed by request path, shaped like the REST responses."""
@@ -180,6 +189,55 @@ class FreshnessTests(unittest.TestCase):
         code, out, _ = self.run_main("--validate-only", fetch=never)
         self.assertEqual(code, 0)
         self.assertIn("nothing was fetched", out)
+
+    def test_article_row_is_validated_but_never_fetched(self):
+        self.write([source(), article()])
+        fetch = github()
+        code, out, _ = self.run_main(fetch=fetch)
+        self.assertEqual(code, 0)
+        self.assertIn("article", out)
+        self.assertIn("checked by date only (read 2026-10-28)", out)
+        self.assertFalse(any("example.org" in call or "an-article" in call
+                             for call in fetch.calls))
+
+    def test_article_alone_needs_no_network_and_survives_a_rate_limit(self):
+        def never(path):
+            raise AssertionError("fetched")
+        self.write([article()])
+        code, out, _ = self.run_main("--json", fetch=never)
+        self.assertEqual(code, 0)
+        result = json.loads(out)[0]
+        self.assertEqual((result["band"], result["url"], result["repo"]),
+                         ("article", "https://example.org/post", None))
+
+        self.write([source(), article()])
+
+        def limited(path):
+            raise freshness.RateLimited("GitHub rate limit (403)")
+        code, out, _ = self.run_main(fetch=limited)
+        self.assertEqual(code, 3)
+        self.assertEqual(out.count("UNCHECKED"), 1)
+        self.assertIn("checked by date only", out)
+
+    def test_invalid_article_rows_exit_2(self):
+        def never(path):
+            raise AssertionError("fetched")
+        bad = [
+            [article(kind="blog")],
+            [article(url="http://example.org/post")],
+            [article(url="not a url")],
+            [article(pinned="abc1234")],
+            [dict(article(), repo="owner/example")],
+            [{k: v for k, v in article().items() if k != "url"}],
+            [article(licence="")],
+            [article(), article()],
+        ]
+        for sources in bad:
+            with self.subTest(sources=sources):
+                self.write(sources)
+                code, _, err = self.run_main(fetch=never)
+                self.assertEqual(code, 2)
+                self.assertTrue(err)
 
     def test_repository_register_is_valid(self):
         sources, errors = freshness.load_register(
