@@ -81,6 +81,26 @@ assumption`, and every incident `status open` or `status closed <date>`.
    per-conversation cost hides failures. Then the plan's estimate on its
    own line opening with *Estimate*, and the reason for the difference
    (volume, retries, a model change, fixed costs spread over low volume).
+   When the brief prices each error type (adk-discovery's "Price of each
+   error"), add the cost of errors on its own line: every flag handled in
+   the period, needed or not, at the brief's handling cost, plus the misses
+   at the brief's price of a miss, beside today's process priced the same
+   way at this period's volume (its flags and misses at today's rates). Do
+   not price only the false flags on one side: both totals count every
+   handled flag, or the comparison is not like for like. A cost per outcome
+   without it flatters a cheaper model that misses more; in one worked
+   example a version twenty times cheaper per case cost more in all than
+   the process it replaced (Wimberly, Marker, Siegel and Kwatra,
+   "Eval-Driven System Design: From Prototype to Production", OpenAI
+   cookbook, with Fractional, 2 June 2025,
+   https://developers.openai.com/cookbook/examples/partners/eval_driven_system_design/receipt_inspection,
+   read 2026-10-29). Counts recorded for the whole period (a log of every
+   miss found) are measured. Counts scaled up from a reviewed sample, or
+   from the evaluation's rates times this period's volume, are an
+   estimate, so that line opens with *Estimate*. Cite the brief for the
+   rates rather than writing "£30 a miss" on a measured line: the check
+   reads a money figure followed by "a", "per" or "each" as a cost per
+   outcome and asks for its two records.
 5. **Incidents.** Every `I` record dated in the period, with severity,
    effect, response, fix and whether it is closed; "no incidents recorded" only when the plan
    holds none.

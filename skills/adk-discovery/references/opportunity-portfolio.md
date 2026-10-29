@@ -70,6 +70,28 @@ forward (the first measure moved, access granted, a budget approved).
 - **Counter-metric:** what must not get worse while the outcome improves
   (refunds, complaints, support load, cycle time elsewhere, cost per unit).
   A larger basket with more cancellations is a worse outcome.
+- **Price of each error:** for a use case that decides or flags (approve
+  or refuse, audit or pass, act or escalate), name its two errors: a case
+  that needed the action and did not get it (a miss), and a case flagged
+  that did not need it (a false flag). Record what a miss costs in money
+  and what handling a flag costs, with who said so (a missed audit's average
+  loss; a review's handling minutes at a stated hourly rate). Every flag
+  costs its handling, needed or not; a false flag is the part that buys
+  nothing. Record too the share of cases that need the action, and today's
+  rate of each error and cost per case under the current process. With the
+  volume, these let
+  adk-agent-evaluation turn measured rates into a cost for the period and
+  compare the candidate with today's process at the same volume, instead
+  of with a round accuracy target. For example: 1 million receipts a year,
+  5% needing an audit, $2 an audit, $30 for each missed one; today's
+  process misses 3%, needlessly flags 2% and costs $0.20 a receipt, about
+  $380,000 a year in all (Wimberly, Marker, Siegel and Kwatra,
+  "Eval-Driven System Design: From Prototype to Production", OpenAI
+  cookbook, with Fractional, 2 June 2025,
+  https://developers.openai.com/cookbook/examples/partners/eval_driven_system_design/receipt_inspection,
+  read 2026-10-29; the figures are the authors' assumptions). An error
+  that changes no decision has no price. A price nobody can give is
+  "unknown: ask <role>", and the first goal estimates it.
 - **Leading indicator:** an earlier signal that the chain is moving (fewer
   abandonments at the step) when the lagging outcome (revenue) takes months.
 - **Window and sample:** how long, how many, and who reads the number.

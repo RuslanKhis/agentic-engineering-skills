@@ -2185,6 +2185,57 @@
       ]
     },
     {
+      "id": "evaluation-priced-errors-and-stage-attribution",
+      "prompt": "Our invoice agent got 90% of hold decisions right on the dev set, above the 88% target. The team wants to fix supplier-name extraction next, then rewrite the decision prompt, and ask the finance director to switch off the clerk check from January. Is that the right plan?",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-agent-instructions",
+        "adk-discovery",
+        "adk-presenter"
+      ],
+      "context": "A Python ADK 2.12 accounts-payable agent: an extraction stage writes the invoice fields to state, and a decision stage reads them, looks up earlier payments and decides pay or hold (invoice_agent/, docs/hold-rules.md). runs/dev-run-2026-10-27.jsonl holds the first run on 40 labelled development cases, with the reviewed fields and decisions beside the agent's. runs/dashboard-2026-10-28.md is the team's summary. docs/discovery-brief.md gives the volume, today's clerk-check rates and cost, and the price of each error. No model or cloud access in this session.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Prices both error types at the brief's volume for today's clerk check (about £399k a year) and for the agent as run (about £496k: 2 of 10 holds missed, 2 of 30 false holds, £0.05 an invoice), says the agent would cost more than today despite being cheaper to run, and does not treat 90% against the 88% target as the gate.",
+        "Grades the decision stage on the fields it received: dev-011 and dev-027 were right decisions on misread invoice numbers (extraction errors, and the two costly misses), and only dev-014 and dev-036 are decision-stage errors (holds inside the 2% tolerance), so the dashboard's attribution is wrong.",
+        "Says supplier-name errors changed no decision (no rule reads the field) and are not a gate or the first fix, and puts the invoice-number extraction (or a lookup that does not depend on an exact OCR string) first because it causes the £180 misses.",
+        "Labels the priced comparison indicative because there are only 10 hold cases, quotes the counts, and asks for more labelled hold cases before the go-live decision rather than recommending the switch-off.",
+        "Works from the run records and runs no model."
+      ]
+    },
+    {
+      "id": "discovery-price-each-error",
+      "prompt": "We've picked the accounts-payable invoice-hold agent as our first use case. Write the brief's lines on what a wrong answer costs, and the target the agent has to meet.",
+      "available_skills": [
+        "adk-discovery",
+        "adk-agent-evaluation",
+        "adk-system-designer"
+      ],
+      "context": "About 20,000 supplier invoices arrive a month, and internal audit says about 4% should be held (duplicates, overcharges, no purchase order). Clerks check every invoice today at about £0.90 an invoice; audit's sample of 600 invoices in September 2026 found they miss about 5% of the invoices that should be held and hold about 3% of the others needlessly. The finance controller puts a paid duplicate or overcharge at about £180 to recover or write off. Handling a hold takes a clerk about 12 minutes, and clerks cost £30 an hour. The operations lead wants the agent to reach 95% accuracy. No model or cloud access in this session.",
+      "expected_primary": "adk-discovery",
+      "assertions": [
+        "Prices each error type separately with its source: a miss at about £180 (finance controller) and handling a hold at about £6 (12 minutes at £30 an hour), and records the 4% share to hold, today's 5% and 3% error rates and £0.90 an invoice.",
+        "Puts today's process into money at this volume (about £399k a year or about £33k a month, misses and holds included), or records every input adk-agent-evaluation needs to compute it.",
+        "States the target as the agent's priced total, misses and holds included, below today's at the same volume, rather than the 95% accuracy figure alone."
+      ]
+    },
+    {
+      "id": "presenter-value-report-error-cost",
+      "prompt": "Write the cost per outcome section of October's value report for the invoice-hold agent.",
+      "available_skills": [
+        "adk-presenter",
+        "adk-agent-observability",
+        "adk-agent-evaluation"
+      ],
+      "context": "The plan's records for October 2026: M21 model and cloud spend £1,050 (billing export filtered by the app label); M22 invoices decided by the agent 20,000 (AP system export); M23 invoices held for a clerk 1,400, of which 640 were needless (review queue log, every hold reviewed); M24 internal audit re-checked a sample of 400 invoices the agent paid and found 3 that should have been held (audit workpaper). The agent paid 18,600 invoices in October. The discovery brief (docs/discovery/ap-holds.md) prices a miss at £180 and handling a hold at £6, and gives today's clerk check as £0.90 an invoice, missing 5% of the invoices that should be held (about 4% of all) and holding 3% of the others needlessly. The plan's cost contract C2 estimated £0.05 an invoice. The team's draft says the agent is 18 times cheaper than the clerk check.",
+      "expected_primary": "adk-presenter",
+      "assertions": [
+        "Gives cost per outcome as the spend (M21) over invoices decided (M22), about £0.05 an invoice, with the estimate from C2 on its own Estimate line.",
+        "Adds the cost of errors on its own line: holds handled from M23 (1,400 at £6, about £8,400) and misses scaled from the audit sample (3 in 400 of 18,600 paid, about 140 at £180, about £25,000) on a line opening with Estimate, beside today's clerk check priced at October's volume (about £33,000 with its misses and holds).",
+        "Does not report the agent as 18 times cheaper: says that with errors counted the month's total (about £34,500) is about the same as or above today's, and that 3 misses in 400 is too few to settle which is cheaper."
+      ]
+    },
+    {
       "id": "presenter-monthly-value-report",
       "prompt": "Can you write September's value report for our sponsor on the claims triage agent? Use docs/plans/claims.md and the discovery brief.",
       "available_skills": [

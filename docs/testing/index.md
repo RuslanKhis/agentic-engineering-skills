@@ -17,6 +17,54 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## Priced errors and per-stage grading ("Eval-Driven System Design") · 29 October 2026
+
+Entry 3 of the engineering-articles programme: Hugh Wimberly, Joshua
+Marker, Eddie Siegel and Shikhar Kwatra, "Eval-Driven System Design: From
+Prototype to Production", OpenAI cookbook (with Fractional), 2 June 2025,
+archived. Only the method was taken; no OpenAI API facts, model names or
+prices.
+
+**What changed in the skills.**
+
+- **adk-agent-evaluation.**
+  - Grade each stage on the input it actually received. A stage that is
+    right for a wrong input passes, and the error belongs upstream.
+    Three ways to get a reference that fits the input. An isolated stage
+    run seeded through `session_input.state`.
+  - Price each error type at the brief's volume, and gate on the priced
+    total against today's process rather than on an accuracy figure.
+  - "Not all evals matter": a defect that changes no decision is reported,
+    not gated, and error categories are ranked by cost.
+  - A small sample prices indicatively, with a break-even miss rate.
+- **adk-discovery.** The brief prices a miss and the handling of a flag,
+  with the share of cases that need the action and today's rates.
+- **adk-presenter.** The value report's cost per outcome gains a
+  cost-of-errors line beside today's process at the same volume.
+
+**Register and scenarios.** One article row was added to the source
+register. Three scenario cases were added; one has a new fixture and
+judge-only material, and two are runnable from their context.
+
+**Trial.** One fresh-agent trial on synthetic invoice-hold records,
+offline. It priced today's process at £398,592 and the agent at £495,840,
+moved two of the four wrong decisions to extraction, and passed all five
+assertions. Ease: 5 of 5 to find the method, 4 of 5 to apply it. Three
+frictions were fixed the same day (a break-even formula, taking p from the
+brief rather than an enriched sample, and how a correct flag is priced).
+Those fixes were not re-trialled.
+
+**Scenario run.** The three new scenarios then ran through
+`run_scenarios.py` with Sonnet 5.5 as agent and judge (three judge votes),
+for $1.18 including one re-run. Evaluation passed 5 of 5 and discovery
+3 of 3 (two split votes; the skill was not loaded). Presenter passed 2 of
+3: the value report said to price "misses and false flags", so the agent
+left out the handling cost of correct flags. The wording now prices every
+handled flag on both sides, and the re-run passed 3 of 3 (two split votes).
+
+`scripts/check_repo.py` passed: 28 offline suites, 1,232 tests. No cloud
+runs. Record: [alignment](wimberly-eval-driven-system-design-alignment-2026-10-29.md).
+
 ## Error bars on evaluation comparisons ("Adding Error Bars to Evals") · 29 October 2026
 
 Entry 2 of the engineering-articles programme: Evan Miller (Anthropic),

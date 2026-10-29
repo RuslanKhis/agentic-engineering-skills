@@ -40,7 +40,21 @@ pass honest; this reference makes the output good.
     "stage": "retrieval", "fix_candidate": "deterministic lookup of cited policy numbers"}
    ```
 
-   Count rows per category. The largest category names the first change.
+   Count rows per category, counting only defects that change something a
+   later stage, a reviewer or the deliverable depends on. A defect in a field
+   nothing downstream reads is recorded and names no change: in a receipt
+   pipeline, a merchant name wrong on most receipts changed no audit
+   decision (Wimberly, Marker, Siegel and Kwatra, "Eval-Driven System
+   Design: From Prototype to Production", OpenAI cookbook, with Fractional,
+   2 June 2025,
+   https://developers.openai.com/cookbook/examples/partners/eval_driven_system_design/receipt_inspection,
+   read 2026-10-29). When the discovery brief prices each error type, rank
+   the categories by what they cost (count times the price of the error each
+   causes), not by count alone
+   ([evaluation design](evaluation-design.md#shape-the-rubric-before-writing-it),
+   "Price each error type"). In a staged pipeline, `stage` names the stage
+   whose output was wrong for the input it received, not the stage where
+   the case failed. The top category names the first change.
    Contract failures are repaired before any decision-quality change is
    judged, and they are excluded from the quality denominator.
 4. **One change per iteration.** Change the prompt, the retrieval, an

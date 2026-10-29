@@ -46,6 +46,12 @@ each figure cited>.
   sponsor's ceiling.
 - Estimate: <money> per <outcome unit> (<plan cost contract C n>); the
   difference is <reason>.
+- <When the brief prices each error type:> Errors: <flags handled, needed
+  or not> (<M n>) and <misses> (<M n>), priced at the brief's §4 rates:
+  <money> this period, against <money> for today's process at this volume,
+  its flags and misses priced the same way (brief §4).
+  <Open with "Estimate:" when the counts are scaled from a sample or from
+  evaluation rates.>
 
 ## Incidents
 

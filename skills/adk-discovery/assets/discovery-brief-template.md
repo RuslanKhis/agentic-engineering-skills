@@ -105,6 +105,10 @@ with `--pick <ID>` when the chosen one is not rank 1).
 - **Build or buy:** <a partner already runs this process / build>, and why.
 - **Cost of a wrong answer:** <what happens, who notices, how it is undone>;
   whether a person reviews before any effect.
+- **Price of each error:** a miss <money each, source>; handling a flag
+  <money each, needed or not, source>; share of cases that need the action
+  <p>; today's process <miss rate>, <false-flag rate>, <cost per case>
+  (source, date); or "unknown: ask <role>".
 - **Threshold sentences:** "If <metric> for <workflow> <drops below / rises
   above> <threshold>, we will <action>", for the outcome and the
   counter-metric.

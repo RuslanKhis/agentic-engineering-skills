@@ -32,7 +32,8 @@ either filled in or marked "unknown: ask":
 - the outcome measure, baseline (value, source, date) and counter-metric;
 - the technology fit and the nearest alternative rejected;
 - the systems that own the facts and who grants access;
-- the cost of a wrong answer and whether a person reviews before an effect;
+- the cost of a wrong answer, the price of each error type with today's
+  rates, and whether a person reviews before an effect;
 - the scope-gate table (section 5), including who approves the next step
   and when;
 - the decision calendar (section 6), so the plan carries presentation goals.

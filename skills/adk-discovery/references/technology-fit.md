@@ -40,7 +40,11 @@ column and the one-paragraph explanation to the stakeholder.
    review path: do not automate; PAIR lists "cost of errors outweighs the
    benefits", "predictability matters" and "people told you they do not
    want it automated" as stop conditions. High cost with review: the model
-   interprets and a person or code decides.
+   interprets and a person or code decides. "High" is judged against
+   today's process, whose errors already cost something: price each error
+   type ([opportunity portfolio](opportunity-portfolio.md#define-the-measure-before-the-build),
+   "Price of each error") so the candidate can be compared with today at
+   the same volume.
 6. **Volume and latency?** High volume and delay-tolerant: batch pricing or a
    trained model. Interactive and high volume: the per-call cost and latency
    are measured before the choice is final; none of the sources quantify

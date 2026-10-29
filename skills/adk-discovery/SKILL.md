@@ -128,9 +128,10 @@ months; the bigger idea stays in the portfolio with its trigger.
 Fill section 4 of the brief completely for the chosen use case; the template
 lists every field, from the outcome measure (observable in an existing
 system; usage counts are not outcomes) and its baseline or "unknown" to the
-counter-metric, the hypothesis chain with every arrow a hypothesis, the
-workflow before and after with its validation points, the data register,
-the correction loop, the embedding rule and the 90-day sentence. Then fill
+counter-metric, the price of each error type beside today's rates, the
+hypothesis chain with every arrow a hypothesis, the workflow before and
+after with its validation points, the data register, the correction loop,
+the embedding rule and the 90-day sentence. Then fill
 the stall checks (section 7) from
 [why projects stall](references/why-projects-stall.md): one row per known
 cause, each citing the section that answers it or recording a gap with who
