@@ -53,7 +53,13 @@ answer. Each criterion has all of:
 - **Cases:** how many, drawn how, and agreed by whom: "40 gold cases agreed
   with the client's claims leads by 6 November 2026". Size the set with the
   threshold: on 40 cases one failure moves the rate 2.5 points, so a
-  threshold of 97% on 40 cases allows one failure; say which.
+  threshold of 97% on 40 cases allows one failure; say which. A rate on a
+  set this small is not proof of the threshold: 36 of 40 (90%) has a 95%
+  interval of 77% to 96%. Either write the criterion as an observed count
+  ("at least 34 of 40 pass") and say that it is one, or require the
+  interval to lie above the threshold and size the set from the threshold
+  and the rate expected (`adk-agent-evaluation`'s quality-iteration
+  reference, "Score one version against a fixed target").
 - **Method:** the evaluator and rubric (`adk eval` with the grounded-answer
   rubric, a deterministic check, a human review by two SMEs with a tie-break
   rule), the build it runs on, the repeats when the judge is a model.

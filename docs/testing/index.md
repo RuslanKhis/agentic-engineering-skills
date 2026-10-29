@@ -17,6 +17,35 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## One version against a fixed target · 29 October 2026
+
+This closes friction 4 of the "Eval-Driven System Design" trial: nothing
+said whether 36 of 40 (90%) clears an 88% target. It doesn't: the 95%
+interval is 77% to 96%, so the honest verdict is "not shown".
+
+**What changed in the skills.**
+
+- **adk-agent-evaluation.**
+  - New section "Score one version against a fixed target" in
+    `quality-iteration.md`. It gives three verdicts (meets, below, not
+    shown), the Wilson score interval for pass/fail sets, and sizing from
+    the target and the expected rate.
+  - `paired_difference.py` gains a target mode (`--candidate` and
+    `--target`, no `--baseline`; `--require meets`), with 13 new tests.
+    The paired mode's output is unchanged, byte for byte, on six flag sets.
+  - Pointers in `SKILL.md` and `evaluation-design.md`.
+- **adk-system-designer.** An acceptance threshold on a small set is
+  either written as an observed count or read against its interval.
+- **adk-presenter.** A rate against an agreed threshold is called met only
+  when its interval clears it.
+
+**Scenario.** One runnable case, `evaluation-rate-against-fixed-target`.
+It was not run.
+
+`scripts/check_repo.py` passed: 28 offline suites, 1,245 tests. No model or
+cloud runs, no trial. Record: friction 4 of the
+[alignment](wimberly-eval-driven-system-design-alignment-2026-10-29.md).
+
 ## Priced errors and per-stage grading ("Eval-Driven System Design") · 29 October 2026
 
 Entry 3 of the engineering-articles programme: Hugh Wimberly, Joshua

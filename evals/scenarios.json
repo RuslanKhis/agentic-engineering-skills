@@ -2136,6 +2136,24 @@
       ]
     },
     {
+      "id": "evaluation-rate-against-fixed-target",
+      "prompt": "The release candidate got 36 of our 40 holdout cases right, so 90%, and the go-live bar is 88%. Have we cleared it? If not, how many cases would it take to show it?",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-presenter",
+        "adk-release-engineering",
+        "adk-system-designer"
+      ],
+      "context": "A Python ADK 2.12 invoice-hold agent. The discovery brief's go-live rule, agreed with the sponsor: the agent goes live only when it is shown to decide correctly at least 88% of the time on invoices it has not seen. The frozen release candidate ran once on each of 40 labelled holdout cases, one invoice per case, drawn at random from last quarter with no variants of one invoice; it decided 36 correctly and 4 wrongly. Two further runs ended in infra_error (a quota error) and were re-run; only the 40 scored runs count. The team expects the agent's true rate to be about 90%. Labelling a case takes an expert about 15 minutes. There is no trial file in the workspace and no model or cloud access in this session; work from these figures.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Does not call 90% on 40 cases a pass: gives a 95% interval for 36 of 40 of about 77% to 96% (Wilson; an exact interval of about 76% to 97% is also acceptable) and says the result is consistent with 88% but not shown to meet it.",
+        "Compares the interval, not the point estimate, with the target, counts only the 40 scored cases and leaves the two infra_error runs out of the rate.",
+        "Sizes the set from the target and the expected rate: at a true 90% it takes roughly 2,000 cases to show 88% at 80% power, so no affordable holdout will show it; offers the choices (a lower bar, a criterion agreed as an observed count, or more work to raise the expected rate) rather than a larger 40-case run.",
+        "Uses scripts/paired_difference.py with --target, or computes the interval itself and names the helper, and runs no model."
+      ]
+    },
+    {
       "id": "release-nightly-drop-against-noise",
       "prompt": "Our nightly eval gate blocked the release three times this month and each time the score came back the next night. Can you fix the gate so it stops crying wolf without missing real regressions?",
       "available_skills": [

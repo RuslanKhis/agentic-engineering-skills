@@ -277,6 +277,66 @@ cases to zero is evidence a reviewer can check case by case. The interval
 governs the claims made from scores: a development score, a holdout result,
 a release comparison and a figure in a presentation.
 
+## Score one version against a fixed target
+
+Some decisions compare one version with a fixed number, not with another
+version: an acceptance criterion ("≥ 85% of 40 gold cases pass"), a
+go-live target or a break-even rate. The rate is a sample too. 36 of 40 is
+90%, but its 95% interval runs from 77% to 96%, so it does not show that
+the agent reaches 88%; it shows only that 88% cannot be ruled out. A rate
+above the target on a small set is not a pass until its interval is above
+the target too.
+
+1. **Score each case once.** Average each case's runs first and record the
+   scenario, as in [tell a change from noise](#tell-a-change-from-noise);
+   the rate is the mean of the case scores. For a rate that must stay low
+   (a miss rate of at most 5%), score a case 1 when it is right and use 1
+   minus the limit as the target.
+2. **Use an interval that holds at the edges.** With one pass/fail result
+   per case, use the Wilson score interval. It keeps its width at 40 of
+   40, where the normal interval, rate ± 1.96 × √(p(1 − p)/n), has none.
+   With repeated runs or scenarios, use the clustered standard error and t
+   interval above. When that error is zero, or the interval runs past 0% or
+   100%, fall back to the Wilson interval on the number of scenarios.
+3. **Give one of three verdicts.** *Meets*: the interval lies wholly above
+   the target. *Below*: it lies wholly below. *Not shown*: the target lies
+   inside it, on whichever side the rate falls. Write the rate, the count,
+   the interval and the verdict together: "90% (36 of 40; 95% interval 77%
+   to 96%): not shown to meet 88%". 40 of 40 (91% to 100%) meets 88%; 28 of
+   40 (55% to 82%) is below it.
+4. **Size the set from the target before the run.** For a target R and
+   the rate p the team expects, cases needed n = (z[α/2] × √(R(1 − R)) +
+   z[power] × √(p(1 − p)))² / (p − R)². Multiply by the design effect when
+   cases are clustered or runs averaged; the helper measures it. At 5%
+   significance and 80% power, showing 88% takes about 1,980 cases if the
+   agent really scores 90%, about 140 at 95% and about 30 at 100%. When the
+   expected rate is close to the target, no affordable set can show it. Say
+   so before the run, and agree a lower target, a larger set, or a
+   criterion stated as an observed count on the agreed set ("at least 34 of
+   40 pass"). An observed count is a contract term, not evidence that the
+   agent reaches 85%.
+
+Run the same helper without `--baseline`:
+
+```bash
+python "$SKILL_DIR/scripts/paired_difference.py" \
+  --candidate runs/release-candidate.csv --target 0.88 --require meets
+```
+
+It reads the same trial records, leaves out `infra_error` rows and needs
+every score between 0 and 1. It prints the rate, the interval and its
+method, the verdict, and roughly how many cases would show the rate meets
+the target if the true rate were the one observed. `--require meets` exits
+1 unless the verdict is "meets".
+
+The standard error of a single score, √(p(1 − p)/n) for pass/fail cases,
+is the first recommendation of Miller's paper, which uses normal intervals.
+The Wilson score interval (E. B. Wilson, "Probable Inference, the Law of
+Succession, and Statistical Inference", Journal of the American Statistical
+Association 22, 1927, pages 209 to 212) is this repository's choice for
+small pass/fail sets: it stays honest near 0% and 100%, where agent
+targets often sit.
+
 ## Keep the measurement honest
 
 - The development set measures progress; the holdout measures generalization
@@ -285,7 +345,9 @@ a release comparison and a figure in a presentation.
 - Report successes and attempts separately, by category, with case IDs. A
   percentage without the category table hides which defect moved. A score
   compared with another carries its paired interval and minimum detectable
-  difference ([tell a change from noise](#tell-a-change-from-noise)).
+  difference ([tell a change from noise](#tell-a-change-from-noise)); one
+  compared with a fixed target carries its interval and verdict
+  ([score one version against a fixed target](#score-one-version-against-a-fixed-target)).
 - The judge is calibrated on fixed evidence before it grades candidates
   ([evaluation design](evaluation-design.md#calibrate-the-judge-on-fixed-evidence)).
   Human review of a sample of judge verdicts each iteration keeps it honest.

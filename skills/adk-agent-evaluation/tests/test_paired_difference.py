@@ -273,5 +273,174 @@ class PairedDifferenceTests(unittest.TestCase):
         self.assertAlmostEqual(r["difference"], 0.25)
 
 
+class TargetTests(unittest.TestCase):
+    """One version against a fixed target: no --baseline, --target R."""
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+
+    def write(self, cases, scenarios=None, name="cand.csv", extra=()):
+        """Per-case lists of run scores to one trial file; extra rows are appended as given."""
+        path = self.root / name
+        with path.open("w", newline="", encoding="utf-8") as handle:
+            writer = csv.DictWriter(handle, fieldnames=FIELDS)
+            writer.writeheader()
+            rows = [{"case_id": f"c{index:03d}", "reward": value,
+                     "scenario": scenarios[index] if scenarios else ""}
+                    for index, runs in enumerate(cases) for value in runs]
+            for number, row in enumerate([*rows, *extra]):
+                writer.writerow({"trial_id": f"t{number}", "scenario": "", "outcome": "", "reward": "", **row})
+        return path
+
+    def passes(self, passed, total):
+        return self.write([[1.0]] * passed + [[0.0]] * (total - passed))
+
+    def report(self, path, *extra):
+        code, out, err = run("--candidate", path, "--json", *extra)
+        self.assertNotEqual(code, 2, err)
+        return code, json.loads(out)
+
+    def test_36_of_40_against_88_is_not_shown(self):
+        # Wilson 95% interval for 36/40, checked by solving (p - 0.9)^2 = z^2 p (1 - p) / 40: 0.7695 to 0.9604.
+        code, r = self.report(self.passes(36, 40), "--target", 0.88)
+        self.assertEqual(code, 0)
+        self.assertAlmostEqual(r["rate"], 0.9)
+        self.assertEqual(r["successes"], 36)
+        self.assertIn("Wilson", r["method"])
+        self.assertAlmostEqual(r["interval"][0], 0.7695, places=4)
+        self.assertAlmostEqual(r["interval"][1], 0.9604, places=4)
+        self.assertEqual(r["verdict"], "not shown")
+        # ((1.96 x sqrt(.88 x .12) + 0.8416 x sqrt(.9 x .1)) / .02)^2 = 1977.7; a brute-force z-test power search agrees.
+        self.assertEqual(r["plan"]["cases_needed"], 1978)
+        code, out, _ = run("--candidate", self.passes(36, 40), "--target", 0.88)
+        self.assertIn("95% interval 76.9% to 96.0%", out)
+        self.assertIn("not shown", out)
+
+    def test_40_of_40_meets_88(self):
+        # A normal interval at 40 of 40 has no width; Wilson's lower end is 40 / (40 + z^2) = 0.9124.
+        code, r = self.report(self.passes(40, 40), "--target", 0.88, "--require", "meets")
+        self.assertEqual(code, 0)
+        self.assertAlmostEqual(r["interval"][0], 40 / (40 + 1.959963984540054 ** 2), places=6)
+        self.assertEqual(r["interval"][1], 1.0)
+        self.assertEqual((r["verdict"], r["require"]["met"]), ("meets", True))
+
+    def test_clearly_below(self):
+        # 28 of 40: Wilson upper end 0.8193, below 0.88.
+        code, r = self.report(self.passes(28, 40), "--target", 0.88, "--require", "meets")
+        self.assertEqual(code, 1)
+        self.assertEqual(r["verdict"], "below")
+        self.assertAlmostEqual(r["interval"][1], 0.8193, places=4)
+        self.assertIsNone(r["plan"]["cases_needed"])
+        self.assertIn("not above the target", r["plan"]["reason"])
+
+    def test_not_shown_fails_require(self):
+        code, r = self.report(self.passes(36, 40), "--target", 0.88, "--require", "meets")
+        self.assertEqual((code, r["require"]["met"]), (1, False))
+        code, _ = self.report(self.passes(36, 40), "--target", 0.70, "--require", "meets")
+        self.assertEqual(code, 0)
+
+    def test_alpha_changes_the_interval(self):
+        _, r95 = self.report(self.passes(36, 40), "--target", 0.88)
+        _, r80 = self.report(self.passes(36, 40), "--target", 0.88, "--alpha", 0.2)
+        self.assertLess(r80["interval"][1] - r80["interval"][0], r95["interval"][1] - r95["interval"][0])
+
+    def test_repeated_runs_use_the_clustered_t_interval(self):
+        module = load_module()
+        cases = [[1.0, 1.0, 1.0]] * 34 + [[1.0, 1.0, 0.0]] * 6
+        code, r = self.report(self.write(cases), "--target", 0.88)
+        means = [sum(c) / 3 for c in cases]
+        se = sample_sd(means) / math.sqrt(40)
+        half = module.t_quantile(0.975, 39) * se
+        self.assertAlmostEqual(r["rate"], 0.95)
+        self.assertAlmostEqual(r["se"], se)
+        self.assertAlmostEqual(r["interval"][0], 0.95 - half)
+        self.assertIn("t interval", r["method"])
+        self.assertEqual((code, r["verdict"]), (0, "meets"))
+        self.assertAlmostEqual(r["runs_per_case"], 3.0)
+
+    def test_scenarios_widen_the_interval(self):
+        # 80 cases in 20 scenarios of four; failures fall together in some scenarios.
+        rng = random.Random(5)
+        scen = [f"s{i // 4}" for i in range(80)]
+        level = [rng.choice((0.5, 0.75, 1.0)) for _ in range(20)]
+        cases = [[float(rng.random() < level[i // 4])] for i in range(80)]
+        _, flat = self.report(self.write(cases), "--target", 0.5)
+        _, clustered = self.report(self.write(cases, scen), "--target", 0.5)
+        self.assertEqual(clustered["clusters"], 20)
+        self.assertIn("t interval on 19 df", clustered["method"])
+        self.assertGreater(clustered["se"], flat["se"])
+        self.assertGreater(clustered["interval"][1] - clustered["interval"][0],
+                           flat["interval"][1] - flat["interval"][0])
+        self.assertEqual(clustered["plan"]["cases_needed"], 4 * clustered["plan"]["scenarios_needed"])
+
+    def test_zero_variance_falls_back_to_wilson_on_clusters(self):
+        # Every scenario scores the same: the clustered SE is zero and a t interval would have no width.
+        cases = [[1.0]] * 40
+        scen = [f"s{i // 4}" for i in range(40)]
+        _, r = self.report(self.write(cases, scen), "--target", 0.88)
+        self.assertEqual(r["se"], 0)
+        self.assertIn("Wilson score interval on 10 scenarios", r["method"])
+        self.assertAlmostEqual(r["interval"][0], 10 / (10 + 1.959963984540054 ** 2), places=6)
+        self.assertEqual(r["verdict"], "not shown")
+        self.assertEqual(r["plan"]["scenarios_needed"] * 4, r["plan"]["cases_needed"])
+
+    def test_boundary_guard_keeps_more_failures_from_looking_better(self):
+        # One case at 2 of 3 runs makes the t interval run past 1; Wilson on the 40 cases is used, and the
+        # lower end stays below the all-pass case's.
+        _, edge = self.report(self.write([[1.0, 1.0, 1.0]] * 39 + [[1.0, 1.0, 0.0]]), "--target", 0.88)
+        _, clean = self.report(self.write([[1.0, 1.0, 1.0]] * 40), "--target", 0.88)
+        self.assertIn("runs past 0 or 1", edge["method"])
+        self.assertLess(edge["interval"][0], clean["interval"][0])
+        self.assertEqual(clean["successes"], 40)
+
+    def test_infra_errors_are_left_out_and_reported(self):
+        extra = [{"case_id": "c000", "outcome": "infra_error"}, {"case_id": "c001", "outcome": "infra_error"}]
+        code, r = self.report(self.write([[1.0]] * 36 + [[0.0]] * 4, extra=extra), "--target", 0.88)
+        self.assertEqual((code, r["infra_error_rows"], r["cases_scored"]), (0, 2, 40))
+        self.assertAlmostEqual(r["rate"], 0.9)
+        only_infra = [{"case_id": "c999", "outcome": "infra_error"}]
+        code, out, _ = run("--candidate", self.write([[1.0]] * 36 + [[0.0]] * 4, extra=only_infra),
+                           "--target", 0.88)
+        self.assertEqual(code, 3)
+        self.assertIn("unscored: 1 (c999)", out)
+        self.assertIn("INCOMPLETE", out)
+
+    def test_too_few_cases_is_incomplete(self):
+        code, r = self.report(self.write([[1.0]]), "--target", 0.88)
+        self.assertEqual(code, 3)
+        self.assertIn("incomplete", r)
+        code, r = self.report(self.write([[1.0], [0.5]], ["s1", "s1"]), "--target", 0.5)
+        self.assertEqual(code, 3)
+        self.assertIn("scenarios", r["incomplete"])
+
+    def test_pass_fail_outcomes_and_jsonl(self):
+        path = self.root / "cand.jsonl"
+        path.write_text("\n".join(json.dumps({"case_id": f"c{i}", "outcome": "pass" if i < 9 else "fail"})
+                                  for i in range(10)), encoding="utf-8")
+        code, r = self.report(path, "--target", 0.5)
+        self.assertEqual((code, r["successes"], r["cases_scored"]), (0, 9, 10))
+
+    def test_argument_validation(self):
+        good = self.passes(36, 40)
+        for args in (("--target", 0.0), ("--target", 1.0), ("--target", 88),
+                     (),  # no --baseline and no --target
+                     ("--target", 0.88, "--baseline", good),
+                     ("--target", 0.88, "--margin", 0.1),
+                     ("--target", 0.88, "--require", "meets", "--margin", 0.1),
+                     ("--target", 0.88, "--target-difference", 0.05),
+                     ("--target", 0.88, "--plan-cases", 100),
+                     ("--target", 0.88, "--require", "improved"),
+                     ("--target", 0.88, "--require", "not-worse", "--margin", 0.1),
+                     ("--baseline", good, "--require", "meets")):
+            code, _, err = run("--candidate", good, *args)
+            self.assertEqual(code, 2, args)
+            self.assertIn("error", err)
+        code, _, err = run("--candidate", self.write([[1.5], [1.0]]), "--target", 0.88)
+        self.assertEqual(code, 2)
+        self.assertIn("outside 0 to 1", err)
+
+
 if __name__ == "__main__":
     unittest.main()

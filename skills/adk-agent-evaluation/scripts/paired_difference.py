@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare two versions of an agent on the same cases: paired difference, interval and sample size. Standard library only.
+"""Compare two versions of an agent on the same cases, or score one version against a fixed target: interval, verdict and sample size. Standard library only.
 
 Reads two trial records, ``--baseline`` and ``--candidate``, CSV or JSON Lines,
 one row per trial. Each row needs ``case_id`` and a score: ``reward`` or
@@ -34,10 +34,27 @@ unless the verdict is ``improved``; ``--require not-worse --margin M`` exits
 1 unless the interval's lower end is above -M (a cheaper model or a refactor
 that must not lose more than M).
 
+One version against a fixed target: leave out ``--baseline`` and give
+``--target R`` (0.88 is 88%); every score must then lie between 0 and 1. The
+rate is the mean of the per-case means. With one pass/fail result per case
+and no scenario column the interval is the Wilson score interval (E. B.
+Wilson, 1927), which keeps its width at 40 of 40, where a normal interval
+has none. Otherwise the standard error is clustered as above, with a t
+interval; when that error is zero or the t interval runs past 0 or 1, the
+Wilson interval on the number of clusters is used instead. Verdict:
+``meets`` when the interval lies above R, ``below`` when it lies below R,
+otherwise ``not shown``. It also reports roughly how many cases would show
+the rate meets R at the stated power if the true rate were the one
+observed: n = ((z[alpha/2] x sqrt(R(1-R)) + z[power] x sqrt(p(1-p))) /
+(p - R))^2, times the design effect of averaged runs and clusters; none
+when p is not above R. ``--require meets`` exits 1 unless the verdict is
+``meets``.
+
 Exit status: 0 computed (and any --require met), 1 a --require not met,
 2 unreadable or invalid input, 3 incomplete: a case has scores in one file
-only, or too few cases or scenarios to estimate an interval, so the figures
-printed may change once the missing cases run.
+only (in target mode, only infra_error rows), or too few cases or scenarios
+to estimate an interval, so the figures printed may change once the missing
+cases run.
 """
 
 from __future__ import annotations
@@ -381,6 +398,97 @@ def analyse(baseline: Path, candidate: Path, alpha: float, power: float,
     return report
 
 
+def wilson(rate: float, n: float, z: float) -> tuple[float, float]:
+    """Wilson score interval for a proportion `rate` observed on n units."""
+    denom = 1.0 + z * z / n
+    centre = (rate + z * z / (2 * n)) / denom
+    half = z * math.sqrt(rate * (1.0 - rate) / n + z * z / (4 * n * n)) / denom
+    low = 0.0 if rate <= 0.0 else max(0.0, centre - half)
+    high = 1.0 if rate >= 1.0 else min(1.0, centre + half)
+    return low, high
+
+
+def analyse_target(candidate: Path, target: float, alpha: float, power: float) -> dict:
+    """One version's rate against a fixed target: interval, verdict and the cases needed."""
+    scores, scenario_of, infra = load_arm(candidate)
+    scored = sorted(c for c in scores if scores[c])
+    for case in scored:
+        for value in scores[case]:
+            if not 0.0 <= value <= 1.0:
+                raise InputError(f"case {case!r}: score {value} is outside 0 to 1; a fixed target is a rate")
+    report: dict = {
+        "mode": "target", "alpha": alpha, "power": power, "target": target,
+        "cases_scored": len(scored), "cases_unscored": sorted(c for c in scores if not scores[c]),
+        "infra_error_rows": infra,
+    }
+    if len(scored) < 2:
+        report["incomplete"] = "fewer than two cases scored"
+        return report
+    x = {c: sum(scores[c]) / len(scores[c]) for c in scored}
+    n = len(scored)
+    rate = sum(x.values()) / n
+    z = NormalDist().inv_cdf(1 - alpha / 2)
+    report.update({"rate": rate, "runs_per_case": sum(len(scores[c]) for c in scored) / n})
+    if not scenario_of and all(v in (0.0, 1.0) for v in x.values()):
+        # One pass/fail result per case (or runs that all agreed), cases independent: a binomial count.
+        # Wilson's interval keeps its width at 0 or n successes, where rate +/- z x SE collapses.
+        successes = round(sum(x.values()))
+        low, high = wilson(rate, n, z)
+        report.update({"successes": successes, "clusters": n, "se": math.sqrt(rate * (1 - rate) / n),
+                       "method": f"Wilson score interval on {n} cases"})
+        design_effect = 1.0
+    else:
+        se, g = clustered_se(x, scenario_of)
+        report.update({"clusters": g, "se": se})
+        if g < 2:
+            report["incomplete"] = "fewer than two scenarios: no interval can be estimated"
+            return report
+        tq = t_quantile(1 - alpha / 2, g - 1)
+        low, high = rate - tq * se, rate + tq * se
+        unit = "scenarios" if scenario_of else "cases"
+        if se > 0 and 0.0 <= low and high <= 1.0:
+            report["method"] = (f"mean of per-case means; SE clustered on {unit[:-1]} with G/(G-1); "
+                                f"t interval on {g - 1} df")
+            # Variance of one case relative to a single pass/fail result; below 1 when averaged runs
+            # remove noise, above 1 when cases in a scenario move together. se > 0 puts rate inside (0, 1).
+            design_effect = n * se * se / (rate * (1 - rate))
+        else:
+            # Guard: a zero SE (every cluster scored the same) or a t interval past 0 or 1 means the normal
+            # approximation has failed near the boundary, and would claim too much (40 of 40 scenarios
+            # passing gives an interval of no width). Count each cluster once, as a single pass/fail result
+            # at the observed rate, and use Wilson's interval on the G clusters: conservative, because a
+            # mean of scores between 0 and 1 varies no more than one pass/fail result at the same rate.
+            low, high = wilson(rate, g, z)
+            report["method"] = (f"Wilson score interval on {g} {unit}; the clustered t interval "
+                                + ("has no width" if se == 0 else "runs past 0 or 1"))
+            design_effect = n / g
+    report.update({
+        "interval": [low, high],
+        "verdict": "meets" if low > target else "below" if high < target else "not shown",
+    })
+    plan: dict = {"assumes": f"the true rate is the observed {rate:.4f}, with this sample's runs per case"
+                             + (" and cases per scenario" if scenario_of else "")}
+    if rate <= target:
+        plan["cases_needed"] = None
+        plan["reason"] = "the observed rate is not above the target, so no number of cases will show it meets it"
+    else:
+        zp = NormalDist().inv_cdf(power)
+        simple = ((z * math.sqrt(target * (1 - target)) + zp * math.sqrt(rate * (1 - rate)))
+                  / (rate - target)) ** 2
+        # Plan in clusters, keeping this sample's cases per cluster, as the paired planner does.
+        cases_per_cluster = n / report["clusters"]
+        clusters = max(math.ceil(simple * design_effect / cases_per_cluster), 2)
+        if clusters * cases_per_cluster > MAX_PLAN_CASES:
+            plan["cases_needed"] = None
+            plan["reason"] = f"more than {MAX_PLAN_CASES:,} cases"
+        else:
+            plan["cases_needed"] = math.ceil(clusters * cases_per_cluster)
+            if scenario_of:
+                plan["scenarios_needed"] = clusters
+    report["plan"] = plan
+    return report
+
+
 # ---------------------------------------------------------------- output
 
 
@@ -449,10 +557,49 @@ def text_report(r: dict) -> str:
     return "\n".join(lines)
 
 
+VERDICT_TEXT = {"meets": "meets (the interval lies above the target)",
+                "below": "below (the interval lies below the target)",
+                "not shown": "not shown (the target lies inside the interval)"}
+
+
+def target_text_report(r: dict) -> str:
+    lines = [f"cases scored: {r['cases_scored']}; unscored: {len(r['cases_unscored'])}"
+             + (f" ({', '.join(r['cases_unscored'][:20])}{' ...' if len(r['cases_unscored']) > 20 else ''})"
+                if r["cases_unscored"] else "")]
+    if r["infra_error_rows"]:
+        lines.append(f"infra_error rows left out: {r['infra_error_rows']}")
+    if "rate" in r:
+        count = (f"{r['successes']} of {r['cases_scored']} cases" if "successes" in r
+                 else f"mean of {r['cases_scored']} cases")
+        lines.append(f"rate {plain(r['rate'])}% ({count}; {r['runs_per_case']:.2f} runs per case); "
+                     f"SE {plain(r['se'])} points; clusters {r['clusters']}")
+    if "interval" in r:
+        level = round((1 - r["alpha"]) * 100)
+        lines.append(f"{level}% interval {plain(r['interval'][0])}% to {plain(r['interval'][1])}% ({r['method']})")
+        lines.append(f"target {plain(r['target'])}%: {VERDICT_TEXT[r['verdict']]}")
+        p = r["plan"]
+        need = p["cases_needed"]
+        lines.append(f"to show it meets {plain(r['target'])}% at {round(r['power'] * 100)}% power, "
+                     f"if the true rate is {plain(r['rate'])}%: "
+                     + (f"about {need} cases" + (f" ({p['scenarios_needed']} scenarios)"
+                                                 if p.get("scenarios_needed") else "")
+                        if need is not None else p["reason"]))
+    if "incomplete" in r:
+        lines.append(f"INCOMPLETE: {r['incomplete']}")
+    elif r["cases_unscored"]:
+        lines.append("INCOMPLETE: some cases have only infra_error rows")
+    return "\n".join(lines)
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--baseline", type=Path, required=True, help="trial record of the baseline version (CSV or JSONL)")
+    parser.add_argument("--baseline", type=Path,
+                        help="trial record of the baseline version (CSV or JSONL); leave it out to score the "
+                             "candidate against --target")
     parser.add_argument("--candidate", type=Path, required=True, help="trial record of the candidate version (CSV or JSONL)")
+    parser.add_argument("--target", type=float,
+                        help="without --baseline: the rate the candidate must be shown to reach, between 0 and 1 "
+                             "(0.88 is 88%%)")
     parser.add_argument("--alpha", type=float, default=0.05, help="two-sided significance level (default 0.05)")
     parser.add_argument("--power", type=float, default=0.8, help="power for the detectable difference (default 0.8)")
     parser.add_argument("--target-difference", type=float,
@@ -461,7 +608,8 @@ def main(argv=None) -> int:
                         help="with --target-difference or --plan-cases: also plan for this many runs per case")
     parser.add_argument("--plan-cases", type=int,
                         help="report the difference a set of this many cases could detect (a holdout the budget buys)")
-    parser.add_argument("--require", choices=("improved", "not-worse"), help="exit 1 unless this holds")
+    parser.add_argument("--require", choices=("improved", "not-worse", "meets"),
+                        help="exit 1 unless this holds (meets: with --target, the interval lies above it)")
     parser.add_argument("--margin", type=float, help="with --require not-worse: the largest loss allowed")
     parser.add_argument("--json", action="store_true", help="print a JSON report")
     args = parser.parse_args(argv)
@@ -478,6 +626,32 @@ def main(argv=None) -> int:
         parser.error("--require not-worse needs --margin of zero or more")
     if args.margin is not None and args.require != "not-worse":
         parser.error("--margin is used only with --require not-worse")
+    if args.baseline is None and args.target is None:
+        parser.error("give --baseline to compare two versions, or --target to score one version against a fixed rate")
+    if args.target is not None:
+        if args.baseline is not None:
+            parser.error("--target scores one version, without --baseline; to compare two, use --target-difference")
+        if not 0 < args.target < 1:
+            parser.error("--target must be between 0 and 1 (0.88 is 88%)")
+        if args.target_difference is not None or args.plan_runs is not None or args.plan_cases is not None:
+            parser.error("--target-difference, --plan-cases and --plan-runs compare two versions; not with --target")
+        if args.require in ("improved", "not-worse"):
+            parser.error(f"--require {args.require} compares two versions; with --target use --require meets")
+        try:
+            report = analyse_target(args.candidate, args.target, args.alpha, args.power)
+        except InputError as exc:
+            print(f"paired_difference.py: {exc}", file=sys.stderr)
+            return BAD_INPUT
+        if args.require and "interval" in report:
+            report["require"] = {"rule": "meets", "met": report["verdict"] == "meets"}
+        print(json.dumps(report, indent=2) if args.json else target_text_report(report))
+        if "incomplete" in report or report["cases_unscored"]:
+            return INCOMPLETE
+        if args.require and not report["require"]["met"]:
+            return NOT_MET
+        return OK
+    if args.require == "meets":
+        parser.error("--require meets needs --target, without --baseline")
     try:
         report = analyse(args.baseline, args.candidate, args.alpha, args.power,
                          args.target_difference, args.plan_runs, args.plan_cases)

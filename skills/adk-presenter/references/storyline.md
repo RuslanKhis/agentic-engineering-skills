@@ -62,8 +62,13 @@ reports instead (its quality-iteration reference, "Tell a change from
 noise"); it is usually narrower (both forms are from Evan Miller, "Adding
 Error Bars to Evals", Anthropic, arXiv 2411.00640, section 4, read
 2026-10-29). When the lift is inside its margin, the
-title says "within the margin". When the margin cannot be computed from
-what was recorded, ask the user for the test that was run.
+title says "within the margin". A rate against an agreed threshold has its
+own interval: unless the criterion was agreed as an observed count ("at
+least 34 of 40 pass"), call it met only when the interval
+adk-agent-evaluation reports lies above the threshold (its
+quality-iteration reference, "Score one version against a fixed target");
+36 of 40 against 88% is "not shown". When the margin cannot be computed
+from what was recorded, ask the user for the test that was run.
 
 ## Choose the chart from the comparison
 
