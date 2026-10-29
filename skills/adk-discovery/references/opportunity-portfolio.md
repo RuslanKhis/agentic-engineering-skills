@@ -73,6 +73,19 @@ forward (the first measure moved, access granted, a budget approved).
 - **Leading indicator:** an earlier signal that the chain is moving (fewer
   abandonments at the step) when the lagging outcome (revenue) takes months.
 - **Window and sample:** how long, how many, and who reads the number.
+  Size "how many" from the smallest lift the sponsor would act on (δ), not
+  from what a month happens to hold. For a rate measured before and during
+  the pilot, each period needs about 7.85 × (p₁(1 − p₁) + p₂(1 − p₂)) / δ²
+  cases at 5% significance and 80% power, where p₁ is the baseline and
+  p₂ = p₁ + δ. From a 60% baseline, a 5-point lift needs about 1,470 cases
+  per period and a 10-point lift about 350 (the power formula in Evan
+  Miller, "Adding Error Bars to Evals", Anthropic, arXiv 2411.00640,
+  section 5, read 2026-10-29, applied to two separate samples). When the
+  pilot's volume cannot reach that in the window, lengthen the window, agree
+  a larger lift, or label the measure indicative in the brief. Running the
+  same cases through both the current process and the agent (a shadow run)
+  needs fewer, because each case is compared with itself; adk-agent-evaluation
+  sizes that design.
 
 Write the chain as arrows and treat every arrow as a hypothesis:
 

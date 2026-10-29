@@ -17,6 +17,59 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## Error bars on evaluation comparisons ("Adding Error Bars to Evals") · 29 October 2026
+
+Entry 2 of the engineering-articles programme: Evan Miller (Anthropic),
+"Adding Error Bars to Evals", arXiv 2411.00640, November 2024. It is older
+than the preferred window, but it is still the reference others cite.
+
+**What changed in the skills.**
+
+- **adk-agent-evaluation.**
+  - New section "Tell a change from noise" in `quality-iteration.md`: a
+    paired difference per case, runs averaged first, the error clustered on
+    the scenario, a t interval, the minimum detectable difference, and the
+    holdout and CI set sized from the difference that matters.
+  - New helper `paired_difference.py`, with 17 tests.
+  - Small pointers in `evaluation-design.md`, `result-auditing.md` and
+    `SKILL.md`.
+- **adk-release-engineering.**
+  - A nightly drop blocks only when its paired interval lies below zero.
+  - The suite's minimum detectable difference is recorded beside the
+    margin.
+  - A model migration asks "not worse by more than the margin".
+- **adk-presenter.** The one-over-root-n rule is replaced by the margin of a
+  difference between two periods.
+- **adk-discovery.** The pilot sample is sized from the smallest lift the
+  sponsor would act on.
+- **adk-agent-instructions.** An optimiser's candidate must improve by more
+  than the noise.
+
+**Register and scenarios.** One article row was added to the source
+register. Four scenario cases were added; one has a new fixture and
+judge-only material, and three are runnable from their context.
+
+**Trial.** One fresh-agent trial on synthetic trial records, offline. It
+reached the right verdict (within noise) and holdout size, and passed all
+five assertions. Ease: 5 of 5 to find the method, 3 of 5 to apply it. The
+frictions it found were fixed the same day in the helper and the reference.
+Those fixes were not re-trialled.
+
+**Scenario run.** All four new scenarios then ran through
+`run_scenarios.py` with Sonnet 5.5 as agent and judge (three judge votes),
+for $0.88. Evaluation (with a shell) passed 5 of 5 and presenter 3 of 3.
+Release passed 2 of 4: the agent applied the paired gate but did not choose
+`num_runs` from the variance split or state that the per-case thresholds
+stay, so the reference's completion check now names both. Discovery passed
+2 of 3, with the right sample size, but answered in one turn without
+loading the skill, so the shadow-run route was missed; that is a skill
+selection miss, not a content gap. The release clarification was not
+re-run. adk-system-designer's live-acceptance criterion now points to the
+same sizing method.
+
+`scripts/check_repo.py` passed: 28 offline suites, 1,232 tests. No cloud
+runs. Record: [alignment](miller-adding-error-bars-to-evals-alignment-2026-10-29.md).
+
 ## Seed article "Evaluation Precedes Evolution" integrated · 28 October 2026
 
 The first article in part two of the engineering-articles programme:

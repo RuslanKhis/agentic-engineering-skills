@@ -11,8 +11,12 @@ pass honest; this reference makes the output good.
 
 1. **Labelled development set.** Five to twenty cases with a reviewed
    reference outcome and, where the task produces them, reference reasons and
-   conditions. Keep a separate holdout that no change is allowed to look at
-   ([evaluation design](evaluation-design.md#curate-cases-with-a-reason-to-exist)).
+   conditions. That is enough to find the largest error categories, and too
+   few to show that a small score change is real. Keep a separate holdout
+   that no change is allowed to look at
+   ([evaluation design](evaluation-design.md#curate-cases-with-a-reason-to-exist)),
+   sized for the smallest difference the decision turns on
+   ([tell a change from noise](#tell-a-change-from-noise)).
 2. **One baseline run** through the plainest contract that can produce the
    deliverable: draft plus judge, no checkpoints, no revisions. Retain every
    output and trace.
@@ -43,7 +47,12 @@ pass honest; this reference makes the output good.
    exemplar, the schema or the model, never several at once. Re-run the
    whole development set, re-label, and compare category counts with the
    previous iteration. Keep the change when the targeted category shrinks
-   and no other category grows; otherwise record it and revert.
+   and no other category grows; otherwise record it and revert. Re-run the
+   cases the change moved before counting them fixed: one lucky run is not a
+   fix. A development score that moved by less than the set's minimum
+   detectable difference is recorded as "within noise", and the change is
+   kept on the category evidence alone, labelled so
+   ([tell a change from noise](#tell-a-change-from-noise)).
 5. **Re-measure before adding controls.** A revision workflow, export
    acknowledgement or saved-stage recovery is added after the development
    score is known, not before. A spending budget and a stop are the only
@@ -149,13 +158,120 @@ knobs. Treat each as a factor: vary one, hold the others, and record the
 category counts. A shorter output limit that truncates reasons shows up as
 `weak_condition` and `wrong_outcome`, not as a cost saving.
 
+## Tell a change from noise
+
+A score is a sample: other cases drawn from the same work would give a
+different number, and a model run twice on one case can answer differently.
+Before saying that a prompt, exemplar, model or workflow change helped, or
+that it lost nothing, compute how far the score could move by chance. The
+method is Evan Miller's ("Adding Error Bars to Evals: A Statistical Approach
+to Language Model Evaluations", Anthropic, 1 November 2024,
+https://arxiv.org/abs/2411.00640, sections 2 to 5, read 2026-10-29),
+restated for an ADK project.
+
+1. **Same cases, both versions.** Run the baseline and the candidate on the
+   same cases, fixtures, criteria and judge, K runs per case (three is a
+   reasonable start for a live run; a scripted-model test runs once). Score
+   each trial as the whole case passing (1) or failing (0), or as its
+   reward, in the trial record [result auditing](result-auditing.md#check-the-measured-units)
+   describes, one file per version.
+2. **Average each case's runs first.** A case scored over K runs counts once,
+   as its mean. Treating K × n runs as independent samples understates the
+   error, because runs of one case share its difficulty.
+3. **Take the difference per case.** For each case, candidate mean minus
+   baseline mean; the reported change is the average of these differences.
+   Pairing removes the variation in case difficulty that both versions share,
+   so the interval is narrower than comparing two separate averages.
+4. **Cluster on the unit that was sampled.** When cases are variants of one
+   scenario (same intent, different data) or several cases come from one
+   document, customer or conversation, they move together and are not
+   independent. Sum the per-case deviations from the mean difference within
+   each scenario; the standard error is √(G/(G−1) × Σ over scenarios of
+   (that sum)²) / n, for n cases in G scenarios. With one case per scenario
+   this is the usual standard deviation of the differences over √n. The
+   paper reports clustered errors more than three times the naive ones on
+   some public benchmarks (reported by the source, not verified here). The
+   clustered error can also come out smaller, when variants of one scenario
+   move in opposite directions. With fewer than about ten scenarios either
+   figure is rough: report both, and plan from the larger. Record the
+   scenario of every holdout case as well, or the holdout comparison cannot
+   be clustered.
+5. **Report the interval and the verdict.** The 95% interval is the mean
+   difference ± t × SE, with t from Student's t on G − 1 degrees of freedom
+   (2.09 at 20 cases, close to 1.96 from about 60). Report baseline and
+   candidate scores with the case count and K, the difference, its standard
+   error, the interval and the correlation between the two versions' case
+   scores. An interval wholly above zero is an improvement; one that
+   includes zero is "within noise", whatever the point estimate says.
+6. **State the minimum detectable difference before keeping a win.** At 5%
+   significance and 80% power it is about 2.8 × SE (with t on few cases,
+   slightly more): a true difference that large is found four times in five,
+   and a smaller one usually is not. Write it beside every comparison: "+4
+   points, within noise (minimum detectable difference 12 points on 20
+   cases)".
+7. **Size the holdout and the CI set from the difference that matters.**
+   Cases needed n = (z[α/2] + z[power])² × V / δ², where δ is the smallest
+   difference the decision turns on and V is the variance of one case's
+   difference, measured on the development runs (n_dev × SE²). At 5%
+   significance and 80% power (z values 1.96 and 0.84) the multiplier is
+   7.85. With scenarios, the unit is the scenario: scenarios needed =
+   7.85 × G_dev × SE² / δ², times the cases per scenario. The paper's
+   worked example, V = 1/9, needs about 970 cases for
+   δ = 3 points, about 88 for 10 points and about 22 for 20 points; so a
+   20-case development set sees only differences of roughly 20 points. When
+   the budget buys fewer cases, report the minimum detectable difference the
+   affordable holdout gives instead of a holdout verdict on smaller
+   differences. A budget given in runs converts to cases: runs ÷ (versions ×
+   runs per case).
+8. **Runs reduce run-to-run noise only.** K runs per case divide the
+   within-case noise by K and leave the variation between cases untouched.
+   In the paper's uniform-difficulty example, two runs cut the variance by a
+   third and no number of runs by more than two thirds. When most of V is
+   between cases, add cases, not runs. On a small sample the run-noise
+   estimate can exceed V itself; the split is then unknown, so plan on
+   cases at the runs per case already used. Do not lower the temperature to
+   reduce noise: the paper shows it can move the score itself, and
+   adk-model-and-output-contracts keeps Gemini 3 at its default of 1.0.
+
+Run the bundled helper on the two trial records rather than computing this
+by hand:
+
+```bash
+python "$SKILL_DIR/scripts/paired_difference.py" \
+  --baseline runs/baseline.csv --candidate runs/candidate.csv \
+  --target-difference 0.05 --plan-cases 100 --plan-runs 5
+```
+
+It reads CSV or JSON Lines rows with `case_id` and `reward`, `score` or a
+`pass`/`fail` `outcome`, and an optional `scenario`; `infra_error` rows are
+counted and left out. It averages runs per case, clusters on `scenario`
+when present, prints the interval, the verdict, the minimum detectable
+difference and the share of the variance that is run-to-run noise. With
+`--target-difference` it gives the cases needed, and with `--plan-cases` the
+difference that many cases could detect. Both are at the runs per case
+already used, and again at `--plan-runs` when the noise split can be
+estimated. Plans keep the sample's cases per scenario. `--require improved` exits 1 unless
+the interval lies above zero; `--require not-worse --margin 0.02` exits 1
+unless the candidate loses less than two points (for a cheaper model or a
+refactor). Exit 3 means a case has scores in one file only, and the figures
+may change when it runs. The helper uses only the standard library, makes no
+external calls and does not import the project.
+
+Error analysis on a development set of five to twenty cases still works:
+reading every output finds the defects, and a category that falls from five
+cases to zero is evidence a reviewer can check case by case. The interval
+governs the claims made from scores: a development score, a holdout result,
+a release comparison and a figure in a presentation.
+
 ## Keep the measurement honest
 
 - The development set measures progress; the holdout measures generalization
   once, at the end, with the frozen method. A holdout case used to guide a
   fix moves into development and is replenished.
 - Report successes and attempts separately, by category, with case IDs. A
-  percentage without the category table hides which defect moved.
+  percentage without the category table hides which defect moved. A score
+  compared with another carries its paired interval and minimum detectable
+  difference ([tell a change from noise](#tell-a-change-from-noise)).
 - The judge is calibrated on fixed evidence before it grades candidates
   ([evaluation design](evaluation-design.md#calibrate-the-judge-on-fixed-evidence)).
   Human review of a sample of judge verdicts each iteration keeps it honest.

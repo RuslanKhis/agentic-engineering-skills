@@ -244,7 +244,9 @@ run:
   re-measure the whole pipeline's outcome measure on the holdout.
 
 Keep the candidate only when the project's outcome measure improves on the
-holdout and no stage verdict regresses. A higher eval score with a flat
+holdout by more than its noise (the paired interval in
+adk-agent-evaluation's quality-iteration reference, "Tell a change from
+noise") and no stage verdict regresses. A higher eval score with a flat
 outcome measure is the optimiser finding the proxy. The same precondition
 holds for any loop that rewrites the agent from scores, including one
 written in the project.

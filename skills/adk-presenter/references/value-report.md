@@ -48,8 +48,10 @@ assumption`, and every incident `status open` or `status closed <date>`.
 1. **Outcome against baseline.** The brief's outcome measure this period
    against its baseline, measured on the same definition and scope. When
    the brief's baseline covers only part of the live scope, say which part
-   the comparison holds for. A lift of the order of one over the square
-   root of the sample is within the margin; say so ([storyline](storyline.md)).
+   the comparison holds for. A lift smaller than its 95% margin is within
+   the margin; say so. This month against a baseline period is two separate
+   samples, so the margin is that of a difference, not of one proportion
+   ([storyline](storyline.md) gives the formula).
    Last month's figure may sit beside it for the trend on a line that says
    "last period"; it never stands in for this month's.
 2. **Counter-metric.** The brief's counter-metric against its own baseline,

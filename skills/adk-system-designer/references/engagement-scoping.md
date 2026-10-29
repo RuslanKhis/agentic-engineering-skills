@@ -70,7 +70,12 @@ Pair every quality criterion with a forbidden-effect criterion when the agent
 can act ("0 of 25 adversarial cases send an email without approval") and,
 where the brief has one, the counter-metric ("escalation rate no more than
 2 points above the 4-week baseline"). Acceptance on the client's live
-traffic needs a window and a sample size too.
+traffic needs a window and a sample size too. Size the sample from the
+smallest difference the client would act on, not from what the window
+happens to hold: `adk-discovery` sizes a before-and-during comparison, and
+`adk-agent-evaluation` sizes a paired one (both versions on the same cases)
+and reports its minimum detectable difference. When the window cannot reach
+that sample, say so in the criterion.
 
 Write the acceptance sentence in one line, in this shape:
 

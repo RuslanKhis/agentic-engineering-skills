@@ -2117,6 +2117,74 @@
       ]
     },
     {
+      "id": "evaluation-paired-difference-and-holdout-size",
+      "prompt": "Prompt v4 scored 70% against v3's 63% on our 20 dev cases, three runs each. Did the change help, and how many cases do we need in the holdout before we tell the sponsor?",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-agent-instructions",
+        "adk-release-engineering",
+        "adk-presenter"
+      ],
+      "context": "A Python ADK 2.12 claims-triage agent. runs/baseline-prompt-v3.csv and runs/candidate-prompt-v4.csv are the trial records of the two prompt versions on the same 20 development cases, three runs each; the scenario column groups cases that are variants of one claim type. runs/dashboard-2026-10-23.md is the team's summary. docs/discovery-brief.md gives the outcome measure, the smallest lift the sponsor would act on and the evaluation budget. cases/holdout/ has 12 unlabelled cases. No model or cloud access in this session.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Averages each case's runs before comparing and takes the difference per case on the same cases, rather than comparing pooled run-level pass rates; leaves the infra_error run out of the figures and reports it.",
+        "Clusters the standard error on the scenario column and reports the paired difference with a 95% interval that includes zero, calling the change within noise rather than an improvement.",
+        "States the development set's minimum detectable difference (about 22 points) and does not tell the sponsor the change helped.",
+        "Sizes the holdout from the sponsor's 5-point lift with the power formula and the variance measured on the development runs, says the 12-case holdout cannot detect it, and states the trade-off the run budget allows (runs against cases, or the detectable difference the budget buys).",
+        "Uses scripts/paired_difference.py, or in a run without a shell names it and reports it as not run, and runs no model."
+      ]
+    },
+    {
+      "id": "release-nightly-drop-against-noise",
+      "prompt": "Our nightly eval gate blocked the release three times this month and each time the score came back the next night. Can you fix the gate so it stops crying wolf without missing real regressions?",
+      "available_skills": [
+        "adk-release-engineering",
+        "adk-agent-evaluation",
+        "adk-agent-observability"
+      ],
+      "context": "A Python ADK 2.12 agent with a tier-3 nightly job: 60 eval cases, num_runs=3, a pinned rubric judge with num_samples=5. The job compares tonight's mean judge score with last night's and opens a release blocker when it fell by more than 2 points; the per-case trial results of each night are kept as JSON Lines with case_id, trial_id and score. Ten of the cases are variants of three customer scenarios. No model or cloud access in this session.",
+      "expected_primary": "adk-release-engineering",
+      "assertions": [
+        "Replaces the raw mean comparison with a paired difference per case between the two nights, runs averaged within each case and the error clustered on the scenario for the variant cases, and blocks only when the interval lies wholly below zero.",
+        "Computes or asks for the suite's minimum detectable difference and says whether 60 cases can see a 2-point drop; if not, sizes the set for the agreed margin or records the detectable difference as the gate's limit.",
+        "Uses the split between run-to-run noise and between-case variation to choose num_runs against more cases within a cost ceiling, rather than adding runs by default.",
+        "Keeps the per-case thresholds, the strict every-run check and NOT RUN semantics unchanged, and routes the statistical method to adk-agent-evaluation."
+      ]
+    },
+    {
+      "id": "presenter-lift-within-margin",
+      "prompt": "Draft the headline slide for Thursday's results review: the agent lifted first-time resolution from 60% to 66%.",
+      "available_skills": [
+        "adk-presenter",
+        "adk-agent-evaluation",
+        "adk-discovery"
+      ],
+      "context": "The baseline is 60% of 400 invoice exceptions resolved first time in August 2026, before the agent; the figure with the agent is 66% of 400 exceptions in October 2026. Both come from the finance system's exception export. The discovery brief's outcome measure is first-time resolution and the counter-metric is supplier complaints, which stayed at 3 per month. No other test was run.",
+      "expected_primary": "adk-presenter",
+      "assertions": [
+        "Treats the lift as the difference of two separate samples and computes its 95% margin from both proportions (about 6.7 points), not the one-proportion rule of thumb.",
+        "Does not title the slide as a measured 6-point lift; says the lift is within the margin, or asks for the test that was run, and keeps the counter-metric beside the outcome.",
+        "Gives the method and sample beside the figures (400 and 400, August and October, the finance system's export)."
+      ]
+    },
+    {
+      "id": "discovery-pilot-sample-size",
+      "prompt": "We want a six-week pilot of the exceptions agent to prove it raises first-time resolution. How long and how big does the pilot need to be?",
+      "available_skills": [
+        "adk-discovery",
+        "adk-agent-evaluation",
+        "adk-system-designer"
+      ],
+      "context": "First-time resolution of invoice exceptions is 60% today, measured from the finance system's exports. About 200 exceptions arrive per week. The finance director says a lift of 5 points would justify rolling the agent out; anything smaller would not. No model or cloud access in this session.",
+      "expected_primary": "adk-discovery",
+      "assertions": [
+        "Sizes the sample from the 5-point lift the sponsor would act on, with the power formula for two rates at 5% significance and 80% power (about 1,470 exceptions per period).",
+        "Shows that six weeks at about 200 a week (about 1,200) falls short, and offers lengthening the window, agreeing a larger lift, or labelling the measure indicative.",
+        "Writes the window and sample into the outcome measure with the baseline and counter-metric, and mentions that a shadow run of the same cases needs fewer, sized by adk-agent-evaluation."
+      ]
+    },
+    {
       "id": "presenter-monthly-value-report",
       "prompt": "Can you write September's value report for our sponsor on the claims triage agent? Use docs/plans/claims.md and the discovery brief.",
       "available_skills": [

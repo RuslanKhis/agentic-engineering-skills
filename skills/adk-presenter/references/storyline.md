@@ -49,11 +49,21 @@ baseline, with the counter-metric beside it.
 A demo is not the measured system unless it is the same build on the same
 inputs; say which build the demo is and which build the numbers cover, or
 that there is no demo. Projected impact is not a result. A benchmark score
-is not a business outcome. A small lift on a small sample may be noise: a
-proportion measured on n cases moves by roughly one over the square root of
-n from chance alone (about five points on 300), so when the lift is of that
-order the title says "within the margin" or the user is asked for the test
-that was run.
+is not a business outcome. A small lift on a small sample may be noise.
+The 95% margin of one proportion measured on n cases is at most about one
+over the square root of n (about six points on 300). A lift is the
+difference of two measurements, so its margin is wider: for two separate
+samples (this month against a baseline period) it is
+1.96 × √(p₁(1 − p₁)/n₁ + p₂(1 − p₂)/n₂), about eight points for 300 and
+300 near 50%. Outcomes grouped by customer, site or document widen it
+again. When both figures come from the same cases, as in an offline
+evaluation of two builds, cite the paired interval adk-agent-evaluation
+reports instead (its quality-iteration reference, "Tell a change from
+noise"); it is usually narrower (both forms are from Evan Miller, "Adding
+Error Bars to Evals", Anthropic, arXiv 2411.00640, section 4, read
+2026-10-29). When the lift is inside its margin, the
+title says "within the margin". When the margin cannot be computed from
+what was recorded, ask the user for the test that was run.
 
 ## Choose the chart from the comparison
 
