@@ -251,6 +251,17 @@ outcome measure is the optimiser finding the proxy. The same precondition
 holds for any loop that rewrites the agent from scores, including one
 written in the project.
 
+In every such loop, whatever proposes the candidate never grades it: an
+optimiser, a coding agent or a person. The eval config, cases, judge and
+thresholds are fixed before the loop starts and are not edited inside
+it. A coding agent driving the loop reports the evaluator's verdicts and
+does not replace them with its own reading (Dima Melnyk and Jason Dai,
+"Driving the Agent Quality Flywheel from Your Coding Agent", Google
+Developers Blog, 30 June 2026,
+https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/,
+read 2026-11-08; adk-agent-evaluation's quality-iteration reference,
+step 4).
+
 Completion: the prompt is in one owned location with a dated changelog, the
 loader returns a versioned provider, the contract and hostile-document tests
 pass offline, and the next evaluation run records the version.

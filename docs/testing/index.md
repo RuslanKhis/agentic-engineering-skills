@@ -17,6 +17,47 @@ model and cloud trials are bounded samples on the dates shown, not a
 guarantee for every model, SDK version or client. New entries go at the top
 of the list below.
 
+## "Driving the Agent Quality Flywheel" (Melnyk and Dai, Google) · 8 November 2026
+
+Entry 4 of the engineering-articles reading plan. The comparison note is
+[melnyk-dai-agent-quality-flywheel-comparison-2026-11-08.md](../research/melnyk-dai-agent-quality-flywheel-comparison-2026-11-08.md).
+
+**What changed in the skills.**
+
+- **adk-agent-evaluation.**
+  - `evaluation-design.md` gives the behaviour a change targets its own
+    fixed, categorical judge, with a not-applicable class and an action
+    rule set before the run. The adaptive managed metrics stay as the
+    broad-health signal. A case where the user revises a detail checks the
+    reply against the latest state.
+  - In `quality-iteration.md` step 4, whoever proposed a change never
+    grades it.
+  - `live-evaluations.md` notes that the trajectory rater needs the
+    agent's tool declarations. A "not permitted" call to a declared tool
+    makes the run incomplete.
+  - `SKILL.md` routing points to both.
+- **adk-agent-instructions.** `prompt-as-code.md` "Optimisers" says any
+  rewrite loop keeps its evaluation fixed and outside the proposer.
+
+**Checks.** `scripts/check_repo.py` and `git diff --check` pass.
+
+**Scenario trial.** One new scenario case,
+`evaluation-fixed-categorical-metric-and-independent-grader`, ran twice on
+`claude-sonnet-5-5` with three judge votes. The two runs cost $0.50 in all.
+
+- **First run: 4 of 5.** The agent never reached the trajectory bullet,
+  because nothing it read linked to it.
+- **Fix.** Links were added from `evaluation-design.md` and `SKILL.md`, and
+  the bullet now says to keep the score out of the before-and-after.
+- **Re-run: 5 of 5.**
+
+The [testing record](melnyk-dai-agent-quality-flywheel-alignment-2026-11-08.md)
+has the details.
+
+**Not established.** The article's rater behaviours (blended adaptive
+criteria, trajectory false-flags without tool declarations) were not
+reproduced here. No managed evaluation ran.
+
 ## One version against a fixed target · 29 October 2026
 
 This closes friction 4 of the "Eval-Driven System Design" trial: nothing

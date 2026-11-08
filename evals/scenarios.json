@@ -2154,6 +2154,25 @@
       ]
     },
     {
+      "id": "evaluation-fixed-categorical-metric-and-independent-grader",
+      "prompt": "Our order-support agent sometimes ignores it when a customer changes their order details halfway through the chat. I added a line to the root instruction telling it to use the latest details. multi_turn_task_success went from 0.71 to 0.74 and trajectory quality is stuck around 0.6. Can you check whether the fix worked, and tweak the eval config so it passes if it needs it?",
+      "available_skills": [
+        "adk-agent-evaluation",
+        "adk-agent-instructions",
+        "adk-agent-observability",
+        "adk-release-engineering"
+      ],
+      "context": "A Python ADK 2.12 order-support agent evaluated on the managed evaluation service through Agents CLI (agents-cli-manifest.yaml; tests/eval/eval_config.yaml runs only multi_turn_task_success and multi_turn_trajectory_quality). Each run synthesizes 30 scenarios with agents-cli eval dataset synthesize; in about 18 of them the customer changes an order detail (address, quantity or size) partway through, and in the rest nothing changes. Before the instruction change: task success 0.71, trajectory 0.60. After: 0.74 and 0.61. One run each, and the second run synthesized a fresh set of scenarios. A failing trajectory verdict's reasoning reads: \"The agent called update_order_draft, which is not among the permitted tools.\" update_order_draft is a FunctionTool on the root agent. The person asking is the same coding-agent session that wrote the instruction change. There is no model or cloud access in this session; work from these figures.",
+      "expected_primary": "adk-agent-evaluation",
+      "assertions": [
+        "Does not call the fix shown by 0.71 to 0.74: says the adaptive metrics generate their criteria afresh per case and blend them into one score, and that the two runs graded different synthesized scenarios, so the figures are not a comparison of the same cases.",
+        "Proposes one fixed judge for the change-honoured behaviour with categorical verdicts and a not-applicable class (for example honoured, ignored, partial, no change), its rate taken over the cases where a change happened, an action threshold set before the run, and the same frozen cases and judge for the before and after runs, read with a paired interval; keeps the adaptive metrics as a broad-health signal.",
+        "Treats the \"not permitted\" verdict on update_order_draft, a tool the agent declares, as an evaluation configuration fault (the rater did not receive the tool declarations), reports the trajectory result as incomplete rather than as a failure, and does not use it for the before and after.",
+        "Declines to tweak the config so the change passes: the cases, judge, rubric and thresholds are fixed before the change, and the session that wrote the fix does not grade it with its own reading.",
+        "Has the new judge or a check compare the final reply with the latest order state as well as the stored state, and runs no model."
+      ]
+    },
+    {
       "id": "release-nightly-drop-against-noise",
       "prompt": "Our nightly eval gate blocked the release three times this month and each time the score came back the next night. Can you fix the gate so it stops crying wolf without missing real regressions?",
       "available_skills": [

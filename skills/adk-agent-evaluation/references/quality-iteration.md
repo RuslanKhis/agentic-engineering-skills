@@ -67,6 +67,20 @@ pass honest; this reference makes the output good.
    detectable difference is recorded as "within noise", and the change is
    kept on the category evidence alone, labelled so
    ([tell a change from noise](#tell-a-change-from-noise)).
+   Whoever proposed the change never grades it. The keep-or-revert
+   verdict comes from the evaluation fixed before the change: the code
+   checks, the pinned judge and its rubric, or a reviewer. A coding agent
+   that wrote the change may read the outputs to diagnose them. It does
+   not edit the cases, rubric, judge or thresholds in the same iteration,
+   and its own reading never replaces the evaluator's labels. An optimiser
+   that grades itself "learns to game the metric instead of improving the
+   agent" (Dima Melnyk and Jason Dai, "Driving the Agent Quality Flywheel
+   from Your Coding Agent", Google Developers Blog, 30 June 2026,
+   https://developers.googleblog.com/en/driving-the-agent-quality-flywheel-from-your-coding-agent/,
+   read 2026-11-08). When the change's author is the only labeller
+   available, it labels the outputs of both versions without knowing
+   which version produced which; this fallback is this toolkit's
+   addition, not the article's.
 5. **Re-measure before adding controls.** A revision workflow, export
    acknowledgement or saved-stage recovery is added after the development
    score is known, not before. A spending budget and a stop are the only
